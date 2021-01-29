@@ -1,10 +1,10 @@
 const Pool = require('pg').Pool
 const pool = new Pool({
-  user: 'emazing',
-  host: '136.243.204.82',
-  database: 'emazing',
-  password: 'enter password',
-  port: 27032,
+  user: process.env.POSTGRES_USER,
+  host: process.env.POSTGRES_HOST,
+  database: process.env.POSTGRES_DB,
+  password: process.env.POSTGRES_PASSWORD,
+  port: process.env.POSTGRES_PORT || 5432,
 })
 
 const getEnquiries = (request, response) => {
