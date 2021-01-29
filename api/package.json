@@ -6,7 +6,7 @@
   "scripts": {
     "start": "node server.bundle.js",
     "build": "webpack",
-    "dev": "nodemon ./server.js localhost 3080"
+    "dev": "export $(cat .env | xargs) && nodemon ./server.js localhost 3080"
   },
   "repository": {
     "type": "git",
