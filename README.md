@@ -31,7 +31,7 @@ npm run dev
 
 ### Start the FE
 ```
-cd frontend
+cd prmApp
 npm install
 npm run serve
 ```

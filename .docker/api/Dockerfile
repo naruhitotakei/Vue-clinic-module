@@ -1,4 +1,6 @@
 FROM node:12
+LABEL org.opencontainers.image.source https://github.com/Thermidor/SmartPRM-ClinicModule
+
 WORKDIR /app
 
 # Copy application files
