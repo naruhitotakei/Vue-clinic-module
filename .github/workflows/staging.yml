@@ -4,6 +4,7 @@ on:
   push:
     branches:
       - main
+      - staging
 
 jobs:
   build:
@@ -12,14 +13,24 @@ jobs:
     steps:
       - uses: actions/checkout@v2
 
-      - name: Build and publish on Github
+      - name: Build and publish API
         uses: elgohr/Publish-Docker-Github-Action@master
         with:
          name: Thermidor/smartprm-api
          registry: ghcr.io
          username: "Thermidor"
          password: ${{ secrets.DOCKER_TOKEN }}
-         dockerfile: .docker/app/Dockerfile
+         dockerfile: .docker/api/Dockerfile
+         tags: staging
+
+      - name: Build and publish prmApp
+        uses: elgohr/Publish-Docker-Github-Action@master
+        with:
+         name: Thermidor/smartprm-app
+         registry: ghcr.io
+         username: "Thermidor"
+         password: ${{ secrets.DOCKER_TOKEN }}
+         dockerfile: .docker/prmApp/Dockerfile
          tags: staging
 
   deploy:
