@@ -1,5 +1,6 @@
 <template>
     <div class="container">
+        <!-- https://github.com/aquilesb/v-datatable-light/blob/master/src/components/Pagination.vue -->
         <DataTable
             :header-fields="headerFields"
             :sort-field="sortField"
@@ -9,16 +10,24 @@
             :css="datatableCss"
             not-found-msg="Items not found"
             @on-update="dtUpdateSort"
-            track-by="firstName"
+            track-by="name"
         >
             <!-- Action button slot -->
+            <input
+                slot="actionNotes"
+                slot-scope="props"
+                type="button"
+                class="btn btn-primary"
+                value="Notes"
+                @click="doNotesClick(props)"
+            >              
             <input
                 slot="actionEdit"
                 slot-scope="props"
                 type="button"
-                class="btn btn-info"
+                class="btn btn-secondary"
                 value="Edit"
-                @click="dtEditClick(props)"
+                @click="doEditClick(props)"
             >
             <input
                 slot="actionDelete"
@@ -26,8 +35,8 @@
                 type="button"
                 class="btn btn-danger"
                 value="Delete"
-                @click="dtDeleteClick(props)"
-            >      
+                @click="doDeleteClick(props)"
+            >                  
 
             <input type="text" slot="updated:header" value="Custom updated" />
 
@@ -260,7 +269,7 @@ export default {
   data: function () {
     return {
       headerFields: [
-        '__slot:checkboxes',
+        //'__slot:checkboxes',
         {
           name: 'name',
           label: 'Name',
@@ -277,11 +286,17 @@ export default {
           sortable: false
         },
         {
-          name: 'created_at',
-          label: 'Created',
-          sortable: true,
+          name: 'date_of_birth',
+          label: 'Date of birth',
+          sortable: false,
           format: formatDate
         },
+        {
+          name: 'gender',
+          label: 'Gender',
+          sortable: false
+        },  
+        '__slot:actions:actionNotes',      
         '__slot:actions:actionEdit',
         '__slot:actions:actionDelete',
       ],
@@ -320,9 +335,12 @@ export default {
   },
   
   methods: {
-    dtEditClick: props => alert(`Edit props: ${JSON.stringify(props)}`),
+  
+    doNotesClick: props => alert(`Delete props: ${props.rowData.data}`),
     
-    dtDeleteClick: props => alert(`Delete props: ${props.rowData.id}`),
+    doEditClick: props => alert(`Edit props: ${JSON.stringify(props)}`),
+    
+    doDeleteClick: props => alert(`Delete props: ${props.rowData.id}`),
     
     dtUpdateSort: function ({ sortField, sort }) {
       const sortedData = orderBy(this.data, [sortField], [sort])
