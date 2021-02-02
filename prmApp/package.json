@@ -11,6 +11,8 @@
     "bootstrap": "^4.5.2",
     "bootstrap-vue": "^2.16.0",
     "core-js": "^3.6.5",
+    "lodash.orderby": "^4.6.0",
+    "v-datatable-light": "^0.8.2",
     "vue": "^2.6.11"
   },
   "devDependencies": {
