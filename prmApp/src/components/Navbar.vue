@@ -4,22 +4,22 @@
     <nav class="navbar navbar-vertical fixed-left navbar-expand-md navbar-light">
          <ul class="nav flex-column">
             <li class="nav-item">
-                <a class="nav-link" href="./index.html">Domov</a>
+                <a v-bind:class="[linkClass, (currentPage === 'Domov') ? selectedLinkClass : '']" href="#" @click="setActive('Domov')">Domov</a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" href="./pacienti.html">Pacienti</a>
+                <a v-bind:class="[linkClass, (currentPage === 'Pacienti') ? selectedLinkClass : '']" href="#" @click="setActive('Pacienti')">Pacienti</a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" href="./koledar.html">Koledar</a>
+                <a v-bind:class="[linkClass, (currentPage === 'Koledar') ? selectedLinkClass : '']" href="#" @click="setActive('Koledar')">Koledar</a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" href="./nov_racun.html">Nov račun</a>
+                <a v-bind:class="[linkClass, (currentPage === 'NovRacun') ? selectedLinkClass : '']" href="#" @click="setActive('NovRacun')">Nov račun</a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" href="./nova_ponudba.html">Nova ponudba</a>
+                <a v-bind:class="[linkClass, (currentPage === 'NovaPonudba') ? selectedLinkClass : '']" href="#" @click="setActive('NovaPonudba')">Nova ponudba</a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" href="./nov_avansni_racun.html">Nov avansni račun</a>
+                <a v-bind:class="[linkClass, (currentPage === 'NovAvans') ? selectedLinkClass : '']" href="#" @click="setActive('NovAvans')">Nov avansni račun</a>
             </li>
         </ul>
     </nav>
@@ -27,28 +27,28 @@
     <nav class="navbar navbar-vertical navbar-expand-md navbar-light">
         <ul class="nav flex-column">
             <li class="nav-item">
-                <p class="nav-link nav-klinika">Klinika</p>
+                <a v-bind:class="[linkClass, (currentPage === 'Klinika') ? selectedLinkClass : '']" href="#" @click="setActive('Klinika')">Klinika</a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" href="./storitve.html">Storitve</a>
+                <a v-bind:class="[linkClass, (currentPage === 'Storitve') ? selectedLinkClass : '']" href="#" @click="setActive('Storitve')">Storitve</a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" href="./dodatne_storitve.html">Dodatne storitve</a>
+                <a v-bind:class="[linkClass, (currentPage === 'DodatneStoritve') ? selectedLinkClass : '']" href="#" @click="setActive('DodatneStoritve')">Dodatne storitve</a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" href="./izdelki.html">Izdelki</a>
+                <a v-bind:class="[linkClass, (currentPage === 'Izdelki') ? selectedLinkClass : '']" href="#" @click="setActive('Izdelki')">Izdelki</a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" href="./kirurgi.html">Kirurgi</a>
+                <a v-bind:class="[linkClass, (currentPage === 'Kirurgi') ? selectedLinkClass : '']" href="#" @click="setActive('Kirurgi')">Kirurgi</a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" href="./doktorji.html">Doktorji</a>
+                <a v-bind:class="[linkClass, (currentPage === 'Doktorji') ? selectedLinkClass : '']" href="#" @click="setActive('Doktorji')">Doktorji</a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" href="./sestre.html">Sestre</a>
+                <a v-bind:class="[linkClass, (currentPage === 'Sestre') ? selectedLinkClass : '']" href="#" @click="setActive('Sestre')">Sestre</a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" href="./statistika.html">Statistika</a>
+                <a v-bind:class="[linkClass, (currentPage === 'Statistika') ? selectedLinkClass : '']" href="#" @click="setActive('Statistika')">Statistika</a>
             </li>
         </ul>
     </nav> 
@@ -57,8 +57,20 @@
 
 <script>
 
-    export default {
-        name: 'NavbarTop',
-        props: ['navbarTop']
-     }
+export default {
+    name: 'Navbar',
+    props: ['navbar'],
+    data: function () {
+        return {
+            currentPage: 'Pacienti',
+            linkClass: 'nav-link',
+            selectedLinkClass: 'nav-selected'
+        }
+    },
+    methods: {
+        setActive: function(screen) {
+            this.currentPage = screen
+    }
+}
+}
 </script>

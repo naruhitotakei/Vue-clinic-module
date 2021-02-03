@@ -3068,7 +3068,7 @@ input[type="button"].btn-block {
     bottom: 0;
 }
 
-.nav-klinika {
+.nav-selected {
     background-color: rgb(227, 235, 246);
     font-weight: 600;
     margin-bottom: 10px;
