@@ -57,7 +57,8 @@ article, aside, figcaption, figure, footer, header, hgroup, main, nav, section {
 
 #userName {
     padding: 0px 10px;
-    border-left: 1px solid black;
+    border-left: 3px solid rgb(227, 235, 246);
+    line-height: 4rem;
 }
 
 body {
@@ -466,8 +467,16 @@ pre {
   margin-left: auto;
 }
 
+.container-fluid-navbar {
+    width: 100%;
+    padding-right: 12px;
+    padding-left: 0;
+    margin-right: auto;
+    margin-left: auto;
+}
+
 @media (min-width: 576px) {
-  .container, .container-sm {
+        .container, .container-sm {
     max-width: 540px; } }
 
 @media (min-width: 768px) {
@@ -3059,9 +3068,11 @@ input[type="button"].btn-block {
     bottom: 0;
 }
 
- .nav-klinika{
-     background-color: lightgray;
- }
+.nav-klinika {
+    background-color: rgb(227, 235, 246);
+    font-weight: 600;
+    margin-bottom: 10px;
+}
 
 .nav {
   display: flex;
@@ -3072,7 +3083,7 @@ input[type="button"].btn-block {
 
 .nav-link {
   display: block;
-  padding: 0.5rem 1rem;
+  padding: 0.75rem 1rem;
   color: black;
 }
   .nav-link:hover, .nav-link:focus {
@@ -3137,7 +3148,11 @@ input[type="button"].btn-block {
   flex-wrap: wrap;
   align-items: center;
   justify-content: space-between;
-  padding: 0.75rem 1rem;
+  padding: 0.1rem 1rem 0.75rem 0.1rem;
+}
+
+.navbar-padding-bottom {
+    padding-bottom: 3rem;
 }
   .navbar .container,
   .navbar .container-fluid, .navbar .container-sm, .navbar .container-md, .navbar .container-lg, .navbar .container-xl {
@@ -3200,11 +3215,6 @@ input[type="button"].btn-block {
   content: "";
   background: no-repeat center center;
   background-size: 100% 100%; }
-
-.navbar-margin-top{
-    margin-top: -395px;
-    margin-left: -32px;
-}
 
 @media (max-width: 575.98px) {
   .navbar-expand-sm > .container,
@@ -9042,8 +9052,10 @@ a.text-white:hover, a.text-white:focus {
   color: #FFFFFF; }
 
 .navbar {
-  border-width: 0 0 1px 0;
-  border-style: solid; }
+    border-width: 0 1px 0 0;
+    border-style: solid;
+    border-color: rgb(227, 235, 246);
+}
 
 .navbar-dark {
   background-color: #152E4D;
@@ -9700,9 +9712,9 @@ a.text-white:hover, a.text-white:focus {
     top: 0;
     bottom: 0;
     width: 100%;
-    max-width: 250px;
-    padding-left: 1.5rem;
-    padding-right: 1.5rem;
+    max-width: 14em;
+    /*padding-left: 1.5rem; 
+    padding-right: 1.5rem; */
     overflow-y: auto; }
     .navbar-vertical.navbar-expand-md > [class*="container"] {
       flex-direction: column;
@@ -9713,12 +9725,14 @@ a.text-white:hover, a.text-white:focus {
     @media all and (min-width: 768px) and (-ms-high-contrast: none), (min-width: 768px) and (-ms-high-contrast: active) {
       .navbar-vertical.navbar-expand-md > [class*="container"] {
         min-height: none;
-        height: 100%; } }
+        height: 100%; } }.navbar-vertical.navbar-expand-md
 
 @media (min-width: 768px) {
     .navbar-vertical.navbar-expand-md.fixed-left {
       left: 0;
-      border-width: 0 1px 0 0; }
+      border-width: 0 1px 0 0;
+      border-color: #f4f4f4;
+    }
     .navbar-vertical.navbar-expand-md.fixed-right {
       right: 0;
       border-width: 0 0 0 1px; }
@@ -10581,7 +10595,7 @@ a:focus, button:focus {
 .avatar-img {
   width: 100%;
   height: 100%;
-  -o-object-fit: cover;
+    -o-object-fit: cover;
      object-fit: cover; }
 
 .avatar-title {
@@ -10667,13 +10681,15 @@ a:focus, button:focus {
   width: 10.66667rem; }
 
 .avatar-group {
-  display: inline-flex; 
+  display: inline-block; 
   padding: 0 10px;
 }
   .avatar-group .avatar + .avatar {
     margin-left: -0.75rem; }
-  .avatar-group .avatar-xs + .avatar-xs {
-    margin-left: -0.40625rem; }
+    .avatar-group .avatar-xs + .avatar-xs {
+        margin-left: 0rem;
+        /* margin-left: -0.40625rem; */
+    }
   .avatar-group .avatar-sm + .avatar-sm {
     margin-left: -0.625rem; }
   .avatar-group .avatar-lg + .avatar-lg {
@@ -10682,23 +10698,24 @@ a:focus, button:focus {
     margin-left: -1.28125rem; }
   .avatar-group .avatar-xxl + .avatar-xxl {
     margin-left: -2rem; }
-  .avatar-group .avatar:not(:last-child) {
+  /*.avatar-group .avatar:not(:last-child) {
     -webkit-mask-image: url(../img/masks/avatar-group.svg);
             mask-image: url(../img/masks/avatar-group.svg);
+            
     -webkit-mask-size: 100% 100%;
-            mask-size: 100% 100%; }
+            mask-size: 100% 100%;  }
   .avatar-group .avatar:hover {
     -webkit-mask-image: none;
             mask-image: none;
     z-index: 1; }
     .avatar-group .avatar:hover + .avatar {
       -webkit-mask-image: url(../img/masks/avatar-group-hover.svg);
-              mask-image: url(../img/masks/avatar-group-hover.svg);
+              mask-image: url(../img/masks/avatar-group-hover.svg); 
       -webkit-mask-size: 100% 100%;
               mask-size: 100% 100%; }
       .avatar-group .avatar:hover + .avatar:last-child {
         -webkit-mask-image: url(../img/masks/avatar-group-hover-last.svg);
-                mask-image: url(../img/masks/avatar-group-hover-last.svg); }
+                mask-image: url(../img/masks/avatar-group-hover-last.svg); } */
 
 .chart {
   position: relative;
@@ -10796,8 +10813,9 @@ a:focus, button:focus {
   opacity: .2; }
 
 .header {
-  margin-bottom: 2rem; 
-  border-bottom: 1px solid black;
+  margin-bottom: 0.5rem;
+  padding-left: 20px;
+  padding-right: 50px;
 }
 
 .header-img-top {
@@ -10805,8 +10823,8 @@ a:focus, button:focus {
   height: auto; }
 
 .header-body {
-  padding-top: 1.5rem;
-  padding-bottom: 0.3rem;
+  padding-top: 1rem;
+  padding-bottom: 1rem;
   border-bottom: 1px solid #E3EBF6; }
 
 .header.bg-dark .header-body,
