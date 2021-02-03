@@ -62,7 +62,7 @@ export default {
     props: ['navbar'],
     data: function () {
         return {
-            currentPage: 'Pacienti',
+            currentPage: 'Domov',
             linkClass: 'nav-link',
             selectedLinkClass: 'nav-selected'
         }
@@ -70,7 +70,8 @@ export default {
     methods: {
         setActive: function(screen) {
             this.currentPage = screen
+            this.$emit("pageSelect", screen)
+        }
     }
-}
 }
 </script>
