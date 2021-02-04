@@ -76,14 +76,14 @@
 </template>
 
 <style>
-#app {
-  font-family: "Avenir", Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-  margin-top: 60px;
-}
+    #app {
+    font-family: "Avenir", Helvetica, Arial, sans-serif;
+    -webkit-font-smoothing: antialiased; 
+    -moz-osx-font-smoothing: grayscale; 
+    color: #2c3e50;
+    /*text-align: center;
+    margin-top: 60px;*/
+    }
 #app .title {
   margin-bottom: 30px;
 }
@@ -98,40 +98,40 @@
 }
 /* Datatable CSS */
 #app .v-datatable-light .header-column-2 {
-  color: red;
+  color: black;
 }
 #app .v-datatable-light .header-column-3 {
-  color: green;
+  color: black;
 }
 #app .v-datatable-light .header-column-4 {
-  color: yellow;
+  color: black;
 }
 #app .v-datatable-light .header-column-5 {
-  color: pink;
+  color: black;
 }
 #app .v-datatable-light .header-column-6 {
-  color: blueviolet;
+  color: black;
 }
 #app .v-datatable-light .row-2 {
-  color: goldenrod;
+  color: black;
 }
 #app .v-datatable-light .row-2 .column-2{
-  color: purple;
+  color: black;
 }
 #app .v-datatable-light .row-3 {
-  color: silver;
+  color: black;
 }
 #app .v-datatable-light .row-5 .column-1, #app .v-datatable-light .row-5 .column-6 {
-  color: rosybrown;
+  color: black;
 }
 #app .v-datatable-light .row-7 .column-4 {
-  color: steelblue;
+  color: black;
 }
 #app .v-datatable-light .row-9 .column-5 {
-  color: springgreen;
+  color: black;
 }
 #app .v-datatable-light .row-4 {
-  color: mediumturquoise;
+  color: black;
 }
 .v-datatable-light .header-item {
   cursor: pointer;
