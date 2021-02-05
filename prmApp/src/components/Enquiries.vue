@@ -1,5 +1,5 @@
 <template>
-    <div class="container">
+    <div class="container-table">
         <!-- https://github.com/aquilesb/v-datatable-light/blob/master/src/components/Pagination.vue -->
         <DataTable
             :header-fields="headerFields"
@@ -134,24 +134,28 @@
   color: black;
 }
 .v-datatable-light .header-item {
-  cursor: pointer;
-  color: #337ab7;
-  transition: color 0.15s ease-in-out;
+    cursor: pointer;
+    color: black;
+    background-color: #d6d6d6;
+    transition: color 0.15s ease-in-out;
 }
+
 .v-datatable-light .header-item:hover {
-  color: #ed9b19;
+  color: #ed9b19; 
 }
 .v-datatable-light .header-item.no-sortable{
   cursor: default;
 }
 .v-datatable-light .header-item.no-sortable:hover {
   color: #337ab7;
-}
+} 
 .v-datatable-light .header-item .th-wrapper {
   display: flex;
   width: 100%;
   height: 100%;
   font-weight: bold;
+  justify-content: center;
+  font-size: 12px;
 }
 .v-datatable-light .header-item .th-wrapper.checkboxes {
   justify-content: center;
@@ -271,13 +275,18 @@ export default {
       headerFields: [
         //'__slot:checkboxes',
         {
-          name: 'name',
-          label: 'Name',
+          name: 'first_name',
+          label: 'Ime',
+          sortable: false
+        },
+        {
+          name: 'last_name',
+          label: 'Priimek',
           sortable: true
         },
         {
           name: 'phone',
-          label: 'Phone',
+          label: 'Telefon',
           sortable: false
         },
         {
@@ -286,18 +295,33 @@ export default {
           sortable: false
         },
         {
-          name: 'date_of_birth',
-          label: 'Date of birth',
+          name: 'city',
+          label: 'Kraj',
+          sortable: false,
+        },
+        {
+          name: 'country',
+          label: 'Država',
+          sortable: false,
+        },
+        {
+          name: 'last_visit',
+          label: 'Zadnji obisk',
           sortable: false,
           format: formatDate
         },
         {
-          name: 'gender',
-          label: 'Gender',
+          name: 'next_visit',
+          label: 'Naslednji obisk',
           sortable: false
-        },  
+         },
+         {
+          name: 'personal_dentist',
+          label: 'Osebni zobozdravnik',
+          sortable: false
+         },
         '__slot:actions:actionNotes',      
-        '__slot:actions:actionEdit',
+       /* '__slot:actions:actionEdit', */
         '__slot:actions:actionDelete',
       ],
       data: [].slice(0, 10),
