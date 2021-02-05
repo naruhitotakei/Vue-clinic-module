@@ -3084,6 +3084,10 @@ input[type="button"].btn-block {
     margin-bottom: 10px;
 }
 
+.nav-submenu {
+    margin-left: 20px;
+}
+
 .nav {
   display: flex;
   flex-wrap: wrap;

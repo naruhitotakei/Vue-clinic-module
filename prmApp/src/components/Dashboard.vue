@@ -4,8 +4,9 @@
         <Navbar v-on:pageSelect="pageChanged"/>
         
         <Home v-if="currentPage == 'Domov'" />
-        <Enquiries v-if="currentPage == 'Pacienti'" />
         <Calendar v-if="currentPage == 'Koledar'" />
+        <Enquiries v-if="currentPage == 'Pacienti'" />
+        <Invoices v-if="currentPage == 'Racuni'" />
     </div>
 </template>
 
@@ -14,8 +15,9 @@ import Header from './Header.vue'
 import Navbar from './Navbar.vue'
 
 import Home from './Home.vue'
-import Enquiries from './Enquiries.vue'
 import Calendar from './Calendar.vue'
+import Enquiries from './Enquiries.vue'
+import Invoices from './Invoices.vue'
 
 export default {
     name: 'Dashboard',
@@ -23,8 +25,9 @@ export default {
         Header,
         Navbar,
         Home,
+        Calendar,
         Enquiries,
-        Calendar
+        Invoices
     },
     data: function () {
         return {
