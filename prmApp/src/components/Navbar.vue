@@ -1,6 +1,6 @@
 <template>
     <!--Sidebar Top-->
-    <div class="container-fluid navbar-margin-top">
+    <div class="container-fluid-navbar navbar-margin-top">
     <nav class="navbar navbar-vertical fixed-left navbar-expand-md navbar-light">
          <ul class="nav flex-column">
             <li class="nav-item">
