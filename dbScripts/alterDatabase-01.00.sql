@@ -1,6 +1,6 @@
-############################################################
-# Create version table
-############################################################
+--############################################################
+--# Create version table
+--############################################################
 CREATE TABLE IF NOT EXISTS db_version (
    resource               VARCHAR(64) UNIQUE NOT NULL,
    version                VARCHAR(16) NOT NULL,
@@ -9,9 +9,9 @@ CREATE TABLE IF NOT EXISTS db_version (
 
 INSERT INTO db_version (resource, version) VALUES ('Tables', '01.00', CURRENT_DATE);
 
-############################################################
-# Create lead_owner table and add FK to enquiries
-############################################################
+--############################################################
+--# Create lead_owner table and add FK to enquiries
+--############################################################
 CREATE TABLE IF NOT EXISTS lead_owner (
    lead_owner_id          INT UNIQUE NOT NULL,
    lead_owner             VARCHAR(16) NOT NULL,
@@ -19,8 +19,10 @@ CREATE TABLE IF NOT EXISTS lead_owner (
    date_created           DATE NOT NULL DEFAULT CURRENT_DATE  
 );
 
-INSERT INTO lead_owner (lead_owner_id, lead_owner) VALUES (0,'Undefined');
+INSERT INTO lead_owner (lead_owner_id, lead_owner, lead_owner_description) VALUES (0,'Undefined', 'Undefined owner');
 
-ALTER TABLE enquiries ADD COLUMN lead_owner_id INT NOT NULL DEFAULT 0,
+ALTER TABLE enquiries ADD COLUMN lead_owner_id INT NOT NULL DEFAULT 0
 CONSTRAINT enquiries_leadowner_fk REFERENCES lead_owner (lead_owner_id)
-ON UPDATE CASCADE ON DELETE CASCADE;
+ON UPDATE CASCADE ON DELETE CASCADE;;
+
+COMMIT;
