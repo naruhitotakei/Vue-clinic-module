@@ -22,7 +22,6 @@ CREATE TABLE IF NOT EXISTS lead_owner (
 INSERT INTO lead_owner (lead_owner_id, lead_owner, lead_owner_description) VALUES (0,'Undefined', 'Undefined owner');
 
 ALTER TABLE enquiries ADD COLUMN lead_owner_id INT NOT NULL DEFAULT 0
-CONSTRAINT enquiries_leadowner_fk REFERENCES lead_owner (lead_owner_id)
-ON UPDATE CASCADE ON DELETE CASCADE;;
+CONSTRAINT enquiries_leadowner_fk REFERENCES lead_owner (lead_owner_id);
 
 COMMIT;
