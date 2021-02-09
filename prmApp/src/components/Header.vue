@@ -13,7 +13,7 @@
                             Smart PRM
                         </h2>
                     </div>
-                    <div class="avatar avatar-md mx-auto d-block">
+                    <div class="avatar-logo avatar-md mx-auto d-block">
                         <img src="../assets/img/emazing_logo.png" alt="Emazing Logo" class="avatar-img">
                     </div>
                     <div class="col-12 col-md-auto mt-3 mt-md-0 row align-items-center">
