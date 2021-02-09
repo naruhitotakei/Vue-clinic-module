@@ -1,5 +1,9 @@
 <template>
-    <div class="container">
+    <div class="container-table">
+        <div class="container-filter">
+            <input type="text" placeholder="Isci po priimku..." class="filter" />
+            <button type="button" class="btn btn-dark float-right add-patient">+ Dodaj pacienta</button>
+        </div>
         <!-- https://github.com/aquilesb/v-datatable-light/blob/master/src/components/Pagination.vue -->
         <DataTable
             :header-fields="headerFields"
@@ -36,7 +40,7 @@
                 class="btn btn-danger"
                 value="Delete"
                 @click="doDeleteClick(props)"
-            >                  
+            >                
 
             <input type="text" slot="updated:header" value="Custom updated" />
 
@@ -77,10 +81,10 @@
 
 <style>
     #app {
-    font-family: "Avenir", Helvetica, Arial, sans-serif;
+    /* font-family: "Avenir", Helvetica, Arial, sans-serif;
     -webkit-font-smoothing: antialiased; 
     -moz-osx-font-smoothing: grayscale; 
-    /*color: #2c3e50;
+    color: #2c3e50;
     text-align: center;
     margin-top: 60px;*/
     }
@@ -97,6 +101,7 @@
   margin: 0 15px;
 }
 /* Datatable CSS */
+    /*
 #app .v-datatable-light .header-column-2 {
   color: black;
 }
@@ -133,25 +138,30 @@
 #app .v-datatable-light .row-4 {
   color: black;
 }
+    */
 .v-datatable-light .header-item {
-  cursor: pointer;
-  color: #337ab7;
-  transition: color 0.15s ease-in-out;
+    cursor: pointer;
+    color: black;
+    background-color: #d6d6d6;
+    transition: color 0.15s ease-in-out;
 }
+
 .v-datatable-light .header-item:hover {
-  color: #ed9b19;
+  color: #ed9b19; 
 }
 .v-datatable-light .header-item.no-sortable{
   cursor: default;
 }
 .v-datatable-light .header-item.no-sortable:hover {
   color: #337ab7;
-}
+} 
 .v-datatable-light .header-item .th-wrapper {
   display: flex;
   width: 100%;
   height: 100%;
   font-weight: bold;
+  justify-content: center;
+  font-size: 12px;
 }
 .v-datatable-light .header-item .th-wrapper.checkboxes {
   justify-content: center;
@@ -187,7 +197,7 @@
 .v-datatable-light .footer {
   display: flex;
   justify-content: space-between;
-  width: 500px;
+  width: auto;
 }
 /* End Datatable CSS */
 /* Pagination CSS */
@@ -195,11 +205,14 @@
     list-style: none;
     display: flex;
     align-items: center;
-    justify-content: flex-start;
+    justify-content: center;
+    text-align: center;
     margin: 0;
     padding: 0;
     width: 300px;
     height: 30px;
+    position: absolute;
+    left: 35%;
   }
   .v-datatable-light-pagination .pagination-item {
     width: 30px;
@@ -271,13 +284,18 @@ export default {
       headerFields: [
         //'__slot:checkboxes',
         {
-          name: 'name',
-          label: 'Name',
+          name: 'first_name',
+          label: 'Ime',
+          sortable: false
+        },
+        {
+          name: 'last_name',
+          label: 'Priimek',
           sortable: true
         },
         {
           name: 'phone',
-          label: 'Phone',
+          label: 'Telefon',
           sortable: false
         },
         {
@@ -286,19 +304,34 @@ export default {
           sortable: false
         },
         {
-          name: 'date_of_birth',
-          label: 'Date of birth',
+          name: 'city',
+          label: 'Kraj',
+          sortable: false,
+        },
+        {
+          name: 'country',
+          label: 'Država',
+          sortable: false,
+        },
+        {
+          name: 'last_visit',
+          label: 'Zadnji obisk',
           sortable: false,
           format: formatDate
         },
         {
-          name: 'gender',
-          label: 'Gender',
+          name: 'next_visit',
+          label: 'Naslednji obisk',
           sortable: false
-        },  
-        '__slot:actions:actionNotes',      
-        '__slot:actions:actionEdit',
-        '__slot:actions:actionDelete',
+         },
+         {
+          name: 'personal_dentist',
+          label: 'Osebni zobozdravnik',
+          sortable: false
+         },
+        /*'__slot:actions:actionNotes',*/
+        '__slot:actions:actionEdit', 
+        /* '__slot:actions:actionDelete', */
       ],
       data: [].slice(0, 10),
       datatableCss: {
