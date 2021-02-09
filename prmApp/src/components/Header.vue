@@ -8,13 +8,15 @@
                             <img src="../assets/img/primadent_thin_R.png" alt="Logo" class="avatar-img">
                         </div>
                     </div>
-                    <div class="col ml-n3 ml-md-n2">
+                    <div class="col-auto ml-n3 ml-md-n2">
                         <h2 class="header-title">
-                            Emazing PRM
+                            Smart PRM
                         </h2>
                     </div>
+                    <div class="avatar avatar-md mx-auto d-block">
+                        <img src="../assets/img/emazing_logo.png" alt="Emazing Logo" class="avatar-img">
+                    </div>
                     <div class="col-12 col-md-auto mt-3 mt-md-0 row align-items-center">
-
                         <div class="avatar-group">
                             <div class="avatar avatar-xs">
                                 <img src="../assets/img/bell.png" alt="Obvestila" class="avatar-img">

@@ -477,10 +477,9 @@ pre {
 }
 
 .container-fluid-navbar {
-    width: auto;
+    width: 200px;
     padding-left: 0;
     margin-left: 0;
-    max-width: 18em;
     display:inline-block;
     vertical-align: top;
 }
@@ -10609,7 +10608,7 @@ a:focus, button:focus {
 .avatar {
   position: relative;
   display: inline-block;
-  width: 2.75rem;
+  width: 3.75rem;
   height: 2.75rem;
   font-size: 1rem;
 }
@@ -10621,10 +10620,11 @@ a:focus, button:focus {
     background-image: url(../img/masks/avatar-status.svg), url(../img/masks/avatar-group.svg), url(../img/masks/avatar-group-hover.svg), url(../img/masks/avatar-group-hover-last.svg); }
 
 .avatar-img {
-  width: 100%;
-  height: 100%;
-    -o-object-fit: cover;
-     object-fit: cover; }
+    width: 100%;
+    height: 100%;
+    /* -o-object-fit: cover;
+     object-fit: cover;  */
+}
 
 .avatar-title {
   display: flex;

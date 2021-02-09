@@ -75,7 +75,7 @@
     </div>
 </template>
 
-<style>
+<style scoped>
     #app {
     font-family: "Avenir", Helvetica, Arial, sans-serif;
     -webkit-font-smoothing: antialiased; 
@@ -97,6 +97,7 @@
   margin: 0 15px;
 }
 /* Datatable CSS */
+    /*
 #app .v-datatable-light .header-column-2 {
   color: black;
 }
@@ -133,6 +134,7 @@
 #app .v-datatable-light .row-4 {
   color: black;
 }
+    */
 .v-datatable-light .header-item {
     cursor: pointer;
     color: black;
