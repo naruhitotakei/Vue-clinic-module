@@ -17,7 +17,9 @@
             track-by="name"
         >
             <!-- Action button slot -->            
-            <button slot="actionEdit" slot-scope="props" type="button" class="btn btn-secondary" value="Edit" @click="doEditClick(props)"><b-icon icon="pencil"/></button>            
+            <button slot="actionEdit" slot-scope="props" type="button" class="btn btn-secondary" @click="doEditClick(props)"><b-icon icon="pencil"/></button>
+            
+            <button slot="actionEmail" slot-scope="props" type="button" class="btn btn-secondary" @click="doEmail(props)"><b-icon icon="envelope"/></button>            
 
             <input type="text" slot="updated:header" value="Custom updated" />
 
@@ -306,7 +308,8 @@ export default {
           label: 'Osebni zobozdravnik',
           sortable: false
          },
-        '__slot:actions:actionEdit', 
+         '__slot:actions:actionEmail',
+         '__slot:actions:actionEdit', 
       ],
       initialData: [],
       filteredData: [], 
@@ -346,10 +349,10 @@ export default {
   },
   
   methods: {
-  
-    doNotesClick: props => alert(`Delete props: ${props.rowData.data}`),
-    
+     
     doEditClick: props => alert(`Edit props: ${JSON.stringify(props)}`),
+    
+    doEmail: props =>  window.location.href = "mailto:" + props.rowData.email,
     
     doDeleteClick: props => alert(`Delete props: ${props.rowData.id}`),
     
