@@ -1,7 +1,7 @@
 <template>
     <div class="container-table">
         <div class="container-filter">
-            <input type="text" placeholder="Isci po priimku..." class="filter" />
+            <input type="text" v-model="surnameFilter" placeholder="Isci po priimku..." class="filter" @change="filterData"/>
             <button type="button" class="btn btn-dark float-right add-patient">+ Dodaj pacienta</button>
         </div>
         <!-- https://github.com/aquilesb/v-datatable-light/blob/master/src/components/Pagination.vue -->
@@ -16,15 +16,7 @@
             @on-update="dtUpdateSort"
             track-by="name"
         >
-            <!-- Action button slot -->
-            <input
-                slot="actionNotes"
-                slot-scope="props"
-                type="button"
-                class="btn btn-primary"
-                value="Notes"
-                @click="doNotesClick(props)"
-            >              
+            <!-- Action button slot -->            
             <input
                 slot="actionEdit"
                 slot-scope="props"
@@ -32,15 +24,7 @@
                 class="btn btn-secondary"
                 value="Edit"
                 @click="doEditClick(props)"
-            >
-            <input
-                slot="actionDelete"
-                slot-scope="props"
-                type="button"
-                class="btn btn-danger"
-                value="Delete"
-                @click="doDeleteClick(props)"
-            >                
+            >              
 
             <input type="text" slot="updated:header" value="Custom updated" />
 
@@ -329,11 +313,12 @@ export default {
           label: 'Osebni zobozdravnik',
           sortable: false
          },
-        /*'__slot:actions:actionNotes',*/
         '__slot:actions:actionEdit', 
-        /* '__slot:actions:actionDelete', */
       ],
+      initialData: [],
+      filteredData: [], 
       data: [].slice(0, 10),
+      surnameFilter: null,
       datatableCss: {
         table: 'table table-bordered table-hover table-striped table-center',
         theadTr: 'header-item',
@@ -375,8 +360,22 @@ export default {
     
     doDeleteClick: props => alert(`Delete props: ${props.rowData.id}`),
     
+    filterData: function() {
+        this.filteredData = []
+        if (this.initialData && this.initialData.length>0) {
+            for (var line in this.initialData) {
+                if ( this.initialData[line].last_name) {
+                    if ( this.initialData[line].last_name.toLowerCase().startsWith(this.surnameFilter.toLowerCase()) ) {
+                        this.filteredData.push(this.initialData[line]) 
+                    }
+                }   
+            }
+        }
+        this.data = this.filteredData
+    },
+      
     dtUpdateSort: function ({ sortField, sort }) {
-      const sortedData = orderBy(this.data, [sortField], [sort])
+      const sortedData = orderBy(this.filteredData, [sortField], [sort])
       const start = (this.currentPage - 1) * this.itemsPerPage
       const end = this.currentPage * this.itemsPerPage
       this.data = sortedData.slice(start, end)
@@ -384,12 +383,18 @@ export default {
     
     updateItemsPerPage: function (itemsPerPage) {
       this.itemsPerPage = itemsPerPage
+      if (itemsPerPage >= this.filteredData.length) {
+        this.data = this.filteredData
+      } else {
+        this.data = this.filteredData.slice(0, itemsPerPage)
+      }
     },
     
     changePage: function (currentPage) {
       this.currentPage = currentPage
-      //const start = (currentPage - 1) * this.itemsPerPage
-      //const end = currentPage * this.itemsPerPage
+      const start = (currentPage - 1) * this.itemsPerPage
+      const end = currentPage * this.itemsPerPage
+      this.data = this.filteredData.slice(start, end)
     },
     
     updateCurrentPage: function (currentPage) {
@@ -402,13 +407,18 @@ export default {
     
     getAllEnquiries() {
       getAllEnquiries().then(response => {
-        this.data = response.slice(0,10)
+        this.initialData = response
+        this.filteredData = response
+        this.data = this.filteredData.slice(0, 10)
       })
     },
   },
   
   mounted () {
     this.getAllEnquiries();
+  },
+  
+  computed: {
   }
 }
 
