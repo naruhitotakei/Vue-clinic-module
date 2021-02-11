@@ -10876,7 +10876,7 @@ a:focus, button:focus {
 .header {
     /* margin-bottom: 0.5rem; */
     padding-left: 20px;
-    padding-right: 30px;
+    padding-right: 15px;
     background-color: #333939;
     color: white;
 }
