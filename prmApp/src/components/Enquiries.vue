@@ -17,14 +17,7 @@
             track-by="name"
         >
             <!-- Action button slot -->            
-            <input
-                slot="actionEdit"
-                slot-scope="props"
-                type="button"
-                class="btn btn-secondary"
-                value="Edit"
-                @click="doEditClick(props)"
-            >              
+            <button slot="actionEdit" slot-scope="props" type="button" class="btn btn-secondary" value="Edit" @click="doEditClick(props)"><b-icon icon="pencil"/></button>            
 
             <input type="text" slot="updated:header" value="Custom updated" />
 
