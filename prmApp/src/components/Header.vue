@@ -4,8 +4,8 @@
             <div class="header-body">
                 <div class="row align-items-center">
                     <div class="col-auto">
-                        <div class="avatar avatar-md">
-                            <img src="../assets/img/primadent_thin_R.png" alt="Logo" class="avatar-img">
+                        <div class="avatar-logo avatar-md">
+                            <img src="../assets/img/emazing_logo.png" alt="Logo" class="avatar-img">
                         </div>
                     </div>
                     <div class="col-auto ml-n3 ml-md-n2">
@@ -13,8 +13,8 @@
                             Smart PRM
                         </h2>
                     </div>
-                    <div class="avatar-logo avatar-md mx-auto d-block">
-                       <img src="../assets/img/emazing_logo.png" alt="Emazing Logo" class="avatar-img" >
+                    <div class="avatar-logo-client avatar-md mx-auto d-block">
+                       <img src="../assets/img/primadent_thin_R.png" alt="Emazing Logo" class="avatar-img" >
                     </div>
                     <div class="col-12 col-md-auto mt-3 mt-md-0 row align-items-center">
                         <div class="avatar-group">
@@ -28,7 +28,7 @@
                         <div>
                             <h3 class="header-title navbar-text" id="userName">Dr. Ime Priimek</h3>
                         </div>
-                        <div class="btn btn-md btn-rounded-circle" @click="showProfile = true" v-bind:class="{'show-profile' : showProfile}">
+                        <div class="btn btn-lg btn-rounded-circle" @click="showProfile = true" v-bind:class="{'show-profile' : showProfile}">
                             <img src="../assets/img/user1.png" alt="Uporabnik " class="avatar-img">
                                 <div class="modal-overlay" v-if="showProfile">
                                     <div class="modal-header">
@@ -74,8 +74,8 @@
 .modal-overlay {
     background-color: #FFF;
     position: absolute;
-    top: 3.55rem;
-    right: -0.345rem;
+    top: 3.55rem; 
+    right: 0; 
     height: 150px;
     width: 300px;
     text-decoration: none;

@@ -1,7 +1,20 @@
 <template>
     <div class="container-table">
         <div class="container-filter">
-            <input type="text" v-model="surnameFilter" placeholder="Isci po priimku..." class="filter" @change="filterData"/>
+            <input type="text" v-model="surnameFilter" placeholder="Isci" class="filter" @change="filterData"/>
+            <span>Isci glede na: </span>
+            <select name="filterDropdown" class="filter-dropdown">
+                <option value="all"></option>
+                <option value="name">Ime</option>
+                <option value="last_name">Priimek</option>
+                <option value="phone">Telefon</option>
+                <option value="email">Email</option>
+                <option value="city">Mesto</option>
+                <option value="country">Drzava</option>
+                <option value="next_visit">Zadnji obisk</option>
+                <option value="last_visit">Naslednji obisk</option>
+                <option value="personal_dentist">Osebni zobozdravnik</option>
+            </select>
             <button type="button" class="btn btn-dark float-right add-patient">+ Dodaj pacienta</button>
         </div>
         <!-- https://github.com/aquilesb/v-datatable-light/blob/master/src/components/Pagination.vue -->
@@ -263,7 +276,7 @@ export default {
       headerFields: [
         //'__slot:checkboxes',
         {
-          name: 'first_name',
+          name: 'name',
           label: 'Ime',
           sortable: false
         },
