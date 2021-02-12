@@ -1,16 +1,14 @@
 <template>
     <div class="container-login">
         <div class="container-fluid-logo">
-            <img src="./primadent_thin_R.png" width="100" height="90" /> <br />
             <h2>Emazing PRM</h2>
         </div>
         <div class="container-login-form">
             <form>
                 <h3>Prijavite se v svoj racun</h3> <br />
-                <input type="email" placeholder="E-postni naslov" /> <br />
-                <input type="password" placeholder="Geslo" /> <br />
-                <input type="checkbox" class="" /><span>Zapomni si </span> <br />
-                <button type="submit">Prijava</button> <br />
+                <input type="email" v-model="loginEmail" placeholder="E-postni naslov" /> <br />
+                <input type="password" v-model="loginPassword" placeholder="Geslo" /> <br />
+                <button type="submit" @click="login()">Prijava</button> <br />
                 <hr />
                 <a href="#">Ste pozabili vase geslo?</a>
             </form>
@@ -23,7 +21,19 @@
 
 <script>
     export default {
-        name: 'Login'
+        name: 'Login',
+        data: function () {
+            return {
+                loginEmail: null,
+                loginPassword: null,
+                user: {name: 'Janez'}
+            }
+        },
+        methods: {
+            login: function() {
+                this.$emit("logedIn", this.user)
+            }
+        }
     }
 </script>
 
