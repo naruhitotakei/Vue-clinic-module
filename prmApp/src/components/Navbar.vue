@@ -15,18 +15,18 @@
             <a v-bind:class="[linkClass, (currentPage.menu === 'Naloge') ? selectedLinkClass : '']" href="#" @click="setActive('Naloge', 'Naloge', true)"><b-icon icon="map"/>Naloge</a>
             <a v-bind:class="[linkClass, (currentPage.menu === 'Statistika') ? selectedLinkClass : '']" href="#" @click="setActive('Statistika', 'StatistikaKlinike', true)"><b-icon icon="bar-chart"/>Statistika</a>
             <div v-if="currentPage.menu === 'Statistika' && this.currentPage.opened" class="nav-item">
-                <a class="nav-submenu" v-bind:class="[linkClass, (currentPage.submenu === 'StatistikaKlinike') ? selectedLinkClass : '']" href="#" @click="setActive('Statistika', 'StatistikaKlinike', false)">Statistika klinike</a>
+                <a class="nav-submenu" v-bind:class="[linkClass, (currentPage.submenu === 'StatistikaKlinike') ? selectedLinkClass : '']" href="#" @click="setActive('Statistika', 'StatistikaKlinike', false)"><b-icon icon="building"/>Statistika klinike</a>
                 <a class="nav-submenu" v-bind:class="[linkClass, (currentPage.submenu === 'OsebnaStatistika') ? selectedLinkClass : '']" href="#" @click="setActive('Statistika', 'OsebnaStatistika', false)"><b-icon icon="person"/>Osebna statistika</a>
             </div>
-            <a v-bind:class="[linkClass, (currentPage.menu === 'PorocilaInObracuni') ? selectedLinkClass : '']" href="#" @click="setActive('PorocilaInObracuni', 'ObracunEmazing', true)"><b-icon icon="reception-4"/>Poročila in obračuni</a>
+            <a v-bind:class="[linkClass, (currentPage.menu === 'PorocilaInObracuni') ? selectedLinkClass : '']" href="#" @click="setActive('PorocilaInObracuni', 'ObracunEmazing', true)"><b-icon icon="file-spreadsheet"/>Poročila in obračuni</a>
             <div v-if="currentPage.menu === 'PorocilaInObracuni' && this.currentPage.opened" class="nav-item">
-                <a class="nav-submenu" v-bind:class="[linkClass, (currentPage.submenu === 'ObracunEmazing') ? selectedLinkClass : '']" href="#" @click="setActive('PorocilaInObracuni', 'ObracunEmazing', false)">Obračun - Emazing</a>
-                <a class="nav-submenu" v-bind:class="[linkClass, (currentPage.submenu === 'ObracunDoktor') ? selectedLinkClass : '']" href="#" @click="setActive('PorocilaInObracuni', 'ObracunDoktor', false)">Obračun - doktor</a>
+                <a class="nav-submenu" v-bind:class="[linkClass, (currentPage.submenu === 'ObracunEmazing') ? selectedLinkClass : '']" href="#" @click="setActive('PorocilaInObracuni', 'ObracunEmazing', false)"><b-icon icon="check-all"/>Obračun - Emazing</a>
+                <a class="nav-submenu" v-bind:class="[linkClass, (currentPage.submenu === 'ObracunDoktor') ? selectedLinkClass : '']" href="#" @click="setActive('PorocilaInObracuni', 'ObracunDoktor', false)"><b-icon icon="person-check"/>Obračun - doktor</a>
             </div>
             <a v-bind:class="[linkClass, (currentPage.menu === 'Nastavitve') ? selectedLinkClass : '']" href="#" @click="setActive('Nastavitve', 'StoritveInIzdelki', true)"><b-icon icon="gear"/>Nastavitve</a>
             <div v-if="currentPage.menu === 'Nastavitve' && this.currentPage.opened" class="nav-item">
-                <a class="nav-submenu" v-bind:class="[linkClass, (currentPage.submenu === 'StoritveInIzdelki') ? selectedLinkClass : '']" href="#" @click="setActive('Nastavitve', 'StoritveInIzdelki', false)"><b-icon icon="palette"/>Storitve in izdelki</a>
-                <a class="nav-submenu" v-bind:class="[linkClass, (currentPage.submenu === 'Uporabniki') ? selectedLinkClass : '']" href="#" @click="setActive('Nastavitve', 'Uporabniki', false)">Uporabniki</a>
+                <a class="nav-submenu" v-bind:class="[linkClass, (currentPage.submenu === 'StoritveInIzdelki') ? selectedLinkClass : '']" href="#" @click="setActive('Nastavitve', 'StoritveInIzdelki', false)"><b-icon icon="tags"/>Storitve in izdelki</a>
+                <a class="nav-submenu" v-bind:class="[linkClass, (currentPage.submenu === 'Uporabniki') ? selectedLinkClass : '']" href="#" @click="setActive('Nastavitve', 'Uporabniki', false)"><b-icon icon="person-badge"/>Uporabniki</a>
             </div>            
         </ul>
     </nav> 
