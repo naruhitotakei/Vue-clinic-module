@@ -477,7 +477,7 @@ pre {
 }
 
 .container-fluid-navbar {
-    width: 200px;
+    width: 205px;
     padding-left: 0;
     margin-left: 0;
     display:inline-block;
@@ -485,7 +485,7 @@ pre {
 }
 
 .container-table {
-    width: calc(100% - 200px);
+    width: calc(100% - 205px);
     height: auto;
     display: inline-table;
     vertical-align: top;
@@ -525,8 +525,8 @@ pre {
     border-radius: 15px 15px !important;
 }
 
-.b-icon {
-    margin: 0 5px;
+.b-icon-btn {
+    margin: 0;
 }
 
 
@@ -3146,7 +3146,7 @@ input[type="button"].btn-block {
 
 .nav-link {
   display: block;
-  padding: 0.7rem 1rem;
+  padding: 0.7rem 0.5rem;
   color: black;
 }
   .nav-link:hover, .nav-link:focus {
@@ -9776,7 +9776,6 @@ a.text-white:hover, a.text-white:focus {
     top: 0;
     bottom: 0;
     width: 100%;
-    max-width: 14em;
     /*padding-left: 1.5rem; 
     padding-right: 1.5rem; */
     overflow-y: auto; }

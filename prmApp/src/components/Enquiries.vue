@@ -30,9 +30,9 @@
             track-by="name"
         >
             <!-- Action button slot -->            
-            <button slot="actionEdit" slot-scope="props" type="button" class="btn btn-secondary" @click="doEditClick(props)"><b-icon icon="pencil"/></button>
+            <button slot="actionEdit" slot-scope="props" type="button" class="btn btn-secondary" @click="doEditClick(props)"><b-icon icon="pencil" class="b-icon-btn"/></button>
             
-            <button slot="actionEmail" slot-scope="props" type="button" class="btn btn-secondary" @click="doEmail(props)"><b-icon icon="envelope"/></button>            
+            <button slot="actionEmail" slot-scope="props" type="button" class="btn btn-secondary" @click="doEmail(props)"><b-icon icon="envelope" class="b-icon-btn"/></button>            
 
             <input type="text" slot="updated:header" value="Custom updated" />
 

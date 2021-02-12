@@ -33,7 +33,7 @@
     </div>   
 </template>
 
-<style>
+<style scoped>
 .b-icon {
     margin-right: 10px;
 }
