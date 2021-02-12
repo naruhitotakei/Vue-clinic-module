@@ -314,7 +314,8 @@ export default {
         {
           name: 'next_visit',
           label: 'Naslednji obisk',
-          sortable: false
+          sortable: false,
+          format: formatDate
          },
          {
           name: 'personal_dentist',

@@ -8,12 +8,12 @@ const pool = new Pool({
 })
 
 const getEnquiries = (req, res) => {
-  pool.query('SELECT * FROM enquiries', (error, results) => {
-    if (error) {
-      throw error
-    }
-    res.status(200).json(results.rows)
-  })
+    pool.query("SELECT enquiries.* FROM enquiries JOIN clients ON enquiries.client_id = clients.id WHERE enquiries.trashed IS FALSE AND clients.slug = 'primadent_si'", (error, results) => {
+        if (error) {
+            throw error
+        }
+        res.status(200).json(results.rows)
+    })
 }
 
 const deleteEnquiries = (req, res) => {
