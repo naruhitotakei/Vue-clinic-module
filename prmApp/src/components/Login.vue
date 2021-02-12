@@ -9,7 +9,6 @@
                 <input type="email" v-model="loginEmail" placeholder="E-postni naslov" /> <br />
                 <input type="password" v-model="loginPassword" placeholder="Geslo" /> <br />
                 <button type="submit" @click="login()">Prijava</button> <br />
-                <hr />
                 <a href="#">Ste pozabili vase geslo?</a>
             </form>
         </div>
@@ -38,9 +37,6 @@
 </script>
 
 <style scoped>
-    body {
-        background-color: #333939;
-    }
 
     .container-login {
         width: 100%;
@@ -49,35 +45,39 @@
         display: block;
         margin-left: auto;
         margin-right: auto;
-        width: 500px;
-        top: 3rem;
         position: relative;
+        background-color: #333939;
     }
 
     .container-fluid-logo {
-        width: 50%;
+        width: 100%;
         margin: 0 auto;
         position: relative;
         color: white;
         line-height: 0rem;
         text-align: center;
+        top: 3rem;
     }
 
     .container-login-form {
         position: relative;
         background-color: #FFF;
-        height: 400px;
-        top: 20px;
-        border-radius: 10%;
+        height: 375px;
+        top: 5rem;
+        border-radius: 5%;
         text-align: center;
-        padding: 2rem 1rem;
+        padding: 2rem 1rem 2rem 1rem;
+        width: 500px;
+        justify-content: center;
+        align-items: center;
+        margin: 0 auto;
     }
 
     .container-login-footer {
         position: relative;
         color: #FFF;
         height: 400px;
-        top: 20px;
+        top: 70px;
         border-radius: 10%;
         text-align: center;
         padding: 2rem 1rem;
@@ -87,5 +87,30 @@
         height: 50px;
         width: 300px;
         margin-bottom: 0.5rem;
+        border-radius: 1rem;
+        background-color: #ededed;
+        font-weight: 600;
+    }
+
+    button {
+        margin: 10px 0 50px 0;
+        display: inline-block;
+        width: 300px;
+        height: 50px;
+        background-color: #13bafb;
+        color: white;
+        font-weight: 700;
+        letter-spacing: .04em;
+        border-radius: 2rem;
+        border: none;
+    }
+
+    a {
+        color: black;
+        font-size: 18px;
+    }
+
+    h3 {
+        padding-bottom: 20px;
     }
 </style>
