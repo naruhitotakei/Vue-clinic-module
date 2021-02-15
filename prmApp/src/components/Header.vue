@@ -16,7 +16,7 @@
                     <div class="avatar-logo-client avatar-md mx-auto d-block">
                        <img src="../assets/img/primadent_thin_R.png" alt="Emazing Logo" class="avatar-img" >
                     </div>
-                    <div class="col-12 col-md-auto mt-3 mt-md-0 row align-items-center">
+                    <div v-if="user" class="col-12 col-md-auto mt-3 mt-md-0 row align-items-center">
                         <div class="avatar-group">
                             <div class="avatar avatar-xs">
                                 <img src="../assets/img/bell.png" alt="Obvestila" class="avatar-img">
@@ -26,7 +26,7 @@
                             </div>
                         </div>
                         <div>
-                            <h3 class="header-title navbar-text" id="userName">Dr. Ime Priimek</h3>
+                            <h3 class="header-title navbar-text" id="userName">{{ user.name }}</h3>
                         </div>
                         <div class="btn btn-lg btn-rounded-circle" @click="showProfile = true" v-bind:class="{'show-profile' : showProfile}">
                             <img src="../assets/img/user1.png" alt="Uporabnik " class="avatar-img">
@@ -40,8 +40,8 @@
                                             <img src="../assets/img/user1.png" alt="Uporabnik " class="avatar-lg modal-img">
                                         </div>
                                         <div class="modal-user-info">
-                                            <p><strong>Dr. Ime Priimek</strong></p> <br />
-                                            <p>ime.priimek@gmail.com</p> <br />
+                                            <p><strong>{{ user.name }}</strong></p> <br />
+                                            <p>{{ user.email }}</p> <br />
                                             <a href="#">Oglej si racun</a>
                                         </div>
                                     </div>
@@ -57,6 +57,9 @@
 <script>
     export default {
         name: 'Header',
+        props: {
+            user: Object
+        }, 
         data() {
             return {
                 showProfile: false

@@ -1,6 +1,6 @@
 <template>
     <div>
-        <Header />
+        <Header :user="user"/>
         <Login v-if="!user" v-on:logedIn="setUser"/>
         <Navbar v-if="user" v-on:pageSelect="pageChanged"/>
         
