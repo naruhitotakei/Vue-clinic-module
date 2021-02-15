@@ -34,14 +34,16 @@ export default {
     
     methods: {
         loginUser: function() {
-            login(this.loginEmail, this.loginPassword).then(response => {
-                if (typeof response === 'string' && response.startsWith("NOK")) {
-                    alert(response)
-                } else {
-                    this.user = response
-                    this.$emit("logedIn", this.user)
-                }
-            })
+            if (this.loginEmail && this.loginPassword) {
+                login(this.loginEmail, this.loginPassword).then(response => {
+                    if (typeof response === 'string' && response.startsWith("NOK")) {
+                        alert(response)
+                    } else {
+                        this.user = response
+                        this.$emit("logedIn", this.user)
+                    }
+                })
+            }
         },
         sso: function() {
             sso().then(response => {

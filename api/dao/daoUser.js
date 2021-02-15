@@ -22,14 +22,20 @@ const getUser = ((request, response, sessionData, email, password) => {
         if (error) {
             throw error
         }
-        // todo - preveri dolzino qResult.rows
+        if (!qResult.rows || qResult.rows.length==0) {
+            console.info("User " + email + " does not exist!")
+            return response.status(200).json("NOK: User does not exist");        
+        } else if (qResult.rows.length<1) {
+            console.error("More than ose user has email " + email)
+            return response.status(200).json("NOK: Please contact administrator");
+        }
         bcrResult = bcrypt.compare(qResult.rows[0].encrypted_password, password, function(err, bcrResult) {
             bcrResult = qResult.rows[0].encrypted_password === password  // todo - tole odstrani
             if (bcrResult) {
                 sessionData.user = qResult.rows[0]
                 return response.status(200).json(qResult.rows[0])
             } else {
-                console.log("does not match " + qResult.rows[0].encrypted_password + "/" + password)
+                console.info("Password does not match ")
                 response.json("NOK: Wrong password");
             }
         });
@@ -38,7 +44,6 @@ const getUser = ((request, response, sessionData, email, password) => {
 
 const getUserSso = ((request, response, sessionData) => {
     if (sessionData.user) {  // user already logged in
-        console.log("SSO!!!!")
         return response.status(200).json(sessionData.user)
     }
 })
