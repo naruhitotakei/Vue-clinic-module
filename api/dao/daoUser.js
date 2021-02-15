@@ -43,7 +43,15 @@ const getUserSso = ((request, response, sessionData) => {
     }
 })
 
+const logout = ((request, response, sessionData) => {
+    if (sessionData.user) {  // user already logged in
+        sessionData.user = null
+        return response.status(200).json("OK: user logged out")
+    }
+})
+
 module.exports = {
   getUser,
-  getUserSso
+  getUserSso,
+  logout
 }

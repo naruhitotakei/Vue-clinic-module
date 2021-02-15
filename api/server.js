@@ -39,6 +39,7 @@ app.get('/api/login', (req, res) => {
 // logout user
 app.get('/api/logout', (req, res) => {
    console.log('GET: api/logout called ')
+   daoUser.logout(req, res, req.session)
 });
 
 ///////////////////////////////////
