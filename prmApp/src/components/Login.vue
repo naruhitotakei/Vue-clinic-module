@@ -8,32 +8,55 @@
                 <h3>Prijavite se v svoj racun</h3> <br />
                 <input type="email" v-model="loginEmail" placeholder="E-postni naslov" /> <br />
                 <input type="password" v-model="loginPassword" placeholder="Geslo" /> <br />
-                <button type="submit" @click="login()">Prijava</button> <br />
+                <button type="submit" @click="loginUser()">Prijava</button> <br />
                 <a href="#">Ste pozabili vase geslo?</a>
             </form>
         </div>
         <div class="container-login-footer">
-            <h4>Copyright © 2020 Emazing. Vse pravice pridrzane</h4>
+            <h4>Copyright &#169; 2020 Emazing. Vse pravice pridrzane</h4>
         </div>
     </div>
 </template>
 
 <script>
-    export default {
-        name: 'Login',
-        data: function () {
-            return {
-                loginEmail: null,
-                loginPassword: null,
-                user: {name: 'Janez'}
-            }
-        },
-        methods: {
-            login: function() {
-                this.$emit("logedIn", this.user)
-            }
+import { login } from '../services/UserService'
+import { sso } from '../services/UserService'
+
+export default {
+    name: 'Login',
+    data: function () {
+        return {
+            loginEmail: null,
+            loginPassword: null,
+            user: null
         }
+    },
+    
+    methods: {
+        loginUser: function() {
+            login(this.loginEmail, this.loginPassword).then(response => {
+                if (typeof response === 'string' && response.startsWith("NOK")) {
+                    alert(response)
+                } else {
+                    this.user = response
+                    this.$emit("logedIn", this.user)
+                }
+            })
+        },
+        sso: function() {
+            sso().then(response => {
+                if (typeof response != 'string') {
+                    this.user = response
+                    this.$emit("logedIn", this.user)
+                }
+            })
+        }
+    },
+    
+    mounted () {
+        this.sso();
     }
+}
 </script>
 
 <style scoped>
