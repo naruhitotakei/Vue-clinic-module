@@ -25,9 +25,19 @@ const getUser = ((request, response, sessionData, email, password) => {
         }
         bcrResult = bcrypt.compare(qResult.rows[0].encrypted_password, password, function(err, bcrResult) {
             bcrResult = qResult.rows[0].encrypted_password === password  // todo - tole odstrani
-            if (bcrResult) {
-                sessionData.user = qResult.rows[0]
-                return response.status(200).json(qResult.rows[0])
+            if (qResult.rows[0].prm_role_id) {
+                pool.query('SELECT p.resource_name, s.scope_name FROM prm_role_permission rp JOIN prm_role r ON rp.role_id=r.role_id JOIN prm_permission p ON rp.permission_id=p.permission_id JOIN prm_scope s ON p.scope_id=s.scope_id WHERE rp.role_id = $1', [qResult.rows[0].prm_role_id], (error, qRoleResult) => {
+                    if (error) {
+                        throw error
+                    }
+                    sessionData.user = qResult.rows[0]
+                    sessionData.user.permissions = qRoleResult.rows
+                    console.log(sessionData.user)
+                    return response.status(200).json(sessionData.user)                    
+                })
+            } else if (qResult.rows[0]) {
+                console.info("User "+ email +" has no roles ")
+                response.json("NOK: No roles");                
             } else {
                 console.info("Password does not match ")
                 response.json("NOK: Wrong password");
