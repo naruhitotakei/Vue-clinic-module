@@ -4,13 +4,11 @@
             <h2>Emazing PRM</h2>
         </div>
         <div class="container-login-form">
-            <form>
-                <h3>Prijavite se v svoj racun</h3> <br />
-                <input type="email" v-model="loginEmail" placeholder="E-postni naslov" /> <br />
-                <input type="password" v-model="loginPassword" placeholder="Geslo" /> <br />
-                <button type="submit" @click="loginUser()">Prijava</button> <br />
-                <a href="#">Ste pozabili vase geslo?</a>
-            </form>
+            <h3>Prijavite se v svoj racun</h3> <br />
+            <input type="email" v-model="loginEmail" placeholder="E-postni naslov" /> <br />
+            <input type="password" v-model="loginPassword" placeholder="Geslo" /> <br />
+            <button type="submit" @click="loginUser()">Prijava</button> <br />
+            <a href="#">Ste pozabili vase geslo?</a>
         </div>
         <div class="container-login-footer">
             <h4>Copyright &#169; 2020 Emazing. Vse pravice pridrzane</h4>
@@ -19,7 +17,7 @@
 </template>
 
 <script>
-//import { login } from '../services/UserService'
+import { login } from '../services/UserService'
 import { sso } from '../services/UserService'
 
 export default {
@@ -35,17 +33,14 @@ export default {
     methods: {
         loginUser: function() {
             if (this.loginEmail && this.loginPassword) {
-                //login(this.loginEmail, this.loginPassword).then(response => {
-                //    if (typeof response === 'string' && response.startsWith("NOK")) {
-                //        alert(response)
-                //    } else {
-                //        this.user = response
-                //        this.$emit("logedIn", this.user)
-                //    }
-                //})
-                this.user = {email:'branko@emazing.sl', name:'Branko'}
-                console.log("Set user " + this.user.email)
-                this.$emit("logedIn", this.user)
+                login(this.loginEmail, this.loginPassword).then(response => {
+                    if (typeof response === 'string' && response.startsWith("NOK")) {
+                        alert(response)
+                    } else {
+                        this.user = response
+                        this.$emit("logedIn", this.user)
+                    }
+                })
             }
         },
         sso: function() {
