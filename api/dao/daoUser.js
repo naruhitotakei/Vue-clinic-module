@@ -12,12 +12,6 @@ const pool = new Pool({
 const bcrypt = require('bcrypt');
 
 const getUser = ((request, response, sessionData, email, password) => {
-    if (sessionData.user) {  // user already logged in
-        if (credentials.email != sessionData.user.email) {
-             return response.status(200).json("NOK: Please logout first");
-        }
-        return response.status(200).json(sessionData.user)
-    }
     pool.query('SELECT * FROM users WHERE email = $1', [email], (error, qResult) => {
         if (error) {
             throw error
@@ -43,16 +37,15 @@ const getUser = ((request, response, sessionData, email, password) => {
 })
 
 const getUserSso = ((request, response, sessionData) => {
-    if (sessionData.user) {  // user already logged in
+    if (sessionData.user) { 
         return response.status(200).json(sessionData.user)
     }
+    return response.status(200).json("NOK: user not logged in")
 })
 
 const logout = ((request, response, sessionData) => {
-    if (sessionData.user) {  // user already logged in
-        sessionData.user = null
-        return response.status(200).json("OK: user logged out")
-    }
+    delete sessionData.user
+    return response.status(200).json("OK: user logged out")
 })
 
 module.exports = {

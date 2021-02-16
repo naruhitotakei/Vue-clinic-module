@@ -19,7 +19,7 @@
 </template>
 
 <script>
-import { login } from '../services/UserService'
+//import { login } from '../services/UserService'
 import { sso } from '../services/UserService'
 
 export default {
@@ -35,14 +35,17 @@ export default {
     methods: {
         loginUser: function() {
             if (this.loginEmail && this.loginPassword) {
-                login(this.loginEmail, this.loginPassword).then(response => {
-                    if (typeof response === 'string' && response.startsWith("NOK")) {
-                        alert(response)
-                    } else {
-                        this.user = response
-                        this.$emit("logedIn", this.user)
-                    }
-                })
+                //login(this.loginEmail, this.loginPassword).then(response => {
+                //    if (typeof response === 'string' && response.startsWith("NOK")) {
+                //        alert(response)
+                //    } else {
+                //        this.user = response
+                //        this.$emit("logedIn", this.user)
+                //    }
+                //})
+                this.user = {email:'branko@emazing.sl', name:'Branko'}
+                console.log("Set user " + this.user.email)
+                this.$emit("logedIn", this.user)
             }
         },
         sso: function() {
