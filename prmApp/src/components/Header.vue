@@ -33,7 +33,7 @@
                                 <div class="modal-overlay" v-if="showProfile">
                                     <div class="modal-header">
                                         <p>KLINIKA PRIMADENT d.o.o.</p>
-                                        <span><a href="#">Izpisi se</a></span>
+                                        <span><a href="#" @click="logout">Izpisi se</a></span>
                                     </div>
                                     <div class="modal-body">
                                         <div>
@@ -55,22 +55,33 @@
 </template>
 
 <script>
-    export default {
-        name: 'Header',
-        props: {
-            user: Object
-        }, 
-        data() {
-            return {
-                showProfile: false
-            }
-        },
-        methods: {
-            closeProfileModal() {
-                this.showProfile = false;
-            }
+import { logout } from '../services/UserService'
+
+export default {
+    name: 'Header',
+    props: {
+        user: Object
+    },
+     
+    data() {
+        return {
+            showProfile: false
         }
+    },
+    
+    methods: {
+        logout: function() {
+            logout().then(response => {
+                if (!response.startsWith("OK:"))
+                    console.error(response)
+                this.$emit("logedOut",null)
+            })
+        },
+        closeProfileModal() {
+            this.showProfile = false;
+        },          
     }
+}
 </script>
 
 <style scoped>

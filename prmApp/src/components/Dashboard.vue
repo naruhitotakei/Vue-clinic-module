@@ -1,6 +1,6 @@
 <template>
     <div>
-        <Header :user="user"/>
+        <Header :user="user" v-on:logedOut="setUser"/>
         <Login v-if="!user" v-on:logedIn="setUser"/>
         <Navbar v-if="user" v-on:pageSelect="pageChanged" :user="user"/>
         
@@ -72,7 +72,7 @@ export default {
         },
         setUser (logedInUser) {
             this.user = logedInUser
-        }
+        }       
     }
 }
 </script>

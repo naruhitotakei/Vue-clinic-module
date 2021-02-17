@@ -80,9 +80,7 @@ export default {
             if (!this.user) return false
             if (!resource_names) return false
             for (var i = 0; i < this.user.permissions.length; i++) {
-            console.log(i + ":")
                 for (var j = 0; j < resource_names.length; j++) {
-                console.log(i + " " + j)
                     if(this.user.permissions[i].resource_name == resource_names[j]) return true
                 }
             }
