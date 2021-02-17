@@ -2,7 +2,7 @@
     <div>
         <Header :user="user"/>
         <Login v-if="!user" v-on:logedIn="setUser"/>
-        <Navbar v-if="user" v-on:pageSelect="pageChanged"/>
+        <Navbar v-if="user" v-on:pageSelect="pageChanged" :user="user"/>
         
         <Home v-if="user && currentPage == 'Domov'" />
         <Calendar v-if="user && currentPage == 'Koledar'" />
