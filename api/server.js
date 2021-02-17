@@ -19,6 +19,9 @@ app.use(session({resave: true, saveUninitialized: true, secret: 'BwhFeenj9DcRqAN
 //
 ///////////////////////////////////
 
+const enquiriesPermission = "Enquiries"
+const allScope = "All"
+
 ///////////////////////////////////
 // user login, logout, ...
 ///////////////////////////////////
@@ -52,7 +55,10 @@ app.get('/api/logout', (req, res) => {
 ///////////////////////////////////
 app.get('/api/enquiries', (req, res) => {
   console.log('GET: api/enquiries called')
-  daoEnquiries.getEnquiries(req, res)
+  if(req.session.prm_user && req.session.prm_user.permissions && checkPermission(req.session.prm_user.permissions, enquiriesPermission, allScope))
+      daoEnquiries.getEnquiries(req, res)
+  else    
+      res.status(401).send(`NOK: No permission ` + enquiriesPermission)
 });
 
 app.post('/api/enquiries', (req, res) => {
@@ -74,3 +80,15 @@ app.get('/', (req,res) => {
 app.listen(port, () => {
     console.log(`Server listening on the port::${port}`);
 });
+
+///////////////////////////////////
+// common
+///////////////////////////////////
+
+const checkPermission = function(permissionsList, permission, scope) {
+    if(!permissionsList) return false
+    for(var i=0; i<permissionsList.length; i++) {
+        if (permissionsList[i].resource_name == permission && permissionsList[i].scope_name == scope) return true
+    }
+    return false
+}

@@ -71,6 +71,7 @@ export default {
             this.currentPage = screen
         },
         setUser (logedInUser) {
+            this.currentPage = 'Domov'
             this.user = logedInUser
         }       
     }
