@@ -1,6 +1,6 @@
 <template>
     <div class="container">
-        <h1>Invoices</h1>
+        <h1>Offers</h1>
     </div>
 </template>
 
@@ -8,7 +8,7 @@
 export default {
   components: {
   },
-  name: 'Invoices',
+  name: 'Offers',
   data: function () {
     return {
     }
