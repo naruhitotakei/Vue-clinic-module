@@ -1,7 +1,7 @@
 export async function login(loginEmail, loginPassword) {
-
     const rawResponse = await fetch('/api/login', {
         method: 'POST',
+        credentials: "same-origin",
         headers: {
             'Accept': 'application/json',
             'Content-Type': 'application/json'
@@ -12,7 +12,21 @@ export async function login(loginEmail, loginPassword) {
 }
 
 export async function sso() {
+    const rawResponse = await fetch('/api/login', {
+        credentials: "same-origin",
+        headers: {
+            'Accept': 'application/json',
+        }
+    });    
+    return await rawResponse.json();
+}
 
-    const response = await fetch('/api/login');
-    return await response.json();
+export async function logout() {
+    const rawResponse = await fetch('/api/logout', {
+        credentials: "same-origin",
+        headers: {
+            'Accept': 'application/json',
+        }
+    });    
+    return await rawResponse.json();
 }
