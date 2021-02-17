@@ -1,5 +1,9 @@
 export async function getAllEnquiries() {
-
-    const response = await fetch('/api/enquiries');
-    return await response.json();
+    const rawResponse = await fetch('/api/enquiries', {
+        credentials: "same-origin",
+        headers: {
+            'Accept': 'application/json',
+        }
+    });    
+    return await rawResponse.json();
 }

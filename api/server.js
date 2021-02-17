@@ -24,17 +24,15 @@ app.use(session({resave: true, saveUninitialized: true, secret: 'BwhFeenj9DcRqAN
 ///////////////////////////////////
 
 // login - email and password in body
-app.post('/api/login', (req, res) => {
+app.post('/api/login', async function(req, res) {
    const credentials = req.body
    console.log('POST: api/login called for ' + credentials.loginEmail) 
-   req.session.prm_user = daoUser.getUser(req, res, credentials.loginEmail, credentials.loginPassword) 
-   console.log(req.session.prm_user)
+   req.session.prm_user = await daoUser.getUser(req, res, credentials.loginEmail, credentials.loginPassword)
 });
 
 // get loged user data
 app.get('/api/login', (req, res) => {
    console.log('GET: api/login called')
-   console.log(req.session.prm_user)
    if (req.session.prm_user) { 
         res.status(200).json(req.session.prm_user)
    } else {
