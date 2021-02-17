@@ -27,19 +27,26 @@ app.use(session({resave: true, saveUninitialized: true, secret: 'BwhFeenj9DcRqAN
 app.post('/api/login', (req, res) => {
    const credentials = req.body
    console.log('POST: api/login called for ' + credentials.loginEmail) 
-   daoUser.getUser(req, res, req.session, credentials.loginEmail, credentials.loginPassword)  
+   req.session.prm_user = daoUser.getUser(req, res, credentials.loginEmail, credentials.loginPassword) 
+   console.log(req.session.prm_user)
 });
 
 // get loged user data
 app.get('/api/login', (req, res) => {
    console.log('GET: api/login called')
-   daoUser.getUserSso(req, res, req.session)
+   console.log(req.session.prm_user)
+   if (req.session.prm_user) { 
+        res.status(200).json(req.session.prm_user)
+   } else {
+       res.status(200).json("NOK: user not logged in")
+   }
 });
 
 // logout user
 app.get('/api/logout', (req, res) => {
    console.log('GET: api/logout called ')
-   daoUser.logout(req, res, req.session)
+   delete req.session.prm_user
+   return res.status(200).json("OK: user logged out")
 });
 
 ///////////////////////////////////

@@ -11,17 +11,19 @@ const pool = new Pool({
 
 const bcrypt = require('bcrypt');
 
-const getUser = ((request, response, sessionData, email, password) => {
+const getUser = ((request, response, email, password) => {
     pool.query('SELECT * FROM users WHERE email = $1', [email], (error, qResult) => {
         if (error) {
             throw error
         }
         if (!qResult.rows || qResult.rows.length==0) {
             console.info("User " + email + " does not exist!")
-            return response.status(200).json("NOK: User does not exist");        
+            response.status(200).json("NOK: User does not exist");
+            return         
         } else if (qResult.rows.length<1) {
             console.error("More than ose user has email " + email)
-            return response.status(200).json("NOK: Please contact administrator");
+            response.status(200).json("NOK: Please contact administrator");
+            return 
         }
         bcrResult = bcrypt.compare(qResult.rows[0].encrypted_password, password, function(err, bcrResult) {
             bcrResult = qResult.rows[0].encrypted_password === password  // todo - tole odstrani
@@ -30,10 +32,11 @@ const getUser = ((request, response, sessionData, email, password) => {
                     if (error) {
                         throw error
                     }
-                    sessionData.user = qResult.rows[0]
-                    sessionData.user.permissions = qRoleResult.rows
-                    console.log(sessionData.user)
-                    return response.status(200).json(sessionData.user)                    
+                    var user = qResult.rows[0]
+                    user.permissions = qRoleResult.rows
+                    request.session.prm_user = user
+                    response.status(200).json(user)
+                    return                    
                 })
             } else if (qResult.rows[0]) {
                 console.info("User "+ email +" has no roles ")
@@ -46,20 +49,6 @@ const getUser = ((request, response, sessionData, email, password) => {
     })
 })
 
-const getUserSso = ((request, response, sessionData) => {
-    if (sessionData.user) { 
-        return response.status(200).json(sessionData.user)
-    }
-    return response.status(200).json("NOK: user not logged in")
-})
-
-const logout = ((request, response, sessionData) => {
-    delete sessionData.user
-    return response.status(200).json("OK: user logged out")
-})
-
 module.exports = {
-  getUser,
-  getUserSso,
-  logout
+  getUser
 }
