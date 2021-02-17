@@ -15,8 +15,9 @@
                 <option value="last_visit">Naslednji obisk</option>
                 <option value="personal_dentist">Osebni zobozdravnik</option>
             </select>
-            <button type="button" class="btn btn-dark float-right add-patient">+ Dodaj pacienta</button>
+            <button type="button" class="btn btn-dark float-right add-patient" @click="addPatient = true">+ Dodaj pacienta</button>
         </div>
+        <AddPatient v-if="addPatient"/>
         <!-- https://github.com/aquilesb/v-datatable-light/blob/master/src/components/Pagination.vue -->
         <DataTable
             :header-fields="headerFields"
@@ -251,6 +252,7 @@ import ItemsPerPageDropdown from './common/ItemsPerPageDropdown.vue'
 import Pagination from './common/Pagination.vue'
 import { DataTable } from 'v-datatable-light'
 import orderBy from 'lodash.orderby'
+import AddPatient from '../components/modals/AddPatient.vue'
 
 const addZero = value => (`0${value}`).slice(-2)
 
@@ -268,11 +270,13 @@ export default {
   components: {
       DataTable,
       ItemsPerPageDropdown,
-      Pagination
+      Pagination,
+      AddPatient
   },
   name: 'Enquiries',
   data: function () {
     return {
+      addPatient: false,
       headerFields: [
         //'__slot:checkboxes',
         {
