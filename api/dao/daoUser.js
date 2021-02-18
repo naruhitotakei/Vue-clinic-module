@@ -29,8 +29,7 @@ const getUser = ((request, response, email, password) => {
                 resolve(null)
                 return
             }
-            bcrResult = bcrypt.compare(qResult.rows[0].encrypted_password, password, function(err, bcrResult) {
-                //bcrResult = qResult.rows[0].encrypted_password === password  // todo - tole odstrani
+            bcrResult = bcrypt.compare(qResult.rows[0].prm_password_hash, password, function(err, bcrResult) {
                 if (qResult.rows[0].prm_role_id) {
                     pool.query('SELECT p.resource_name, s.scope_name FROM prm_role_permission rp JOIN prm_role r ON rp.role_id=r.role_id JOIN prm_permission p ON rp.permission_id=p.permission_id JOIN prm_scope s ON p.scope_id=s.scope_id WHERE rp.role_id = $1', [qResult.rows[0].prm_role_id], (error, qRoleResult) => {
                         if (error) {
