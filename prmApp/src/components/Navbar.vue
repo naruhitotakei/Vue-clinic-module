@@ -1,4 +1,3 @@
-<!-- https://phrase.com/blog/posts/ultimate-guide-to-vue-localization-with-vue-i18n/ -->
 <template>
     <!--Sidebar Top-->
     <div class="container-fluid-navbar navbar-margin-top">

@@ -5,15 +5,15 @@
             <span>{{ $t("enquiries.searchby") }} :</span>
             <select name="filterDropdown" class="filter-dropdown">
                 <option value="all"></option>
-                <option value="name">Ime</option>
-                <option value="last_name">Priimek</option>
-                <option value="phone">Telefon</option>
-                <option value="email">Email</option>
-                <option value="city">Mesto</option>
-                <option value="country">Drzava</option>
-                <option value="next_visit">Zadnji obisk</option>
-                <option value="last_visit">Naslednji obisk</option>
-                <option value="personal_dentist">Osebni zobozdravnik</option>
+                <option value="name">{{ $t('enquiries.columname.name') }}</option>
+                <option value="last_name">{{ $t('enquiries.columname.surname') }}</option>
+                <option value="phone">{{ $t('enquiries.columname.phone') }}</option>
+                <option value="email">{{ $t('enquiries.columname.email') }}</option>
+                <option value="city">{{ $t('enquiries.columname.city') }}</option>
+                <option value="country">{{ $t('enquiries.columname.country') }}</option>
+                <option value="next_visit">{{ $t('enquiries.columname.lastvisit') }}</option>
+                <option value="last_visit">{{ $t('enquiries.columname.nextvisit') }}</option>
+                <option value="personal_dentist">{{ $t('enquiries.columname.dentist') }}</option>
             </select>
             <button type="button" class="btn btn-dark float-right add-patient" @click="addPatient = true">+ {{ $t("enquiries.addpacient") }}</button>
         </div>
