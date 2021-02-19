@@ -1,21 +1,21 @@
 <template>
     <div class="container-table">
         <div class="container-filter">
-            <input type="text" v-model="surnameFilter" placeholder="Isci" class="filter" @change="filterData"/>
-            <span>Isci glede na: </span>
+            <input type="text" v-model="surnameFilter" :placeholder="$t('enquiries.search')" class="filter" @change="filterData"/>
+            <span>{{ $t("enquiries.searchby") }} :</span>
             <select name="filterDropdown" class="filter-dropdown">
                 <option value="all"></option>
-                <option value="name">Ime</option>
-                <option value="last_name">Priimek</option>
-                <option value="phone">Telefon</option>
-                <option value="email">Email</option>
-                <option value="city">Mesto</option>
-                <option value="country">Drzava</option>
-                <option value="next_visit">Zadnji obisk</option>
-                <option value="last_visit">Naslednji obisk</option>
-                <option value="personal_dentist">Osebni zobozdravnik</option>
+                <option value="name">{{ $t('enquiries.columname.name') }}</option>
+                <option value="last_name">{{ $t('enquiries.columname.surname') }}</option>
+                <option value="phone">{{ $t('enquiries.columname.phone') }}</option>
+                <option value="email">{{ $t('enquiries.columname.email') }}</option>
+                <option value="city">{{ $t('enquiries.columname.city') }}</option>
+                <option value="country">{{ $t('enquiries.columname.country') }}</option>
+                <option value="next_visit">{{ $t('enquiries.columname.lastvisit') }}</option>
+                <option value="last_visit">{{ $t('enquiries.columname.nextvisit') }}</option>
+                <option value="personal_dentist">{{ $t('enquiries.columname.dentist') }}</option>
             </select>
-            <button type="button" class="btn btn-dark float-right add-patient" @click="addPatient = true">+ Dodaj pacienta</button>
+            <button type="button" class="btn btn-dark float-right add-patient" @click="addPatient = true">+ {{ $t("enquiries.addpacient") }}</button>
         </div>
         <AddPatient v-if="addPatient"/>
         <!-- https://github.com/aquilesb/v-datatable-light/blob/master/src/components/Pagination.vue -->
@@ -52,7 +52,7 @@
 
             <!-- ItemsPerPage component as a slot, but could be drag out from Database element -->
             <div class="items-per-page" slot="ItemsPerPage">
-                <label>Items per page</label>
+                <label>{{ $t("enquiries.itemsperpage") }}</label>
                 <ItemsPerPageDropdown
                     :list-items-per-page="listItemsPerPage"
                     :items-per-page="itemsPerPage"
@@ -281,49 +281,49 @@ export default {
         //'__slot:checkboxes',
         {
           name: 'name',
-          label: 'Ime',
+          label: this.$t('enquiries.columname.name'),
           sortable: false
         },
         {
           name: 'last_name',
-          label: 'Priimek',
+          label: this.$t('enquiries.columname.surname'),
           sortable: true
         },
         {
           name: 'phone',
-          label: 'Telefon',
+          label: this.$t('enquiries.columname.phone'),
           sortable: false
         },
         {
           name: 'email',
-          label: 'email',
+          label: this.$t('enquiries.columname.email'),
           sortable: false
         },
         {
           name: 'city',
-          label: 'Kraj',
+          label: this.$t('enquiries.columname.city'),
           sortable: false,
         },
         {
           name: 'country',
-          label: 'Država',
+          label: this.$t('enquiries.columname.country'),
           sortable: false,
         },
         {
           name: 'last_visit',
-          label: 'Zadnji obisk',
+          label: this.$t('enquiries.columname.lastvisit'),
           sortable: false,
           format: formatDate
         },
         {
           name: 'next_visit',
-          label: 'Naslednji obisk',
+          label: this.$t('enquiries.columname.nextvisit'),
           sortable: false,
           format: formatDate
          },
          {
           name: 'personal_dentist',
-          label: 'Osebni zobozdravnik',
+          label: this.$t('enquiries.columname.dentist'),
           sortable: false
          },
          '__slot:actions:actionEmail',
