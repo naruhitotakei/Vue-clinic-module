@@ -1,9 +1,9 @@
 <template>
     <div class="container-table">
         <div class="container-filter">
-            <input type="text" v-model="surnameFilter" :placeholder="$t('enquiries.search')" class="filter" @change="filterData"/>
+            <input type="text" v-model="filter" :placeholder="$t('enquiries.search')" class="filter" @change="filterData"/>
             <span>{{ $t("enquiries.searchby") }} :</span>
-            <select name="filterDropdown" class="filter-dropdown">
+            <select v-model="filterDropdown" class="filter-dropdown">
                 <option value="all"></option>
                 <option value="name">{{ $t('enquiries.columname.name') }}</option>
                 <option value="last_name">{{ $t('enquiries.columname.surname') }}</option>
@@ -172,17 +172,17 @@
   transition: color 0.15s ease-in-out;
   width: 0;
   height: 0;
-  border-left: 8px solid transparent;
-  border-right: 8px solid transparent;
+  border-left: 6px solid transparent;
+  border-right: 6px solid transparent;
 }
 .v-datatable-light .arrow.up {
-  border-bottom: 8px solid #337ab7;
+  border-bottom: 8px solid black;
 }
 .v-datatable-light .arrow.up:hover {
   border-bottom: 8px solid #ed9b19;
 }
 .v-datatable-light .arrow.down {
-  border-top: 8px solid #337ab7;
+  border-top: 8px solid black;
 }
 .v-datatable-light .arrow.down:hover {
   border-top: 8px solid #ed9b19;
@@ -331,8 +331,9 @@ export default {
       ],
       initialData: [],
       filteredData: [], 
+      /* filterDropdown: '',  added v-model"filterDropdown" in <select>, initialized the property here */
       data: [].slice(0, 10),
-      surnameFilter: null,
+      filter: null,
       datatableCss: {
         table: 'table table-bordered table-hover table-striped table-center',
         theadTr: 'header-item',
@@ -376,15 +377,21 @@ export default {
     
     filterData: function() {
         this.filteredData = []
-        if (this.initialData && this.initialData.length>0) {
+        if (this.initialData && this.initialData.length > 0) {
             for (var line in this.initialData) {
-                if ( this.initialData[line].last_name) {
-                    if ( this.initialData[line].last_name.toLowerCase().startsWith(this.surnameFilter.toLowerCase()) ) {
-                        this.filteredData.push(this.initialData[line]) 
+                if (/*this.filterDropdown === "last_name" && */ this.initialData[line].last_name) {
+                    if (this.initialData[line].last_name.toLowerCase().startsWith(this.filter.toLowerCase())) {
+                        this.filteredData.push(this.initialData[line])
+                    } /* else if (this.filterDropdown === "name" && this.initialData[line].name) {
+                        if (this.initialData[line].name.toLowerCase().startsWith(this.filter.toLowerCase())) {
+                            this.filteredData.push(this.initialData[line])
+                        } /*else if (this.filterDropdown === "phone" && this.initialData[line].phone) {
+                        if(this.initialData)[line].phone.toLowerCase().startsWith(this.filter.toLowerCase())) {
+                         this.filteredData.push(this.initialData[line]) 
+                    } */
                     }
-                }   
+                }
             }
-        }
         this.data = this.filteredData
     },
       
@@ -423,6 +430,7 @@ export default {
       getAllEnquiries().then(response => {
         this.initialData = response
         this.filteredData = response
+        this.filterDropdown = response /* added this line */
         this.data = this.filteredData.slice(0, 10)
       })
     },
