@@ -38,8 +38,8 @@ export default {
                         alert(response)
                     } else {
                         this.user = response
-                        this.$i18n.locale = this.user.locale
-                        console.log("Setting locale to " + this.user.locale)
+                        if (this.user.locale) 
+                            this.$i18n.locale = this.user.locale
                         this.$emit("logedIn", this.user)
                     }
                 })
