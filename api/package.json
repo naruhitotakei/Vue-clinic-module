@@ -6,7 +6,8 @@
   "scripts": {
     "start": "node server.bundle.js",
     "build": "webpack",
-    "dev": "nodemon ./server.js localhost 3080"
+    "dev": "nodemon ./server.js localhost 3080",
+    "test": "mocha"
   },
   "repository": {
     "type": "git",
@@ -19,13 +20,16 @@
   },
   "homepage": "https://github.com/bbachi/vuejs-nginx-docker#readme",
   "dependencies": {
+    "base64url": "^3.0.1",
     "bcrypt": "^5.0.0",
     "dotenv": "^8.2.0",
     "express": "^4.17.1",
     "express-session": "^1.17.1",
+    "get-env": "^0.5.10",
     "http-proxy-middleware": "^1.0.4",
     "pg": "^8.5.1",
-    "random-id": "^1.0.4"
+    "random-id": "^1.0.4",
+    "utf8": "^3.0.0"
   },
   "devDependencies": {
     "del": "^5.1.0",
