@@ -5,24 +5,21 @@
                 <div class="row align-items-center">
                     <div class="col-auto">
                         <div class="avatar-logo avatar-md">
-                            <img src="../assets/img/emazing_logo.png" alt="Logo" class="avatar-img">
+                            <img src="../assets/img/primadent_thin_R.png" alt="Logo" class="avatar-img">
                         </div>
                     </div>
-                    <div class="col-auto ml-n3 ml-md-n2">
-                        <h2 class="header-title">
+                    <div class="avatar-logo-prm avatar-md mx-auto d-block">
+                        <h2>
                             Smart PRM
                         </h2>
                     </div>
-                    <div class="avatar-logo-client avatar-md mx-auto d-block">
-                       <img src="../assets/img/primadent_thin_R.png" alt="Emazing Logo" class="avatar-img" >
-                    </div>
-                    <div v-if="user" class="col-12 col-md-auto mt-3 mt-md-0 row align-items-center">
+                    <div v-if="user" class="col-12 col-md-auto mt-3 mt-md-0 row align-items-center float-right">
                         <div class="avatar-group">
                             <div class="avatar avatar-xs">
-                                <img src="../assets/img/bell.png" alt="Obvestila" class="avatar-img">
+                                <b-icon icon="bell-fill" class="avatar-img"/>
                             </div>
                             <div class="avatar avatar-xs">
-                                <img src="../assets/img/settings.png" alt="Nastavitve" class="avatar-img ">
+                                <b-icon icon="gear-fill" class="avatar-img"/>
                             </div>
                         </div>
                         <div>
@@ -57,6 +54,7 @@
 <script>
 import { logout } from '../services/UserService'
 
+
 export default {
     name: 'Header',
     props: {
@@ -82,6 +80,7 @@ export default {
         },          
     }
 }
+
 </script>
 
 <style scoped>
@@ -133,5 +132,18 @@ export default {
     background-color: #3a8698;
     border-radius: 0 !important;
     transition: none !important;
+}
+
+h2 {
+    margin: 0 !important;
+}
+
+.float-right {
+    right: 0 !important;
+    position: absolute !important;
+}
+
+.col-auto {
+    padding: 0.25rem 0.75rem;
 }
 </style>

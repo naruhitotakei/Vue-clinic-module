@@ -487,7 +487,7 @@ pre {
 .container-table {
     width: calc(100% - 205px);
     height: auto;
-    display: inline-table;
+    display: inline;
     vertical-align: top;
     overflow: hidden;
     position: absolute;
@@ -10655,17 +10655,18 @@ a:focus, button:focus {
 .avatar-logo {
     position: relative;
     display: inline-block;
-    width: 4.25rem;
+    width: 3.75rem;
     height: 3rem;
     font-size: 1rem;
 }
 
-.avatar-logo-client {
-    position: relative;
+.avatar-logo-prm {
+    position: absolute;
     display: inline-block;
-    width: 3.75rem;
-    height: 3rem;
     font-size: 1rem;
+    text-align: center;
+    justify-content: center;
+    width: 100%;
 }
   .avatar:after {
     content: '';
@@ -10766,6 +10767,7 @@ a:focus, button:focus {
 .avatar-group {
   display: inline-block; 
   padding: 0 10px;
+  margin-top: 5px;
 }
   .avatar-group .avatar + .avatar {
     margin-left: -0.75rem; }
