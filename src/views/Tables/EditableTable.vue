@@ -53,7 +53,6 @@
 </template>
 <script>
 import { xray } from '../../config/pluginInit'
-
 export default {
   name: 'UiDataTable',
   mounted () {

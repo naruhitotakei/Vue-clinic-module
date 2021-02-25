@@ -43,6 +43,8 @@
 <script>
 import List from '../menus/ListStyle1'
 import SideBarItems from '../../../FackApi/json/SideBar'
+
+console.log('sidebar data', SideBarItems)
 export default {
   name: 'NavBarStyle1',
   props: {

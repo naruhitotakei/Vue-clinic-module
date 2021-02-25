@@ -51,7 +51,7 @@
 
 <script>
 import SocialLoginForm from './SocialLoginForm'
-import login from '../../../../services/userService'
+import { login } from '../../../../services/userService'
 import { mapGetters } from 'vuex'
 
 export default {
@@ -75,7 +75,9 @@ export default {
   },
   methods: {
     onSubmit () {
+      console.log(this.user.email, this.user.password)
       login(this.user.email, this.user.password)
+      this.$router.push({ name: 'dashboard.home-1' })
     }
   }
 }
