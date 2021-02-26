@@ -1,23 +1,11 @@
 {
   "sidebar": {
-    "dashboard": "Dashboard",
-    "dashboard1": "Doctor Dashboard",
-    "dashboard2": "Hospital Dashboard 1",
-    "dashboard3": "Hospital Dashboard 2",
-    "dashboard4": "Patient Dashboard",
-    "app": "App",
-    "eCommerce": "E-Commerce",
-    "productListing": "Product Listing",
-    "productDetail": "Product Detail",
-    "checkout": "Checkout",
-    "wishlist": "Wishlist",
-    "socialApp": "Social App",
-    "todo": "Todo",
-    "projectManagement": "Project Management",
-    "email": "Email",
-    "inbox": "Inbox",
-    "emailCompose": "Email Compose",
+    "dashboard": "Home",
     "calendar": "Calendar",
+    "editable": "Patients",
+    "assignment": "Assignment",
+    "maps": "Maps",
+    "extraPages": "Extra Pages",
     "doctor": "Doctors",
     "doctorProfile": "Doctor Profile",
     "doctorEdit": "Edit Doctor",
@@ -54,10 +42,9 @@
     "table": "Table",
     "basicTable": "Basic Table",
     "dataTable": "Data Table",
-    "editable": "Editable",
-    "charts": "Charts",
-    "morrisChart": "Morris Chart",
-    "highChart": "High Chart",
+    "charts": "Statistics",
+    "morrisChart": "Statistics Clinic",
+    "highChart": "Statistics Person",
     "amChart": "AM Chart",
     "apexChart": "Apex Chart",
     "icons": "Icons",
@@ -74,9 +61,6 @@
     "recoverPassword": "Recover Password",
     "confirmMail": "Confirm Mail",
     "lockScreen": "Lock Screen",
-    "maps": "Maps",
-    "googleMap": "Google Map",
-    "extraPages": "Extra Pages",
     "timeline": "Timeline",
     "invoice": "Invoice",
     "blankPage": "Blank Page",
@@ -92,6 +76,11 @@
     "select": "Select",
     "draggable": "Draggable",
     "chat": "Chat"
+  },
+  "documents": {
+    "offers": "Offers",
+    "invoices": "Invoices",
+    "advInvoices": "AdvInvoices"
   },
   "nav": {
     "allNotifications": "All Notifications",
@@ -110,7 +99,7 @@
       "privacySettingSub": "Control your privacy parameters.",
       "signout": "Sign Out"
     }
-  },
+  },  
   "dashboard2": {
     "card1": "AVG Impressions",
     "card2": "AVG Engagements Rate",

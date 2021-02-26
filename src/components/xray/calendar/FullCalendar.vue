@@ -11,7 +11,7 @@ import VueFullCalendar from '@fullcalendar/vue'
 import dayGridPlugin from '@fullcalendar/daygrid'
 import timeGridPlugin from '@fullcalendar/timegrid'
 import interactionPlugin from '@fullcalendar/interaction'
-import listPlugin from '@fullcalendar/list'
+// import listPlugin from '@fullcalendar/list'
 export default {
   name: 'FullCalendar',
   props: {
@@ -33,8 +33,8 @@ export default {
       calendarPlugins: [
         dayGridPlugin,
         timeGridPlugin,
-        interactionPlugin,
-        listPlugin
+        interactionPlugin
+        // listPlugin
       ]
     }
   },

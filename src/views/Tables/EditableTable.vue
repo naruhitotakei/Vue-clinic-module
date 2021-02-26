@@ -4,11 +4,11 @@
       <b-col md="12">
         <iq-card>
           <template v-slot:headerTitle>
-            <h4 class="card-title">Editable Table</h4>
+            <h4 class="card-title">Patient Table</h4>
           </template>
-          <template v-slot:headerAction>
+          <!-- <template v-slot:headerAction>
             <b-button variant="primary" @click="add">Add New</b-button>
-          </template>
+          </template> -->
           <template v-slot:body>
             <b-row>
               <b-col md="12" class="table-responsive">
@@ -146,37 +146,6 @@ export default {
           age: '39',
           start_date: '2011/08/11',
           salary: '$170,800',
-          editable: false
-        },
-        {
-          id: 1,
-          name: 'Tiger Nixon',
-          position: 'System Architect',
-          office: 'Edinburgh',
-          age: '61',
-          start_date: '2011/04/25',
-          salary: '$320,800',
-          editable: false
-        },
-
-        {
-          id: 5,
-          name: 'Airi Satou',
-          position: 'Accountant',
-          office: 'Tokyo',
-          age: '39',
-          start_date: '2011/08/11',
-          salary: '$170,800',
-          editable: false
-        },
-        {
-          id: 1,
-          name: 'Tiger Nixon',
-          position: 'System Architect',
-          office: 'Edinburgh',
-          age: '61',
-          start_date: '2011/04/25',
-          salary: '$320,800',
           editable: false
         }
       ]

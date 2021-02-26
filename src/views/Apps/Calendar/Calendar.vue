@@ -1,56 +1,14 @@
 <template>
   <b-container fluid>
     <b-row>
-      <b-col md="3">
-        <iq-card class="calender-small">
-          <template v-slot:body>
-            <flat-pickr :config="config" value="" class="d-none"/>
-          </template>
-        </iq-card>
-        <iq-card>
-          <template v-slot:headerTitle>
-            <h4 class="card-title ">Classification</h4>
-          </template>
-          <template v-slot:headerAction>
-            <a href="#"><i class="fa fa-plus  mr-0" aria-hidden="true" /></a>
-          </template>
-          <template v-slot:body>
-            <ul class="m-0 p-0 job-classification">
-              <li class=""><i class="ri-check-line bg-danger" />Meeting</li>
-              <li class=""><i class="ri-check-line bg-success" />Business travel</li>
-              <li class=""><i class="ri-check-line bg-warning" />Personal Work</li>
-              <li class=""><i class="ri-check-line bg-info" />Team Project</li>
-            </ul>
-          </template>
-        </iq-card>
-        <iq-card>
-          <template v-slot:headerTitle>
-            <h4 class="card-title">Today's Schedule</h4>
-          </template>
-          <template v-slot:body>
-            <ul class="m-0 p-0 today-schedule">
-              <li class="d-flex">
-                <div class="schedule-icon"><i class="ri-checkbox-blank-circle-fill text-primary" /></div>
-                <div class="schedule-text"> <span>Web Design</span>
-                  <span>09:00 to 12:00</span></div>
-              </li>
-              <li class="d-flex">
-                <div class="schedule-icon"><i class="ri-checkbox-blank-circle-fill text-success" /></div>
-                <div class="schedule-text"> <span>Participate in Design</span>
-                  <span>09:00 to 12:00</span></div>
-              </li>
-            </ul>
-          </template>
-        </iq-card>
-      </b-col>
-      <b-col md="9">
+      <b-col md="12">
         <iq-card>
           <template v-slot:headerTitle>
             <h4 class="card-title">Book Appointment</h4>
           </template>
-          <template v-slot:headerAction>
+          <!-- <template v-slot:headerAction>
             <a href="#" class="btn btn-primary"><i class="ri-add-line mr-2"></i>Book Appointment</a>
-          </template>
+          </template> -->
           <template v-slot:body>
             <FullCalendar :calendarEvents="events" />
           </template>

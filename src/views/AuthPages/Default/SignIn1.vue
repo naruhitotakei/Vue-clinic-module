@@ -1,7 +1,7 @@
 <template>
   <div>
     <h1 class="mb-0">Sign in</h1>
-    <p>Enter your email address and password to access admin panel.</p>
+    <!-- <p>Enter your email address and password to access admin panel.</p> -->
     <sign-in1-form formType="jwt" email="admin@xray.com" password="admin123"></sign-in1-form>
   </div>
 </template>

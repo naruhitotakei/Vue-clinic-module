@@ -86,6 +86,10 @@ import DatepickerDemo from '../views/Plugins/DatepickerDemo'
 import SelectDemo from '../views/Plugins/SelectDemo'
 import DragDropDemo from '../views/Plugins/DragDropDemo'
 import AppTreeView from '../views/Plugins/AppTreeView'
+/* Documents */
+import Offers from '../views/Documents/Offers'
+import Invoices from '../views/Documents/Invoices'
+import AdvInvoices from '../views/Documents/AdvInvoices'
 Vue.use(VueRouter)
 
 const childRoutes = (prop, mode) => [
@@ -120,7 +124,26 @@ const childRoutes = (prop, mode) => [
     component: Dashboard4
   }
 ]
-
+const documentChildRoute = (prop, mode) => [
+  {
+    path: 'invoices',
+    name: prop + '.invoices',
+    meta: { dark: mode, auth: true, name: 'Invoices' },
+    component: Invoices
+  },
+  {
+    path: 'advInvoices',
+    name: prop + '.advInvoices',
+    meta: { dark: mode, auth: true, name: 'AdvInvoices' },
+    component: AdvInvoices
+  },
+  {
+    path: 'offers',
+    name: prop + '.offers',
+    meta: { dark: mode, auth: true, name: 'Offers' },
+    component: Offers
+  }
+]
 const coreChildRoute = (prop, mode) => [
   {
     path: 'ui-colors',
@@ -559,6 +582,13 @@ const routes = [
     component: Layout1,
     meta: { auth: true },
     children: coreChildRoute('core')
+  },
+  {
+    path: '/documents',
+    name: 'documents',
+    component: Layout1,
+    meta: { auth: true },
+    children: documentChildRoute('documents')
   },
   {
     path: '/table',

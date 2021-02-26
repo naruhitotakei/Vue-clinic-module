@@ -9,165 +9,6 @@
     "icon": ""
   },
   {
-    "title": "Doctor Dashboard",
-    "name": "sidebar.dashboard1",
-    "is_heading": false,
-    "is_active": false,
-    "link": {
-      "name": "dashboard.home-4"
-    },
-    "class_name": "",
-    "is_icon_class": true,
-    "icon": "ri-hospital-fill"
-  },
-  {
-    "title": "Hospital Dashboard 1",
-    "name": "sidebar.dashboard2",
-    "is_heading": false,
-    "is_active": false,
-    "link": {
-      "name": "dashboard.home-1"
-    },
-    "class_name": "",
-    "is_icon_class": true,
-    "icon": "ri-home-8-fill"
-  },
-  {
-    "title": "Hospital Dashboard 2",
-    "name": "sidebar.dashboard3",
-    "is_heading": false,
-    "is_active": false,
-    "link": {
-      "name": "dashboard.home-2"
-    },
-    "class_name": "",
-    "is_icon_class": true,
-    "icon": "ri-briefcase-4-fill"
-  },
-  {
-    "title": "Patient Dashboard",
-    "name": "sidebar.dashboard4",
-    "is_heading": false,
-    "is_active": false,
-    "link": {
-      "name": "dashboard.home-3"
-    },
-    "class_name": "",
-    "is_icon_class": true,
-    "icon": "ri-group-fill"
-  },
-  {
-    "title": "Covid-19 Dashboard",
-    "name": "Covid-19 Dashboard",
-    "is_heading": false,
-    "is_active": false,
-    "link": {
-      "name": "dashboard.home-5"
-    },
-    "class_name": "",
-    "is_icon_class": true,
-    "icon": "lab la-mendeley"
-  },
-  {
-    "title": "Apps",
-    "name": "sidebar.app",
-    "is_heading": true,
-    "is_active": false,
-    "class_name": "",
-    "is_icon_class": true,
-    "icon": ""
-  },
-  {
-    "title": "Email",
-    "name": "sidebar.email",
-    "is_heading": false,
-    "is_active": false,
-    "link": "",
-    "class_name": "",
-    "is_icon_class": true,
-    "icon": "ri-mail-open-line",
-    "children": [
-      {
-        "title": "Inbox",
-        "name": "sidebar.inbox",
-        "is_active": false,
-        "link": {
-          "name" : "app.email"
-        },
-        "class_name": "",
-        "is_icon_class": true,
-        "icon": "ri-mail-open-fill"
-      },
-      {
-        "title": "Email Compose",
-        "name": "sidebar.emailCompose",
-        "is_active": false,
-        "link": {
-          "name" : "app.email.compose"
-        },
-        "class_name": "",
-        "is_icon_class": true,
-        "icon": "ri-edit-line"
-      }
-    ]
-  },
-  {
-    "title": "Doctors",
-    "name": "sidebar.doctor",
-    "is_heading": false,
-    "is_active": false,
-    "link": "",
-    "class_name": "",
-    "is_icon_class": true,
-    "icon": "ri-user-3-fill",
-    "children": [
-      {
-        "title": "All Doctors",
-        "name": "sidebar.doctorList",
-        "is_active": false,
-        "link": {
-          "name" : "doctor.list"
-        },
-        "class_name": "",
-        "is_icon_class": true,
-        "icon": "ri-file-list-fill"
-      },
-      {
-        "title": "Add Doctor",
-        "name": "sidebar.doctorAdd",
-        "is_active": false,
-        "link": {
-          "name" : "doctor.add"
-        },
-        "class_name": "",
-        "is_icon_class": true,
-        "icon": "ri-user-add-fill"
-      },
-      {
-        "title": "Doctor Profile",
-        "name": "sidebar.doctorProfile",
-        "is_active": false,
-        "link": {
-          "name" : "doctor.profile"
-        },
-        "class_name": "",
-        "is_icon_class": true,
-        "icon": "ri-profile-fill"
-      },
-      {
-        "title": "Edit Doctor",
-        "name": "sidebar.doctorEdit",
-        "is_active": false,
-        "link": {
-          "name" : "doctor.edit"
-        },
-        "class_name": "",
-        "is_icon_class": true,
-        "icon": "ri-file-edit-fill"
-      }
-    ]
-  },
-  {
     "title": "Calendar",
     "name": "sidebar.calendar",
     "is_heading": false,
@@ -179,19 +20,140 @@
     "is_icon_class": true,
     "icon": "ri-calendar-event-fill"
   },
+    {
+      "title": "Patients",
+      "name": "sidebar.editable",
+      "is_active": false,
+      "link": {
+        "name": "table.editable"
+      },
+      "class_name": "",
+      "is_icon_class": true,
+      "icon": "ri-refund-line"
+    },
+    {
+      "title": "Documents",
+      "name": "Documents",
+      "is_heading": false,
+      "is_active": false,
+      "link": "",
+      "class_name": "",
+      "is_icon_class": true,
+      "icon": "ri-device-fill",
+      "children": [
+        {
+          "title": "Offers",
+          "name": "documents.offers",
+          "is_active": false,
+          "link": {
+            "name": "documents.offers"
+          },
+          "class_name": "",
+          "is_icon_class": true,
+          "icon": "ri-tablet-line"
+        },
+        {
+          "title": "Invoices",
+          "name": "documents.invoices",
+          "is_active": false,
+          "link": {
+            "name": "documents.invoices"
+          },
+          "class_name": "",
+          "is_icon_class": true,
+          "icon": "ri-device-line"
+        },
+        {
+          "title": "Form AdvInvoices",
+          "name": "documents.advInvoices",
+          "is_active": false,
+          "link": {
+            "name": "documents.advInvoices"
+          },
+          "class_name": "",
+          "is_icon_class": true,
+          "icon": "ri-toggle-line"
+        }
+      ]
+    },
+    {
+      "title": "Assignment",
+      "name": "Assignment",
+      "is_heading": false,
+      "is_active": false,
+      "link": {
+        "name" : "sidebar.assignment"
+      },
+      "class_name": "",
+      "is_icon_class": true,
+      "icon": "ri-calendar-event-fill"
+    },
   {
-    "title": "Chat",
-    "name": "sidebar.chat",
+    "title": "Statistics",
+    "name": "Statistics",
     "is_heading": false,
     "is_active": false,
-    "link": {
-      "name" : "app.chat"
-    },
+    "link": "",
     "class_name": "",
     "is_icon_class": true,
-    "icon": "ri-message-fill"
+    "icon": "ri-bar-chart-2-fill",
+    "children": [
+      {
+        "title": "Statistics Clinic",
+        "name": "sidebar.morrisChart",
+        "is_active": false,
+        "link": {
+          "name": "chart.morris"
+        },
+        "class_name": "",
+        "is_icon_class": true,
+        "icon": "ri-file-chart-line"
+      },
+      {
+        "title": "Statistics Person",
+        "name": "sidebar.highChart",
+        "is_active": false,
+        "link": {
+          "name": "chart.high"
+        },
+        "class_name": "",
+        "is_icon_class": true,
+        "icon": "ri-bar-chart-line"
+      }
+    ]
   },
-
+  {
+    "title": "Reports",
+    "name": "Reports",
+    "is_heading": false,
+    "is_active": false,
+    "link":"",
+    "class_name": "",
+    "is_icon_class": true,
+    "icon": "ri-file-chart-line",
+    "children": [
+      {
+        "title": "Accounting Emazing",
+        "name": "Accounting Emazing",
+        "is_active": false,
+        "link": {
+        "name": ""
+        },
+        "class_name": "",
+        "is_icon_class": true,
+        "icon": "ri-font-color"
+      }]
+  },
+  {
+    "title": "Settings",
+    "name": "Settings",
+    "is_heading": false,
+    "is_active": false,
+    "link":"",
+    "class_name": "",
+    "is_icon_class": true,
+    "icon": "ri-settings-5-line"
+  },
   {
     "title": "Components",
     "name": "sidebar.components",
@@ -530,73 +492,6 @@
         "class_name": "",
         "is_icon_class": true,
         "icon": "ri-database-line"
-      },
-      {
-        "title": "Editable",
-        "name": "sidebar.editable",
-        "is_active": false,
-        "link": {
-          "name": "table.editable"
-        },
-        "class_name": "",
-        "is_icon_class": true,
-        "icon": "ri-refund-line"
-      }
-    ]
-  },
-  {
-    "title": "Charts",
-    "name": "sidebar.charts",
-    "is_heading": false,
-    "is_active": false,
-    "link": "",
-    "class_name": "",
-    "is_icon_class": true,
-    "icon": "ri-bar-chart-2-fill",
-    "children": [
-      {
-        "title": "Morris Charts",
-        "name": "sidebar.morrisChart",
-        "is_active": false,
-        "link": {
-          "name": "chart.morris"
-        },
-        "class_name": "",
-        "is_icon_class": true,
-        "icon": "ri-file-chart-line"
-      },
-      {
-        "title": "High Charts",
-        "name": "sidebar.highChart",
-        "is_active": false,
-        "link": {
-          "name": "chart.high"
-        },
-        "class_name": "",
-        "is_icon_class": true,
-        "icon": "ri-bar-chart-line"
-      },
-      {
-        "title": "AM Charts",
-        "name": "sidebar.amChart",
-        "is_active": false,
-        "link": {
-          "name": "chart.am"
-        },
-        "class_name": "",
-        "is_icon_class": true,
-        "icon": "ri-folder-chart-line"
-      },
-      {
-        "title": "Apex Charts",
-        "name": "sidebar.apexChart",
-        "is_active": false,
-        "link": {
-          "name": "chart.apex"
-        },
-        "class_name": "",
-        "is_icon_class": true,
-        "icon": "ri-folder-chart-2-line"
       }
     ]
   },
@@ -740,29 +635,6 @@
         "class_name": "",
         "is_icon_class": true,
         "icon": "ri-lock-line"
-      }
-    ]
-  },
-  {
-    "title": "Maps",
-    "name": "sidebar.maps",
-    "is_heading": false,
-    "is_active": false,
-    "link": "",
-    "class_name": "",
-    "is_icon_class": true,
-    "icon": "ri-map-pin-2-fill",
-    "children": [
-      {
-        "title": "Google Map",
-        "name": "sidebar.googleMap",
-        "is_active": false,
-        "link": {
-          "name": "map.google"
-        },
-        "class_name": "",
-        "is_icon_class": true,
-        "icon": "ri-google-line"
       }
     ]
   },
