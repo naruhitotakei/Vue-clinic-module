@@ -1,10 +1,23 @@
 <template>
-  <VueFullCalendar defaultView="dayGridMonth"
-                   :header="header"
-                   :plugins="calendarPlugins"
-                   :events="calendarEvents"
-                   time-zone="UTC"
+  <VueFullCalendar @dateClick="handleDateClick"
+  defaultView="dayGridMonth"
+  :header="header"
+  :plugins="calendarPlugins"
+  :weekends="false"
+  :events="[
+    { title: 'event 1', date: '2021-04-01' },
+    { title: 'event 2', date: '2021-04-02' }
+  ]"
   />
+  <!-- <FullCalendar
+  defaultView="dayGridMonth"
+  :plugins="calendarPlugins"
+  :weekends="false"
+  :events="[
+    { title: 'event 1', date: '2019-04-01' },
+    { title: 'event 2', date: '2019-04-02' }
+  ]"
+  /> -->
 </template>
 <script>
 import VueFullCalendar from '@fullcalendar/vue'
@@ -16,7 +29,7 @@ export default {
   name: 'FullCalendar',
   props: {
     // eslint-disable-next-line vue/require-valid-default-prop
-    calendarEvents: { type: Array, default: [] },
+    calendarEvents: { type: Array, default: [ { title: 'event 1', date: '2021-04-01' }, { title: 'event 2', date: '2021-04-02' } ] },
     header: { type: Object,
       // eslint-disable-next-line vue/require-valid-default-prop
       default () {
@@ -46,6 +59,9 @@ export default {
   computed: {
   },
   methods: {
+    handleDateClick (arg) {
+      alert(arg.date)
+    }
   }
 }
 </script>

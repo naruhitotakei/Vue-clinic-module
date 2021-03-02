@@ -466,7 +466,7 @@
 &lt;/div&gt;
 </code></pre>
                 </kbd>
-              </div>
+            </div>
             </b-collapse>
             <b-button variant="primary" class="mb-3 mr-1"><i class="ri-heart-fill pr-0"></i></b-button>
             <b-button variant="secondary" class="mb-3 mr-1"><i class="ri-star-fill pr-0"></i></b-button>

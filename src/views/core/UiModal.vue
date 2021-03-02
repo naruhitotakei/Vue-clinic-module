@@ -20,7 +20,6 @@
                     <code>
 &lt;b-button v-b-modal.modal-1 variant="primary"&gt;Launch demo modal&lt;/b-button&gt;
 &lt;b-modal id="modal-1" title="Modal title" ok-title="Save Changes" cancel-title="Close"&gt;
-  ...
 &lt;/b-modal&gt;
 </code></pre>
                 </kbd>
@@ -28,7 +27,53 @@
             </b-collapse>
             <b-button v-b-modal.modal-1 variant="primary">Launch demo modal</b-button>
             <b-modal id="modal-1" title="Modal title" ok-title="Save Changes" cancel-title="Close">
-              ...
+          <iq-card>
+          <template v-slot:headerTitle>
+            <h4 class="card-title">Basic Form</h4>
+          </template>
+          <template v-slot:headerAction>
+            <b-link class="text-primary float-right" v-b-toggle.collapse-1>
+              <i class="ri-code-s-slash-line" />
+            </b-link>
+          </template>
+          <template v-slot:body>
+           <b-collapse id="collapse-1" class="mb-2">
+              <div class="card">
+                <kbd class="bg-dark">
+                  <pre class="text-white" id="form-1">
+                    <code>
+ &lt;b-form&gt;
+  &lt;b-form-group label="Email address:" label-for="email1"&gt;
+    &lt;b-form-input id="email1" type="email"&gt;&lt;/b-form-input&gt;
+  &lt;/b-form-group&gt;
+  &lt;b-form-group label="Password:" label-for="pwd"&gt;
+    &lt;b-form-input id="pwd" type="password" &gt;&lt;/b-form-input&gt;
+  &lt;/b-form-group&gt;
+  &lt;b-form-checkbox class="mb-3"&gt;
+    Remember me
+  &lt;/b-form-checkbox&gt;
+  &lt;b-button type="submit" variant="primary"&gt;Submit&lt;/b-button&gt;
+  &lt;b-button type="submit" variant="none" class="iq-bg-danger ml-3"&gt;Cancle&lt;/b-button&gt;
+&lt;/b-form&gt;
+</code></pre>
+                </kbd>
+              </div>
+            </b-collapse>
+            <b-form>
+              <b-form-group label="Email address:" label-for="email1">
+                <b-form-input id="email1" type="email"></b-form-input>
+              </b-form-group>
+              <b-form-group label="Password:" label-for="pwd">
+                <b-form-input id="pwd" type="password" ></b-form-input>
+              </b-form-group>
+              <b-form-checkbox class="mb-3">
+                Remember me
+              </b-form-checkbox>
+              <b-button type="submit" variant="primary">Submit</b-button>
+              <b-button type="submit" variant="none" class="iq-bg-danger ml-3">Cancle</b-button>
+            </b-form>
+          </template>
+        </iq-card>
             </b-modal>
           </template>
         </iq-card>
