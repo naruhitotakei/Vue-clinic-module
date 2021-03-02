@@ -16,7 +16,7 @@ const prodPort = 9003
 // API METHODES
 //
 ///////////////////////////////////
-const ping = (certPath, keyPath, passphrase) => {
+const ping = (certDescriptor) => {
     console.log("Environment " + env)
 
     var jsonRequest = {
@@ -24,7 +24,7 @@ const ping = (certPath, keyPath, passphrase) => {
     }
     var data = JSON.stringify(jsonRequest)
     
-    var pingOptions = getOptions("echo", data.length, certPath, keyPath, passphrase);     
+    var pingOptions = getOptions("echo", data.length, certDescriptor);     
     const req = https.request(pingOptions, (res) => {
         console.log(`statusCode: ${res.statusCode}`)
         res.on('data', (d) => {
@@ -39,11 +39,18 @@ const ping = (certPath, keyPath, passphrase) => {
     req.end()
 }
 
-const issueInvoice = (invoice, certPath, keyPath, passphrase) => {
+const registerPremises = (premises, certDescriptor) => {
+    var checkStatus = checkPremises(premises)
+    if (checkStatus != "OK") 
+        return checkStatus;
+    return issueDocument("invoices/register", premises, certDescriptor)
+}
+
+const issueInvoice = (invoice, certDescriptor) => {
     var checkStatus = checkInvoice(invoice)
     if (checkStatus != "OK") 
         return checkStatus;
-    return issueDocument(invoice, certPath, keyPath, passphrase)
+    return issueDocument("invoices", invoice, certDescriptor)
 }
 
 ///////////////////////////////////
@@ -51,37 +58,60 @@ const issueInvoice = (invoice, certPath, keyPath, passphrase) => {
 // HELPER METHODES
 //
 ///////////////////////////////////
+const checkPremises = (premises) => {
+    return "OK"
+}
+
 const checkInvoice = (invoice) => {
     return "OK"
 }
 
-const issueDocument = (doc, certPath, keyPath, passphrase) => {
-    var header = getHeaderBase64(certPath)  
-    var boddy = getBoddy(doc)      
-    var signedToken = getSignedToken(header + "." + boddy)
+const issueDocument = (service, doc, certDescriptor) => {
+    var header = getHeaderBase64(certDescriptor)  
+    var boddy = getBoddyBase64(doc)
+    var signedToken = getSignedToken(header + "." + boddy, certDescriptor)
+    var data = JSON.stringify({ "token": signedToken})
      
-    var data = JSON.stringify({"token" : signedToken})
-    console.log(data)
+    var issueOptions = getOptions(service, data.length, certDescriptor);     
+    const req = https.request(issueOptions, (res) => {
+        console.log(`statusCode: ${res.statusCode}`)
+        res.on('data', (d) => {
+            process.stdout.write(d)
+        })
+    })
+    req.on('error', (error) => {
+        console.error(error)
+    })
+
+    req.write(data)
+    req.end()
 }
 
-const getHeaderBase64 = (certPath) => {
+const getHeaderBase64 = (certDescriptor) => {
     var header = {
         "alg":          "RS256",
-        "subject_name": "subject name",
-        "issuer_name":  "issuer name",
-        "serial":       "serial"
+        "subject_name": certDescriptor.subject,
+        "issuer_name":  certDescriptor.issuer,
+        "serial":       certDescriptor.serial
     }
+        
     var headerBytes = utf8.encode(JSON.stringify(header))
     var headerBase64 = base64url(headerBytes)
     return headerBase64
 }
 
-const getOptions = (service, len, certPath, keyPath, passphrase) => {
+const getBoddyBase64 = (doc) => {
+    var docBytes = utf8.encode(JSON.stringify(doc))
+    var docBase64 = base64url(docBytes)
+    return docBase64
+}
+
+const getOptions = (service, len, certDescriptor) => {
     var reqOptions = {
         method: 'POST',
-        cert: fs.readFileSync(certPath),
-        key: fs.readFileSync(keyPath),  
-        passphrase: passphrase,
+        cert: fs.readFileSync(certDescriptor.certFile),
+        key: fs.readFileSync(certDescriptor.keyFile),  
+        passphrase: certDescriptor.passphrase,
         headers: {}
     }
     if (env == 'prod') {
@@ -101,25 +131,19 @@ const getOptions = (service, len, certPath, keyPath, passphrase) => {
     return reqOptions
 } 
 
-const getBoddy = (invoice) => {
-    return 123
-}
-
-const getSignedToken = (token) => {
-    var privateKey = getPrivateKey('./fiscalVerfication/ssl/key.pem')
+const getSignedToken = (token, certDescriptor) => {
+    var privateKey = getPrivateKey(certDescriptor.keyFile)
         
     var sign = crypto.createSign('sha256WithRSAEncryption');
     sign.write(token);
     sign.end();
     var signature = sign.sign(privateKey, 'hex');
     var base64Signature = base64url(parseHexString(signature))
-    console.log("B Signature: " + token + "." + base64Signature)
     return token + "." + base64Signature
 }
 
 const getPrivateKey = (keyFile) => {
     var pemString = fs.readFileSync(keyFile);
-    console.log("Sign key:" + pemString)
     var privateKey = crypto.createPrivateKey({
         'key': pemString,
         'format': 'pem',
@@ -147,7 +171,7 @@ const parseHexString = (str) => {
 //
 ///////////////////////////////////
 module.exports = {
-  getSignedToken,
   ping,
-  issueInvoice,
+  registerPremises,
+  issueInvoice
 }
