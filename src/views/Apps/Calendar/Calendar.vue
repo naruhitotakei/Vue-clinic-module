@@ -18,69 +18,71 @@
         </iq-card>
           </template>
           <template v-slot:headerAction>
-<!-- <kbd class="bg-dark">
-<pre class="text-white" id="form-3">
-<code>
-&lt;b-form-group
-    label-for="exampleFormControlSelect1"
-    label="Select Input"&gt;
-    &lt;b-form-select plain v-model="selected" :options="options1" id="exampleFormControlSelect1"&gt;
-      &lt;template v-slot:first&gt;
-        &lt;b-form-select-option :value="null" disabled&gt;Select your age&lt;/b-form-select-option&gt;
-      &lt;/template&gt;
-    &lt;/b-form-select&gt;
-  &lt;/b-form-group&gt;
-        </code>
-            </pre>
-                </kbd> -->
             <b-button v-b-modal.modal-1 variant="primary"><i class="ri-add-line mr-2"></i>Book Appointment</b-button>
-            <b-modal id="modal-1" title="Appointment details" ok-title="Save Changes" @ok="submitFormData" cancel-title="Close">
-            <b-form>
-              <b-form-group label="Appointment name:" label-for="appname">
-                <b-form-input id="appname" v-model="formData.appName"></b-form-input>
-              </b-form-group>
-              <b-form-group label="Date and Time Input" label-for="datetime">
-                <b-form-input id="datetime" v-model="formData.dateTime" type="datetime-local" value="2019-12-19T13:45:00"></b-form-input>
-              </b-form-group>
-              <b-form-group label="Regarding:" label-for="regarding">
-                <b-form-input id="regarding" v-model="formData.regarding"></b-form-input>
-              </b-form-group>
-              <b-form-group label="Type:" label-for="type">
-              <b-form-select id="type" plain v-model="formData.type" :options="options3" class="mb-3">
-                <!-- <template v-slot:first>
-                  <b-form-select-option :value="null"></b-form-select-option>
-                </template> -->
-              </b-form-select>
-            </b-form-group>
-            <b-form-group label="Name of Doctor:" label-for="doctorlist">
-              <b-form-select id="doctorlist" plain v-model="formData.doctorList" :options="options2" class="mb-3">
-              </b-form-select>
-            </b-form-group>
-            <b-form-group label="Name of Patient:" label-for="patientname">
-              <b-form-select id="patientname" plain v-model="formData.patientName" :options="options3" class="mb-3">
-              </b-form-select>
-            </b-form-group>
-            <b-form-group label="Location:" label-for="location">
-              <b-form-select id="location" plain v-model="formData.location" :options="options3" class="mb-3">
-              </b-form-select>
-            </b-form-group>
-            <b-form-group label="Telephone Input" label-for="phone" class="mb-3">
-                <b-form-input id="phone" v-model="formData.phone" placeholder="1-(555)-555-5555"></b-form-input>
-             </b-form-group>
-             <b-form-group label="Answered by:" label-for="answeredby">
-                <b-form-input id="answeredby" v-model="formData.answeredBy"></b-form-input>
-              </b-form-group>
-              <b-form-group label="Presence:" label-for="presence">
-              <b-form-select id="presence" plain :options="options1" v-model="formData.presence" class="mb-3" style="padding: 12px">
-              </b-form-select>
-              </b-form-group>
-              <!-- <b-form-checkbox class="mb-3">
-                Remember me
-              </b-form-checkbox>
-              <b-button type="submit" variant="primary">Submit</b-button>
-              <b-button type="submit" variant="none" class="iq-bg-danger ml-3">Cancle</b-button> -->
-            </b-form>
+            <form class="mt-4" novalidate @submit="submitFormData()">
+              <b-modal id="modal-1" title="Appointment details" hide-footer>
+            <!-- <b-modal id="modal-1" title="Appointment details" ok-title="Save Changes" @ok="submitFormData" cancel-title="Close"> -->
+              <form @submit="submitFormData()">
+              <div class="form-row">
+                <div class="col-md-12 mb-3">
+                  <label for="validationDefault01">Appointment name</label>
+                  <input type="text" v-model="formData.appName" class="form-control" id="validationDefault01" required>
+                </div>
+                <div class="col-md-12 mb-3">
+                  <label for="validationDefault02">Date and Time</label>
+                  <input type="datetime-local" placeholder="2021-01-01T13:45:00" v-model="formData.dateTime" class="form-control" id="validationDefault02" required>
+                </div>
+                <div class="col-md-12 mb-3">
+                  <label for="validationDefault03">Regarding</label>
+                  <input type="text" v-model="formData.regarding" class="form-control" id="validationDefault02" required>
+                </div>
+                <div class="col-md-12 mb-3">
+                  <label for="validationDefault04">Type</label>
+                  <select class="form-control" v-model="formData.type" id="validationDefault04" required>
+                    <option selected disabled value="type">Choose...</option>
+                    <option>...</option>
+                  </select>
+                </div>
+                <div class="col-md-12 mb-3">
+                  <label for="validationDefault05">Name of Doctor</label>
+                  <select class="form-control" v-model="formData.doctorList" id="validationDefault05" required>
+                    <option selected disabled value="doctor_name">Choose...</option>
+                    <option>...</option>
+                  </select>
+                </div>
+                <div class="col-md-12 mb-3">
+                  <label for="validationDefault06">Name of Patient</label>
+                  <select class="form-control" v-model="formData.patientName" id="validationDefault06" required>
+                    <option selected disabled value="patient_name">Choose...</option>
+                    <option>...</option>
+                  </select>
+                </div>
+                <div class="col-md-12 mb-3">
+                  <label for="validationDefault06">Location</label>
+                  <select class="form-control" v-model="formData.location" id="validationDefault06" required>
+                    <option selected disabled value="location">Choose...</option>
+                    <option>...</option>
+                  </select>
+                </div>
+                <div class="col-md-12 mb-3">
+                  <label for="validationDefault05">Telephone Input</label>
+                  <input type="tel" class="form-control" v-model="formData.phone" id="validationDefault05" required>
+                </div>
+              <div class="col-md-12 mb-3">
+                  <label for="validationDefault05">Answered by</label>
+                  <input type="tel" v-model="formData.answeredBy" class="form-control" id="validationDefault05" required>
+              </div>
+              <div class="col-md-12 mb-3">
+                  <label for="validationDefault05">Presence</label>
+                  <input type="tel" v-model="formData.presence" class="form-control" id="validationDefault05" required>
+              </div>
+              </div>
+              <div class="form-group">
+                <button class="btn btn-primary" type="submit">Submit form</button>
+              </div>
+            </form>
           </b-modal>
+          </form>
             <!-- <a href="#" class="btn btn-primary"><i class="ri-add-line mr-2"></i>Book Appointment</a> -->
           </template>
           <template v-slot:body>
