@@ -3,16 +3,8 @@
   defaultView="dayGridMonth"
   :header="header"
   :plugins="calendarPlugins"
-  :weekends="true"
-  :events="[
-    { title: 'Event 1', date: '2021-03-04', color: 'rgb(0, 255, 136)', resource: 'a'},
-    { title: 'Event 2', date: '2021-03-04', color: 'rgb(243, 0, 101)', resource: 'b'},
-    { title: 'Repeating Event', start: '2021-03-03T10:00:00', end: '2021-03-04T08:00:00', color: '#17a2b8',  resource: 'c'},
-    { title: 'Event 3', start: '2021-03-09', end: '2021-03-13', color: '#27e3f4' },
-    { title: 'Event 4', start: '2021-03-20', end: '2021-03-25', color: 'rgb(243, 0, 101)' },
-    { title: 'Event 5', start: '2021-03-24', end: '2021-03-28T07:00:00', color: 'rgb(0, 255, 136)' },
-    { title: 'Meeting', start: '2021-03-13', end: '2021-03-17', color: 'red' }
-  ]"
+  :weekends="false"
+  :events="eventArray"
   :resources="[
       { id: 'a', resource: 'A' },
       { id: 'b', resource: 'B'},
@@ -58,6 +50,15 @@ export default {
         timeGridPlugin,
         interactionPlugin,
         listPlugin
+      ],
+      eventArray: [
+        { title: 'Event 1', date: '2021-03-04', color: 'rgb(0, 255, 136)', resource: 'A' },
+        { title: 'Event 2', date: '2021-03-04', color: 'rgb(243, 0, 101)', resource: 'B' },
+        { title: 'Repeating Event', start: '2021-03-03T10:00:00', end: '2021-03-04T08:00:00', color: '#17a2b8', resource: 'C' },
+        { title: 'Event 3', start: '2021-03-09', end: '2021-03-13', color: '#27e3f4' },
+        { title: 'Event 4', start: '2021-03-20', end: '2021-03-25', color: 'rgb(243, 0, 101)' },
+        { title: 'Event 5', start: '2021-03-24', end: '2021-03-28T07:00:00', color: 'rgb(0, 255, 136)' },
+        { title: 'Meeting', start: '2021-03-13', end: '2021-03-17', color: 'brown' }
       ]
     }
   },

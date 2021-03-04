@@ -68,8 +68,24 @@
               </b-col>
             </b-row>
             <template>
+            <b-collapse id="collapse-6" class="mb-2">
+              <div class="card">
+                <kbd class="bg-dark">
+                  <pre class="text-white" id="pagination-align">
+                    <code>
+&lt;b-pagination value="1"
+              prev-text="Previous"
+              next-text="Next"
+              first-text="First"
+              last-text="Last"
+              :total-rows="50"
+&gt;&lt;/b-pagination&gt;
+</code></pre>
+                </kbd>
+              </div>
+            </b-collapse>
             <div class="mt-3">
-            <b-pagination @change="onPageChanged" :per-page="perPage" v-model="currentPage" prev-text="Previous" next-text="Next" first-text="First" last-text="Last" :total-rows="totalRows" align="center"/>
+            <b-pagination value="1" prev-text="Previous" next-text="Next" first-text="First" last-text="Last" :total-rows="50" align="center"/>
             </div>
           </template>
           </template>
@@ -84,21 +100,11 @@ export default {
   name: 'UiDataTable',
   mounted () {
     xray.index()
-    this.paginate(this.perPage, 0)
   },
   methods: {
     add () {
       let obj = this.default()
       this.rows.push(obj)
-    },
-    paginate (pageSize, pageNumber) {
-      let itemsToParse = this.rows
-      this.paginatedItems = itemsToParse.slice(
-        pageNumber * pageSize,
-        (pageNumber + 1) * pageSize)
-    },
-    onPageChanged (page) {
-      this.paginate(this.perPage, page - 1)
     },
     default () {
       return {
@@ -110,11 +116,6 @@ export default {
         start_date: '2011/04/25',
         salary: '$0',
         editable: false
-        // items: this.rows,
-        // paginatedItems: this.rows,
-        // currentPage: 1,
-        // perPage: 5,
-        // totalRows: this.rows.length
       }
     },
     edit (item) {
@@ -130,12 +131,6 @@ export default {
   },
   data () {
     return {
-      editable: false,
-      items: this.rows,
-      paginatedItems: this.rows,
-      currentPage: 1,
-      perPage: 5,
-      totalRows: this.rows.length,
       selected: this.value,
       searchoption: [
         { value: 'name', text: 'Name' },
@@ -201,7 +196,7 @@ export default {
           editable: false
         },
         {
-          id: 4,
+          id: 1,
           name: 'Tiger',
           surname: 'Nixon',
           telephone: '7876678787',
@@ -214,7 +209,7 @@ export default {
           editable: false
         },
         {
-          id: 5,
+          id: 2,
           name: 'Garrett',
           surname: 'Winters',
           telephone: '9834567755',
@@ -227,7 +222,7 @@ export default {
           editable: false
         },
         {
-          id: 6,
+          id: 3,
           name: 'Ashton',
           surname: 'Cox',
           telephone: '9834567755',
@@ -240,7 +235,7 @@ export default {
           editable: false
         },
         {
-          id: 7,
+          id: 1,
           name: 'Tiger',
           surname: 'Nixon',
           telephone: '7876678787',
@@ -253,7 +248,7 @@ export default {
           editable: false
         },
         {
-          id: 8,
+          id: 2,
           name: 'Garrett',
           surname: 'Winters',
           telephone: '9834567755',
@@ -266,46 +261,7 @@ export default {
           editable: false
         },
         {
-          id: 9,
-          name: 'Ashton',
-          surname: 'Cox',
-          telephone: '9834567755',
-          email: 'ashton@gmail.com',
-          region: 'San Francisco',
-          state: 'pqr',
-          last_visit: '2011/04/25',
-          next_visit: '2011/04/30',
-          personal_dentist: 'Doctor3',
-          editable: false
-        },
-        {
-          id: 10,
-          name: 'Tiger',
-          surname: 'Nixon',
-          telephone: '7876678787',
-          email: 'tiger@gmail.com',
-          region: 'Edinburgh',
-          state: 'xyz',
-          last_visit: '2011/04/25',
-          next_visit: '2011/04/30',
-          personal_dentist: 'Doctor1',
-          editable: false
-        },
-        {
-          id: 11,
-          name: 'Garrett',
-          surname: 'Winters',
-          telephone: '9834567755',
-          email: 'garrett@gmail.com',
-          region: 'Tokyo',
-          state: 'abc',
-          last_visit: '2011/04/25',
-          next_visit: '2011/04/30',
-          personal_dentist: 'Doctor2',
-          editable: false
-        },
-        {
-          id: 12,
+          id: 3,
           name: 'Ashton',
           surname: 'Cox',
           telephone: '9834567755',
