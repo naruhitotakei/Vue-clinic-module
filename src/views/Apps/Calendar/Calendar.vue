@@ -8,13 +8,13 @@
           <template v-slot:headerTitle>
             <h4 class="card-title">Select Doctor</h4>
           </template>
-            <b-button pill variant="primary" class="mb-3 mr-1"><i class="ri-arrow-left-s-line"></i>Prev</b-button>
-            <b-button pill variant="primary" class="mb-3 mr-1">Doctor 1</b-button>
-            <b-button pill variant="primary" class="mb-3 mr-1">Doctor 2</b-button>
-            <b-button pill variant="primary" class="mb-3 mr-1">Doctor 3</b-button>
-            <b-button pill variant="primary" class="mb-3 mr-1">Doctor 4</b-button>
-            <b-button pill variant="primary" class="mb-3 mr-1">Doctor 5</b-button>
-            <b-button pill variant="primary" class="mb-3 mr-1">Next<i class="ri-arrow-right-s-line"></i></b-button>
+            <b-button-group>
+              <b-button variant="primary"><i class="ri-arrow-left-s-line"></i>Left</b-button>
+              <b-button variant="primary">Doctor 1</b-button>
+              <b-button variant="primary">Doctor 2</b-button>
+              <b-button variant="primary">Doctor 3</b-button>
+              <b-button variant="primary">Right<i class="ri-arrow-right-s-line"></i></b-button>
+            </b-button-group>
         </iq-card>
           </template>
           <template v-slot:headerAction>
@@ -95,7 +95,6 @@
 </template>
 <script>
 import { xray } from '../../../config/pluginInit'
-import {} from '../../Forms/FormLayout'
 import appointmentBook from '../../../services/appointbook'
 export default {
   name: 'GoogleCalendar',
@@ -141,7 +140,7 @@ export default {
       events: [
         {
           title: 'All Day Event',
-          start: '2019-12-01',
+          start: '2021-03-01',
           color: '#fc9919'
         },
         {
