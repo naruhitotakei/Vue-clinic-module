@@ -12,7 +12,7 @@
           </template>
           <template v-slot:body>
             <b-form-group label-for="searchoption" label="Search By:" style="margin-top: 15px;">
-                <b-form-select plain v-model="selected" :options="searchoption" id="searchoption">
+                <b-form-select plain v-model="selected" :options="searchoption" id="searchoption" @change="searchOption($event)">
                 </b-form-select>
               </b-form-group>
           </template>
@@ -69,20 +69,6 @@
             </b-row>
             <template>
             <b-collapse id="collapse-6" class="mb-2">
-              <div class="card">
-                <kbd class="bg-dark">
-                  <pre class="text-white" id="pagination-align">
-                    <code>
-&lt;b-pagination value="1"
-              prev-text="Previous"
-              next-text="Next"
-              first-text="First"
-              last-text="Last"
-              :total-rows="50"
-&gt;&lt;/b-pagination&gt;
-</code></pre>
-                </kbd>
-              </div>
             </b-collapse>
             <div class="mt-3">
             <b-pagination value="1" prev-text="Previous" next-text="Next" first-text="First" last-text="Last" :total-rows="50" align="center"/>
@@ -105,6 +91,10 @@ export default {
     add () {
       let obj = this.default()
       this.rows.push(obj)
+    },
+    searchOption (event) {
+      console.log('SEARCHBY OPTION:', event)
+      return event
     },
     default () {
       return {

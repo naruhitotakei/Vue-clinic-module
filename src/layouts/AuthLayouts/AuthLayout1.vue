@@ -38,7 +38,7 @@
 </template>
 <script>
 import Loader from '../../components/xray/loader/Loader'
-import logo from '../../assets/images/logo-white.png'
+import logo from '../../assets/images/Logo-Dental-White.png'
 import { xray } from '../../config/pluginInit'
 import bgImage from '../../assets/images/login/2.png'
 export default {
