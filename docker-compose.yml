@@ -1,0 +1,20 @@
+##############################
+### ONLY FOR LOCAL TESTING ###
+##############################
+version: '3.1'
+
+networks:
+  smartprm:
+
+services:
+  smart_prm_frontend:
+    build:
+      context: .
+      dockerfile: .docker/app/Dockerfile
+    restart: always
+    ports:
+      - ${HTTP_PORT:-8085}:80
+    environment:
+      VUE_APP_BASE_URL: http://localhost
+    networks:
+      - smartprm
