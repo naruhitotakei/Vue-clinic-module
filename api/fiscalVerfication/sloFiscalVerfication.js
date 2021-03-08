@@ -74,9 +74,15 @@ const issueDocument = (service, doc, certDescriptor) => {
      
     var issueOptions = getOptions(service, data.length, certDescriptor);     
     const req = https.request(issueOptions, (res) => {
-        console.log(`statusCode: ${res.statusCode}`)
+        if (res.statusCode != 200) throw error
         res.on('data', (d) => {
-            process.stdout.write(d)
+            var status = JSON.parse(d.toString())
+            var responseFields = status.token.split(".")
+            var heaader = responseFields[0]
+            var signature = responseFields[2]
+            // todo check signature
+            var body = base64url.decode(responseFields[1])
+            console.log(body)
         })
     })
     req.on('error', (error) => {
