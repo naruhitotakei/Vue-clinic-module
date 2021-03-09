@@ -7,7 +7,7 @@ CREATE TABLE IF NOT EXISTS db_version (
    version_date           DATE NOT NULL DEFAULT CURRENT_DATE 
 );
 
-INSERT INTO db_version (resource, version) VALUES ('Tables', '01.00', CURRENT_DATE);
+INSERT INTO db_version (resource, version, version_date) VALUES ('Tables', '01.00', CURRENT_DATE);
 
 --############################################################
 --# Create lead_owner table and add FK to enquiries

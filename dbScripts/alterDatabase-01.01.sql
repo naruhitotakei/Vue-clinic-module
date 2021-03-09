@@ -187,7 +187,7 @@ INSERT INTO prm_role_permission (role_permission_id, role_id, permission_id) VAL
 --############################################################
 --# update version
 --############################################################
-UPDATE db_version SET version ='01.01' WHERE resource='Tables';
+UPDATE db_version SET version ='01.01', version_date=CURRENT_DATE WHERE resource='Tables';
 
 
 COMMIT;
