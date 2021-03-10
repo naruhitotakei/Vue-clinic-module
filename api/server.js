@@ -9,7 +9,10 @@ const app = express(),
 const daoUser = require('./dao/daoUser')
 const daoEnquiries = require('./dao/daoEnquiries')
 
-app.use(cors())
+app.use(cors({
+    origin: 'http://localhost:8080',
+    credentials: true
+}))
 app.use(bodyParser.json());
 app.use(express.static(path.join(__dirname, '../prmApp/dist')));
 app.use(session({resave: true, saveUninitialized: true, secret: 'BwhFeenj9DcRqANH', cookie: { maxAge: null }}));
@@ -28,12 +31,14 @@ const enquiriesPermission = "Enquiries"
 // login - email and password in body
 app.post('/api/login', async function(req, res) {
    const credentials = req.body
-   console.log('POST: api/login called for ' + credentials.loginEmail) 
+   //console.log('POST: api/login called for ' + credentials.loginEmail) 
    req.session.prm_user = await daoUser.getUser(req, res, credentials.loginEmail, credentials.loginPassword)
+  // console.log('req.session.prm_user', req.session)
 });
 
 // get loged user data
 app.get('/api/login', (req, res) => {
+   console.log('check get login api', req.session)
    if (req.session.prm_user) { 
         res.status(200).json(req.session.prm_user)
    } else {
@@ -59,6 +64,7 @@ app.get('/api/hash', (req, res) => {
 ///////////////////////////////////
 app.get('/api/enquiries', (req, res) => {
   console.log('GET: api/enquiries called', req.session)
+  if(req.session.prm_user && req.session.prm_user.permissions && checkPermission(req.session.prm_user.permissions, enquiriesPermission))
       daoEnquiries.getEnquiries(req, res)
 });
 

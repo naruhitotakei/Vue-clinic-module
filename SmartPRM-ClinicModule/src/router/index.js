@@ -99,12 +99,12 @@ const childRoutes = (prop, mode) => [
     meta: { dark: mode, auth: true, name: 'Home 1' },
     component: Dashboard1
   },
-  {
-    path: 'home-2',
-    name: prop + '.home-2',
-    meta: { dark: mode, auth: true, name: 'Home 2' },
-    component: Dashboard2
-  },
+  // {
+  //   path: 'home-2',
+  //   name: prop + '.home-2',
+  //   meta: { dark: mode, auth: true, name: 'Home 2' },
+  //   component: Dashboard2
+  // },
   {
     path: 'home-3',
     name: prop + '.home-3',
@@ -388,6 +388,12 @@ const appChildRoute = (prop, mode = false) => [
     component: Calendar
   },
   {
+    path: 'home-2',
+    name: prop + '.home-2',
+    meta: { dark: mode, auth: true, name: 'Home 2' },
+    component: Dashboard2
+  },
+  {
     path: 'chat',
     name: prop + '.chat',
     meta: { dark: mode, auth: true, name: 'Chat' },
@@ -575,6 +581,13 @@ const routes = [
     component: Layout1,
     meta: { auth: true },
     children: childRoutes('dashboard')
+  },
+  {
+    path: '/assignment',
+    name: 'dashboard3',
+    component: Layout1,
+    meta: { auth: true },
+    children: childRoutes('dashboard3')
   },
   {
     path: '/core',
