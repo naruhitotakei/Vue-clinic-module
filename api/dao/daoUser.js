@@ -14,18 +14,16 @@ const bcrypt = require('bcrypt');
 const getUser = ((request, response, email, password) => {
     return new Promise((resolve, reject) =>
         pool.query('SELECT * FROM users WHERE email = $1 AND active = true', [email], (error, qResult) => {
-            console.log('qResult', error)
-            console.log(!qResult.rows || qResult.rows.length==0)
             if (error) {
                 reject("SQL users error " + error)
             }
-            if (!qResult.rows || qResult.rows.length==0) {
+            if (!qResult || !qResult.rows || qResult.rows.length==0) {
                 console.info("User " + email + " does not exist!")
                 response.status(200).json("NOK: User does not exist");
                 resolve(null) 
                 return        
             } else if (qResult.rows.length>1) {
-                console.error("More than ose user has email " + email)
+                console.error("More than user user has email " + email)
                 response.status(200).json("NOK: Please contact administrator");
                 resolve(null)
                 return

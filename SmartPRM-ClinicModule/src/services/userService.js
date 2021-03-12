@@ -1,6 +1,6 @@
 export async function login (loginEmail, loginPassword) {
   console.log('check if it works here', JSON.stringify({ 'loginEmail': loginEmail, 'loginPassword': loginPassword }))
-  const rawResponse = await fetch('http://localhost:3080/api/login', {
+  const rawResponse = await fetch('/api/login', {
     method: 'POST',
     credentials: 'same-origin',
     headers: {
@@ -13,7 +13,7 @@ export async function login (loginEmail, loginPassword) {
 }
 
 export async function sso () {
-  const rawResponse = await fetch('http://localhost:3080/api/login', {
+  const rawResponse = await fetch('/api/login', {
     credentials: 'same-origin',
     headers: {
       'Accept': 'application/json'

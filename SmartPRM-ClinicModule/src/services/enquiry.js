@@ -1,5 +1,5 @@
 export async function enquiry () {
-  const rawResponse = await fetch('http://localhost:3080/api/enquiries', {
+  const rawResponse = await fetch('/api/enquiries', {
     method: 'GET',
     credentials: 'same-origin',
     headers: {
