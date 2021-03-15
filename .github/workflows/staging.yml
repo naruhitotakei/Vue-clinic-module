@@ -1,0 +1,99 @@
+name: Build Staging
+
+on:
+  push:
+    branches:
+      - main
+      - staging
+      - newAssignment
+
+jobs:
+  build:
+    name: Build Docker image
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Build and publish API
+        uses: elgohr/Publish-Docker-Github-Action@master
+        with:
+         name: Thermidor/smartprm-api
+         registry: ghcr.io
+         username: "Thermidor"
+         password: ${{ secrets.DOCKER_TOKEN }}
+         dockerfile: .docker/api/Dockerfile
+         tags: staging
+
+      - name: Build and publish prmApp
+        uses: elgohr/Publish-Docker-Github-Action@master
+        with:
+         name: Thermidor/smartprm-app
+         registry: ghcr.io
+         username: "Thermidor"
+         password: ${{ secrets.DOCKER_TOKEN }}
+         dockerfile: .docker/app/Dockerfile
+         tags: staging
+
+  deploy:
+    runs-on: ubuntu-latest
+    needs: [build] 
+    steps:
+    - uses: actions/checkout@v2
+
+    - name: Run SmartPRM API
+      uses: appleboy/ssh-action@master
+      env:
+          GITHUB_USERNAME: Thermidor
+          DOCKER_TOKEN: ${{ secrets.DOCKER_TOKEN }}
+          POSTGRES_HOST: ${{ secrets.STAGING_DB_HOST }}
+          POSTGRES_PORT: ${{ secrets.STAGING_DB_PORT }}
+          POSTGRES_DB: emazing
+          POSTGRES_USER: emazing
+          POSTGRES_PASSWORD: ${{ secrets.STAGING_DB_PASS }}
+      with:
+        host: ${{ secrets.STAGING_HOST }}
+        username: root
+        key: ${{ secrets.SSH_KEY }}
+        envs: GITHUB_USERNAME, DOCKER_TOKEN, POSTGRES_HOST, POSTGRES_PORT, POSTGRES_DB, POSTGRES_USER, POSTGRES_PASSWORD
+        script: |
+          docker login ghcr.io -u $GITHUB_USERNAME -p $DOCKER_TOKEN
+          docker pull ghcr.io/thermidor/smartprm-api:staging
+          docker stop smartprm_api || true
+          docker rm smartprm_api || true
+          docker run --name smartprm_api -d \
+          --restart always \
+          --net emazing \
+          -e POSTGRES_HOST=$POSTGRES_HOST \
+          -e POSTGRES_PORT=$POSTGRES_PORT \
+          -e POSTGRES_USER=$POSTGRES_USER \
+          -e POSTGRES_DB=$POSTGRES_DB \
+          -e POSTGRES_PASSWORD=$POSTGRES_PASSWORD \
+          ghcr.io/thermidor/smartprm-api:staging
+
+
+    - name: Run SmartPRM APP
+      uses: appleboy/ssh-action@master
+      env:
+          GITHUB_USERNAME: Thermidor
+          DOCKER_TOKEN: ${{ secrets.DOCKER_TOKEN }}
+      with:
+        host: ${{ secrets.STAGING_HOST }}
+        username: root
+        key: ${{ secrets.SSH_KEY }}
+        envs: GITHUB_USERNAME, DOCKER_TOKEN
+        script: |
+          docker login ghcr.io -u $GITHUB_USERNAME -p $DOCKER_TOKEN
+          docker pull ghcr.io/thermidor/smartprm-app:staging
+          docker stop smartprm_app || true
+          docker rm smartprm_app || true
+          docker run --name smartprm_app -d \
+          --restart always \
+          --net emazing \
+          -e API_URL="http://smartprm_api:3080" \
+          -l traefik.enable=true \
+          -l traefik.http.services.smartprm_app.loadbalancer.server.port=80 \
+          -l 'traefik.http.routers.smartprm_app.rule=Host("staging-prm.emazing.si")' \
+          -l traefik.http.routers.smartprm_app.entrypoints=https \
+          -l traefik.http.routers.smartprm_app.tls=true \
+          -l traefik.http.routers.smartprm_app.tls.certresolver=myresolver \
+          ghcr.io/thermidor/smartprm-app:staging

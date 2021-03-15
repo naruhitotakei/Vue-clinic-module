@@ -1,0 +1,32 @@
+##############################
+### ONLY FOR LOCAL TESTING ###
+##############################
+version: '3.1'
+
+networks:
+  smartprm:
+
+services:
+  smart_prm_api:
+    build:
+      context: .
+      dockerfile: .docker/api/Dockerfile
+    env_file: api/.env
+    restart: always
+    ports:
+      - ${HTTP_PORT:-3080}:3080
+    networks:
+      - smartprm
+
+  smart_prm_frontend:
+    build:
+      context: .
+      dockerfile: .docker/app/Dockerfile
+    restart: always
+    ports:
+      - ${HTTP_PORT:-8085}:80
+    environment:
+      API_URL: smart_prm_api:3080
+      VUE_APP_BASE_URL: http://localhost
+    networks:
+      - smartprm
