@@ -4,7 +4,7 @@ ENV NODE_ENV=development
 
 WORKDIR /app
 
-COPY . /app
+COPY ./SmartPRM-ClinicModule/ /app
 RUN npm install
 RUN npm run build
 
