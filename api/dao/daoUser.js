@@ -23,7 +23,7 @@ const getUser = ((request, response, email, password) => {
                 resolve(null) 
                 return        
             } else if (qResult.rows.length>1) {
-                console.error("More than user user has email " + email)
+                console.error("More than one user has email " + email)
                 response.status(200).json("NOK: Please contact administrator");
                 resolve(null)
                 return
