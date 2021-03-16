@@ -7,28 +7,27 @@
             <h3 class="card-title">Patients</h3>
           </template>
           <template v-slot:headerAction>
-            <iq-card>
-              <template v-slot:headerTitle> </template>
-              <template v-slot:body>
-                <b-form-group
-                  label-for="searchoption"
-                  label="Search By:"
-                  style="margin-top: 15px;"
-                >
-                  <b-form-select
-                    plain
-                    v-model="selected"
-                    :options="searchoption"
-                    id="searchoption"
-                    @change="searchOption($event)"
-                  >
-                  </b-form-select>
-                </b-form-group>
-              </template>
-            </iq-card>
-            <b-button variant="primary" @click="add"
-              ><i class="ri-add-line mr-2"></i>Add New</b-button
-            >
+              <div class="iq-search-bar">
+                  <form action="#" class="searchbox">
+                      <input type="text" class="text search-input" placeholder="Search" @keyup="myFunction()">
+                      <a class="search-link" href="#"><i class="ri-search-line"></i></a>
+                  </form>
+              </div>
+              <iq-card>
+                  <template v-slot:body>
+                      <b-form-group label-for="searchoption"
+                                    label="Search By:"
+                                    style="margin-top: 15px;">
+                          <b-form-select plain
+                                         v-model="selected"
+                                         :options="searchoption"
+                                         id="searchoption"
+                                         @change="searchOption($event)">
+                          </b-form-select>
+                      </b-form-group>
+                  </template>
+              </iq-card>
+              <b-button variant="primary" @click="add"><i class="ri-add-line mr-2"></i>Add New</b-button>
           </template>
           <template v-slot:body>
             <b-row>
