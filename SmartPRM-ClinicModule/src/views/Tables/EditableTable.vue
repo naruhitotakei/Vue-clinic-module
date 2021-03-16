@@ -3,10 +3,9 @@
     <b-row>
       <b-col md="12">
         <iq-card>
-            <template v-slot:headerTitle>
-                <h3 class="card-title inline-block">Patients</h3>
-                <b-button variant="primary" class="btn-margin-top" @click="add"><i class="ri-add-line mr-2"></i>Add New</b-button>
-            </template>
+          <template v-slot:headerTitle>
+            <h3 class="card-title">Patients</h3>
+          </template>
           <template v-slot:headerAction>
               <div class="iq-search-bar">
                   <form action="#" class="searchbox">
@@ -27,7 +26,7 @@
                       </b-form-group>
                   </template>
               </iq-card>
-
+                  <b-button variant="primary" @click="add" class="btn-float-right"><i class="ri-add-line mr-2"></i>Add New</b-button>
           </template>
           <template v-slot:body>
             <b-row>
