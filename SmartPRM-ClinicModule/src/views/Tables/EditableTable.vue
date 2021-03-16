@@ -40,7 +40,6 @@
                   :fields="columns"
                   :per-page="perPage"
                   :current-page="currentPage"
-                  foot-clone
                 >
                   <template v-slot:cell(name)="data">
                     <span v-if="!data.item.editable">{{ data.item.name }}</span>
@@ -350,7 +349,7 @@ export default {
       items: rows,
       paginatedItems: rows,
       currentPage: 1,
-      perPage: 5,
+      perPage: 10,
       totalRows: rows.length,
       selected: this.value,
       searchoption: [
