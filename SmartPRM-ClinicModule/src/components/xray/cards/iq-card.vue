@@ -1,7 +1,7 @@
 <template>
   <div :class="'iq-card ' + className">
     <slot name="cardImage"/>
-    <div v-if="hasHeaderTitleSlot || hasHeaderActionSlot" :class="'iq-card-header d-flex justify-content-between '+headerClass">
+    <div v-if="hasHeaderTitleSlot || hasHeaderActionSlot">
       <div class="iq-header-title">
         <slot name="headerTitle" />
       </div>

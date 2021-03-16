@@ -16,8 +16,7 @@
               <iq-card>
                   <template v-slot:body>
                       <b-form-group label-for="searchoption"
-                                    label="Search By:"
-                                    style="margin-top: 15px;">
+                                    label="Search By:">
                           <b-form-select plain
                                          v-model="selected"
                                          :options="searchoption"
