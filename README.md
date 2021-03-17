@@ -31,7 +31,7 @@ npm run dev
 
 ### Start the FE
 ```
-cd prmApp
+cd SmartPRM-ClinicModule
 npm install
 npm run serve
 ```

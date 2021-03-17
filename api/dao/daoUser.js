@@ -14,23 +14,23 @@ const bcrypt = require('bcrypt');
 const getUser = ((request, response, email, password) => {
     return new Promise((resolve, reject) =>
         pool.query('SELECT * FROM users WHERE email = $1 AND active = true', [email], (error, qResult) => {
-            console.log(!qResult.rows || qResult.rows.length==0)
             if (error) {
                 reject("SQL users error " + error)
             }
-            if (!qResult.rows || qResult.rows.length==0) {
+            if (!qResult || !qResult.rows || qResult.rows.length==0) {
                 console.info("User " + email + " does not exist!")
                 response.status(200).json("NOK: User does not exist");
                 resolve(null) 
                 return        
             } else if (qResult.rows.length>1) {
-                console.error("More than ose user has email " + email)
+                console.error("More than one user has email " + email)
                 response.status(200).json("NOK: Please contact administrator");
                 resolve(null)
                 return
             }
             bcrResult = bcrypt.compare(qResult.rows[0].prm_password_hash, password, function(err, bcrResult) {
                 if (qResult.rows[0].prm_role_id) {
+                    console.log('check if it is working here')
                     pool.query('SELECT p.resource_name, s.scope_name FROM prm_role_permission rp JOIN prm_role r ON rp.role_id=r.role_id JOIN prm_permission p ON rp.permission_id=p.permission_id JOIN prm_scope s ON p.scope_id=s.scope_id WHERE rp.role_id = $1', [qResult.rows[0].prm_role_id], (error, qRoleResult) => {
                         if (error) {
                             reject("SQL roles error " + error)
@@ -39,7 +39,7 @@ const getUser = ((request, response, email, password) => {
                         user.permissions = qRoleResult.rows
                         request.session.prm_user = user
                         response.status(200).json(user)
-                        resolve(user) 
+                        resolve(user)
                         return                   
                     })
                 } else if (qResult.rows[0]) {

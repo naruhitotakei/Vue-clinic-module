@@ -21,11 +21,12 @@ services:
   smart_prm_frontend:
     build:
       context: .
-      dockerfile: .docker/frontend/Dockerfile
+      dockerfile: .docker/app/Dockerfile
     restart: always
     ports:
-      - ${HTTP_PORT:-8080}:8080
+      - ${HTTP_PORT:-8085}:80
     environment:
-      API_URL: "http://smart_prm_api:3080"
+      API_URL: smart_prm_api:3080
+      VUE_APP_BASE_URL: http://localhost
     networks:
       - smartprm

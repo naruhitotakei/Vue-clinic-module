@@ -5,6 +5,7 @@ on:
     branches:
       - main
       - staging
+      - newAssignment
 
 jobs:
   build:
@@ -30,7 +31,7 @@ jobs:
          registry: ghcr.io
          username: "Thermidor"
          password: ${{ secrets.DOCKER_TOKEN }}
-         dockerfile: .docker/prmApp/Dockerfile
+         dockerfile: .docker/app/Dockerfile
          tags: staging
 
   deploy:
@@ -90,7 +91,7 @@ jobs:
           --net emazing \
           -e API_URL="http://smartprm_api:3080" \
           -l traefik.enable=true \
-          -l traefik.http.services.smartprm_app.loadbalancer.server.port=8080 \
+          -l traefik.http.services.smartprm_app.loadbalancer.server.port=80 \
           -l 'traefik.http.routers.smartprm_app.rule=Host("staging-prm.emazing.si")' \
           -l traefik.http.routers.smartprm_app.entrypoints=https \
           -l traefik.http.routers.smartprm_app.tls=true \
