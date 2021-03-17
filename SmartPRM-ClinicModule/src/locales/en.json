@@ -2,8 +2,10 @@
   "sidebar": {
     "dashboard": "Home",
     "calendar": "Calendar",
-    "editable": "Patients",
+    "patients": "Patients",
     "assignment": "Assignment",
+    "users":"Users",
+    "statistics-clinic": "Statistics Clinic",
     "maps": "Maps",
     "extraPages": "Extra Pages",
     "doctor": "Doctors",

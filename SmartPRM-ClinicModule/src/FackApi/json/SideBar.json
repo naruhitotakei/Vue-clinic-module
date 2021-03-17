@@ -9,28 +9,40 @@
     "icon": ""
   },
   {
+    "title": "Home",
+    "name": "sidebar.dashboard",
+    "is_heading": false,
+    "is_active": false,
+    "link": {
+      "name" : "dashboard.home"
+    },
+    "class_name": "",
+    "is_icon_class": true,
+    "icon": "ri-home-4-line"
+  },
+  {
     "title": "Calendar",
     "name": "sidebar.calendar",
     "is_heading": false,
     "is_active": false,
     "link": {
-      "name" : "app.calendar"
+      "name" : "dashboard.calendar"
     },
     "class_name": "",
     "is_icon_class": true,
     "icon": "ri-calendar-event-fill"
   },
-    {
-      "title": "Patients",
-      "name": "sidebar.editable",
-      "is_active": false,
-      "link": {
-        "name": "table.editable"
-      },
-      "class_name": "",
-      "is_icon_class": true,
-      "icon": "ri-refund-line"
+  {
+    "title": "Patients",
+    "name": "sidebar.patients",
+    "is_active": false,
+    "link": {
+      "name": "dashboard.patients"
     },
+    "class_name": "",
+    "is_icon_class": true,
+    "icon": "ri-refund-line"
+  },
     {
       "title": "Documents",
       "name": "Documents",
@@ -78,15 +90,15 @@
     },
     {
       "title": "Assignment",
-      "name": "Assignment",
+      "name": "sidebar.assignment",
       "is_heading": false,
       "is_active": false,
       "link": {
-        "name" : "app.home-2"
+        "name" : "dashboard.assignment"
       },
       "class_name": "",
       "is_icon_class": true,
-      "icon": "ri-calendar-event-fill"
+      "icon": "ri-home-4-line"
     },
   {
     "title": "Statistics",
@@ -100,10 +112,10 @@
     "children": [
       {
         "title": "Statistics Clinic",
-        "name": "sidebar.morrisChart",
+        "name": "sidebar.statistics-clinic",
         "is_active": false,
         "link": {
-          "name": "chart.morris"
+          "name": "statistics.clinic"
         },
         "class_name": "",
         "is_icon_class": true,
@@ -152,7 +164,76 @@
     "link":"",
     "class_name": "",
     "is_icon_class": true,
-    "icon": "ri-settings-5-line"
+    "icon": "ri-settings-5-line",
+    "children": [
+      {
+        "title": "Users",
+        "name": "sidebar.users",
+        "is_active": false,
+        "link": {
+          "name" : "setting.list"
+        },
+        "class_name": "",
+        "is_icon_class": true,
+        "icon": "ri-file-list-fill"
+      }
+    ]
+  },
+  {
+    "title": "Doctors",
+    "name": "sidebar.doctor",
+    "is_heading": false,
+    "is_active": false,
+    "link": "",
+    "class_name": "",
+    "is_icon_class": true,
+    "icon": "ri-user-3-fill",
+    "children": [
+      {
+        "title": "All Doctors",
+        "name": "sidebar.doctorList",
+        "is_active": false,
+        "link": {
+          "name" : "doctor.list"
+        },
+        "class_name": "",
+        "is_icon_class": true,
+        "icon": "ri-file-list-fill"
+      },
+      {
+        "title": "Add Doctor",
+        "name": "sidebar.doctorAdd",
+        "is_active": false,
+        "link": {
+          "name" : "doctor.add"
+        },
+        "class_name": "",
+        "is_icon_class": true,
+        "icon": "ri-user-add-fill"
+      },
+      {
+        "title": "Doctor Profile",
+        "name": "sidebar.doctorProfile",
+        "is_active": false,
+        "link": {
+          "name" : "doctor.profile"
+        },
+        "class_name": "",
+        "is_icon_class": true,
+        "icon": "ri-profile-fill"
+      },
+      {
+        "title": "Edit Doctor",
+        "name": "sidebar.doctorEdit",
+        "is_active": false,
+        "link": {
+          "name" : "doctor.edit"
+        },
+        "class_name": "",
+        "is_icon_class": true,
+        "icon": "ri-file-edit-fill"
+      }
+    ]
   },
   {
     "title": "Components",

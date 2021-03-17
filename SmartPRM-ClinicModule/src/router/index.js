@@ -99,6 +99,24 @@ const childRoutes = (prop, mode) => [
     meta: { dark: mode, auth: true, name: 'Home 1' },
     component: Dashboard1
   },
+  {
+    path: 'calendar',
+    name: prop + '.calendar',
+    meta: { dark: mode, auth: true, name: 'Calendar' },
+    component: Calendar
+  },
+  {
+    path: 'patients',
+    name: prop + '.patients',
+    meta: { dark: mode, auth: true, name: 'Editable' },
+    component: EditableTable
+  },
+  {
+    path: 'assignment',
+    name: prop + '.assignment',
+    meta: { dark: mode, auth: true, name: 'assignment' },
+    component: Dashboard2
+  },
   // {
   //   path: 'home-2',
   //   name: prop + '.home-2',
@@ -119,8 +137,14 @@ const childRoutes = (prop, mode) => [
   },
   {
     path: '/',
-    name: prop + '.home-4',
-    meta: { dark: mode, auth: true, name: 'Home 4' },
+    name: prop + '.home',
+    meta: { dark: mode, auth: true, name: 'Home' },
+    component: Dashboard4
+  },
+  {
+    path: '/home',
+    name: prop + '.home',
+    meta: { dark: mode, auth: true, name: 'Home' },
     component: Dashboard4
   }
 ]
@@ -298,7 +322,6 @@ const formChildRoute = (prop, mode = false) => [
     component: FormCheckboxes
   }
 ]
-
 const tableChildRoute = (prop, mode = false) => [
   {
     path: 'tables-basic',
@@ -311,12 +334,35 @@ const tableChildRoute = (prop, mode = false) => [
     name: prop + '.dataTable',
     meta: { dark: mode, auth: true, name: 'Datatable' },
     component: DataTable
+  }
+  // {
+  //   path: 'editable',
+  //   name: prop + '.editable',
+  //   meta: { dark: mode, auth: true, name: 'Editable' },
+  //   component: EditableTable
+  // }
+]
+const settingChildRoute = (prop, mode = false) => [
+  {
+    path: 'user-list',
+    name: prop + '.list',
+    meta: { dark: mode, auth: true, name: 'User List' },
+    component: UserList
+  }
+]
+
+const statisticsChildRoute = (prop, mode = false) => [
+  {
+    path: 'clinic',
+    name: prop + '.clinic',
+    meta: { dark: mode, auth: true, name: 'Statistics Clinic' },
+    component: Dashboard1
   },
   {
-    path: 'editable',
-    name: prop + '.editable',
-    meta: { dark: mode, auth: true, name: 'Editable' },
-    component: EditableTable
+    path: 'person',
+    name: prop + '.person',
+    meta: { dark: mode, auth: true, name: 'Statistics Person' },
+    component: Dashboard1
   }
 ]
 
@@ -381,12 +427,12 @@ const chartChildRoutes = (prop, mode = false) => [
 ]
 
 const appChildRoute = (prop, mode = false) => [
-  {
-    path: 'calendar',
-    name: prop + '.calendar',
-    meta: { dark: mode, auth: true, name: 'Calendar' },
-    component: Calendar
-  },
+  // {
+  //   path: 'calendar',
+  //   name: prop + '.calendar',
+  //   meta: { dark: mode, auth: true, name: 'Calendar' },
+  //   component: Calendar
+  // },
   {
     path: 'home-2',
     name: prop + '.home-2',
@@ -538,13 +584,13 @@ const userChildRoute = (prop, mode = false) => [
     name: prop + '.add',
     meta: { dark: mode, auth: true, name: 'Add Profile' },
     component: AddUser
-  },
-  {
-    path: 'user-list',
-    name: prop + '.list',
-    meta: { dark: mode, auth: true, name: 'User List' },
-    component: UserList
   }
+  // {
+  //   path: 'user-list',
+  //   name: prop + '.list',
+  //   meta: { dark: mode, auth: true, name: 'User List' },
+  //   component: UserList
+  // }
 ]
 
 const pluginsChildRoute = (prop, mode = false) => [
@@ -582,13 +628,13 @@ const routes = [
     meta: { auth: true },
     children: childRoutes('dashboard')
   },
-  {
-    path: '/assignment',
-    name: 'dashboard3',
-    component: Layout1,
-    meta: { auth: true },
-    children: childRoutes('dashboard3')
-  },
+  // {
+  //   path: '/assignment',
+  //   name: 'dashboard3',
+  //   component: Layout1,
+  //   meta: { auth: true },
+  //   children: childRoutes('dashboard3')
+  // },
   {
     path: '/core',
     name: 'core',
@@ -604,11 +650,25 @@ const routes = [
     children: documentChildRoute('documents')
   },
   {
+    path: '/statistics',
+    name: 'statistics',
+    component: Layout1,
+    meta: { auth: true },
+    children: statisticsChildRoute('statistics')
+  },
+  {
     path: '/table',
     name: 'table',
     component: Layout1,
     meta: { auth: true },
     children: tableChildRoute('table')
+  },
+  {
+    path: '/setting',
+    name: 'setting',
+    component: Layout1,
+    meta: { auth: true },
+    children: settingChildRoute('setting')
   },
   {
     path: '/chart',
