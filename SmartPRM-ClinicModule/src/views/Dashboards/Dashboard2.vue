@@ -1,7 +1,7 @@
 <template>
   <b-container>
     <b-row style="justify-content: center">
-        <b-col lg="6" >
+        <b-col lg="12" >
           <iq-card class-name="iq-card-block iq-card-stretch iq-card-height">
             <template v-slot:headerTitle>
               <h4 class="card-title">My Assignments</h4>

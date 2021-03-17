@@ -336,7 +336,7 @@ div#lottie-beil svg path, div#lottie-mail svg path, div#lottie-fullscreen svg pa
 .topnav-toolbar li.active a { background: #eff7f8; color: #089bab; }
 .topnav-toolbar ul li { list-style: none; padding: 13px 0; }
 .navbar-list li > .dropdown { line-height: 73px; cursor: pointer; }
-.iq-search-bar { padding: 0 15px; }
+.iq-search-bar { padding: 0 15px 0 0; }
 .iq-search-bar .searchbox { width: 480px; position: relative; }
 .iq-search-bar .search-input { width: 100%; padding: 5px 40px 5px 15px; border-radius: 10px; border: none; background: #ceebee; }
 
@@ -853,7 +853,7 @@ Calender
 .stepwizard { display: table; width: 100%; position: relative; }
 .setup-content { margin-top: 60px; }
 .wizard-step { font-size: 18px; width: 25%; float: left; position: relative; font-weight: 400; text-align: center; }
-.stepwizard-row .wizard-step a.btn { background: #fff; color: #374948; font-size: 18px; font-weight: 400; display: block; padding: 50px 15px; margin: 10px 20px; border-radius: 20px; -webkit-border-radius: 20px; text-decoration: none; border: 1px solid #f2edff; font-family: 'Poppins', sans-serif; }
+.stepwizard-row .wizard-step a.btn.btn { background: #fff; color: #374948; font-size: 18px; font-weight: 400; display: block; padding: 50px 15px; margin: 10px 20px; border-radius: 20px; -webkit-border-radius: 20px; text-decoration: none; border: 1px solid #f2edff; font-family: 'Poppins', sans-serif; }
 .stepwizard-row .wizard-step i { display: block; text-align: center; height: 65px; width: 65px; line-height: 65px; font-size: 25px; border-radius: 50%; margin: 0 auto 20px; color: #ffffff; background: #089bab; }
 .stepwizard-row #user.active a { background: #eff7f8; border-color: #089bab; }
 .stepwizard-row #document.active a { background: #fff5f4; border-color: #f14336; }
