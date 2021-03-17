@@ -369,7 +369,7 @@ export default {
         { label: 'Phone', key: 'phone', class: 'text-left' },
         { label: 'Email', key: 'email', class: 'text-left' },
         { label: 'Region', key: 'region', class: 'text-left' },
-        { label: 'State', key: 'country', class: 'text-left' },
+        { label: 'Country', key: 'country', class: 'text-left' },
         { label: 'Last Visit', key: 'last_visit', class: 'text-left' },
         { label: 'Next Visit', key: 'next_visit', class: 'text-left' },
         {
