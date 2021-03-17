@@ -1,7 +1,7 @@
 <template>
   <b-container fluid>
     <b-row>
-      <b-col sm="12">
+      <!-- <b-col sm="12">
         <b-row>
           <b-col md="6" lg="3">
             <iq-card class-name="iq-card-block iq-card-stretch iq-card-height">
@@ -46,7 +46,7 @@
             </iq-card>
           </b-col>
         </b-row>
-      </b-col>
+      </b-col> -->
       <b-col lg="4">
         <iq-card class-name="iq-card-block iq-card-stretch iq-card-height iq-user-profile-block">
           <template v-slot:body>
