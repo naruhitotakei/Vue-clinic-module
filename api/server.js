@@ -8,6 +8,7 @@ const app = express(),
 
 const daoUser = require('./dao/daoUser')
 const daoEnquiries = require('./dao/daoEnquiries')
+const fiscalVerification = require('./services/fiscalVerification')
 
 app.use(cors({
     origin: 'http://localhost:8080',
@@ -78,6 +79,19 @@ app.delete('/api/enquiries/:id', (req, res) => {
    const id = req.params.id
    console.log('DELETE: api/enquiries for ', id)
    res.json("OK: " + id);
+});
+
+///////////////////////////////////
+// invoices, fiscal verification
+///////////////////////////////////
+app.get('/api/invoice/premises/:premiseId', (req, res) => {
+  const premiseId = req.params.premiseId
+  console.log('GET: api/invoice/premises called for ', premiseId)
+  // todo which permission?
+  // todo which company (cert, vat)
+
+  fiscalVerification.registerPremises(premiseId)
+
 });
 
 ///////////////////////////////////
