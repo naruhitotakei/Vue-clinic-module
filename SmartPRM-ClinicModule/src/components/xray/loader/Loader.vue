@@ -7,7 +7,7 @@
   <!-- loader END -->
 </template>
 <script>
-import lightLogo from '../../../assets/images/loader.gif'
+import lightLogo from '../../../assets/images/sprm-Dental-color.png'
 import darkLogo from '../../../assets/images/darkMode/dark-loader.gif'
 export default {
   name: 'Loader',

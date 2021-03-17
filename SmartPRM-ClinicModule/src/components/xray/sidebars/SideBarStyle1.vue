@@ -2,8 +2,9 @@
   <div class="iq-sidebar">
     <div class="iq-sidebar-logo d-flex justify-content-between">
       <router-link :to="homeURL">
-        <img :src="logo" class="img-fluid" alt="logo">
-        <span>XRay</span>
+        <!-- <img :src="logo" class="img-fluid" alt="logo"> -->
+        <img src="../../../assets/images/Logo-Dental-White.png"/>
+        <!-- <span>XRay</span> -->
       </router-link>
       <div class="iq-menu-bt-sidebar" v-if="toggleButton">
         <div class="iq-menu-bt align-self-center">
