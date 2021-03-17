@@ -158,7 +158,7 @@
             <li class="list-inline-item"><a href="#">Terms of Use</a></li>
           </template>
           <template v-slot:right>
-            Copyright 2020 <a href="#">Xray</a> All Rights Reserved.
+            Copyright {{ new Date().getFullYear() }} <a href="https://www.emazing.si/en">Emazing</a> All Rights Reserved.
           </template>
         </FooterStyle1>
       </div>

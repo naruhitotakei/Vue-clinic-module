@@ -26,7 +26,7 @@
                       </b-form-group>
                   </template>
               </iq-card>
-                  <b-button variant="primary" @click="add" class="btn-float-right"><i class="ri-add-line mr-2"></i>Add New</b-button>
+                  <b-button variant="primary" @click="add" class="btn-float-right"><i class="ri-add-line mr-2"></i>Add Patient</b-button>
           </template>
           <template v-slot:body>
             <b-row>
@@ -60,13 +60,13 @@
                       class="form-control"
                     />
                   </template>
-                  <template v-slot:cell(telephone)="data">
+                  <template v-slot:cell(phone)="data">
                     <span v-if="!data.item.editable">{{
-                      data.item.telephone
+                      data.item.phone
                     }}</span>
                     <input
                       type="text"
-                      v-model="data.item.telephone"
+                      v-model="data.item.phone"
                       v-else
                       class="form-control"
                     />
@@ -93,13 +93,13 @@
                       class="form-control"
                     />
                   </template>
-                  <template v-slot:cell(state)="data">
+                  <template v-slot:cell(country)="data">
                     <span v-if="!data.item.editable">{{
-                      data.item.state
+                      data.item.country
                     }}</span>
                     <input
                       type="text"
-                      v-model="data.item.state"
+                      v-model="data.item.country"
                       v-else
                       class="form-control"
                     />
@@ -188,10 +188,10 @@ var rows = [
     id: 1,
     name: 'Tiger',
     last_name: 'Nixon',
-    telephone: '7876678787',
+    phone: '7876678787',
     email: 'tiger@gmail.com',
     region: 'Edinburgh',
-    state: 'xyz',
+    country: 'xyz',
     last_visit: '2011/04/25',
     next_visit: '2011/04/30',
     personal_dentist: 'Doctor1',
@@ -201,10 +201,10 @@ var rows = [
     id: 2,
     name: 'Garrett',
     last_name: 'Winters',
-    telephone: '9834567755',
+    phone: '9834567755',
     email: 'garrett@gmail.com',
     region: 'Tokyo',
-    state: 'abc',
+    country: 'abc',
     last_visit: '2011/04/25',
     next_visit: '2011/04/30',
     personal_dentist: 'Doctor2',
@@ -214,10 +214,10 @@ var rows = [
     id: 3,
     name: 'Ashton',
     last_name: 'Cox',
-    telephone: '9834567755',
+    phone: '9834567755',
     email: 'ashton@gmail.com',
     region: 'San Francisco',
-    state: 'pqr',
+    country: 'pqr',
     last_visit: '2011/04/25',
     next_visit: '2011/04/30',
     personal_dentist: 'Doctor3',
@@ -227,10 +227,10 @@ var rows = [
     id: 4,
     name: 'Tiger1',
     last_name: 'Nixon',
-    telephone: '7876678787',
+    phone: '7876678787',
     email: 'tiger@gmail.com',
     region: 'Edinburgh',
-    state: 'xyz',
+    country: 'xyz',
     last_visit: '2011/04/25',
     next_visit: '2011/04/30',
     personal_dentist: 'Doctor1',
@@ -240,10 +240,10 @@ var rows = [
     id: 5,
     name: 'Garrett1',
     last_name: 'Winters',
-    telephone: '9834567755',
+    phone: '9834567755',
     email: 'garrett@gmail.com',
     region: 'Tokyo',
-    state: 'abc',
+    country: 'abc',
     last_visit: '2011/04/25',
     next_visit: '2011/04/30',
     personal_dentist: 'Doctor2',
@@ -253,10 +253,10 @@ var rows = [
     id: 6,
     name: 'Ashton1',
     last_name: 'Cox',
-    telephone: '9834567755',
+    phone: '9834567755',
     email: 'ashton@gmail.com',
     region: 'San Francisco',
-    state: 'pqr',
+    country: 'pqr',
     last_visit: '2011/04/25',
     next_visit: '2011/04/30',
     personal_dentist: 'Doctor3',
@@ -266,10 +266,10 @@ var rows = [
     id: 7,
     name: 'Tiger2',
     last_name: 'Nixon',
-    telephone: '7876678787',
+    phone: '7876678787',
     email: 'tiger@gmail.com',
     region: 'Edinburgh',
-    state: 'xyz',
+    country: 'xyz',
     last_visit: '2011/04/25',
     next_visit: '2011/04/30',
     personal_dentist: 'Doctor1',
@@ -279,10 +279,10 @@ var rows = [
     id: 8,
     name: 'Garrett2',
     last_name: 'Winters',
-    telephone: '9834567755',
+    phone: '9834567755',
     email: 'garrett@gmail.com',
     region: 'Tokyo',
-    state: 'abc',
+    country: 'abc',
     last_visit: '2011/04/25',
     next_visit: '2011/04/30',
     personal_dentist: 'Doctor2',
@@ -292,10 +292,10 @@ var rows = [
     id: 9,
     name: 'Ashton2',
     last_name: 'Cox',
-    telephone: '9834567755',
+    phone: '9834567755',
     email: 'ashton@gmail.com',
     region: 'San Francisco',
-    state: 'pqr',
+    country: 'pqr',
     last_visit: '2011/04/25',
     next_visit: '2011/04/30',
     personal_dentist: 'Doctor3',
@@ -366,16 +366,16 @@ export default {
       columns: [
         { label: 'Name', key: 'name', class: 'text-left' },
         { label: 'Last Name', key: 'last_name', class: 'text-left' },
-        { label: 'Phone', key: 'telephone', class: 'text-left' },
+        { label: 'Phone', key: 'phone', class: 'text-left' },
         { label: 'Email', key: 'email', class: 'text-left' },
         { label: 'Region', key: 'region', class: 'text-left' },
-        { label: 'State', key: 'state', class: 'text-left' },
+        { label: 'State', key: 'country', class: 'text-left' },
         { label: 'Last Visit', key: 'last_visit', class: 'text-left' },
-        { label: 'Next Visit', key: 'next_visit', class: 'text-center' },
+        { label: 'Next Visit', key: 'next_visit', class: 'text-left' },
         {
           label: 'Personal Dentist',
           key: 'personal_dentist',
-          class: 'text-center'
+          class: 'text-left'
         },
         { label: 'Actions', key: 'action', class: 'text-center' }
       ]
