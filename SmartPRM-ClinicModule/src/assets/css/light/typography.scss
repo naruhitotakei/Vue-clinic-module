@@ -276,7 +276,7 @@ Card
 .iq-card .iq-card .iq-card-header { border: none; }
 /* .iq-card-body { padding: 20px; } */
 .iq-card .iq-card-header { padding: 0 20px; min-height: 60px; -ms-flex-align: center !important; align-items: center !important; border-bottom: 1px solid #eeeeee; border-radius: 25px 25px 0 0; -webkit-border-radius: 25px 25px 0 0; }
-.iq-card .iq-card-header .iq-header-title { display: inline-block; align-self: center !important; }
+.iq-card .iq-card-header .iq-header-title { display: inline-block; align-self: center !important; width: 100%; }
 .iq-card .iq-card-header .iq-header-title .card-title { margin-bottom: 0; }
 .iq-card-header-toolbar .nav-item a { color: #393c52; padding: 4px 12px; font-size: 14px; font-family: 'Nunito', sans-serif; }
 .iq-card-header-toolbar .dropdown-toggle i { font-size: 22px; line-height: normal; color: #393c52; }
