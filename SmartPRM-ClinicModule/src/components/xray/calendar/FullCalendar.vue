@@ -9,6 +9,7 @@
       center: 'title',
       right: 'dayGridMonth,timeGridWeek,timeGridDay,resourceTimeGridDay'
     }"
+  @eventClick="eventData(args)"
   />
 </template>
 <script>
@@ -36,11 +37,17 @@ export default {
           { id: 'c', title: 'Resource C' },
           { id: 'd', title: 'Resource D' }
         ],
-        events: 'https://fullcalendar.io/demo-events.json?with-resources=4&single-day'
+        // events: 'https://fullcalendar.io/demo-events.json?with-resources=4&single-day'
+        events: { title: 'Event Now', start: Date.now(), resourceId: 'a', color: 'black' }
       }
     }
   },
-  methods: {}
+  methods: {
+    eventData (args) {
+      console.log('ARGS:', args)
+      alert('Hii')
+    }
+  }
 }
 </script>
 
