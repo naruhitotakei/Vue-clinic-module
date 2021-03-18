@@ -7,7 +7,7 @@
   :header="{
       left: 'prev,next today',
       center: 'title',
-      right: 'dayGridMonth,timeGridWeek,timeGridDay,resourceTimeGridDay'
+      right: 'dayGridMonth,timeGridWeek,timeGridDay,resourceTimeGridDay,resourceTimeGridWeek'
     }"
   />
 </template>

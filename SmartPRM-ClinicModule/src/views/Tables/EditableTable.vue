@@ -35,7 +35,7 @@
                   id="my-table"
                   bordered
                   hover
-                  :items="paginatedItems"
+                  :items="computedList"
                   :fields="columns"
                   :per-page="perPage"
                   :current-page="currentPage"
@@ -183,132 +183,17 @@
 import { xray } from '../../config/pluginInit'
 import { enquiry } from '../../services/enquiry'
 // import Pagination from './Pagination.vue'
-var rows = [
-  {
-    id: 1,
-    name: 'Tiger',
-    last_name: 'Nixon',
-    telephone: '7876678787',
-    email: 'tiger@gmail.com',
-    region: 'Edinburgh',
-    state: 'xyz',
-    last_visit: '2011/04/25',
-    next_visit: '2011/04/30',
-    personal_dentist: 'Doctor1',
-    editable: false
-  },
-  {
-    id: 2,
-    name: 'Garrett',
-    last_name: 'Winters',
-    telephone: '9834567755',
-    email: 'garrett@gmail.com',
-    region: 'Tokyo',
-    state: 'abc',
-    last_visit: '2011/04/25',
-    next_visit: '2011/04/30',
-    personal_dentist: 'Doctor2',
-    editable: false
-  },
-  {
-    id: 3,
-    name: 'Ashton',
-    last_name: 'Cox',
-    telephone: '9834567755',
-    email: 'ashton@gmail.com',
-    region: 'San Francisco',
-    state: 'pqr',
-    last_visit: '2011/04/25',
-    next_visit: '2011/04/30',
-    personal_dentist: 'Doctor3',
-    editable: false
-  },
-  {
-    id: 4,
-    name: 'Tiger1',
-    last_name: 'Nixon',
-    telephone: '7876678787',
-    email: 'tiger@gmail.com',
-    region: 'Edinburgh',
-    state: 'xyz',
-    last_visit: '2011/04/25',
-    next_visit: '2011/04/30',
-    personal_dentist: 'Doctor1',
-    editable: false
-  },
-  {
-    id: 5,
-    name: 'Garrett1',
-    last_name: 'Winters',
-    telephone: '9834567755',
-    email: 'garrett@gmail.com',
-    region: 'Tokyo',
-    state: 'abc',
-    last_visit: '2011/04/25',
-    next_visit: '2011/04/30',
-    personal_dentist: 'Doctor2',
-    editable: false
-  },
-  {
-    id: 6,
-    name: 'Ashton1',
-    last_name: 'Cox',
-    telephone: '9834567755',
-    email: 'ashton@gmail.com',
-    region: 'San Francisco',
-    state: 'pqr',
-    last_visit: '2011/04/25',
-    next_visit: '2011/04/30',
-    personal_dentist: 'Doctor3',
-    editable: false
-  },
-  {
-    id: 7,
-    name: 'Tiger2',
-    last_name: 'Nixon',
-    telephone: '7876678787',
-    email: 'tiger@gmail.com',
-    region: 'Edinburgh',
-    state: 'xyz',
-    last_visit: '2011/04/25',
-    next_visit: '2011/04/30',
-    personal_dentist: 'Doctor1',
-    editable: false
-  },
-  {
-    id: 8,
-    name: 'Garrett2',
-    last_name: 'Winters',
-    telephone: '9834567755',
-    email: 'garrett@gmail.com',
-    region: 'Tokyo',
-    state: 'abc',
-    last_visit: '2011/04/25',
-    next_visit: '2011/04/30',
-    personal_dentist: 'Doctor2',
-    editable: false
-  },
-  {
-    id: 9,
-    name: 'Ashton2',
-    last_name: 'Cox',
-    telephone: '9834567755',
-    email: 'ashton@gmail.com',
-    region: 'San Francisco',
-    state: 'pqr',
-    last_visit: '2011/04/25',
-    next_visit: '2011/04/30',
-    personal_dentist: 'Doctor3',
-    editable: false
-  }
-]
+var rows = []
 export default {
   name: 'UiDataTable',
-  mounted () {
+  async mounted () {
     xray.index()
-    enquiry().then((response) => {
-      this.rows = response
-    })
+  },
+  computed: {
+    computedList () {
+      this.replace()
+      return this.items
+    }
   },
   methods: {
     add () {
@@ -341,6 +226,27 @@ export default {
     remove  (item) {
       let index = this.rows.indexOf(item)
       this.rows.splice(index, 1)
+    },
+    async replace () {
+      let finalData = await Promise.all([enquiry()])
+      finalData = finalData[0]
+      if (finalData.constructor === Array && finalData.length > 0) {
+        finalData.map((currentElementOfFinalArray, indexOfDefaultItems) => {
+          this.$set(this.items, indexOfDefaultItems, {
+            id: currentElementOfFinalArray.id,
+            name: currentElementOfFinalArray.name,
+            last_name: currentElementOfFinalArray.last_name,
+            telephone: currentElementOfFinalArray.phone,
+            email: currentElementOfFinalArray.email,
+            region: 'n/a',
+            state: 'n/a',
+            last_visit: '2011/04/25',
+            next_visit: '2011/04/30',
+            personal_dentist: 'Doctor3',
+            editable: false
+          })
+        })
+      }
     }
   },
   data  () {
