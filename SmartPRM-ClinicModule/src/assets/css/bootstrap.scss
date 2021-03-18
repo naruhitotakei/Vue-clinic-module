@@ -585,8 +585,8 @@ pre code {
 }
 
 .btn-add-patient {
-    float: right !important;
-    position: relative;
+    float: right;
+    margin-top: 1.375rem;
 }
 
 @media (min-width:576px) {
