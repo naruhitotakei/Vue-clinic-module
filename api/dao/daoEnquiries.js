@@ -8,13 +8,11 @@ const pool = new Pool({
   port: process.env.POSTGRES_PORT || 5432,
 })
 
-const getEnquiries = (request, response) => {
-    pool.query("SELECT enquiries.* FROM enquiries JOIN clients ON enquiries.client_id = clients.id WHERE enquiries.trashed IS FALSE AND clients.slug = 'primadent_si'", (error, results) => {
-        if (error) {
-            throw error
-        }
-        response.status(200).json(results.rows)
-    })
+const getEnquiries = async (request, response) => {  
+  return new Promise((resolve, reject)=>{
+    let data = pool.query("SELECT enquiries.* FROM enquiries JOIN clients ON enquiries.client_id = clients.id WHERE enquiries.trashed IS FALSE AND clients.slug = 'primadent_si' LIMIT 5");
+    resolve(data);
+  }); 
 }
 
 const deleteEnquiries = (request, response) => {
