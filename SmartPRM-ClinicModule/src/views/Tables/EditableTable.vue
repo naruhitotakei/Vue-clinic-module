@@ -246,6 +246,8 @@ export default {
             editable: false
           })
         })
+      }
+    },
     myFunction () {
       var input, filter, table, tr, td, i, txtValue
       input = document.getElementById('myInput')
@@ -265,7 +267,7 @@ export default {
       }
     }
   },
-  data  () {
+  data () {
     return {
       items: rows,
       paginatedItems: rows,
