@@ -584,9 +584,9 @@ pre code {
     display: inline-block !important;
 }
 
-.btn-float-right {
-    float: right !important;
-    margin-left: 36.375rem !important;
+.btn-add-patient {
+    float: right;
+    margin-top: 1.375rem;
 }
 
 @media (min-width:576px) {
@@ -5044,13 +5044,12 @@ input[type=submit].btn-block {
 	-ms-flex: 1 1 auto;
 	flex: 1 1 auto;
 	min-height: 1px;
-	/* padding: 1.25rem */
-    padding-right: 1.25rem;
+	padding: 1.25rem;
 }
 
 .card-title {
-	/* margin-bottom: .75rem; */
-    padding: 0.5rem 1rem 0rem 1rem;
+    margin-bottom: .75rem; 
+    /* padding: 0.5rem 1rem 0rem 1rem; */
 }
 
 .card-subtitle {

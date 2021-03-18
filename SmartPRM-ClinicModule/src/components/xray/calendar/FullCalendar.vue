@@ -37,10 +37,16 @@ export default {
           { id: 'd', title: 'Resource D' }
         ],
         events: 'https://fullcalendar.io/demo-events.json?with-resources=4&single-day'
+        // events: { title: 'Event Now', start: new Date(), resourceId: 'a', color: 'black' }
       }
     }
   },
-  methods: {}
+  methods: {
+    eventData (args) {
+      console.log('ARGS:', args)
+      alert('Hii')
+    }
+  }
 }
 </script>
 

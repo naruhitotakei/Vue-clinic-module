@@ -1,6 +1,6 @@
-const path = require('path')
-const express = require('express')
-const session = require('express-session')
+const path = require('path');
+const express = require('express');
+const session = require("express-session");
 var cors = require('cors')
 const app = express(),
   bodyParser = require('body-parser')
@@ -8,24 +8,16 @@ port = 3080
 
 const daoUser = require('./dao/daoUser')
 const daoEnquiries = require('./dao/daoEnquiries')
+const fiscalVerification = require('./services/fiscalVerification')
 
-app.use(
-  cors({
+app.use(cors({
     origin: 'http://localhost:8080',
     credentials: true
-  })
-)
-app.use(bodyParser.json())
-app.use(express.static(path.join(__dirname, '../prmApp/dist')))
-app.use(
-  session({
-    resave: true,
-    saveUninitialized: true,
-    secret: 'BwhFeenj9DcRqANH',
-    cookie: { maxAge: null }
-  })
-)
-
+}))
+app.use(bodyParser.json());
+app.use(express.static(path.join(__dirname, '../prmApp/dist')));
+app.use(session({resave: true, saveUninitialized: true, secret: 'BwhFeenj9DcRqANH', cookie: { maxAge: null }}));
+ 
 ///////////////////////////////////
 //
 // REST SERVER
@@ -38,27 +30,22 @@ const enquiriesPermission = 'Enquiries'
 ///////////////////////////////////
 
 // login - email and password in body
-app.post('/api/login', async function (req, res) {
-  const credentials = req.body
-  //console.log('POST: api/login called for ' + credentials.loginEmail)
-  req.session.prm_user = await daoUser.getUser(
-    req,
-    res,
-    credentials.loginEmail,
-    credentials.loginPassword
-  )
+app.post('/api/login', async function(req, res) {
+   const credentials = req.body
+   //console.log('POST: api/login called for ' + credentials.loginEmail) 
+   req.session.prm_user = await daoUser.getUser(req, res, credentials.loginEmail, credentials.loginPassword)
   // console.log('req.session.prm_user', req.session)
-})
+});
 
 // get loged user data
 app.get('/api/login', (req, res) => {
-  console.log('check get login api', req.session)
-  if (req.session.prm_user) {
-    res.status(200).json(req.session.prm_user)
-  } else {
-    res.status(200).json('NOK: user not logged in')
-  }
-})
+   console.log('check get login api', req.session)
+   if (req.session.prm_user) { 
+        res.status(200).json(req.session.prm_user)
+   } else {
+       res.status(200).json("NOK: user not logged in")
+   }
+});
 
 // logout user
 app.get('/api/logout', (req, res) => {
@@ -97,6 +84,19 @@ app.delete('/api/enquiries/:id', (req, res) => {
   console.log('DELETE: api/enquiries for ', id)
   res.json('OK: ' + id)
 })
+
+///////////////////////////////////
+// invoices, fiscal verification
+///////////////////////////////////
+app.get('/api/invoice/premises/:premiseId', (req, res) => {
+  const premiseId = req.params.premiseId
+  console.log('GET: api/invoice/premises called for ', premiseId)
+  // todo which permission?
+  // todo which company (cert, vat)
+
+  fiscalVerification.registerPremises(premiseId)
+
+});
 
 ///////////////////////////////////
 // common methodes
