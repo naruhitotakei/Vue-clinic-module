@@ -11,7 +11,7 @@ const daoEnquiries = require('./dao/daoEnquiries')
 const fiscalVerification = require('./services/fiscalVerification')
 
 app.use(cors({
-    origin: 'http://localhost:8080',
+    origin: process.env.APP_URL || 'http://localhost:8080',
     credentials: true
 }))
 app.use(bodyParser.json());
