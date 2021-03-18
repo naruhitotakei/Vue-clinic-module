@@ -9,6 +9,7 @@
       center: 'title',
       right: 'dayGridMonth,timeGridWeek,timeGridDay,resourceTimeGridDay,resourceTimeGridWeek'
     }"
+  @eventClick="eventData(args)"
   />
 </template>
 <script>

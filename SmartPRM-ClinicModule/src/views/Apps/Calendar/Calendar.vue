@@ -15,7 +15,7 @@
               <b-button variant="primary">Doctor 3</b-button>
               <b-button variant="primary">Right<i class="ri-arrow-right-s-line"></i></b-button>
             </b-button-group>&nbsp;&nbsp;
-            <b-button v-b-modal.modal-1 variant="primary">All Doctors</b-button>
+            <b-button variant="primary">All Doctors</b-button>
         </iq-card>
           </template>
           <template v-slot:headerAction>
