@@ -353,14 +353,14 @@ const settingChildRoute = (prop, mode = false) => [
 
 const statisticsChildRoute = (prop, mode = false) => [
   {
-    path: 'clinic',
-    name: prop + '.clinic',
+    path: 'statistics-clinic',
+    name: prop + '.statistics-clinic',
     meta: { dark: mode, auth: true, name: 'Statistics Clinic' },
     component: Dashboard1
   },
   {
-    path: 'person',
-    name: prop + '.person',
+    path: 'statistics-person',
+    name: prop + '.statistics-person',
     meta: { dark: mode, auth: true, name: 'Statistics Person' },
     component: Dashboard1
   }

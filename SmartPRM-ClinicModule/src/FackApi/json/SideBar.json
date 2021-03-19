@@ -115,7 +115,7 @@
         "name": "sidebar.statistics-clinic",
         "is_active": false,
         "link": {
-          "name": "statistics.clinic"
+          "name": "statistics.statistics-clinic"
         },
         "class_name": "",
         "is_icon_class": true,

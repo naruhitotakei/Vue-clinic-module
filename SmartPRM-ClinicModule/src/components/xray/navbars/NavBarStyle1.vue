@@ -42,9 +42,9 @@ console.log('sidebar data', SideBarItems)
 export default {
   name: 'NavBarStyle1',
   props: {
-    homeURL: { type: Object, default: () => ({ name: 'layout1.dashboard' }) },
+    homeURL: { type: Object, default: () => ({ name: 'dashboard.home-1' }) },
     title: { type: String, default: 'Dashboard' },
-    logo: { type: String, default: require('../../../assets/images/logo.png') },
+    logo: { type: String, default: require('../../../assets/images/smallPRM-logo-white.png') },
     horizontal: { type: Boolean, default: false },
     items: { type: Array }
   },
@@ -67,24 +67,6 @@ export default {
   methods: {
     miniSidebar () {
       this.$emit('toggle')
-    },
-    myFunction () {
-      var input, filter, table, tr, td, i, txtValue
-      input = document.getElementById('myInput')
-      filter = input.value.toUpperCase()
-      table = document.getElementById('my-table')
-      tr = table.getElementsByTagName('tr')
-      for (i = 0; i < tr.length; i++) {
-        td = tr[i].getElementsByTagName('td')[0]
-        if (td) {
-          txtValue = td.textContent || td.innerText
-          if (txtValue.toUpperCase().indexOf(filter) > -1) {
-            tr[i].style.display = ''
-          } else {
-            tr[i].style.display = 'none'
-          }
-        }
-      }
     }
   }
 }

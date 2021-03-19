@@ -3,7 +3,8 @@
     <div class="iq-sidebar-logo d-flex justify-content-between">
       <router-link :to="homeURL">
         <!-- <img :src="logo" class="img-fluid" alt="logo"> -->
-        <img src="../../../assets/images/Logo-Dental-White.png"/>
+        <img src="../../../assets/images/smallPRM-logo-white.png" alt="Smart PRM"/>
+        <span><img src="../../../assets/images/logo-text-white.png" alt="Smart PRM"/></span>
         <!-- <span>XRay</span> -->
       </router-link>
       <div class="iq-menu-bt-sidebar" v-if="toggleButton">
@@ -30,7 +31,7 @@ import List from '../menus/ListStyle1'
 export default {
   name: 'SideBarStyle1',
   props: {
-    homeURL: { type: Object, default: () => ({ name: 'layout1.dashboard' }) },
+    homeURL: { type: Object, default: () => ({ name: 'dashboard.home-1' }) },
     items: { type: Array },
     logo: { type: String, default: require('../../../assets/images/logo.png') },
     horizontal: { type: Boolean },
