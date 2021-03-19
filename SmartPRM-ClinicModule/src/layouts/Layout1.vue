@@ -82,7 +82,7 @@
                 <a href="#" class="search-toggle iq-waves-effect d-flex align-items-center">
                   <img :src="userProfile" class="img-fluid rounded mr-3" alt="user">
                   <div class="caption">
-                    <h6 class="mb-0 line-height">Nik jone</h6>
+                    <h6 class="mb-0 line-height">Dr. Nika Klemenc</h6>
                     <span class="font-size-12">{{ $t('nav.user.available') }}</span>
                   </div>
                 </a>
@@ -90,7 +90,7 @@
                   <div class="iq-card shadow-none m-0">
                     <div class="iq-card-body p-0 ">
                       <div class="bg-primary p-3">
-                        <h5 class="mb-0 text-white line-height">Hello Nik jone</h5>
+                        <h5 class="mb-0 text-white line-height">Hello Dr. Nika Klemenc</h5>
                         <span class="text-white font-size-12">{{ $t('nav.user.available') }}</span>
                       </div>
                       <a href="#" class="iq-sub-card iq-bg-primary-hover">
@@ -215,18 +215,18 @@ export default {
       usersList: Users,
       rtl: false,
       message: [
-        { image: require('../assets/images/user/01.jpg'), name: 'Nik Emma Watson', date: '13 jan' },
-        { image: require('../assets/images/user/02.jpg'), name: 'Greta Life', date: '14 Jun' },
-        { image: require('../assets/images/user/03.jpg'), name: 'Barb Ackue', date: '16 Aug' },
-        { image: require('../assets/images/user/04.jpg'), name: 'Anna Sthesia', date: '21 Sept' },
-        { image: require('../assets/images/user/05.jpg'), name: 'Bob Frapples', date: '29 Sept' }
+        { image: require('../assets/images/user/01.jpg'), name: 'Dr. Bojan Jernejc', date: '13 Jan' },
+        { image: require('../assets/images/user/02.jpg'), name: 'Dr. Silvija Lenart', date: '14 Jun' },
+        { image: require('../assets/images/user/03.jpg'), name: 'Dr. Irma Medved', date: '16 Avg' },
+        { image: require('../assets/images/user/04.jpg'), name: 'Dr. Petra Maver', date: '21 Sept' },
+        { image: require('../assets/images/user/05.jpg'), name: 'Dr. Damjan Ahlin', date: '29 Sept' }
       ],
       notification: [
-        { image: require('../assets/images/user/01.jpg'), name: 'Nik Emma Watson', date: '23 hour ago', description: 'Enjoy smart access to videos, games' },
-        { image: require('../assets/images/user/02.jpg'), name: 'Greta Life', date: '14 hour ago', description: 'Google Chromecast: Enjoy a world of entertainment' },
-        { image: require('../assets/images/user/03.jpg'), name: 'Barb Ackue', date: '16 hour ago', description: 'Dell Inspiron Laptop: Get speed and performance from' },
-        { image: require('../assets/images/user/04.jpg'), name: 'Anna Sthesia', date: '21 hour ago', description: 'Deliver your favorite playlist anywhere in your home ' },
-        { image: require('../assets/images/user/05.jpg'), name: 'Bob Frapples', date: '11 hour ago', description: 'MacBook Air features up to 8GB of memory, a fifth-generation' }
+        { image: require('../assets/images/user/01.jpg'), name: 'Dr. Bojan Jernejc', date: '23 ur nazaj', description: 'Slike pacienta' },
+        { image: require('../assets/images/user/02.jpg'), name: 'Dr. Silvija Lenart', date: '14 ur nazaj', description: 'Operacija' },
+        { image: require('../assets/images/user/03.jpg'), name: 'Dr. Irma Medved', date: '16 ur nazaj', description: 'Rentgen' },
+        { image: require('../assets/images/user/04.jpg'), name: 'Dr. Petra Maver', date: '21 ur nazaj', description: 'Kartoteka pacienta' },
+        { image: require('../assets/images/user/05.jpg'), name: 'Dr. Damjan Ahlin', date: '11 ur nazaj', description: 'Nov termin' }
       ]
     }
   },

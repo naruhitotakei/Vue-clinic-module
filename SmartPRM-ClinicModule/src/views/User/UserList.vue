@@ -36,22 +36,22 @@ export default {
   data () {
     return {
       doctors: [
-        { name: 'Dr. Anna Mull', specialist: 'Cardiologists', image: require('../../assets/images/user/1.jpg'), email: 'abc@gmail.com', phone: '9876543210' },
-        { name: 'Dr. Bunny Joy', specialist: 'Gynaecology', image: require('../../assets/images/user/01.jpg'), email: 'abc@gmail.com', phone: '9876543210' },
-        { name: 'Dr. Shonda Leer', specialist: 'Orthopedics Special', image: require('../../assets/images/user/02.jpg'), email: 'abc@gmail.com', phone: '9876543210' },
-        { name: 'Dr. Ira Membrit', specialist: 'MD', image: require('../../assets/images/user/03.jpg'), email: 'abc@gmail.com', phone: '9876543210' },
-        { name: 'Dr. Paul Molive', specialist: 'Medicine Specialists', image: require('../../assets/images/user/04.jpg'), email: 'abc@gmail.com', phone: '9876543210' },
-        { name: 'Dr. Dr. Terry Aki', specialist: 'Heart Surgeons', image: require('../../assets/images/user/05.jpg'), email: 'abc@gmail.com', phone: '9876543210' },
-        { name: 'Dr. Poppa Cherry', specialist: 'Family Physicians', image: require('../../assets/images/user/06.jpg'), email: 'abc@gmail.com', phone: '9876543210' },
-        { name: 'Dr. Dr. Saul T. Balls', specialist: 'Gynaecology', image: require('../../assets/images/user/07.jpg'), email: 'abc@gmail.com', phone: '9876543210' },
-        { name: 'Dr. Hal Appeno', specialist: 'MD', image: require('../../assets/images/user/08.jpg'), email: 'abc@gmail.com', phone: '9876543210' },
-        { name: 'Dr. Polly Tech', specialist: 'Eye Special', image: require('../../assets/images/user/09.jpg'), email: 'abc@gmail.com', phone: '9876543210' },
-        { name: 'Dr. Pat Agonia', specialist: 'Therapy Special', image: require('../../assets/images/user/10.jpg'), email: 'abc@gmail.com', phone: '9876543210' },
-        { name: 'Dr. Barry Cade', specialist: 'Heart Surgeons', image: require('../../assets/images/user/12.jpg'), email: 'abc@gmail.com', phone: '9876543210' },
-        { name: 'Dr.Jimmy Changa', specialist: 'Cardiologists', image: require('../../assets/images/user/12.jpg'), email: 'abc@gmail.com', phone: '9876543210' },
-        { name: 'Dr. Sue Vaneer', specialist: 'Orthopedics Special', image: require('../../assets/images/user/13.jpg'), email: 'abc@gmail.com', phone: '9876543210' },
-        { name: 'Dr. Monty Carlo', specialist: 'Anesthesiologists', image: require('../../assets/images/user/14.jpg'), email: 'abc@gmail.com', phone: '9876543210' },
-        { name: 'Dr. Rick O\'Shea', specialist: 'General', image: require('../../assets/images/user/15.jpg'), email: 'abc@gmail.com', phone: '9876543210' }
+        { name: 'Dr. Ana Mencin', specialist: 'Kadriolog', image: require('../../assets/images/user/1.jpg'), email: 'ana.mencin@gmail.com', phone: '+38670532732' },
+        { name: 'Dr. Bojan Jernejc', specialist: 'Ginekolog', image: require('../../assets/images/user/01.jpg'), email: 'bojan.jernejc@gmail.com', phone: '+38641235833' },
+        { name: 'Dr. Silvija Lenart', specialist: 'Ortoped', image: require('../../assets/images/user/02.jpg'), email: 'silvija.lenart@gmail.com', phone: '+38640934232' },
+        { name: 'Dr. Irma Medved', specialist: 'Infektolog', image: require('../../assets/images/user/03.jpg'), email: 'irma.medved@gmail.com', phone: '+38631493422' },
+        { name: 'Dr. Petra Maver', specialist: 'Kirurg', image: require('../../assets/images/user/04.jpg'), email: 'pavel.maver@gmail.com', phone: '+38670324786' },
+        { name: 'Dr. Damjan Ahlin', specialist: 'Nevrokirurg', image: require('../../assets/images/user/05.jpg'), email: 'damjan.ahlin@gmail.com', phone: '+38640593412' },
+        { name: 'Dr. Martin Sever', specialist: 'Oftamolog', image: require('../../assets/images/user/06.jpg'), email: 'martin.sever@gmail.com', phone: '+38670313285' },
+        { name: 'Dr. Tanja Perme', specialist: 'Ginekolog', image: require('../../assets/images/user/07.jpg'), email: 'tanja.perme@gmail.com', phone: '+38631945122' },
+        { name: 'Dr. Matic Erjavec', specialist: 'Kirurg', image: require('../../assets/images/user/08.jpg'), email: 'matic.erjavec@gmail.com', phone: '+38651934832' },
+        { name: 'Dr. Peter Berlot', specialist: 'Urolog', image: require('../../assets/images/user/09.jpg'), email: 'peter.berlot@gmail.com', phone: '+38640573247' },
+        { name: 'Dr. Sebastjan Bras', specialist: 'Anesteziolog', image: require('../../assets/images/user/10.jpg'), email: 'sebastjan.bras@gmail.com', phone: '+38651423841' },
+        { name: 'Dr. Dejan Sivec', specialist: 'Kirurg', image: require('../../assets/images/user/12.jpg'), email: 'dejan.sivec@gmail.com', phone: '+38631945022' },
+        { name: 'Dr. Janez Veble', specialist: 'Kardiolog', image: require('../../assets/images/user/12.jpg'), email: 'janez.veble@gmail.com', phone: '+386705932483' },
+        { name: 'Dr. Suzana Zgonc', specialist: 'Ortoped', image: require('../../assets/images/user/13.jpg'), email: 'suzana.zgonc@gmail.com', phone: '+38651832430' },
+        { name: 'Dr. Miha Vozelj', specialist: 'Kirurg', image: require('../../assets/images/user/14.jpg'), email: 'miha.vozelj@gmail.com', phone: '+38631743823' },
+        { name: 'Dr. Renata Kobler', specialist: 'Anesteziolog', image: require('../../assets/images/user/15.jpg'), email: 'rajko.kobler@gmail.com', phone: '+38670583248' }
 
       ]
     }

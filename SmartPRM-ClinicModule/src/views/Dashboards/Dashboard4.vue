@@ -55,8 +55,8 @@
                 <img src="../../assets/images/user/11.png" alt="profile-img" class="avatar-130 img-fluid">
               </div>
               <div class="text-center mt-3">
-                <h4><b>Bini Jets</b></h4>
-                <p>Doctor</p>
+                <h4><b>Dr. Nika Klemenc</b></h4>
+                <p>Kirurg</p>
                 <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. In in arcu turpis. Nunc</p>
                 <a href="#" class="btn btn-primary">Assign</a>
               </div>
@@ -158,49 +158,49 @@
             <ul class="patient-progress m-0 p-0">
               <li class="d-flex mb-3 align-items-center">
                 <div class="media-support-info">
-                  <h6>Bud Jet</h6>
+                  <h6>Natalija Kogoj</h6>
                 </div>
                 <span class="badge badge-primary">30%</span>
               </li>
               <li class="d-flex mb-3 align-items-center">
                 <div class="media-support-info">
-                  <h6>Barney Cull</h6>
+                  <h6>Oliver Kemperle</h6>
                 </div>
                 <span class="badge badge-success">70%</span>
               </li>
               <li class="d-flex mb-3 align-items-center">
                 <div class="media-support-info">
-                  <h6>Eric Shun</h6>
+                  <h6>Metka Gams</h6>
                 </div>
                 <span class="badge badge-danger">15%</span>
               </li>
               <li class="d-flex mb-3 align-items-center">
                 <div class="media-support-info">
-                  <h6>Rick Shaw</h6>
+                  <h6>Larisa Fortuna</h6>
                 </div>
                 <span class="badge badge-warning">55%</span>
               </li>
               <li class="d-flex mb-3 align-items-center">
                 <div class="media-support-info">
-                  <h6>Ben Effit</h6>
+                  <h6>Leonarda Godina</h6>
                 </div>
                 <span class="badge badge-info">45%</span>
               </li>
               <li class="d-flex mb-3 align-items-center">
                 <div class="media-support-info">
-                  <h6>Rick Shaw</h6>
+                  <h6>Monika Forte</h6>
                 </div>
                 <span class="badge badge-warning">55%</span>
               </li>
               <li class="d-flex mb-3 align-items-center">
                 <div class="media-support-info">
-                  <h6>Marge Arita</h6>
+                  <h6>Janez Erjavec</h6>
                 </div>
                 <span class="badge badge-primary">65%</span>
               </li>
               <li class="d-flex align-items-center">
                 <div class="media-support-info">
-                  <h6>Barry Cudat</h6>
+                  <h6>Iztok Dimnik</h6>
                 </div>
                 <span class="badge badge-danger">15%</span>
               </li>
@@ -358,26 +358,26 @@ export default {
         inline: true
       },
       doctors: [
-        { name: 'Dr. Paul Molive', img: require('../../assets/images/user/01.jpg'), degree: 'MBBS, MD' },
-        { name: 'Dr. Barb Dwyer', img: require('../../assets/images/user/02.jpg'), degree: 'MD' },
-        { name: 'Dr. Terry Aki', img: require('../../assets/images/user/03.jpg'), degree: 'MBBS' },
-        { name: 'Dr. Robin Banks', img: require('../../assets/images/user/04.jpg'), degree: 'MBBS, MD' },
-        { name: 'Dr. Barry Wine', img: require('../../assets/images/user/05.jpg'), degree: 'BAMS' },
-        { name: 'Dr. Zack Lee', img: require('../../assets/images/user/06.jpg'), degree: 'MS, MD' },
-        { name: 'Dr. Otto Matic', img: require('../../assets/images/user/07.jpg'), degree: 'MBBS, MD' },
-        { name: 'Dr. Moe Fugga', img: require('../../assets/images/user/08.jpg'), degree: 'MD' },
-        { name: 'Dr. Bud Wiser', img: require('../../assets/images/user/09.jpg'), degree: 'MBBS' },
-        { name: 'Dr. Barry Cade', img: require('../../assets/images/user/10.jpg'), degree: 'MBBS, MD' }
+        { name: 'Dr. Bojan Jernejc', img: require('../../assets/images/user/01.jpg'), degree: 'MBBS, MD' },
+        { name: 'Dr. Silvija Lenart', img: require('../../assets/images/user/02.jpg'), degree: 'MD' },
+        { name: 'Dr. Irma Medved', img: require('../../assets/images/user/03.jpg'), degree: 'MBBS' },
+        { name: 'Dr. Petra Maver', img: require('../../assets/images/user/04.jpg'), degree: 'MBBS, MD' },
+        { name: 'Dr. Damjan Ahlin', img: require('../../assets/images/user/05.jpg'), degree: 'BAMS' },
+        { name: 'Dr. Martin Sever', img: require('../../assets/images/user/06.jpg'), degree: 'MS, MD' },
+        { name: 'Dr. Tanja Perme', img: require('../../assets/images/user/07.jpg'), degree: 'MBBS, MD' },
+        { name: 'Dr. Matic Erjavec', img: require('../../assets/images/user/08.jpg'), degree: 'MD' },
+        { name: 'Dr. Peter Berlot', img: require('../../assets/images/user/09.jpg'), degree: 'MBBS' },
+        { name: 'Dr. Sebastjan Bras', img: require('../../assets/images/user/10.jpg'), degree: 'MBBS, MD' }
 
       ],
       appointments: [
-        { patient: 'Petey Cruiser', doctor: 'Dr.Monty Carlo', date: '20/02/2020', timing: '8:00 AM', contact: '+1-202-555-0146' },
-        { patient: 'Anna Sthesia', doctor: 'Dr.Pete Sariya', date: '25/02/2020', timing: '8:30 AM', contact: '+1-202-555-0164' },
-        { patient: 'Paul Molive', doctor: 'Dr.Brock Lee', date: '20/02/2020', timing: '9:45 AM', contact: '+1-202-555-0153' },
-        { patient: 'Anna Mull', doctor: 'Dr.Barb Ackue', date: '27/02/2020', timing: '11:30 AM', contact: '+1-202-555-0154' },
-        { patient: 'Paige Turner', doctor: 'Dr.Walter Melon', date: '28/02/2020', timing: '3:30 AM', contact: '+1-202-555-0101' },
-        { patient: 'Don Stairs', doctor: 'Dr.Arty Ficial', date: '28/02/2020', timing: '4:30 PM', contact: '+1-202-555-0176' },
-        { patient: 'Pat Agonia', doctor: 'Dr.Barb Ackue', date: '29/02/2020', timing: '5:00 AM', contact: '+1-202-555-0194' }
+        { patient: 'Martina Dolar', doctor: 'Dr. Martin Sever', date: '20/02/2020', timing: '8:00 AM', contact: '+1-202-555-0146' },
+        { patient: 'Marko Engelman', doctor: 'Dr. Sebastjan Bras', date: '25/02/2020', timing: '8:30 AM', contact: '+1-202-555-0164' },
+        { patient: 'Lana Ekart', doctor: 'Dr. Suzana Zgonc', date: '20/02/2020', timing: '9:45 AM', contact: '+1-202-555-0153' },
+        { patient: 'Goran Drobne', doctor: 'Dr. Martin Sever', date: '27/02/2020', timing: '11:30 AM', contact: '+1-202-555-0154' },
+        { patient: 'Igor Destovnik', doctor: 'Dr. Irma Medved', date: '28/02/2020', timing: '3:30 AM', contact: '+1-202-555-0101' },
+        { patient: 'Linda Darovec', doctor: 'Dr. Miha Vozelj', date: '28/02/2020', timing: '4:30 PM', contact: '+1-202-555-0176' },
+        { patient: 'Maj Pavlin', doctor: 'Dr. Janez Veble', date: '29/02/2020', timing: '5:00 AM', contact: '+1-202-555-0194' }
       ],
       chart1: {
         series: [{

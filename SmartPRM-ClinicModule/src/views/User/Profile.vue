@@ -11,8 +11,8 @@
                 <b-img :src="doctor.profile" alt="profile-img" class="avatar-130 img-fluid" />
               </div>
               <div class="text-center mt-3 pl-3 pr-3">
-                <h4><b>Bini Jets</b></h4>
-                <p>Doctor</p>
+                <h4><b>Dr. Nika Klemenc</b></h4>
+                <p>Kirurg</p>
                 <p class="mb-0">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Delectus repudiandae eveniet harum.</p>
               </div>
               <hr>
@@ -44,19 +44,19 @@
               <div class="about-info m-0 p-0">
                 <div class="row">
                   <div class="col-4">First Name:</div>
-                  <div class="col-8">Bini</div>
+                  <div class="col-8">Nika</div>
                   <div class="col-4">Last Name:</div>
-                  <div class="col-8">Jets</div>
+                  <div class="col-8">Klemenc</div>
                   <div class="col-4">Age:</div>
-                  <div class="col-8">27</div>
+                  <div class="col-8">41</div>
                   <div class="col-4">Position:</div>
-                  <div class="col-8">Senior Docter</div>
+                  <div class="col-8">Kirurg</div>
                   <div class="col-4">Email:</div>
-                  <div class="col-8"><a href="mailto:biniJets24@demo.com"> biniJets24@demo.com </a></div>
+                  <div class="col-8"><a href="mailto:biniJets24@demo.com"> nika.klemenc@gmail.com </a></div>
                   <div class="col-4">Phone:</div>
-                  <div class="col-8"><a href="tel:001-2351-25612">001 2351 256 12</a></div>
+                  <div class="col-8"><a href="tel:001-2351-25612">+38640582347</a></div>
                   <div class="col-4">Location:</div>
-                  <div class="col-8">USA</div>
+                  <div class="col-8">Slovenia</div>
                 </div>
               </div>
             </div>
@@ -128,7 +128,7 @@
                 <ul class="iq-timeline">
                   <li>
                     <div class="timeline-dots border-success"></div>
-                    <h6 class="">Dr. Joy Send you Photo</h6>
+                    <h6 class="">Dr. Ahlin Send you Photo</h6>
                     <small class="mt-1">23 November 2019</small>
                   </li>
                   <li>
@@ -153,35 +153,35 @@
               <template v-slot:body>
                 <ul class="list-inline m-0 p-0">
                   <li>
-                    <h6 class="float-left mb-1">Ruby saul (Blood Check)</h6>
+                    <h6 class="float-left mb-1">Maj Pavlin (Blood Check)</h6>
                     <small class="float-right mt-1">Today</small>
                     <div class="d-inline-block w-100">
                       <p class="badge badge-primary">09:00 AM </p>
                     </div>
                   </li>
                   <li>
-                    <h6 class="float-left mb-1">  Anna Mull (Fever)</h6>
+                    <h6 class="float-left mb-1">Jure Arnejc (Fever)</h6>
                     <small class="float-right mt-1">Today</small>
                     <div class="d-inline-block w-100">
                       <p class="badge badge-danger">09:15 AM </p>
                     </div>
                   </li>
                   <li>
-                    <h6 class="float-left mb-1">Petey Cruiser (X-ray)</h6>
+                    <h6 class="float-left mb-1">Neli Kastelic (X-ray)</h6>
                     <small class="float-right mt-1">Today</small>
                     <div class="d-inline-block w-100">
                       <p class="badge badge-warning">10:00 AM </p>
                     </div>
                   </li>
                   <li>
-                    <h6 class="float-left mb-1">Anna Sthesia (Full body Check up)</h6>
+                    <h6 class="float-left mb-1">Kim Bole (Full body Check up)</h6>
                     <small class="float-right mt-1">Today</small>
                     <div class="d-inline-block w-100">
                       <p class="badge badge-info">01:00 PM </p>
                     </div>
                   </li>
                   <li>
-                    <h6 class="float-left mb-1">Paul Molive (Operation)</h6>
+                    <h6 class="float-left mb-1">Nina Avsec (Operation)</h6>
                     <small class="float-right mt-1">Tomorrow</small>
                     <div class="d-inline-block w-100">
                       <p class="badge badge-success">09:00 AM </p>
@@ -261,12 +261,6 @@
                   </tr>
                   </thead>
                   <tbody>
-                  <tr>
-                    <td>2010</td>
-                    <td>MBBS, M.D</td>
-                    <td>University of Wyoming</td>
-                    <td><span class="badge badge-success">Distinction</span></td>
-                  </tr>
                   <tr>
                     <td>2014</td>
                     <td>M.D. of Medicine</td>
