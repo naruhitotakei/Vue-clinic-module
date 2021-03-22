@@ -105,7 +105,7 @@ export default {
             invoiceDate: '20 Mar, 2021',
             invoiceStatus: 2,
             invoiceID: '250028',
-            invoiceTotal: '1.000 EUR',
+            invoiceTotal: '1.500 EUR',
             billingDetails: 'Natalija Kogoj <br> Prva cesta 1 <br> 1000 Ljubljana, Slovenija <br> Telefon: +38651365682 <br> Email: natalija.kogoj@staging-emazing.si'
           }
         ],
@@ -208,9 +208,9 @@ export default {
             bank: 'Banka Intesa Sanpaolo d.d.',
             accNo: 'SI56 1010 0005 6606 867',
             dueDate: '20 April 2021',
-            subTotal: '1600 EUR',
+            subTotal: '1.600 EUR',
             paymentMethod: 'Gotovina',
-            total: '1500 EUR'
+            total: '1.500 EUR'
           }
         ]
       }
