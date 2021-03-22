@@ -741,17 +741,6 @@
         "icon": "ri-map-pin-time-line"
       },
       {
-        "title": "Invoice",
-        "name": "sidebar.invoice",
-        "is_active": false,
-        "link": {
-          "name": "extra-pages.invoice"
-        },
-        "class_name": "",
-        "is_icon_class": true,
-        "icon": "ri-question-answer-line"
-      },
-      {
         "title": "Invoice Example",
         "name": "invoice Example",
         "is-active": false,
@@ -796,28 +785,6 @@
         "class_name": "",
         "is_icon_class": true,
         "icon": "ri-error-warning-line"
-      },
-      {
-        "title": "Pricing",
-        "name": "sidebar.pricing",
-        "is_active": false,
-        "link": {
-          "name": "extra-pages.pricing"
-        },
-        "class_name": "",
-        "is_icon_class": true,
-        "icon": "ri-price-tag-line"
-      },
-      {
-        "title": "Pricing 1",
-        "name": "sidebar.pricing1",
-        "is_active": false,
-        "link": {
-          "name": "extra-pages.pricing1"
-        },
-        "class_name": "",
-        "is_icon_class": true,
-        "icon": "ri-price-tag-2-line"
       },
       {
         "title": "Maintenance",
