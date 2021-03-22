@@ -752,6 +752,17 @@
         "icon": "ri-question-answer-line"
       },
       {
+        "title": "Invoice Example",
+        "name": "invoice Example",
+        "is-active": false,
+        "link": {
+          "name": "extra-pages.invoice-example"
+        },
+        "class_name": "",
+        "is_icon_class": true,
+        "icon": "ri-question-answer-line"
+      },
+      {
         "title": "Blank Page",
         "name": "sidebar.blankPage",
         "is_active": false,

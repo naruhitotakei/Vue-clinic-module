@@ -47,6 +47,7 @@ import Pricing1 from '../views/Pages/Pricing1'
 import BlankPage from '../views/Pages/BlankPage'
 import FAQ from '../views/Pages/FAQ'
 import Invoice from '../views/Pages/Invoice'
+import InvoiceExample from '../views/Pages/InvoiceExample'
 /* Apps Views */
 import EmailListing from '../views/Apps/Email/EmailListing'
 import EmailCompose from '../views/Apps/Email/EmailCompose'
@@ -519,6 +520,12 @@ const defaultlayout = (prop, mode = false) => [
     name: prop + '.invoice',
     meta: { dark: mode, auth: true, name: 'Invoice' },
     component: Invoice
+  },
+  {
+    path: 'invoice-example',
+    name: prop + '.invoice-example',
+    meta: { dark: mode, auth: true, name: 'Invoices Example' },
+    component: InvoiceExample
   },
   {
     path: 'blank-page',
