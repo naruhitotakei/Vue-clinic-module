@@ -106,7 +106,9 @@ export default {
             invoiceStatus: 2,
             invoiceID: '250028',
             invoiceTotal: '1.500 EUR',
-            billingDetails: 'Natalija Kogoj <br> Prva cesta 1 <br> 1000 Ljubljana, Slovenija <br> Telefon: +38651365682 <br> Email: natalija.kogoj@staging-emazing.si'
+            billingDetails: 'Natalija Kogoj <br> Prva cesta 1 <br> 1000 Ljubljana, Slovenija <br> Telefon: +38651365682 <br> Email: natalija.kogoj@staging-emazing.si',
+            issuedIn: 'Ljubljana',
+            issuedBy: 'Dr. Bojan Jernejc'
           }
         ],
         invoiceSummaryFields: [
@@ -199,6 +201,10 @@ export default {
             label: 'Sub-total'
           },
           {
+            key: 'discount',
+            label: 'Discount'
+          },
+          {
             key: 'total',
             label: 'Total'
           }
@@ -210,6 +216,7 @@ export default {
             dueDate: '20 April 2021',
             subTotal: '1.600 EUR',
             paymentMethod: 'Gotovina',
+            discount: '100 EUR',
             total: '1.500 EUR'
           }
         ]
