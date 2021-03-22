@@ -212,7 +212,7 @@ export default {
         { value: { enter: 'rotateInDownLeft', exit: 'rotateOutDownLeft' }, text: 'Roll' }
       ],
       horizontalMenu: HorizontalItems,
-      verticalMenu: SideBarItems,
+      verticalMenu: {},
       userProfile: profile,
       logo: loader,
       usersList: Users,
@@ -272,6 +272,7 @@ export default {
       sso().then(response => {
         if (typeof response !== 'string') {
           this.logedInUser = response
+          this.verticalMenu = this.filterMenu(SideBarItems)
         } else {
           this.$router.push({ name: 'auth1.sign-in1' })
         }
@@ -281,6 +282,25 @@ export default {
       logout()
       this.logedInUser = {}
       this.$router.push({ name: 'auth1.sign-in1' })
+    },
+    filterMenu (sideBarItems) {
+      console.log('User permissions ', this.logedInUser.permissions)
+      var rVal = []
+      for (var i = 0; i < sideBarItems.length; i++) {
+        if (this.permissionContains(sideBarItems[i].title)) {
+          rVal.push(sideBarItems[i])
+        }
+      }
+      return rVal
+    },
+    permissionContains (resourceName) {
+      if (this.logedInUser) return true // todo - vrzi venm da bo delovalo filtriranje
+      if (!this.logedInUser) return false
+      for (var i = 0; i < this.logedInUser.permissions.length; i++) {
+        if (this.logedInUser.permissions[i].resource_name === resourceName) return true
+      }
+      console.log('User has no premission for ' + resourceName)
+      return false
     },
     langChange (lang) {
       this.langChangeState(lang)

@@ -1,5 +1,4 @@
 export async function login (loginEmail, loginPassword) {
-  console.log('check if it works here', JSON.stringify({ 'loginEmail': loginEmail, 'loginPassword': loginPassword }))
   const rawResponse = await fetch('/api/login', {
     method: 'POST',
     credentials: 'same-origin',
