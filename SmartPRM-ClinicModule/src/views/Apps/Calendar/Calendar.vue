@@ -87,7 +87,7 @@
             <!-- <a href="#" class="btn btn-primary"><i class="ri-add-line mr-2"></i>Book Appointment</a> -->
           </template>
           <template v-slot:body>
-            <FullCalendar :calendarEvents="events" />
+            <FullCalendar :calendarEvents="events" style="width: 100%; height: 100%;"/>
           </template>
         </iq-card>
       </b-col>
