@@ -82,7 +82,7 @@
                 <a href="#" class="search-toggle iq-waves-effect d-flex align-items-center">
                   <img :src="userProfile" class="img-fluid rounded mr-3" alt="user">
                   <div class="caption">
-                    <h6 class="mb-0 line-height">Dr. Nika Klemenc</h6>
+                    <h6 class="mb-0 line-height">{{ logedInUser.name }}</h6>
                     <span class="font-size-12">{{ $t('nav.user.available') }}</span>
                   </div>
                 </a>
@@ -90,7 +90,7 @@
                   <div class="iq-card shadow-none m-0">
                     <div class="iq-card-body p-0 ">
                       <div class="bg-primary p-3">
-                        <h5 class="mb-0 text-white line-height">Hello Dr. Nika Klemenc</h5>
+                        <h5 class="mb-0 text-white line-height">Hello {{ logedInUser.name }}</h5>
                         <span class="text-white font-size-12">{{ $t('nav.user.available') }}</span>
                       </div>
                       <a href="#" class="iq-sub-card iq-bg-primary-hover">
@@ -138,7 +138,7 @@
                         </div>
                       </a>
                       <div class="d-inline-block w-100 text-center p-3">
-                        <a class="iq-bg-danger iq-sign-btn" href="javascript:void(0)" @click="logout" role="button">{{ $t('nav.user.signout') }}<i class="ri-login-box-line ml-2"></i></a>
+                        <a class="iq-bg-danger iq-sign-btn" href="javascript:void(0)" @click="userLogout" role="button">{{ $t('nav.user.signout') }}<i class="ri-login-box-line ml-2"></i></a>
                       </div>
                     </div>
                   </div>
@@ -176,6 +176,7 @@ import loader from '../assets/images/logo.png'
 import { xray } from '../config/pluginInit'
 import { Users } from '../FackApi/api/chat'
 import { mapGetters, mapActions } from 'vuex'
+import { sso, logout } from '../services/userService'
 export default {
   name: 'Layout1',
   components: {
@@ -184,6 +185,7 @@ export default {
     NavBarStyle1
   },
   mounted () {
+    this.getUserLogin()
     this.updateRadio()
   },
   computed: {
@@ -198,6 +200,7 @@ export default {
   // sidebarTicket
   data () {
     return {
+      logedInUser: {},
       horizontal: false,
       mini: false,
       darkMode: false,
@@ -265,9 +268,18 @@ export default {
       this.animated = { enter: 'zoomIn', exit: 'zoomOut' }
       this.light()
     },
-    logout () {
-      localStorage.removeItem('user')
-      localStorage.removeItem('access_token')
+    getUserLogin () {
+      sso().then(response => {
+        if (typeof response !== 'string') {
+          this.logedInUser = response
+        } else {
+          this.$router.push({ name: 'auth1.sign-in1' })
+        }
+      })
+    },
+    userLogout () {
+      logout()
+      this.logedInUser = {}
       this.$router.push({ name: 'auth1.sign-in1' })
     },
     langChange (lang) {

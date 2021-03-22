@@ -21,3 +21,12 @@ export async function sso () {
   })
   return rawResponse.json()
 }
+
+export async function logout () {
+  await fetch('/api/logout', {
+    credentials: 'same-origin',
+    headers: {
+      'Accept': 'application/json'
+    }
+  })
+}
