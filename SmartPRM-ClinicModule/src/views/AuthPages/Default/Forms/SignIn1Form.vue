@@ -89,7 +89,7 @@ export default {
           if (this.data.locale) {
             sso().then(response1 => {
               this.$emit('logedIn', this.data)
-              this.$router.push({ name: 'dashboard.home-2' })
+              this.$router.push({ name: 'dashboard.home' })
             })
           }
         }
