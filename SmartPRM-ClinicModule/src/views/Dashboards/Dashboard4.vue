@@ -371,13 +371,13 @@ export default {
 
       ],
       appointments: [
-        { patient: 'Martina Dolar', doctor: 'Dr. Martin Sever', date: '20/02/2020', timing: '8:00 AM', contact: '+1-202-555-0146' },
-        { patient: 'Marko Engelman', doctor: 'Dr. Sebastjan Bras', date: '25/02/2020', timing: '8:30 AM', contact: '+1-202-555-0164' },
-        { patient: 'Lana Ekart', doctor: 'Dr. Suzana Zgonc', date: '20/02/2020', timing: '9:45 AM', contact: '+1-202-555-0153' },
-        { patient: 'Goran Drobne', doctor: 'Dr. Martin Sever', date: '27/02/2020', timing: '11:30 AM', contact: '+1-202-555-0154' },
-        { patient: 'Igor Destovnik', doctor: 'Dr. Irma Medved', date: '28/02/2020', timing: '3:30 AM', contact: '+1-202-555-0101' },
-        { patient: 'Linda Darovec', doctor: 'Dr. Miha Vozelj', date: '28/02/2020', timing: '4:30 PM', contact: '+1-202-555-0176' },
-        { patient: 'Maj Pavlin', doctor: 'Dr. Janez Veble', date: '29/02/2020', timing: '5:00 AM', contact: '+1-202-555-0194' }
+        { patient: 'Martina Dolar', doctor: 'Dr. Martin Sever', date: '20/02/2020', timing: '8:00 AM', contact: '+38670482347' },
+        { patient: 'Marko Engelman', doctor: 'Dr. Sebastjan Bras', date: '25/02/2020', timing: '8:30 AM', contact: '+38651392143' },
+        { patient: 'Lana Ekart', doctor: 'Dr. Suzana Zgonc', date: '20/02/2020', timing: '9:45 AM', contact: '+38640843247' },
+        { patient: 'Goran Drobne', doctor: 'Dr. Martin Sever', date: '27/02/2020', timing: '11:30 AM', contact: '+38631493432' },
+        { patient: 'Igor Destovnik', doctor: 'Dr. Irma Medved', date: '28/02/2020', timing: '3:30 AM', contact: '+38640584352' },
+        { patient: 'Linda Darovec', doctor: 'Dr. Miha Vozelj', date: '28/02/2020', timing: '4:30 PM', contact: '+38670943283' },
+        { patient: 'Maj Pavlin', doctor: 'Dr. Janez Veble', date: '29/02/2020', timing: '5:00 AM', contact: '+38631932431' }
       ],
       chart1: {
         series: [{

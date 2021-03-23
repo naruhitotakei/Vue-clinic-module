@@ -1,4 +1,4 @@
-import getters from './getters'
+﻿import getters from './getters'
 import actions from './actions'
 import mutations from './mutations'
 import SideBarItems from '../../FackApi/json/GlobalSearch'
@@ -6,14 +6,15 @@ import SideBarItems from '../../FackApi/json/GlobalSearch'
 const state = {
   horizontalMenu: false,
   miniSidebarMenu: false,
-  lang: { title: 'English', value: 'en', image: require('../../assets/images/small/flag-01.png') },
+  lang: { title: 'English', value: 'en', image: require('../../assets/images/small/flag-11.png') },
   langOption: [
-    { title: 'English', value: 'en', image: require('../../assets/images/small/flag-01.png') },
-    { title: 'Arabic', value: 'ar', image: require('../../assets/images/small/flag-500.png') },
+    { title: 'English', value: 'en', image: require('../../assets/images/small/flag-11.png') },
+    { title: 'Slovenščina', value: 'sl', image: require('../../assets/images/small/flag-800.png') }
+    /* { title: 'Arabic', value: 'ar', image: require('../../assets/images/small/flag-500.png') },
     { title: 'Chinese', value: 'chi', image: require('../../assets/images/small/flag-300.png') },
     { title: 'Hindi', value: 'hi', image: require('../../assets/images/small/flag-100.png') },
     { title: 'Greek', value: 'gr', image: require('../../assets/images/small/flag-400.png') },
-    { title: 'Franch', value: 'fr', image: require('../../assets/images/small/flag-200.png') }
+    { title: 'Franch', value: 'fr', image: require('../../assets/images/small/flag-200.png') } */
   ],
   colors: [
     { primary: '#827af3', primaryLight: '#b47af3', bodyBgLight: '#efeefd', bodyBgDark: '#1d203f' },
