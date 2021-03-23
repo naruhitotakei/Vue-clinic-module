@@ -93,18 +93,7 @@
                         <h5 class="mb-0 text-white line-height">Hello {{ logedInUser.name }}</h5>
                         <span class="text-white font-size-12">{{ $t('nav.user.available') }}</span>
                       </div>
-                      <a href="#" class="iq-sub-card iq-bg-primary-hover">
-                        <div class="media align-items-center">
-                          <div class="rounded iq-card-icon iq-bg-primary">
-                            <i class="ri-file-line"></i>
-                          </div>
-                          <div class="media-body ml-3">
-                            <h6 class="mb-0 ">{{ $t('nav.user.profileTitle') }}</h6>
-                            <p class="mb-0 font-size-12">{{ $t('nav.user.profileSub') }}</p>
-                          </div>
-                        </div>
-                      </a>
-                      <a href="#" class="iq-sub-card iq-bg-primary-success-hover">
+                      <a v-on:click="callModal('edit')" class="iq-sub-card iq-bg-primary-success-hover">
                         <div class="media align-items-center">
                           <div class="rounded iq-card-icon iq-bg-success">
                             <i class="ri-profile-line"></i>
@@ -115,25 +104,14 @@
                           </div>
                         </div>
                       </a>
-                      <a href="#" class="iq-sub-card iq-bg-primary-danger-hover">
+                      <a v-on:click="callModal('setting')" class="iq-sub-card iq-bg-primary-secondary-hover">
                         <div class="media align-items-center">
                           <div class="rounded iq-card-icon iq-bg-danger">
                             <i class="ri-account-box-line"></i>
                           </div>
                           <div class="media-body ml-3">
                             <h6 class="mb-0 ">{{ $t('nav.user.accountSettingTitle') }}</h6>
-                            <p class="mb-0 font-size-12">{{ $t('nav.user.accountSettingSub') }}</p>
-                          </div>
-                        </div>
-                      </a>
-                      <a href="#" class="iq-sub-card iq-bg-primary-secondary-hover">
-                        <div class="media align-items-center">
-                          <div class="rounded iq-card-icon iq-bg-secondary">
-                            <i class="ri-lock-line"></i>
-                          </div>
-                          <div class="media-body ml-3">
-                            <h6 class="mb-0 ">{{ $t('nav.user.privacySettingTitle') }}</h6>
-                            <p class="mb-0 font-size-12">{{ $t('nav.user.privacySettingSub')}}</p>
+                            <p class="mb-0 font-size-12">{{ $t('nav.user.accountSettingSub')}}</p>
                           </div>
                         </div>
                       </a>
@@ -145,6 +123,48 @@
                 </div>
               </li>
             </ul>
+  <!-- Edit profile modal -->
+  <b-modal v-model="profileModalShow" title="Edit Profile" ok-title="Save Changes" @ok="editProfileData" cancel-title="Close">
+    <form>
+      <div class="form-row">
+        <div class="col-md-12 mb-3">
+        <label for="validationDefault01">Profile Picture:</label><br>
+        <input type="file" accept="image/*" @change="uploadImage($event)">
+        </div>
+        <div class="col-md-12 mb-3">
+          <label for="validationDefault01">Name:</label>
+          <input type="text" v-model="formData.name" class="form-control" placeholder="John" id="validationDefault01" required>
+        </div>
+        <div class="col-md-12 mb-3">
+          <label for="validationDefault01">Surname:</label>
+          <input type="text" v-model="formData.surname" class="form-control" placeholder="Doe" id="validationDefault01" required>
+        </div>
+        <div class="col-md-12 mb-3">
+          <label for="validationDefault01">Title:</label>
+          <input type="text" v-model="formData.title" class="form-control" placeholder="Title" id="validationDefault01" required>
+        </div>
+        <div class="col-md-12 mb-3">
+          <label for="validationDefault01">Email:</label>
+          <input type="email" v-model="formData.email" class="form-control" placeholder="abc@gmail.com" id="validationDefault01" required>
+        </div>
+        <div class="col-md-12 mb-3">
+          <label for="validationDefault01">Phone:</label>
+          <input type="tel" v-model="formData.phone" class="form-control" placeholder="9876543210" id="validationDefault01" required>
+        </div>
+      </div>
+    </form>
+  </b-modal>
+  <!-- Account Setting -->
+  <b-modal v-model="accountModalShow" title="Account Setting" ok-title="Save Changes" @ok="settingData" cancel-title="Close">
+    <form>
+      <div class="form-row">
+        <div class="col-md-12 mb-3">
+          <label for="validationDefault01">Email:</label>
+          <input type="email" v-model="formData.email" class="form-control" placeholder="abc@gmail.com" id="validationDefault01" required>
+        </div>
+      </div>
+    </form>
+  </b-modal>
           </template>
         </NavBarStyle1>
         <!-- TOP Nav Bar END -->
@@ -200,6 +220,16 @@ export default {
   // sidebarTicket
   data () {
     return {
+      formData: {
+        profileImage: this.profileImage,
+        name: '',
+        surname: '',
+        title: '',
+        email: '',
+        phone: ''
+      },
+      profileModalShow: false,
+      accountModalShow: false,
       logedInUser: {},
       horizontal: false,
       mini: false,
@@ -234,6 +264,32 @@ export default {
     }
   },
   methods: {
+    uploadImage (event) {
+      console.log('IMAGE UPLOADED:', event.target.files[0])
+      this.profileImage = event.target.files[0]
+      console.log('PROFILE IMAGE:', this.profileImage)
+      let data = new FormData()
+      data.append('name', 'my-picture')
+      data.append('file', event.target.files[0])
+    // let config = {
+    //   header : {
+    //     'Content-Type' : 'image/png'
+    //   }
+    // }
+    },
+    callModal (args) {
+      if (args === 'edit') {
+        this.profileModalShow = true
+      } else {
+        this.accountModalShow = true
+      }
+    },
+    editProfileData () {
+      console.log('EDIT FORMDATA:', this.formData)
+    },
+    settingData () {
+      console.log('setting data submitted')
+    },
     updateRadio () {
       this.horizontal = this.$store.getters['Setting/horizontalMenuState']
       this.mini = this.$store.getters['Setting/miniSidebarState']
