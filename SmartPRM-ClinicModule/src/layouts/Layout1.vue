@@ -11,7 +11,7 @@
           <template slot="responsiveRight">
             <ul class="navbar-nav ml-auto navbar-list">
               <li class="nav-item">
-                <a class="search-toggle iq-waves-effect language-title" href="#"><img :src="selectedLang.image" alt="img-flaf" class="img-fluid mr-1" style="height: 16px; width: 16px;" /> {{ selectedLang.title }} <i class="ri-arrow-down-s-line"></i></a>
+                <a class="search-toggle iq-waves-effect language-title" href="#"><img :src="selectedLang.image" alt="img-flaf" class="img-fluid mr-1" style="height: 14px; width: 18px;" /> {{ selectedLang.title }} <i class="ri-arrow-down-s-line"></i></a>
                 <div class="iq-sub-dropdown">
                   <a class="iq-sub-card" href="javascript:void(0)" v-for="(lang, i) in langsOptions" :key="`Lang${i}`" @click="langChange(lang)">
                     <img :src="lang.image" alt="img-flaf" class="img-fluid mr-2" />{{ lang.title }}
