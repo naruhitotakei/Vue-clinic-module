@@ -38,13 +38,13 @@
                                          :fields="columns"
                                          :per-page="perPage"
                                          :current-page="currentPage">
-                                    <template v-slot:cell(name)="data">
+                                    <template v-slot:cell(name)="data"><a style="cursor: pointer;" @click="onPatientClick()">
                                         <span v-if="!data.item.editable">{{ data.item.name }}</span>
                                         <input type="text"
                                                v-model="data.item.name"
                                                v-else
                                                class="form-control" />
-                                    </template>
+                                    </a></template>
                                     <template v-slot:cell(last_name)="data">
                                         <span v-if="!data.item.editable">
                                             {{
@@ -171,10 +171,12 @@
 <script>
 import { xray } from '../../config/pluginInit'
 import { enquiry } from '../../services/enquiry'
+// import ViewPatient from '../User/ViewPatient'
 // import Pagination from './Pagination.vue'
 var rows = []
 export default {
   name: 'UiDataTable',
+  // components: { ViewPatient },
   async mounted () {
     xray.index()
   },
@@ -192,6 +194,10 @@ export default {
     searchOption (event) {
       console.log('SEARCHBY OPTION:', event)
       return event
+    },
+    onPatientClick () {
+      // alert('hii')
+      this.$router.push('/patients/viewpatient')
     },
     default () {
       return {

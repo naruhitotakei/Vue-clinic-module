@@ -48,6 +48,8 @@ import BlankPage from '../views/Pages/BlankPage'
 import FAQ from '../views/Pages/FAQ'
 import Invoice from '../views/Pages/Invoice'
 import InvoiceExample from '../views/Pages/InvoiceExample'
+/* Patients */
+import ViewPatient from '../views/User/ViewPatient'
 /* Apps Views */
 import EmailListing from '../views/Apps/Email/EmailListing'
 import EmailCompose from '../views/Apps/Email/EmailCompose'
@@ -167,6 +169,14 @@ const documentChildRoute = (prop, mode) => [
     name: prop + '.offers',
     meta: { dark: mode, auth: true, name: 'Offers' },
     component: Offers
+  }
+]
+const patientChildRoute = (prop, mode) => [
+  {
+    path: 'viewpatient',
+    name: prop + '.viewpatient',
+    meta: { dark: mode, auth: true, name: 'ViewPatient' },
+    component: ViewPatient
   }
 ]
 const coreChildRoute = (prop, mode) => [
@@ -655,6 +665,13 @@ const routes = [
     component: Layout1,
     meta: { auth: true },
     children: documentChildRoute('documents')
+  },
+  {
+    path: '/patients',
+    name: 'patients',
+    component: Layout1,
+    meta: { auth: true },
+    children: patientChildRoute('patients')
   },
   {
     path: '/statistics',
