@@ -1,6 +1,6 @@
 <template>
     <div class="container">
-        <h1>Advance Payments</h1>
+        <h1>Services and Products</h1>
     </div>
 </template>
 
@@ -8,7 +8,7 @@
 export default {
   components: {
   },
-  name: 'AdvInvoices',
+  name: 'ServicesAndProducts',
   data: function () {
     return {
     }

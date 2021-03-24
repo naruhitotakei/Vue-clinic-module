@@ -1,6 +1,6 @@
 <template>
     <div class="container">
-        <h1>Advance Payments</h1>
+        <h1>Tax Authority</h1>
     </div>
 </template>
 
@@ -8,7 +8,7 @@
 export default {
   components: {
   },
-  name: 'AdvInvoices',
+  name: 'TaxAuthority',
   data: function () {
     return {
     }

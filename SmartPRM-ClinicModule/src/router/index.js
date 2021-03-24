@@ -91,6 +91,17 @@ import AppTreeView from '../views/Plugins/AppTreeView'
 import Offers from '../views/Documents/Offers'
 import Invoices from '../views/Documents/Invoices'
 import AdvInvoices from '../views/Documents/AdvInvoices'
+/* Reporting */
+import Emazing from '../views/Reporting/Emazing'
+import Doctor from '../views/Reporting/Doctor'
+import TaxAuthority from '../views/Reporting/TaxAuthority'
+/* Settings */
+import Users from '../views/Settings/Users'
+import Locations from '../views/Settings/Locations'
+import ServicesAndProducts from '../views/Settings/ServicesAndProducts'
+import Invoicing from '../views/Settings/Invoicing'
+/* Statistics */
+import PersonalStatistics from '../views/Statistics/PersonalStatistics.vue'
 Vue.use(VueRouter)
 
 const childRoutes = (prop, mode) => [
@@ -113,9 +124,9 @@ const childRoutes = (prop, mode) => [
     component: EditableTable
   },
   {
-    path: 'assignment',
-    name: prop + '.assignment',
-    meta: { dark: mode, auth: true, name: 'assignment' },
+    path: 'assignments',
+    name: prop + '.assignments',
+    meta: { dark: mode, auth: true, name: 'assignments' },
     component: Dashboard2
   },
   // {
@@ -157,9 +168,9 @@ const documentChildRoute = (prop, mode) => [
     component: Invoices
   },
   {
-    path: 'advInvoices',
-    name: prop + '.advInvoices',
-    meta: { dark: mode, auth: true, name: 'AdvInvoices' },
+    path: 'advance-payments',
+    name: prop + '.advance-payments',
+    meta: { dark: mode, auth: true, name: 'Advance Payments' },
     component: AdvInvoices
   },
   {
@@ -354,16 +365,64 @@ const settingChildRoute = (prop, mode = false) => [
 
 const statisticsChildRoute = (prop, mode = false) => [
   {
-    path: 'statistics-clinic',
-    name: prop + '.statistics-clinic',
-    meta: { dark: mode, auth: true, name: 'Statistics Clinic' },
+    path: 'statistics-for-clinic',
+    name: prop + '.statistics-for-clinic',
+    meta: { dark: mode, auth: true, name: 'Statistics for Clinic' },
     component: Dashboard1
   },
   {
-    path: 'statistics-person',
-    name: prop + '.statistics-person',
-    meta: { dark: mode, auth: true, name: 'Statistics Person' },
-    component: Dashboard1
+    path: 'personal-statistics',
+    name: prop + '.personal-statistics',
+    meta: { dark: mode, auth: true, name: 'Personal Statistics' },
+    component: PersonalStatistics
+  }
+]
+
+const reportingChildRoute = (prop, mode = false) => [
+  {
+    path: 'emazing',
+    name: prop + '.emazing',
+    meta: { dark: mode, auth: true, name: 'Emazing' },
+    component: Emazing
+  },
+  {
+    path: 'doctor',
+    name: prop + '.doctor',
+    meta: { dark: mode, auth: true, name: 'Doctor' },
+    component: Doctor
+  },
+  {
+    path: 'tax-authority',
+    name: prop + '.tax-authority',
+    meta: { dark: mode, auth: true, name: 'Tax Authority' },
+    component: TaxAuthority
+  }
+]
+
+const settingsChildRoute = (prop, mode = false) => [
+  {
+    path: 'users',
+    name: prop + '.users',
+    meta: { darke: mode, auth: true, name: 'Users' },
+    component: Users
+  },
+  {
+    path: 'locations',
+    name: prop + '.locations',
+    meta: { darke: mode, auth: true, name: 'Locations' },
+    component: Locations
+  },
+  {
+    path: 'services-and-products',
+    name: prop + '.services-and-products',
+    meta: { darke: mode, auth: true, name: 'Services And Products' },
+    component: ServicesAndProducts
+  },
+  {
+    path: 'invoicing',
+    name: prop + '.invoicing',
+    meta: { darke: mode, auth: true, name: 'Invoicing' },
+    component: Invoicing
   }
 ]
 
@@ -662,6 +721,20 @@ const routes = [
     component: Layout1,
     meta: { auth: true },
     children: statisticsChildRoute('statistics')
+  },
+  {
+    path: '/reporting',
+    name: 'reporting',
+    component: Layout1,
+    meta: { auth: true },
+    children: reportingChildRoute('reporting')
+  },
+  {
+    path: '/settings',
+    name: 'settings',
+    component: Layout1,
+    meta: { auth: true },
+    children: settingsChildRoute('settings')
   },
   {
     path: '/table',
