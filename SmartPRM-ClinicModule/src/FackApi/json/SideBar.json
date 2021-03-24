@@ -41,7 +41,7 @@
     },
     "class_name": "",
     "is_icon_class": true,
-    "icon": "ri-refund-line"
+    "icon": "ri-contacts-line"
   },
     {
       "title": "Documents",
@@ -76,29 +76,29 @@
           "icon": "ri-device-line"
         },
         {
-          "title": "Form AdvInvoices",
-          "name": "documents.advInvoices",
+          "title": "Advance Payments",
+          "name": "Advance Payments",
           "is_active": false,
           "link": {
-            "name": "documents.advInvoices"
+            "name": "documents.advance-payments"
           },
           "class_name": "",
           "is_icon_class": true,
-          "icon": "ri-toggle-line"
+          "icon": "ri-wallet-line"
         }
       ]
     },
     {
-      "title": "Assignment",
-      "name": "sidebar.assignment",
+      "title": "Assignments",
+      "name": "assignments",
       "is_heading": false,
       "is_active": false,
       "link": {
-        "name" : "dashboard.assignment"
+        "name" : "dashboard.assignments"
       },
       "class_name": "",
       "is_icon_class": true,
-      "icon": "ri-home-4-line"
+      "icon": "ri-task-line"
     },
   {
     "title": "Statistics",
@@ -111,22 +111,22 @@
     "icon": "ri-bar-chart-2-fill",
     "children": [
       {
-        "title": "Statistics Clinic",
-        "name": "sidebar.statistics-clinic",
+        "title": "Statistics For Clinic",
+        "name": "statistics for clinic",
         "is_active": false,
         "link": {
-          "name": "statistics.statistics-clinic"
+          "name": "statistics.statistics-for-clinic"
         },
         "class_name": "",
         "is_icon_class": true,
         "icon": "ri-file-chart-line"
       },
       {
-        "title": "Statistics Person",
-        "name": "sidebar.highChart",
+        "title": "Personal Statistics",
+        "name": "personal statistics",
         "is_active": false,
         "link": {
-          "name": "chart.high"
+          "name": "statistics.personal-statistics"
         },
         "class_name": "",
         "is_icon_class": true,
@@ -135,8 +135,8 @@
     ]
   },
   {
-    "title": "Reports",
-    "name": "Reports",
+    "title": "Reporting",
+    "name": "Reporting",
     "is_heading": false,
     "is_active": false,
     "link":"",
@@ -145,16 +145,39 @@
     "icon": "ri-file-chart-line",
     "children": [
       {
-        "title": "Accounting Emazing",
-        "name": "Accounting Emazing",
+        "title": "Emazing",
+        "name": "emazing",
         "is_active": false,
         "link": {
-        "name": ""
+          "name": "reporting.emazing"
         },
         "class_name": "",
         "is_icon_class": true,
-        "icon": "ri-font-color"
-      }]
+        "icon": "ri-building-3-line"
+      },
+      {
+        "title": "Doctor",
+        "name": "doctor",
+        "is_active": false,
+        "link": {
+          "name": "reporting.doctor"
+        },
+        "class_name": "",
+        "is_icon_class": true,
+        "icon": "ri-user-3-fill"
+      },
+      {
+        "title": "Tax Authority",
+        "name": "tax authority",
+        "is_active": false,
+        "link": {
+          "name": "reporting.tax-authority"
+        },
+        "class_name": "",
+        "is_icon_class": true,
+        "icon": "ri-book-line"
+      }
+    ]
   },
   {
     "title": "Settings",
@@ -168,70 +191,47 @@
     "children": [
       {
         "title": "Users",
-        "name": "sidebar.users",
+        "name": "users",
         "is_active": false,
         "link": {
-          "name" : "setting.list"
+          "name": "settings.users"
+        },
+        "class_name": "",
+        "is_icon_class": true,
+        "icon": "ri-user-3-line"
+      },
+      {
+        "title": "Locations",
+        "name": "locations",
+        "is_active": false,
+        "link": {
+          "name": "settings.locations"
+        },
+        "class_name": "",
+        "is_icon_class": true,
+        "icon": "ri-map-pin-line"
+      },
+      {
+        "title": "Services and Products",
+        "name": "services and products",
+        "is_active": false,
+        "link": {
+          "name": "settings.services-and-products"
+        },
+        "class_name": "",
+        "is_icon_class": true,
+        "icon": "ri-stack-line"
+      },
+      {
+        "title": "Invoicing",
+        "name": "invoicing",
+        "is_active": false,
+        "link": {
+          "name": "settings.invoicing"
         },
         "class_name": "",
         "is_icon_class": true,
         "icon": "ri-file-list-fill"
-      }
-    ]
-  },
-  {
-    "title": "Doctors",
-    "name": "sidebar.doctor",
-    "is_heading": false,
-    "is_active": false,
-    "link": "",
-    "class_name": "",
-    "is_icon_class": true,
-    "icon": "ri-user-3-fill",
-    "children": [
-      {
-        "title": "All Doctors",
-        "name": "sidebar.doctorList",
-        "is_active": false,
-        "link": {
-          "name" : "doctor.list"
-        },
-        "class_name": "",
-        "is_icon_class": true,
-        "icon": "ri-file-list-fill"
-      },
-      {
-        "title": "Add Doctor",
-        "name": "sidebar.doctorAdd",
-        "is_active": false,
-        "link": {
-          "name" : "doctor.add"
-        },
-        "class_name": "",
-        "is_icon_class": true,
-        "icon": "ri-user-add-fill"
-      },
-      {
-        "title": "Doctor Profile",
-        "name": "sidebar.doctorProfile",
-        "is_active": false,
-        "link": {
-          "name" : "doctor.profile"
-        },
-        "class_name": "",
-        "is_icon_class": true,
-        "icon": "ri-profile-fill"
-      },
-      {
-        "title": "Edit Doctor",
-        "name": "sidebar.doctorEdit",
-        "is_active": false,
-        "link": {
-          "name" : "doctor.edit"
-        },
-        "class_name": "",
-        "is_icon_class": true,
-        "icon": "ri-file-edit-fill"
       }
     ]
   },
