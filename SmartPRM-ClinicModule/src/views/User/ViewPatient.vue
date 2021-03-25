@@ -7,7 +7,7 @@
             <template v-slot:body>
               <div class="iq-edit-list">
                 <tab-nav :pills="true" class="iq-edit-profile d-flex">
-                  <a id="myTab" class="nav-link show col p-0 ri-arrow-left-line" style="padding: 10px 0px !important; font-size: x-large;" href="/patients" :active="false"></a>
+                  <a id="myTab" class="nav-link show col p-0 ri-arrow-left-line" style="padding: 10px 0px !important; font-size: x-large;" @click="onBackClick()" :active="false"></a>
                   <!-- <tab-nav-items class="col p-0" :active="false" href="/patients" title="Back" /> -->
                   <tab-nav-items class="col p-0" :active="true" href="#overview" title="Overview" />
                   <tab-nav-items class="col p-0" :active="false" href="#info" title="Information" />
@@ -114,7 +114,7 @@
                   </li>
                   <li class="d-flex align-items-center justify-content-between mb-3">
                     <div>
-                      <h6>My Helth in better Now</h6>
+                      <h6>My Health in better Now</h6>
                       <p class="mb-0">03/03/2021</p>
                     </div>
                     <div><a href="#" class="btn iq-bg-primary">Open</a></div>
@@ -135,7 +135,7 @@
                   </li>
                   <li class="d-flex align-items-center justify-content-between mb-3">
                     <div>
-                      <h6>Mediacal Care is just a click away</h6>
+                      <h6>Medical Care is just a click away</h6>
                       <p class="mb-0">03/03/2021 </p>
                     </div>
                     <div><a href="#" class="btn iq-bg-primary">Open</a></div>
@@ -374,6 +374,9 @@ export default {
     }
   },
   methods: {
+    onBackClick () {
+      this.$router.push('/patients')
+    },
     previewImage: function (event) {
       const input = event.target
 

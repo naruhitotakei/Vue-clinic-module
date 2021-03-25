@@ -22,7 +22,6 @@
             <b-button v-b-modal.modal-1 variant="primary"><i class="ri-add-line mr-2"></i>Book Appointment</b-button>
             <form class="mt-4" novalidate @submit="submitFormData()">
               <b-modal id="modal-1" title="Appointment details" hide-footer>
-            <!-- <b-modal id="modal-1" title="Appointment details" ok-title="Save Changes" @ok="submitFormData" cancel-title="Close"> -->
               <form @submit="submitFormData()">
               <div class="form-row">
                 <div class="col-md-12 mb-3">
@@ -84,10 +83,9 @@
             </form>
           </b-modal>
           </form>
-            <!-- <a href="#" class="btn btn-primary"><i class="ri-add-line mr-2"></i>Book Appointment</a> -->
           </template>
           <template v-slot:body>
-            <FullCalendar :calendarEvents="events" style="width: 100%; height: 100%;"/>
+            <FullCalendar style="width: 100%; height: 100%;"/>
           </template>
         </iq-card>
       </b-col>
@@ -117,142 +115,7 @@ export default {
       config: {
         dateFormat: 'Y-m-d',
         inline: true
-      },
-      options1: [
-        { value: 'yes', text: 'Yes' },
-        { value: 'no', text: 'No' },
-        { value: 'postponed', text: 'Postponed' }
-      ],
-      options2: [
-        { value: 'select-1', text: 'Doctor-1' },
-        { value: 'select-2', text: 'Doctor-2' },
-        { value: 'select-3', text: 'Doctor-3' },
-        { value: 'select-4', text: 'Doctor-4' },
-        { value: 'select-5', text: 'Doctor-5' },
-        { value: 'select-6', text: 'Doctor-6' }
-      ],
-      options3: [
-        { value: '1', text: 'One' },
-        { value: '2', text: 'Two' },
-        { value: '3', text: 'Three' }
-      ],
-      selected: ['select-1'],
-      selected3: null,
-      events: [
-        {
-          title: 'All Day Event',
-          start: '2021-03-01',
-          color: '#fc9919'
-        },
-        {
-          title: 'Long Event',
-          start: '2019-12-07',
-          end: '2019-12-10',
-          color: '#ffc107' // override!
-        },
-        {
-          groupId: '999',
-          title: 'Repeating Event',
-          start: '2019-12-09T16:00:00',
-          color: '#17a2b8'
-        },
-        {
-          groupId: '999',
-          title: 'Repeating Event',
-          start: '2019-12-16T16:00:00',
-          color: '#17a2b8'
-        },
-        {
-          title: 'Conference',
-          start: '2019-12-11',
-          end: '2019-12-13',
-          color: '#27e3f4' // override!
-        },
-        {
-          title: 'Meeting',
-          start: '2019-12-12T10:30:00',
-          end: '2019-12-12T12:30:00',
-          color: '#0084ff'
-        },
-        {
-          title: 'Lunch',
-          start: '2019-12-12T12:00:00',
-          color: '#777D74'
-        },
-        {
-          title: 'Meeting',
-          start: '2019-12-12T14:30:00',
-          color: '#0084ff'
-        },
-        {
-          title: 'Birthday Party',
-          start: '2019-12-28T07:00:00',
-          color: '#28a745'
-        },
-        {
-          title: 'Meeting',
-          start: '2020-01-12T14:30:00',
-          color: '#0084ff'
-        },
-        {
-          title: 'Birthday Party',
-          start: '2020-01-02T07:00:00',
-          color: '#28a745'
-        },
-        {
-          title: 'Click for Google',
-          url: 'http://google.com/',
-          start: '2020-01-25'
-        },
-        {
-          title: 'Birthday Party',
-          start: '2020-01-13T07:00:00',
-          color: '#28a745'
-        },
-        {
-          title: 'Click for Google',
-          url: 'http://google.com/',
-          start: '2019-12-28'
-        },
-        {
-          title: 'Meeting',
-          start: '2020-01-12T14:30:00',
-          color: '#0084ff'
-        },
-        {
-          title: 'Birthday Party',
-          start: '2020-01-13T07:00:00',
-          color: '#28a745'
-        },
-        {
-          title: 'Click for Google',
-          url: 'http://google.com/',
-          start: '2020-01-28'
-        },
-        {
-          title: 'All Day Event',
-          start: '2020-02-01',
-          color: '#fc9919'
-        },
-        {
-          title: 'Long Event',
-          start: '2020-02-07',
-          end: '2020-02-10',
-          color: '#ffc107' // override!
-        },
-        {
-          groupId: '999',
-          title: 'Repeating Event',
-          start: '2020-02-09T16:00:00',
-          color: '#17a2b8'
-        },
-        {
-          groupId: '999',
-          title: 'Repeating Event',
-          start: '2020-02-16T16:00:00',
-          color: '#17a2b8'
-        }
-      ]
+      }
     }
   },
   mounted () {

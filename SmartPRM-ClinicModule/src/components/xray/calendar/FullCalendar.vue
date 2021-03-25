@@ -18,16 +18,18 @@
   <!-- Event description modal -->
   <b-modal v-model="modalShow" size="lg" title="Event Details" ok-title="Save Changes" @ok="submitFormData" cancel-title="Close">
     <form @submit="submitFormData">
-      <label for="validationDefault01">Event Name:</label> {{eventInfo.title}}
+      <h3 style="text-align: center;">{{eventInfo.title}}</h3>
       <div class="form-row">
         <div class="col-md-12 mb-3">
           <label for="validationDefault01">Start:</label>
-          <input type="datetime-local" v-model="formData.start" class="form-control" value="2021-03-30T13:45:00" id="validationDefault01" required>
+          <input type="date" v-model="formData.start" class="form-control" id="validationDefault01" required>
         </div>
         <div class="col-md-12 mb-3">
-          <label for="validationDefault01">End:</label>
-          <input type="datetime-local" v-model="formData.end" class="form-control" value="2021-03-30T13:45:00" id="validationDefault01" required>
-        </div>
+          <label for="validationDefault01">Duration:</label>
+          <div style="display: flex;">
+          <input type="number" v-model="formData.hours" class="form-control col-md-6 mr-1" min="0" placeholder="Hours" id="validationDefault01" required>
+          <input type="number" v-model="formData.minutes" class="form-control col-md-6 ml-1" min="0" step="5" placeholder="Minutes" id="validationDefault01" required>
+        </div></div>
         <div class="col-md-12 mb-3">
           <label for="validationDefault01">Notes:</label>
           <textarea row="2" v-model="formData.notes" class="form-control" placeholder="Add your notes here for event!" id="validationDefault01" required></textarea>
@@ -73,7 +75,8 @@ export default {
       ],
       formData: {
         start: '',
-        end: '',
+        hours: '',
+        minutes: '',
         notes: '',
         checked: ''
       },
@@ -87,7 +90,6 @@ export default {
           { id: 'b', title: 'Doctor 2', eventColor: 'blue' },
           { id: 'c', title: 'Doctor 3', eventColor: 'red' }
         ],
-        // events: 'https://fullcalendar.io/demo-events.json?with-resources=4&single-day'
         events: [
           { title: 'Appointment 1', start: '2021-03-22T04:30:00', end: '2021-03-22T06:00:00', resourceId: 'a' },
           { title: 'Appointment 1.1', start: '2021-03-22T01:00:00', end: '2021-03-22T03:00:00', resourceId: 'a' },
@@ -108,8 +110,6 @@ export default {
       console.log('ARGS:', args.event)
       this.eventInfo = args.event
       console.log('EVENT INFO:', this.eventInfo)
-      // console.log('before alert', this.modalShow)
-      // alert(args.event.start)
     }
   }
 }
@@ -119,6 +119,7 @@ export default {
 .fc-event{
   color: white !important;
   border: none !important;
+  cursor: pointer;
 }
 .fc-license-message{
   display:none;
