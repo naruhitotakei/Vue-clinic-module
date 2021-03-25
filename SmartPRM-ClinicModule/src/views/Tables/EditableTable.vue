@@ -34,17 +34,19 @@
                                 <b-table id="my-table"
                                          bordered
                                          hover
+                                         @row-clicked="onPatientClick"
+                                         style="cursor: pointer;"
                                          :items="computedList"
                                          :fields="columns"
                                          :per-page="perPage"
                                          :current-page="currentPage">
-                                    <template v-slot:cell(name)="data"><a style="cursor: pointer;" @click="onPatientClick()">
+                                    <template v-slot:cell(name)="data">
                                         <span v-if="!data.item.editable">{{ data.item.name }}</span>
                                         <input type="text"
                                                v-model="data.item.name"
                                                v-else
                                                class="form-control" />
-                                    </a></template>
+                                    </template>
                                     <template v-slot:cell(last_name)="data">
                                         <span v-if="!data.item.editable">
                                             {{

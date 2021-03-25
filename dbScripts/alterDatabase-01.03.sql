@@ -77,7 +77,7 @@ CREATE TABLE IF NOT EXISTS prm_company (
 --# Create invoice line items table
 --############################################################
 CREATE TABLE IF NOT EXISTS prm_invoice_item (
-   invoice_item_id					SERIAL UNIQUE,
+   invoice_item_id			SERIAL UNIQUE,
    invoice_id				SERIAL UNIQUE CONSTRAINT invoice_item_invoice_fk REFERENCES prm_invoice (invoice_id),
    product_id			    SERIAL UNIQUE CONSTRAINT invoice_item_product_fk REFERENCES prm_product (product_id),
    product_type_id		    SERIAL UNIQUE CONSTRAINT invoice_item_product_type_fk REFERENCES prm_product_type (product_type_id),
@@ -129,7 +129,7 @@ CREATE TABLE IF NOT EXISTS prm_product_group (
 --############################################################
 CREATE TABLE IF NOT EXISTS prm_premise (
    premise_id									SERIAL UNIQUE,
-   company_id                   SERIAL UNIQUE CONSTRAINT premise_company_fk REFERENCES prm_company (company_id),
+   company_id									SERIAL UNIQUE CONSTRAINT premise_company_fk REFERENCES prm_company (company_id),
    company_name									VARCHAR(128) NOT NULL,
    company_tax_registration_number				VARCHAR(64) NOT NULL,
    premise_address_line_1						VARCHAR(128) NOT NULL,
