@@ -22,7 +22,7 @@ CREATE TABLE IF NOT EXISTS prm_invoice (
    enquiries_id							    SERIAL UNIQUE CONSTRAINT invoice_enquiries_fk REFERENCES enquiries (id),
    enquiries_name						    VARCHAR(255) NOT NULL,
    enquiries_last_name					    VARCHAR(255) NOT NULL,
-   enquiries_address_line_1					VARCHAR(64) NOT NULL,
+   enquiries_address_line_1					VARCHAR(128) NOT NULL,
    enquiries_post_code						INT NOT NULL,
    enquiries_city						    VARCHAR(64) NOT NULL,
    enquiries_country_code					TEXT NOT NULL,
@@ -50,30 +50,12 @@ CREATE TABLE IF NOT EXISTS prm_invoice (
 --# add enquiries fields to enquiries table
 --############################################################
 ALTER TABLE enquiries 
-ADD COLUMN address_line_1	        VARCHAR(128) NOT NULL,
-ADD COLUMN post_code				INT NOT NULL,
-ADD COLUMN city						VARCHAR(64) NOT NULL,
-ADD COLUMN country_code				TEXT NOT NULL,
-ADD COLUMN tax_registration_number  VARCHAR(32) NOT NULL,
-ADD COLUMN VAT_number	            VARCHAR(32) NOT NULL;
---############################################################
---# Create invoice line items table
---############################################################
-CREATE TABLE IF NOT EXISTS prm_invoice_line_items (
-   item_id					SERIAL UNIQUE,
-   invoice_id				SERIAL UNIQUE CONSTRAINT invoice_line_items_invoice_fk REFERENCES prm_invoice (invoice_id),
-   product_id			    SERIAL UNIQUE CONSTRAINT invoice_line_items_product_fk REFERENCES prm_products (product_id),
-   product_type_id		    SERIAL UNIQUE CONSTRAINT invoice_line_items_product_type_fk REFERENCES prm_product_types (product_type_id),
-   product_name				VARCHAR(32) NOT NULL,
-   product_price			MONEY NOT NULL,
-   invoiced_quantity		INT, 
-   discount					DECIMAL NOT NULL DEFAULT 0,
-   product_VAT_tax_rate		DECIMAL,
-   product_taxable_amount	MONEY,
-   product_tax_amount		MONEY,
-   net_amount				MONEY NOT NULL,
-   created_date				DATE NOT NULL DEFAULT CURRENT_DATE 
-);
+ADD COLUMN address_line_1	          VARCHAR(128),
+ADD COLUMN post_code                INT,
+ADD COLUMN city                     VARCHAR(64),
+ADD COLUMN country_code             TEXT,
+ADD COLUMN tax_registration_number  VARCHAR(32),
+ADD COLUMN VAT_number	              VARCHAR(32);
 --############################################################
 --# Create company table
 --############################################################
@@ -88,15 +70,34 @@ CREATE TABLE IF NOT EXISTS prm_company (
    company_tax_registration_number		     VARCHAR(64) NOT NULL,
    company_VAT_number					     VARCHAR(64) NOT NULL,
    company_legal_registration_identifier	 BIGINT NOT NULL,
+   company_deleted								BOOLEAN DEFAULT 'f',
    created_date							     DATE NOT NULL DEFAULT CURRENT_DATE 
+);
+--############################################################
+--# Create invoice line items table
+--############################################################
+CREATE TABLE IF NOT EXISTS prm_invoice_item (
+   invoice_item_id					SERIAL UNIQUE,
+   invoice_id				SERIAL UNIQUE CONSTRAINT invoice_item_invoice_fk REFERENCES prm_invoice (invoice_id),
+   product_id			    SERIAL UNIQUE CONSTRAINT invoice_item_product_fk REFERENCES prm_product (product_id),
+   product_type_id		    SERIAL UNIQUE CONSTRAINT invoice_item_product_type_fk REFERENCES prm_product_type (product_type_id),
+   product_name				VARCHAR(32) NOT NULL,
+   product_price			MONEY NOT NULL,
+   invoiced_quantity		INT, 
+   discount					DECIMAL NOT NULL DEFAULT 0,
+   product_VAT_tax_rate		DECIMAL,
+   product_taxable_amount	MONEY,
+   product_tax_amount		MONEY,
+   net_amount				MONEY NOT NULL,
+   created_date				DATE NOT NULL DEFAULT CURRENT_DATE 
 );
 --############################################################
 --# Create product table
 --############################################################
-CREATE TABLE IF NOT EXISTS prm_products (
+CREATE TABLE IF NOT EXISTS prm_product (
    product_id			SERIAL UNIQUE,
-   product_type_id		SERIAL UNIQUE CONSTRAINT product_product_types_fk REFERENCES prm_product_types (product_type_id),
-   product_group_id		SERIAL UNIQUE CONSTRAINT product_product_groups_fk REFERENCES prm_product_groups (product_group_id),
+   product_type_id		SERIAL UNIQUE CONSTRAINT product_product_type_fk REFERENCES prm_product_type (product_type_id),
+   product_group_id		SERIAL UNIQUE CONSTRAINT product_product_group_fk REFERENCES prm_product_group (product_group_id),
    product_name		    VARCHAR(32) NOT NULL,
    product_price		MONEY NOT NULL,
    VAT_tax_rate		    DECIMAL,
@@ -108,17 +109,17 @@ CREATE TABLE IF NOT EXISTS prm_products (
 --############################################################
 --# Create product types table
 --############################################################
-CREATE TABLE IF NOT EXISTS prm_product_types (
+CREATE TABLE IF NOT EXISTS prm_product_type (
    product_type_id			SERIAL UNIQUE,
    product_type				VARCHAR(64) NOT NULL,
-   product_group_id			SERIAL UNIQUE CONSTRAINT product_types_product_groups_fk REFERENCES prm_product_groups (product_group_id),
+   product_group_id			SERIAL UNIQUE CONSTRAINT product_type_product_group_fk REFERENCES prm_product_group (product_group_id),
    product_type_deleted     BOOLEAN DEFAULT 'f',
    created_date			    DATE NOT NULL DEFAULT CURRENT_DATE 
 );
 --############################################################
 --# Create product groups table
 --############################################################
-CREATE TABLE IF NOT EXISTS prm_product_groups (
+CREATE TABLE IF NOT EXISTS prm_product_group (
    product_group_id     SERIAL UNIQUE,
    product_group	    VARCHAR(64) NOT NULL,
    created_date         DATE NOT NULL DEFAULT CURRENT_DATE 
@@ -126,9 +127,9 @@ CREATE TABLE IF NOT EXISTS prm_product_groups (
 --############################################################
 --# Create premises table
 --############################################################
-CREATE TABLE IF NOT EXISTS prm_premises (
+CREATE TABLE IF NOT EXISTS prm_premise (
    premise_id									SERIAL UNIQUE,
-   company_id								    SERIAL UNIQUE CONSTRAINT premises_company_fk REFERENCES prm_company (company_id),
+   company_id                   SERIAL UNIQUE CONSTRAINT premise_company_fk REFERENCES prm_company (company_id),
    company_name									VARCHAR(128) NOT NULL,
    company_tax_registration_number				VARCHAR(64) NOT NULL,
    premise_address_line_1						VARCHAR(128) NOT NULL,
@@ -154,13 +155,14 @@ CREATE TABLE IF NOT EXISTS prm_premises (
 INSERT INTO prm_invoice (invoice_numbering_structure) VALUES ("B");
 INSERT INTO prm_invoice (invoice_numbering_structure) VALUES ("C");
 
-INSERT INTO prm_products (VAT_tax_rate) VALUES (NULL);
-INSERT INTO prm_products (VAT_tax_rate) VALUES (0);
-INSERT INTO prm_products (VAT_tax_rate) VALUES (9.5);
-INSERT INTO prm_products (VAT_tax_rate) VALUES (22);
+INSERT INTO prm_product (VAT_tax_rate) VALUES (NULL);
+INSERT INTO prm_product (VAT_tax_rate) VALUES (0);
+INSERT INTO prm_product (VAT_tax_rate) VALUES (9.5);
+INSERT INTO prm_product (VAT_tax_rate) VALUES (22);
 --############################################################
 --# update version
 --############################################################
+
 UPDATE db_version SET version ='01.03', version_date=CURRENT_DATE WHERE resource='Tables';
 
 
