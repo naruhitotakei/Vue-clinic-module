@@ -155,15 +155,40 @@
     </form>
   </b-modal>
   <!-- Account Setting -->
-  <b-modal v-model="accountModalShow" title="Account Setting" ok-title="Save Changes" @ok="settingData" cancel-title="Close">
-    <form>
+  <b-modal v-model="accountModalShow" title="Account Setting" ok-title="Save Changes" @ok="submit" cancel-title="Close">
+    <ValidationObserver ref="form" v-slot="{ handleSubmit }">
+    <form novalidate @submit.prevent="handleSubmit(settingData)">
       <div class="form-row">
-        <div class="col-md-12 mb-3">
-          <label for="validationDefault01">Email:</label>
-          <input type="email" v-model="formData.email" class="form-control" placeholder="abc@gmail.com" id="validationDefault01" required>
+      <ValidationProvider class="col-md-12 mb-3" vid="old_password" name="Old password" rules="required|old_password" v-slot="{ errors }">
+        <div>
+          <label for="validationDefault01">Old Password:</label>
+          <input type="password" v-model="formData.old_password" class="form-control" id="validationDefault01" :class="'form-control mb-0' +(errors.length > 0 ? ' is-invalid' : '')">
+          <div class="invalid-feedback">
+            <span>{{ errors[0] }}</span>
+          </div>
         </div>
+      </ValidationProvider>
+      <ValidationProvider class="col-md-12 mb-3" vid="confirm_password" name="New password" rules="required" v-slot="{ errors }">
+        <div>
+          <label for="validationDefault01">New Password:</label>
+          <input type="password" v-model="formData.confirm_password" class="form-control" id="validationDefault01" :class="'form-control mb-0' +(errors.length > 0 ? ' is-invalid' : '')">
+          <div class="invalid-feedback">
+            <span>{{ errors[0] }}</span>
+          </div>
+        </div>
+      </ValidationProvider>
+      <ValidationProvider class="col-md-12 mb-3" name="Confirm Password" rules="required|confirmed:confirm_password" v-slot="{ errors }">
+        <div>
+          <label for="validationDefault01">Confirm New Password:</label>
+          <input type="password" v-model="formData.new_password" class="form-control" id="validationDefault01" :class="'form-control mb-0' +(errors.length > 0 ? ' is-invalid' : '')">
+          <div class="invalid-feedback">
+            <span>{{ errors[0] }}</span>
+          </div>
+        </div>
+      </ValidationProvider>
       </div>
     </form>
+    </ValidationObserver>
   </b-modal>
           </template>
         </NavBarStyle1>
@@ -221,12 +246,9 @@ export default {
   data () {
     return {
       formData: {
-        profileImage: this.profileImage,
-        name: '',
-        surname: '',
-        title: '',
-        email: '',
-        phone: ''
+        old_password: '',
+        new_password: '',
+        email: ''
       },
       profileModalShow: false,
       accountModalShow: false,
