@@ -127,10 +127,27 @@
   <b-modal v-model="profileModalShow" title="Edit Profile" ok-title="Save Changes" @ok="editProfileData" cancel-title="Close">
     <form>
       <div class="form-row">
-        <div class="col-md-12 mb-3">
-        <label for="validationDefault01">Profile Picture:</label><br>
-        <input type="file" accept="image/*" @change="uploadImage($event)">
-        </div>
+        <div style="margin: auto;text-align: center;">
+                  <div class="add-img-user profile-img-edit">
+                    <b-img class="profile-pic height-150 width-150" fluid :src="user.profile_image" alt="profile-pic" />
+                    <input type="hidden" v-model="user.profile_image">
+                    <div class="p-image">
+                      <b-button variant="none" class="upload-button iq-bg-primary position-relative">
+                        <input type="file" @change="previewImage" class="h-100 position-absolute" accept="image/*" style="opacity: 0;" />
+                        File Upload
+                      </b-button>
+                    </div>
+                  </div>
+                  <div class="img-extension mt-3">
+                    <div class="d-inline-block align-items-center">
+                      <span>Only</span>
+                      <b-link href="javascript:void(0);">.jpg</b-link>
+                      <b-link href="javascript:void(0);">.png</b-link>
+                      <b-link href="javascript:void(0);">.jpeg</b-link>
+                      <span>allowed</span>
+                    </div>
+                  </div>
+                </div>
         <div class="col-md-12 mb-3">
           <label for="validationDefault01">Name:</label>
           <input type="text" v-model="formData.name" class="form-control" placeholder="John" id="validationDefault01" required>
@@ -245,6 +262,27 @@ export default {
   // sidebarTicket
   data () {
     return {
+      user: {
+        fname: '',
+        lname: '',
+        name: '',
+        username: '',
+        email: '',
+        password: '',
+        address1: '',
+        address2: '',
+        company_name: '',
+        profile_image: require('../assets/images/user/11.png'),
+        mobile_no: '',
+        country: '',
+        state: '',
+        city: '',
+        pincode: '',
+        role: '',
+        gender: '',
+        dob: '',
+        url: ''
+      },
       formData: {
         old_password: '',
         new_password: '',
@@ -286,18 +324,18 @@ export default {
     }
   },
   methods: {
-    uploadImage (event) {
-      console.log('IMAGE UPLOADED:', event.target.files[0])
-      this.profileImage = event.target.files[0]
-      console.log('PROFILE IMAGE:', this.profileImage)
-      let data = new FormData()
-      data.append('name', 'my-picture')
-      data.append('file', event.target.files[0])
-    // let config = {
-    //   header : {
-    //     'Content-Type' : 'image/png'
-    //   }
-    // }
+    previewImage: function (event) {
+      const input = event.target
+
+      if (input.files && input.files[0]) {
+        const reader = new FileReader()
+
+        reader.onload = (e) => {
+          this.user.profile_image = e.target.result
+        }
+
+        reader.readAsDataURL(input.files[0])
+      }
     },
     callModal (args) {
       if (args === 'edit') {

@@ -31,10 +31,10 @@
             </b-form-group>
             </div>
             <h5 class="card-title">Services summary</h5>
-            <b-table small :items="items1" class="mb-0"></b-table>
-            <b-table small :items="items2" class="mb-0" thead-class="hidden_header"></b-table>
-            <b-table small :items="items3" class="mb-0" thead-class="hidden_header"></b-table>
-            <b-table small :items="items4" class="mb-0" thead-class="hidden_header"></b-table>
+            <b-table small :items="items1" class="mb-0" :tbody-tr-class="table-success"></b-table>
+            <!-- <b-table small :items="items2" class="mb-0" :tbody-tr-class="table-success" thead-class="hidden_header"></b-table>
+            <b-table small :items="items3" class="mb-0" :tbody-tr-class="table-success" thead-class="hidden_header"></b-table>
+            <b-table small :items="items4" class="mb-0" :tbody-tr-class="table-success" thead-class="hidden_header"></b-table> -->
           </template>
         </iq-card>
     </div>
@@ -63,18 +63,23 @@ export default {
         { service_title: 'General dentistry', service_count: 245, amount: '48.805,55', _rowVariant: 'active' },
         { service_title: 'Dental procedure', service_count: 242, amount: '48.260,55' },
         { service_title: 'Ekstrakcija zoba', service_count: 2, amount: '395,00' },
-        { service_title: 'Zalivka | Plomba', service_count: 1, amount: '150,00' }
+        { service_title: 'Zalivka | Plomba', service_count: 1, amount: '150,00' },
+        { service_title: 'Preventry dentistry', service_count: 1, amount: '50,55', _rowVariant: 'active' },
+        { service_title: 'Zobni kamen', service_count: 242, amount: '48.260,55' },
+        { service_title: 'Consultation', service_count: 1, amount: '35,00', _rowVariant: 'active' },
+        { service_title: 'Consultation', service_count: 1, amount: '35,00' },
+        { service_title: 'Sum', service_count: 247, amount: '48.890,00', _rowVariant: 'active' }
       ],
       items2: [
-        { service_title: 'Preventry dentistry', service_count: 1, amount: '50,55', _rowVariant: 'active' },
+        { service_title: 'Preventry dentistry', service_count: 1, amount: '50,55' },
         { service_title: 'Zobni kamen', service_count: 242, amount: '48.260,55' }
       ],
       items3: [
-        { service_title: 'Consultation', service_count: 1, amount: '35,00', _rowVariant: 'active' },
+        { service_title: 'Consultation', service_count: 1, amount: '35,00' },
         { service_title: 'Consultation', service_count: 1, amount: '35,00' }
       ],
       items4: [
-        { service_title: 'Sum', service_count: 247, amount: '48.890,00', _rowVariant: 'active' }
+        { service_title: 'Sum', service_count: 247, amount: '48.890,00' }
       ],
       columns: [
         { label: 'Service Title', key: 'service_title', class: 'text-left' },
