@@ -23,7 +23,7 @@ app.use(session({resave: true, saveUninitialized: true, secret: 'BwhFeenj9DcRqAN
 // REST SERVER
 //
 ///////////////////////////////////
-const enquiriesPermission = "Enquiries"
+const enquiriesPermission = "Patients"
 
 ///////////////////////////////////
 // user login, logout, ...
@@ -80,6 +80,10 @@ app.delete('/api/enquiries/:id', (req, res) => {
    console.log('DELETE: api/enquiries for ', id)
    res.json("OK: " + id);
 });
+
+///////////////////////////////////
+// enquiries, patients
+///////////////////////////////////
 
 ///////////////////////////////////
 // invoices, fiscal verification
