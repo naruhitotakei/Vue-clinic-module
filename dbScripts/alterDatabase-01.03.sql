@@ -161,11 +161,11 @@ CREATE TABLE IF NOT EXISTS prm_premise (
 --############################################################
 --# Fill tables
 --############################################################
-INSERT INTO prm_invoice (invoice_type) VALUES (Invoice);
-INSERT INTO prm_invoice (invoice_type) VALUES (Advance payment);
-INSERT INTO prm_invoice (invoice_type) VALUES (Offer);
-INSERT INTO prm_invoice (invoice_numbering_structure) VALUES ("B");
-INSERT INTO prm_invoice (invoice_numbering_structure) VALUES ("C");
+INSERT INTO prm_invoice (invoice_type) VALUES ('Invoice');
+INSERT INTO prm_invoice (invoice_type) VALUES ('Advance payment');
+INSERT INTO prm_invoice (invoice_type) VALUES ('Offer');
+INSERT INTO prm_invoice (invoice_numbering_structure) VALUES ('B');
+INSERT INTO prm_invoice (invoice_numbering_structure) VALUES ('C');
 
 INSERT INTO prm_product (VAT_tax_rate) VALUES (NULL);
 INSERT INTO prm_product (VAT_tax_rate) VALUES (0);
@@ -174,8 +174,6 @@ INSERT INTO prm_product (VAT_tax_rate) VALUES (22);
 --############################################################
 --# update version
 --############################################################
-
-DROP TABLE prm_invoice, prm_company, prm_premise CASCADE;
 
 UPDATE db_version SET version ='01.03', version_date=CURRENT_DATE WHERE resource='Tables';
 
