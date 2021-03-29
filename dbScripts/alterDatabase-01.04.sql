@@ -154,13 +154,50 @@ INSERT INTO prm_role_permission (role_permission_id, role_id, permission_id) VAL
 INSERT INTO prm_role_permission (role_permission_id, role_id, permission_id) VALUES (405, 4, 54);
 INSERT INTO prm_role_permission (role_permission_id, role_id, permission_id) VALUES (406, 4, 64);
 INSERT INTO prm_role_permission (role_permission_id, role_id, permission_id) VALUES (407, 4, 74);
-INSERT INTO prm_role_permission (role_permission_id, role_id, permission_id) VALUES (408, 4, 81);
+INSERT INTO prm_role_permission (role_permission_id, role_id, permission_id) VALUES (408, 4, 84);
 INSERT INTO prm_role_permission (role_permission_id, role_id, permission_id) VALUES (409, 4, 91);
 INSERT INTO prm_role_permission (role_permission_id, role_id, permission_id) VALUES (411, 4, 111);
 INSERT INTO prm_role_permission (role_permission_id, role_id, permission_id) VALUES (412, 4, 121);
 INSERT INTO prm_role_permission (role_permission_id, role_id, permission_id) VALUES (414, 4, 144);
 INSERT INTO prm_role_permission (role_permission_id, role_id, permission_id) VALUES (416, 4, 161);
 INSERT INTO prm_role_permission (role_permission_id, role_id, permission_id) VALUES (419, 4, 191);
+-- Superdoctor
+INSERT INTO prm_role_permission (role_permission_id, role_id, permission_id) VALUES (500, 5, 1);
+INSERT INTO prm_role_permission (role_permission_id, role_id, permission_id) VALUES (501, 5, 11);
+INSERT INTO prm_role_permission (role_permission_id, role_id, permission_id) VALUES (502, 5, 21);
+INSERT INTO prm_role_permission (role_permission_id, role_id, permission_id) VALUES (503, 5, 31);
+INSERT INTO prm_role_permission (role_permission_id, role_id, permission_id) VALUES (504, 5, 44);
+INSERT INTO prm_role_permission (role_permission_id, role_id, permission_id) VALUES (505, 5, 54);
+INSERT INTO prm_role_permission (role_permission_id, role_id, permission_id) VALUES (506, 5, 64);
+INSERT INTO prm_role_permission (role_permission_id, role_id, permission_id) VALUES (507, 5, 74);
+INSERT INTO prm_role_permission (role_permission_id, role_id, permission_id) VALUES (508, 5, 81);
+INSERT INTO prm_role_permission (role_permission_id, role_id, permission_id) VALUES (509, 5, 91);
+INSERT INTO prm_role_permission (role_permission_id, role_id, permission_id) VALUES (511, 5, 111);
+INSERT INTO prm_role_permission (role_permission_id, role_id, permission_id) VALUES (512, 5, 121);
+INSERT INTO prm_role_permission (role_permission_id, role_id, permission_id) VALUES (514, 5, 144);
+INSERT INTO prm_role_permission (role_permission_id, role_id, permission_id) VALUES (516, 5, 161);
+INSERT INTO prm_role_permission (role_permission_id, role_id, permission_id) VALUES (519, 5, 191);
+-- Technician
+INSERT INTO prm_role_permission (role_permission_id, role_id, permission_id) VALUES (600, 6, 1);
+INSERT INTO prm_role_permission (role_permission_id, role_id, permission_id) VALUES (601, 6, 11);
+INSERT INTO prm_role_permission (role_permission_id, role_id, permission_id) VALUES (603, 6, 33);
+INSERT INTO prm_role_permission (role_permission_id, role_id, permission_id) VALUES (608, 6, 83);
+-- Nurse
+INSERT INTO prm_role_permission (role_permission_id, role_id, permission_id) VALUES (700, 7, 1);
+INSERT INTO prm_role_permission (role_permission_id, role_id, permission_id) VALUES (701, 7, 11);
+INSERT INTO prm_role_permission (role_permission_id, role_id, permission_id) VALUES (702, 7, 21);
+INSERT INTO prm_role_permission (role_permission_id, role_id, permission_id) VALUES (703, 7, 31);
+INSERT INTO prm_role_permission (role_permission_id, role_id, permission_id) VALUES (708, 7, 84);
+-- Supernurse
+INSERT INTO prm_role_permission (role_permission_id, role_id, permission_id) VALUES (800, 8, 1);
+INSERT INTO prm_role_permission (role_permission_id, role_id, permission_id) VALUES (801, 8, 11);
+INSERT INTO prm_role_permission (role_permission_id, role_id, permission_id) VALUES (802, 8, 21);
+INSERT INTO prm_role_permission (role_permission_id, role_id, permission_id) VALUES (803, 8, 31);
+INSERT INTO prm_role_permission (role_permission_id, role_id, permission_id) VALUES (804, 8, 41);
+INSERT INTO prm_role_permission (role_permission_id, role_id, permission_id) VALUES (805, 8, 51);
+INSERT INTO prm_role_permission (role_permission_id, role_id, permission_id) VALUES (806, 8, 61);
+INSERT INTO prm_role_permission (role_permission_id, role_id, permission_id) VALUES (807, 8, 71);
+INSERT INTO prm_role_permission (role_permission_id, role_id, permission_id) VALUES (808, 8, 85);
 
 --############################################################
 --# update version
