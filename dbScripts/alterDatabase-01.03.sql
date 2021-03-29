@@ -19,6 +19,7 @@ CREATE TABLE IF NOT EXISTS prm_invoice (
    company_legal_registration_identifier	BIGINT NOT NULL,
    premises_business_premise_ID				VARCHAR(20) NOT NULL,
    premises_electronic_device_ID			VARCHAR(20) NOT NULL,
+   issued_in                        VARCHAR(64) NOT NULL,
    enquiries_id							    SERIAL UNIQUE CONSTRAINT invoice_enquiries_fk REFERENCES enquiries (id),
    enquiries_name						    VARCHAR(255) NOT NULL,
    enquiries_last_name					    VARCHAR(255) NOT NULL,
@@ -43,6 +44,7 @@ CREATE TABLE IF NOT EXISTS prm_invoice (
    operator_tax_number						VARCHAR(32) NOT NULL,
    ZOI										VARCHAR(64) NOT NULL,
    EOR										VARCHAR(64) NOT NULL,
+   invoice_special_notes    TEXT,
    reverted									BOOLEAN DEFAULT 'f',
    created_date								DATE NOT NULL DEFAULT CURRENT_DATE 
 );
@@ -71,6 +73,12 @@ CREATE TABLE IF NOT EXISTS prm_company (
    company_VAT_number					     VARCHAR(64) NOT NULL,
    company_legal_registration_identifier	 BIGINT NOT NULL,
    company_deleted								BOOLEAN DEFAULT 'f',
+   cert_file                      VARCHAR(132) NOT NULL,
+   key_file                       VARCHAR(132) NOT NULL,
+   pass_phrase                    VARCHAR(64) NOT NULL,
+   company_subject                VARCHAR(256) NOT NULL,
+   company_issuer                 VARCHAR(64) NOT NULL,
+   company_serial                 VARCHAR(64) NOT NULL,
    created_date							     DATE NOT NULL DEFAULT CURRENT_DATE 
 );
 --############################################################
@@ -147,11 +155,15 @@ CREATE TABLE IF NOT EXISTS prm_premise (
    premises_validity_date						DATE NOT NULL,
    software_supplier_tax_registration_number	VARCHAR(64) NOT NULL,						
    premise_deleted								BOOLEAN DEFAULT 'f',
+   premise_special_notes          TEXT,
    created_date									DATE NOT NULL DEFAULT CURRENT_DATE
 );
 --############################################################
 --# Fill tables
 --############################################################
+INSERT INTO prm_invoice (invoice_type) VALUES (Invoice);
+INSERT INTO prm_invoice (invoice_type) VALUES (Advance payment);
+INSERT INTO prm_invoice (invoice_type) VALUES (Offer);
 INSERT INTO prm_invoice (invoice_numbering_structure) VALUES ("B");
 INSERT INTO prm_invoice (invoice_numbering_structure) VALUES ("C");
 
@@ -162,6 +174,8 @@ INSERT INTO prm_product (VAT_tax_rate) VALUES (22);
 --############################################################
 --# update version
 --############################################################
+
+DROP TABLE prm_invoice, prm_company, prm_premise CASCADE;
 
 UPDATE db_version SET version ='01.03', version_date=CURRENT_DATE WHERE resource='Tables';
 
