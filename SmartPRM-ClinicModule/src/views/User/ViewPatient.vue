@@ -43,14 +43,23 @@
               <hr>
               <ul class="doctoe-sedual d-flex align-items-center justify-content-between p-0 m-0">
                 <li class="text-center">
-                  <h3 class="counter">4</h3>
+                  <h4 class="counter">4</h4>
                   <span>Number of visits</span>
                 </li>
                 <li class="text-center">
-                  <h3 class="counter">10000</h3>
+                  <h4 class="counter">2021-03-03</h4>
                   <span>Time since first visit</span>
                 </li>
               </ul>
+              <hr>
+              <div class="row px-3 ml-1">
+                  <div class="col-4">Phone:</div>
+                  <div class="col-8">9876543210</div>
+                  <div class="col-4">Email:</div>
+                  <div class="col-8">nika@staging.in</div>
+                  <div class="col-4">Address:</div>
+                  <div class="col-8">abc, New York</div>
+                </div>
             </div>
           </template>
         </iq-card>
@@ -95,7 +104,7 @@
         </iq-card>
       </b-col>
       <b-col lg="8">
-        <b-container fluid>
+        <b-container>
         <b-row>
           <b-col md="6">
             <iq-card>
@@ -139,21 +148,25 @@
                     </div>
                     <div><a href="#" class="btn iq-bg-primary">Open</a></div>
                   </li>
-                  <li class="d-flex align-items-center justify-content-between mb-3">
-                    <div>
-                      <h6>Treatment is good</h6>
-                      <p class="mb-0">03/03/2021 </p>
-                    </div>
-                    <div><a href="#" class="btn iq-bg-primary">Open</a></div>
-                  </li>
                 </ul>
               </template>
             </iq-card>
+          <b-card
+          text-variant="white"
+          bg-variant="danger"
+          class="iq-mb-3 iq-card"
+        >
+          <b-card-title class="text-white">Allergies</b-card-title>
+          <blockquote class="blockquote mb-0">
+            <p class="font-size-14">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer posuere erat a ante.</p>
+            <footer class="blockquote-footer text-white font-size-12">Someone famous in <cite title="Source Title">Source Title</cite></footer>
+          </blockquote>
+        </b-card>
           </b-col>
           <b-col md="6">
             <iq-card>
               <template v-slot:headerTitle>
-                <h4 class="card-title">Appointments</h4>
+                <h4 class="card-title">Future Appointments</h4>
               </template>
               <template v-slot:body>
                 <ul class="iq-timeline">
@@ -175,23 +188,41 @@
                 </ul>
               </template>
             </iq-card>
-          <b-card
-          text-variant="white"
-          bg-variant="danger"
-          class="iq-mb-3 iq-card"
-        >
-          <b-card-title class="text-white">Allergies</b-card-title>
-          <blockquote class="blockquote mb-0">
-            <p class="font-size-14">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer posuere erat a ante.</p>
-            <footer class="blockquote-footer text-white font-size-12">Someone famous in <cite title="Source Title">Source Title</cite></footer>
-          </blockquote>
-        </b-card>
+            <iq-card>
+              <template v-slot:headerTitle>
+                <h4 class="card-title">Past Appointments</h4>
+              </template>
+              <template v-slot:body>
+                <ul class="iq-timeline">
+                  <li>
+                    <div class="timeline-dots border-success"></div>
+                    <h6 class="">Dr. Ahlin Send you Photo</h6>
+                    <small class="mt-1">23 November 2019</small>
+                  </li>
+                  <li>
+                    <div class="timeline-dots border-danger"></div>
+                    <h6 class="">Reminder : Opertion Time!</h6>
+                    <small class="mt-1">20 November 2019</small>
+                  </li>
+                  <li>
+                    <div class="timeline-dots border-primary"></div>
+                    <h6 class="mb-1">Patient Call</h6>
+                    <small class="mt-1">19 November 2019</small>
+                  </li>
+                </ul>
+              </template>
+            </iq-card>
           </b-col>
           <b-col md="12">
           <b-card title="General Notes" class="iq-mb-3 iq-card">
             <b-card-text>This is another card with title and supporting text below. This card has some additional content to make it slightly taller overall.</b-card-text>
             <b-card-text><small class="text-muted">Last updated 3 mins ago</small></b-card-text>
           </b-card>
+          </b-col>
+          <b-col md="12" style="text-align: right;">
+            <button type="" class="btn btn-primary">Add Appointment</button>&nbsp;&nbsp;
+            <button type="" class="btn btn-primary">Add Assignment</button>&nbsp;&nbsp;
+            <button type="" class="btn btn-primary">Delete Patient</button>
           </b-col>
         </b-row>
         </b-container>
