@@ -1,0 +1,208 @@
+--############################################################
+--# add PRM passowrd
+--############################################################
+DELETE FROM prm_role_permission;
+DELETE FROM prm_permission;
+
+INSERT INTO prm_permission (permission_id, resource_name, scope_id) VALUES (1, 'Dashboard', 1);
+INSERT INTO prm_permission (permission_id, resource_name, scope_id) VALUES (2, 'Dashboard', 2);
+INSERT INTO prm_permission (permission_id, resource_name, scope_id) VALUES (3, 'Dashboard', 3);
+INSERT INTO prm_permission (permission_id, resource_name, scope_id) VALUES (4, 'Dashboard', 4);
+INSERT INTO prm_permission (permission_id, resource_name, scope_id) VALUES (5, 'Dashboard', 5);
+INSERT INTO prm_permission (permission_id, resource_name, scope_id) VALUES (11, 'Home', 1);
+INSERT INTO prm_permission (permission_id, resource_name, scope_id) VALUES (12, 'Home', 2);
+INSERT INTO prm_permission (permission_id, resource_name, scope_id) VALUES (13, 'Home', 3);
+INSERT INTO prm_permission (permission_id, resource_name, scope_id) VALUES (14, 'Home', 4);
+INSERT INTO prm_permission (permission_id, resource_name, scope_id) VALUES (15, 'Home', 5);
+INSERT INTO prm_permission (permission_id, resource_name, scope_id) VALUES (21, 'Calendar', 1);
+INSERT INTO prm_permission (permission_id, resource_name, scope_id) VALUES (22, 'Calendar', 2);
+INSERT INTO prm_permission (permission_id, resource_name, scope_id) VALUES (23, 'Calendar', 3);
+INSERT INTO prm_permission (permission_id, resource_name, scope_id) VALUES (24, 'Calendar', 4);
+INSERT INTO prm_permission (permission_id, resource_name, scope_id) VALUES (25, 'Calendar', 5);
+INSERT INTO prm_permission (permission_id, resource_name, scope_id) VALUES (31, 'Patients', 1);
+INSERT INTO prm_permission (permission_id, resource_name, scope_id) VALUES (32, 'Patients', 2);
+INSERT INTO prm_permission (permission_id, resource_name, scope_id) VALUES (33, 'Patients', 3);
+INSERT INTO prm_permission (permission_id, resource_name, scope_id) VALUES (34, 'Patients', 4);
+INSERT INTO prm_permission (permission_id, resource_name, scope_id) VALUES (35, 'Patients', 5);
+INSERT INTO prm_permission (permission_id, resource_name, scope_id) VALUES (41, 'Documents', 1);
+INSERT INTO prm_permission (permission_id, resource_name, scope_id) VALUES (42, 'Documents', 2);
+INSERT INTO prm_permission (permission_id, resource_name, scope_id) VALUES (43, 'Documents', 3);
+INSERT INTO prm_permission (permission_id, resource_name, scope_id) VALUES (44, 'Documents', 4);
+INSERT INTO prm_permission (permission_id, resource_name, scope_id) VALUES (45, 'Documents', 5);
+INSERT INTO prm_permission (permission_id, resource_name, scope_id) VALUES (51, 'Offers', 1);
+INSERT INTO prm_permission (permission_id, resource_name, scope_id) VALUES (52, 'Offers', 2);
+INSERT INTO prm_permission (permission_id, resource_name, scope_id) VALUES (53, 'Offers', 3);
+INSERT INTO prm_permission (permission_id, resource_name, scope_id) VALUES (54, 'Offers', 4);
+INSERT INTO prm_permission (permission_id, resource_name, scope_id) VALUES (55, 'Offers', 5);
+INSERT INTO prm_permission (permission_id, resource_name, scope_id) VALUES (61, 'Invoices', 1);
+INSERT INTO prm_permission (permission_id, resource_name, scope_id) VALUES (62, 'Invoices', 2);
+INSERT INTO prm_permission (permission_id, resource_name, scope_id) VALUES (63, 'Invoices', 3);
+INSERT INTO prm_permission (permission_id, resource_name, scope_id) VALUES (64, 'Invoices', 4);
+INSERT INTO prm_permission (permission_id, resource_name, scope_id) VALUES (65, 'Invoices', 5);
+INSERT INTO prm_permission (permission_id, resource_name, scope_id) VALUES (71, 'Advance Payments', 1);
+INSERT INTO prm_permission (permission_id, resource_name, scope_id) VALUES (72, 'Advance Payments', 2);
+INSERT INTO prm_permission (permission_id, resource_name, scope_id) VALUES (73, 'Advance Payments', 3);
+INSERT INTO prm_permission (permission_id, resource_name, scope_id) VALUES (74, 'Advance Payments', 4);
+INSERT INTO prm_permission (permission_id, resource_name, scope_id) VALUES (75, 'Advance Payments', 5);
+INSERT INTO prm_permission (permission_id, resource_name, scope_id) VALUES (81, 'Assignments', 1);
+INSERT INTO prm_permission (permission_id, resource_name, scope_id) VALUES (82, 'Assignments', 2);
+INSERT INTO prm_permission (permission_id, resource_name, scope_id) VALUES (83, 'Assignments', 3);
+INSERT INTO prm_permission (permission_id, resource_name, scope_id) VALUES (84, 'Assignments', 4);
+INSERT INTO prm_permission (permission_id, resource_name, scope_id) VALUES (85, 'Assignments', 5);
+INSERT INTO prm_permission (permission_id, resource_name, scope_id) VALUES (91, 'Statistics', 1);
+INSERT INTO prm_permission (permission_id, resource_name, scope_id) VALUES (92, 'Statistics', 2);
+INSERT INTO prm_permission (permission_id, resource_name, scope_id) VALUES (93, 'Statistics', 3);
+INSERT INTO prm_permission (permission_id, resource_name, scope_id) VALUES (94, 'Statistics', 4);
+INSERT INTO prm_permission (permission_id, resource_name, scope_id) VALUES (95, 'Statistics', 5);
+INSERT INTO prm_permission (permission_id, resource_name, scope_id) VALUES (101, 'Statistics For Clinic', 1);
+INSERT INTO prm_permission (permission_id, resource_name, scope_id) VALUES (102, 'Statistics For Clinic', 2);
+INSERT INTO prm_permission (permission_id, resource_name, scope_id) VALUES (103, 'Statistics For Clinic', 3);
+INSERT INTO prm_permission (permission_id, resource_name, scope_id) VALUES (104, 'Statistics For Clinic', 4);
+INSERT INTO prm_permission (permission_id, resource_name, scope_id) VALUES (105, 'Statistics For Clinic', 5);
+INSERT INTO prm_permission (permission_id, resource_name, scope_id) VALUES (111, 'Personal Statistics', 1);
+INSERT INTO prm_permission (permission_id, resource_name, scope_id) VALUES (112, 'Personal Statistics', 2);
+INSERT INTO prm_permission (permission_id, resource_name, scope_id) VALUES (113, 'Personal Statistics', 3);
+INSERT INTO prm_permission (permission_id, resource_name, scope_id) VALUES (114, 'Personal Statistics', 4);
+INSERT INTO prm_permission (permission_id, resource_name, scope_id) VALUES (115, 'Personal Statistics', 5);
+INSERT INTO prm_permission (permission_id, resource_name, scope_id) VALUES (121, 'Reporting', 1);
+INSERT INTO prm_permission (permission_id, resource_name, scope_id) VALUES (122, 'Reporting', 2);
+INSERT INTO prm_permission (permission_id, resource_name, scope_id) VALUES (123, 'Reporting', 3);
+INSERT INTO prm_permission (permission_id, resource_name, scope_id) VALUES (124, 'Reporting', 4);
+INSERT INTO prm_permission (permission_id, resource_name, scope_id) VALUES (125, 'Reporting', 5);
+INSERT INTO prm_permission (permission_id, resource_name, scope_id) VALUES (131, 'Emazing', 1);
+INSERT INTO prm_permission (permission_id, resource_name, scope_id) VALUES (132, 'Emazing', 2);
+INSERT INTO prm_permission (permission_id, resource_name, scope_id) VALUES (133, 'Emazing', 3);
+INSERT INTO prm_permission (permission_id, resource_name, scope_id) VALUES (134, 'Emazing', 4);
+INSERT INTO prm_permission (permission_id, resource_name, scope_id) VALUES (135, 'Emazing', 5);
+INSERT INTO prm_permission (permission_id, resource_name, scope_id) VALUES (141, 'Doctor', 1);
+INSERT INTO prm_permission (permission_id, resource_name, scope_id) VALUES (142, 'Doctor', 2);
+INSERT INTO prm_permission (permission_id, resource_name, scope_id) VALUES (143, 'Doctor', 3);
+INSERT INTO prm_permission (permission_id, resource_name, scope_id) VALUES (144, 'Doctor', 4);
+INSERT INTO prm_permission (permission_id, resource_name, scope_id) VALUES (145, 'Doctor', 5);
+INSERT INTO prm_permission (permission_id, resource_name, scope_id) VALUES (151, 'Tax Authority', 1);
+INSERT INTO prm_permission (permission_id, resource_name, scope_id) VALUES (152, 'Tax Authority', 2);
+INSERT INTO prm_permission (permission_id, resource_name, scope_id) VALUES (153, 'Tax Authority', 3);
+INSERT INTO prm_permission (permission_id, resource_name, scope_id) VALUES (154, 'Tax Authority', 4);
+INSERT INTO prm_permission (permission_id, resource_name, scope_id) VALUES (155, 'Tax Authority', 5);
+INSERT INTO prm_permission (permission_id, resource_name, scope_id) VALUES (161, 'Settings', 1);
+INSERT INTO prm_permission (permission_id, resource_name, scope_id) VALUES (162, 'Settings', 2);
+INSERT INTO prm_permission (permission_id, resource_name, scope_id) VALUES (163, 'Settings', 3);
+INSERT INTO prm_permission (permission_id, resource_name, scope_id) VALUES (164, 'Settings', 4);
+INSERT INTO prm_permission (permission_id, resource_name, scope_id) VALUES (165, 'Settings', 5);
+INSERT INTO prm_permission (permission_id, resource_name, scope_id) VALUES (171, 'Users', 1);
+INSERT INTO prm_permission (permission_id, resource_name, scope_id) VALUES (172, 'Users', 2);
+INSERT INTO prm_permission (permission_id, resource_name, scope_id) VALUES (173, 'Users', 3);
+INSERT INTO prm_permission (permission_id, resource_name, scope_id) VALUES (174, 'Users', 4);
+INSERT INTO prm_permission (permission_id, resource_name, scope_id) VALUES (175, 'Users', 5);
+INSERT INTO prm_permission (permission_id, resource_name, scope_id) VALUES (181, 'Locations', 1);
+INSERT INTO prm_permission (permission_id, resource_name, scope_id) VALUES (182, 'Locations', 2);
+INSERT INTO prm_permission (permission_id, resource_name, scope_id) VALUES (183, 'Locations', 3);
+INSERT INTO prm_permission (permission_id, resource_name, scope_id) VALUES (184, 'Locations', 4);
+INSERT INTO prm_permission (permission_id, resource_name, scope_id) VALUES (185, 'Locations', 5);
+INSERT INTO prm_permission (permission_id, resource_name, scope_id) VALUES (191, 'Services and Products', 1);
+INSERT INTO prm_permission (permission_id, resource_name, scope_id) VALUES (192, 'Services and Products', 2);
+INSERT INTO prm_permission (permission_id, resource_name, scope_id) VALUES (193, 'Services and Products', 3);
+INSERT INTO prm_permission (permission_id, resource_name, scope_id) VALUES (194, 'Services and Products', 4);
+INSERT INTO prm_permission (permission_id, resource_name, scope_id) VALUES (195, 'Services and Products', 5);
+INSERT INTO prm_permission (permission_id, resource_name, scope_id) VALUES (201, 'Invoicing', 1);
+INSERT INTO prm_permission (permission_id, resource_name, scope_id) VALUES (202, 'Invoicing', 2);
+INSERT INTO prm_permission (permission_id, resource_name, scope_id) VALUES (203, 'Invoicing', 3);
+INSERT INTO prm_permission (permission_id, resource_name, scope_id) VALUES (204, 'Invoicing', 4);
+INSERT INTO prm_permission (permission_id, resource_name, scope_id) VALUES (205, 'Invoicing', 5);
+
+-- Manager - all resources all
+INSERT INTO prm_role_permission (role_permission_id, role_id, permission_id) VALUES (100, 1, 1);
+INSERT INTO prm_role_permission (role_permission_id, role_id, permission_id) VALUES (101, 1, 11);
+INSERT INTO prm_role_permission (role_permission_id, role_id, permission_id) VALUES (102, 1, 21);
+INSERT INTO prm_role_permission (role_permission_id, role_id, permission_id) VALUES (103, 1, 31);
+INSERT INTO prm_role_permission (role_permission_id, role_id, permission_id) VALUES (104, 1, 41);
+INSERT INTO prm_role_permission (role_permission_id, role_id, permission_id) VALUES (105, 1, 51);
+INSERT INTO prm_role_permission (role_permission_id, role_id, permission_id) VALUES (106, 1, 61);
+INSERT INTO prm_role_permission (role_permission_id, role_id, permission_id) VALUES (107, 1, 71);
+INSERT INTO prm_role_permission (role_permission_id, role_id, permission_id) VALUES (108, 1, 81);
+INSERT INTO prm_role_permission (role_permission_id, role_id, permission_id) VALUES (109, 1, 91);
+INSERT INTO prm_role_permission (role_permission_id, role_id, permission_id) VALUES (110, 1, 101);
+INSERT INTO prm_role_permission (role_permission_id, role_id, permission_id) VALUES (111, 1, 111);
+INSERT INTO prm_role_permission (role_permission_id, role_id, permission_id) VALUES (112, 1, 121);
+INSERT INTO prm_role_permission (role_permission_id, role_id, permission_id) VALUES (113, 1, 131);
+INSERT INTO prm_role_permission (role_permission_id, role_id, permission_id) VALUES (114, 1, 141);
+INSERT INTO prm_role_permission (role_permission_id, role_id, permission_id) VALUES (115, 1, 151);
+INSERT INTO prm_role_permission (role_permission_id, role_id, permission_id) VALUES (116, 1, 161);
+INSERT INTO prm_role_permission (role_permission_id, role_id, permission_id) VALUES (117, 1, 171);
+INSERT INTO prm_role_permission (role_permission_id, role_id, permission_id) VALUES (118, 1, 181);
+INSERT INTO prm_role_permission (role_permission_id, role_id, permission_id) VALUES (119, 1, 191);
+INSERT INTO prm_role_permission (role_permission_id, role_id, permission_id) VALUES (120, 1, 201);
+-- Admin
+INSERT INTO prm_role_permission (role_permission_id, role_id, permission_id) VALUES (200, 2, 1);
+INSERT INTO prm_role_permission (role_permission_id, role_id, permission_id) VALUES (201, 2, 11);
+INSERT INTO prm_role_permission (role_permission_id, role_id, permission_id) VALUES (216, 2, 161);
+INSERT INTO prm_role_permission (role_permission_id, role_id, permission_id) VALUES (217, 2, 171);
+INSERT INTO prm_role_permission (role_permission_id, role_id, permission_id) VALUES (218, 2, 181);
+INSERT INTO prm_role_permission (role_permission_id, role_id, permission_id) VALUES (219, 2, 191);
+INSERT INTO prm_role_permission (role_permission_id, role_id, permission_id) VALUES (220, 2, 201);
+-- Caller
+INSERT INTO prm_role_permission (role_permission_id, role_id, permission_id) VALUES (300, 3, 1);
+INSERT INTO prm_role_permission (role_permission_id, role_id, permission_id) VALUES (301, 3, 11);
+INSERT INTO prm_role_permission (role_permission_id, role_id, permission_id) VALUES (302, 3, 21);
+INSERT INTO prm_role_permission (role_permission_id, role_id, permission_id) VALUES (303, 3, 31);
+-- Doctor
+INSERT INTO prm_role_permission (role_permission_id, role_id, permission_id) VALUES (400, 4, 1);
+INSERT INTO prm_role_permission (role_permission_id, role_id, permission_id) VALUES (401, 4, 11);
+INSERT INTO prm_role_permission (role_permission_id, role_id, permission_id) VALUES (402, 4, 21);
+INSERT INTO prm_role_permission (role_permission_id, role_id, permission_id) VALUES (403, 4, 31);
+INSERT INTO prm_role_permission (role_permission_id, role_id, permission_id) VALUES (404, 4, 44);
+INSERT INTO prm_role_permission (role_permission_id, role_id, permission_id) VALUES (405, 4, 54);
+INSERT INTO prm_role_permission (role_permission_id, role_id, permission_id) VALUES (406, 4, 64);
+INSERT INTO prm_role_permission (role_permission_id, role_id, permission_id) VALUES (407, 4, 74);
+INSERT INTO prm_role_permission (role_permission_id, role_id, permission_id) VALUES (408, 4, 84);
+INSERT INTO prm_role_permission (role_permission_id, role_id, permission_id) VALUES (409, 4, 91);
+INSERT INTO prm_role_permission (role_permission_id, role_id, permission_id) VALUES (411, 4, 111);
+INSERT INTO prm_role_permission (role_permission_id, role_id, permission_id) VALUES (412, 4, 121);
+INSERT INTO prm_role_permission (role_permission_id, role_id, permission_id) VALUES (414, 4, 144);
+INSERT INTO prm_role_permission (role_permission_id, role_id, permission_id) VALUES (416, 4, 161);
+INSERT INTO prm_role_permission (role_permission_id, role_id, permission_id) VALUES (419, 4, 191);
+-- Superdoctor
+INSERT INTO prm_role_permission (role_permission_id, role_id, permission_id) VALUES (500, 5, 1);
+INSERT INTO prm_role_permission (role_permission_id, role_id, permission_id) VALUES (501, 5, 11);
+INSERT INTO prm_role_permission (role_permission_id, role_id, permission_id) VALUES (502, 5, 21);
+INSERT INTO prm_role_permission (role_permission_id, role_id, permission_id) VALUES (503, 5, 31);
+INSERT INTO prm_role_permission (role_permission_id, role_id, permission_id) VALUES (504, 5, 44);
+INSERT INTO prm_role_permission (role_permission_id, role_id, permission_id) VALUES (505, 5, 54);
+INSERT INTO prm_role_permission (role_permission_id, role_id, permission_id) VALUES (506, 5, 64);
+INSERT INTO prm_role_permission (role_permission_id, role_id, permission_id) VALUES (507, 5, 74);
+INSERT INTO prm_role_permission (role_permission_id, role_id, permission_id) VALUES (508, 5, 81);
+INSERT INTO prm_role_permission (role_permission_id, role_id, permission_id) VALUES (509, 5, 91);
+INSERT INTO prm_role_permission (role_permission_id, role_id, permission_id) VALUES (511, 5, 111);
+INSERT INTO prm_role_permission (role_permission_id, role_id, permission_id) VALUES (512, 5, 121);
+INSERT INTO prm_role_permission (role_permission_id, role_id, permission_id) VALUES (514, 5, 144);
+INSERT INTO prm_role_permission (role_permission_id, role_id, permission_id) VALUES (516, 5, 161);
+INSERT INTO prm_role_permission (role_permission_id, role_id, permission_id) VALUES (519, 5, 191);
+-- Technician
+INSERT INTO prm_role_permission (role_permission_id, role_id, permission_id) VALUES (600, 6, 1);
+INSERT INTO prm_role_permission (role_permission_id, role_id, permission_id) VALUES (601, 6, 11);
+INSERT INTO prm_role_permission (role_permission_id, role_id, permission_id) VALUES (603, 6, 33);
+INSERT INTO prm_role_permission (role_permission_id, role_id, permission_id) VALUES (608, 6, 83);
+-- Nurse
+INSERT INTO prm_role_permission (role_permission_id, role_id, permission_id) VALUES (700, 7, 1);
+INSERT INTO prm_role_permission (role_permission_id, role_id, permission_id) VALUES (701, 7, 11);
+INSERT INTO prm_role_permission (role_permission_id, role_id, permission_id) VALUES (702, 7, 21);
+INSERT INTO prm_role_permission (role_permission_id, role_id, permission_id) VALUES (703, 7, 31);
+INSERT INTO prm_role_permission (role_permission_id, role_id, permission_id) VALUES (708, 7, 84);
+-- Supernurse
+INSERT INTO prm_role_permission (role_permission_id, role_id, permission_id) VALUES (800, 8, 1);
+INSERT INTO prm_role_permission (role_permission_id, role_id, permission_id) VALUES (801, 8, 11);
+INSERT INTO prm_role_permission (role_permission_id, role_id, permission_id) VALUES (802, 8, 21);
+INSERT INTO prm_role_permission (role_permission_id, role_id, permission_id) VALUES (803, 8, 31);
+INSERT INTO prm_role_permission (role_permission_id, role_id, permission_id) VALUES (804, 8, 41);
+INSERT INTO prm_role_permission (role_permission_id, role_id, permission_id) VALUES (805, 8, 51);
+INSERT INTO prm_role_permission (role_permission_id, role_id, permission_id) VALUES (806, 8, 61);
+INSERT INTO prm_role_permission (role_permission_id, role_id, permission_id) VALUES (807, 8, 71);
+INSERT INTO prm_role_permission (role_permission_id, role_id, permission_id) VALUES (808, 8, 85);
+
+--############################################################
+--# update version
+--############################################################
+UPDATE db_version SET version ='01.04', version_date=CURRENT_DATE WHERE resource='Tables';
+
+
+COMMIT;

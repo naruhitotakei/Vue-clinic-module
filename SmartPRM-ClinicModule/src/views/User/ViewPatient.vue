@@ -15,7 +15,6 @@
                   <tab-nav-items class="col p-0" :active="false" href="#appointments" title="Appointments" />
                   <tab-nav-items class="col p-0" :active="false" href="#offers" title="Offers" />
                   <tab-nav-items class="col p-0" :active="false" href="#invoices" title="Invoices" />
-                  <tab-nav-items class="col-md-3 p-0" :active="false" href="#advpay" title="Advance payment invoices" />
                 </tab-nav>
               </div>
             </template>

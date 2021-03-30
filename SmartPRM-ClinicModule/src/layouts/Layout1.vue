@@ -400,17 +400,24 @@ export default {
       this.$router.push({ name: 'auth1.sign-in1' })
     },
     filterMenu (sideBarItems) {
-      console.log('User permissions ', this.logedInUser.permissions)
       var rVal = []
-      for (var i = 0; i < sideBarItems.length; i++) {
-        if (this.permissionContains(sideBarItems[i].title)) {
-          rVal.push(sideBarItems[i])
+      for (var menuCnt = 0; menuCnt < sideBarItems.length; menuCnt++) {
+        if (this.permissionContains(sideBarItems[menuCnt].title)) {
+          if (sideBarItems[menuCnt].children && sideBarItems[menuCnt].children.length) {
+            var rValSubmenu = []
+            for (var submenuCnt = 0; submenuCnt < sideBarItems[menuCnt].children.length; submenuCnt++) {
+              if (this.permissionContains(sideBarItems[menuCnt].children[submenuCnt].title)) {
+                rValSubmenu.push(sideBarItems[menuCnt].children[submenuCnt])
+              }
+            }
+            sideBarItems[menuCnt].children = rValSubmenu
+          }
+          rVal.push(sideBarItems[menuCnt])
         }
       }
       return rVal
     },
     permissionContains (resourceName) {
-      if (this.logedInUser) return true // todo - vrzi venm da bo delovalo filtriranje
       if (!this.logedInUser) return false
       for (var i = 0; i < this.logedInUser.permissions.length; i++) {
         if (this.logedInUser.permissions[i].resource_name === resourceName) return true
