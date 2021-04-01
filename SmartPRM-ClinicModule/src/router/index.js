@@ -2,14 +2,12 @@ import Vue from 'vue'
 import VueRouter from 'vue-router'
 /* Layouts */
 import Layout1 from '../layouts/Layout1'
-import Default from '../layouts/BlankLayout'
 import AuthLayout1 from '../layouts/AuthLayouts/AuthLayout1'
 /* Dashboards View */
 import Dashboard2 from '../views/Dashboards/Dashboard2.vue'
 import Dashboard1 from '../views/Dashboards/Dashboard1.vue'
 import Dashboard3 from '../views/Dashboards/Dashboard3'
 import Dashboard4 from '../views/Dashboards/Dashboard4'
-import Dashboard5 from '../views/Dashboards/Dashboard5'
 /* UIElements View */
 import UiAlerts from '../views/core/UiAlerts.vue'
 import UiButtons from '../views/core/UiButtons.vue'
@@ -38,15 +36,6 @@ import RecoverPassword1 from '../views/AuthPages/Default/RecoverPassword1'
 import LockScreen1 from '../views/AuthPages/Default/LockScreen1'
 import ConfirmMail1 from '../views/AuthPages/Default/ConfirmMail1'
 /* Extra Pages */
-import ErrorPage from '../views/Pages/ErrorPage'
-import ComingSoon from '../views/Pages/ComingSoon'
-import Maintenance from '../views/Pages/Maintenance'
-import TimeLine from '../views/Pages/TimeLines'
-import Pricing from '../views/Pages/Pricing'
-import Pricing1 from '../views/Pages/Pricing1'
-import BlankPage from '../views/Pages/BlankPage'
-import FAQ from '../views/Pages/FAQ'
-import Invoice from '../views/Pages/Invoice'
 import InvoiceExample from '../views/Pages/InvoiceExample'
 /* Patients */
 import ViewPatient from '../views/User/ViewPatient'
@@ -69,8 +58,6 @@ import ApexCharts from '../views/Charts/ApexCharts'
 import AmCharts from '../views/Charts/AmCharts'
 import MorrisCharts from '../views/Charts/MorrisCharts'
 import HighCharts from '../views/Charts/HighCharts'
-import GoogleMaps from '../views/Maps/GoogleMaps'
-import VectorMaps from '../views/Maps/VectorMaps'
 /* Form View */
 import FormLayout from '../views/Forms/FormLayout'
 import FormValidates from '../views/Forms/FormValidates'
@@ -86,9 +73,6 @@ import UserList from '../views/User/UserList'
 import Callback from '../views/AuthPages/Default/Callback'
 /* Plugins Views */
 import DatepickerDemo from '../views/Plugins/DatepickerDemo'
-import SelectDemo from '../views/Plugins/SelectDemo'
-import DragDropDemo from '../views/Plugins/DragDropDemo'
-import AppTreeView from '../views/Plugins/AppTreeView'
 /* Documents */
 import Offers from '../views/Documents/Offers'
 import Invoices from '../views/Documents/Invoices'
@@ -142,12 +126,6 @@ const childRoutes = (prop, mode) => [
     name: prop + '.home-3',
     meta: { dark: mode, auth: true, name: 'Home 3' },
     component: Dashboard3
-  },
-  {
-    path: 'home-5',
-    name: prop + '.home-5',
-    meta: { dark: mode, auth: true, name: 'Home 5' },
-    component: Dashboard5
   },
   {
     path: '/',
@@ -562,86 +540,15 @@ const authChildRoutes = (prop, mode = false) => [
   }
 ]
 
-const mapChildRoute = (prop, mode = false) => [
-  {
-    path: 'google-maps',
-    name: prop + '.google',
-    meta: { dark: mode, auth: true, name: 'Google map' },
-    component: GoogleMaps
-  },
-  {
-    path: 'vector-maps',
-    name: prop + '.vector',
-    meta: { dark: mode, auth: true, name: 'Vector Detail' },
-    component: VectorMaps
-  }
-]
-
 const defaultlayout = (prop, mode = false) => [
-  {
-    path: 'timeline',
-    name: prop + '.timeline',
-    meta: { dark: mode, auth: true, name: 'Timeline' },
-    component: TimeLine
-  },
-  {
-    path: 'invoice',
-    name: prop + '.invoice',
-    meta: { dark: mode, auth: true, name: 'Invoice' },
-    component: Invoice
-  },
   {
     path: 'invoice-example',
     name: prop + '.invoice-example',
     meta: { dark: mode, auth: true, name: 'Invoices Example' },
     component: InvoiceExample
-  },
-  {
-    path: 'blank-page',
-    name: prop + '.blank-page',
-    meta: { dark: mode, auth: true, name: 'Blank Page' },
-    component: BlankPage
-  },
-  {
-    path: 'pricing',
-    name: prop + '.pricing',
-    meta: { dark: mode, auth: true, name: 'Pricing' },
-    component: Pricing
-  },
-  {
-    path: 'pricing-1',
-    name: prop + '.pricing1',
-    meta: { dark: mode, auth: true, name: 'Pricing 1' },
-    component: Pricing1
-  },
-  {
-    path: 'faq',
-    name: prop + '.faq',
-    meta: { dark: mode, auth: true, name: 'Faq' },
-    component: FAQ
   }
 ]
 
-const pagesChildRoutes = (prop, mode = false) => [
-  {
-    path: 'error/:code',
-    name: prop + '.error',
-    meta: { dark: mode, auth: true },
-    component: ErrorPage
-  },
-  {
-    path: 'coming-soon',
-    name: prop + '.coming-soon',
-    meta: { dark: mode, auth: true },
-    component: ComingSoon
-  },
-  {
-    path: 'maintenance',
-    name: prop + '.maintenance',
-    meta: { dark: mode, auth: true },
-    component: Maintenance
-  }
-]
 const userChildRoute = (prop, mode = false) => [
   {
     path: 'profile',
@@ -675,24 +582,6 @@ const pluginsChildRoute = (prop, mode = false) => [
     name: prop + '.datepicker',
     meta: { dark: mode, auth: true, name: 'Datepicker' },
     component: DatepickerDemo
-  },
-  {
-    path: 'select',
-    name: prop + '.select',
-    meta: { dark: mode, auth: true, name: 'Select' },
-    component: SelectDemo
-  },
-  {
-    path: 'draggable',
-    name: prop + '.draggable',
-    meta: { dark: mode, auth: true, name: 'Draggable' },
-    component: DragDropDemo
-  },
-  {
-    path: 'treeview',
-    name: prop + '.treeview',
-    meta: { dark: mode, auth: true, name: 'Tree View' },
-    component: AppTreeView
   }
 ]
 
@@ -789,13 +678,6 @@ const routes = [
     children: authChildRoutes('auth1')
   },
   {
-    path: '/pages',
-    name: 'pages',
-    component: Default,
-    meta: { auth: true },
-    children: pagesChildRoutes('default')
-  },
-  {
     path: '/extra-pages',
     name: 'extra-pages',
     component: Layout1,
@@ -815,13 +697,6 @@ const routes = [
     component: Layout1,
     meta: { auth: true },
     children: userChildRoute('doctor')
-  },
-  {
-    path: '/map',
-    name: 'map',
-    component: Layout1,
-    meta: { auth: true },
-    children: mapChildRoute('map')
   },
   {
     path: '/form',

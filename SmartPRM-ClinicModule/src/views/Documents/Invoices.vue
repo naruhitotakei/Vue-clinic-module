@@ -41,7 +41,6 @@
                   :fields="columns"
                   :per-page="perPage"
                   :current-page="currentPage"
-                  foot-clone
                 >
                 </b-table>
               </b-col>
@@ -68,10 +67,10 @@
 var rows = [
   {
     invoice_no: 'invoice12312',
-    desc: 'Teeth extraction',
+    desc: 'Tooth extraction',
     invoice_name: 'Invoice 1',
-    amount: '300',
-    issued_by: 'abc',
+    amount: '90 EUR',
+    issued_by: 'Dr. Damjan Ahlin',
     created_at: '27.01.2021-18:00',
     status: 'Paid'
   },
@@ -79,8 +78,8 @@ var rows = [
     invoice_no: 'invoice1454',
     desc: 'Tartar cleaning',
     invoice_name: 'Invoice 2',
-    amount: '200',
-    issued_by: 'xyz',
+    amount: '70 EUR',
+    issued_by: 'Dr. Silvija Lenart',
     created_at: '27.01.2021-18:00',
     status: 'Unpaid'
   },
@@ -88,8 +87,8 @@ var rows = [
     invoice_no: 'invoice111',
     desc: 'Filling',
     invoice_name: 'Invoice 3',
-    amount: '300',
-    issued_by: 'pqr',
+    amount: '70 EUR',
+    issued_by: 'Dr. Bojan Jernejc',
     created_at: '27.01.2021-18:00',
     status: 'Paid'
   }
@@ -106,7 +105,7 @@ export default {
         { value: 'invoice_name', text: 'Invoice Name' },
         { value: 'description', text: 'Description' },
         { value: 'amount', text: 'Invoice amount' },
-        { value: 'issue_by', text: 'Issued by' },
+        { value: 'issued_by', text: 'Issued by' },
         { value: 'created_at', text: 'Created at' },
         { value: 'status', text: 'Status' }
       ],
@@ -121,7 +120,7 @@ export default {
         { label: 'Invoice Name', key: 'invoice_name', class: 'text-left' },
         { label: 'Created at', key: 'created_at', class: 'text-left' },
         { label: 'Issued by', key: 'issued_by', class: 'text-left' },
-        { label: 'Offer amount', key: 'amount', class: 'text-left' },
+        { label: 'Invoice amount', key: 'amount', class: 'text-left' },
         { label: 'Status', key: 'status', class: 'text-left' }
       ]
     }
@@ -129,12 +128,12 @@ export default {
   methods: {
     default () {
       return {
-        offer_no: this.rows.length,
+        invoice_no: this.rows.length,
         desc: '',
-        offer_name: '',
+        invoice_name: '',
         amount: '',
         issued_by: '',
-        fully_paid: '',
+        status: '',
         created_at: ''
       }
     },
