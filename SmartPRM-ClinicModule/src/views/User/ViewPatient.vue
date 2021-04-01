@@ -7,7 +7,7 @@
             <template v-slot:body>
               <div class="iq-edit-list">
                 <tab-nav :pills="true" class="iq-edit-profile d-flex">
-                  <a id="myTab" class="nav-link show col p-0 ri-arrow-left-line" style="padding: 10px 0px !important; font-size: x-large;" @click="()=>$router.push('/patients')" :active="false"></a>
+                  <a id="myTab" class="nav-link show col p-0 ri-arrow-left-line" style="padding: 10px 0px !important; font-size: x-large;" @click="$router.push('/patients')" :active="false"></a>
                   <!-- <tab-nav-items class="col p-0" :active="false" href="/patients" title="Back" /> -->
                   <tab-nav-items class="col p-0" :active="true" href="#overview" title="Overview" />
                   <tab-nav-items class="col-md-2 p-0" :active="false" href="#info" title="Personal Information" />
@@ -66,7 +66,7 @@
           <template v-slot:body>
             <div class="iq-card-header d-flex justify-content-between">
               <div class="iq-header-title">
-                <h4 class="card-title">Personal doctors</h4>
+                <h4 class="card-title">Personal doctors</h4><hr/>
               </div>
             </div>
             <div class="iq-card-body">
@@ -83,7 +83,7 @@
           <template v-slot:body>
             <div class="iq-card-header d-flex justify-content-between">
               <div class="iq-header-title">
-                <h4 class="card-title">Photos</h4>
+                <h4 class="card-title">Photos</h4><hr/>
               </div>
             </div>
             <div class="iq-card-body">
@@ -107,10 +107,12 @@
         <b-row>
           <b-col md="6">
             <iq-card>
-              <template v-slot:headerTitle>
-                <h4 class="card-title">Patients Notes</h4>
-              </template>
               <template v-slot:body>
+                <div class="iq-card-header d-flex justify-content-between">
+              <div class="iq-header-title">
+                <h4 class="card-title">Patient Notes</h4><hr/>
+              </div>
+            </div>
                 <ul class="list-inline m-0 p-0">
                   <li class="d-flex align-items-center justify-content-between mb-3">
                     <div>
@@ -164,10 +166,12 @@
           </b-col>
           <b-col md="6">
             <iq-card>
-              <template v-slot:headerTitle>
-                <h4 class="card-title">Future Appointments</h4>
-              </template>
               <template v-slot:body>
+                <div class="iq-card-header d-flex justify-content-between">
+              <div class="iq-header-title">
+                <h4 class="card-title">Future Appointments</h4><hr/>
+              </div>
+            </div>
                 <ul class="iq-timeline">
                   <li>
                     <div class="timeline-dots border-success"></div>
@@ -188,10 +192,13 @@
               </template>
             </iq-card>
             <iq-card>
-              <template v-slot:headerTitle>
-                <h4 class="card-title">Past Appointments</h4>
-              </template>
               <template v-slot:body>
+                <div class="iq-card-header d-flex justify-content-between">
+              <div class="iq-header-title">
+                <h4 class="card-title">Past Appointments</h4>
+                <hr/>
+              </div>
+            </div>
                 <ul class="iq-timeline">
                   <li>
                     <div class="timeline-dots border-success"></div>
@@ -213,7 +220,7 @@
             </iq-card>
           </b-col>
           <b-col md="12">
-          <b-card title="General Notes" class="iq-mb-3 iq-card">
+          <b-card title="General Notes" class="iq-mb-3 iq-card"><hr/>
             <b-card-text>This is another card with title and supporting text below. This card has some additional content to make it slightly taller overall.</b-card-text>
             <b-card-text><small class="text-muted">Last updated 3 mins ago</small></b-card-text>
           </b-card>
@@ -229,115 +236,140 @@
     </b-row>
                 </iq-card>
               </tab-content-item>
-              <tab-content-item :active="false" id="info">
-                <iq-card>
-                   <b-col lg="12">
-          <div class="iq-edit-list-data">
-            <tab-content id="pills-tabContent-2">
-              <tab-content-item :active="true" id="personal-information" >
-                <iq-card>
-                  <template v-slot:headerTitle>
-                    <h4 class="card-title">Personal Information</h4>
-                  </template>
-                  <template v-slot:body>
-                      <b-form-group class="row align-items-center">
+              <tab-content-item :active="false" id="info" >
+                 <iq-card style="background: none;">
+                    <b-form-group class="row align-items-center /*justify-content-center*/">
                         <b-col md="12">
                           <div class="profile-img-edit">
                             <b-img :src="user.profile_image" class="profile-pic height-150 width-150" alt="profile-pic"/>
                             <input type="hidden" v-model="user.profile_image">
                             <div class="p-image">
                               <div class="position-relative">
-                                <i class="ri-pencil-line upload-button"></i>
+                                <i class="ri-pencil-line upload-button" @click="disabled = (disabled + 1) % 2"></i>
                                 <b-form-file class="h-100 position-absolute" accept="image/*" style="opacity: 0;" @change="previewImage"></b-form-file>
                               </div>
                             </div>
                           </div>
                         </b-col>
                       </b-form-group>
+                  <b-row>
+      <b-col lg="6">
+        <iq-card>
+                  <template v-slot:body>
+            <div class="pl-0 iq-card-header d-flex justify-content-between">
+              <div class="iq-header-title">
+                <h4 class="card-title">Personal Information</h4>
+              </div>
+            </div>
                       <b-row align-v="center">
-                        <b-form-group class="col-md-6" label="First Name" label-for="fname">
-                          <ValidationProvider name="First name" rules="required" v-slot="{ errors }">
-                            <b-form-input v-model="user.fname" type="text" placeholder="First Name" :class="(errors.length > 0 ? ' is-invalid' : '')"></b-form-input>
+                        <b-form-group class="col-md-12" label-cols-sm="4" label="First Name:" label-for="fname">
+                          <ValidationProvider name="fname" rules="required" v-slot="{ errors }">
+                            <b-form-input :disabled="disabled == 1" v-model="user.fname" type="text" :class="(errors.length > 0 ? ' is-invalid' : '')"></b-form-input>
                             <div class="invalid-feedback">
                               <span>{{ errors[0] }}</span>
                             </div>
                           </ValidationProvider>
                         </b-form-group>
-                        <b-form-group class="col-md-6" label="Last Name" label-for="lname">
-                          <ValidationProvider name="Last name" rules="required" v-slot="{ errors }">
-                            <b-form-input v-model="user.lname" type="text" placeholder="Last Name" :class="(errors.length > 0 ? ' is-invalid' : '')"></b-form-input>
+                        <b-form-group class="col-md-12" label-cols-sm="4" label="Last Name:" label-for="lname">
+                          <ValidationProvider name="lname" rules="required" v-slot="{ errors }">
+                            <b-form-input :disabled="disabled == 1" v-model="user.lname" type="text" :class="(errors.length > 0 ? ' is-invalid' : '')"></b-form-input>
                             <div class="invalid-feedback">
                               <span>{{ errors[0] }}</span>
                             </div>
                           </ValidationProvider>
                         </b-form-group>
 
-                        <b-form-group class="col-md-6" label="Username" label-for="uname">
-                          <ValidationProvider name="User name" rules="required" v-slot="{ errors }">
-                            <b-form-input v-model="user.username" type="text" placeholder="Username" :class="(errors.length > 0 ? ' is-invalid' : '')"></b-form-input>
+                        <b-form-group class="col-md-12" label-cols-sm="4" label="Date of birth:" label-for="dob">
+                          <ValidationProvider name="dob" rules="required" v-slot="{ errors }">
+                            <b-form-input :disabled="disabled == 1" v-model="user.dob" type="date" :class="(errors.length > 0 ? ' is-invalid' : '')"></b-form-input>
                             <div class="invalid-feedback">
                               <span>{{ errors[0] }}</span>
                             </div>
                           </ValidationProvider>
                         </b-form-group>
-                        <b-form-group class="col-sm-6" label="Gender:" label-class="d-block">
+                        <b-form-group :disabled="disabled == 1" class="col-md-12" label-cols-sm="4" label="Gender:" label-for="gender" label-class="d-block">
                           <b-form-radio inline v-model="user.gender" value="male">Male</b-form-radio>
                           <b-form-radio inline v-model="user.gender" value="female">Female</b-form-radio>
+                          <b-form-radio inline v-model="user.gender" value="unspecified">Unspecified</b-form-radio>
                         </b-form-group>
-                        <b-form-group class="col-sm-6" label="Date Of Birth:" label-for="dob">
-                          <b-form-input type="date" v-model="user.dob" id="dob"></b-form-input>
-                        </b-form-group>
-                        <b-form-group class="col-md-6" label="City:" label-for="uname">
-                          <b-form-input v-model="user.city" type="text" placeholder="City"></b-form-input>
-                        </b-form-group>
-                        <b-form-group class="col-sm-6" label-for="exampleFormControlSelect4" label="State:">
-                          <b-form-select plain v-model="user.state" :options="states" id="exampleFormControlSelect4">
-                          </b-form-select>
-                        </b-form-group>
-                        <b-form-group class="col-sm-6" label-for="exampleFormControlSelect3" label="Country:">
-                          <b-form-select plain v-model="user.country" :options="countries" id="exampleFormControlSelect3">
-                          </b-form-select>
-                        </b-form-group>
-                        <b-form-group class="col-sm-12" label="Address:">
-                          <b-form-textarea name="address" v-model="user.address1" style="line-height: 22px;" rows="5">
+                        <b-form-group class="col-md-12" label-cols-sm="4" label="Address:" label-for="address">
+                          <b-form-textarea :disabled="disabled == 1" name="address" v-model="user.address" style="line-height: 22px;" rows="3">
                           </b-form-textarea>
                         </b-form-group>
+                        <b-form-group class="col-md-12" style="justify-content: space-between;" label-cols-sm="4" label="Postcode, City:" label-for="city">
+                          <b-form-input :disabled="disabled == 1" class="col-md-6" style="float: left;" v-model="user.postcode" type="text"></b-form-input>
+                          <b-form-input :disabled="disabled == 1" class="col-md-6" v-model="user.city" type="text"></b-form-input>
+                        </b-form-group>
+                        <b-form-group class="col-md-12" label-cols-sm="4" label-for="country" label="Country:">
+                          <b-form-select :disabled="disabled == 1" plain v-model="user.country" :selected="user.country" :options="countries" id="exampleFormControlSelect3">
+                          </b-form-select>
+                        </b-form-group>
+                        <b-form-group class="col-md-12" label-cols-sm="4" label-for="citizenship" label="Citizenship:">
+                          <b-form-input :disabled="disabled == 1" name="citizenship" type="text" v-model="user.citizenship"></b-form-input>
+                        </b-form-group>
+                        <b-form-group class="col-md-12" label-cols-sm="4" label-for="region" label="Region(EU):">
+                          <b-form-input :disabled="disabled == 1" name="region" type="text" v-model="user.region"></b-form-input>
+                        </b-form-group>
+                        <b-form-group class="col-md-12" label-cols-sm="4" label-for="insurance" label="Insurance number, insured at:">
+                          <b-form-input :disabled="disabled == 1" class="col-md-6" style="float: left;" name="insurance_no" type="text" v-model="user.insurance_no"></b-form-input>
+                          <b-form-input :disabled="disabled == 1" class="col-md-6" name="insured_at" type="text" v-model="user.insured_at"></b-form-input>
+                        </b-form-group>
+                        <b-form-group class="col-md-12" label-cols-sm="4" label-for="mobile_no" label="Mobile number:">
+                          <b-form-input :disabled="disabled == 1" name="mobile_no" type="text" v-model="user.mobile_no"></b-form-input>
+                        </b-form-group>
+                        <b-form-group class="col-md-12" label-cols-sm="4" label-for="email" label="Email-address:">
+                          <b-form-input :disabled="disabled == 1" name="email" type="text" v-model="user.email"></b-form-input>
+                        </b-form-group>
+                        <b-form-group class="col-md-12" label-cols-sm="4" label-for="tax_no" label="Tax number:">
+                          <b-form-input :disabled="disabled == 1" name="tax_no" type="number" v-model="user.tax_no"></b-form-input>
+                        </b-form-group>
                       </b-row>
-                      <b-button type="submit" variant="primary" class="mr-2">Submit</b-button>
-                      <b-button type="reset" variant="none" class="iq-bg-danger">Cancel</b-button>
                   </template>
-                </iq-card>
-              </tab-content-item>
-              <tab-content-item :active="false" id="chang-pwd">
-                <iq-card>
-                  <template v-slot:headerTitle>
-                    <h4 class="card-title">Change Password</h4>
-                  </template>
-                  <template v-slot:body>
-                      <b-form-group>
-                        <label for="cpass">Current Password:</label>
-                        <b-link href="javascripe:void();" class="float-right">Forgot Password</b-link>
-                        <b-form-input @focusout="changePassword()" type="password" id="cpass" v-model="currentPassword"></b-form-input>
-                      </b-form-group>
-                      <b-form-group class="col-md-6" label="New Password:" label-for="pass">
-                        <ValidationProvider name="Password" rules="confirmed:repeat_password" v-slot="{ errors }">
-                          <b-form-input v-model="user.password" type="password" placeholder="Password" :class="(errors.length > 0 ? ' is-invalid' : '')"></b-form-input>
-                          <div class="invalid-feedback">
-                            <span>{{ errors[0] }}</span>
-                          </div>
-                        </ValidationProvider>
-                      </b-form-group>
-                      <b-form-group class="col-md-6" label="Repeat Password:" label-for="rpass">
-                        <ValidationProvider vid="repeat_password" name="Repeat Password" rules="required" v-slot="{ errors }">
-                          <b-form-input v-model="user.repeat_password" type="password" placeholder="Repeat Password" :class="(errors.length > 0 ? ' is-invalid' : '')"></b-form-input>
-                          <div class="invalid-feedback">
-                            <span>{{ errors[0] }}</span>
-                          </div>
-                        </ValidationProvider>
-                      </b-form-group>
-                      <b-button type="submit" variant="primary" class="mr-2">Submit</b-button>
-                      <b-button type="reset" variant="none" class="iq-bg-danger">Cancel</b-button>
-                  </template>
+        </iq-card>
+      </b-col>
+      <b-col lg="6">
+         <iq-card>
+          <template v-slot:body>
+            <div class="pl-0 iq-card-header d-flex justify-content-between">
+                <h4>Allergies and sensitivities</h4>
+            </div>
+            <div class="iq-card-body p-0">
+                <textarea :disabled="disabled == 1" style="line-height: 30px;" v-model="user.allergies" class="textarea form-control" rows="7"></textarea>
+            </div>
+          </template>
+        </iq-card>
+         <iq-card>
+          <template v-slot:body>
+            <div class="pl-0 iq-card-header d-flex justify-content-between">
+                <h4>Reminders</h4>
+            </div>
+            <div class="iq-card-body p-0">
+                <textarea :disabled="disabled == 1" style="line-height: 30px;" v-model="user.reminder" class="textarea form-control" rows="7"></textarea>
+            </div>
+          </template>
+        </iq-card>
+         <iq-card>
+          <template v-slot:body>
+            <div class="pl-0 iq-card-header d-flex justify-content-between">
+                <h4>Other Information</h4>
+                <hr/>
+            </div>
+            <div class="iq-card-body">
+                <div class="row">
+                  <div class="col-4 pr-1 pl-0">Dentist:</div>
+                  <b-form-input :disabled="disabled == 1" v-model="user.dentist" class="col-8 mb-2" type="text"></b-form-input>
+                  <div class="col-4 pr-1 pl-0">Surgeon:</div>
+                  <b-form-input :disabled="disabled == 1" v-model="user.surgeon" class="col-8" type="text"></b-form-input>
+                </div>
+            </div>
+          </template>
+        </iq-card>
+      </b-col>
+    </b-row>
+          <div class="text-center p-1">
+            <b-button style="padding: 5px 25px;" @click="submitData" variant="primary" class="mr-2">Submit</b-button>
+            <b-button style="padding: 5px 25px;" @click="resetForm" variant="none" class="iq-bg-danger">Cancel</b-button>
+          </div>
                 </iq-card>
               </tab-content-item>
               <tab-content-item :active="false" id="emailandsms">
@@ -422,11 +454,6 @@
                       <b-button type="reset" variant="none" class="iq-bg-danger">Cancel</b-button>
                     </b-form>
                   </template>
-                </iq-card>
-              </tab-content-item>
-            </tab-content>
-          </div>
-        </b-col>
                 </iq-card>
               </tab-content-item>
               <tab-content-item :active="false" id="files">
@@ -530,22 +557,40 @@ export default {
   },
   data () {
     return {
+      disabled: 1,
       doctor: {
         profile: require('../../assets/images/user/1.jpg')
       },
       user: {
         profile_image: require('../../assets/images/user/11.png'),
-        background: require('../../assets/images/page-img/profile-bg.jpg'),
-        profile: require('../../assets/images/user/11.png'),
-        name: 'Nik Jone',
-        role: ' - Web designer',
+        fname: 'Nik',
+        lname: 'Jone',
+        dob: '30/03/2021',
+        gender: 'female',
+        address: 'Rusjanov trg 10',
+        postcode: '1000',
+        city: 'Ljbuljana',
+        country: 'Slovenia',
+        citizenship: 'Slovenian',
+        region: 'Sl-unknown',
+        insurance_no: '1534667',
+        insured_at: 'zanahjbn jnjn',
+        mob_no: '+386 67388 78889',
+        tax_no: '9877645677',
         email: 'nikjone@demoo.com',
-        phone: '001 2351 256 12',
+        mobile_no: '001 2351 256 12',
         location: 'USA',
-        careated_date: '07 Jan 2020'
+        edited_date: Date.now(),
+        allergies: 'Type, cause, symptom, note, date, change , doctor...',
+        reminder: 'The patient has very sensitive gums, careful not to cause bleeding...',
+        surgeon: 'Dr. Penger',
+        dentist: 'Dr. Penger',
+        background: require('../../assets/images/page-img/profile-bg.jpg'),
+        profile: require('../../assets/images/user/11.png')
       },
       currentPassword: '',
       countries: [
+        { value: 'Slovenia', text: 'Slovenia' },
         { value: 'Canada', text: 'Canada' },
         { value: 'Niada', text: 'Niada' },
         { value: 'USA', text: 'USA' },
@@ -562,6 +607,39 @@ export default {
     }
   },
   methods: {
+    resetForm () {
+      this.user = {
+        profile_image: require('../../assets/images/user/11.png'),
+        fname: 'Nik',
+        lname: 'Jone',
+        dob: '30/03/2021',
+        gender: 'female',
+        address: 'Rusjanov trg 10',
+        postcode: '1000',
+        city: 'Ljbuljana',
+        country: 'Slovenia',
+        citizenship: 'Slovenian',
+        region: 'Sl-unknown',
+        insurance_no: '1534667',
+        insured_at: 'zanahjbn jnjn',
+        mob_no: '+386 67388 78889',
+        tax_no: '9877645677',
+        email: 'nikjone@demoo.com',
+        mobile_no: '001 2351 256 12',
+        location: 'USA',
+        edited_date: Date.now(),
+        allergies: 'Type, cause, symptom, note, date, change , doctor...',
+        reminder: 'The patient has very sensitive gums, careful not to cause bleeding...',
+        surgeon: 'Dr. Penger',
+        dentist: 'Dr. Penger',
+        background: require('../../assets/images/page-img/profile-bg.jpg'),
+        profile: require('../../assets/images/user/11.png')
+      }
+      console.log('RESET FORM', this.user)
+    },
+    submitData () {
+      console.log('FORM DATA:', this.user)
+    },
     previewImage: function (event) {
       const input = event.target
 
