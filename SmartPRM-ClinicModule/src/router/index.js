@@ -36,7 +36,6 @@ import RecoverPassword1 from '../views/AuthPages/Default/RecoverPassword1'
 import LockScreen1 from '../views/AuthPages/Default/LockScreen1'
 import ConfirmMail1 from '../views/AuthPages/Default/ConfirmMail1'
 /* Extra Pages */
-import TimeLine from '../views/Pages/TimeLines'
 import InvoiceExample from '../views/Pages/InvoiceExample'
 /* Patients */
 import ViewPatient from '../views/User/ViewPatient'
@@ -74,9 +73,6 @@ import UserList from '../views/User/UserList'
 import Callback from '../views/AuthPages/Default/Callback'
 /* Plugins Views */
 import DatepickerDemo from '../views/Plugins/DatepickerDemo'
-import SelectDemo from '../views/Plugins/SelectDemo'
-import DragDropDemo from '../views/Plugins/DragDropDemo'
-import AppTreeView from '../views/Plugins/AppTreeView'
 /* Documents */
 import Offers from '../views/Documents/Offers'
 import Invoices from '../views/Documents/Invoices'
@@ -546,12 +542,6 @@ const authChildRoutes = (prop, mode = false) => [
 
 const defaultlayout = (prop, mode = false) => [
   {
-    path: 'timeline',
-    name: prop + '.timeline',
-    meta: { dark: mode, auth: true, name: 'Timeline' },
-    component: TimeLine
-  },
-  {
     path: 'invoice-example',
     name: prop + '.invoice-example',
     meta: { dark: mode, auth: true, name: 'Invoices Example' },
@@ -592,24 +582,6 @@ const pluginsChildRoute = (prop, mode = false) => [
     name: prop + '.datepicker',
     meta: { dark: mode, auth: true, name: 'Datepicker' },
     component: DatepickerDemo
-  },
-  {
-    path: 'select',
-    name: prop + '.select',
-    meta: { dark: mode, auth: true, name: 'Select' },
-    component: SelectDemo
-  },
-  {
-    path: 'draggable',
-    name: prop + '.draggable',
-    meta: { dark: mode, auth: true, name: 'Draggable' },
-    component: DragDropDemo
-  },
-  {
-    path: 'treeview',
-    name: prop + '.treeview',
-    meta: { dark: mode, auth: true, name: 'Tree View' },
-    component: AppTreeView
   }
 ]
 
