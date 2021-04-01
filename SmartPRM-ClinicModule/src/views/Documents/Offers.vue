@@ -39,7 +39,6 @@
                   :fields="columns"
                   :per-page="perPage"
                   :current-page="currentPage"
-                  foot-clone
                 >
                 </b-table>
               </b-col>
@@ -66,11 +65,11 @@
 var rows = [
   {
     offer_no: 'offer12312',
-    desc: 'Teeth extraction',
+    desc: 'Tooth extraction',
     offer_name: 'offer1',
-    amount: '300',
-    issued_by: '118',
-    created_at: '27.01.2021-18:00'
+    created_at: '27.01.2021-18:00',
+    issued_by: 'Dr. Petra Maver',
+    amount: '90 EUR'
   }
 ]
 export default {
@@ -83,10 +82,9 @@ export default {
         offer_no: this.rows.length,
         desc: '',
         offer_name: '',
-        amount: '',
+        created_at: '',
         issued_by: '',
-        fully_paid: '',
-        created_at: ''
+        amount: ''
       }
     },
     searchOption (event) {
@@ -102,11 +100,11 @@ export default {
       selected: this.value,
       searchoption: [
         { value: 'offer_no', text: 'Offer Number' },
-        { value: 'offer_name', text: 'Offer Name' },
         { value: 'description', text: 'Description' },
-        { value: 'amount', text: 'Amount' },
+        { value: 'offer_name', text: 'Offer Name' },
+        { value: 'created_at', text: 'Created at' },
         { value: 'issue_by', text: 'Issued by' },
-        { value: 'created_at', text: 'Created at' }
+        { value: 'amount', text: 'Amount' }
       ],
       items: rows,
       paginatedItems: rows,
@@ -115,11 +113,11 @@ export default {
       totalRows: rows.length,
       columns: [
         { label: 'Offer Number', key: 'offer_no', class: 'text-left' },
-        { label: 'Offer Name', key: 'offer_name', class: 'text-left' },
         { label: 'Description', key: 'desc', class: 'text-left' },
-        { label: 'Amount', key: 'amount', class: 'text-left' },
+        { label: 'Offer Name', key: 'offer_name', class: 'text-left' },
+        { label: 'Created at', key: 'created_at', class: 'text-left' },
         { label: 'Issued by', key: 'issued_by', class: 'text-left' },
-        { label: 'Created at', key: 'created_at', class: 'text-left' }
+        { label: 'Amount', key: 'amount', class: 'text-left' }
       ]
     }
   },
