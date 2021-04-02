@@ -457,63 +457,48 @@
                 </iq-card>
               </tab-content-item>
               <tab-content-item :active="false" id="files">
-                <iq-card>
-                  <template v-slot:headerTitle>
-                    <h4 class="card-title">Email and SMS</h4>
-                  </template>
-                  <template v-slot:body>
-                      <div class="form-group row align-items-center">
-                        <label class="col-md-3" for="emailnotification">Email Notification:</label>
-                        <div class="col-md-9 custom-control custom-switch">
-                          <input type="checkbox" class="custom-control-input" id="emailnotification" checked="">
-                          <label class="custom-control-label" for="emailnotification"></label>
+          <iq-card body-class="iq-card-body">
+          <template v-slot:headerTitle>
+                        <h3 class="card-title" style="margin-top: 10px;">Files</h3>
+                        <div class="btn-add-patient">
+                            <b-button variant="primary" @click="add_offer"><i class="ri-add-line mr-2"></i>New File</b-button>
                         </div>
-                      </div>
-                      <div class="form-group row align-items-center">
-                        <label class="col-md-3" for="smsnotification">SMS Notification:</label>
-                        <div class="col-md-9 custom-control custom-switch">
-                          <input type="checkbox" class="custom-control-input" id="smsnotification" checked="">
-                          <label class="custom-control-label" for="smsnotification"></label>
+                        <div class="iq-card-header-toolbar d-flex align-items-center" style="margin-top: -10px;">
+                            <div class="iq-search-bar">
+                                <form action="#" class="searchbox">
+                                    <input type="text" class="text search-input" placeholder="Search" @keyup="myFunction()">
+                                    <a class="search-link" href="#"><i class="ri-search-line"></i></a>
+                                </form>
+                            </div>
+                            <iq-card>
+                                <b-form-group label-for="searchoption"
+                                              label="Search By:">
+                                    <b-form-select plain
+                                                   v-model="selected"
+                                                   :options="searchoption"
+                                                   id="searchoption"
+                                                   @change="searchOption($event)">
+                                    </b-form-select>
+                                </b-form-group>
+                            </iq-card>
                         </div>
-                      </div>
-                      <div class="form-group row align-items-center">
-                        <label class="col-md-3" for="npass">When To Email</label>
-                        <div class="col-md-9">
-                          <div class="custom-control custom-checkbox">
-                            <input type="checkbox" class="custom-control-input" id="email01">
-                            <label class="custom-control-label" for="email01">You have new notifications.</label>
-                          </div>
-                          <div class="custom-control custom-checkbox">
-                            <input type="checkbox" class="custom-control-input" id="email02">
-                            <label class="custom-control-label" for="email02">You're sent a direct message</label>
-                          </div>
-                          <div class="custom-control custom-checkbox">
-                            <input type="checkbox" class="custom-control-input" id="email03" checked="">
-                            <label class="custom-control-label" for="email03">Someone adds you as a connection</label>
-                          </div>
-                        </div>
-                      </div>
-                      <div class="form-group row align-items-center">
-                        <label class="col-md-3" for="npass">When To Escalate Emails</label>
-                        <div class="col-md-9">
-                          <div class="custom-control custom-checkbox">
-                            <input type="checkbox" class="custom-control-input" id="email04">
-                            <label class="custom-control-label" for="email04"> Upon new order.</label>
-                          </div>
-                          <div class="custom-control custom-checkbox">
-                            <input type="checkbox" class="custom-control-input" id="email05">
-                            <label class="custom-control-label" for="email05"> New membership approval</label>
-                          </div>
-                          <div class="custom-control custom-checkbox">
-                            <input type="checkbox" class="custom-control-input" id="email06" checked="">
-                            <label class="custom-control-label" for="email06"> Member registration</label>
-                          </div>
-                        </div>
-                      </div>
-                      <b-button type="submit" variant="primary" class="mr-2">Submit</b-button>
-                      <b-button type="reset" variant="none" class="iq-bg-danger">Cancel</b-button>
-                  </template>
-                </iq-card>
+                    </template>
+          <template v-slot:body>
+            <div class="iq-card-body">
+              <ul class="profile-img-gallary d-flex flex-wrap p-0 m-0">
+                <li class="col-md-4 col-6 pb-3"><a href="javascript:void(0);"><img src="../../assets/images/login/1.png" alt="gallary-image" class="img-fluid"></a><div class="text-center"><p class="mb-0">File name: File 1</p><p>Created at: 03-03-2021</p></div></li>
+                <li class="col-md-4 col-6 pb-3"><a href="javascript:void(0);"><img src="../../assets/images/login/2.png" alt="gallary-image" class="img-fluid"></a><div class="text-center"><p class="mb-0">File name: File 2</p><p>Created at: 03-03-2021</p></div></li>
+                <li class="col-md-4 col-6 pb-3"><a href="javascript:void(0);"><img src="../../assets/images/login/3.png" alt="gallary-image" class="img-fluid"></a><div class="text-center"><p class="mb-0">File name: File 3</p><p>Created at: 03-03-2021</p></div></li>
+                <li class="col-md-4 col-6 pb-3"><a href="javascript:void(0);"><img src="../../assets/images/login/1.png" alt="gallary-image" class="img-fluid"></a><div class="text-center"><p class="mb-0">File name: File 4</p><p>Created at: 03-03-2021</p></div></li>
+                <li class="col-md-4 col-6 pb-3"><a href="javascript:void(0);"><img src="../../assets/images/login/2.png" alt="gallary-image" class="img-fluid"></a><div class="text-center"><p class="mb-0">File name: File 5</p><p>Created at: 03-03-2021</p></div></li>
+                <li class="col-md-4 col-6 pb-3"><a href="javascript:void(0);"><img src="../../assets/images/login/3.png" alt="gallary-image" class="img-fluid"></a><div class="text-center"><p class="mb-0">File name: File 6</p><p>Created at: 03-03-2021</p></div></li>
+                <li class="col-md-4 col-6 pb-0"><a href="javascript:void(0);"><img src="../../assets/images/login/1.png" alt="gallary-image" class="img-fluid"></a><div class="text-center"><p class="mb-0">File name: File 7</p><p>Created at: 03-03-2021</p></div></li>
+                <li class="col-md-4 col-6 pb-0"><a href="javascript:void(0);"><img src="../../assets/images/login/2.png" alt="gallary-image" class="img-fluid"></a><div class="text-center"><p class="mb-0">File name: File 8</p><p>Created at: 03-03-2021</p></div></li>
+                <li class="col-md-4 col-6 pb-0"><a href="javascript:void(0);"><img src="../../assets/images/login/3.png" alt="gallary-image" class="img-fluid"></a><div class="text-center"><p class="mb-0">File name: File 9</p><p>Created at: 03-03-2021</p></div></li>
+              </ul>
+            </div>
+          </template>
+        </iq-card>
               </tab-content-item>
               <tab-content-item :active="false" id="appointments">
                 <iq-card>
@@ -557,6 +542,10 @@ export default {
   },
   data () {
     return {
+      searchoption: [
+        { value: 'file_name', text: 'File Name' },
+        { value: 'created_at', text: 'Created Date' }
+      ],
       disabled: 1,
       doctor: {
         profile: require('../../assets/images/user/1.jpg')
@@ -565,7 +554,7 @@ export default {
         profile_image: require('../../assets/images/user/11.png'),
         fname: 'Nik',
         lname: 'Jone',
-        dob: '30/03/2021',
+        dob: '2021/03/03',
         gender: 'female',
         address: 'Rusjanov trg 10',
         postcode: '1000',
@@ -612,7 +601,7 @@ export default {
         profile_image: require('../../assets/images/user/11.png'),
         fname: 'Nik',
         lname: 'Jone',
-        dob: '30/03/2021',
+        dob: '2021/03/03',
         gender: 'female',
         address: 'Rusjanov trg 10',
         postcode: '1000',
