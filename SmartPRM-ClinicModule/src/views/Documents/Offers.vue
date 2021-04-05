@@ -11,7 +11,7 @@
                         <div class="iq-card-header-toolbar d-flex align-items-center" style="margin-top: -10px;">
                             <div class="iq-search-bar">
                                 <form action="#" class="searchbox">
-                                    <input type="text" class="text search-input" placeholder="Search" @keyup="myFunction()">
+                                    <input type="text" class="text search-input" placeholder="Search" @keyup="myFunction($event.target.value)">
                                     <a class="search-link" href="#"><i class="ri-search-line"></i></a>
                                 </form>
                             </div>
@@ -20,9 +20,9 @@
                                               label="Search By:">
                                     <b-form-select plain
                                                    v-model="selected"
-                                                   :options="searchoption"
-                                                   id="searchoption"
-                                                   @change="searchOption($event)">
+                                                   :options="searchOptions"
+                                                   id="searchOptions"
+                                                   @change="searchfunction($event)">
                                     </b-form-select>
                                 </b-form-group>
                             </iq-card>
@@ -87,9 +87,23 @@ export default {
         amount: ''
       }
     },
-    searchOption (event) {
+    searchfunction (event) {
+      this.dropDownText = event
       console.log('SEARCHBY OPTION:', event)
+      console.log('DROPDOWN:', this.dropDownText)
       return event
+    },
+    myFunction (event) {
+      console.log('evemt', event)
+      console.log('DROPDOWN:', this.dropDownText)
+
+      if (this.dropDownText) {
+        var sorted = rows.filter((item) => {
+          return item[this.dropDownText].toLowerCase().includes(event.toLowerCase())
+        })
+        this.paginatedItems = sorted
+      }
+      console.log('sorted', sorted)
     },
     add_offer () {
       console.log('ADD NEW OFFER CLICKED')
@@ -97,8 +111,9 @@ export default {
   },
   data  () {
     return {
+      dropDownText: '',
       selected: this.value,
-      searchoption: [
+      searchOptions: [
         { value: 'offer_no', text: 'Offer Number' },
         { value: 'description', text: 'Description' },
         { value: 'offer_name', text: 'Offer Name' },

@@ -11,18 +11,18 @@
                         <div class="iq-card-header-toolbar d-flex align-items-center" style="margin-top: -10px;">
                             <div class="iq-search-bar">
                                 <form action="#" class="searchbox">
-                                    <input type="text" class="text search-input" placeholder="Search" @keyup="myFunction()">
+                                    <input type="text" class="text search-input" placeholder="Search" @keyup="myFunction($event.target.value)">
                                     <a class="search-link" href="#"><i class="ri-search-line"></i></a>
                                 </form>
                             </div>
                             <iq-card>
-                                <b-form-group label-for="searchoption"
+                                <b-form-group label-for="searchOptions"
                                               label="Search By:">
                                     <b-form-select plain
                                                    v-model="selected"
-                                                   :options="searchoption"
-                                                   id="searchoption"
-                                                   @change="searchOption($event)">
+                                                   :options="searchOptions"
+                                                   id="searchOptions"
+                                                   @change="searchFunction($event)">
                                     </b-form-select>
                                 </b-form-group>
                             </iq-card>
@@ -193,10 +193,6 @@ export default {
       let obj = this.default()
       this.rows.push(obj)
     },
-    searchOption (event) {
-      console.log('SEARCHBY OPTION:', event)
-      return event
-    },
     onPatientClick () {
       // alert('hii')
       this.$router.push('/patients/viewpatient')
@@ -245,41 +241,42 @@ export default {
         })
       }
     },
-    myFunction () {
-      var input, filter, table, tr, td, i, txtValue
-      input = document.getElementById('myInput')
-      filter = input.value.toUpperCase()
-      table = document.getElementById('my-table')
-      tr = table.getElementsByTagName('tr')
-      for (i = 0; i < tr.length; i++) {
-        td = tr[i].getElementsByTagName('td')[0]
-        if (td) {
-          txtValue = td.textContent || td.innerText
-          if (txtValue.toUpperCase().indexOf(filter) > -1) {
-            tr[i].style.display = ''
-          } else {
-            tr[i].style.display = 'none'
-          }
-        }
+    searchFunction (event) {
+      this.dropDownText = event
+      console.log('SEARCHBY OPTION:', event)
+      console.log('DROPDOWN:', this.dropDownText)
+      return event
+    },
+    myFunction (event) {
+      console.log('EVENT:', event)
+      console.log('DROPDOWN:', this.dropDownText)
+
+      if (this.dropDownText) {
+        var sorted = rows.filter((item) => {
+          return item[this.dropDownText].toLowerCase().includes(event.toLowerCase())
+        })
+        this.items = sorted
       }
+      console.log('sorted', sorted)
     }
   },
   data () {
     return {
+      dropDownText: '',
       items: rows,
       paginatedItems: rows,
       currentPage: 1,
       perPage: 10,
       totalRows: rows.length,
       selected: this.value,
-      searchoption: [
+      searchOptions: [
         // { text: 'Search By', disabled },
         { value: 'name', text: 'Name' },
         { value: 'last_name', text: 'Last Name' },
-        { value: 'phone', text: 'Phone' },
+        { value: 'telephone', text: 'Phone' },
         { value: 'email', text: 'Email' },
-        { value: 'city', text: 'City' },
-        { value: 'country', text: 'Country' },
+        { value: 'state', text: 'State' },
+        { value: 'region', text: 'Region' },
         { value: 'last_visit', text: 'Last Visit' },
         { value: 'next_visit', text: 'Next Visit' },
         { value: 'personal_dentist', text: 'Personal Dentist' }
@@ -293,11 +290,7 @@ export default {
         { label: 'State', key: 'state', class: 'text-left' },
         { label: 'Last Visit', key: 'last_visit', class: 'text-left' },
         { label: 'Next Visit', key: 'next_visit', class: 'text-center' },
-        {
-          label: 'Personal Dentist',
-          key: 'personal_dentist',
-          class: 'text-center'
-        },
+        { label: 'Personal Dentist', key: 'personal_dentist', class: 'text-center' },
         { label: 'Actions', key: 'action', class: 'text-center' }
       ]
     }

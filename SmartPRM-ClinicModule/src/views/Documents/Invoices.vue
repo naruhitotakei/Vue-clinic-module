@@ -11,18 +11,18 @@
                         <div class="iq-card-header-toolbar d-flex align-items-center" style="margin-top: -10px;">
                             <div class="iq-search-bar">
                                 <form action="#" class="searchbox">
-                                    <input type="text" class="text search-input" placeholder="Search" @keyup="myFunction()">
+                                    <input type="text" v-on:keyup="myFunction($event.target.value)" class="text search-input" placeholder="Search" >
                                     <a class="search-link" href="#"><i class="ri-search-line"></i></a>
                                 </form>
                             </div>
                             <iq-card>
-                                <b-form-group label-for="searchoption"
+                                <b-form-group label-for="searchOptions"
                                               label="Search By:">
                                     <b-form-select plain
                                                    v-model="selected"
-                                                   :options="searchoption"
-                                                   id="searchoption"
-                                                   @change="searchOption($event)">
+                                                   :options="searchOptions"
+                                                   id="searchFunction"
+                                                   @change="searchFunction($event)">
                                     </b-form-select>
                                 </b-form-group>
                             </iq-card>
@@ -99,11 +99,12 @@ export default {
   name: 'Invoices',
   data: function () {
     return {
+      dropDownText: '',
       selected: this.value,
-      searchoption: [
+      searchOptions: [
         { value: 'invoice_no', text: 'Invoice number' },
         { value: 'invoice_name', text: 'Invoice Name' },
-        { value: 'description', text: 'Description' },
+        { value: 'desc', text: 'Description' },
         { value: 'amount', text: 'Invoice amount' },
         { value: 'issued_by', text: 'Issued by' },
         { value: 'created_at', text: 'Created at' },
@@ -137,9 +138,22 @@ export default {
         created_at: ''
       }
     },
-    searchOption (event) {
+    searchFunction (event) {
+      this.dropDownText = event
       console.log('SEARCHBY OPTION:', event)
       return event
+    },
+    myFunction (event) {
+      console.log('evemt', event)
+      console.log('this.dropDownText', this.dropDownText)
+
+      if (this.dropDownText) {
+        var sorted = rows.filter((item) => {
+          return item[this.dropDownText].toLowerCase().includes(event.toLowerCase())
+        })
+        this.paginatedItems = sorted
+      }
+      console.log('sorted', sorted)
     },
     add_invoice () {
       console.log('ADD NEW INVOICE CLICKED')

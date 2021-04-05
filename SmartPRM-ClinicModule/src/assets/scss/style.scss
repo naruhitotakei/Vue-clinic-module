@@ -15,6 +15,14 @@
   @import "../css/light/responsive";
 }
 
+
+.fc-scroller{
+  min-height: 863.135px!important;
+}
+.fc-widget-content{
+  min-height: 143px!important;
+}
+
 .iq-global-search>ul>li a, .slick-arrow, .breadcrumb-item>a{
   color: var(--iq-primary);
   &:hover{

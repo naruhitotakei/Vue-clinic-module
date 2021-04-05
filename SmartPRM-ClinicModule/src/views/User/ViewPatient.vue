@@ -461,23 +461,23 @@
           <template v-slot:headerTitle>
                         <h3 class="card-title" style="margin-top: 10px;">Files</h3>
                         <div class="btn-add-patient">
-                            <b-button variant="primary" @click="add_offer"><i class="ri-add-line mr-2"></i>New File</b-button>
+                            <b-button variant="primary" @click="add_file"><i class="ri-add-line mr-2"></i>New File</b-button>
                         </div>
                         <div class="iq-card-header-toolbar d-flex align-items-center" style="margin-top: -10px;">
                             <div class="iq-search-bar">
                                 <form action="#" class="searchbox">
-                                    <input type="text" class="text search-input" placeholder="Search" @keyup="myFunction()">
+                                    <input type="text" class="text search-input" placeholder="Search" @keyup="myFunction($event.target.value)">
                                     <a class="search-link" href="#"><i class="ri-search-line"></i></a>
                                 </form>
                             </div>
                             <iq-card>
-                                <b-form-group label-for="searchoption"
+                                <b-form-group label-for="searchOptions"
                                               label="Search By:">
                                     <b-form-select plain
                                                    v-model="selected"
-                                                   :options="searchoption"
-                                                   id="searchoption"
-                                                   @change="searchOption($event)">
+                                                   :options="searchOptions"
+                                                   id="searchOptions"
+                                                   @change="searchFunction($event)">
                                     </b-form-select>
                                 </b-form-group>
                             </iq-card>
@@ -542,7 +542,9 @@ export default {
   },
   data () {
     return {
-      searchoption: [
+      dropDownText: '',
+      selected: this.value,
+      searchOptions: [
         { value: 'file_name', text: 'File Name' },
         { value: 'created_at', text: 'Created Date' }
       ],
@@ -554,7 +556,7 @@ export default {
         profile_image: require('../../assets/images/user/11.png'),
         fname: 'Nik',
         lname: 'Jone',
-        dob: '2021/03/03',
+        dob: '2021-03-03',
         gender: 'female',
         address: 'Rusjanov trg 10',
         postcode: '1000',
@@ -577,7 +579,6 @@ export default {
         background: require('../../assets/images/page-img/profile-bg.jpg'),
         profile: require('../../assets/images/user/11.png')
       },
-      currentPassword: '',
       countries: [
         { value: 'Slovenia', text: 'Slovenia' },
         { value: 'Canada', text: 'Canada' },
@@ -585,23 +586,37 @@ export default {
         { value: 'USA', text: 'USA' },
         { value: 'India', text: 'India' },
         { value: 'Africa', text: 'Africa' }
-      ],
-      states: [
-        { value: 'California', text: 'California' },
-        { value: 'Florida', text: 'Florida' },
-        { value: 'Georgia', text: 'Georgia' },
-        { value: 'Connecticut', text: 'Connecticut' },
-        { value: 'Louisiana', text: 'Louisiana' }
       ]
     }
   },
   methods: {
+    searchFunction (event) {
+      this.dropDownText = event
+      console.log('SEARCHBY OPTION:', event)
+      console.log('DROPDOWN:', this.dropDownText)
+      return event
+    },
+    add_file () {
+      console.log('Add file clicked')
+    },
+    myFunction (event) {
+      console.log('evemt', event)
+      console.log('DROPDOWN:', this.dropDownText)
+
+      // if (this.dropDownText) {
+      //   var sorted = rows.filter((item) => {
+      //     return item[this.dropDownText].toLowerCase().includes(event.toLowerCase())
+      //   })
+      //   this.paginatedItems = sorted
+      // }
+      // console.log('sorted', sorted)
+    },
     resetForm () {
       this.user = {
         profile_image: require('../../assets/images/user/11.png'),
         fname: 'Nik',
         lname: 'Jone',
-        dob: '2021/03/03',
+        dob: '2021-03-03',
         gender: 'female',
         address: 'Rusjanov trg 10',
         postcode: '1000',
@@ -641,8 +656,6 @@ export default {
 
         reader.readAsDataURL(input.files[0])
       }
-    },
-    changePassword: function () {
     }
   }
 }

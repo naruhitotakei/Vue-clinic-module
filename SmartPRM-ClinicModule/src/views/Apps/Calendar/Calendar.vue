@@ -84,7 +84,7 @@
           </b-modal>
           </form>
           </template>
-          <template v-slot:body>
+          <template  v-slot:body>
             <FullCalendar style="width: 100%; height: 100%;"/>
           </template>
         </iq-card>
