@@ -21,6 +21,7 @@
       <h3 style="text-align: center;">{{this.patientData.patient_name}} - {{this.patientData.desc}}</h3>
       <div class="form-row">
         <div class="col-md-12 mb-3">
+          <!-- <button @click="onClickButton()">onClickButton</button> -->
           <label for="validationDefault01">Start:</label>
           <input type="date" v-model="formData.start" class="form-control" id="validationDefault01" required>
         </div>
@@ -134,13 +135,13 @@ export default {
           { id: 'c', title: 'Doctor 3', eventColor: 'red' }
         ],
         events: [
-          { id: '1', title: 'Appointment 1', start: '2021-03-22T04:30:00', end: '2021-03-22T06:00:00', resourceId: 'a', patient_data: { patient_name: 'Patient 1', desc: 'Cavity' } },
-          { id: '2', title: 'Appointment 1.1', start: '2021-03-22T01:00:00', end: '2021-03-22T03:00:00', resourceId: 'a', patient_data: { patient_name: 'Patient 2', desc: 'Implant' } },
-          { id: '3', title: 'Appointment 2', start: '2021-03-22T02:00:00', end: '2021-03-22T04:00:00', resourceId: 'b', patient_data: { patient_name: 'Patient 3', desc: 'Braces' } },
-          { id: '4', title: 'Appointment 6', start: '2021-03-22T03:30:00', end: '2021-03-22T05:00:00', resourceId: 'b', patient_data: { patient_name: 'Patient 4', desc: 'Checkup' } },
-          { id: '5', title: 'Appointment 5', start: '2021-03-22T01:30:00', end: '2021-03-22T03:30:00', resourceId: 'c', patient_data: { patient_name: 'Patient 5', desc: 'Braces' } },
-          { id: '6', title: 'Appointment 3', start: '2021-03-23T12:00:00', end: '2021-03-23T01:00:00', resourceId: 'c', patient_data: { patient_name: 'Patient 6', desc: 'Cavity' } },
-          { id: '7', title: 'Appointment 4', start: '2021-03-23T10:00:00', end: '2021-03-23T11:00:00', resourceId: 'b', patient_data: { patient_name: 'Patient 7', desc: 'Implant' } }
+          { id: '1', title: 'Appointment 1', start: '2021-04-22T16:30:00', end: '2021-04-22T18:00:00', resourceId: 'a', patient_data: { patient_name: 'Patient 1', desc: 'Cavity' } },
+          { id: '2', title: 'Appointment 1.1', start: '2021-04-22T01:00:00', end: '2021-04-22T03:00:00', resourceId: 'a', patient_data: { patient_name: 'Patient 2', desc: 'Implant' } },
+          { id: '3', title: 'Appointment 2', start: '2021-04-22T02:00:00', end: '2021-04-22T04:00:00', resourceId: 'b', patient_data: { patient_name: 'Patient 3', desc: 'Braces' } },
+          { id: '4', title: 'Appointment 6', start: '2021-04-22T03:30:00', end: '2021-04-22T05:00:00', resourceId: 'b', patient_data: { patient_name: 'Patient 4', desc: 'Checkup' } },
+          { id: '5', title: 'Appointment 5', start: '2021-04-22T01:30:00', end: '2021-04-22T03:30:00', resourceId: 'c', patient_data: { patient_name: 'Patient 5', desc: 'Braces' } },
+          { id: '6', title: 'Appointment 3', start: '2021-04-23T12:00:00', end: '2021-04-23T01:00:00', resourceId: 'c', patient_data: { patient_name: 'Patient 6', desc: 'Cavity' } },
+          { id: '7', title: 'Appointment 4', start: '2021-04-23T10:00:00', end: '2021-04-23T11:00:00', resourceId: 'b', patient_data: { patient_name: 'Patient 7', desc: 'Implant' } }
         ]
       }
     }
@@ -159,6 +160,10 @@ export default {
       var patientArr = this.calendarOptions.events
       this.patientData = patientArr.find(item => item.id === this.eventId).patient_data
       console.log('PATIENT DATA:', this.patientData.patient_name)
+    },
+    onClickButton (event) {
+      // console.log('RESOURCES:', this.calendarOptions.resources)
+      this.$emit('clicked', this.calendarOptions.resources)
     }
   }
 }

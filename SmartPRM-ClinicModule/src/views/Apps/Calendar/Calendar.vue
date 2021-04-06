@@ -8,14 +8,21 @@
           <template v-slot:headerTitle>
             <h4 class="card-title">Select Doctor</h4>
           </template>
-            <b-button-group>
-              <b-button variant="primary"><i class="ri-arrow-left-s-line"></i>Left</b-button>
-              <b-button variant="primary">Doctor 1</b-button>
-              <b-button variant="primary">Doctor 2</b-button>
-              <b-button variant="primary">Doctor 3</b-button>
-              <b-button variant="primary">Right<i class="ri-arrow-right-s-line"></i></b-button>
-            </b-button-group>&nbsp;&nbsp;
-            <b-button v-b-modal.modal-1 variant="primary">All Doctors</b-button>
+          <template v-slot:body>
+          <div class="main-wrapper">
+          <button @click="scroll_left" class="nav-btn btn-primary"><i class="ri-arrow-left-s-line"></i></button>
+            <div class="wrapper-box">
+              <div id="box">
+            <template v-for="(item,index) in doctors">
+              <b-checkbox class="custom-switch-color" :color="item.color" v-model="item.checked" name="check-button" inline :key="index">
+                {{ item.label }}
+              </b-checkbox>
+            </template></div></div>
+          <button @click="scroll_right" class="nav-btn btn-primary"><i class="ri-arrow-right-s-line"></i></button>
+            <b-checkbox name="check-button" checked="true" inline>All Doctors</b-checkbox>
+          <!-- <button @clicked="onClickChild">onClickButton</button> -->
+          </div>
+          </template>
         </iq-card>
           </template>
           <template v-slot:headerAction>
@@ -112,6 +119,23 @@ export default {
         answeredBy: '',
         presence: ''
       },
+      doctors: [
+        {
+          label: 'Doctor 1',
+          checked: false,
+          disabled: false
+        },
+        {
+          label: 'Doctor 2',
+          checked: false,
+          disabled: false
+        },
+        {
+          label: 'Doctor 3',
+          checked: false,
+          disabled: false
+        }
+      ],
       config: {
         dateFormat: 'Y-m-d',
         inline: true
@@ -127,7 +151,62 @@ export default {
     submitFormData () {
       console.log('FORM DATA:', this.formData)
       appointmentBook(this.formData)
+    },
+    onClickChild (value) {
+      console.log('HII FROM CHILD', value) // someValue
+    },
+    scroll_left () {
+      console.log('scroll left call')
+      let content = document.querySelector('.wrapper-box')
+      content.scrollLeft -= 90
+    },
+    scroll_right () {
+      console.log('scroll right call')
+      let content = document.querySelector('.wrapper-box')
+      content.scrollLeft += 90
     }
   }
 }
 </script>
+<style scoped>
+.main-wrapper {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-around;
+  width: 50%;
+  margin-left: -15px;
+}
+.wrapper-box {
+  max-width: 185px;
+  /* overflow: auto; */
+  overflow: hidden;
+}
+.nav-btn {
+  border-radius: 25px;
+  border: none;
+  height: 30px;
+  width: 30px;
+}
+#box {
+  width: max-content;
+  /* height: 200px;
+  border: 1px solid black; */
+  position: relative;
+}
+#box b-checkbox{
+  position: absolute;
+  height: 100%;
+  width: 50px;
+}
+#box .left {
+  left: 0;
+}
+
+#box .right {
+  right: 0;
+}
+
+#box .center {
+  left: calc(50% - 25px);
+}
+</style>
