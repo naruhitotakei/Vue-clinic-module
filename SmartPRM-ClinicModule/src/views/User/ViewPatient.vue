@@ -6,16 +6,16 @@
           <iq-card body-class="p-0">
             <template v-slot:body>
               <div class="iq-edit-list">
-                <tab-nav :pills="true" class="iq-edit-profile d-flex">
-                  <a id="myTab" class="nav-link show col p-0 ri-arrow-left-line" style="padding: 10px 0px !important; font-size: x-large;" @click="$router.push('/patients')" :active="false"></a>
-                  <!-- <tab-nav-items class="col p-0" :active="false" href="/patients" title="Back" /> -->
-                  <tab-nav-items class="col p-0" :active="true" href="#overview" title="Overview" />
-                  <tab-nav-items class="col-md-2 p-0" :active="false" href="#info" title="Personal Information" />
-                  <tab-nav-items class="col p-0" :active="false" href="#files" title="Files" />
-                  <tab-nav-items class="col p-0" :active="false" href="#appointments" title="Appointments" />
-                  <tab-nav-items class="col p-0" :active="false" href="#offers" title="Offers" />
-                  <tab-nav-items class="col p-0" :active="false" href="#invoices" title="Invoices" />
-                </tab-nav>
+                  <tab-nav :pills="true" class="iq-edit-profile d-flex">
+                      <a id="myTab" class="nav-link show col p-0 ri-arrow-left-line" style="padding: 10px 0px !important; font-size: x-large;" @click="$router.push('/patients')" :active="false"></a>
+                      <!-- <tab-nav-items class="col p-0" :active="false" href="/patients" title="Back" /> -->
+                      <tab-nav-items class="col p-0" :active="true" href="#overview" title="Overview" />
+                      <tab-nav-items class="col-md-2 p-0" :active="false" href="#info" title="Personal Information" />
+                      <tab-nav-items class="col p-0" :active="false" href="#files" title="Files" />
+                      <tab-nav-items class="col p-0" :active="false" href="#appointments" title="Appointments" />
+                      <tab-nav-items class="col p-0" :active="false" href="#invoices" title="Invoices" />
+                      <tab-nav-items class="col p-0" :active="false" href="#offers" title="Offers" />
+                  </tab-nav>
               </div>
             </template>
           </iq-card>
@@ -30,13 +30,20 @@
         <iq-card body-class="iq-card-body pl-0 pr-0 pt-0">
           <template v-slot:body>
             <div class="docter-details-block">
-              <div class="doc-profile-bg bg-primary" style="height:100px;">
-              </div>
+                <div class="doc-profile-bg bg-primary" style="height:95px;">
+                    <b-col md="14" class="d-flex justify-content-between">
+                        <button type="" class="btn btn-light mt-2 ml-4">Add Appointment</button>&nbsp;&nbsp;
+                        <button type="" class="btn btn-danger mt-2 mr-4">Delete Patient</button>&nbsp;&nbsp;
+                    </b-col>
+                    <b-col md="14" class="d-flex justify-content-start">
+                        <button type="" class="btn btn-light mt-2 ml-4">Add Assignment</button>
+                    </b-col>
+                </div>
               <div class="docter-profile text-center">
                 <b-img :src="doctor.profile" alt="profile-img" class="avatar-130 img-fluid" />
               </div>
               <div class="text-center mt-3 pl-3 pr-3">
-                <h4><b>Nika Klemenc</b></h4>
+                <h4><b>Anita Jereb</b></h4>
                 <!-- <p>Kirurg</p> -->
                 </div>
               <hr>
@@ -46,18 +53,18 @@
                   <span>Number of visits</span>
                 </li>
                 <li class="text-center">
-                  <h4 class="counter">2021-03-03</h4>
+                  <h4 class="counter">9 months, 13 days</h4>
                   <span>Time since first visit</span>
                 </li>
               </ul>
               <hr>
               <div class="row px-3 ml-1">
                   <div class="col-4">Phone:</div>
-                  <div class="col-8">9876543210</div>
+                  <div class="col-8">+38640076191</div>
                   <div class="col-4">Email:</div>
-                  <div class="col-8">nika@staging.in</div>
+                  <div class="col-8">anita.jereb@staging.emazing.si</div>
                   <div class="col-4">Address:</div>
-                  <div class="col-8">abc, New York</div>
+                  <div class="col-8">Prva ulica 11, 1000 Ljubljana</div>
                 </div>
             </div>
           </template>
@@ -70,11 +77,11 @@
               </div>
             </div>
             <div class="iq-card-body">
-                <div class="row">
-                  <div class="col-7">Personal dentist:</div>
-                  <div class="col-5">Nika</div>
-                  <div class="col-7">Personal surgeon:</div>
-                  <div class="col-5">Klemenc</div>
+                <div class="row font-size-16">
+                  <div class="col-6">Personal dentist:</div>
+                  <div class="col-6">Dr. Miha Breznik</div>
+                  <div class="col-6">Personal surgeon:</div>
+                  <div class="col-6">Dr. Nika Klemenc</div>
                 </div>
             </div>
           </template>
@@ -83,155 +90,139 @@
           <template v-slot:body>
             <div class="iq-card-header d-flex justify-content-between">
               <div class="iq-header-title">
-                <h4 class="card-title">Photos</h4><hr/>
+                <h4 class="card-title">Files</h4><hr/>
               </div>
             </div>
             <div class="iq-card-body">
-              <ul class="profile-img-gallary d-flex flex-wrap p-0 m-0">
-                <li class="col-md-4 col-6 pb-3"><a href="javascript:void(0);"><img src="../../assets/images/login/1.png" alt="gallary-image" class="img-fluid"></a></li>
-                <li class="col-md-4 col-6 pb-3"><a href="javascript:void(0);"><img src="../../assets/images/login/2.png" alt="gallary-image" class="img-fluid"></a></li>
-                <li class="col-md-4 col-6 pb-3"><a href="javascript:void(0);"><img src="../../assets/images/login/3.png" alt="gallary-image" class="img-fluid"></a></li>
-                <li class="col-md-4 col-6 pb-3"><a href="javascript:void(0);"><img src="../../assets/images/login/1.png" alt="gallary-image" class="img-fluid"></a></li>
-                <li class="col-md-4 col-6 pb-3"><a href="javascript:void(0);"><img src="../../assets/images/login/2.png" alt="gallary-image" class="img-fluid"></a></li>
-                <li class="col-md-4 col-6 pb-3"><a href="javascript:void(0);"><img src="../../assets/images/login/3.png" alt="gallary-image" class="img-fluid"></a></li>
-                <li class="col-md-4 col-6 pb-0"><a href="javascript:void(0);"><img src="../../assets/images/login/1.png" alt="gallary-image" class="img-fluid"></a></li>
-                <li class="col-md-4 col-6 pb-0"><a href="javascript:void(0);"><img src="../../assets/images/login/2.png" alt="gallary-image" class="img-fluid"></a></li>
-                <li class="col-md-4 col-6 pb-0"><a href="javascript:void(0);"><img src="../../assets/images/login/3.png" alt="gallary-image" class="img-fluid"></a></li>
+              <ul class="profile-img-gallary d-flex flex-wrap p-0 m-0 font-size-12">
+                <li class="col-md-4 col-6"><a href="javascript:void(0);"><img src="../../assets/images/login/1.png" alt="gallary-image" class="img-fluid"></a><div class="text-center"><p class="mb-0 pb-0">x-ray_1.jpg</p><p>03-03-2021</p></div></li>
+                <li class="col-md-4 col-6"><a href="javascript:void(0);"><img src="../../assets/images/login/2.png" alt="gallary-image" class="img-fluid"></a><div class="text-center"><p class="mb-0 pb-0">blood_test_1.jpg</p><p>10-03-2021</p></div></li>
+                <li class="col-md-4 col-6"><a href="javascript:void(0);"><img src="../../assets/images/login/3.png" alt="gallary-image" class="img-fluid"></a><div class="text-center"><p class="mb-0 pb-0">imprint_1.jpg</p><p>09-03-2021</p></div></li>
+                <li class="col-md-4 col-6"><a href="javascript:void(0);"><img src="../../assets/images/login/1.png" alt="gallary-image" class="img-fluid"></a><div class="text-center"><p class="mb-0 pb-0">imprint_2.jpg</p><p>17-04-2021</p></div></li>
+                <li class="col-md-4 col-6"><a href="javascript:void(0);"><img src="../../assets/images/login/2.png" alt="gallary-image" class="img-fluid"></a><div class="text-center"><p class="mb-0 pb-0">x-ray_2.jpg</p><p>21-03-2021</p></div></li>
+                <li class="col-md-4 col-6"><a href="javascript:void(0);"><img src="../../assets/images/login/3.png" alt="gallary-image" class="img-fluid"></a><div class="text-center"><p class="mb-0 pb-0">anamnesis_1.jpg</p><p>08-03-2021</p></div></li>
+                <li class="col-md-4 col-6"><a href="javascript:void(0);"><img src="../../assets/images/login/1.png" alt="gallary-image" class="img-fluid"></a><div class="text-center"><p class="mb-0 pb-0">anamnesis_2.jpg</p><p>11-04-2021</p></div></li>
+                <li class="col-md-4 col-6"><a href="javascript:void(0);"><img src="../../assets/images/login/2.png" alt="gallary-image" class="img-fluid"></a><div class="text-center"><p class="mb-0 pb-0">blood_test_2.jpg</p><p>21-04-2021</p></div></li>
+                <li class="col-md-4 col-6"><a href="javascript:void(0);"><img src="../../assets/images/login/3.png" alt="gallary-image" class="img-fluid"></a><div class="text-center"><p class="mb-0 pb-0">x-ray_3.jpg</p><p>12-04-2021</p></div></li>
               </ul>
             </div>
           </template>
         </iq-card>
       </b-col>
       <b-col lg="8">
-        <b-container>
-        <b-row>
-          <b-col md="6">
-            <iq-card>
-              <template v-slot:body>
-                <div class="iq-card-header d-flex justify-content-between">
-              <div class="iq-header-title">
-                <h4 class="card-title">Patient Notes</h4><hr/>
-              </div>
-            </div>
-                <ul class="list-inline m-0 p-0">
-                  <li class="d-flex align-items-center justify-content-between mb-3">
-                    <div>
-                      <h6>Treatment was good!</h6>
-                      <p class="mb-0">03/03/2021</p>
-                    </div>
-                    <div><a href="#" class="btn iq-bg-primary">Open</a></div>
-                  </li>
-                  <li class="d-flex align-items-center justify-content-between mb-3">
-                    <div>
-                      <h6>My Health in better Now</h6>
-                      <p class="mb-0">03/03/2021</p>
-                    </div>
-                    <div><a href="#" class="btn iq-bg-primary">Open</a></div>
-                  </li>
-                  <li class="d-flex align-items-center justify-content-between mb-3">
-                    <div>
-                      <h6>No Effacted</h6>
-                      <p class="mb-0">03/03/2021</p>
-                    </div>
-                    <div><a href="#" class="btn iq-bg-primary">Open</a></div>
-                  </li>
-                  <li class="d-flex align-items-center justify-content-between mb-3">
-                    <div>
-                      <h6>Operation Successfull</h6>
-                      <p class="mb-0">03/03/2021</p>
-                    </div>
-                    <div><a href="#" class="btn iq-bg-primary">Open</a></div>
-                  </li>
-                  <li class="d-flex align-items-center justify-content-between mb-3">
-                    <div>
-                      <h6>Medical Care is just a click away</h6>
-                      <p class="mb-0">03/03/2021 </p>
-                    </div>
-                    <div><a href="#" class="btn iq-bg-primary">Open</a></div>
-                  </li>
-                </ul>
-              </template>
-            </iq-card>
-          <b-card
-          text-variant="white"
-          bg-variant="danger"
-          class="iq-mb-3 iq-card"
-        >
-          <b-card-title class="text-white">Allergies</b-card-title>
-          <blockquote class="blockquote mb-0">
-            <p class="font-size-14">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer posuere erat a ante.</p>
-            <footer class="blockquote-footer text-white font-size-12">Someone famous in <cite title="Source Title">Source Title</cite></footer>
-          </blockquote>
-        </b-card>
-          </b-col>
-          <b-col md="6">
-            <iq-card>
-              <template v-slot:body>
-                <div class="iq-card-header d-flex justify-content-between">
-              <div class="iq-header-title">
-                <h4 class="card-title">Future Appointments</h4><hr/>
-              </div>
-            </div>
-                <ul class="iq-timeline">
-                  <li>
-                    <div class="timeline-dots border-success"></div>
-                    <h6 class="">Dr. Ahlin Send you Photo</h6>
-                    <small class="mt-1">23 November 2019</small>
-                  </li>
-                  <li>
-                    <div class="timeline-dots border-danger"></div>
-                    <h6 class="">Reminder : Opertion Time!</h6>
-                    <small class="mt-1">20 November 2019</small>
-                  </li>
-                  <li>
-                    <div class="timeline-dots border-primary"></div>
-                    <h6 class="mb-1">Patient Call</h6>
-                    <small class="mt-1">19 November 2019</small>
-                  </li>
-                </ul>
-              </template>
-            </iq-card>
-            <iq-card>
-              <template v-slot:body>
-                <div class="iq-card-header d-flex justify-content-between">
-              <div class="iq-header-title">
-                <h4 class="card-title">Past Appointments</h4>
-                <hr/>
-              </div>
-            </div>
-                <ul class="iq-timeline">
-                  <li>
-                    <div class="timeline-dots border-success"></div>
-                    <h6 class="">Dr. Ahlin Send you Photo</h6>
-                    <small class="mt-1">23 November 2019</small>
-                  </li>
-                  <li>
-                    <div class="timeline-dots border-danger"></div>
-                    <h6 class="">Reminder : Opertion Time!</h6>
-                    <small class="mt-1">20 November 2019</small>
-                  </li>
-                  <li>
-                    <div class="timeline-dots border-primary"></div>
-                    <h6 class="mb-1">Patient Call</h6>
-                    <small class="mt-1">19 November 2019</small>
-                  </li>
-                </ul>
-              </template>
-            </iq-card>
-          </b-col>
-          <b-col md="12">
-          <b-card title="General Notes" class="iq-mb-3 iq-card"><hr/>
-            <b-card-text>This is another card with title and supporting text below. This card has some additional content to make it slightly taller overall.</b-card-text>
-            <b-card-text><small class="text-muted">Last updated 3 mins ago</small></b-card-text>
-          </b-card>
-          </b-col>
-          <b-col md="12" style="text-align: right;">
-            <button type="" class="btn btn-primary">Add Appointment</button>&nbsp;&nbsp;
-            <button type="" class="btn btn-primary">Add Assignment</button>&nbsp;&nbsp;
-            <button type="" class="btn btn-primary">Delete Patient</button>
-          </b-col>
-        </b-row>
-        </b-container>
+          <b-container>
+              <b-col md="14">
+                  <b-card title="General Notes" class="iq-mb-3 iq-card">
+                      <hr />
+                      <b-card-text>This is another card with title and supporting text below. This card has some additional content to make it slightly taller overall.</b-card-text>
+                      <b-card-text><small class="text-muted">Last updated 3 mins ago</small></b-card-text>
+                  </b-card>
+              </b-col>
+              <b-card text-variant="white"
+                      bg-variant="danger"
+                      class="iq-mb-3 iq-card">
+                  <b-card-title class="text-white">Allergies</b-card-title>
+                  <blockquote class="blockquote mb-0">
+                      <p class="font-size-14">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer posuere erat a ante.</p>
+                      <footer class="blockquote-footer text-white font-size-12">Someone famous in <cite title="Source Title">Source Title</cite></footer>
+                  </blockquote>
+              </b-card>
+              <b-row>
+                  <b-col md="6">
+                      <iq-card>
+                          <template v-slot:body>
+                              <div class="iq-card-header d-flex justify-content-between">
+                                  <div class="iq-header-title">
+                                      <h4 class="card-title">Patient Notes</h4><hr />
+                                  </div>
+                              </div>
+                              <ul class="list-inline m-0">
+                                  <li class="d-flex align-items-center justify-content-between mb-3">
+                                      <div>
+                                          <h6>Treatment was good!</h6>
+                                          <p class="mb-0">03/03/2021</p>
+                                      </div>
+                                      <div><a href="#" class="btn iq-bg-primary">Open</a></div>
+                                  </li>
+                                  <li class="d-flex align-items-center justify-content-between mb-3">
+                                      <div>
+                                          <h6>My Health in better Now</h6>
+                                          <p class="mb-0">03/03/2021</p>
+                                      </div>
+                                      <div><a href="#" class="btn iq-bg-primary">Open</a></div>
+                                  </li>
+                                  <li class="d-flex align-items-center justify-content-between mb-3">
+                                      <div>
+                                          <h6>No Effacted</h6>
+                                          <p class="mb-0">03/03/2021</p>
+                                      </div>
+                                      <div><a href="#" class="btn iq-bg-primary">Open</a></div>
+                                  </li>
+                                  <li class="d-flex align-items-center justify-content-between mb-3">
+                                      <div>
+                                          <h6>Operation Successfull</h6>
+                                          <p class="mb-0">03/03/2021</p>
+                                      </div>
+                                      <div><a href="#" class="btn iq-bg-primary">Open</a></div>
+                                  </li>
+                                  <li class="d-flex align-items-center justify-content-between mb-3">
+                                      <div>
+                                          <h6>Medical Care is just a click away</h6>
+                                          <p class="mb-0">03/03/2021 </p>
+                                      </div>
+                                      <div><a href="#" class="btn iq-bg-primary">Open</a></div>
+                                  </li>
+                              </ul>
+                          </template>
+                      </iq-card>
+                  </b-col>
+                  <b-col md="6">
+                      <iq-card>
+                          <template v-slot:body>
+                              <div class="iq-card-header d-flex justify-content-between">
+                                  <div class="iq-header-title">
+                                      <h4 class="card-title">Future Appointments</h4><hr />
+                                  </div>
+                              </div>
+                              <ul class="iq-timeline">
+                                  <li>
+                                      <div class="timeline-dots border-success"></div>
+                                      <h6 class="">Check up</h6>
+                                      <small class="mt-1">23 June 2021</small>
+                                  </li>
+                              </ul>
+                          </template>
+                      </iq-card>
+                      <iq-card>
+                          <template v-slot:body>
+                              <div class="iq-card-header d-flex justify-content-between">
+                                  <div class="iq-header-title">
+                                      <h4 class="card-title">Past Appointments</h4>
+                                      <hr />
+                                  </div>
+                              </div>
+                              <ul class="iq-timeline">
+                                  <li>
+                                      <div class="timeline-dots border-success"></div>
+                                      <h6 class="">Dr. Ahlin Send you Photo</h6>
+                                      <small class="mt-1">23 November 2019</small>
+                                  </li>
+                                  <li>
+                                      <div class="timeline-dots border-danger"></div>
+                                      <h6 class="">Reminder : Opertion Time!</h6>
+                                      <small class="mt-1">20 November 2019</small>
+                                  </li>
+                                  <li>
+                                      <div class="timeline-dots border-primary"></div>
+                                      <h6 class="mb-1">Patient Call</h6>
+                                      <small class="mt-1">19 November 2019</small>
+                                  </li>
+                              </ul>
+                          </template>
+                      </iq-card>
+                  </b-col>
+              </b-row>
+          </b-container>
       </b-col>
     </b-row>
                 </iq-card>

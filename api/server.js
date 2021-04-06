@@ -9,6 +9,7 @@ const app = express(),
 const daoUser = require('./dao/daoUser')
 const daoEnquiries = require('./dao/daoEnquiries')
 const daoAssignments = require('./dao/daoAssignments')
+const daoStatistics = require('./dao/daoStatistics')
 const fiscalVerification = require('./services/fiscalVerification')
 
 app.use(cors({
@@ -26,6 +27,7 @@ app.use(session({resave: true, saveUninitialized: true, secret: 'BwhFeenj9DcRqAN
 ///////////////////////////////////
 const enquiriesPermission = "Patients"
 const assignmentsPermission = "Assignments"
+const clinicStatisticsPermission = "Statistics For Clinic"
 
 ///////////////////////////////////
 // user login, logout, ...
@@ -107,6 +109,17 @@ app.get('/api/invoice/premises/:premiseId', (req, res) => {
 
   fiscalVerification.registerPremises(premiseId)
 
+});
+
+///////////////////////////////////
+// statistics
+///////////////////////////////////
+app.get('/api/statistics/clinic', (req, res) => {
+  const clinicId = 123 // todo - get it from session
+  if(req.session.prm_user && req.session.prm_user.permissions && checkPermission(req.session.prm_user.permissions, clinicStatisticsPermission))
+      daoStatistics.getClinicStatistics(req, res, clinicId)
+  else
+      res.status(401).json("OK: user unauthorized")
 });
 
 ///////////////////////////////////
