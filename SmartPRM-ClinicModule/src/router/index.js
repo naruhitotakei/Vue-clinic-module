@@ -68,7 +68,6 @@ import FormCheckboxes from '../views/Forms/FormCheckboxes'
 import Profile from '../views/User/Profile'
 import ProfileEdit from '../views/User/ProfileEdit'
 import AddUser from '../views/User/AddUser'
-import UserList from '../views/User/UserList'
 /* Todo */
 import Callback from '../views/AuthPages/Default/Callback'
 /* Plugins Views */
@@ -341,14 +340,6 @@ const tableChildRoute = (prop, mode = false) => [
   //   meta: { dark: mode, auth: true, name: 'Editable' },
   //   component: EditableTable
   // }
-]
-const settingChildRoute = (prop, mode = false) => [
-  {
-    path: 'user-list',
-    name: prop + '.list',
-    meta: { dark: mode, auth: true, name: 'User List' },
-    component: UserList
-  }
 ]
 
 const statisticsChildRoute = (prop, mode = false) => [
@@ -648,13 +639,6 @@ const routes = [
     component: Layout1,
     meta: { auth: true },
     children: tableChildRoute('table')
-  },
-  {
-    path: '/setting',
-    name: 'setting',
-    component: Layout1,
-    meta: { auth: true },
-    children: settingChildRoute('setting')
   },
   {
     path: '/chart',
