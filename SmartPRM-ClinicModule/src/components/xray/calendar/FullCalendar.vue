@@ -1,10 +1,11 @@
 <template>
 <b-container fluid>
   <VueFullCalendar
+  :datesAboveResources="true" 
   :defaultView="calendarOptions.defaultView"
   :plugins="calendarOptions.plugins"
   :events="calendarOptions.events"
-  :resources="calendarOptions.resources"
+  :resources="resourcesOuter"
   :header="{
       left: 'prev,next today',
       center: 'title',
@@ -21,7 +22,6 @@
       <h3 style="text-align: center;">{{this.patientData.patient_name}} - {{this.patientData.desc}}</h3>
       <div class="form-row">
         <div class="col-md-12 mb-3">
-          <!-- <button @click="onClickButton()">onClickButton</button> -->
           <label for="validationDefault01">Start:</label>
           <input type="date" v-model="formData.start" class="form-control" id="validationDefault01" required>
         </div>
@@ -68,6 +68,9 @@ export default {
   // name: 'VueFullCalendar',
   components: {
     VueFullCalendar
+  },
+  props: {
+    resourcesOuter: Array
   },
   data () {
     return {
@@ -129,11 +132,12 @@ export default {
         plugins: [dayGridPlugin, listPlugin, timeGridPlugin, interactionPlugin, resourceTimeGrid],
         timeZone: 'UTC',
         defaultView: 'dayGridMonth',
-        resources: [
-          { id: 'a', title: 'Doctor 1', eventColor: 'sandybrown' },
-          { id: 'b', title: 'Doctor 2', eventColor: 'blue' },
-          { id: 'c', title: 'Doctor 3', eventColor: 'red' }
-        ],
+        resources: this.resourcesOuter,
+        // resources: [
+        //   { id: 'a', title: 'Doctor 1', eventColor: 'sandybrown' },
+        //   { id: 'b', title: 'Doctor 2', eventColor: 'blue' },
+        //   { id: 'c', title: 'Doctor 3', eventColor: 'red' }
+        // ],
         events: [
           { id: '1', title: 'Appointment 1', start: '2021-04-22T16:30:00', end: '2021-04-22T18:00:00', resourceId: 'a', patient_data: { patient_name: 'Patient 1', desc: 'Cavity' } },
           { id: '2', title: 'Appointment 1.1', start: '2021-04-22T01:00:00', end: '2021-04-22T03:00:00', resourceId: 'a', patient_data: { patient_name: 'Patient 2', desc: 'Implant' } },
@@ -145,6 +149,9 @@ export default {
         ]
       }
     }
+  },
+  mounted () {
+    console.log('this.resourcesOuter', this.resourcesOuter)
   },
   methods: {
     submitFormData () {
@@ -160,10 +167,6 @@ export default {
       var patientArr = this.calendarOptions.events
       this.patientData = patientArr.find(item => item.id === this.eventId).patient_data
       console.log('PATIENT DATA:', this.patientData.patient_name)
-    },
-    onClickButton (event) {
-      // console.log('RESOURCES:', this.calendarOptions.resources)
-      this.$emit('clicked', this.calendarOptions.resources)
     }
   }
 }

@@ -14,13 +14,12 @@
             <div class="wrapper-box">
               <div id="box">
             <template v-for="(item,index) in doctors">
-              <b-checkbox class="custom-switch-color" :color="item.color" v-model="item.checked" name="check-button" inline :key="index">
-                {{ item.label }}
+              <b-checkbox class="custom-switch-color" :color="item.color" @change="checkData(item)" v-model="item.checked" name="check-button" inline :key="index">
+                {{ item.title }}
               </b-checkbox>
             </template></div></div>
           <button @click="scroll_right" class="nav-btn btn-primary"><i class="ri-arrow-right-s-line"></i></button>
-            <b-checkbox name="check-button" checked="true" inline>All Doctors</b-checkbox>
-          <!-- <button @clicked="onClickChild">onClickButton</button> -->
+            <b-checkbox name="check-button" v-model="allDoctorCheck" @change="allDoctorFun(allDoctorCheck)" :disabled="checkedListArray.length==0" inline>All Doctors</b-checkbox>
           </div>
           </template>
         </iq-card>
@@ -92,7 +91,7 @@
           </form>
           </template>
           <template  v-slot:body>
-            <FullCalendar style="width: 100%; height: 100%;"/>
+            <FullCalendar :resourcesOuter="resources" style="width: 100%; height: 100%;"/>
           </template>
         </iq-card>
       </b-col>
@@ -107,6 +106,18 @@ export default {
   components: { },
   data () {
     return {
+      allDoctorCheck: true,
+      checkedListArray: [],
+      resources: [
+        { id: 'a', title: 'Doctor 1', eventColor: 'sandybrown' },
+        { id: 'b', title: 'Doctor 2', eventColor: 'blue' },
+        { id: 'c', title: 'Doctor 3', eventColor: 'red' }
+      ],
+      clonedResources: [
+        { id: 'a', title: 'Doctor 1', eventColor: 'sandybrown' },
+        { id: 'b', title: 'Doctor 2', eventColor: 'blue' },
+        { id: 'c', title: 'Doctor 3', eventColor: 'red' }
+      ],
       formData: {
         appName: '',
         dateTime: '',
@@ -121,17 +132,20 @@ export default {
       },
       doctors: [
         {
-          label: 'Doctor 1',
+          id: 'a',
+          title: 'Doctor 1',
           checked: false,
           disabled: false
         },
         {
-          label: 'Doctor 2',
+          id: 'b',
+          title: 'Doctor 2',
           checked: false,
           disabled: false
         },
         {
-          label: 'Doctor 3',
+          id: 'c',
+          title: 'Doctor 3',
           checked: false,
           disabled: false
         }
@@ -148,20 +162,73 @@ export default {
   computed: {
   },
   methods: {
+    allDoctorFun (value) {
+      // console.log('before THIS.CLONEDRESOURCES:', this.clonedResources)
+      // if (value) {
+      //   this.clonedResources.map((x) => {
+      //     x.checked = true
+      //   })
+      //   console.log('THIS.CLONEDRESOURCES:', this.clonedResources)
+      // }
+      this.resources = value ? this.clonedResources : this.checkedListArray
+    },
+    checkData (item) {
+      let check = this.checkedListArray.includes(item)
+      let tempArray = this.checkedListArray
+      let resourcesArrayCloned = this.resources
+      let tempArray1 = []
+      if (!check) {
+        tempArray.push(item)
+        for (var i = 0; i < tempArray.length; i++) {
+          for (var j = 0; j < this.clonedResources.length; j++) {
+            if (tempArray[i].id === this.clonedResources[j].id) {
+              tempArray1.push(this.clonedResources[j])
+            }
+          }
+        }
+      } else {
+        tempArray.filter((data, index) => {
+          if (data.id === item.id) {
+            tempArray.splice(index, 1)
+          }
+        })
+        resourcesArrayCloned.filter((data) => {
+          if (data.id === item.id) {
+            tempArray1 = resourcesArrayCloned.filter((o) => {
+              if (o.id !== item.id) {
+                return o
+              }
+            })
+          }
+        })
+      }
+      this.checkedListArray = tempArray
+      if (tempArray1.length < this.clonedResources.length && tempArray1.length !== 0) {
+        this.resources = tempArray1
+        this.allDoctorCheck = false
+      } else {
+        if (tempArray1.length === 0 || tempArray1.length === this.clonedResources.length) {
+          this.resources = this.clonedResources
+          this.allDoctorCheck = true
+        }
+      }
+      // console.log('cloned array length:', this.clonedResources.length)
+      // console.log('temparray1 array length:', tempArray1.length)
+      // console.log('ALL DOCTOR CHECK', this.allDoctorCheck)
+      // this.resources = tempArray1.length > 0 ? (tempArray1, this.allDoctorCheck = false) : this.clonedResources
+      // console.log('TEMARRAY1:', tempArray1)
+      // console.log('TEMARRAY:', tempArray)
+      // console.log('ITEM:', item)
+    },
     submitFormData () {
       console.log('FORM DATA:', this.formData)
       appointmentBook(this.formData)
     },
-    onClickChild (value) {
-      console.log('HII FROM CHILD', value) // someValue
-    },
     scroll_left () {
-      console.log('scroll left call')
       let content = document.querySelector('.wrapper-box')
       content.scrollLeft -= 90
     },
     scroll_right () {
-      console.log('scroll right call')
       let content = document.querySelector('.wrapper-box')
       content.scrollLeft += 90
     }
