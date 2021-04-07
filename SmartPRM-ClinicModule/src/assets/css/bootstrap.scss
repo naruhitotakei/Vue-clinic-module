@@ -589,6 +589,11 @@ pre code {
     margin-top: 1.375rem;
 }
 
+.completed-column {
+    max-width: 5px;
+    padding: 0.5rem 0.75rem 0 0 !important;
+}
+
 @media (min-width:576px) {
 	.container {
 		max-width: 540px
