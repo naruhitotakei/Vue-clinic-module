@@ -23,13 +23,13 @@
         <div class="col-md-12 mb-3">
           <!-- <button @click="onClickButton()">onClickButton</button> -->
           <label for="validationDefault01">Start:</label>
-          <input type="date" v-model="formData.start" class="form-control" id="validationDefault01" required>
+          <input type="date" v-model="formData.start" class="form-control" id="validationDefault01" required style="max-width: 200px;">
         </div>
         <div class="col-md-12 mb-3">
           <label for="validationDefault01">Duration:</label>
           <div style="display: flex;">
-          <input type="number" v-model="formData.hours" class="form-control col-md-6" min="0" placeholder="Hours" id="validationDefault01" required>
-          <input type="number" v-model="formData.minutes" class="form-control col-md-6" min="0" step="5" placeholder="Minutes" id="validationDefault01" required>
+          <input type="number" v-model="formData.hours" class="form-control col-md-6" min="0" placeholder="Hours" id="validationDefault01" required style="max-width: 100px;">
+          <input type="number" v-model="formData.minutes" class="form-control col-md-6" min="0" step="5" placeholder="Minutes" id="validationDefault01" required style="max-width: 100px;">
         </div></div>
         <div class="col-md-12 mb-3">
           <label for="validationDefault01">Notes:</label>
