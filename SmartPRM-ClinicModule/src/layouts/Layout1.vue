@@ -98,7 +98,7 @@
                           <div class="rounded iq-card-icon iq-bg-success">
                             <i class="ri-profile-line"></i>
                           </div>
-                          <div class="media-body ml-3">
+                          <div class="media-body ml-3" style="cursor: pointer;">
                             <h6 class="mb-0 ">{{ $t('nav.user.profileEditTitle') }}</h6>
                             <p class="mb-0 font-size-12">{{ $t('nav.user.profileEditSub') }}</p>
                           </div>
@@ -109,7 +109,7 @@
                           <div class="rounded iq-card-icon iq-bg-danger">
                             <i class="ri-account-box-line"></i>
                           </div>
-                          <div class="media-body ml-3">
+                          <div class="media-body ml-3" style="cursor: pointer;">
                             <h6 class="mb-0 ">{{ $t('nav.user.accountSettingTitle') }}</h6>
                             <p class="mb-0 font-size-12">{{ $t('nav.user.accountSettingSub')}}</p>
                           </div>
@@ -127,13 +127,13 @@
   <b-modal v-model="profileModalShow" title="Edit Profile" ok-title="Save Changes" @ok="editProfileData" cancel-title="Close">
     <form>
       <div class="form-row">
-        <div style="margin: auto;text-align: center;">
+        <div style="margin: auto; text-align: center;">
                   <div class="add-img-user profile-img-edit">
                     <b-img class="profile-pic height-150 width-150" fluid :src="user.profile_image" alt="profile-pic" />
                     <input type="hidden" v-model="user.profile_image">
                     <div class="p-image">
-                      <b-button variant="none" class="upload-button iq-bg-primary position-relative">
-                        <input type="file" @change="previewImage" class="h-100 position-absolute" accept="image/*" style="opacity: 0;" />
+                      <b-button variant="none" class="upload-button iq-bg-primary position-relative" style="left: 12px;">
+                        <input type="file" @change="previewImage" class="h-100 position-absolute" accept="image/*" style="opacity: 0" />
                         File Upload
                       </b-button>
                     </div>
