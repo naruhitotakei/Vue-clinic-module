@@ -589,9 +589,18 @@ pre code {
     margin-top: 1.375rem;
 }
 
-.completed-column {
-    max-width: 5px;
-    padding: 0.5rem 0.75rem 0 0 !important;
+.completed-assignment {
+    padding-top: 0.5rem !important;
+    position: absolute;
+}
+
+.assignments-container {
+    text-align: justify;
+}
+
+.assignments-container span {
+    width: 285px;
+    display: inline-block;
 }
 
 @media (min-width:576px) {
