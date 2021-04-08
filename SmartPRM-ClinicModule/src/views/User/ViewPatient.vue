@@ -225,7 +225,7 @@
           </b-container>
       </b-col>
     </b-row>
-                </iq-card>
+            </iq-card>
               </tab-content-item>
               <tab-content-item :active="false" id="info" >
                  <iq-card style="background: none;">
@@ -312,7 +312,7 @@
                           <b-form-input :disabled="disabled == 1" name="email" type="text" v-model="user.email"></b-form-input>
                         </b-form-group>
                         <b-form-group class="col-md-12" label-cols-sm="4" label-for="tax_no" label="Tax number:">
-                          <b-form-input :disabled="disabled == 1" name="tax_no" type="number" v-model="user.tax_no"></b-form-input>
+                          <b-form-input :disabled="disabled == 1" name="tax_no" type="text" v-model="user.tax_no"></b-form-input>
                         </b-form-group>
                       </b-row>
                   </template>
@@ -357,9 +357,24 @@
         </iq-card>
       </b-col>
     </b-row>
-          <div class="text-center p-1">
-            <b-button style="padding: 5px 25px;" @click="submitData" variant="primary" class="mr-2">Submit</b-button>
-            <b-button style="padding: 5px 25px;" @click="resetForm" variant="none" class="iq-bg-danger">Cancel</b-button>
+        <div class="text-center p-1" v-if="disabled !== 1">
+            <b-button style="padding: 5px 25px;" @click="submitData(true)" variant="primary" class="mr-2">Submit</b-button>
+            <b-button style="padding: 5px 25px;" v-b-modal.modal-1 variant="none" class="iq-bg-danger">Cancel</b-button>
+            <b-modal id="modal-1" ok-title="OK" cancel-title="Cancel" @ok="(resetForm()), (disabled = (disabled + 1) % 2)">
+              <h4 class="my-4 card-title text-center">Are you sure you want to the<br>discard changes?</h4>
+            </b-modal>
+            <b-modal ref="my-modal" ok-only ok-variant="primary" ok-title="OK">
+              <div class="text-center">
+              <i class="ri-error-warning-fill ri-4x" style="color: #d84a45;"></i>
+              <h4 class="my-4 card-title text-center">Unable to save changes, please try again</h4>
+              </div>
+            </b-modal>
+            <b-alert :show="dismissCountDown" @dismissed="disabled = (disabled + 1) % 2" variant="success" style="shape-outside: content-box;" class="text-white bg-success col-md-4 float-right">
+              <div class="iq-alert-icon">
+                <i class="ri-checkbox-circle-line"></i>
+              </div>
+              <div class="iq-alert-text">Changes saved</div>
+            </b-alert>
           </div>
                 </iq-card>
               </tab-content-item>
@@ -533,6 +548,7 @@ export default {
   },
   data () {
     return {
+      dismissCountDown: null,
       dropDownText: '',
       selected: this.value,
       searchOptions: [
@@ -632,7 +648,13 @@ export default {
       }
       console.log('RESET FORM', this.user)
     },
-    submitData () {
+    submitData (args) {
+      console.log('ARGS:', args)
+      if (args) {
+        this.dismissCountDown = 2
+      } else {
+        this.$refs['my-modal'].show()
+      }
       console.log('FORM DATA:', this.user)
     },
     previewImage: function (event) {
