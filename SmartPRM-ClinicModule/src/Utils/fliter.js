@@ -6,8 +6,14 @@ Vue.filter('reverse', function (value) {
   return value.slice().reverse()
 })
 
-Vue.filter('formatDate', function (value) {
+/* Vue.filter('formatDate', function (value) {
   if (value) {
     return moment(String(value)).fromNow()
+  }
+}) */
+
+Vue.filter('formatDate', function (value) {
+  if (value) {
+    return moment(String(value)).format('ddd, D MMM')
   }
 })
