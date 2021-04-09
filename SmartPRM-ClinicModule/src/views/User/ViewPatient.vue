@@ -26,26 +26,16 @@
               <tab-content-item :active="true" id="overview" >
                 <iq-card style="background: none;">
                   <b-row>
-      <b-col lg="4">
-        <iq-card body-class="iq-card-body pl-0 pr-0 pt-0">
+      <b-col lg="4" class="pr-0 pt-2 mt-5 col-lg-4">
+        <iq-card>
           <template v-slot:body>
-            <div class="docter-details-block">
-                <div class="doc-profile-bg bg-primary" style="height:95px;">
-                    <b-col md="14" class="d-flex justify-content-between">
-                        <button type="" class="btn btn-light mt-2 ml-4">Add Appointment</button>&nbsp;&nbsp;
-                        <button type="" class="btn btn-danger mt-2 mr-4">Delete Patient</button>&nbsp;&nbsp;
-                    </b-col>
-                    <b-col md="14" class="d-flex justify-content-start">
-                        <button type="" class="btn btn-light mt-2 ml-4">Add Assignment</button>
-                    </b-col>
-                </div>
-              <div class="docter-profile text-center">
-                <b-img :src="doctor.profile" alt="profile-img" class="avatar-130 img-fluid" />
+            <div class="user-details-block">
+              <div class="user-profile text-center">
+                <img src="../../assets/images/user/11.png" alt="profile-img" class="avatar-130 img-fluid">
               </div>
-              <div class="text-center mt-3 pl-3 pr-3">
+              <div class="text-center mt-3">
                 <h4><b>Anita Jereb</b></h4>
-                <!-- <p>Kirurg</p> -->
-                </div>
+              </div>
               <hr>
               <ul class="doctoe-sedual d-flex align-items-center justify-content-between p-0 m-0">
                 <li class="text-center">
@@ -53,23 +43,32 @@
                   <span>Number of visits</span>
                 </li>
                 <li class="text-center">
-                  <h4 class="counter">9 months, 13 days</h4>
+                  <h4 class="counter">9 m, 13 d</h4>
                   <span>Time since first visit</span>
                 </li>
               </ul>
               <hr>
-              <div class="row px-3 ml-1">
-                  <div class="col-4">Phone:</div>
-                  <div class="col-8">+38640076191</div>
-                  <div class="col-4">Email:</div>
-                  <div class="col-8">anita.jereb@staging.emazing.si</div>
-                  <div class="col-4">Address:</div>
-                  <div class="col-8">Prva ulica 11, 1000 Ljubljana</div>
+              <div class="row ml-1">
+                  <div class="col-3">Phone:</div>
+                  <div class="col-9">+38640076191</div>
+                  <div class="col-3">Email:</div>
+                  <div class="col-9">anita.jereb@staging.emazing.si</div>
+                  <div class="col-3">Address:</div>
+                  <div class="col-9">Prva ulica 11, 1000 Ljubljana</div>
                 </div>
             </div>
           </template>
+          <div class="bg-primary pb-2 p-1" style="border-radius: 0 0 25px 25px;">
+      <b-col md="14" class="d-flex justify-content-center">
+          <button type="" class="btn btn-light m-2">Add Appointment</button>&nbsp;
+          <button type="" class="btn btn-light m-2">Add Assignment</button>&nbsp;
+      </b-col>
+      <b-col class="text-center">
+          <button type="" class="btn btn-danger">Delete Patient</button>
+      </b-col>
+  </div>
         </iq-card>
-        <iq-card body-class="iq-card-body">
+        <iq-card>
           <template v-slot:body>
             <div class="iq-card-header d-flex justify-content-between">
               <div class="iq-header-title">
@@ -110,9 +109,8 @@
         </iq-card>
       </b-col>
       <b-col lg="8">
-          <b-container>
               <b-col md="14">
-                  <b-card title="General Notes" class="iq-mb-3 iq-card">
+                  <b-card title="General Notes" class="iq-card">
                       <hr />
                       <b-card-text>This is another card with title and supporting text below. This card has some additional content to make it slightly taller overall.</b-card-text>
                       <b-card-text><small class="text-muted">Last updated 3 mins ago</small></b-card-text>
@@ -120,7 +118,7 @@
               </b-col>
               <b-card text-variant="white"
                       bg-variant="danger"
-                      class="iq-mb-3 iq-card">
+                      class="iq-card">
                   <b-card-title class="text-white">Allergies</b-card-title>
                   <blockquote class="blockquote mb-0">
                       <p class="font-size-14">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer posuere erat a ante.</p>
@@ -128,7 +126,7 @@
                   </blockquote>
               </b-card>
               <b-row>
-                  <b-col md="6">
+                  <b-col md="6" class="pr-0">
                       <iq-card>
                           <template v-slot:body>
                               <div class="iq-card-header d-flex justify-content-between">
@@ -222,7 +220,6 @@
                       </iq-card>
                   </b-col>
               </b-row>
-          </b-container>
       </b-col>
     </b-row>
             </iq-card>
@@ -369,7 +366,7 @@
               <h4 class="my-4 card-title text-center">Unable to save changes, please try again</h4>
               </div>
             </b-modal>
-            <b-alert :show="dismissCountDown" @dismissed="disabled = (disabled + 1) % 2" variant="success" style="shape-outside: content-box;" class="text-white bg-success col-md-4 float-right">
+            <b-alert :show="dismissCountDown" @dismissed="(disabled = (disabled + 1) % 2), dismissCountDown = 0" variant="success" style="shape-outside: content-box;" class="text-white bg-success col-md-4 float-right">
               <div class="iq-alert-icon">
                 <i class="ri-checkbox-circle-line"></i>
               </div>
