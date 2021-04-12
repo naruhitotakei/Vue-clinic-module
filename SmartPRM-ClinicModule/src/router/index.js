@@ -75,7 +75,7 @@ import DatepickerDemo from '../views/Plugins/DatepickerDemo'
 /* Documents */
 import Offers from '../views/Documents/Offers'
 import Invoices from '../views/Documents/Invoices'
-import AdvInvoices from '../views/Documents/AdvInvoices'
+import AdvInvoices from '../views/Documents/AdvPayments'
 /* Reporting */
 import Emazing from '../views/Reporting/Emazing'
 import Doctor from '../views/Reporting/Doctor'

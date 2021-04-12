@@ -67,29 +67,26 @@
 var rows = [
   {
     invoice_no: 'invoice12312',
-    desc: 'Tooth extraction',
-    invoice_name: 'Invoice 1',
+    patient_name: 'Matej Dolenc',
     amount: '90 EUR',
     issued_by: 'Dr. Damjan Ahlin',
-    created_at: '27.01.2021-18:00',
+    date: '27.01.2021-18:00',
     status: 'Paid'
   },
   {
     invoice_no: 'invoice1454',
-    desc: 'Tartar cleaning',
-    invoice_name: 'Invoice 2',
+    patient_name: 'Damjan Rupnik',
     amount: '70 EUR',
     issued_by: 'Dr. Silvija Lenart',
-    created_at: '27.01.2021-18:00',
+    date: '27.01.2021-18:00',
     status: 'Unpaid'
   },
   {
     invoice_no: 'invoice111',
-    desc: 'Filling',
-    invoice_name: 'Invoice 3',
+    patient_name: 'Ljudmila Furlan',
     amount: '70 EUR',
     issued_by: 'Dr. Bojan Jernejc',
-    created_at: '27.01.2021-18:00',
+    date: '27.01.2021-18:00',
     status: 'Paid'
   }
 ]
@@ -102,12 +99,11 @@ export default {
       dropDownText: '',
       selected: this.value,
       searchOptions: [
-        { value: 'invoice_no', text: 'Invoice number' },
-        { value: 'invoice_name', text: 'Invoice Name' },
-        { value: 'desc', text: 'Description' },
-        { value: 'amount', text: 'Invoice amount' },
+        { value: 'invoice_no', text: 'Number' },
+        { value: 'patient_name', text: 'Patient Name' },
+        { value: 'date', text: 'Date' },
         { value: 'issued_by', text: 'Issued by' },
-        { value: 'created_at', text: 'Created at' },
+        { value: 'amount', text: 'Invoice amount' },
         { value: 'status', text: 'Status' }
       ],
       items: rows,
@@ -116,10 +112,9 @@ export default {
       perPage: 10,
       totalRows: rows.length,
       columns: [
-        { label: 'Invoice Number', key: 'invoice_no', class: 'text-left' },
-        { label: 'Description', key: 'desc', class: 'text-left' },
-        { label: 'Invoice Name', key: 'invoice_name', class: 'text-left' },
-        { label: 'Created at', key: 'created_at', class: 'text-left' },
+        { label: 'Number', key: 'invoice_no', class: 'text-left' },
+        { label: 'Patient Name', key: 'patient_name', class: 'text-left' },
+        { label: 'Date', key: 'date', class: 'text-left' },
         { label: 'Issued by', key: 'issued_by', class: 'text-left' },
         { label: 'Invoice amount', key: 'amount', class: 'text-left' },
         { label: 'Status', key: 'status', class: 'text-left' }
@@ -130,12 +125,11 @@ export default {
     default () {
       return {
         invoice_no: this.rows.length,
-        desc: '',
-        invoice_name: '',
+        patient_name: '',
         amount: '',
         issued_by: '',
         status: '',
-        created_at: ''
+        date: ''
       }
     },
     searchFunction (event) {
