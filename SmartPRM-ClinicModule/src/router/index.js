@@ -4,7 +4,6 @@ import VueRouter from 'vue-router'
 import Layout1 from '../layouts/Layout1'
 import AuthLayout1 from '../layouts/AuthLayouts/AuthLayout1'
 /* Dashboards View */
-import Dashboard2 from '../views/Dashboards/Dashboard2.vue'
 import Dashboard1 from '../views/Dashboards/Dashboard1.vue'
 import Dashboard3 from '../views/Dashboards/Dashboard3'
 import Dashboard4 from '../views/Dashboards/Dashboard4'
@@ -76,6 +75,8 @@ import DatepickerDemo from '../views/Plugins/DatepickerDemo'
 import Offers from '../views/Documents/Offers'
 import Invoices from '../views/Documents/Invoices'
 import AdvInvoices from '../views/Documents/AdvPayments'
+/* Assignments */
+import Assignments from '../views/Assignments/Assignments'
 /* Reporting */
 import Emazing from '../views/Reporting/Emazing'
 import Doctor from '../views/Reporting/Doctor'
@@ -112,7 +113,7 @@ const childRoutes = (prop, mode) => [
     path: 'assignments',
     name: prop + '.assignments',
     meta: { dark: mode, auth: true, name: 'assignments' },
-    component: Dashboard2
+    component: Assignments
   },
   // {
   //   path: 'home-2',
@@ -472,12 +473,6 @@ const appChildRoute = (prop, mode = false) => [
   //   meta: { dark: mode, auth: true, name: 'Calendar' },
   //   component: Calendar
   // },
-  {
-    path: 'home-2',
-    name: prop + '.home-2',
-    meta: { dark: mode, auth: true, name: 'Home 2' },
-    component: Dashboard2
-  },
   {
     path: 'chat',
     name: prop + '.chat',
