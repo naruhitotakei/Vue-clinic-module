@@ -65,9 +65,8 @@
 var rows = [
   {
     offer_no: 'offer12312',
-    desc: 'Tooth extraction',
-    offer_name: 'offer1',
-    created_at: '27.01.2021-18:00',
+    patient_name: 'Maks Krajnc',
+    date: '03.03.2021-14:00',
     issued_by: 'Dr. Petra Maver',
     amount: '90 EUR'
   }
@@ -80,9 +79,8 @@ export default {
     default () {
       return {
         offer_no: this.rows.length,
-        desc: '',
-        offer_name: '',
-        created_at: '',
+        patient_name: '',
+        date: '',
         issued_by: '',
         amount: ''
       }
@@ -114,10 +112,9 @@ export default {
       dropDownText: '',
       selected: this.value,
       searchOptions: [
-        { value: 'offer_no', text: 'Offer Number' },
-        { value: 'description', text: 'Description' },
-        { value: 'offer_name', text: 'Offer Name' },
-        { value: 'created_at', text: 'Created at' },
+        { value: 'offer_no', text: 'Number' },
+        { value: 'patient_name', text: 'Patient Name' },
+        { value: 'date', text: 'Date' },
         { value: 'issue_by', text: 'Issued by' },
         { value: 'amount', text: 'Amount' }
       ],
@@ -127,10 +124,9 @@ export default {
       perPage: 10,
       totalRows: rows.length,
       columns: [
-        { label: 'Offer Number', key: 'offer_no', class: 'text-left' },
-        { label: 'Description', key: 'desc', class: 'text-left' },
-        { label: 'Offer Name', key: 'offer_name', class: 'text-left' },
-        { label: 'Created at', key: 'created_at', class: 'text-left' },
+        { label: 'Number', key: 'offer_no', class: 'text-left' },
+        { label: 'Patient name', key: 'patient_name', class: 'text-left' },
+        { label: 'Date', key: 'date', class: 'text-left' },
         { label: 'Issued by', key: 'issued_by', class: 'text-left' },
         { label: 'Amount', key: 'amount', class: 'text-left' }
       ]

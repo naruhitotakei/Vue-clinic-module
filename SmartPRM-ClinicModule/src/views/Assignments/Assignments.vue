@@ -138,7 +138,7 @@ import { xray } from '../../config/pluginInit'
 import { getAssignments } from '../../services/assignmentsService'
 var rows = []
 export default {
-  name: 'Dashboard2',
+  name: 'Assignments',
   mounted () {
     xray.index()
     this.getAssignments()
