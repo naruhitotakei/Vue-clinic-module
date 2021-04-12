@@ -587,38 +587,30 @@ import { xray } from '../../config/pluginInit'
 var rowsInvoices = [
   {
     invoice_no: 'invoice372',
-    desc: 'Tooth extraction',
-    invoice_name: 'Invoice 1',
     amount: '90 EUR',
     issued_by: 'Dr. Damjan Ahlin',
-    created_at: '27.02.2021-14:00',
+    date: '27.02.2021-14:00',
     status: 'Paid'
   },
   {
     invoice_no: 'invoice405',
-    desc: 'Tartar cleaning',
-    invoice_name: 'Invoice 2',
     amount: '70 EUR',
     issued_by: 'Dr. Silvija Lenart',
-    created_at: '14.03.2021-11:00',
+    date: '14.03.2021-11:00',
     status: 'Paid'
   },
   {
     invoice_no: 'invoice499',
-    desc: 'Filling',
-    invoice_name: 'Invoice 3',
     amount: '70 EUR',
     issued_by: 'Dr. Bojan Jernejc',
-    created_at: '28.03.2021-12:00',
+    date: '28.03.2021-12:00',
     status: 'Unpaid'
   }
 ]
 var rowsOffers = [
   {
     offer_no: 'offer112',
-    desc: 'Teeth whitening',
-    offer_name: 'offer1',
-    created_at: '28.03.2021-12:00',
+    date: '28.03.2021-12:00',
     issued_by: 'Dr. Bojan Jernejc',
     amount: '300 EUR'
   }
@@ -677,19 +669,15 @@ export default {
         { value: 'Africa', text: 'Africa' }
       ],
       columnsInvoices: [
-        { label: 'Invoice Number', key: 'invoice_no', class: 'text-left' },
-        { label: 'Description', key: 'desc', class: 'text-left' },
-        { label: 'Invoice Name', key: 'invoice_name', class: 'text-left' },
-        { label: 'Created at', key: 'created_at', class: 'text-left' },
+        { label: 'Number', key: 'invoice_no', class: 'text-left' },
+        { label: 'Date', key: 'date', class: 'text-left' },
         { label: 'Issued by', key: 'issued_by', class: 'text-left' },
         { label: 'Invoice amount', key: 'amount', class: 'text-left' },
         { label: 'Status', key: 'status', class: 'text-left' }
       ],
       columnsOffers: [
-        { label: 'Offer Number', key: 'offer_no', class: 'text-left' },
-        { label: 'Description', key: 'desc', class: 'text-left' },
-        { label: 'Offer Name', key: 'offer_name', class: 'text-left' },
-        { label: 'Created at', key: 'created_at', class: 'text-left' },
+        { label: 'Number', key: 'offer_no', class: 'text-left' },
+        { label: 'Date', key: 'date', class: 'text-left' },
         { label: 'Issued by', key: 'issued_by', class: 'text-left' },
         { label: 'Amount', key: 'amount', class: 'text-left' }
       ],
@@ -703,14 +691,11 @@ export default {
     default () {
       return {
         invoice_no: this.rowsInvoices.length,
-        desc: '',
-        invoice_name: '',
         amount: '',
         issued_by: '',
         status: '',
-        created_at: '',
-        offer_no: this.rowsOffers.length,
-        offer_name: ''
+        date: '',
+        offer_no: this.rowsOffers.length
       }
     },
     searchFunction (event) {
