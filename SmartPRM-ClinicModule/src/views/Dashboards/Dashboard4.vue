@@ -1,270 +1,6 @@
 <template>
   <b-container fluid>
     <b-row>
-      <!-- <b-col sm="12">
-        <b-row>
-          <b-col md="6" lg="3">
-            <iq-card class-name="iq-card-block iq-card-stretch iq-card-height">
-              <template v-slot:body>
-                <div class="iq-progress-bar progress-bar-vertical iq-bg-primary">
-                  <span class="bg-primary" data-percent="70"></span>
-                </div>
-                <span class="line-height-4">10 feb, 2020</span>
-                <h4 class="mb-2 mt-2">Hypertensive Crisis</h4>
-                <p class="mb-0 text-secondary line-height">Ongoing treatment</p>
-              </template>
-            </iq-card>
-          </b-col>
-          <b-col md="6" lg="3">
-            <iq-card class-name="iq-card-block iq-card-stretch iq-card-height">
-              <template v-slot:body>
-                <div class="iq-progress-bar progress-bar-vertical iq-bg-danger">
-                  <span class="bg-danger" data-percent="50"></span>
-                </div>
-                <span class="line-height-4">12 Jan, 2020</span>
-                <h4 class="mb-2 mt-2">Osteoporosis</h4>
-                <p class="mb-0 text-secondary line-height">Incurable</p>
-              </template>
-            </iq-card>
-          </b-col>
-          <b-col md="6" lg="3">
-            <iq-card class-name="iq-card-block iq-card-stretch iq-card-height">
-              <template v-slot:body>
-                <div class="iq-progress-bar progress-bar-vertical iq-bg-warning">
-                  <span class="bg-warning" data-percent="80"></span>
-                </div>
-                <span class="line-height-4">15 feb, 2020</span>
-                <h4 class="mb-2 mt-2">Hypertensive Crisis</h4>
-                <p class="mb-0 text-secondary line-height">Examination</p>
-              </template>
-            </iq-card>
-          </b-col>
-          <b-col md="6" lg="3">
-            <iq-card class-name="iq-card-block iq-card-stretch iq-card-height" nobody>
-              <div class="iq-card-body p-0 rounded" :style="`background: url(${require('../../assets/images/page-img/38.jpg')}) no-repeat scroll center center; background-size: contain;  min-height: 146px;`">
-              </div>
-            </iq-card>
-          </b-col>
-        </b-row>
-      </b-col> -->
-      <b-col lg="4">
-        <iq-card class-name="iq-card-block iq-card-stretch iq-card-height iq-user-profile-block">
-          <template v-slot:body>
-            <div class="user-details-block">
-              <div class="user-profile text-center">
-                <img src="../../assets/images/user/11.png" alt="profile-img" class="avatar-130 img-fluid">
-              </div>
-              <div class="text-center mt-3">
-                <h4><b>Dr. Nika Klemenc</b></h4>
-                <p>Kirurg</p>
-                <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. In in arcu turpis. Nunc</p>
-                <a href="#" class="btn btn-primary">Assign</a>
-              </div>
-              <hr>
-              <ul class="doctoe-sedual d-flex align-items-center justify-content-between p-0">
-                <li class="text-center">
-                  <h3 class="counter">4500</h3>
-                  <span>Operations</span>
-                </li>
-                <li class="text-center">
-                  <h3 class="counter">3.9</h3>
-                  <span>Medical Rating</span>
-                </li>
-              </ul>
-            </div>
-          </template>
-        </iq-card>
-      </b-col>
-      <b-col lg="8">
-        <iq-card class-name=iq-card-block iq-card-stretch iq-card-height>
-          <template v-slot:headerTitle>
-            <h4 class="card-title">Health Curve</h4>
-          </template>
-          <template v-slot:body>
-            <ApexChart element="home-chart-06" :chartOption="darkChart1" v-if="$route.meta.dark"/>
-            <ApexChart element="home-chart-06" :chartOption="chart1" v-else/>
-          </template>
-        </iq-card>
-      </b-col>
-    </b-row>
-    <b-row>
-      <b-col lg="4">
-        <iq-card class-name="iq-card-block iq-card-stretch iq-card-height" body-class="smaill-calender-home">
-          <template v-slot:headerTitle>
-            <h4 class="card-title">Nearest Treatment</h4>
-          </template>
-          <template v-slot:body>
-            <flat-pickr :config="config" value="" class="d-none" />
-          </template>
-        </iq-card>
-      </b-col>
-      <b-col lg="4">
-        <iq-card class-name="iq-card-block iq-card-stretch iq-card-height-half" nobody>
-          <div class="iq-card-body">
-              <h6>APPOINTMENTS</h6>
-              <h3><b>5075</b></h3>
-          </div>
-            <ApexChart element="wave-chart-7" :chartOption="chart7" :isLive="true"/>
-        </iq-card>
-        <iq-card class-name="iq-card-block iq-card-stretch iq-card-height-half" nobody>
-          <div class="iq-card-body">
-              <h6>NEW PATIENTS</h6>
-              <h3><b>1200</b></h3>
-          </div>
-            <ApexChart element="wave-chart-8" :chartOption="chart8" :isLive="true"/>
-        </iq-card>
-      </b-col>
-      <b-col lg="4">
-        <iq-card class-name="iq-card-block iq-card-stretch iq-card-height" body-class="hospital-mgt">
-          <template v-slot:headerTitle>
-            <h4 class="card-title">Hospital Management</h4>
-          </template>
-          <template v-slot:body>
-            <div class="progress mb-3" style="height: 30px;">
-              <div class="progress-bar bg-primary" role="progressbar" style="width: 20%;" aria-valuenow="15" aria-valuemin="0" aria-valuemax="100">OPD</div>
-              <div class="progress-bar bg-warning" role="progressbar" style="width: 80%" aria-valuenow="30" aria-valuemin="0" aria-valuemax="100">80%</div>
-            </div>
-            <div class="progress mb-3" style="height: 30px;">
-              <div class="progress-bar bg-primary" role="progressbar" style="width: 30%;" aria-valuenow="15" aria-valuemin="0" aria-valuemax="100">Treatment</div>
-              <div class="progress-bar bg-warning" role="progressbar" style="width: 70%" aria-valuenow="30" aria-valuemin="0" aria-valuemax="100">70%</div>
-            </div>
-            <div class="progress mb-3" style="height: 30px;">
-              <div class="progress-bar bg-primary" role="progressbar" style="width: 60%;" aria-valuenow="15" aria-valuemin="0" aria-valuemax="100">Laboratory Test</div>
-              <div class="progress-bar bg-warning" role="progressbar" style="width: 40%" aria-valuenow="30" aria-valuemin="0" aria-valuemax="100">85%</div>
-            </div>
-            <div class="progress mb-3" style="height: 30px;">
-              <div class="progress-bar bg-primary" role="progressbar" style="width: 40%;" aria-valuenow="15" aria-valuemin="0" aria-valuemax="100">New Patient</div>
-              <div class="progress-bar bg-warning" role="progressbar" style="width: 60%" aria-valuenow="30" aria-valuemin="0" aria-valuemax="100">70%</div>
-            </div>
-            <div class="progress mb-3" style="height: 30px;">
-              <div class="progress-bar bg-primary" role="progressbar" style="width: 35%;" aria-valuenow="15" aria-valuemin="0" aria-valuemax="100">Doctors</div>
-              <div class="progress-bar bg-warning" role="progressbar" style="width: 65%" aria-valuenow="30" aria-valuemin="0" aria-valuemax="100">95%</div>
-            </div>
-            <div class="progress" style="height: 30px;">
-              <div class="progress-bar bg-primary" role="progressbar" style="width: 28%;" aria-valuenow="15" aria-valuemin="0" aria-valuemax="100">Discharge</div>
-              <div class="progress-bar bg-warning" role="progressbar" style="width: 75%" aria-valuenow="30" aria-valuemin="0" aria-valuemax="100">35%</div>
-            </div>
-          </template>
-        </iq-card>
-      </b-col>
-    </b-row>
-    <b-row>
-      <b-col lg="3">
-        <iq-card class-name="iq-card-block iq-card-stretch iq-card-height">
-          <template v-slot:headerTitle>
-            <h4 class="card-title">Patient Progress</h4>
-          </template>
-          <template v-slot:body>
-            <ul class="patient-progress m-0 p-0">
-              <li class="d-flex mb-3 align-items-center">
-                <div class="media-support-info">
-                  <h6>Natalija Kogoj</h6>
-                </div>
-                <span class="badge badge-primary">30%</span>
-              </li>
-              <li class="d-flex mb-3 align-items-center">
-                <div class="media-support-info">
-                  <h6>Oliver Kemperle</h6>
-                </div>
-                <span class="badge badge-success">70%</span>
-              </li>
-              <li class="d-flex mb-3 align-items-center">
-                <div class="media-support-info">
-                  <h6>Metka Gams</h6>
-                </div>
-                <span class="badge badge-danger">15%</span>
-              </li>
-              <li class="d-flex mb-3 align-items-center">
-                <div class="media-support-info">
-                  <h6>Larisa Fortuna</h6>
-                </div>
-                <span class="badge badge-warning">55%</span>
-              </li>
-              <li class="d-flex mb-3 align-items-center">
-                <div class="media-support-info">
-                  <h6>Leonarda Godina</h6>
-                </div>
-                <span class="badge badge-info">45%</span>
-              </li>
-              <li class="d-flex mb-3 align-items-center">
-                <div class="media-support-info">
-                  <h6>Monika Forte</h6>
-                </div>
-                <span class="badge badge-warning">55%</span>
-              </li>
-              <li class="d-flex mb-3 align-items-center">
-                <div class="media-support-info">
-                  <h6>Janez Erjavec</h6>
-                </div>
-                <span class="badge badge-primary">65%</span>
-              </li>
-              <li class="d-flex align-items-center">
-                <div class="media-support-info">
-                  <h6>Iztok Dimnik</h6>
-                </div>
-                <span class="badge badge-danger">15%</span>
-              </li>
-            </ul>
-          </template>
-        </iq-card>
-      </b-col>
-      <b-col lg="6">
-        <iq-card class-name="iq-card-block iq-card-stretch iq-card-height" body-class="pl-0 pr-0">
-          <template v-slot:headerTitle>
-            <h4 class="card-title">Patient overview</h4>
-          </template>
-          <template v-slot:body>
-            <AmChart element="home-chart-03" :type=radialChat.type :option=radialChat.data  :height=radialChat.height />
-          </template>
-        </iq-card>
-      </b-col>
-      <b-col lg="3">
-        <iq-card class-name="iq-card-block iq-card-stretch iq-card-height">
-          <template v-slot:headerTitle>
-            <h4 class="card-title">Visits From Countries </h4>
-          </template>
-          <template v-slot:body>
-            <div class="iq-details">
-              <span class="title text-dark">United States</span>
-              <div class="percentage float-right text-primary">95 <span>%</span></div>
-              <div class="iq-progress-bar-linear d-inline-block w-100">
-                <div class="iq-progress-bar">
-                  <span class="bg-primary" data-percent="95"></span>
-                </div>
-              </div>
-            </div>
-            <div class="iq-details mt-4">
-              <span class="title text-dark">India</span>
-              <div class="percentage float-right text-warning">75 <span>%</span></div>
-              <div class="iq-progress-bar-linear d-inline-block w-100">
-                <div class="iq-progress-bar">
-                  <span class="bg-warning" data-percent="75"></span>
-                </div>
-              </div>
-            </div>
-            <div class="iq-details mt-4">
-              <span class="title text-dark">Australia</span>
-              <div class="percentage float-right text-success">55 <span>%</span></div>
-              <div class="iq-progress-bar-linear d-inline-block w-100">
-                <div class="iq-progress-bar">
-                  <span class="bg-success" data-percent="55"></span>
-                </div>
-              </div>
-            </div>
-            <div class="iq-details mt-4">
-              <span class="title text-dark">Brazil</span>
-              <div class="percentage float-right text-danger">25 <span>%</span></div>
-              <div class="iq-progress-bar-linear d-inline-block w-100">
-                <div class="iq-progress-bar">
-                  <span class="bg-danger" data-percent="25"></span>
-                </div>
-              </div>
-            </div>
-          </template>
-        </iq-card>
-      </b-col>
-    </b-row>
-    <b-row>
       <b-col lg="8">
         <iq-card class-name="iq-card-block iq-card-stretch iq-card-height">
           <template v-slot:headerTitle>
@@ -341,6 +77,175 @@
           </template>
         </iq-card>
       </b-col>
+      <b-col lg="9">
+            <iq-card class-name="iq-card-block iq-card-stretch iq-card-height" body-class="">
+              <template v-slot:headerTitle>
+                <h4 class="card-title">Operations</h4>
+              </template>
+              <template v-slot:headerAction>
+                <div class="iq-card-header-toolbar d-flex align-items-center">
+                  <b-dropdown size="lg"  variant="link" toggle-class="text-decoration-none" no-caret>
+                    <template v-slot:button-content>
+                      <i class="ri-more-fill"></i>
+                    </template>
+                    <b-dropdown-item href="#"><i class="ri-eye-fill mr-2"></i>View</b-dropdown-item>
+                    <b-dropdown-item href="#">Another action</b-dropdown-item>
+                    <b-dropdown-item href="#">Something else here...</b-dropdown-item>
+                  </b-dropdown>
+                </div>
+              </template>
+              <template v-slot:body>
+                <div class="table-responsive">
+                  <table class="table mb-0 table-borderless">
+                    <thead>
+                    <tr>
+                      <th scope="col">Patient</th>
+                      <th scope="col">Patient Name </th>
+                      <th scope="col">Doctors Team</th>
+                      <th scope="col">Date Of Operation</th>
+                      <th scope="col"> Report</th>
+                      <th scope="col">Diseases</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr>
+                      <td class="text-center"><img class="rounded-circle img-fluid avatar-40" src="../../assets/images/user/01.jpg" alt="profile"></td>
+                      <td>Petey Cruiser</td>
+                      <td>
+                        <div class="iq-media-group">
+                          <a href="#" class="iq-media">
+                            <img class="img-fluid avatar-40 rounded-circle" src="../../assets/images/user/05.jpg" alt="">
+                          </a>
+                          <a href="#" class="iq-media">
+                            <img class="img-fluid avatar-40 rounded-circle" src="../../assets/images/user/06.jpg" alt="">
+                          </a>
+                          <a href="#" class="iq-media">
+                            <img class="img-fluid avatar-40 rounded-circle" src="../../assets/images/user/07.jpg" alt="">
+                          </a>
+                        </div>
+                      </td>
+                      <td>12-02-2020</td>
+                      <td><i class="ri-file-pdf-line font-size-16 text-danger"></i></td>
+                      <td>Fracture</td>
+                    </tr>
+                    <tr>
+                      <td class="text-center"><img class="rounded-circle img-fluid avatar-40" src="../../assets/images/user/02.jpg" alt="profile"></td>
+                      <td>Anna Sthesia</td>
+                      <td>
+                        <div class="iq-media-group">
+                          <a href="#" class="iq-media">
+                            <img class="img-fluid avatar-40 rounded-circle" src="../../assets/images/user/05.jpg" alt="">
+                          </a>
+                          <a href="#" class="iq-media">
+                            <img class="img-fluid avatar-40 rounded-circle" src="../../assets/images/user/06.jpg" alt="">
+                          </a>
+                          <a href="#" class="iq-media">
+                            <img class="img-fluid avatar-40 rounded-circle" src="../../assets/images/user/07.jpg" alt="">
+                          </a>
+                        </div>
+                      </td>
+                      <td>14-02-2020</td>
+                      <td><i class="ri-file-pdf-line font-size-16 text-danger"></i></td>
+                      <td>Cataract surgery</td>
+                    </tr>
+                    <tr>
+                      <td class="text-center"><img class="rounded-circle img-fluid avatar-40" src="../../assets/images/user/03.jpg" alt="profile"></td>
+                      <td>Paul Molive</td>
+                      <td>
+                        <div class="iq-media-group">
+                          <a href="#" class="iq-media">
+                            <img class="img-fluid avatar-40 rounded-circle" src="../../assets/images/user/05.jpg" alt="">
+                          </a>
+                          <a href="#" class="iq-media">
+                            <img class="img-fluid avatar-40 rounded-circle" src="../../assets/images/user/06.jpg" alt="">
+                          </a>
+                          <a href="#" class="iq-media">
+                            <img class="img-fluid avatar-40 rounded-circle" src="../../assets/images/user/07.jpg" alt="">
+                          </a>
+                        </div>
+                      </td>
+                      <td>14-02-2020</td>
+                      <td><i class="ri-file-pdf-line font-size-16 text-danger"></i></td>
+                      <td>Cancer</td>
+
+                    </tr>
+                    <tr>
+                      <td class="text-center"><img class="rounded-circle img-fluid avatar-40" src="../../assets/images/user/04.jpg" alt="profile"></td>
+                      <td>Anna Mull</td>
+                      <td>
+                        <div class="iq-media-group">
+                          <a href="#" class="iq-media">
+                            <img class="img-fluid avatar-40 rounded-circle" src="../../assets/images/user/05.jpg" alt="">
+                          </a>
+                          <a href="#" class="iq-media">
+                            <img class="img-fluid avatar-40 rounded-circle" src="../../assets/images/user/06.jpg" alt="">
+                          </a>
+                          <a href="#" class="iq-media">
+                            <img class="img-fluid avatar-40 rounded-circle" src="../../assets/images/user/07.jpg" alt="">
+                          </a>
+                        </div>
+                      </td>
+                      <td>16-02-2020</td>
+                      <td><i class="ri-file-pdf-line font-size-16 text-danger"></i></td>
+                      <td>Hysterectomy</td>
+                    </tr>
+                    <tr>
+                      <td class="text-center"><img class="rounded-circle img-fluid avatar-40" src="../../assets/images/user/05.jpg" alt="profile"></td>
+                      <td>Ruby saul</td>
+                      <td>
+                        <div class="iq-media-group">
+                          <a href="#" class="iq-media">
+                            <img class="img-fluid avatar-40 rounded-circle" src="../../assets/images/user/05.jpg" alt="">
+                          </a>
+                          <a href="#" class="iq-media">
+                            <img class="img-fluid avatar-40 rounded-circle" src="../../assets/images/user/06.jpg" alt="">
+                          </a>
+                          <a href="#" class="iq-media">
+                            <img class="img-fluid avatar-40 rounded-circle" src="../../assets/images/user/07.jpg" alt="">
+                          </a>
+                        </div>
+                      </td>
+                      <td>18-02-2020</td>
+                      <td><i class="ri-file-pdf-line font-size-16 text-danger"></i></td>
+                      <td>Cancer</td>
+                    </tr>
+                    </tbody>
+                  </table>
+                </div>
+              </template>
+            </iq-card>
+          </b-col>
+    <b-col lg="3">
+        <iq-card>
+          <template v-slot:headerTitle>
+            <h4 class="card-title">Today's Schedule</h4>
+          </template>
+          <template v-slot:body>
+            <ul class="m-0 p-0 today-schedule">
+              <li class="d-flex">
+                <div class="schedule-icon"><i class="ri-checkbox-blank-circle-fill text-primary" /></div>
+                <div class="schedule-text"> <span>Web Design</span>
+                  <span>09:00 to 12:00</span></div>
+              </li>
+              <li class="d-flex">
+                <div class="schedule-icon"><i class="ri-checkbox-blank-circle-fill text-success" /></div>
+                <div class="schedule-text"> <span>Participate in Design</span>
+                  <span>09:00 to 12:00</span></div>
+              </li>
+            </ul>
+          </template>
+        </iq-card>
+      </b-col>
+    <b-col lg="12">
+      <iq-card>
+        <template v-slot:headerTitle>
+          <h4 class="card-title">Activity Statistic</h4>
+        </template>
+        <template v-slot:body>
+          <ApexChart element="patient-chart-01" :chartOption="chart5"/>
+        </template>
+      </iq-card>
+    </b-col>
     </b-row>
   </b-container>
 </template>
@@ -353,9 +258,57 @@ export default {
   components: { IqCard },
   data () {
     return {
-      config: {
-        dateFormat: 'Y-m-d',
-        inline: true
+      chart5: {
+        series: [{
+          name: 'PRODUCT A',
+          data: [44, 55, 41, 67, 22, 43]
+        }, {
+          name: 'PRODUCT B',
+          data: [13, 23, 20, 8, 13, 27]
+        }, {
+          name: 'PRODUCT C',
+          data: [11, 17, 15, 15, 21, 14]
+        }],
+        colors: ['#089bab', '#FC9F5B', '#5bc5d1'],
+        chart: {
+          type: 'bar',
+          height: 350,
+          stacked: true,
+          toolbar: {
+            show: true
+          },
+          zoom: {
+            enabled: true
+          }
+        },
+        responsive: [{
+          breakpoint: 480,
+          options: {
+            legend: {
+              position: 'bottom',
+              offsetX: -10,
+              offsetY: 0
+            }
+          }
+        }],
+        plotOptions: {
+          bar: {
+            horizontal: false
+          }
+        },
+        xaxis: {
+          type: 'datetime',
+          categories: ['01/01/2011 GMT', '01/02/2011 GMT', '01/03/2011 GMT', '01/04/2011 GMT',
+            '01/05/2011 GMT', '01/06/2011 GMT'
+          ]
+        },
+        legend: {
+          position: 'right',
+          offsetY: 40
+        },
+        fill: {
+          opacity: 1
+        }
       },
       doctors: [
         { name: 'Dr. Bojan Jernejc', img: require('../../assets/images/user/01.jpg'), degree: 'MBBS, MD' },
@@ -371,198 +324,14 @@ export default {
 
       ],
       appointments: [
-        { patient: 'Martina Dolar', doctor: 'Dr. Martin Sever', date: '20/02/2020', timing: '8:00 AM', contact: '+38670482347' },
-        { patient: 'Marko Engelman', doctor: 'Dr. Sebastjan Bras', date: '25/02/2020', timing: '8:30 AM', contact: '+38651392143' },
-        { patient: 'Lana Ekart', doctor: 'Dr. Suzana Zgonc', date: '20/02/2020', timing: '9:45 AM', contact: '+38640843247' },
-        { patient: 'Goran Drobne', doctor: 'Dr. Martin Sever', date: '27/02/2020', timing: '11:30 AM', contact: '+38631493432' },
-        { patient: 'Igor Destovnik', doctor: 'Dr. Irma Medved', date: '28/02/2020', timing: '3:30 AM', contact: '+38640584352' },
-        { patient: 'Linda Darovec', doctor: 'Dr. Miha Vozelj', date: '28/02/2020', timing: '4:30 PM', contact: '+38670943283' },
-        { patient: 'Maj Pavlin', doctor: 'Dr. Janez Veble', date: '29/02/2020', timing: '5:00 AM', contact: '+38631932431' }
-      ],
-      chart1: {
-        series: [{
-          name: 'series1',
-          data: [31, 40, 28, 51, 42, 109, 100]
-        }],
-        chart: {
-          height: 350,
-          type: 'area'
-        },
-        colors: ['#089bab'],
-        dataLabels: {
-          enabled: false
-        },
-        stroke: {
-          curve: 'smooth'
-        },
-        xaxis: {
-          type: 'datetime',
-          categories: ['2018-09-19T00:00:00.000Z', '2018-09-19T01:30:00.000Z', '2018-09-19T02:30:00.000Z', '2018-09-19T03:30:00.000Z', '2018-09-19T04:30:00.000Z', '2018-09-19T05:30:00.000Z', '2018-09-19T06:30:00.000Z']
-        },
-        tooltip: {
-          x: {
-            format: 'dd/MM/yy HH:mm'
-          }
-        }
-      },
-      darkChart1: {
-        series: [{
-          name: 'series1',
-          data: [31, 40, 28, 51, 42, 109, 100]
-        }],
-        chart: {
-          height: 350,
-          type: 'area'
-        },
-        colors: ['#089bab'],
-        dataLabels: {
-          enabled: false
-        },
-        stroke: {
-          curve: 'smooth'
-        },
-        xaxis: {
-          type: 'datetime',
-          categories: ['2018-09-19T00:00:00.000Z', '2018-09-19T01:30:00.000Z', '2018-09-19T02:30:00.000Z', '2018-09-19T03:30:00.000Z', '2018-09-19T04:30:00.000Z', '2018-09-19T05:30:00.000Z', '2018-09-19T06:30:00.000Z']
-        },
-        tooltip: {
-          x: {
-            format: 'dd/MM/yy HH:mm'
-          }
-        }
-      },
-      chart7: {
-        chart: {
-          height: 112,
-          type: 'area',
-          animations: {
-            enabled: true,
-            easing: 'linear',
-            dynamicAnimation: {
-              speed: 1000
-            }
-          },
-          toolbar: {
-            show: false
-          },
-          sparkline: {
-            enabled: true
-          },
-          group: 'sparklines'
-        },
-        dataLabels: {
-          enabled: false
-        },
-        stroke: {
-          curve: 'smooth',
-          width: 3
-        },
-        fill: {
-          type: 'gradient',
-          gradient: {
-            shadeIntensity: 1,
-            opacityFrom: 0.5,
-            opacityTo: 0
-          }
-        },
-        series: [{
-          data: []
-        }],
-        colors: ['#089bab'],
-        markers: {
-          size: 0
-        },
-        xaxis: {
-          type: 'datetime',
-          range: 777600000
-        },
-        yaxis: {
-          labels: {
-            minWidth: 34
-          },
-          max: 100
-        },
-        legend: {
-          show: false
-        }
-      },
-      chart8: {
-        chart: {
-          height: 112,
-          type: 'area',
-          animations: {
-            enabled: true,
-            easing: 'linear',
-            dynamicAnimation: {
-              speed: 1000
-            }
-          },
-          toolbar: {
-            show: false
-          },
-          sparkline: {
-            enabled: true
-          },
-          group: 'sparklines'
-        },
-        dataLabels: {
-          enabled: false
-        },
-        stroke: {
-          curve: 'smooth',
-          width: 3
-        },
-        fill: {
-          type: 'gradient',
-          gradient: {
-            shadeIntensity: 1,
-            opacityFrom: 0.5,
-            opacityTo: 0
-          }
-        },
-        series: [{
-          data: []
-        }],
-        colors: ['#fc9f5b'],
-        markers: {
-          size: 0
-        },
-        xaxis: {
-          type: 'datetime',
-          range: 777600000
-        },
-        yaxis: {
-          labels: {
-            minWidth: 34
-          },
-          max: 100
-        },
-        legend: {
-          show: false
-        }
-      },
-      radialChat: {
-        type: 'radial-pie',
-        height: 280,
-        data: [
-          {
-            country: 'USA',
-            value: 401
-          },
-          {
-            country: 'India',
-            value: 300
-          },
-          {
-            country: 'Australia',
-            value: 200
-          },
-          {
-            country: 'Brazil',
-            value: 100
-          }
-        ]
-      }
+        { patient: 'Martina Dolar', doctor: 'Dr. Martin Sever', date: '20/02/2020', timing: '8:00 AM', contact: '+1-202-555-0146' },
+        { patient: 'Marko Engelman', doctor: 'Dr. Sebastjan Bras', date: '25/02/2020', timing: '8:30 AM', contact: '+1-202-555-0164' },
+        { patient: 'Lana Ekart', doctor: 'Dr. Suzana Zgonc', date: '20/02/2020', timing: '9:45 AM', contact: '+1-202-555-0153' },
+        { patient: 'Goran Drobne', doctor: 'Dr. Martin Sever', date: '27/02/2020', timing: '11:30 AM', contact: '+1-202-555-0154' },
+        { patient: 'Igor Destovnik', doctor: 'Dr. Irma Medved', date: '28/02/2020', timing: '3:30 AM', contact: '+1-202-555-0101' },
+        { patient: 'Linda Darovec', doctor: 'Dr. Miha Vozelj', date: '28/02/2020', timing: '4:30 PM', contact: '+1-202-555-0176' },
+        { patient: 'Maj Pavlin', doctor: 'Dr. Janez Veble', date: '29/02/2020', timing: '5:00 AM', contact: '+1-202-555-0194' }
+      ]
     }
   },
   mounted () {
