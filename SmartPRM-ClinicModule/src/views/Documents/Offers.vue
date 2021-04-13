@@ -35,6 +35,7 @@
                   id="my-table"
                   bordered
                   hover
+                  @row-clicked="$router.push('/extra-pages/offer-example')"
                   :items="paginatedItems"
                   :fields="columns"
                   :per-page="perPage"

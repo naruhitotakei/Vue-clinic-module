@@ -36,6 +36,7 @@ import LockScreen1 from '../views/AuthPages/Default/LockScreen1'
 import ConfirmMail1 from '../views/AuthPages/Default/ConfirmMail1'
 /* Extra Pages */
 import InvoiceExample from '../views/Pages/InvoiceExample'
+import OfferExample from '../views/Pages/OfferExample'
 /* Patients */
 import ViewPatient from '../views/User/ViewPatient'
 /* Apps Views */
@@ -532,6 +533,12 @@ const defaultlayout = (prop, mode = false) => [
     name: prop + '.invoice-example',
     meta: { dark: mode, auth: true, name: 'Invoices Example' },
     component: InvoiceExample
+  },
+  {
+    path: 'offer-example',
+    name: prop + '.offer-example',
+    meta: { dark: mode, auth: true, name: 'Offer Example' },
+    component: OfferExample
   }
 ]
 
