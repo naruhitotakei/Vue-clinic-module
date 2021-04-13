@@ -42,3 +42,16 @@ export async function changePassword (oldPassword, newPassword1, newPassword2) {
   })
   return rawResponse.json()
 }
+
+export async function editProfile (name, email, phoneNumber) {
+  const rawResponse = await fetch('/api/profile', {
+    method: 'POST',
+    credentials: 'same-origin',
+    headers: {
+      'Accept': 'application/json',
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify({ 'email': email, 'name': name, 'phone_number': phoneNumber })
+  })
+  return rawResponse.json()
+}

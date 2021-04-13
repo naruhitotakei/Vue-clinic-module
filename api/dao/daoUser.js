@@ -102,8 +102,33 @@ const changePassword = ((request, response, email, oldpasswordhash, credentials)
     });   
 })
 
+const editProfile = ((request, response, email, data) => {
+    if (data.email || data.name || data.phone_number) {
+         var statement = ["UPDATE users SET "]
+         if (data.email) {
+             request.session.prm_user.email = data.email
+             statement.push("email = " + data.email)
+         }
+         if (data.name) {
+             request.session.prm_user.name = data.name
+             statement.push("name = " + data.name)
+         }
+         if (data.phone_number) {
+             request.session.prm_user.phone_number = data.phone_number
+             statement.push("phone_number = '" + data.phone_number + "'")
+         } 
+         statement.push(" WHERE email = '" + email + "'");
+         pool.query(statement.join('\n') , (error, qResult) => {
+             response.status(200).json("OK: Updated")
+         })                 
+    } else {
+        response.status(200).json("OK: Nothing to do")
+    }
+})
+
 module.exports = {
   getUser,
   hash,
-  changePassword
+  changePassword,
+  editProfile
 }

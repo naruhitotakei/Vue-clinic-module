@@ -150,23 +150,15 @@
                 </div>
         <div class="col-md-12 mb-3">
           <label for="validationDefault01">Name:</label>
-          <input type="text" v-model="formData.name" class="form-control" placeholder="John" id="validationDefault01" required>
-        </div>
-        <div class="col-md-12 mb-3">
-          <label for="validationDefault01">Surname:</label>
-          <input type="text" v-model="formData.surname" class="form-control" placeholder="Doe" id="validationDefault01" required>
-        </div>
-        <div class="col-md-12 mb-3">
-          <label for="validationDefault01">Title:</label>
-          <input type="text" v-model="formData.title" class="form-control" placeholder="Title" id="validationDefault01" required>
+          <input type="text" class="form-control" :value="logedInUser.name" id="validationDefault01" required>
         </div>
         <div class="col-md-12 mb-3">
           <label for="validationDefault01">Email:</label>
-          <input type="email" v-model="formData.email" class="form-control" placeholder="abc@gmail.com" id="validationDefault01" required>
+          <input type="email" class="form-control" :value="logedInUser.email" id="validationDefault01" required>
         </div>
         <div class="col-md-12 mb-3">
           <label for="validationDefault01">Phone:</label>
-          <input type="tel" v-model="formData.phone" class="form-control" placeholder="9876543210" id="validationDefault01" required>
+          <input type="tel" class="form-control" :value="logedInUser.phone_number" id="validationDefault01" required>
         </div>
       </div>
     </form>

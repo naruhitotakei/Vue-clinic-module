@@ -70,6 +70,18 @@ app.post('/api/password', async function(req, res) {
     }    
 });
 
+// /api/password
+app.get('/api/profile', async function(req, res) {
+    const data = {
+      phone_number: 1234
+    }
+    if (req.session.prm_user) { 
+        daoUser.editProfile(req, res, req.session.prm_user.email, data)
+    } else {
+       res.status(200).json("NOK: user not logged in")
+    }    
+});
+
 ///////////////////////////////////
 // enquiries, patients
 ///////////////////////////////////
