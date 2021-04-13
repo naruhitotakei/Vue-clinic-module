@@ -98,11 +98,13 @@ export default {
   },
   computed: {
     title () {
-      return this.invoice.invoice[0].invoiceID
+      return this.text + this.invoiceID
     }
   },
   data () {
     return {
+      text: 'Invoice N° : ',
+      invoiceID: '250028',
       invoice: {
         summary: 'Invoice Summary',
         detail: 'Invoice Detail',
@@ -111,7 +113,6 @@ export default {
           {
             invoiceDate: '20 Mar, 2021',
             invoiceTotal: '1.500 EUR',
-            invoiceID: '250028',
             invoiceStatus: 2,
             billingDetails: 'Natalija Kogoj <br> Prva cesta 1 <br> 1000 Ljubljana, Slovenija <br> Telefon: +38651365682 <br> Email: natalija.kogoj@staging-emazing.si',
             issuedIn: 'Ljubljana',

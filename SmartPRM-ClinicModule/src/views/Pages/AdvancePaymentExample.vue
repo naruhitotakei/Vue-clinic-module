@@ -98,20 +98,21 @@ export default {
   },
   computed: {
     title () {
-      return this.advancePayment.advancePayment[0].paymentID
+      return this.text + this.paymentID
     }
   },
   data () {
     return {
+      text: 'Payment N° : ',
+      paymentID: '250028',
       advancePayment: {
         summary: 'Advance Payment Summary',
         detail: 'Advance Payment Detail',
         description: 'It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout. The point of using Lorem Ipsum is that it has a more-or-less normal distribution of letters, as opposed to using \'Content here, content here\', making it look like readable English.',
         advancePayment: [
           {
-            paymentDate: '20 Mar, 2021',
+            date: '20 Mar, 2021',
             paymentTotal: '1.500 EUR',
-            paymentID: '250028',
             paymentStatus: 2,
             billingDetails: 'Natalija Kogoj <br> Prva cesta 1 <br> 1000 Ljubljana, Slovenija <br> Telefon: +38651365682 <br> Email: natalija.kogoj@staging-emazing.si',
             issuedIn: 'Ljubljana',
@@ -188,8 +189,8 @@ export default {
         ],
         advancePaymentDetailField: [
           {
-            key: 'dueDate',
-            label: 'Due Date'
+            key: 'paymentDate',
+            label: 'Payment Date'
           },
           {
             key: 'paymentMethod',
@@ -210,7 +211,7 @@ export default {
         ],
         advancePaymentDetails: [
           {
-            dueDate: '20 April 2021',
+            paymentDate: '20 April 2021',
             subTotal: '1.600 EUR',
             paymentMethod: 'Gotovina',
             discount: '100 EUR',

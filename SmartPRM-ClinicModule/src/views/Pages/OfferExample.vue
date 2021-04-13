@@ -98,11 +98,13 @@ export default {
   },
   computed: {
     title () {
-      return this.offer.offer[0].offerID
+      return this.text + this.offerID
     }
   },
   data () {
     return {
+      text: 'Offer N° : ',
+      offerID: '250028',
       offer: {
         summary: 'Offer Summary',
         detail: 'Offer Detail',
@@ -111,8 +113,6 @@ export default {
           {
             offerDate: '20 Mar, 2021',
             offerTotal: '1.500 EUR',
-            offerID: '250028',
-            offerStatus: 2,
             billingDetails: 'Natalija Kogoj <br> Prva cesta 1 <br> 1000 Ljubljana, Slovenija <br> Telefon: +38651365682 <br> Email: natalija.kogoj@staging-emazing.si',
             issuedIn: 'Ljubljana',
             issuedBy: 'Dr. Bojan Jernejc'
@@ -192,10 +192,6 @@ export default {
             label: 'Due Date'
           },
           {
-            key: 'paymentMethod',
-            label: 'Payment Method'
-          },
-          {
             key: 'subTotal',
             label: 'Sub-total'
           },
@@ -212,7 +208,6 @@ export default {
           {
             dueDate: '20 April 2021',
             subTotal: '1.600 EUR',
-            paymentMethod: 'Gotovina',
             discount: '100 EUR',
             total: '1.500 EUR'
           }
