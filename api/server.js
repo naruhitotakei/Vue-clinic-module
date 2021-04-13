@@ -36,14 +36,11 @@ const clinicStatisticsPermission = "Statistics For Clinic"
 // login - email and password in body
 app.post('/api/login', async function(req, res) {
    const credentials = req.body
-   //console.log('POST: api/login called for ' + credentials.loginEmail) 
    req.session.prm_user = await daoUser.getUser(req, res, credentials.loginEmail, credentials.loginPassword)
-  // console.log('req.session.prm_user', req.session)
 });
 
 // get loged user data
 app.get('/api/login', (req, res) => {
-   console.log('check get login api', req.session)
    if (req.session.prm_user) { 
         res.status(200).json(req.session.prm_user)
    } else {
@@ -53,7 +50,6 @@ app.get('/api/login', (req, res) => {
 
 // logout user
 app.get('/api/logout', (req, res) => {
-   console.log('GET: api/logout called ')
    delete req.session.prm_user
    return res.status(200).json("OK: user logged out")
 });
@@ -62,6 +58,28 @@ app.get('/api/logout', (req, res) => {
 app.get('/api/hash', (req, res) => { 
     var password = req.param('password');
     daoUser.hash(req, res, password) 
+});
+
+// /api/password
+app.post('/api/password', async function(req, res) {
+    const credentials = req.body
+    if (req.session.prm_user) { 
+        daoUser.changePassword(req, res, req.session.prm_user.email, req.session.prm_user.prm_password_hash, credentials)
+    } else {
+       res.status(200).json("NOK: user not logged in")
+    }    
+});
+
+// /api/password
+app.get('/api/profile', async function(req, res) {
+    const data = {
+      phone_number: 1234
+    }
+    if (req.session.prm_user) { 
+        daoUser.editProfile(req, res, req.session.prm_user.email, data)
+    } else {
+       res.status(200).json("NOK: user not logged in")
+    }    
 });
 
 ///////////////////////////////////

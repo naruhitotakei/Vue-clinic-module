@@ -28,9 +28,13 @@ const getUser = ((request, response, email, password) => {
                 resolve(null)
                 return
             }
-            bcrResult = bcrypt.compare(qResult.rows[0].prm_password_hash, password, function(err, bcrResult) {
-                if (qResult.rows[0].prm_role_id) {
-                    console.log('check if it is working here')
+            bcrypt.compare(password, qResult.rows[0].prm_password_hash).then(function(result) {
+                if (!result) {
+                    console.info("Password does not match ")
+                    response.json("NOK: Wrong password");
+                    resolve(null)
+                    return
+                } else if (qResult.rows[0].prm_role_id) {
                     pool.query('SELECT p.resource_name, s.scope_name FROM prm_role_permission rp JOIN prm_role r ON rp.role_id=r.role_id JOIN prm_permission p ON rp.permission_id=p.permission_id JOIN prm_scope s ON p.scope_id=s.scope_id WHERE rp.role_id = $1', [qResult.rows[0].prm_role_id], (error, qRoleResult) => {
                         if (error) {
                             reject("SQL roles error " + error)
@@ -41,15 +45,10 @@ const getUser = ((request, response, email, password) => {
                         response.status(200).json(user)
                         resolve(user)
                         return                   
-                    })
-                } else if (qResult.rows[0]) {
-                    console.info("User "+ email +" has no roles ")
-                    response.json("NOK: No roles");
-                    resolve(null)
-                    return                
+                    })              
                 } else {
-                    console.info("Password does not match ")
-                    response.json("NOK: Wrong password");
+                    console.info("Unknown problem ")
+                    response.json("NOK: Unknown");
                     resolve(null)
                     return
                 }
@@ -69,7 +68,67 @@ const hash = ((request, response, password) => {
     });   
 })
 
+const changePassword = ((request, response, email, oldpasswordhash, credentials) => {
+    if (!email) {
+        response.status(200).json("NOK: Unknown user")
+        return
+    } else if (!credentials) {
+        response.status(200).json("NOK: No credentials")
+        return    
+    } else if (!credentials || !credentials.oldpassword || !credentials.password1 || !credentials.password2) {
+        response.status(200).json("NOK: No credentials")
+        return   
+    } else if (credentials.password1 !== credentials.password2) {
+        response.status(200).json("NOK: Passwords does not match")
+        return             
+    } else if (credentials.password1.length < 8) {
+        response.status(200).json("NOK: Password to short")
+        return    
+    } 
+    bcrypt.compare(credentials.oldpassword, oldpasswordhash).then(function(result) {
+        if (result) {
+            bcrypt.hash(credentials.password1, 12).then(function(hash) {
+                console.log("sql " + hash + " " + email)
+                pool.query("UPDATE users SET prm_password_hash = $1 WHERE email = $2", [hash, email], (error, qResult) => {
+                    request.session.prm_user.prm_password_hash = hash
+                    response.status(200).json("OK: Password changed")
+                    return  
+                })
+            });
+        } else {
+            response.status(200).json("NOK: Wrong password")
+            return            
+        }
+    });   
+})
+
+const editProfile = ((request, response, email, data) => {
+    if (data.email || data.name || data.phone_number) {
+         var statement = ["UPDATE users SET "]
+         if (data.email) {
+             request.session.prm_user.email = data.email
+             statement.push("email = " + data.email)
+         }
+         if (data.name) {
+             request.session.prm_user.name = data.name
+             statement.push("name = " + data.name)
+         }
+         if (data.phone_number) {
+             request.session.prm_user.phone_number = data.phone_number
+             statement.push("phone_number = '" + data.phone_number + "'")
+         } 
+         statement.push(" WHERE email = '" + email + "'");
+         pool.query(statement.join('\n') , (error, qResult) => {
+             response.status(200).json("OK: Updated")
+         })                 
+    } else {
+        response.status(200).json("OK: Nothing to do")
+    }
+})
+
 module.exports = {
   getUser,
-  hash
+  hash,
+  changePassword,
+  editProfile
 }

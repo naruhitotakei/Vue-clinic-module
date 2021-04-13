@@ -1,7 +1,7 @@
 <template>
 <b-container fluid>
   <VueFullCalendar
-  :datesAboveResources="true" 
+  :datesAboveResources="true"
   :defaultView="calendarOptions.defaultView"
   :plugins="calendarOptions.plugins"
   :events="calendarOptions.events"
@@ -22,21 +22,21 @@
       <h3 style="text-align: center;">{{this.patientData.patient_name}} - {{this.patientData.desc}}</h3>
       <div class="form-row">
         <div class="col-md-12 mb-3">
-          <label for="validationDefault01">Start:</label>
+            <label for="validationDefault01">{{ $t('calendarEvent.start') }}</label>
           <input type="date" v-model="formData.start" class="form-control" id="validationDefault01" required style="max-width: 200px;">
         </div>
         <div class="col-md-12 mb-3">
-          <label for="validationDefault01">Duration:</label>
+            <label for="validationDefault01">{{ $t('calendarEvent.duration') }}</label>
           <div style="display: flex;">
           <input type="number" v-model="formData.hours" class="form-control col-md-6" min="0" placeholder="Hours" id="validationDefault01" required style="max-width: 100px;">
           <input type="number" v-model="formData.minutes" class="form-control col-md-6" min="0" step="5" placeholder="Minutes" id="validationDefault01" required style="max-width: 100px;">
         </div></div>
         <div class="col-md-12 mb-3">
-          <label for="validationDefault01">Notes:</label>
+            <label for="validationDefault01">{{ $t('calendarEvent.notes') }}</label>
           <textarea row="2" v-model="formData.notes" class="form-control" placeholder="Add your notes here for event!" id="validationDefault01" required></textarea>
         </div>
         <div class="col-md-12 mb-3">
-          <label for="validationDefault01">Change Color:</label><br>
+            <label for="validationDefault01">{{ $t('calendarEvent.changeColor') }}</label><br>
           <template v-for="(item,index) in color">
               <b-form-radio class="custom-radio-color" inline v-model="formData.color" :color="item.color" name="color" :key="index" :value="item.value" :disabled="item.disabled">{{ item.label }}</b-form-radio>
             </template>
@@ -49,9 +49,9 @@
         </template>
         </div>
       </div>
-      <button type="" class="btn btn-primary">View Patient</button>&nbsp;&nbsp;
-      <button type="" class="btn btn-primary">Change Display Color</button>&nbsp;&nbsp;
-      <button type="" class="btn btn-primary">Appointment Dismissed by Patient</button>
+      <button type="" class="btn btn-primary">{{ $t('calendarEvent.viewPatient') }}</button>&nbsp;&nbsp;
+      <button type="" class="btn btn-primary">{{ $t('calendarEvent.changeDisplayColor') }}</button>&nbsp;&nbsp;
+      <button type="" class="btn btn-primary">{{ $t('calendarEvent.appointmentCancelled') }}</button>
     </form>
   </b-modal>
 </b-container>
@@ -139,12 +139,12 @@ export default {
         //   { id: 'c', title: 'Doctor 3', eventColor: 'red' }
         // ],
         events: [
-          { id: '1', title: 'Appointment 1', start: '2021-04-22T16:30:00', end: '2021-04-22T18:00:00', resourceId: 'a', patient_data: { patient_name: 'Patient 1', desc: 'Cavity' } },
+          { id: '1', title: 'Appointment 1', start: '2021-04-22T16:30:00', end: '2021-04-22T18:00:00', resourceId: 'a', patient_data: { patient_name: 'Patient 1', desc: 'Zalivka' } },
           { id: '2', title: 'Appointment 1.1', start: '2021-04-22T01:00:00', end: '2021-04-22T03:00:00', resourceId: 'a', patient_data: { patient_name: 'Patient 2', desc: 'Implant' } },
-          { id: '3', title: 'Appointment 2', start: '2021-04-22T02:00:00', end: '2021-04-22T04:00:00', resourceId: 'b', patient_data: { patient_name: 'Patient 3', desc: 'Braces' } },
-          { id: '4', title: 'Appointment 6', start: '2021-04-22T03:30:00', end: '2021-04-22T05:00:00', resourceId: 'b', patient_data: { patient_name: 'Patient 4', desc: 'Checkup' } },
-          { id: '5', title: 'Appointment 5', start: '2021-04-22T01:30:00', end: '2021-04-22T03:30:00', resourceId: 'c', patient_data: { patient_name: 'Patient 5', desc: 'Braces' } },
-          { id: '6', title: 'Appointment 3', start: '2021-04-23T12:00:00', end: '2021-04-23T01:00:00', resourceId: 'c', patient_data: { patient_name: 'Patient 6', desc: 'Cavity' } },
+          { id: '3', title: 'Appointment 2', start: '2021-04-22T02:00:00', end: '2021-04-22T04:00:00', resourceId: 'b', patient_data: { patient_name: 'Patient 3', desc: 'Invisalign' } },
+          { id: '4', title: 'Appointment 6', start: '2021-04-22T03:30:00', end: '2021-04-22T05:00:00', resourceId: 'b', patient_data: { patient_name: 'Patient 4', desc: 'Pregled' } },
+          { id: '5', title: 'Appointment 5', start: '2021-04-22T01:30:00', end: '2021-04-22T03:30:00', resourceId: 'c', patient_data: { patient_name: 'Patient 5', desc: 'Invisalign' } },
+          { id: '6', title: 'Appointment 3', start: '2021-04-23T12:00:00', end: '2021-04-23T01:00:00', resourceId: 'c', patient_data: { patient_name: 'Patient 6', desc: 'Zalivka' } },
           { id: '7', title: 'Appointment 4', start: '2021-04-23T10:00:00', end: '2021-04-23T11:00:00', resourceId: 'b', patient_data: { patient_name: 'Patient 7', desc: 'Implant' } }
         ]
       }

@@ -10,7 +10,7 @@
                   <div class="rounded-circle iq-card-icon bg-primary"><i class="ri-user-fill"></i></div>
                   <div class="text-right">
                     <h2 class="mb-0"><span class="counter">5600</span></h2>
-                    <h5 class="">Doctors</h5>
+                    <h5 class="">{{ $t('statisticsForClinic.doctors') }}</h5>
                   </div>
                 </div>
               </template>
@@ -23,7 +23,7 @@
                   <div class="rounded-circle iq-card-icon bg-warning"><i class="ri-women-fill"></i></div>
                   <div class="text-right">
                     <h2 class="mb-0"><span class="counter">3450</span></h2>
-                    <h5 class="">Nurses</h5>
+                    <h5 class="">{{ $t('statisticsForClinic.nurses') }}</h5>
                   </div>
                 </div>
               </template>
@@ -36,7 +36,7 @@
                   <div class="rounded-circle iq-card-icon bg-danger"><i class="ri-group-fill"></i></div>
                   <div class="text-right">
                     <h2 class="mb-0"><span class="counter">3500</span></h2>
-                    <h5 class="">Patients</h5>
+                    <h5 class="">{{ $t('statisticsForClinic.patients') }}</h5>
                   </div>
                 </div>
               </template>
@@ -49,7 +49,7 @@
                   <div class="rounded-circle iq-card-icon bg-info"><i class="ri-hospital-line"></i></div>
                   <div class="text-right">
                     <h2 class="mb-0"><span class="counter">4500</span></h2>
-                    <h5 class="">Pharmacists</h5>
+                    <h5 class="">{{ $t('statisticsForClinic.pharmacists') }}</h5>
                   </div>
                 </div>
               </template>
@@ -60,26 +60,26 @@
       <b-col sm="12">
         <iq-card class-name="iq-card-block iq-card-stretch iq-card-height">
           <template v-slot:headerTitle>
-            <h4 class="card-title">Hospital Survey</h4>
+              <h4 class="card-title">{{ $t('statisticsForClinic.statisticsForClinicHeader') }}</h4>
           </template>
           <template v-slot:body>
             <div class="iq-card-body pb-0 mt-3">
               <div class="row text-center">
                 <div class="col-sm-3 col-6">
                   <h4 class="margin-0">$ 305 </h4>
-                  <p class="text-muted">Today's Income</p>
+                  <p class="text-muted">{{ $t('statisticsForClinic.todaysIncome') }}</p>
                 </div>
                 <div class="col-sm-3 col-6">
                   <h4 class="margin-0">$ 999 </h4>
-                  <p class="text-muted">This Week's Income</p>
+                  <p class="text-muted">{{ $t('statisticsForClinic.weeksIncome') }}</p>
                 </div>
                 <div class="col-sm-3 col-6">
                   <h4 class="margin-0">$ 4999 </h4>
-                  <p class="text-muted">This Month's Income</p>
+                  <p class="text-muted">{{ $t('statisticsForClinic.monthsIncome') }}</p>
                 </div>
                 <div class="col-sm-3 col-6">
                   <h4 class="margin-0">$ 90,000 </h4>
-                  <p class="text-muted">This Year's Income</p>
+                  <p class="text-muted">{{ $t('statisticsForClinic.yearsIncome') }}</p>
                 </div>
               </div>
             </div>
