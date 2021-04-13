@@ -21,7 +21,7 @@
                         <div class="iq-doc-description mt-2">
                             <p class="mb-0">{{doctor.phone}}</p>
                         </div>
-                        <a href="#" class="btn btn-primary">View Profile</a>
+                        <a href="#" class="btn btn-primary">{{ $t('settingsUsers.viewProfile') }}</a>
                     </template>
                 </iq-card>
             </b-col>

@@ -76,9 +76,9 @@
                                           </div>
                                           <div class="iq-card-body">
                                               <div class="row font-size-16">
-                                                  <div class="col-6">Personal dentist:</div>
+                                                  <div class="col-6"><h6>Personal dentist:</h6></div>
                                                   <div class="col-6">Dr. Miha Breznik</div>
-                                                  <div class="col-6">Personal surgeon:</div>
+                                                  <div class="col-6"><h6>Personal surgeon:</h6></div>
                                                   <div class="col-6">Dr. Nika Klemenc</div>
                                               </div>
                                           </div>
@@ -111,7 +111,7 @@
                                   <b-col md="14">
                                       <b-card title="General Notes" class="iq-card">
                                           <hr />
-                                          <b-card-text>This is another card with title and supporting text below. This card has some additional content to make it slightly taller overall.</b-card-text>
+                                          <b-card-text style="color:black;">This is another card with title and supporting text below. This card has some additional content to make it slightly taller overall.</b-card-text>
                                           <b-card-text><small class="text-muted">Last updated 3 mins ago</small></b-card-text>
                                       </b-card>
                                   </b-col>
@@ -121,7 +121,7 @@
                                       <b-card-title class="text-white">Allergies</b-card-title>
                                       <blockquote class="blockquote mb-0">
                                           <p class="font-size-14">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer posuere erat a ante.</p>
-                                          <footer class="blockquote-footer text-white font-size-12">Someone famous in <cite title="Source Title">Source Title</cite></footer>
+                                          <footer class="blockquote-footer text-white font-size-12">Last updated 2 weeks ago</footer>
                                       </blockquote>
                                   </b-card>
                                   <b-row>

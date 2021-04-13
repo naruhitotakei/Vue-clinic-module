@@ -4,9 +4,9 @@
             <b-col md="12">
                 <iq-card>
                     <template v-slot:headerTitle>
-                        <h3 class="card-title" style="margin-top: 10px;">Advance Payments</h3>
+                        <h3 class="card-title" style="margin-top: 10px;">{{ $t('advPayments.advPaymentsHeader') }}</h3>
                         <div class="btn-add-patient">
-                            <b-button variant="primary" @click="add_invoice"><i class="ri-add-line mr-2"></i>New Advance Payment</b-button>
+                            <b-button variant="primary" @click="add_invoice"><i class="ri-add-line mr-2"></i>{{ $t('advPayments.advPaymentsBtn') }}</b-button>
                         </div>
                         <div class="iq-card-header-toolbar d-flex align-items-center" style="margin-top: -10px;">
                             <div class="iq-search-bar">
@@ -132,11 +132,11 @@ export default {
       perPage: 10,
       totalRows: rows.length,
       columns: [
-        { label: 'Number', key: 'invoice_no', class: 'text-left' },
-        { label: 'Patient Name', key: 'patient_name', class: 'text-left' },
-        { label: 'Date', key: 'date', class: 'text-left' },
-        { label: 'Issued by', key: 'issued_by', class: 'text-left' },
-        { label: 'Invoice amount', key: 'amount', class: 'text-left' }
+        { label: this.$t('advPayments.advPaymentsColumn.no'), key: 'invoice_no', class: 'text-left' },
+        { label: this.$t('advPayments.advPaymentsColumn.patientName'), key: 'patient_name', class: 'text-left' },
+        { label: this.$t('advPayments.advPaymentsColumn.date'), key: 'date', class: 'text-left' },
+        { label: this.$t('advPayments.advPaymentsColumn.issuedBy'), key: 'issued_by', class: 'text-left' },
+        { label: this.$t('advPayments.advPaymentsColumn.amount'), key: 'amount', class: 'text-left' }
       ]
     }
   },

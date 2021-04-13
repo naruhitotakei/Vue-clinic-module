@@ -26,13 +26,13 @@
         </iq-card>
         <iq-card>
           <template v-slot:body>
-            <h5 class="card-title">Services summary</h5>
+              <h5 class="card-title">{{ $t('reportingEmazing.servicesSummary') }}</h5>
             <b-table small :items="items1" class="mb-0" :tbody-tr-class="table-success"></b-table>
           </template>
         </iq-card>
         <iq-card>
           <template v-slot:body>
-            <h5 class="card-title">Services list</h5>
+              <h5 class="card-title">{{ $t('reportingEmazing.servicesList') }}</h5>
             <b-table small :items="items2" class="mb-0" :tbody-tr-class="table-success"></b-table>
           </template>
         </iq-card>
@@ -61,9 +61,9 @@ export default {
       selected2: null,
       selected3: null,
       columns1: [
-        { label: 'Service Title', key: 'service_title', class: 'text-left' },
-        { label: 'Service Count', key: 'service_count', class: 'text-left' },
-        { label: 'Amount', key: 'amount', class: 'text-left' }
+        { label: this.$t('reportingEmazing.servicesSummaryColumn.serviceTitle'), key: 'service_title', class: 'text-left' },
+        { label: this.$t('reportingEmazing.servicesSummaryColumn.serviceCount'), key: 'service_count', class: 'text-left' },
+        { label: this.$t('reportingEmazing.servicesSummaryColumn.serviceAmount'), key: 'amount', class: 'text-left' }
       ],
       items1: [
         { service_title: 'General dentistry', service_count: 245, amount: '48.805,55', _rowVariant: 'active' },
@@ -77,14 +77,14 @@ export default {
         { service_title: 'Sum', service_count: 247, amount: '48.890,00', _rowVariant: 'active' }
       ],
       columns2: [
-        { label: 'Service date', key: 'service_date', class: 'text-left' },
-        { label: 'Title', key: 'title', class: 'text-left' },
-        { label: 'Lead name', key: 'lead_name', class: 'text-left' },
-        { label: 'Amount', key: 'amount', class: 'text-left' },
-        { label: 'Fee', key: 'fee', class: 'text-left' },
-        { label: 'Location', key: 'location', class: 'text-left' },
-        { label: 'Doctor', key: 'doctor', class: 'text-left' },
-        { label: 'Last Consultant Location', key: 'last_consultant_location', class: 'text-left' }
+        { label: this.$t('reportingEmazing.servicesListColumn.serviceDate'), key: 'service_date', class: 'text-left' },
+        { label: this.$t('reportingEmazing.servicesListColumn.serviceTitle'), key: 'title', class: 'text-left' },
+        { label: this.$t('reportingEmazing.servicesListColumn.serviceLeadName'), key: 'lead_name', class: 'text-left' },
+        { label: this.$t('reportingEmazing.servicesListColumn.serviceAmount'), key: 'amount', class: 'text-left' },
+        { label: this.$t('reportingEmazing.servicesListColumn.serviceFee'), key: 'fee', class: 'text-left' },
+        { label: this.$t('reportingEmazing.servicesListColumn.serviceLocation'), key: 'location', class: 'text-left' },
+        { label: this.$t('reportingEmazing.servicesListColumn.serviceDoctor'), key: 'doctor', class: 'text-left' },
+        { label: this.$t('reportingEmazing.servicesListColumn.serviceLastConsult'), key: 'last_consultant_location', class: 'text-left' }
       ],
       items2: [
         { service_date: 'General dentistry', title: '', lead_name: '', amount: '', fee: '', location: '', doctor: '', last_consultant_location: '', _rowVariant: 'active' },
