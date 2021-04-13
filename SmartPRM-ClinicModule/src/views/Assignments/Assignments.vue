@@ -11,8 +11,8 @@
                             <h5>{{ $t('assignments.todaysAssignments') }}</h5>
                         </template>
                         <template v-slot:body>
-                            <b-list-group class="list-group-flush" id="todaysAssignments" :per-page="perPage" :current-page="currentPage">
-                                <b-list-group-item v-for="item in items.slice(0, 15)" :key="item.id">
+                            <b-list-group class="list-group-flush" id="todaysAssignments">
+                                <b-list-group-item v-for="item in todaysAssigments" :key="item.id">
                                     <div class="assignments-container">
                                         <b-checkbox v-model="item.completed" :disabled="item.disabled" name="check-button" inline :key="index" class="completed-assignment"></b-checkbox>
                                         <span>{{ item.description }}</span>
@@ -24,10 +24,10 @@
                             </b-list-group>
                             <template>
                                 <div class="mt-4 ml-2">
-                                    <b-pagination v-model="currentPage"
-                                                  :total-rows="totalRows"
-                                                  :per-page="perPage"
-                                                  aria-controls="todaysAssignments"></b-pagination>
+                                     <b-pagination v-model="todayCurrentPage"
+                                              :total-rows="totalRows"
+                                              :per-page="todayPerPage"
+                                              aria-controls="overdueAssignments"></b-pagination>
                                 </div>
                             </template>
                         </template>
@@ -42,8 +42,8 @@
                         <h5>{{ $t('assignments.overdueAssignments') }}</h5>
                     </template>
                     <template v-slot:body>
-                        <b-list-group class="list-group-flush" id="overdueAssignments" :per-page="perPage" :current-page="currentPage">
-                            <b-list-group-item v-for="item in items.slice(10, 23)" :key="item.id">
+                        <b-list-group class="list-group-flush" id="overdueAssignments">
+                            <b-list-group-item v-for="item in overdueAssignments" :key="item.id">
                                 <div class="assignments-container">
                                     <b-checkbox v-model="item.completed" :disabled="item.disabled" name="check-button" inline :key="index" class="completed-assignment"></b-checkbox>
                                     <span>{{ item.description }}</span>
@@ -55,9 +55,9 @@
                         </b-list-group>
                         <template>
                             <div class="mt-4 ml-2">
-                                <b-pagination v-model="currentPage"
+                                <b-pagination v-model="overdueCurrentPage"
                                               :total-rows="totalRows"
-                                              :per-page="perPage"
+                                              :per-page="overduePerPage"
                                               aria-controls="overdueAssignments"></b-pagination>
                             </div>
                         </template>
@@ -73,7 +73,7 @@
                     </template>
                     <template v-slot:body>
                         <b-list-group class="list-group-flush" id="futureAssignments" :per-page="perPage" :current-page="currentPage">
-                            <b-list-group-item v-for="item in items.slice(33, 49)" :key="item.id">
+                            <b-list-group-item v-for="item in futureAssigments" :key="item.id">
                                 <div class="assignments-container">
                                     <b-checkbox v-model="item.completed" :disabled="item.disabled" name="check-button" inline :key="index" class="completed-assignment"></b-checkbox>
                                     <span>{{ item.description }}</span>
@@ -85,9 +85,9 @@
                         </b-list-group>
                         <template>
                             <div class="mt-4 ml-2">
-                                <b-pagination v-model="currentPage"
+                                <b-pagination v-model="futureCurrentPage"
                                               :total-rows="totalRows"
-                                              :per-page="perPage"
+                                              :per-page="futurePerPage"
                                               aria-controls="futureAssignments"></b-pagination>
                             </div>
                         </template>
@@ -103,7 +103,7 @@
                     </template>
                     <template v-slot:body>
                         <b-list-group class="list-group-flush" id="completedAssignments" :per-page="perPage" :current-page="currentPage">
-                            <b-list-group-item v-for="item in items.slice(60, 78)" :key="item.id">
+                            <b-list-group-item v-for="item in completedAssigments" :key="item.id">
                                 <div class="assignments-container">
                                     <b-checkbox v-model="item.completed" :disabled="item.disabled" name="check-button" inline :key="index" class="completed-assignment"></b-checkbox>
                                     <span>{{ item.description }}</span>
@@ -115,9 +115,9 @@
                         </b-list-group>
                         <template>
                             <div class="mt-4 ml-2">
-                                <b-pagination v-model="currentPage"
+                                <b-pagination v-model="completedCurrentPage"
                                               :total-rows="totalRows"
-                                              :per-page="perPage"
+                                              :per-page="completedPerPage"
                                               aria-controls="completedAssignments"></b-pagination>
                             </div>
                         </template>
@@ -136,7 +136,7 @@
 <script>
 import { xray } from '../../config/pluginInit'
 import { getAssignments } from '../../services/assignmentsService'
-var rows = []
+
 export default {
   name: 'Assignments',
   mounted () {
@@ -144,6 +144,18 @@ export default {
     this.getAssignments()
   },
   computed: {
+    todaysAssigments () {
+      return this.items.slice((this.todayCurrentPage - 1) * this.todayPerPage, this.todayCurrentPage * this.todayPerPage)
+    },
+    overdueAssignments () {
+      return this.items.slice((this.overdueCurrentPage - 1) * this.overduePerPage, this.overdueCurrentPage * this.overduePerPage)
+    },
+    futureAssigments () {
+      return this.items.slice((this.futureCurrentPage - 1) * this.futurePerPage, this.futureCurrentPage * this.futurePerPage)
+    },
+    completedAssigments () {
+      return this.items.slice((this.completedCurrentPage - 1) * this.completedPerPage, this.completedCurrentPage * this.completedPerPage)
+    }
   },
   watch: {
   },
@@ -151,19 +163,25 @@ export default {
     getAssignments () {
       getAssignments().then(response => {
         this.items = response
+        this.totalRows = this.items.length
       }
       )
     }
   },
   data () {
     return {
-      item: [],
       disabled: false,
       index: [],
-      items: rows,
-      currentPage: 1,
-      perPage: 10,
-      totalRows: rows.length,
+      items: [],
+      totalRows: '',
+      todayCurrentPage: 1,
+      todayPerPage: 10,
+      overdueCurrentPage: 1,
+      overduePerPage: 10,
+      futureCurrentPage: 1,
+      futurePerPage: 10,
+      completedCurrentPage: 1,
+      completedPerPage: 10,
       bool: [
         { label: 'Completed', checked: true },
         { label: 'Completed', checked: false }
