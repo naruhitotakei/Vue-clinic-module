@@ -34,7 +34,7 @@
                                 <b-table id="my-table"
                                          bordered
                                          hover
-                                         @row-clicked="$router.push('/extra-pages/invoice-example')"
+                                         @row-clicked="$router.push('/extra-pages/advance-payment-example')"
                                          style="cursor: pointer;"
                                          :items="paginatedItems"
                                          :fields="columns"

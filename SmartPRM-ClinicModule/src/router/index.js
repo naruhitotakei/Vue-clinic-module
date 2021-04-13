@@ -37,6 +37,7 @@ import ConfirmMail1 from '../views/AuthPages/Default/ConfirmMail1'
 /* Extra Pages */
 import InvoiceExample from '../views/Pages/InvoiceExample'
 import OfferExample from '../views/Pages/OfferExample'
+import AdvancePaymentExample from '../views/Pages/AdvancePaymentExample'
 /* Patients */
 import ViewPatient from '../views/User/ViewPatient'
 /* Apps Views */
@@ -539,6 +540,12 @@ const defaultlayout = (prop, mode = false) => [
     name: prop + '.offer-example',
     meta: { dark: mode, auth: true, name: 'Offer Example' },
     component: OfferExample
+  },
+  {
+    path: 'advance-payment-example',
+    name: prop + '.advance-payment-example',
+    meta: { dark: mode, auth: true, name: 'Advance Payment Example' },
+    component: AdvancePaymentExample
   }
 ]
 
