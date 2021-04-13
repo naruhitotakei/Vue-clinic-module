@@ -4,11 +4,11 @@
             <b-col lg="12">
                 <iq-card class-name="iq-card-block iq-card-stretch iq-card-height">
                     <template v-slot:headerTitle>
-                        <h4 class="card-title">My assignments</h4>
+                        <h4 class="card-title">{{ $t('assignments.assignmentsHeader') }}</h4>
                     </template>
                     <iq-card class-name="iq-card-block iq-card-stretch iq-card-height">
                         <template v-slot:headerTitle>
-                            <h5>Today's assignments</h5>
+                            <h5>{{ $t('assignments.todaysAssignments') }}</h5>
                         </template>
                         <template v-slot:body>
                             <b-list-group class="list-group-flush" id="todaysAssignments" :per-page="perPage" :current-page="currentPage">
@@ -39,7 +39,7 @@
             <b-col lg="12">
                 <iq-card class-name="iq-card-block iq-card-stretch iq-card-height">
                     <template v-slot:headerTitle>
-                        <h5>Overdue assignments</h5>
+                        <h5>{{ $t('assignments.overdueAssignments') }}</h5>
                     </template>
                     <template v-slot:body>
                         <b-list-group class="list-group-flush" id="overdueAssignments" :per-page="perPage" :current-page="currentPage">
@@ -69,7 +69,7 @@
             <b-col lg="12">
                 <iq-card class-name="iq-card-block iq-card-stretch iq-card-height">
                     <template v-slot:headerTitle>
-                        <h5>Future assignments</h5>
+                        <h5>{{ $t('assignments.futureAssignments') }}</h5>
                     </template>
                     <template v-slot:body>
                         <b-list-group class="list-group-flush" id="futureAssignments" :per-page="perPage" :current-page="currentPage">
@@ -99,7 +99,7 @@
             <b-col lg="12">
                 <iq-card class-name="iq-card-block iq-card-stretch iq-card-height">
                     <template v-slot:headerTitle>
-                        <h5>Completed assignments</h5>
+                        <h5>{{ $t('assignments.completedAssignments') }}</h5>
                     </template>
                     <template v-slot:body>
                         <b-list-group class="list-group-flush" id="completedAssignments" :per-page="perPage" :current-page="currentPage">

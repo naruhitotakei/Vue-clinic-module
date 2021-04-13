@@ -3,86 +3,31 @@
     "dashboard": "Home",
     "calendar": "Calendar",
     "patients": "Patients",
-    "assignment": "Assignments",
-    "users":"Users",
-    "statistics-clinic": "Statistics Clinic",
-    "maps": "Maps",
-    "extraPages": "Extra Pages",
-    "doctor": "Doctors",
-    "doctorProfile": "Doctor Profile",
-    "doctorEdit": "Edit Doctor",
-    "doctorAdd": "Add Doctor",
-    "doctorList": "All Doctors",
-    "components": "Components",
-    "uiElements": "UI Elements",
-    "color": "Color",
-    "typography": "Typography",
-    "alert": "Alert",
-    "badges": "Badges",
-    "breadcrumb": "Breadcrumb",
-    "button": "Button",
-    "cards": "Cards",
-    "carousel": "Carousel",
-    "video": "Video",
-    "grid": "Grid",
-    "images": "Images",
-    "listGroup": "List Group",
-    "media": "Media",
-    "modal": "Modal",
-    "notifications": "Notifications",
-    "pagination": "Pagination",
-    "popovers": "Popovers",
-    "progressBars": "Progress Bars",
-    "tabs": "Tabs",
-    "tooltips": "Tooltips",
-    "forms": "Forms",
-    "formElements": "Form Elements",
-    "formValidation": "Form Validation",
-    "formSwitch": "Form Switch",
-    "formRadio": "Form Radio",
-    "formCheckbox": "Form Checkbox",
-    "table": "Table",
-    "basicTable": "Basic Table",
-    "dataTable": "Data Table",
-    "charts": "Statistics",
-    "morrisChart": "Statistics Clinic",
-    "highChart": "Statistics Person",
-    "amChart": "AM Chart",
-    "apexChart": "Apex Chart",
-    "icons": "Icons",
-    "dripicons": "Dripicons Icon",
-    "fontAwsome5": "Font Awsome 5",
-    "lineAwsomeIcon": "lineAwsomeIcon",
-    "rimixIcon": "Remixicon",
-    "unicon": "Unicon",
-    "treeView": "Tree View",
-    "pages": "Pages",
-    "authentication": "Authentication",
-    "login": "Login",
-    "register": "Register",
-    "recoverPassword": "Recover Password",
-    "confirmMail": "Confirm Mail",
-    "lockScreen": "Lock Screen",
-    "timeline": "Timeline",
-    "invoice": "Invoice",
-    "blankPage": "Blank Page",
-    "error404": "Error 404",
-    "error500": "Error 500",
-    "pricing": "Pricing",
-    "pricing1": "pricing 1",
-    "maintenance": "Maintenance",
-    "comingSoon": "Coming Soon",
-    "faq": "FAQ",
-    "plugins": "Plugins",
-    "datepicker": "Datepicker",
-    "select": "Select",
-    "draggable": "Draggable",
-    "chat": "Chat"
+    "documents": "Documents",
+    "assignments": "Assignments",
+    "statistics": "Statistics",
+    "reporting": "Reporting",
+    "settings": "Settings"
   },
   "documents": {
     "offers": "Offers",
     "invoices": "Invoices",
     "advInvoices": "AdvInvoices"
+  },
+  "statistics": {
+    "statistics for clinic": "Statistics For Clinic",
+    "personal statistics": "Personal Statistics"
+  },
+  "reporting": {
+    "emazing": "Emazing",
+    "doctor": "Doctor",
+    "tax authority": "Tax Authority"
+  },
+  "settings": {
+    "users": "Users",
+    "locations": "Locations",
+    "services and products": "Services and Products",
+    "invoicing": "Invoicing"
   },
   "nav": {
     "allNotifications": "All Notifications",
@@ -101,7 +46,148 @@
       "privacySettingSub": "Control your privacy parameters.",
       "signout": "Sign Out"
     }
-  },  
+  },
+  "home": {
+    "newAppointments": "New Appointments",
+    "newAppointmentsColumn": {
+      "patient": "Patient",
+      "doctor": "Doctor",
+      "date": "Date",
+      "timing": "Timing",
+      "contact": "Contact"
+    },
+    "newAppointmentsDropDown": {
+      "view": "View",
+      "delete": "Delete",
+      "edit": "Edit",
+      "print": "Print",
+      "download": "Download"
+    },
+    "doctorsList": "Doctors List",
+    "doctorsListDropDown": {
+      "view": "View",
+      "appointment": "Appointment"
+    },
+    "doctorsListBtn": "View All Doctors",
+    "operations": "Operations",
+    "operationsColumn": {
+      "patient": "Patient",
+      "patientName": "Name",
+      "doctorsTeam": "Doctors Team",
+      "dateOfOperation": "Date of Surgery",
+      "report": "Report",
+      "diseases": "Diseases"
+    },
+    "operationsDropDown": {
+      "view": "View"
+    },
+    "todaysSchedule": "Today's Schedule",
+    "activityStatistics": "Activity Statistics"
+  },
+  "calendar": {
+    "selectDoctor": "Select Doctor",
+    "selectAll": "Select All",
+    "bookAppointment": "Book Appointment"
+  },
+  "calendarEvent": {
+    "start": "Start",
+    "duration": "Duration",
+    "notes": "Notes",
+    "changeColor": "Change Color",
+    "viewPatient": "View Patient",
+    "changeDisplayColor": "Change Appointment Color",
+    "appointmentCancelled": "Appointment Cancelled by the Patient"
+  },
+  "patients": {
+    "patientsHeader": "Patients",
+    "addPatient": "Add Patient",
+    "patientsColumn": {
+      "name": "Name",
+      "lastName": "Last Name",
+      "telephone": "Phone",
+      "email": "Email",
+      "region": "Region",
+      "state": "Country",
+      "lastVisit": "Last Visit",
+      "nextVisit": "Next Visit",
+      "personalDentist": "Personal Dentist",
+      "action": "Actions"
+    }
+  },
+  "offers": {
+    "offersHeader": "Offers",
+    "offersBtn": "Add Offer",
+    "offersColumn": {
+      "no": "Number",
+      "patientName": "Patient Name",
+      "date": "Date",
+      "issuedBy": "Issued By",
+      "amount": "Amount"
+    }
+  },
+  "invoices": {
+    "invoicesHeader": "Invoices",
+    "invoicesBtn": "Add Invoice",
+    "invoicesColumn": {
+      "no": "Number",
+      "patientName": "Patient Name",
+      "date": "Date",
+      "issuedBy": "Issued By",
+      "amount": "Amount",
+      "status": "Status"
+    }
+  },
+  "advPayments": {
+    "advPaymentsHeader": "Advance Payments",
+    "advPaymentsBtn": "Add Advance Payment",
+    "advPaymentsColumn": {
+      "no": "Number",
+      "patientName": "Patient Name",
+      "date": "Date",
+      "issuedBy": "Issued By",
+      "amount": "Amount"
+    }
+  },
+  "assignments": {
+    "assignmentsHeader": "My Assignments",
+    "todaysAssignments": "Today's Assignments",
+    "overdueAssignments": "Overdue Assignments",
+    "futureAssignments": "Future Assignments",
+    "completedAssignments": "Completed Assignments"
+  },
+  "statisticsForClinic": {
+    "doctors": "Doctors",
+    "nurses": "Nurses",
+    "patients": "Patients",
+    "pharmacists": "Pharmacists",
+    "statisticsForClinicHeader": "Clinic Statistics",
+    "todaysIncome": "Today's Income",
+    "weeksIncome": "This Week's Income",
+    "monthsIncome": "This Month's Income",
+    "yearsIncome": "This Year's Income"
+  },
+  "settingsUsers": {
+    "viewProfile": "View Profile"
+  },
+  "reportingEmazing": {
+    "servicesSummary": "Services Summary",
+    "servicesSummaryColumn": {
+      "serviceTitle": "Service Title",
+      "serviceCount": "Service Count",
+      "serviceAmount":  "Amount"
+    },
+    "servicesList": "Services List",
+    "servicesListColumn": {
+      "serviceDate": "Service Date",
+      "serviceTitle": "Service Title",
+      "serviceLeadName": "Patient Name",
+      "serviceAmount": "Amount",
+      "serviceFee": "Fee",
+      "serviceLocation": "Location",
+      "serviceDoctor": "Doctor",
+      "serviceLastConsult":  "Last Consult Location"
+    }
+  },
   "dashboard2": {
     "card1": "AVG Impressions",
     "card2": "AVG Engagements Rate",
@@ -117,29 +203,29 @@
     "card2": "Credited From Accounts",
     "card3": "AVG Employee Costs",
     "card4": "Average payment delay",
-    "invoice" : "invoice",
+    "invoice": "invoice",
     "invoiceState": "Invoice Stats",
     "openInvoice": "Open Invoices",
     "monthlyInvoice": "Monthly Invoices",
     "exchangeRates": "Exchange Rates",
-    "paymentHistory" : "Payment History",
-    "lastCosts" : "Last Costs",
-    "efficiency" : "Efficiency"
+    "paymentHistory": "Payment History",
+    "lastCosts": "Last Costs",
+    "efficiency": "Efficiency"
   },
   "rightSide": {
-    "customerDistribution" : "Customer Distribution",
-    "projectStatistic" : "Project Statistic",
-    "countries" : "Countries"
+    "customerDistribution": "Customer Distribution",
+    "projectStatistic": "Project Statistic",
+    "countries": "Countries"
   },
   "dropdown": {
-    "view" : "View",
+    "view": "View",
     "delete": "Delete",
-    "edit" : "Edit",
-    "print" : "Print",
+    "edit": "Edit",
+    "print": "Print",
     "download": "Download",
-    "unfollow" : "Unfollow",
-    "follow" : "Follow",
-    "block" : "Block"
+    "unfollow": "Unfollow",
+    "follow": "Follow",
+    "block": "Block"
   },
   "customizer": {
     "colorCustomizer": "Color Customizer",
@@ -147,7 +233,7 @@
     "colorMode": "Color Mode",
     "sidebar": "Sidebar",
     "sidebarMini": "Sidebar Mini",
-    "routeAnimation" : "Route Animation",
+    "routeAnimation": "Route Animation",
     "rtlMode": "RTL Mode",
     "rtl": "RTL",
     "reset": "Reset"

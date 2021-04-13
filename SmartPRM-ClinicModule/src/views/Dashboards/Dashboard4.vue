@@ -4,7 +4,7 @@
       <b-col lg="8">
         <iq-card class-name="iq-card-block iq-card-stretch iq-card-height">
           <template v-slot:headerTitle>
-            <h4 class="card-title">New Appointments </h4>
+              <h4 class="card-title">{{ $t('home.newAppointments') }}</h4>
           </template>
           <template v-slot:headerAction>
             <b-dropdown size="lg p-0"  variant="link" toggle-class="text-decoration-none" no-caret>
@@ -13,11 +13,11 @@
                       <i class="ri-more-fill m-0 text-primary"></i>
                     </span>
               </template>
-              <b-dropdown-item href="#"><i class="ri-eye-fill mr-2"></i>View</b-dropdown-item>
-              <b-dropdown-item href="#"><i class="ri-delete-bin-6-fill mr-2"></i>Delete</b-dropdown-item>
-              <b-dropdown-item href="#"><i class="ri-pencil-fill mr-2"></i>Edit</b-dropdown-item>
-              <b-dropdown-item href="#"><i class="ri-printer-fill mr-2"></i>Print</b-dropdown-item>
-              <b-dropdown-item href="#"><i class="ri-file-download-fill mr-2"></i>Download</b-dropdown-item>
+              <b-dropdown-item href="#"><i class="ri-eye-fill mr-2"></i>{{ $t('home.newAppointmentsDropDown.view') }}</b-dropdown-item>
+              <b-dropdown-item href="#"><i class="ri-delete-bin-6-fill mr-2"></i>{{ $t('home.newAppointmentsDropDown.delete') }}</b-dropdown-item>
+              <b-dropdown-item href="#"><i class="ri-pencil-fill mr-2"></i>{{ $t('home.newAppointmentsDropDown.edit') }}</b-dropdown-item>
+              <b-dropdown-item href="#"><i class="ri-printer-fill mr-2"></i>{{ $t('home.newAppointmentsDropDown.print') }}</b-dropdown-item>
+              <b-dropdown-item href="#"><i class="ri-file-download-fill mr-2"></i>{{ $t('home.newAppointmentsDropDown.download') }}</b-dropdown-item>
             </b-dropdown>
           </template>
           <template v-slot:body>
@@ -25,12 +25,11 @@
               <table class="table mb-0 table-borderless">
                 <thead>
                 <tr>
-                  <th scope="col">Patient</th>
-                  <th scope="col">Doctor</th>
-                  <th scope="col">Date</th>
-                  <th scope="col">Timing</th>
-                  <th scope="col">Contact</th>
-
+                  <th scope="col">{{ $t('home.newAppointmentsColumn.patient') }}</th>
+                  <th scope="col">{{ $t('home.newAppointmentsColumn.doctor') }}</th>
+                  <th scope="col">{{ $t('home.newAppointmentsColumn.date') }}</th>
+                  <th scope="col">{{ $t('home.newAppointmentsColumn.timing') }}</th>
+                  <th scope="col">{{ $t('home.newAppointmentsColumn.contact') }}</th>
                 </tr>
                 </thead>
                 <tbody v-for="appointment in appointments" :key="appointment.id">
@@ -50,7 +49,7 @@
       <b-col lg="4">
         <iq-card class-name="iq-card-block iq-card-stretch iq-card-height">
           <template v-slot:headerTitle>
-            <h4 class="card-title">Doctors Lists</h4>
+            <h4 class="card-title">{{ $t('home.doctorsList') }}</h4>
           </template>
           <template v-slot:body>
             <ul class="doctors-lists m-0 p-0">
@@ -67,20 +66,20 @@
                       <i class="ri-more-2-line"></i>
                     </span>
                     </template>
-                    <b-dropdown-item href="#"><i class="ri-eye-line mr-2"></i>View</b-dropdown-item>
-                    <b-dropdown-item href="#"><i class="ri-bookmark-line mr-2"></i>Appointment</b-dropdown-item>
+                    <b-dropdown-item href="#"><i class="ri-eye-line mr-2"></i>{{ $t('home.doctorsListDropDown.view') }}</b-dropdown-item>
+                    <b-dropdown-item href="#"><i class="ri-bookmark-line mr-2"></i>{{ $t('home.doctorsListDropDown.appointment') }}</b-dropdown-item>
                   </b-dropdown>
                 </div>
               </li>
             </ul>
-            <a href="javascript:void(0);" class="btn btn-primary d-block mt-3"><i class="ri-add-line"></i> View All Doctors </a>
+            <a href="javascript:void(0);" class="btn btn-primary d-block mt-3"><i class="ri-add-line"></i>{{ $t('home.doctorsListBtn') }}</a>
           </template>
         </iq-card>
       </b-col>
       <b-col lg="9">
             <iq-card class-name="iq-card-block iq-card-stretch iq-card-height" body-class="">
               <template v-slot:headerTitle>
-                <h4 class="card-title">Operations</h4>
+                <h4 class="card-title">{{ $t('home.operations') }}</h4>
               </template>
               <template v-slot:headerAction>
                 <div class="iq-card-header-toolbar d-flex align-items-center">
@@ -88,9 +87,7 @@
                     <template v-slot:button-content>
                       <i class="ri-more-fill"></i>
                     </template>
-                    <b-dropdown-item href="#"><i class="ri-eye-fill mr-2"></i>View</b-dropdown-item>
-                    <b-dropdown-item href="#">Another action</b-dropdown-item>
-                    <b-dropdown-item href="#">Something else here...</b-dropdown-item>
+                    <b-dropdown-item href="#"><i class="ri-eye-fill mr-2"></i>{{ $t('home.operationsDropDown.view') }}</b-dropdown-item>
                   </b-dropdown>
                 </div>
               </template>
@@ -99,18 +96,18 @@
                   <table class="table mb-0 table-borderless">
                     <thead>
                     <tr>
-                      <th scope="col">Patient</th>
-                      <th scope="col">Patient Name </th>
-                      <th scope="col">Doctors Team</th>
-                      <th scope="col">Date Of Operation</th>
-                      <th scope="col"> Report</th>
-                      <th scope="col">Diseases</th>
+                      <th scope="col">{{ $t('home.operationsColumn.patient') }}</th>
+                      <th scope="col">{{ $t('home.operationsColumn.patientName') }}</th>
+                      <th scope="col">{{ $t('home.operationsColumn.doctorsTeam') }}</th>
+                      <th scope="col">{{ $t('home.operationsColumn.dateOfOperation') }}</th>
+                      <th scope="col">{{ $t('home.operationsColumn.report') }}</th>
+                      <th scope="col">{{ $t('home.operationsColumn.diseases') }}</th>
                     </tr>
                     </thead>
                     <tbody>
                     <tr>
                       <td class="text-center"><img class="rounded-circle img-fluid avatar-40" src="../../assets/images/user/01.jpg" alt="profile"></td>
-                      <td>Petey Cruiser</td>
+                      <td>Viktor Jereb</td>
                       <td>
                         <div class="iq-media-group">
                           <a href="#" class="iq-media">
@@ -126,11 +123,11 @@
                       </td>
                       <td>12-02-2020</td>
                       <td><i class="ri-file-pdf-line font-size-16 text-danger"></i></td>
-                      <td>Fracture</td>
+                      <td>Zalivka</td>
                     </tr>
                     <tr>
                       <td class="text-center"><img class="rounded-circle img-fluid avatar-40" src="../../assets/images/user/02.jpg" alt="profile"></td>
-                      <td>Anna Sthesia</td>
+                      <td>Simona Majcen</td>
                       <td>
                         <div class="iq-media-group">
                           <a href="#" class="iq-media">
@@ -146,11 +143,11 @@
                       </td>
                       <td>14-02-2020</td>
                       <td><i class="ri-file-pdf-line font-size-16 text-danger"></i></td>
-                      <td>Cataract surgery</td>
+                      <td>Implantat</td>
                     </tr>
                     <tr>
                       <td class="text-center"><img class="rounded-circle img-fluid avatar-40" src="../../assets/images/user/03.jpg" alt="profile"></td>
-                      <td>Paul Molive</td>
+                      <td>Kaja Novak</td>
                       <td>
                         <div class="iq-media-group">
                           <a href="#" class="iq-media">
@@ -166,12 +163,11 @@
                       </td>
                       <td>14-02-2020</td>
                       <td><i class="ri-file-pdf-line font-size-16 text-danger"></i></td>
-                      <td>Cancer</td>
-
+                      <td>Odstranitev zobnega kamna</td>
                     </tr>
                     <tr>
                       <td class="text-center"><img class="rounded-circle img-fluid avatar-40" src="../../assets/images/user/04.jpg" alt="profile"></td>
-                      <td>Anna Mull</td>
+                      <td>Elizabeta Kralj</td>
                       <td>
                         <div class="iq-media-group">
                           <a href="#" class="iq-media">
@@ -187,11 +183,11 @@
                       </td>
                       <td>16-02-2020</td>
                       <td><i class="ri-file-pdf-line font-size-16 text-danger"></i></td>
-                      <td>Hysterectomy</td>
+                      <td>Peskanje</td>
                     </tr>
                     <tr>
                       <td class="text-center"><img class="rounded-circle img-fluid avatar-40" src="../../assets/images/user/05.jpg" alt="profile"></td>
-                      <td>Ruby saul</td>
+                      <td>Damjan Rupnik</td>
                       <td>
                         <div class="iq-media-group">
                           <a href="#" class="iq-media">
@@ -207,7 +203,7 @@
                       </td>
                       <td>18-02-2020</td>
                       <td><i class="ri-file-pdf-line font-size-16 text-danger"></i></td>
-                      <td>Cancer</td>
+                      <td>Invisalign</td>
                     </tr>
                     </tbody>
                   </table>
@@ -218,18 +214,18 @@
     <b-col lg="3">
         <iq-card>
           <template v-slot:headerTitle>
-            <h4 class="card-title">Today's Schedule</h4>
+              <h4 class="card-title">{{ $t('home.todaysSchedule') }}</h4>
           </template>
           <template v-slot:body>
             <ul class="m-0 p-0 today-schedule">
               <li class="d-flex">
                 <div class="schedule-icon"><i class="ri-checkbox-blank-circle-fill text-primary" /></div>
-                <div class="schedule-text"> <span>Web Design</span>
+                <div class="schedule-text"> <span>Implant</span>
                   <span>09:00 to 12:00</span></div>
               </li>
               <li class="d-flex">
                 <div class="schedule-icon"><i class="ri-checkbox-blank-circle-fill text-success" /></div>
-                <div class="schedule-text"> <span>Participate in Design</span>
+                <div class="schedule-text"> <span>Invisalign</span>
                   <span>09:00 to 12:00</span></div>
               </li>
             </ul>
@@ -239,7 +235,7 @@
     <b-col lg="12">
       <iq-card>
         <template v-slot:headerTitle>
-          <h4 class="card-title">Activity Statistic</h4>
+          <h4 class="card-title">{{ $t('home.activityStatistics') }}</h4>
         </template>
         <template v-slot:body>
           <ApexChart element="patient-chart-01" :chartOption="chart5"/>
@@ -324,13 +320,13 @@ export default {
 
       ],
       appointments: [
-        { patient: 'Martina Dolar', doctor: 'Dr. Martin Sever', date: '20/02/2020', timing: '8:00 AM', contact: '+1-202-555-0146' },
-        { patient: 'Marko Engelman', doctor: 'Dr. Sebastjan Bras', date: '25/02/2020', timing: '8:30 AM', contact: '+1-202-555-0164' },
-        { patient: 'Lana Ekart', doctor: 'Dr. Suzana Zgonc', date: '20/02/2020', timing: '9:45 AM', contact: '+1-202-555-0153' },
-        { patient: 'Goran Drobne', doctor: 'Dr. Martin Sever', date: '27/02/2020', timing: '11:30 AM', contact: '+1-202-555-0154' },
-        { patient: 'Igor Destovnik', doctor: 'Dr. Irma Medved', date: '28/02/2020', timing: '3:30 AM', contact: '+1-202-555-0101' },
-        { patient: 'Linda Darovec', doctor: 'Dr. Miha Vozelj', date: '28/02/2020', timing: '4:30 PM', contact: '+1-202-555-0176' },
-        { patient: 'Maj Pavlin', doctor: 'Dr. Janez Veble', date: '29/02/2020', timing: '5:00 AM', contact: '+1-202-555-0194' }
+        { patient: 'Martina Dolar', doctor: 'Dr. Martin Sever', date: '20/02/2021', timing: '8:00 AM', contact: '+38651982340' },
+        { patient: 'Marko Engelman', doctor: 'Dr. Sebastjan Bras', date: '25/02/2021', timing: '8:30 AM', contact: '+38640923721' },
+        { patient: 'Lana Ekart', doctor: 'Dr. Suzana Zgonc', date: '20/02/2021', timing: '9:45 AM', contact: '+38631239343' },
+        { patient: 'Goran Drobne', doctor: 'Dr. Martin Sever', date: '27/02/2021', timing: '11:30 AM', contact: '+38651843249' },
+        { patient: 'Igor Destovnik', doctor: 'Dr. Irma Medved', date: '28/02/2021', timing: '3:30 AM', contact: '+38640539821' },
+        { patient: 'Linda Darovec', doctor: 'Dr. Miha Vozelj', date: '28/02/2021', timing: '4:30 PM', contact: '+38631344357' },
+        { patient: 'Maj Pavlin', doctor: 'Dr. Janez Veble', date: '29/02/2021', timing: '5:00 AM', contact: '+38641234932' }
       ]
     }
   },

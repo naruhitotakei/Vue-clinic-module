@@ -4,9 +4,9 @@
             <b-col md="12">
                 <iq-card>
                     <template v-slot:headerTitle>
-                        <h3 class="card-title" style="margin-top: 10px;">Patients</h3>
+                        <h3 class="card-title" style="margin-top: 10px;">{{ $t('patients.patientsHeader') }}</h3>
                         <div class="btn-add-patient">
-                            <b-button variant="primary" @click="add"><i class="ri-add-line mr-2"></i>Add Patient</b-button>
+                            <b-button variant="primary" @click="add"><i class="ri-add-line mr-2"></i>{{ $t('patients.addPatient') }}</b-button>
                         </div>
                         <div class="iq-card-header-toolbar d-flex align-items-center" style="margin-top: -10px;">
                             <div class="iq-search-bar">
@@ -282,16 +282,16 @@ export default {
         { value: 'personal_dentist', text: 'Personal Dentist' }
       ],
       columns: [
-        { label: 'Name', key: 'name', class: 'text-left' },
-        { label: 'Last Name', key: 'last_name', class: 'text-left' },
-        { label: 'Phone', key: 'telephone', class: 'text-left' },
-        { label: 'Email', key: 'email', class: 'text-left' },
-        { label: 'Region', key: 'region', class: 'text-left' },
-        { label: 'State', key: 'state', class: 'text-left' },
-        { label: 'Last Visit', key: 'last_visit', class: 'text-left' },
-        { label: 'Next Visit', key: 'next_visit', class: 'text-center' },
-        { label: 'Personal Dentist', key: 'personal_dentist', class: 'text-center' },
-        { label: 'Actions', key: 'action', class: 'text-center' }
+        { label: this.$t('patients.patientsColumn.name'), key: 'name', class: 'text-left' },
+        { label: this.$t('patients.patientsColumn.lastName'), key: 'last_name', class: 'text-left' },
+        { label: this.$t('patients.patientsColumn.telephone'), key: 'telephone', class: 'text-left' },
+        { label: this.$t('patients.patientsColumn.email'), key: 'email', class: 'text-left' },
+        { label: this.$t('patients.patientsColumn.region'), key: 'region', class: 'text-left' },
+        { label: this.$t('patients.patientsColumn.state'), key: 'state', class: 'text-left' },
+        { label: this.$t('patients.patientsColumn.lastVisit'), key: 'last_visit', class: 'text-left' },
+        { label: this.$t('patients.patientsColumn.nextVisit'), key: 'next_visit', class: 'text-center' },
+        { label: this.$t('patients.patientsColumn.personalDentist'), key: 'personal_dentist', class: 'text-center' },
+        { label: this.$t('patients.patientsColumn.action'), key: 'action', class: 'text-center' }
       ]
     }
   }
