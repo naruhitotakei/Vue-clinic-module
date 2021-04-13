@@ -16,6 +16,9 @@
                                     <template v-slot:cell(invoiceStatus)="data">
                                         <span class="badge badge-danger">Unpaid</span>
                                     </template>
+                                    <template v-slot:cell(invoiceTotal)="data">
+                                        <span class="font-weight-bold" v-html="data.value"></span>
+                                    </template>
                                     <template v-slot:cell(billingDetails)="data">
                                         <p v-html="data.value"></p>
                                     </template>
@@ -93,9 +96,13 @@ export default {
   mounted () {
     xray.index()
   },
+  computed: {
+    title () {
+      return this.invoice.invoice[0].invoiceID
+    }
+  },
   data () {
     return {
-      title: 'Invoice',
       invoice: {
         summary: 'Invoice Summary',
         detail: 'Invoice Detail',
@@ -103,9 +110,9 @@ export default {
         invoice: [
           {
             invoiceDate: '20 Mar, 2021',
-            invoiceStatus: 2,
-            invoiceID: '250028',
             invoiceTotal: '1.500 EUR',
+            invoiceID: '250028',
+            invoiceStatus: 2,
             billingDetails: 'Natalija Kogoj <br> Prva cesta 1 <br> 1000 Ljubljana, Slovenija <br> Telefon: +38651365682 <br> Email: natalija.kogoj@staging-emazing.si',
             issuedIn: 'Ljubljana',
             issuedBy: 'Dr. Bojan Jernejc'
@@ -181,14 +188,6 @@ export default {
         ],
         InvoiceDetailField: [
           {
-            key: 'bank',
-            label: 'Bank'
-          },
-          {
-            key: 'accNo',
-            label: 'Acc.No'
-          },
-          {
             key: 'dueDate',
             label: 'Due Date'
           },
@@ -211,8 +210,6 @@ export default {
         ],
         InvoiceDetails: [
           {
-            bank: 'Banka Intesa Sanpaolo d.d.',
-            accNo: 'SI56 1010 0005 6606 867',
             dueDate: '20 April 2021',
             subTotal: '1.600 EUR',
             paymentMethod: 'Gotovina',
