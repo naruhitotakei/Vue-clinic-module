@@ -125,6 +125,31 @@
       "amount": "Znesek"
     }
   },
+  "offer": {
+    "offerHeader": "Ponudba",
+    "offerInfo": {
+      "offerDate": "Datum",
+      "offerTotal": "Znesek",
+      "offerDetails": "Naslovnik",
+      "offerIssuedIn": "Kraj Izdaje",
+      "offerIssuedBy": "Izdal"
+    },
+    "offerDetail": "Podrobnosti Ponudbe",
+    "offerDetailColumn": {
+      "item": "Opis",
+      "quantity": "Količina",
+      "price": "Cena",
+      "discount": "Popust",
+      "total": "Znesek"
+    },
+    "offerSummary": "Povzetek Ponudbe",
+    "offerSummaryColumn": {
+      "dueDate": "Datum Zapadlosti",
+      "subTotal": "Cena",
+      "discount": "Popust",
+      "total": "Znesek"
+    }
+  },
   "invoices": {
     "invoicesHeader": "Računi",
     "invoicesBtn": "Dodaj Račun",
@@ -137,6 +162,32 @@
       "status": "Status"
     }
   },
+  "invoice": {
+    "invoiceHeader": "Račun",
+    "invoiceInfo": {
+      "invoiceDate": "Datum",
+      "invoiceTotal": "Znesek",
+      "invoiceDetails": "Naslovnik",
+      "invoiceIssuedIn": "Kraj Izdaje",
+      "invoiceIssuedBy": "Izdal"
+    },
+    "invoiceDetail": "Podrobnosti Računa",
+    "invoiceDetailColumn": {
+      "item": "Opis",
+      "quantity": "Količina",
+      "price": "Cena",
+      "discount": "Popust",
+      "total": "Znesek"
+    },
+    "invoiceSummary": "Povzetek Računa",
+    "invoiceSummaryColumn": {
+      "dueDate": "Datum Zapadlosti",
+      "paymentMethod": "Način Plačila",
+      "subTotal": "Cena",
+      "discount": "Popust",
+      "total": "Znesek"
+    }
+  },
   "advPayments": {
     "advPaymentsHeader": "Avansni Računi",
     "advPaymentsBtn": "Dodaj Avansni Račun",
@@ -146,6 +197,33 @@
       "date": "Datum",
       "issuedBy": "Izdal",
       "amount": "Znesek"
+    }
+  },
+  "advPayment": {
+    "advPaymentHeader": "Avansni Račun",
+    "advPaymentInfo": {
+      "advPaymentDate": "Datum",
+      "advPaymentTotal": "Znesek",
+      "advPaymentStatus": "Status",
+      "advPaymentDetails": "Naslovnik",
+      "advPaymentIssuedIn": "Kraj Izdaje",
+      "advPaymentIssuedBy": "Izdal"
+    },
+    "advPaymentDetail": "Podrobnosti Avansnega Računa",
+    "advPaymentDetailColumn": {
+      "item": "Opis",
+      "quantity": "Količina",
+      "price": "Cena",
+      "discount": "Popust",
+      "total": "Znesek"
+    },
+    "advPaymentSummary": "Povzetek Avansnega Računa",
+    "advPaymentSummaryColumn": {
+      "paymentDate": "Datum Plačila",
+      "paymentMethod": "Način Plačila",
+      "subTotal": "Cena",
+      "discount": "Popust",
+      "total": "Znesek"
     }
   },
   "assignments": {

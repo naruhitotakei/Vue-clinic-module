@@ -12,7 +12,7 @@
                     <b-row>
                         <b-col lg="12">
                             <div class="table-responsive-sm">
-                                <b-table :items="invoice.invoice">
+                                <b-table :items="invoice.invoice" :fields="invoice.invoiceColumns">
                                     <template v-slot:cell(invoiceStatus)="data">
                                         <span class="badge badge-danger">Unpaid</span>
                                     </template>
@@ -103,11 +103,11 @@ export default {
   },
   data () {
     return {
-      text: 'Invoice N° : ',
+      text: this.$t('invoice.invoiceHeader') + ' N° : ',
       invoiceID: '250028',
       invoice: {
-        summary: 'Invoice Summary',
-        detail: 'Invoice Detail',
+        summary: this.$t('invoice.invoiceSummary'),
+        detail: this.$t('invoice.invoiceDetail'),
         description: 'It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout. The point of using Lorem Ipsum is that it has a more-or-less normal distribution of letters, as opposed to using \'Content here, content here\', making it look like readable English.',
         invoice: [
           {
@@ -126,23 +126,23 @@ export default {
           },
           {
             key: 'item',
-            label: 'Item'
+            label: this.$t('invoice.invoiceDetailColumn.item')
           },
           {
             key: 'quantity',
-            label: 'Quantity'
+            label: this.$t('invoice.invoiceDetailColumn.quantity')
           },
           {
             key: 'price',
-            label: 'Price'
+            label: this.$t('invoice.invoiceDetailColumn.price')
           },
           {
             key: 'discount',
-            label: 'Discount'
+            label: this.$t('invoice.invoiceDetailColumn.discount')
           },
           {
             key: 'total',
-            label: 'Total'
+            label: this.$t('invoice.invoiceDetailColumn.total')
           }
         ],
         invoiceSummary: [
@@ -190,23 +190,23 @@ export default {
         InvoiceDetailField: [
           {
             key: 'dueDate',
-            label: 'Due Date'
+            label: this.$t('invoice.invoiceSummaryColumn.dueDate')
           },
           {
             key: 'paymentMethod',
-            label: 'Payment Method'
+            label: this.$t('invoice.invoiceSummaryColumn.paymentMethod')
           },
           {
             key: 'subTotal',
-            label: 'Sub-total'
+            label: this.$t('invoice.invoiceSummaryColumn.subTotal')
           },
           {
             key: 'discount',
-            label: 'Discount'
+            label: this.$t('invoice.invoiceSummaryColumn.discount')
           },
           {
             key: 'total',
-            label: 'Total'
+            label: this.$t('invoice.invoiceSummaryColumn.total')
           }
         ],
         InvoiceDetails: [
@@ -217,6 +217,13 @@ export default {
             discount: '100 EUR',
             total: '1.500 EUR'
           }
+        ],
+        invoiceColumns: [
+          { label: this.$t('invoice.invoiceInfo.invoiceDate'), key: 'invoiceDate', class: 'text-left' },
+          { label: this.$t('invoice.invoiceInfo.invoiceTotal'), key: 'invoiceTotal', class: 'text-left' },
+          { label: this.$t('invoice.invoiceInfo.invoiceDetails'), key: 'billingDetails', class: 'text-left' },
+          { label: this.$t('invoice.invoiceInfo.invoiceIssuedIn'), key: 'issuedIn', class: 'text-left' },
+          { label: this.$t('invoice.invoiceInfo.invoiceIssuedBy'), key: 'issuedBy', class: 'text-left' }
         ]
       }
     }
