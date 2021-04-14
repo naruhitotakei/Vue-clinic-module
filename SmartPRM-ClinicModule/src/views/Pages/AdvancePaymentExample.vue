@@ -12,7 +12,7 @@
                     <b-row>
                         <b-col lg="12">
                             <div class="table-responsive-sm">
-                                <b-table :items="advancePayment.advancePayment">
+                                <b-table :items="advancePayment.advancePayment" :fields="advancePayment.advPaymentColumns">
                                     <template v-slot:cell(paymentStatus)="data">
                                         <span class="badge badge-danger">Unpaid</span>
                                     </template>
@@ -103,11 +103,11 @@ export default {
   },
   data () {
     return {
-      text: 'Payment N° : ',
+      text: this.$t('advPayment.advPaymentHeader') + ' N° : ',
       paymentID: '250028',
       advancePayment: {
-        summary: 'Advance Payment Summary',
-        detail: 'Advance Payment Detail',
+        summary: this.$t('advPayment.advPaymentSummary'),
+        detail: this.$t('advPayment.advPaymentDetail'),
         description: 'It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout. The point of using Lorem Ipsum is that it has a more-or-less normal distribution of letters, as opposed to using \'Content here, content here\', making it look like readable English.',
         advancePayment: [
           {
@@ -126,23 +126,23 @@ export default {
           },
           {
             key: 'item',
-            label: 'Item'
+            label: this.$t('advPayment.advPaymentDetailColumn.item')
           },
           {
             key: 'quantity',
-            label: 'Quantity'
+            label: this.$t('advPayment.advPaymentDetailColumn.quantity')
           },
           {
             key: 'price',
-            label: 'Price'
+            label: this.$t('advPayment.advPaymentDetailColumn.price')
           },
           {
             key: 'discount',
-            label: 'Discount'
+            label: this.$t('advPayment.advPaymentDetailColumn.discount')
           },
           {
             key: 'total',
-            label: 'Total'
+            label: this.$t('advPayment.advPaymentDetailColumn.total')
           }
         ],
         advancePaymentSummary: [
@@ -190,23 +190,23 @@ export default {
         advancePaymentDetailField: [
           {
             key: 'paymentDate',
-            label: 'Payment Date'
+            label: this.$t('advPayment.advPaymentSummaryColumn.paymentDate')
           },
           {
             key: 'paymentMethod',
-            label: 'Payment Method'
+            label: this.$t('advPayment.advPaymentSummaryColumn.paymentMethod')
           },
           {
             key: 'subTotal',
-            label: 'Sub-total'
+            label: this.$t('advPayment.advPaymentSummaryColumn.subTotal')
           },
           {
             key: 'discount',
-            label: 'Discount'
+            label: this.$t('advPayment.advPaymentSummaryColumn.discount')
           },
           {
             key: 'total',
-            label: 'Total'
+            label: this.$t('advPayment.advPaymentSummaryColumn.total')
           }
         ],
         advancePaymentDetails: [
@@ -217,6 +217,14 @@ export default {
             discount: '100 EUR',
             total: '1.500 EUR'
           }
+        ],
+        advPaymentColumns: [
+          { label: this.$t('advPayment.advPaymentInfo.advPaymentDate'), key: 'date', class: 'text-left' },
+          { label: this.$t('advPayment.advPaymentInfo.advPaymentTotal'), key: 'paymentTotal', class: 'text-left' },
+          { label: this.$t('advPayment.advPaymentInfo.advPaymentStatus'), key: 'paymentStatus', class: 'text-left' },
+          { label: this.$t('advPayment.advPaymentInfo.advPaymentDetails'), key: 'billingDetails', class: 'text-left' },
+          { label: this.$t('advPayment.advPaymentInfo.advPaymentIssuedIn'), key: 'issuedIn', class: 'text-left' },
+          { label: this.$t('advPayment.advPaymentInfo.advPaymentIssuedBy'), key: 'issuedBy', class: 'text-left' }
         ]
       }
     }

@@ -12,7 +12,7 @@
                     <b-row>
                         <b-col lg="12">
                             <div class="table-responsive-sm">
-                                <b-table :items="offer.offer">
+                                <b-table :items="offer.offer" :fields="offer.offerColumns">
                                     <template v-slot:cell(offerStatus)="data">
                                         <span class="badge badge-danger">Unpaid</span>
                                     </template>
@@ -103,11 +103,11 @@ export default {
   },
   data () {
     return {
-      text: 'Offer N° : ',
+      text: this.$t('offer.offerHeader') + ' N° : ',
       offerID: '250028',
       offer: {
-        summary: 'Offer Summary',
-        detail: 'Offer Detail',
+        summary: this.$t('offer.offerSummary'),
+        detail: this.$t('offer.offerDetail'),
         description: 'It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout. The point of using Lorem Ipsum is that it has a more-or-less normal distribution of letters, as opposed to using \'Content here, content here\', making it look like readable English.',
         offer: [
           {
@@ -125,23 +125,23 @@ export default {
           },
           {
             key: 'item',
-            label: 'Item'
+            label: this.$t('offer.offerDetailColumn.item')
           },
           {
             key: 'quantity',
-            label: 'Quantity'
+            label: this.$t('offer.offerDetailColumn.quantity')
           },
           {
             key: 'price',
-            label: 'Price'
+            label: this.$t('offer.offerDetailColumn.price')
           },
           {
             key: 'discount',
-            label: 'Discount'
+            label: this.$t('offer.offerDetailColumn.discount')
           },
           {
             key: 'total',
-            label: 'Total'
+            label: this.$t('offer.offerDetailColumn.total')
           }
         ],
         offerSummary: [
@@ -189,19 +189,19 @@ export default {
         offerDetailField: [
           {
             key: 'dueDate',
-            label: 'Due Date'
+            label: this.$t('offer.offerSummaryColumn.dueDate')
           },
           {
             key: 'subTotal',
-            label: 'Sub-total'
+            label: this.$t('offer.offerSummaryColumn.subTotal')
           },
           {
             key: 'discount',
-            label: 'Discount'
+            label: this.$t('offer.offerSummaryColumn.discount')
           },
           {
             key: 'total',
-            label: 'Total'
+            label: this.$t('offer.offerSummaryColumn.total')
           }
         ],
         offerDetails: [
@@ -211,6 +211,13 @@ export default {
             discount: '100 EUR',
             total: '1.500 EUR'
           }
+        ],
+        offerColumns: [
+          { label: this.$t('offer.offerInfo.offerDate'), key: 'offerDate', class: 'text-left' },
+          { label: this.$t('offer.offerInfo.offerTotal'), key: 'offerTotal', class: 'text-left' },
+          { label: this.$t('offer.offerInfo.offerDetails'), key: 'billingDetails', class: 'text-left' },
+          { label: this.$t('offer.offerInfo.offerIssuedIn'), key: 'issuedIn', class: 'text-left' },
+          { label: this.$t('offer.offerInfo.offerIssuedBy'), key: 'issuedBy', class: 'text-left' }
         ]
       }
     }
