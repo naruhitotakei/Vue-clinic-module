@@ -88,11 +88,11 @@
                                       <template v-slot:body>
                                           <div class="iq-card-header d-flex justify-content-between">
                                               <div class="iq-header-title">
-                                                  <h4 class="card-title">Files</h4><hr />
+                                                  <h4 class="card-title">Files (9)</h4><hr />
                                               </div>
                                           </div>
-                                          <div class="iq-card-body">
-                                              <ul class="profile-img-gallary d-flex flex-wrap p-0 m-0 font-size-12">
+                                          <div class="iq-card-body p-0">
+                                              <ul class="profile-img-gallary d-flex flex-wrap p-0 m-0 font-size-12 overflow-y-scroll" style="max-height: 230px;">
                                                   <li class="col-md-4 col-6"><a href="javascript:void(0);"><img src="../../assets/images/login/1.png" alt="gallary-image" class="img-fluid"></a><div class="text-center"><p class="mb-0 pb-0">x-ray_1.jpg</p><p>03-03-2021</p></div></li>
                                                   <li class="col-md-4 col-6"><a href="javascript:void(0);"><img src="../../assets/images/login/2.png" alt="gallary-image" class="img-fluid"></a><div class="text-center"><p class="mb-0 pb-0">blood_test_1.jpg</p><p>10-03-2021</p></div></li>
                                                   <li class="col-md-4 col-6"><a href="javascript:void(0);"><img src="../../assets/images/login/3.png" alt="gallary-image" class="img-fluid"></a><div class="text-center"><p class="mb-0 pb-0">imprint_1.jpg</p><p>09-03-2021</p></div></li>
@@ -133,41 +133,62 @@
                                                           <h4 class="card-title">Patient Notes</h4><hr />
                                                       </div>
                                                   </div>
-                                                  <ul class="list-inline m-0">
+                                                  <ul class="list-inline m-0 overflow-y-scroll" style="max-height: 300px;">
                                                       <li class="d-flex align-items-center justify-content-between mb-3">
                                                           <div>
                                                               <h6>Treatment was good!</h6>
                                                               <p class="mb-0">03/03/2021</p>
                                                           </div>
-                                                          <div><a href="#" class="btn iq-bg-primary">Open</a></div>
+                                                          <div><a href="#" class="btn iq-bg-primary mr-2">Open</a></div>
                                                       </li>
                                                       <li class="d-flex align-items-center justify-content-between mb-3">
                                                           <div>
-                                                              <h6>My Health in better Now</h6>
+                                                              <h6>My Health in better now</h6>
                                                               <p class="mb-0">03/03/2021</p>
                                                           </div>
-                                                          <div><a href="#" class="btn iq-bg-primary">Open</a></div>
+                                                          <div><a href="#" class="btn iq-bg-primary mr-2">Open</a></div>
                                                       </li>
                                                       <li class="d-flex align-items-center justify-content-between mb-3">
                                                           <div>
-                                                              <h6>No Effacted</h6>
+                                                              <h6>Not Effected</h6>
                                                               <p class="mb-0">03/03/2021</p>
                                                           </div>
-                                                          <div><a href="#" class="btn iq-bg-primary">Open</a></div>
+                                                          <div><a href="#" class="btn iq-bg-primary mr-2">Open</a></div>
                                                       </li>
                                                       <li class="d-flex align-items-center justify-content-between mb-3">
                                                           <div>
-                                                              <h6>Operation Successfull</h6>
+                                                              <h6>Operation Successful</h6>
                                                               <p class="mb-0">03/03/2021</p>
                                                           </div>
-                                                          <div><a href="#" class="btn iq-bg-primary">Open</a></div>
+                                                          <div><a href="#" class="btn iq-bg-primary mr-2">Open</a></div>
                                                       </li>
                                                       <li class="d-flex align-items-center justify-content-between mb-3">
                                                           <div>
                                                               <h6>Medical Care is just a click away</h6>
                                                               <p class="mb-0">03/03/2021 </p>
                                                           </div>
-                                                          <div><a href="#" class="btn iq-bg-primary">Open</a></div>
+                                                          <div><a href="#" class="btn iq-bg-primary mr-2">Open</a></div>
+                                                      </li>
+                                                      <li class="d-flex align-items-center justify-content-between mb-3">
+                                                          <div>
+                                                              <h6>Not Effected</h6>
+                                                              <p class="mb-0">03/03/2021 </p>
+                                                          </div>
+                                                          <div><a href="#" class="btn iq-bg-primary mr-2">Open</a></div>
+                                                      </li>
+                                                      <li class="d-flex align-items-center justify-content-between mb-3">
+                                                          <div>
+                                                              <h6>Treatment was good!</h6>
+                                                              <p class="mb-0">03/03/2021 </p>
+                                                          </div>
+                                                          <div><a href="#" class="btn iq-bg-primary mr-2">Open</a></div>
+                                                      </li>
+                                                      <li class="d-flex align-items-center justify-content-between mb-3">
+                                                          <div>
+                                                              <h6>My Health in better now</h6>
+                                                              <p class="mb-0">03/03/2021 </p>
+                                                          </div>
+                                                          <div><a href="#" class="btn iq-bg-primary mr-2">Open</a></div>
                                                       </li>
                                                   </ul>
                                               </template>
@@ -232,11 +253,12 @@
                                       <input type="hidden" v-model="user.profile_image">
                                       <div class="p-image">
                                           <div class="position-relative">
-                                              <i class="ri-pencil-line upload-button" @click="disabled = (disabled + 1) % 2"></i>
+                                              <i class="ri-camera-line upload-button"></i>
                                               <b-form-file class="h-100 position-absolute" accept="image/*" style="opacity: 0;" @change="previewImage"></b-form-file>
                                           </div>
                                       </div>
                                   </div>
+                                  <b-button variant="primary" @click="disabled = (disabled + 1) % 2" class="btn-add-patient btn-edit-patient" >Edit</b-button>
                               </b-col>
                           </b-form-group>
                           <b-row>
@@ -251,7 +273,7 @@
                                           <b-row align-v="center">
                                               <b-form-group class="col-md-12" label-cols-sm="4" label="First Name:" label-for="fname">
                                                   <ValidationProvider name="fname" rules="required" v-slot="{ errors }">
-                                                      <b-form-input :disabled="disabled == 1" v-model="user.fname" type="text" :class="(errors.length > 0 ? ' is-invalid' : '')"></b-form-input>
+                                                      <b-form-input :disabled="disabled == 0" v-model="user.fname" type="text" :class="(errors.length > 0 ? ' is-invalid' : '')"></b-form-input>
                                                       <div class="invalid-feedback">
                                                           <span>{{ errors[0] }}</span>
                                                       </div>
@@ -259,7 +281,7 @@
                                               </b-form-group>
                                               <b-form-group class="col-md-12" label-cols-sm="4" label="Last Name:" label-for="lname">
                                                   <ValidationProvider name="lname" rules="required" v-slot="{ errors }">
-                                                      <b-form-input :disabled="disabled == 1" v-model="user.lname" type="text" :class="(errors.length > 0 ? ' is-invalid' : '')"></b-form-input>
+                                                      <b-form-input :disabled="disabled == 0" v-model="user.lname" type="text" :class="(errors.length > 0 ? ' is-invalid' : '')"></b-form-input>
                                                       <div class="invalid-feedback">
                                                           <span>{{ errors[0] }}</span>
                                                       </div>
@@ -268,47 +290,47 @@
 
                                               <b-form-group class="col-md-12" label-cols-sm="4" label="Date of birth:" label-for="dob">
                                                   <ValidationProvider name="dob" rules="required" v-slot="{ errors }">
-                                                      <b-form-input :disabled="disabled == 1" v-model="user.dob" type="date" :class="(errors.length > 0 ? ' is-invalid' : '')"></b-form-input>
+                                                      <b-form-input :disabled="disabled == 0" v-model="user.dob" type="date" :class="(errors.length > 0 ? ' is-invalid' : '')"></b-form-input>
                                                       <div class="invalid-feedback">
                                                           <span>{{ errors[0] }}</span>
                                                       </div>
                                                   </ValidationProvider>
                                               </b-form-group>
-                                              <b-form-group :disabled="disabled == 1" class="col-md-12" label-cols-sm="4" label="Gender:" label-for="gender" label-class="d-block">
+                                              <b-form-group :disabled="disabled == 0" class="col-md-12" label-cols-sm="4" label="Gender:" label-for="gender" label-class="d-block">
                                                   <b-form-radio inline v-model="user.gender" value="male">Male</b-form-radio>
                                                   <b-form-radio inline v-model="user.gender" value="female">Female</b-form-radio>
                                                   <b-form-radio inline v-model="user.gender" value="unspecified">Unspecified</b-form-radio>
                                               </b-form-group>
                                               <b-form-group class="col-md-12" label-cols-sm="4" label="Address:" label-for="address">
-                                                  <b-form-textarea :disabled="disabled == 1" name="address" v-model="user.address" style="line-height: 22px;" rows="3">
+                                                  <b-form-textarea :disabled="disabled == 0" name="address" v-model="user.address" style="line-height: 22px;" rows="3">
                                                   </b-form-textarea>
                                               </b-form-group>
                                               <b-form-group class="col-md-12" style="justify-content: space-between;" label-cols-sm="4" label="Postcode, City:" label-for="city">
-                                                  <b-form-input :disabled="disabled == 1" class="col-md-6" style="float: left;" v-model="user.postcode" type="text"></b-form-input>
-                                                  <b-form-input :disabled="disabled == 1" class="col-md-6" v-model="user.city" type="text"></b-form-input>
+                                                  <b-form-input :disabled="disabled == 0" class="col-md-6" style="float: left;" v-model="user.postcode" type="text"></b-form-input>
+                                                  <b-form-input :disabled="disabled == 0" class="col-md-6" v-model="user.city" type="text"></b-form-input>
                                               </b-form-group>
                                               <b-form-group class="col-md-12" label-cols-sm="4" label-for="country" label="Country:">
-                                                  <b-form-select :disabled="disabled == 1" plain v-model="user.country" :selected="user.country" :options="countries" id="exampleFormControlSelect3">
+                                                  <b-form-select :disabled="disabled == 0" plain v-model="user.country" :selected="user.country" :options="countries" id="exampleFormControlSelect3">
                                                   </b-form-select>
                                               </b-form-group>
                                               <b-form-group class="col-md-12" label-cols-sm="4" label-for="citizenship" label="Citizenship:">
-                                                  <b-form-input :disabled="disabled == 1" name="citizenship" type="text" v-model="user.citizenship"></b-form-input>
+                                                  <b-form-input :disabled="disabled == 0" name="citizenship" type="text" v-model="user.citizenship"></b-form-input>
                                               </b-form-group>
                                               <b-form-group class="col-md-12" label-cols-sm="4" label-for="region" label="Region(EU):">
-                                                  <b-form-input :disabled="disabled == 1" name="region" type="text" v-model="user.region"></b-form-input>
+                                                  <b-form-input :disabled="disabled == 0" name="region" type="text" v-model="user.region"></b-form-input>
                                               </b-form-group>
                                               <b-form-group class="col-md-12" label-cols-sm="4" label-for="insurance" label="Insurance number, insured at:">
-                                                  <b-form-input :disabled="disabled == 1" class="col-md-6" style="float: left;" name="insurance_no" type="text" v-model="user.insurance_no"></b-form-input>
-                                                  <b-form-input :disabled="disabled == 1" class="col-md-6" name="insured_at" type="text" v-model="user.insured_at"></b-form-input>
+                                                  <b-form-input :disabled="disabled == 0" class="col-md-6" style="float: left;" name="insurance_no" type="text" v-model="user.insurance_no"></b-form-input>
+                                                  <b-form-input :disabled="disabled == 0" class="col-md-6" name="insured_at" type="text" v-model="user.insured_at"></b-form-input>
                                               </b-form-group>
                                               <b-form-group class="col-md-12" label-cols-sm="4" label-for="mobile_no" label="Mobile number:">
-                                                  <b-form-input :disabled="disabled == 1" name="mobile_no" type="text" v-model="user.mobile_no"></b-form-input>
+                                                  <b-form-input :disabled="disabled == 0" name="mobile_no" type="text" v-model="user.mobile_no"></b-form-input>
                                               </b-form-group>
                                               <b-form-group class="col-md-12" label-cols-sm="4" label-for="email" label="Email-address:">
-                                                  <b-form-input :disabled="disabled == 1" name="email" type="text" v-model="user.email"></b-form-input>
+                                                  <b-form-input :disabled="disabled == 0" name="email" type="text" v-model="user.email"></b-form-input>
                                               </b-form-group>
                                               <b-form-group class="col-md-12" label-cols-sm="4" label-for="tax_no" label="Tax number:">
-                                                  <b-form-input :disabled="disabled == 1" name="tax_no" type="text" v-model="user.tax_no"></b-form-input>
+                                                  <b-form-input :disabled="disabled == 0" name="tax_no" type="text" v-model="user.tax_no"></b-form-input>
                                               </b-form-group>
                                           </b-row>
                                       </template>
@@ -321,7 +343,7 @@
                                               <h4>Allergies and sensitivities</h4>
                                           </div>
                                           <div class="iq-card-body p-0">
-                                              <textarea :disabled="disabled == 1" style="line-height: 30px;" v-model="user.allergies" class="textarea form-control" rows="7"></textarea>
+                                              <textarea :disabled="disabled == 0" style="line-height: 30px;" v-model="user.allergies" class="textarea form-control" rows="7"></textarea>
                                           </div>
                                       </template>
                                   </iq-card>
@@ -331,22 +353,22 @@
                                               <h4>Reminders</h4>
                                           </div>
                                           <div class="iq-card-body p-0">
-                                              <textarea :disabled="disabled == 1" style="line-height: 30px;" v-model="user.reminder" class="textarea form-control" rows="7"></textarea>
+                                              <textarea :disabled="disabled == 0" style="line-height: 30px;" v-model="user.reminder" class="textarea form-control" rows="7"></textarea>
                                           </div>
                                       </template>
                                   </iq-card>
                                   <iq-card>
                                       <template v-slot:body>
                                           <div class="pl-0 iq-card-header d-flex justify-content-between">
-                                              <h4>Other Information</h4>
+                                              <h4>Personal Doctors</h4>
                                               <hr />
                                           </div>
                                           <div class="iq-card-body">
                                               <div class="row">
-                                                  <div class="col-4 pr-1 pl-0">Dentist:</div>
-                                                  <b-form-input :disabled="disabled == 1" v-model="user.dentist" class="col-8 mb-2" type="text"></b-form-input>
-                                                  <div class="col-4 pr-1 pl-0">Surgeon:</div>
-                                                  <b-form-input :disabled="disabled == 1" v-model="user.surgeon" class="col-8" type="text"></b-form-input>
+                                                  <div class="col-4 pr-1 pl-0 text-black">Dentist:</div>
+                                                  <b-form-input :disabled="disabled == 0" v-model="user.dentist" class="col-8 mb-2" type="text"></b-form-input>
+                                                  <div class="col-4 pr-1 pl-0 text-black">Surgeon:</div>
+                                                  <b-form-input :disabled="disabled == 0" v-model="user.surgeon" class="col-8" type="text"></b-form-input>
                                               </div>
                                           </div>
                                       </template>
@@ -635,11 +657,11 @@ export default {
       },
       user: {
         profile_image: require('../../assets/images/user/11.png'),
-        fname: 'Nik',
-        lname: 'Jone',
-        dob: '2021-03-03',
+        fname: 'Anita',
+        lname: 'Jereb',
+        dob: '1979-04-21',
         gender: 'female',
-        address: 'Rusjanov trg 10',
+        address: 'Prva ulica 11',
         postcode: '1000',
         city: 'Ljubljana',
         country: 'Slovenia',
@@ -647,16 +669,16 @@ export default {
         region: 'Sl-unknown',
         insurance_no: '1534667',
         insured_at: 'Zavarovalnica Triglav',
-        mob_no: '+386 67388 78889',
+        mob_no: '+38640076191',
         tax_no: '9877645677',
-        email: 'nikjone@demoo.com',
-        mobile_no: '001 2351 256 12',
-        location: 'USA',
+        email: 'anita.jereb@staging.emazing.si',
+        mobile_no: '+38640076191',
+        location: 'Ljubljana',
         edited_date: Date.now(),
         allergies: 'Type, cause, symptom, note, date, change , doctor...',
         reminder: 'The patient has very sensitive gums, careful not to cause bleeding...',
-        surgeon: 'Dr. Penger',
-        dentist: 'Dr. Penger',
+        surgeon: 'Dr. Nika Klemenc',
+        dentist: 'Dr. Miha Breznik',
         background: require('../../assets/images/page-img/profile-bg.jpg'),
         profile: require('../../assets/images/user/11.png')
       },
@@ -722,11 +744,11 @@ export default {
     resetForm () {
       this.user = {
         profile_image: require('../../assets/images/user/11.png'),
-        fname: 'Nik',
-        lname: 'Jone',
-        dob: '2021-03-03',
+        fname: 'Anita',
+        lname: 'Jereb',
+        dob: '1979-04-21',
         gender: 'female',
-        address: 'Rusjanov trg 10',
+        address: 'Prva ulica 11',
         postcode: '1000',
         city: 'Ljubljana',
         country: 'Slovenia',
@@ -734,16 +756,16 @@ export default {
         region: 'Sl-unknown',
         insurance_no: '1534667',
         insured_at: 'Zavarovalnica Triglav',
-        mob_no: '+386 67388 78889',
+        mob_no: '+38640076191',
         tax_no: '9877645677',
-        email: 'nikjone@demoo.com',
-        mobile_no: '001 2351 256 12',
-        location: 'USA',
+        email: 'anita.jereb@staging.emazing.si',
+        mobile_no: '+38640076191',
+        location: 'Ljubljana',
         edited_date: Date.now(),
         allergies: 'Type, cause, symptom, note, date, change , doctor...',
         reminder: 'The patient has very sensitive gums, careful not to cause bleeding...',
-        surgeon: 'Dr. Penger',
-        dentist: 'Dr. Penger',
+        surgeon: 'Dr. Nika Klemenc',
+        dentist: 'Dr. Miha Breznik',
         background: require('../../assets/images/page-img/profile-bg.jpg'),
         profile: require('../../assets/images/user/11.png')
       }
