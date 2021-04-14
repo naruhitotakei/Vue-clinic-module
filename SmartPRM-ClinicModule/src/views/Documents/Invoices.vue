@@ -150,7 +150,7 @@ export default {
       console.log('sorted', sorted)
     },
     add_invoice () {
-      console.log('ADD NEW INVOICE CLICKED')
+      this.$router.push('/extra-pages/new-invoice')
     }
   },
   mounted () {
