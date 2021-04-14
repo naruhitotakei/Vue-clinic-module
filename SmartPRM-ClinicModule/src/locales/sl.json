@@ -131,7 +131,7 @@
       "offerDate": "Datum",
       "offerTotal": "Znesek",
       "offerDetails": "Naslovnik",
-      "offerIssuedIn": "Izdano v",
+      "offerIssuedIn": "Kraj Izdaje",
       "offerIssuedBy": "Izdal"
     },
     "offerDetail": "Podrobnosti Ponudbe",
@@ -168,7 +168,7 @@
       "invoiceDate": "Datum",
       "invoiceTotal": "Znesek",
       "invoiceDetails": "Naslovnik",
-      "invoiceIssuedIn": "Izdano v",
+      "invoiceIssuedIn": "Kraj Izdaje",
       "invoiceIssuedBy": "Izdal"
     },
     "invoiceDetail": "Podrobnosti Računa",
@@ -206,7 +206,7 @@
       "advPaymentTotal": "Znesek",
       "advPaymentStatus": "Status",
       "advPaymentDetails": "Naslovnik",
-      "advPaymentIssuedIn": "Izdano v",
+      "advPaymentIssuedIn": "Kraj Izdaje",
       "advPaymentIssuedBy": "Izdal"
     },
     "advPaymentDetail": "Podrobnosti Avansnega Računa",
