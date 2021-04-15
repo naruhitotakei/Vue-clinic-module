@@ -77,7 +77,7 @@
         },
         {
           "title": "Advance Payments",
-          "name": "Advance Payments",
+          "name": "documents.advPayments",
           "is_active": false,
           "link": {
             "name": "documents.advance-payments"

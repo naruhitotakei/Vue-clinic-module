@@ -12,7 +12,7 @@
   "documents": {
     "offers": "Offers",
     "invoices": "Invoices",
-    "advInvoices": "AdvInvoices"
+    "advPayments": "Advance Payments"
   },
   "statistics": {
     "statistics for clinic": "Statistics For Clinic",
