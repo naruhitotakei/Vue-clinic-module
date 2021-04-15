@@ -66,19 +66,19 @@
             <div class="iq-card-body pb-0 mt-3">
               <div class="row text-center">
                 <div class="col-sm-3 col-6">
-                  <h4 class="margin-0">$ 305 </h4>
+                  <h4 class="margin-0">€ 305 </h4>
                   <p class="text-muted">{{ $t('statisticsForClinic.todaysIncome') }}</p>
                 </div>
                 <div class="col-sm-3 col-6">
-                  <h4 class="margin-0">$ 999 </h4>
+                  <h4 class="margin-0">€ 999 </h4>
                   <p class="text-muted">{{ $t('statisticsForClinic.weeksIncome') }}</p>
                 </div>
                 <div class="col-sm-3 col-6">
-                  <h4 class="margin-0">$ 4999 </h4>
+                  <h4 class="margin-0">€ 4999 </h4>
                   <p class="text-muted">{{ $t('statisticsForClinic.monthsIncome') }}</p>
                 </div>
                 <div class="col-sm-3 col-6">
-                  <h4 class="margin-0">$ 90,000 </h4>
+                  <h4 class="margin-0">€ 90.000 </h4>
                   <p class="text-muted">{{ $t('statisticsForClinic.yearsIncome') }}</p>
                 </div>
               </div>
