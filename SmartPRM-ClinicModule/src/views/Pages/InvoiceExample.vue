@@ -221,6 +221,7 @@ export default {
         invoiceColumns: [
           { label: this.$t('invoice.invoiceInfo.invoiceDate'), key: 'invoiceDate', class: 'text-left' },
           { label: this.$t('invoice.invoiceInfo.invoiceTotal'), key: 'invoiceTotal', class: 'text-left' },
+          { label: this.$t('invoice.invoiceInfo.invoiceStatus'), key: 'invoiceStatus', class: 'text-left' },
           { label: this.$t('invoice.invoiceInfo.invoiceDetails'), key: 'billingDetails', class: 'text-left' },
           { label: this.$t('invoice.invoiceInfo.invoiceIssuedIn'), key: 'issuedIn', class: 'text-left' },
           { label: this.$t('invoice.invoiceInfo.invoiceIssuedBy'), key: 'issuedBy', class: 'text-left' }

@@ -167,6 +167,7 @@
     "invoiceInfo": {
       "invoiceDate": "Datum",
       "invoiceTotal": "Znesek",
+      "invoiceStatus": "Status",
       "invoiceDetails": "Naslovnik",
       "invoiceIssuedIn": "Kraj Izdaje",
       "invoiceIssuedBy": "Izdal"

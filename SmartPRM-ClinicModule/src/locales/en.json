@@ -167,6 +167,7 @@
     "invoiceInfo": {
       "invoiceDate": "Date",
       "invoiceTotal": "Total",
+      "invoiceStatus": "Status",
       "invoiceDetails": "Billing Details",
       "invoiceIssuedIn": "Issued In",
       "invoiceIssuedBy": "Issued By"
