@@ -10,10 +10,10 @@ const pool = new Pool({
 })
 
 const getEmazingServicesReport = (request, response, startdate, endate) =>  {
-    var statement = ["SELECT pii.product_id, MAX(pii.product_name), COUNT(pii.product_id), SUM(pii.product_taxable_amount) FROM prm_invoice_item pii ",
-                     "LEFT JOIN prm_invoice pi ON pii.invoice_id = pi.invoice_id ",
-                     "WHERE date_trunc('day', pii.created_date) >= $1 AND date_trunc('day', pii.created_date) <= $2 AND pi.invoice_type = 'Invoice'",
-                     "GROUP BY pii.product_id "].join('\n') 
+    var statement = ["SELECT pr.name as service_title, COUNT(se.id), SUM(se.price) FROM services se ",
+                     "LEFT JOIN products pr ON se.product_id = pr.id ",
+                     "WHERE date_trunc('day', se.date) >= $1 AND date_trunc('day', se.date) <= $2 ",
+                     "GROUP BY pr.id "].join('\n')                       
     pool.query(statement, [startdate, endate], (error, results) => {
         if (error) {
             throw error
@@ -24,11 +24,12 @@ const getEmazingServicesReport = (request, response, startdate, endate) =>  {
 
 // todo add doctor from prm_invoice
 const getServiceList = (request, response, startdate, endate) =>  {
-    var statement = ["SELECT pii.created_date, pii.product_name, en.name, en.last_name, pii.product_taxable_amount, pr.fee FROM prm_invoice_item pii ",
-                     "LEFT JOIN prm_invoice pi ON pii.invoice_id = pi.invoice_id ",
-                     "LEFT JOIN enquiries en ON pi.enquiries_id = en.id ",
-                     "LEFT JOIN products pr ON pii.product_id = pr.id ",
-                     "WHERE date_trunc('day', pii.created_date) >= $1 AND date_trunc('day', pii.created_date) <= $2 AND pi.invoice_type = 'Invoice'"].join('\n') 
+    var statement = ["SELECT se.date, pr.name as service_title, en.name, en.last_name, se.price, se.fee, us.name as doctor FROM services se ",
+                     "LEFT JOIN products pr ON se.product_id = pr.id ",
+                     "LEFT JOIN enquiries en ON se.enquiry_id = en.id ",
+                     "LEFT JOIN client_users cu ON se.doctor_id = cu.id ",
+                     "LEFT JOIN users us ON cu.user_id = us.id ",
+                     "WHERE date_trunc('day', se.date) >= $1 AND date_trunc('day', se.date) <= $2 "].join('\n') 
     pool.query(statement, [startdate, endate], (error, results) => {
         if (error) {
             throw error
