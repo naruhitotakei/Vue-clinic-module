@@ -2,7 +2,7 @@
 --# Create PRM client table
 --############################################################
 CREATE TABLE IF NOT EXISTS prm_client (
-   client_id			  SERIAL UNIQUE CONSTRAINT client_clients_fk REFERENCES clients (id),
+   client_id			  SERIAL UNIQUE,
    client_name			  VARCHAR(255),
    client_slug			  VARCHAR(255),
    client_blueprint       VARCHAR(255),
