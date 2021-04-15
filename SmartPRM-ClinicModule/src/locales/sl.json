@@ -3,104 +3,269 @@
     "dashboard": "Domov",
     "calendar": "Koledar",
     "patients": "Pacienti",
-    "assignment": "Naloge",
-    "users": "Uporabniki",
-    "statistics-clinic": "Statistika Klinike",
-    "maps": "Zemljevidi",
-    "extraPages": "Dodatne Strani",
-    "doctor": "Zdravniki",
-    "doctorProfile": "Profil Zdravnika",
-    "doctorEdit": "Uredi Zdravnika",
-    "doctorAdd": "Dodaj Zdravnika",
-    "doctorList": "Vsi Zdravniki",
-    "components": "Komponente",
-    "uiElements": "UI Elementi",
-    "color": "Barva",
-    "typography": "Tipografija",
-    "alert": "Opozorilo",
-    "badges": "Značka",
-    "breadcrumb": "Breadcrumb",
-    "button": "Gumb",
-    "cards": "Karte",
-    "carousel": "Carousel",
-    "video": "Video",
-    "grid": "Mreža",
-    "images": "Slike",
-    "listGroup": "Seznam",
-    "media": "Medij",
-    "modal": "Modal",
-    "notifications": "Obvestila",
-    "pagination": "Paginacija",
-    "popovers": "Pop-over",
-    "progressBars": "Napredek",
-    "tabs": "Zavihek",
-    "tooltips": "Namigi",
-    "forms": "Obrazci",
-    "formElements": "Elementi Obrazca",
-    "formValidation": "Validacija Obrazca",
-    "formSwitch": "Form Switch",
-    "formRadio": "Form Radio",
-    "formCheckbox": "Form Checkbox",
-    "table": "Tabela",
-    "basicTable": "Osnovna Tabela",
-    "dataTable": "Podatkovna Tabela",
-    "charts": "Statistika",
-    "morrisChart": "Statistika Klinike",
-    "highChart": "Statistika Osebe",
-    "amChart": "AM Grafikon",
-    "apexChart": "Apex Grafikon",
-    "icons": "Ikone",
-    "dripicons": "Dripicons Ikone",
-    "fontAwsome5": "Font Awsome 5",
-    "lineAwsomeIcon": "lineAwsomeIcon",
-    "rimixIcon": "Remixicon",
-    "unicon": "Unicon",
-    "treeView": "Drevesni Pogled",
-    "pages": "Strani",
-    "authentication": "Avtentikacija",
-    "login": "Prijava",
-    "register": "Registracija",
-    "recoverPassword": "Obnovi Geslo",
-    "confirmMail": "Potrdi Mail",
-    "lockScreen": "Zaklenjen Zaslon",
-    "timeline": "Časovna Premica",
-    "invoice": "Račun",
-    "blankPage": "Prazna Stran",
-    "error404": "Napaka 404",
-    "error500": "Napaka 500",
-    "pricing": "Cenitev",
-    "pricing1": "Cenitev 1",
-    "maintenance": "Vzdrževanje",
-    "comingSoon": "Prihaja Kmalu",
-    "faq": "FAQ",
-    "plugins": "Vtičniki",
-    "datepicker": "Izberi Datum",
-    "select": "Izberi",
-    "draggable": "Povleči",
-    "chat": "Pogovor"
+    "documents": "Dokumenti",
+    "assignments": "Naloge",
+    "statistics": "Statistika",
+    "reporting": "Poročila",
+    "settings": "Nastavitve"
   },
   "documents": {
     "offers": "Ponudbe",
     "invoices": "Računi",
-    "advInvoices": "Avansni Računi"
+    "advPayments": "Avansni računi"
+  },
+  "statistics": {
+    "statistics for clinic": "Statistika Klinike",
+    "personal statistics": "Osebna statistika"
+  },
+  "reporting": {
+    "emazing": "Emazing",
+    "doctor": "Doktor",
+    "tax authority": "Davnčna uprava"
+  },
+  "settings": {
+    "users": "Uporabniki",
+    "locations": "Lokacije",
+    "services and products": "Storitve in Izdelki",
+    "invoicing": "Izdajanje računov"
   },
   "nav": {
-    "allNotifications": "Vsa Obvestila",
-    "allMessages": "Vsa Sporočila",
+    "allNotifications": "Vsa obvestila",
+    "allMessages": "Vsa sporočila",
     "allCarts": "Vsi Vozički",
     "viewCarts": "Poglej Vozičke",
     "user": {
       "available": "Na Voljo",
-      "profileTitle": "Moj Profil",
+      "profileTitle": "Moj profil",
       "profileSub": "Poglej podatke profila.",
-      "profileEditTitle": "Uredi Profil",
+      "profileEditTitle": "Uredi profil",
       "profileEditSub": "Spremeni osebne podatke.",
-      "accountSettingTitle": "Nastavitve Računa",
+      "accountSettingTitle": "Nastavitve računa",
       "accountSettingSub": "Upravljaj s parametri računa.",
-      "privacySettingTitle": "Nastavitve Zasebnosti",
+      "privacySettingTitle": "Nastavitve zasebnosti",
       "privacySettingSub": "Nadzoruj parametre zasebnosti.",
-      "signout": "Izpiši Se"
+      "signout": "Izpiši se"
     }
+  },
+  "home": {
+    "newAppointments": "Novi Termini",
+    "newAppointmentsColumn": {
+      "patient": "Pacient",
+      "doctor": "Zdravnik",
+      "date": "Datum",
+      "timing": "Čas",
+      "contact": "Kontakt"
+    },
+    "newAppointmentsDropDown": {
+      "view": "Poglej",
+      "delete": "Izbriši",
+      "edit": "Uredi",
+      "print": "Natisni",
+      "download": "Prenesi"
+    },
+    "doctorsList": "Seznam Zdravnikov",
+    "doctorsListDropDown": {
+      "view": "Poglej",
+      "appointment": "Termin"
+    },
+    "doctorsListBtn": "Poglej Vse Zdravnike",
+    "operations": "Posegi",
+    "operationsColumn": {
+      "patient": "Pacient",
+      "patientName": "Ime",
+      "doctorsTeam": "Zdravniška ekipa",
+      "dateOfOperation": "Datum posega",
+      "report": "Poročilo",
+      "diseases": "Bolezni"
+    },
+    "operationsDropDown": {
+      "view": "Poglej"
+    },
+    "todaysSchedule": "Današnji urnik",
+    "activityStatistics": "Statistika aktivnosti"
+  },
+  "calendar": {
+    "selectDoctor": "Izberi zdravnika",
+    "selectAll": "Izberi vse",
+    "bookAppointment": "Dodaj termin"
+  },
+  "calendarEvent": {
+    "start": "Začetek",
+    "duration": "Trajanje",
+    "notes": "Opombe",
+    "changeColor": "Spremeni barvo",
+    "viewPatient": "Ogled pacienta",
+    "changeDisplayColor": "Spremeni barvo termina",
+    "appointmentCancelled": "Pacient je odpovedal termin"
+  },
+  "patients": {
+    "patientsHeader": "Pacienti",
+    "addPatient": "Dodaj pacienta",
+    "patientsColumn": {
+      "name": "Ime",
+      "lastName": "Priimek",
+      "telephone": "Telefon",
+      "email": "Email",
+      "region": "Regija",
+      "state": "Država",
+      "lastVisit": "Zadnji termin",
+      "nextVisit": "Naslednji termin",
+      "personalDentist": "Osebni zobozdravnik",
+      "action": "Urejaj"
+    }
+  },
+  "offers": {
+    "offersHeader": "Ponudbe",
+    "offersBtn": "Dodaj ponudbo",
+    "offersColumn": {
+      "no": "Številka",
+      "patientName": "Ime pacienta",
+      "date": "Datum",
+      "issuedBy": "Izdal",
+      "amount": "Znesek"
+    }
+  },
+  "offer": {
+    "offerHeader": "Ponudba",
+    "offerInfo": {
+      "offerDate": "Datum",
+      "offerTotal": "Znesek",
+      "offerDetails": "Prejemnik",
+      "offerIssuedIn": "Kraj izdaje",
+      "offerIssuedBy": "Izdal"
+    },
+    "offerDetail": "Podrobnosti ponudbe",
+    "offerDetailColumn": {
+      "item": "Opis",
+      "quantity": "Količina",
+      "price": "Cena",
+      "discount": "Popust",
+      "total": "Znesek"
+    },
+    "offerSummary": "Povzetek Ponudbe",
+    "offerSummaryColumn": {
+      "dueDate": "Datum veljavnosti",
+      "subTotal": "Cena",
+      "discount": "Popust",
+      "total": "Skupen znesek"
+    }
+  },
+  "invoices": {
+    "invoicesHeader": "Računi",
+    "invoicesBtn": "Dodaj Račun",
+    "invoicesColumn": {
+      "no": "Številka",
+      "patientName": "Ime pacienta",
+      "date": "Datum",
+      "issuedBy": "Izdal",
+      "amount": "Znesek",
+      "status": "Status"
+    }
+  },
+  "invoice": {
+    "invoiceHeader": "Račun",
+    "invoiceInfo": {
+      "invoiceDate": "Datum",
+      "invoiceTotal": "Znesek",
+      "invoiceStatus": "Status",
+      "invoiceDetails": "Prejemnik",
+      "invoiceIssuedIn": "Kraj izdaje",
+      "invoiceIssuedBy": "Izdal"
+    },
+    "invoiceDetail": "Podrobnosti računa",
+    "invoiceDetailColumn": {
+      "item": "Opis",
+      "quantity": "Količina",
+      "price": "Cena",
+      "discount": "Popust",
+      "total": "Znesek"
+    },
+    "invoiceSummary": "Povzetek Računa",
+    "invoiceSummaryColumn": {
+      "dueDate": "Datum zapadlosti",
+      "paymentMethod": "Način Plačila",
+      "subTotal": "Cena",
+      "discount": "Popust",
+      "total": "Znesek"
+    }
+  },
+  "advPayments": {
+    "advPaymentsHeader": "Avansni računi",
+    "advPaymentsBtn": "Dodaj avansni račun",
+    "advPaymentsColumn": {
+      "no": "Številka",
+      "patientName": "Ime Pacienta",
+      "date": "Datum",
+      "issuedBy": "Izdal",
+      "amount": "Znesek"
+    }
+  },
+  "advPayment": {
+    "advPaymentHeader": "Avansni Račun",
+    "advPaymentInfo": {
+      "advPaymentDate": "Datum",
+      "advPaymentTotal": "Znesek",
+      "advPaymentStatus": "Status",
+      "advPaymentDetails": "Prejemnik",
+      "advPaymentIssuedIn": "Kraj izdaje",
+      "advPaymentIssuedBy": "Izdal"
+    },
+    "advPaymentDetail": "Podrobnosti Avansnega Računa",
+    "advPaymentDetailColumn": {
+      "item": "Opis",
+      "quantity": "Količina",
+      "price": "Cena",
+      "discount": "Popust",
+      "total": "Znesek"
+    },
+    "advPaymentSummary": "Povzetek Avansnega Računa",
+    "advPaymentSummaryColumn": {
+      "paymentDate": "Datum Plačila",
+      "paymentMethod": "Način Plačila",
+      "subTotal": "Cena",
+      "discount": "Popust",
+      "total": "Znesek"
+    }
+  },
+  "assignments": {
+    "assignmentsHeader": "Moje Naloge",
+    "todaysAssignments": "Današnje Naloge",
+    "overdueAssignments": "Zapadle Naloge",
+    "futureAssignments": "Naslednje Naloge",
+    "completedAssignments": "Opravljene Naloge"
+  },
+  "statisticsForClinic": {
+    "doctors": "Doktorji",
+    "nurses": "Sestre",
+    "patients": "Pacienti",
+    "pharmacists": "Farmacevti",
+    "statisticsForClinicHeader": "Statistika Klinike",
+    "todaysIncome": "Današnji prihodki",
+    "weeksIncome": "Prihodki v tem tednu",
+    "monthsIncome": "Prihodki v tem mesecu",
+    "yearsIncome": "Prihodki v tem letu"
+  },
+  "reportingEmazing": {
+    "servicesSummary": "Povzetek Storitev",
+    "servicesSummaryColumn": {
+      "serviceTitle": "Ime storitve",
+      "serviceCount": "Število storitev",
+      "serviceAmount": "Znesek"
+    },
+    "servicesList": "Seznam Storitev",
+    "servicesListColumn": {
+      "serviceDate": "Datum storitve",
+      "serviceTitle": "Ime storitve",
+      "serviceLeadName": "Ime pacienta",
+      "serviceAmount": "Znesek",
+      "serviceFee": "Provizija",
+      "serviceLocation": "Lokacija",
+      "serviceDoctor": "Zdravnik",
+      "serviceLastConsult": "Lokacija zadnjega posveta"
+    }
+  },
+  "settingsUsers": {
+    "viewProfile": "Ogled profila"
   },
   "dashboard2": {
     "card1": "AVG Impressions",

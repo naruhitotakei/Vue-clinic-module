@@ -45,7 +45,7 @@
   },
     {
       "title": "Documents",
-      "name": "Documents",
+      "name": "sidebar.documents",
       "is_heading": false,
       "is_active": false,
       "link": "",
@@ -77,7 +77,7 @@
         },
         {
           "title": "Advance Payments",
-          "name": "Advance Payments",
+          "name": "documents.advPayments",
           "is_active": false,
           "link": {
             "name": "documents.advance-payments"
@@ -90,7 +90,7 @@
     },
     {
       "title": "Assignments",
-      "name": "assignments",
+      "name": "sidebar.assignments",
       "is_heading": false,
       "is_active": false,
       "link": {
@@ -102,7 +102,7 @@
     },
   {
     "title": "Statistics",
-    "name": "Statistics",
+    "name": "sidebar.statistics",
     "is_heading": false,
     "is_active": false,
     "link": "",
@@ -112,7 +112,7 @@
     "children": [
       {
         "title": "Statistics For Clinic",
-        "name": "statistics for clinic",
+        "name": "statistics.statistics for clinic",
         "is_active": false,
         "link": {
           "name": "statistics.statistics-for-clinic"
@@ -123,7 +123,7 @@
       },
       {
         "title": "Personal Statistics",
-        "name": "personal statistics",
+        "name": "statistics.personal statistics",
         "is_active": false,
         "link": {
           "name": "statistics.personal-statistics"
@@ -136,7 +136,7 @@
   },
   {
     "title": "Reporting",
-    "name": "Reporting",
+    "name": "sidebar.reporting",
     "is_heading": false,
     "is_active": false,
     "link":"",
@@ -146,7 +146,7 @@
     "children": [
       {
         "title": "Emazing",
-        "name": "emazing",
+        "name": "reporting.emazing",
         "is_active": false,
         "link": {
           "name": "reporting.emazing"
@@ -157,7 +157,7 @@
       },
       {
         "title": "Doctor",
-        "name": "doctor",
+        "name": "reporting.doctor",
         "is_active": false,
         "link": {
           "name": "reporting.doctor"
@@ -168,7 +168,7 @@
       },
       {
         "title": "Tax Authority",
-        "name": "tax authority",
+        "name": "reporting.tax authority",
         "is_active": false,
         "link": {
           "name": "reporting.tax-authority"
@@ -181,7 +181,7 @@
   },
   {
     "title": "Settings",
-    "name": "Settings",
+    "name": "sidebar.settings",
     "is_heading": false,
     "is_active": false,
     "link":"",
@@ -191,7 +191,7 @@
     "children": [
       {
         "title": "Users",
-        "name": "users",
+        "name": "settings.users",
         "is_active": false,
         "link": {
           "name": "settings.users"
@@ -202,7 +202,7 @@
       },
       {
         "title": "Locations",
-        "name": "locations",
+        "name": "settings.locations",
         "is_active": false,
         "link": {
           "name": "settings.locations"
@@ -213,7 +213,7 @@
       },
       {
         "title": "Services and Products",
-        "name": "services and products",
+        "name": "settings.services and products",
         "is_active": false,
         "link": {
           "name": "settings.services-and-products"
@@ -224,7 +224,7 @@
       },
       {
         "title": "Invoicing",
-        "name": "invoicing",
+        "name": "settings.invoicing",
         "is_active": false,
         "link": {
           "name": "settings.invoicing"

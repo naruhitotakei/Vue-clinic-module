@@ -4,9 +4,9 @@
       <b-col md="12">
         <iq-card>
           <template v-slot:headerTitle>
-                        <h3 class="card-title" style="margin-top: 10px;">Invoices</h3>
+              <h3 class="card-title" style="margin-top: 10px;">{{ $t('invoices.invoicesHeader') }}</h3>
                         <div class="btn-add-patient">
-                            <b-button variant="primary" @click="add_invoice"><i class="ri-add-line mr-2"></i>New Invoice</b-button>
+                            <b-button variant="primary" @click="add_invoice"><i class="ri-add-line mr-2"></i>{{ $t('invoices.invoicesBtn') }}</b-button>
                         </div>
                         <div class="iq-card-header-toolbar d-flex align-items-center" style="margin-top: -10px;">
                             <div class="iq-search-bar">
@@ -112,12 +112,12 @@ export default {
       perPage: 10,
       totalRows: rows.length,
       columns: [
-        { label: 'Number', key: 'invoice_no', class: 'text-left' },
-        { label: 'Patient Name', key: 'patient_name', class: 'text-left' },
-        { label: 'Date', key: 'date', class: 'text-left' },
-        { label: 'Issued by', key: 'issued_by', class: 'text-left' },
-        { label: 'Invoice amount', key: 'amount', class: 'text-left' },
-        { label: 'Status', key: 'status', class: 'text-left' }
+        { label: this.$t('invoices.invoicesColumn.no'), key: 'invoice_no', class: 'text-left' },
+        { label: this.$t('invoices.invoicesColumn.patientName'), key: 'patient_name', class: 'text-left' },
+        { label: this.$t('invoices.invoicesColumn.date'), key: 'date', class: 'text-left' },
+        { label: this.$t('invoices.invoicesColumn.issuedBy'), key: 'issued_by', class: 'text-left' },
+        { label: this.$t('invoices.invoicesColumn.amount'), key: 'amount', class: 'text-left' },
+        { label: this.$t('invoices.invoicesColumn.status'), key: 'status', class: 'text-left' }
       ]
     }
   },
@@ -150,7 +150,7 @@ export default {
       console.log('sorted', sorted)
     },
     add_invoice () {
-      console.log('ADD NEW INVOICE CLICKED')
+      this.$router.push('/extra-pages/new-invoice')
     }
   },
   mounted () {

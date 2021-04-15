@@ -6,7 +6,7 @@
           <template v-slot:headerTitle>
           <iq-card>
           <template v-slot:headerTitle>
-            <h4 class="card-title">Select Doctor</h4>
+              <h4 class="card-title">{{ $t('calendar.selectDoctor') }}</h4>
           </template>
           <template v-slot:body>
           <div class="main-wrapper">
@@ -19,13 +19,13 @@
               </b-checkbox>
             </template></div></div>
           <button @click="scroll_right" class="nav-btn btn-primary"><i class="ri-arrow-right-s-line"></i></button>
-            <b-checkbox name="check-button" v-model="allDoctorCheck" @change="allDoctorFun(allDoctorCheck)" :disabled="checkedListArray.length==0" inline>All Doctors</b-checkbox>
+          <b-checkbox name="check-button" v-model="allDoctorCheck" @change="allDoctorFun(allDoctorCheck)" :disabled="checkedListArray.length==0" inline>{{ $t('calendar.selectAll') }}</b-checkbox>
           </div>
           </template>
         </iq-card>
           </template>
           <template v-slot:headerAction>
-            <b-button v-b-modal.modal-1 variant="primary"><i class="ri-add-line mr-2"></i>Book Appointment</b-button>
+              <b-button v-b-modal.modal-1 variant="primary" class="btn-add-patient" style="width: 190px;"><i class="ri-add-line mr-2"></i>{{ $t('calendar.bookAppointment') }}</b-button>
             <form class="mt-4" novalidate @submit="submitFormData()">
               <b-modal id="modal-1" title="Appointment details" hide-footer>
               <form @submit="submitFormData()">

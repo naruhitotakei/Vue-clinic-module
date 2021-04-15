@@ -4,9 +4,9 @@
       <b-col md="12">
         <iq-card>
           <template v-slot:headerTitle>
-                        <h3 class="card-title" style="margin-top: 10px;">Offers</h3>
+              <h3 class="card-title" style="margin-top: 10px;">{{ $t('offers.offersHeader') }}</h3>
                         <div class="btn-add-patient">
-                            <b-button variant="primary" @click="add_offer"><i class="ri-add-line mr-2"></i>New Offer</b-button>
+                            <b-button variant="primary" @click="add_offer"><i class="ri-add-line mr-2"></i>{{ $t('offers.offersBtn') }}</b-button>
                         </div>
                         <div class="iq-card-header-toolbar d-flex align-items-center" style="margin-top: -10px;">
                             <div class="iq-search-bar">
@@ -35,6 +35,8 @@
                   id="my-table"
                   bordered
                   hover
+                  style="cursor: pointer;"
+                  @row-clicked="$router.push('/extra-pages/offer-example')"
                   :items="paginatedItems"
                   :fields="columns"
                   :per-page="perPage"
@@ -124,11 +126,11 @@ export default {
       perPage: 10,
       totalRows: rows.length,
       columns: [
-        { label: 'Number', key: 'offer_no', class: 'text-left' },
-        { label: 'Patient name', key: 'patient_name', class: 'text-left' },
-        { label: 'Date', key: 'date', class: 'text-left' },
-        { label: 'Issued by', key: 'issued_by', class: 'text-left' },
-        { label: 'Amount', key: 'amount', class: 'text-left' }
+        { label: this.$t('offers.offersColumn.no'), key: 'offer_no', class: 'text-left' },
+        { label: this.$t('offers.offersColumn.patientName'), key: 'patient_name', class: 'text-left' },
+        { label: this.$t('offers.offersColumn.date'), key: 'date', class: 'text-left' },
+        { label: this.$t('offers.offersColumn.issuedBy'), key: 'issued_by', class: 'text-left' },
+        { label: this.$t('offers.offersColumn.amount'), key: 'amount', class: 'text-left' }
       ]
     }
   },

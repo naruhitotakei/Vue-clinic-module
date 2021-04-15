@@ -10,6 +10,7 @@ const daoUser = require('./dao/daoUser')
 const daoEnquiries = require('./dao/daoEnquiries')
 const daoAssignments = require('./dao/daoAssignments')
 const daoStatistics = require('./dao/daoStatistics')
+const daoReporting = require('./dao/daoReporting')
 const fiscalVerification = require('./services/fiscalVerification')
 
 app.use(cors({
@@ -28,6 +29,7 @@ app.use(session({resave: true, saveUninitialized: true, secret: 'BwhFeenj9DcRqAN
 const enquiriesPermission = "Patients"
 const assignmentsPermission = "Assignments"
 const clinicStatisticsPermission = "Statistics For Clinic"
+const reportingEmazingPermission = "Emazing"
 
 ///////////////////////////////////
 // user login, logout, ...
@@ -36,14 +38,11 @@ const clinicStatisticsPermission = "Statistics For Clinic"
 // login - email and password in body
 app.post('/api/login', async function(req, res) {
    const credentials = req.body
-   //console.log('POST: api/login called for ' + credentials.loginEmail) 
    req.session.prm_user = await daoUser.getUser(req, res, credentials.loginEmail, credentials.loginPassword)
-  // console.log('req.session.prm_user', req.session)
 });
 
 // get loged user data
 app.get('/api/login', (req, res) => {
-   console.log('check get login api', req.session)
    if (req.session.prm_user) { 
         res.status(200).json(req.session.prm_user)
    } else {
@@ -53,7 +52,6 @@ app.get('/api/login', (req, res) => {
 
 // logout user
 app.get('/api/logout', (req, res) => {
-   console.log('GET: api/logout called ')
    delete req.session.prm_user
    return res.status(200).json("OK: user logged out")
 });
@@ -62,6 +60,28 @@ app.get('/api/logout', (req, res) => {
 app.get('/api/hash', (req, res) => { 
     var password = req.param('password');
     daoUser.hash(req, res, password) 
+});
+
+// /api/password
+app.post('/api/password', async function(req, res) {
+    const credentials = req.body
+    if (req.session.prm_user) { 
+        daoUser.changePassword(req, res, req.session.prm_user.email, req.session.prm_user.prm_password_hash, credentials)
+    } else {
+       res.status(200).json("NOK: user not logged in")
+    }    
+});
+
+// /api/password
+app.get('/api/profile', async function(req, res) {
+    const data = {
+      phone_number: 1234
+    }
+    if (req.session.prm_user) { 
+        daoUser.editProfile(req, res, req.session.prm_user.email, data)
+    } else {
+       res.status(200).json("NOK: user not logged in")
+    }    
 });
 
 ///////////////////////////////////
@@ -112,12 +132,30 @@ app.get('/api/invoice/premises/:premiseId', (req, res) => {
 });
 
 ///////////////////////////////////
-// statistics
+// statistics & Reporting
 ///////////////////////////////////
 app.get('/api/statistics/clinic', (req, res) => {
   const clinicId = 123 // todo - get it from session
   if(req.session.prm_user && req.session.prm_user.permissions && checkPermission(req.session.prm_user.permissions, clinicStatisticsPermission))
       daoStatistics.getClinicStatistics(req, res, clinicId)
+  else
+      res.status(401).json("OK: user unauthorized")
+});
+
+app.get('/api/statistics/emazing/services/:statrtdate/:enddate', (req, res) => {
+  const statrtdate = req.params.statrtdate
+  const enddate = req.params.enddate
+  if(req.session.prm_user && req.session.prm_user.permissions && checkPermission(req.session.prm_user.permissions, reportingEmazingPermission))
+      daoReporting.getEmazingServicesReport(req, res, statrtdate, enddate)
+  else
+      res.status(401).json("OK: user unauthorized")
+});
+
+app.get('/api/statistics/emazing/serviceslist/:statrtdate/:enddate', (req, res) => {
+  const statrtdate = req.params.statrtdate
+  const enddate = req.params.enddate
+  if(req.session.prm_user && req.session.prm_user.permissions && checkPermission(req.session.prm_user.permissions, reportingEmazingPermission))
+      daoReporting.getServiceList(req, res, statrtdate, enddate)
   else
       res.status(401).json("OK: user unauthorized")
 });
