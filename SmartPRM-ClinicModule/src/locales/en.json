@@ -12,7 +12,7 @@
   "documents": {
     "offers": "Offers",
     "invoices": "Invoices",
-    "advInvoices": "AdvInvoices"
+    "advPayments": "Advance Payments"
   },
   "statistics": {
     "statistics for clinic": "Statistics For Clinic",
@@ -125,6 +125,31 @@
       "amount": "Amount"
     }
   },
+  "offer": {
+    "offerHeader": "Offer",
+    "offerInfo": {
+      "offerDate": "Date",
+      "offerTotal": "Total",
+      "offerDetails": "Billing Details",
+      "offerIssuedIn": "Issued In",
+      "offerIssuedBy": "Issued By"
+    },
+    "offerDetail": "Offer Detail",
+    "offerDetailColumn": {
+      "item": "Item",
+      "quantity": "Quantity",
+      "price": "Price",
+      "discount": "Discount",
+      "total": "Total"
+    },
+    "offerSummary": "Offer Summary",
+    "offerSummaryColumn": {
+      "dueDate": "Due Date",
+      "subTotal": "Sub-Total",
+      "discount": "Discount",
+      "total": "Total"
+    }
+  },
   "invoices": {
     "invoicesHeader": "Invoices",
     "invoicesBtn": "Add Invoice",
@@ -137,6 +162,33 @@
       "status": "Status"
     }
   },
+  "invoice": {
+    "invoiceHeader": "Invoice",
+    "invoiceInfo": {
+      "invoiceDate": "Date",
+      "invoiceTotal": "Total",
+      "invoiceStatus": "Status",
+      "invoiceDetails": "Billing Details",
+      "invoiceIssuedIn": "Issued In",
+      "invoiceIssuedBy": "Issued By"
+    },
+    "invoiceDetail": "Invoice Detail",
+    "invoiceDetailColumn": {
+      "item": "Item",
+      "quantity": "Quantity",
+      "price": "Price",
+      "discount": "Discount",
+      "total": "Total"
+    },
+    "invoiceSummary": "Invoice Summary",
+    "invoiceSummaryColumn": {
+      "dueDate": "Due Date",
+      "paymentMethod": "Payment Method",
+      "subTotal": "Sub-Total",
+      "discount": "Discount",
+      "total": "Total"
+    }
+  },
   "advPayments": {
     "advPaymentsHeader": "Advance Payments",
     "advPaymentsBtn": "Add Advance Payment",
@@ -146,6 +198,33 @@
       "date": "Date",
       "issuedBy": "Issued By",
       "amount": "Amount"
+    }
+  },
+  "advPayment": {
+    "advPaymentHeader": "Advance Payment",
+    "advPaymentInfo": {
+      "advPaymentDate": "Date",
+      "advPaymentTotal": "Total",
+      "advPaymentStatus":  "Status",
+      "advPaymentDetails": "Billing Details",
+      "advPaymentIssuedIn": "Issued In",
+      "advPaymentIssuedBy": "Issued By"
+    },
+    "advPaymentDetail": "Advance Payment Details",
+    "advPaymentDetailColumn": {
+      "item": "Item",
+      "quantity": "Quantity",
+      "price": "Price",
+      "discount": "Discount",
+      "total": "Total"
+    },
+    "advPaymentSummary": "Advance Payment Summary",
+    "advPaymentSummaryColumn": {
+      "paymentDate": "Payment Date",
+      "paymentMethod": "Payment Method",
+      "subTotal": "Sub-Total",
+      "discount": "Discount",
+      "total": "Total"
     }
   },
   "assignments": {
@@ -174,7 +253,7 @@
     "servicesSummaryColumn": {
       "serviceTitle": "Service Title",
       "serviceCount": "Service Count",
-      "serviceAmount":  "Amount"
+      "serviceAmount": "Amount"
     },
     "servicesList": "Services List",
     "servicesListColumn": {
@@ -185,7 +264,7 @@
       "serviceFee": "Fee",
       "serviceLocation": "Location",
       "serviceDoctor": "Doctor",
-      "serviceLastConsult":  "Last Consult Location"
+      "serviceLastConsult": "Last Consult Location"
     }
   },
   "dashboard2": {

@@ -12,11 +12,11 @@
                     <b-row>
                         <b-col lg="12">
                             <div class="table-responsive-sm">
-                                <b-table :items="invoice.invoice" :fields="invoice.invoiceColumns">
-                                    <template v-slot:cell(invoiceStatus)="data">
+                                <b-table :items="offer.offer" :fields="offer.offerColumns">
+                                    <template v-slot:cell(offerStatus)="data">
                                         <span class="badge badge-danger">Unpaid</span>
                                     </template>
-                                    <template v-slot:cell(invoiceTotal)="data">
+                                    <template v-slot:cell(offerTotal)="data">
                                         <span class="font-weight-bold" v-html="data.value"></span>
                                     </template>
                                     <template v-slot:cell(billingDetails)="data">
@@ -28,17 +28,17 @@
                     </b-row>
                     <b-row>
                         <b-col lg="12">
-                            <h5 style="margin-bottom: 15px;">{{ invoice.detail }}</h5>
+                            <h5 style="margin-bottom: 15px;">{{ offer.detail }}</h5>
                             <div class="table-responsive-sm">
                                 <b-table-simple striped class="text-center">
                                     <thead>
                                         <tr>
-                                            <th v-for="(item,index) in invoice.invoiceSummaryFields" :key="index" :class="item.key === 'item' ? 'text-left' : ''">{{ item.label }}</th>
+                                            <th v-for="(item,index) in offer.offerSummaryFields" :key="index" :class="item.key === 'item' ? 'text-left' : ''">{{ item.label }}</th>
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        <tr v-for="(body, bodyKey) in invoice.invoiceSummary" :key="bodyKey">
-                                            <template v-for="(item,index) in invoice.invoiceSummaryFields">
+                                        <tr v-for="(body, bodyKey) in offer.offerSummary" :key="bodyKey">
+                                            <template v-for="(item,index) in offer.offerSummaryFields">
                                                 <th v-if="item.key === 'id'" :key="item.key+index">{{ body[item.key] }}</th>
                                                 <td v-else-if="item.key === 'item'" :key="item.key+index" class="text-left">
                                                     <h6 class="mb-0">{{ body[item.key].title }}</h6>
@@ -51,17 +51,17 @@
                                     </tbody>
                                 </b-table-simple>
                             </div>
-                            <h5 style="margin-bottom: 15px;">{{ invoice.summary }}</h5>
+                            <h5 style="margin-bottom: 15px;">{{ offer.summary }}</h5>
                             <div class="table-responsive-sm">
                                 <b-table-simple striped>
                                     <thead>
                                         <tr>
-                                            <th v-for="(item,index) in invoice.InvoiceDetailField" :key="index" :class="item.key === 'bank' ? 'text-left' : ''">{{ item.label }}</th>
+                                            <th v-for="(item,index) in offer.offerDetailField" :key="index" :class="item.key === 'bank' ? 'text-left' : ''">{{ item.label }}</th>
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        <tr v-for="(body, bodyKey) in invoice.InvoiceDetails" :key="bodyKey">
-                                            <template v-for="(item,index) in invoice.InvoiceDetailField">
+                                        <tr v-for="(body, bodyKey) in offer.offerDetails" :key="bodyKey">
+                                            <template v-for="(item,index) in offer.offerDetailField">
                                                 <th v-if="item.key === 'bank'" :key="item.key+index">{{ body[item.key] }}</th>
                                                 <td v-else :key="item.key+index" :class="item.key === 'total' ? 'font-weight-bold' : ''">
                                                     {{ body[item.key] }}
@@ -92,60 +92,59 @@
 import { xray } from '../../config/pluginInit'
 
 export default {
-  name: 'Invoices',
+  name: 'offers',
   mounted () {
     xray.index()
   },
   computed: {
     title () {
-      return this.text + this.invoiceID
+      return this.text + this.offerID
     }
   },
   data () {
     return {
-      text: this.$t('invoice.invoiceHeader') + ' N° : ',
-      invoiceID: '250028',
-      invoice: {
-        summary: this.$t('invoice.invoiceSummary'),
-        detail: this.$t('invoice.invoiceDetail'),
+      text: this.$t('offer.offerHeader') + ' N° : ',
+      offerID: '250028',
+      offer: {
+        summary: this.$t('offer.offerSummary'),
+        detail: this.$t('offer.offerDetail'),
         description: 'It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout. The point of using Lorem Ipsum is that it has a more-or-less normal distribution of letters, as opposed to using \'Content here, content here\', making it look like readable English.',
-        invoice: [
+        offer: [
           {
-            invoiceDate: '20 Mar, 2021',
-            invoiceTotal: '1.500 EUR',
-            invoiceStatus: 2,
+            offerDate: '20 Mar, 2021',
+            offerTotal: '1.500 EUR',
             billingDetails: 'Natalija Kogoj <br> Prva cesta 1 <br> 1000 Ljubljana, Slovenija <br> Telefon: +38651365682 <br> Email: natalija.kogoj@staging-emazing.si',
             issuedIn: 'Ljubljana',
             issuedBy: 'Dr. Bojan Jernejc'
           }
         ],
-        invoiceSummaryFields: [
+        offerSummaryFields: [
           {
             key: 'id',
             label: '#'
           },
           {
             key: 'item',
-            label: this.$t('invoice.invoiceDetailColumn.item')
+            label: this.$t('offer.offerDetailColumn.item')
           },
           {
             key: 'quantity',
-            label: this.$t('invoice.invoiceDetailColumn.quantity')
+            label: this.$t('offer.offerDetailColumn.quantity')
           },
           {
             key: 'price',
-            label: this.$t('invoice.invoiceDetailColumn.price')
+            label: this.$t('offer.offerDetailColumn.price')
           },
           {
             key: 'discount',
-            label: this.$t('invoice.invoiceDetailColumn.discount')
+            label: this.$t('offer.offerDetailColumn.discount')
           },
           {
             key: 'total',
-            label: this.$t('invoice.invoiceDetailColumn.total')
+            label: this.$t('offer.offerDetailColumn.total')
           }
         ],
-        invoiceSummary: [
+        offerSummary: [
           {
             id: 1,
             item: {
@@ -187,44 +186,38 @@ export default {
             total: '720 EUR'
           }
         ],
-        InvoiceDetailField: [
+        offerDetailField: [
           {
             key: 'dueDate',
-            label: this.$t('invoice.invoiceSummaryColumn.dueDate')
-          },
-          {
-            key: 'paymentMethod',
-            label: this.$t('invoice.invoiceSummaryColumn.paymentMethod')
+            label: this.$t('offer.offerSummaryColumn.dueDate')
           },
           {
             key: 'subTotal',
-            label: this.$t('invoice.invoiceSummaryColumn.subTotal')
+            label: this.$t('offer.offerSummaryColumn.subTotal')
           },
           {
             key: 'discount',
-            label: this.$t('invoice.invoiceSummaryColumn.discount')
+            label: this.$t('offer.offerSummaryColumn.discount')
           },
           {
             key: 'total',
-            label: this.$t('invoice.invoiceSummaryColumn.total')
+            label: this.$t('offer.offerSummaryColumn.total')
           }
         ],
-        InvoiceDetails: [
+        offerDetails: [
           {
             dueDate: '20 April 2021',
             subTotal: '1.600 EUR',
-            paymentMethod: 'Gotovina',
             discount: '100 EUR',
             total: '1.500 EUR'
           }
         ],
-        invoiceColumns: [
-          { label: this.$t('invoice.invoiceInfo.invoiceDate'), key: 'invoiceDate', class: 'text-left' },
-          { label: this.$t('invoice.invoiceInfo.invoiceTotal'), key: 'invoiceTotal', class: 'text-left' },
-          { label: this.$t('invoice.invoiceInfo.invoiceStatus'), key: 'invoiceStatus', class: 'text-left' },
-          { label: this.$t('invoice.invoiceInfo.invoiceDetails'), key: 'billingDetails', class: 'text-left' },
-          { label: this.$t('invoice.invoiceInfo.invoiceIssuedIn'), key: 'issuedIn', class: 'text-left' },
-          { label: this.$t('invoice.invoiceInfo.invoiceIssuedBy'), key: 'issuedBy', class: 'text-left' }
+        offerColumns: [
+          { label: this.$t('offer.offerInfo.offerDate'), key: 'offerDate', class: 'text-left' },
+          { label: this.$t('offer.offerInfo.offerTotal'), key: 'offerTotal', class: 'text-left' },
+          { label: this.$t('offer.offerInfo.offerDetails'), key: 'billingDetails', class: 'text-left' },
+          { label: this.$t('offer.offerInfo.offerIssuedIn'), key: 'issuedIn', class: 'text-left' },
+          { label: this.$t('offer.offerInfo.offerIssuedBy'), key: 'issuedBy', class: 'text-left' }
         ]
       }
     }

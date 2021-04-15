@@ -11,9 +11,9 @@
                             <h5>{{ $t('assignments.todaysAssignments') }}</h5>
                         </template>
                         <template v-slot:body>
-                            <b-list-group class="list-group-flush" id="todaysAssignments" :per-page="perPage" :current-page="currentPage">
-                                <b-list-group-item v-for="item in items.slice(0, 15)" :key="item.id">
-                                    <div class="assignments-container">
+                            <b-list-group class="list-group-flush" id="todaysAssignments">
+                                <b-list-group-item v-for="item in todaysAssigments" :key="item.id">
+                                    <div class="assignments-container" :class="{ 'taskIsActive' : !item.completed}">
                                         <b-checkbox v-model="item.completed" :disabled="item.disabled" name="check-button" inline :key="index" class="completed-assignment"></b-checkbox>
                                         <span>{{ item.description }}</span>
                                         <span class="pl-5">{{ item.patientname }} {{ item.patientlastname }}</span>
@@ -24,10 +24,11 @@
                             </b-list-group>
                             <template>
                                 <div class="mt-4 ml-2">
-                                    <b-pagination v-model="currentPage"
-                                                  :total-rows="totalRows"
-                                                  :per-page="perPage"
-                                                  aria-controls="todaysAssignments"></b-pagination>
+                                    <p v-if="todaysTotalRows===0"> You have no assignment today.</p>
+                                     <b-pagination v-else v-model="todayCurrentPage"
+                                              :total-rows="todaysTotalRows"
+                                              :per-page="todayPerPage"
+                                              aria-controls="overdueAssignments"></b-pagination>
                                 </div>
                             </template>
                         </template>
@@ -42,9 +43,9 @@
                         <h5>{{ $t('assignments.overdueAssignments') }}</h5>
                     </template>
                     <template v-slot:body>
-                        <b-list-group class="list-group-flush" id="overdueAssignments" :per-page="perPage" :current-page="currentPage">
-                            <b-list-group-item v-for="item in items.slice(10, 23)" :key="item.id">
-                                <div class="assignments-container">
+                        <b-list-group class="list-group-flush" id="overdueAssignments">
+                            <b-list-group-item v-for="item in overdueAssignments" :key="item.id">
+                                <div class="assignments-container" :class="{ 'taskIsActive' : !item.completed}">
                                     <b-checkbox v-model="item.completed" :disabled="item.disabled" name="check-button" inline :key="index" class="completed-assignment"></b-checkbox>
                                     <span>{{ item.description }}</span>
                                     <span class="pl-5">{{ item.patientname }} {{ item.patientlastname }}</span>
@@ -55,9 +56,10 @@
                         </b-list-group>
                         <template>
                             <div class="mt-4 ml-2">
-                                <b-pagination v-model="currentPage"
-                                              :total-rows="totalRows"
-                                              :per-page="perPage"
+                                <p v-if="overdueTotalRows===0"> You have no overdue assignments.</p>
+                                <b-pagination v-else v-model="overdueCurrentPage"
+                                              :total-rows="overdueTotalRows"
+                                              :per-page="overduePerPage"
                                               aria-controls="overdueAssignments"></b-pagination>
                             </div>
                         </template>
@@ -73,8 +75,8 @@
                     </template>
                     <template v-slot:body>
                         <b-list-group class="list-group-flush" id="futureAssignments" :per-page="perPage" :current-page="currentPage">
-                            <b-list-group-item v-for="item in items.slice(33, 49)" :key="item.id">
-                                <div class="assignments-container">
+                            <b-list-group-item v-for="item in futureAssigments" :key="item.id">
+                                <div class="assignments-container" :class="{ 'taskIsActive' : !item.completed}">
                                     <b-checkbox v-model="item.completed" :disabled="item.disabled" name="check-button" inline :key="index" class="completed-assignment"></b-checkbox>
                                     <span>{{ item.description }}</span>
                                     <span class="pl-5">{{ item.patientname }} {{ item.patientlastname }}</span>
@@ -85,9 +87,10 @@
                         </b-list-group>
                         <template>
                             <div class="mt-4 ml-2">
-                                <b-pagination v-model="currentPage"
-                                              :total-rows="totalRows"
-                                              :per-page="perPage"
+                                <p v-if="futureTotalRows===0"> You have no future assignments.</p>
+                                <b-pagination v-else v-model="futureCurrentPage"
+                                              :total-rows="futureTotalRows"
+                                              :per-page="futurePerPage"
                                               aria-controls="futureAssignments"></b-pagination>
                             </div>
                         </template>
@@ -103,8 +106,8 @@
                     </template>
                     <template v-slot:body>
                         <b-list-group class="list-group-flush" id="completedAssignments" :per-page="perPage" :current-page="currentPage">
-                            <b-list-group-item v-for="item in items.slice(60, 78)" :key="item.id">
-                                <div class="assignments-container">
+                            <b-list-group-item v-for="item in completedAssigments" :key="item.id">
+                                <div class="assignments-container" :class="{ 'taskIsActive' : !item.completed}">
                                     <b-checkbox v-model="item.completed" :disabled="item.disabled" name="check-button" inline :key="index" class="completed-assignment"></b-checkbox>
                                     <span>{{ item.description }}</span>
                                     <span class="pl-5">{{ item.patientname }} {{ item.patientlastname }}</span>
@@ -115,9 +118,10 @@
                         </b-list-group>
                         <template>
                             <div class="mt-4 ml-2">
-                                <b-pagination v-model="currentPage"
-                                              :total-rows="totalRows"
-                                              :per-page="perPage"
+                                <p v-if="completedTotalRows===0"> You have no completed assignments.</p>
+                                <b-pagination v-else v-model="completedCurrentPage"
+                                              :total-rows="completedTotalRows"
+                                              :per-page="completedPerPage"
                                               aria-controls="completedAssignments"></b-pagination>
                             </div>
                         </template>
@@ -132,11 +136,14 @@
     background-color: #ffffff;
     border-radius: 15px;
 }
+.taskIsActive {
+    color: black;
+}
 </style>
 <script>
 import { xray } from '../../config/pluginInit'
 import { getAssignments } from '../../services/assignmentsService'
-var rows = []
+
 export default {
   name: 'Assignments',
   mounted () {
@@ -144,6 +151,18 @@ export default {
     this.getAssignments()
   },
   computed: {
+    todaysAssigments () {
+      return this.todaysTotalRows === 0 ? [] : this.items.slice((this.todayCurrentPage - 1) * this.todayPerPage, this.todayCurrentPage * this.todayPerPage)
+    },
+    overdueAssignments () {
+      return this.overdueTotalRows === 0 ? [] : this.items.slice((this.overdueCurrentPage - 1) * this.overduePerPage, this.overdueCurrentPage * this.overduePerPage)
+    },
+    futureAssigments () {
+      return this.futureTotalRows === 0 ? [] : this.items.slice((this.futureCurrentPage - 1) * this.futurePerPage, this.futureCurrentPage * this.futurePerPage)
+    },
+    completedAssigments () {
+      return this.completedTotalRows === 0 ? [] : this.items.slice((this.completedCurrentPage - 1) * this.completedPerPage, this.completedCurrentPage * this.completedPerPage)
+    }
   },
   watch: {
   },
@@ -151,19 +170,31 @@ export default {
     getAssignments () {
       getAssignments().then(response => {
         this.items = response
+        this.todaysTotalRows = this.items.length
+        this.overdueTotalRows = this.items.length
+        this.futureTotalRows = this.items.length
+        // this.completedTotalRows = this.items.length
       }
       )
     }
   },
   data () {
     return {
-      item: [],
       disabled: false,
       index: [],
-      items: rows,
-      currentPage: 1,
-      perPage: 10,
-      totalRows: rows.length,
+      items: [],
+      todaysTotalRows: 0,
+      overdueTotalRows: 0,
+      futureTotalRows: 0,
+      completedTotalRows: 0,
+      todayCurrentPage: 1,
+      todayPerPage: 10,
+      overdueCurrentPage: 1,
+      overduePerPage: 10,
+      futureCurrentPage: 1,
+      futurePerPage: 10,
+      completedCurrentPage: 1,
+      completedPerPage: 10,
       bool: [
         { label: 'Completed', checked: true },
         { label: 'Completed', checked: false }

@@ -254,7 +254,13 @@ textarea {
 	margin: 0;
 	font-family: inherit;
 	font-size: inherit;
-	line-height: inherit
+	line-height: inherit;
+}
+
+input,
+textarea, 
+select {
+    color: black !important;
 }
 
 button,
@@ -587,6 +593,12 @@ pre code {
 .btn-add-patient {
     float: right;
     margin-top: 1.375rem;
+}
+
+.btn-edit-patient {
+    margin-top: 6.825rem;
+    height: 2rem;
+    width: 4rem;
 }
 
 .completed-assignment {
@@ -8308,6 +8320,10 @@ button.bg-dark:hover {
 
 .overflow-hidden {
 	overflow: hidden!important
+}
+
+.overflow-y-scroll {
+    overflow-y: scroll !important;
 }
 
 .position-static {
