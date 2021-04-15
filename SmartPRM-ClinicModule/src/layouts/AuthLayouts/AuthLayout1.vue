@@ -19,7 +19,7 @@
                   <p>It is a long established fact that a reader will be distracted by the readable content.</p>
                 </div> -->
                 <div class="item">
-                  <img :src="require('../../assets/images/login/3.png')" class="img-fluid mb-4" alt="logo">
+                  <img :src="require('../../assets/images/login/4.png')" class="img-fluid mb-4" alt="logo">
                   <!-- <h4 class="mb-1 text-white">Manage your orders</h4>
                   <p>It is a long established fact that a reader will be distracted by the readable content.</p> -->
                 </div>
