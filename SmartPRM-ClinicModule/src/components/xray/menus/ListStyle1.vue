@@ -21,7 +21,7 @@ import { xray } from '../../../config/pluginInit'
 export default {
   name: 'List',
   props: {
-    items: Array,
+    items: {},
     className: { type: String, default: 'iq-menu' },
     horizontal: Boolean,
     open: { type: Boolean, default: false },
@@ -35,7 +35,6 @@ export default {
   },
   methods: {
     activeLink (item) {
-      console.log('qweqwe')
       return xray.getActiveLink(item, this.$route.name)
     }
   }

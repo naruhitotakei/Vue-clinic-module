@@ -282,8 +282,6 @@ export const xray = {
   },
 
   getActiveLink (item, activeRoute) {
-    console.log('item', item.children)
-    console.log('activeRoute', activeRoute)
     let active = false
     if (item.children !== undefined) {
       item.children.filter(function (child) {
@@ -292,7 +290,6 @@ export const xray = {
         }
       })
     } else {
-      console.log('checking here')
       if (item.link.name === activeRoute) {
         active = true
       }
