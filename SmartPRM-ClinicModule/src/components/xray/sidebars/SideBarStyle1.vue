@@ -32,7 +32,7 @@ export default {
   name: 'SideBarStyle1',
   props: {
     homeURL: { type: Object, default: () => ({ name: 'dashboard.home-1' }) },
-    items: { type: Array },
+    items: {},
     logo: { type: String, default: require('../../../assets/images/logo.png') },
     horizontal: { type: Boolean },
     toggleButton: { type: Boolean, default: true }

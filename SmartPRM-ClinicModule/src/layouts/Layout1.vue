@@ -172,7 +172,7 @@
     </form>
   </b-modal>
   <!-- Account Setting -->
-  <b-modal v-model="accountModalShow" title="Account Setting" ok-title="Save Changes" @ok="submit" cancel-title="Close">
+  <b-modal v-model="accountModalShow" title="Account Setting" ok-title="Save Changes" @ok="handleSubmit(settingData)" cancel-title="Close">
     <ValidationObserver ref="form" v-slot="{ handleSubmit }">
     <form novalidate @submit.prevent="handleSubmit(settingData)">
       <div class="form-row">
