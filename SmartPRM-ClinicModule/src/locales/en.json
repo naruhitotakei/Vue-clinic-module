@@ -235,7 +235,7 @@
     "completedAssignments": "Completed Assignments"
   },
   "statisticsForClinic": {
-    "doctors": "Doctors",
+    "attendance": "Number of attended appointments",
     "nurses": "Nurses",
     "patients": "Patients",
     "pharmacists": "Pharmacists",

@@ -21,6 +21,16 @@ const getClinicStatistics = (request, response, clinicId) =>  {
     })
 }
 
+const getClinicAttendance = (request, response, clinicId) =>  {
+    pool.query("SELECT COUNT(id) from appointments WHERE date >= date_trunc('month', CURRENT_DATE) AND attendance='Attended'", (error, results) => {
+        if (error) {
+            throw error
+        }
+        response.status(200).json(results.rows)
+    })
+}
+
 module.exports = {
-  getClinicStatistics
+  getClinicStatistics,
+  getClinicAttendance
 }

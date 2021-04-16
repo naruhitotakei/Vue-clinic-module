@@ -142,6 +142,14 @@ app.get('/api/statistics/clinic', (req, res) => {
       res.status(401).json("OK: user unauthorized")
 });
 
+app.get('/api/statistics/clinic/attendance', (req, res) => {
+  const clinicId = 123 // todo - get it from session
+  if(req.session.prm_user && req.session.prm_user.permissions && checkPermission(req.session.prm_user.permissions, clinicStatisticsPermission))
+      daoStatistics.getClinicAttendance(req, res, clinicId)
+  else
+      res.status(401).json("OK: user unauthorized")
+});
+
 app.get('/api/report/emazing/services/:statrtdate/:enddate/:countrie', (req, res) => {
   const statrtdate = req.params.statrtdate
   const enddate = req.params.enddate

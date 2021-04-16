@@ -235,7 +235,7 @@
     "completedAssignments": "Opravljene Naloge"
   },
   "statisticsForClinic": {
-    "doctors": "Doktorji",
+    "attendance": "Število terminov z udeležbo",
     "nurses": "Sestre",
     "patients": "Pacienti",
     "pharmacists": "Farmacevti",

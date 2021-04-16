@@ -9,8 +9,8 @@
                 <div class="d-flex align-items-center justify-content-between">
                   <div class="rounded-circle iq-card-icon bg-primary"><i class="ri-user-fill"></i></div>
                   <div class="text-right">
-                    <h2 class="mb-0"><span class="counter">5600</span></h2>
-                    <h5 class="">{{ $t('statisticsForClinic.doctors') }}</h5>
+                    <h2 class="mb-0"><span class="counter">{{ attendance }}</span></h2>
+                    <h5 class="">{{ $t('statisticsForClinic.attendance') }}</h5>
                   </div>
                 </div>
               </template>
@@ -96,7 +96,7 @@
 <script>
 import { xray } from '../../config/pluginInit'
 import IqCard from '../../components/xray/cards/iq-card'
-import { clinicStatistics } from '../../services/statistics'
+import { clinicStatistics, clinicStatisticsAttendance } from '../../services/statistics'
 let dates = []
 let totalRevenue = []
 export default {
@@ -105,10 +105,11 @@ export default {
   mounted () {
     xray.index()
     this.getStatistics()
-    console.log(this.chart9)
+    this.getAttendance()
   },
   data () {
     return {
+      attendance: 0,
       statistics: [],
       slickOptions: {
         centerMode: false,
@@ -189,11 +190,24 @@ export default {
   methods: {
     getStatistics () {
       clinicStatistics().then(response => {
-        this.statistics = response
-        this.statistics.forEach(function (item) {
-          dates.push(item.date.split('T').shift())
-          totalRevenue.push(parseFloat(item.totalrevenue))
-        })
+        if (typeof response !== 'string') {
+          this.statistics = response
+          this.statistics.forEach(function (item) {
+            dates.push(item.date.split('T').shift())
+            totalRevenue.push(parseFloat(item.totalrevenue))
+          })
+        } else {
+          console.error(response)
+        }
+      })
+    },
+    getAttendance () {
+      clinicStatisticsAttendance().then(response => {
+        if (typeof response !== 'string') {
+          this.attendance = response[0].count
+        } else {
+          console.error(response)
+        }
       })
     }
   }
