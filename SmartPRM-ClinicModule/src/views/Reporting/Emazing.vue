@@ -9,8 +9,8 @@
               </b-form-select>
             </b-form-group>
             <b-form-group class="col-md-2">
-              <b-form-select plain v-model="selected3" :options="options3" style="padding: 10px;">
-                  <b-form-select-option :value="null">Custom</b-form-select-option>
+              <b-form-select plain v-model="periodSelect" :options="periodSelectOptions" style="padding: 10px;" @change.native="onPeriodChange">
+                  <b-form-select-option :value="null">{{ $t('reportingEmazing.periodSelect') }}</b-form-select-option>
               </b-form-select>
             </b-form-group>
               <label style="padding-top: 8px;">From:</label>
@@ -49,20 +49,21 @@ export default {
   name: 'Emazing',
   data: function () {
     return {
-      fromdate: '2021-01-01',
-      todate: '2021-01-01',
+      fromdate: null,
+      todate: null,
       options2: [
         { value: 'a', text: 'One' },
         { value: 'b', text: 'Two' },
         { value: 'c', text: 'Three' }
       ],
-      options3: [
-        { value: '1', text: 'One' },
-        { value: '2', text: 'Two' },
-        { value: '3', text: 'Three' }
+      periodSelectOptions: [
+        { value: '1', text: this.$t('reportingEmazing.currentMonth') },
+        { value: '2', text: this.$t('reportingEmazing.lastMonth') },
+        { value: '3', text: this.$t('reportingEmazing.thisYear') },
+        { value: '4', text: this.$t('reportingEmazing.lastYear') }
       ],
       selected2: null,
-      selected3: null,
+      periodSelect: null,
       servicesSummaryColumns: [
         { label: this.$t('reportingEmazing.servicesSummaryColumn.serviceTitle'), key: 'service_title', class: 'text-left' },
         { label: this.$t('reportingEmazing.servicesSummaryColumn.serviceCount'), key: 'count', class: 'text-left' },
@@ -86,6 +87,46 @@ export default {
       this.getServicesList()
     },
     onToChange () {
+      this.getServicesReport()
+      this.getServicesList()
+    },
+    onPeriodChange () {
+      if (this.periodSelect === '1') {
+        let today = new Date()
+        let firstThisMonth = new Date()
+        firstThisMonth.setDate(1)
+        this.fromdate = this.formatDate(firstThisMonth)
+        this.todate = this.formatDate(today)
+      } else if (this.periodSelect === '2') {
+        let lastLastMonth = new Date()
+        lastLastMonth.setDate(1)
+        lastLastMonth.setDate(lastLastMonth.getDate() - 1)
+        let firstLastMonth = new Date()
+        firstLastMonth.setMonth(firstLastMonth.getMonth() - 1)
+        firstLastMonth.setDate(1)
+        this.fromdate = this.formatDate(firstLastMonth)
+        this.todate = this.formatDate(lastLastMonth)
+      } else if (this.periodSelect === '3') {
+        let today = new Date()
+        let firstThisYear = new Date()
+        firstThisYear.setMonth(0)
+        firstThisYear.setDate(1)
+        this.fromdate = this.formatDate(firstThisYear)
+        this.todate = this.formatDate(today)
+      } else if (this.periodSelect === '4') {
+        let lastLastYear = new Date()
+        lastLastYear.setMonth(0)
+        lastLastYear.setDate(1)
+        lastLastYear.setDate(lastLastYear.getDate() - 1)
+        let firstLastYear = new Date()
+        firstLastYear.setMonth(0)
+        firstLastYear.setDate(1)
+        firstLastYear.setYear(1900 + firstLastYear.getYear() - 1)
+        this.fromdate = this.formatDate(firstLastYear)
+        this.todate = this.formatDate(lastLastYear)
+      } else {
+        return
+      }
       this.getServicesReport()
       this.getServicesList()
     },
@@ -123,10 +164,9 @@ export default {
   },
   mounted () {
     var today = new Date()
-    var lastMonth = new Date()
-    lastMonth.setMonth(lastMonth.getMonth() - 1)
-    lastMonth.setDate(1)
-    this.fromdate = this.formatDate(lastMonth)
+    var firstThisMonth = new Date()
+    firstThisMonth.setDate(1)
+    this.fromdate = this.formatDate(firstThisMonth)
     this.todate = this.formatDate(today)
     this.getServicesReport()
     this.getServicesList()
