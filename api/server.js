@@ -142,20 +142,31 @@ app.get('/api/statistics/clinic', (req, res) => {
       res.status(401).json("OK: user unauthorized")
 });
 
-app.get('/api/statistics/emazing/services/:statrtdate/:enddate', (req, res) => {
+app.get('/api/report/emazing/services/:statrtdate/:enddate/:countrie', (req, res) => {
   const statrtdate = req.params.statrtdate
   const enddate = req.params.enddate
+  const countrie = req.params.countrie
   if(req.session.prm_user && req.session.prm_user.permissions && checkPermission(req.session.prm_user.permissions, reportingEmazingPermission))
-      daoReporting.getEmazingServicesReport(req, res, statrtdate, enddate)
+      daoReporting.getEmazingServicesReport(req, res, statrtdate, enddate, countrie)
   else
       res.status(401).json("OK: user unauthorized")
 });
 
-app.get('/api/statistics/emazing/serviceslist/:statrtdate/:enddate', (req, res) => {
+app.get('/api/report/emazing/serviceslist/:statrtdate/:enddate/:countrie', (req, res) => {
+  const statrtdate = req.params.statrtdate
+  const enddate = req.params.enddate
+  const countrie = req.params.countrie
+  if(req.session.prm_user && req.session.prm_user.permissions && checkPermission(req.session.prm_user.permissions, reportingEmazingPermission))
+      daoReporting.getServiceList(req, res, statrtdate, enddate, countrie)
+  else
+      res.status(401).json("OK: user unauthorized")
+});
+
+app.get('/api/report/emazing/countrylist/:statrtdate/:enddate', (req, res) => {
   const statrtdate = req.params.statrtdate
   const enddate = req.params.enddate
   if(req.session.prm_user && req.session.prm_user.permissions && checkPermission(req.session.prm_user.permissions, reportingEmazingPermission))
-      daoReporting.getServiceList(req, res, statrtdate, enddate)
+      daoReporting.getCountryList(req, res, statrtdate, enddate)
   else
       res.status(401).json("OK: user unauthorized")
 });

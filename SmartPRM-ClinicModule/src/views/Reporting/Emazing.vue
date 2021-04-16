@@ -4,8 +4,8 @@
           <template v-slot:headerTitle>
             <div class="row pt-3">
           <b-form-group class="col-md-3">
-              <b-form-select plain v-model="selected2" :options="options2" style="padding: 10px;">
-                  <b-form-select-option :value="null">All invoice recipients</b-form-select-option>
+              <b-form-select plain v-model="countrySelect" :options="countrySelectOptions" style="padding: 10px;" @change.native="onCountryChange">
+                  <b-form-select-option :value="null">{{ $t('reportingEmazing.countrySelect') }}</b-form-select-option>
               </b-form-select>
             </b-form-group>
             <b-form-group class="col-md-2">
@@ -41,7 +41,7 @@
 
 <script>
 import IqCard from '../../components/xray/cards/iq-card.vue'
-import { getEmazingServicesReport, getServiceList } from '../../services/reporting'
+import { getEmazingServicesReport, getServiceList, getCountryList } from '../../services/reporting'
 export default {
   components: {
     IqCard
@@ -51,18 +51,14 @@ export default {
     return {
       fromdate: null,
       todate: null,
-      options2: [
-        { value: 'a', text: 'One' },
-        { value: 'b', text: 'Two' },
-        { value: 'c', text: 'Three' }
-      ],
+      countrySelectOptions: [],
       periodSelectOptions: [
         { value: '1', text: this.$t('reportingEmazing.currentMonth') },
         { value: '2', text: this.$t('reportingEmazing.lastMonth') },
         { value: '3', text: this.$t('reportingEmazing.thisYear') },
         { value: '4', text: this.$t('reportingEmazing.lastYear') }
       ],
-      selected2: null,
+      countrySelect: null,
       periodSelect: null,
       servicesSummaryColumns: [
         { label: this.$t('reportingEmazing.servicesSummaryColumn.serviceTitle'), key: 'service_title', class: 'text-left' },
@@ -85,10 +81,12 @@ export default {
     onFromChange () {
       this.getServicesReport()
       this.getServicesList()
+      this.getCountryList()
     },
     onToChange () {
       this.getServicesReport()
       this.getServicesList()
+      this.getCountryList()
     },
     onPeriodChange () {
       if (this.periodSelect === '1') {
@@ -129,9 +127,15 @@ export default {
       }
       this.getServicesReport()
       this.getServicesList()
+      this.getCountryList()
+    },
+    onCountryChange () {
+      this.getServicesReport()
+      this.getServicesList()
+      this.getCountryList()
     },
     getServicesReport () {
-      getEmazingServicesReport(this.fromdate, this.todate).then(response => {
+      getEmazingServicesReport(this.fromdate, this.todate, this.countrySelect).then(response => {
         if (typeof response !== 'string') {
           this.servicesSummary = response
         } else {
@@ -140,11 +144,28 @@ export default {
       })
     },
     getServicesList () {
-      getServiceList(this.fromdate, this.todate).then(response => {
+      getServiceList(this.fromdate, this.todate, this.countrySelect).then(response => {
         if (typeof response !== 'string') {
           this.servicesList = response
         } else {
           console.error(response)
+        }
+      })
+    },
+    getCountryList () {
+      getCountryList(this.fromdate, this.todate).then(response => {
+        if (typeof response !== 'string') {
+          console.log('RESPONSE', response)
+          this.countrySelectOptions = []
+          for (var cnt in response) {
+            console.log('CNT', cnt)
+            if (response[cnt].id) {
+              var cntEnt = { value: response[cnt].id, text: response[cnt].name }
+              this.countrySelectOptions.push(cntEnt)
+            }
+          }
+        } else {
+          this.countrySelectOptions = []
         }
       })
     },
@@ -170,6 +191,7 @@ export default {
     this.todate = this.formatDate(today)
     this.getServicesReport()
     this.getServicesList()
+    this.getCountryList()
   }
 }
 </script>

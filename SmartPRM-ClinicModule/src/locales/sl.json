@@ -252,6 +252,7 @@
     "lastMonth": "Prejšnji mesec",
     "thisYear": "Letos",
     "lastYear": "Lani",
+    "countrySelect": "Vse države",
     "servicesSummaryColumn": {
       "serviceTitle": "Ime storitve",
       "serviceCount": "Število storitev",

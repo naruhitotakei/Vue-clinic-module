@@ -255,6 +255,7 @@
     "lastMonth": "Last Month",
     "thisYear": "This Year",
     "lastYear": "Last Year",
+    "countrySelect": "All Countries",
     "servicesSummaryColumn": {
       "serviceTitle": "Service Title",
       "serviceCount": "Service Count",
