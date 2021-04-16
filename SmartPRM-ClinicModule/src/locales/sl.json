@@ -1,4 +1,4 @@
-﻿{
+{
   "sidebar": {
     "dashboard": "Domov",
     "calendar": "Koledar",
@@ -247,6 +247,11 @@
   },
   "reportingEmazing": {
     "servicesSummary": "Povzetek Storitev",
+    "periodSelect": "Izberi Obdobje",
+    "currentMonth": "Tekoči mesec",
+    "lastMonth": "Prejšnji mesec",
+    "thisYear": "Letos",
+    "lastYear": "Lani",
     "servicesSummaryColumn": {
       "serviceTitle": "Ime storitve",
       "serviceCount": "Število storitev",

@@ -250,6 +250,11 @@
   },
   "reportingEmazing": {
     "servicesSummary": "Services Summary",
+    "periodSelect": "Select Period",
+    "currentMonth": "Current Month",
+    "lastMonth": "Last Month",
+    "thisYear": "This Year",
+    "lastYear": "Last Year",
     "servicesSummaryColumn": {
       "serviceTitle": "Service Title",
       "serviceCount": "Service Count",

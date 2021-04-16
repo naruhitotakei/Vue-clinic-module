@@ -258,7 +258,7 @@
                                           </div>
                                       </div>
                                   </div>
-                                  <b-button variant="primary" @click="disabled = (disabled + 1) % 2" class="btn-add-patient btn-edit-patient" >Edit</b-button>
+                                  <b-button variant="primary" @click="disabled = !disabled" class="btn-add-patient btn-edit-patient" >Edit</b-button>
                               </b-col>
                           </b-form-group>
                           <b-row>
@@ -273,7 +273,7 @@
                                           <b-row align-v="center">
                                               <b-form-group class="col-md-12" label-cols-sm="4" label="First Name:" label-for="fname">
                                                   <ValidationProvider name="fname" rules="required" v-slot="{ errors }">
-                                                      <b-form-input :disabled="disabled == 0" v-model="user.fname" type="text" :class="(errors.length > 0 ? ' is-invalid' : '')"></b-form-input>
+                                                      <b-form-input :disabled="disabled" v-model="user.fname" type="text" :class="(errors.length > 0 ? ' is-invalid' : '')"></b-form-input>
                                                       <div class="invalid-feedback">
                                                           <span>{{ errors[0] }}</span>
                                                       </div>
@@ -281,7 +281,7 @@
                                               </b-form-group>
                                               <b-form-group class="col-md-12" label-cols-sm="4" label="Last Name:" label-for="lname">
                                                   <ValidationProvider name="lname" rules="required" v-slot="{ errors }">
-                                                      <b-form-input :disabled="disabled == 0" v-model="user.lname" type="text" :class="(errors.length > 0 ? ' is-invalid' : '')"></b-form-input>
+                                                      <b-form-input :disabled="disabled" v-model="user.lname" type="text" :class="(errors.length > 0 ? ' is-invalid' : '')"></b-form-input>
                                                       <div class="invalid-feedback">
                                                           <span>{{ errors[0] }}</span>
                                                       </div>
@@ -290,47 +290,47 @@
 
                                               <b-form-group class="col-md-12" label-cols-sm="4" label="Date of birth:" label-for="dob">
                                                   <ValidationProvider name="dob" rules="required" v-slot="{ errors }">
-                                                      <b-form-input :disabled="disabled == 0" v-model="user.dob" type="date" :class="(errors.length > 0 ? ' is-invalid' : '')"></b-form-input>
+                                                      <b-form-input :disabled="disabled" v-model="user.dob" type="date" :class="(errors.length > 0 ? ' is-invalid' : '')"></b-form-input>
                                                       <div class="invalid-feedback">
                                                           <span>{{ errors[0] }}</span>
                                                       </div>
                                                   </ValidationProvider>
                                               </b-form-group>
-                                              <b-form-group :disabled="disabled == 0" class="col-md-12" label-cols-sm="4" label="Gender:" label-for="gender" label-class="d-block">
-                                                  <b-form-radio inline v-model="user.gender" value="male">Male</b-form-radio>
-                                                  <b-form-radio inline v-model="user.gender" value="female">Female</b-form-radio>
-                                                  <b-form-radio inline v-model="user.gender" value="unspecified">Unspecified</b-form-radio>
+                                              <b-form-group class="col-md-12" label-cols-sm="4" label="Gender:" label-for="gender" label-class="d-block">
+                                                  <b-form-radio inline v-model="user.gender" :disabled="disabled" value="male">Male</b-form-radio>
+                                                  <b-form-radio inline v-model="user.gender" :disabled="disabled" value="female">Female</b-form-radio>
+                                                  <b-form-radio inline v-model="user.gender" :disabled="disabled" value="unspecified">Unspecified</b-form-radio>
                                               </b-form-group>
                                               <b-form-group class="col-md-12" label-cols-sm="4" label="Address:" label-for="address">
-                                                  <b-form-textarea :disabled="disabled == 0" name="address" v-model="user.address" style="line-height: 22px;" rows="3">
+                                                  <b-form-textarea :disabled="disabled" name="address" v-model="user.address" style="line-height: 22px;" rows="3">
                                                   </b-form-textarea>
                                               </b-form-group>
                                               <b-form-group class="col-md-12" style="justify-content: space-between;" label-cols-sm="4" label="Postcode, City:" label-for="city">
-                                                  <b-form-input :disabled="disabled == 0" class="col-md-6" style="float: left;" v-model="user.postcode" type="text"></b-form-input>
-                                                  <b-form-input :disabled="disabled == 0" class="col-md-6" v-model="user.city" type="text"></b-form-input>
+                                                  <b-form-input :disabled="disabled" class="col-md-6" style="float: left;" v-model="user.postcode" type="text"></b-form-input>
+                                                  <b-form-input :disabled="disabled" class="col-md-6" v-model="user.city" type="text"></b-form-input>
                                               </b-form-group>
                                               <b-form-group class="col-md-12" label-cols-sm="4" label-for="country" label="Country:">
-                                                  <b-form-select :disabled="disabled == 0" plain v-model="user.country" :selected="user.country" :options="countries" id="exampleFormControlSelect3">
+                                                  <b-form-select :disabled="disabled" plain v-model="user.country" :selected="user.country" :options="countries" id="exampleFormControlSelect3">
                                                   </b-form-select>
                                               </b-form-group>
                                               <b-form-group class="col-md-12" label-cols-sm="4" label-for="citizenship" label="Citizenship:">
-                                                  <b-form-input :disabled="disabled == 0" name="citizenship" type="text" v-model="user.citizenship"></b-form-input>
+                                                  <b-form-input :disabled="disabled" name="citizenship" type="text" v-model="user.citizenship"></b-form-input>
                                               </b-form-group>
                                               <b-form-group class="col-md-12" label-cols-sm="4" label-for="region" label="Region(EU):">
-                                                  <b-form-input :disabled="disabled == 0" name="region" type="text" v-model="user.region"></b-form-input>
+                                                  <b-form-input :disabled="disabled" name="region" type="text" v-model="user.region"></b-form-input>
                                               </b-form-group>
                                               <b-form-group class="col-md-12" label-cols-sm="4" label-for="insurance" label="Insurance number, insured at:">
-                                                  <b-form-input :disabled="disabled == 0" class="col-md-6" style="float: left;" name="insurance_no" type="text" v-model="user.insurance_no"></b-form-input>
-                                                  <b-form-input :disabled="disabled == 0" class="col-md-6" name="insured_at" type="text" v-model="user.insured_at"></b-form-input>
+                                                  <b-form-input :disabled="disabled" class="col-md-6" style="float: left;" name="insurance_no" type="text" v-model="user.insurance_no"></b-form-input>
+                                                  <b-form-input :disabled="disabled" class="col-md-6" name="insured_at" type="text" v-model="user.insured_at"></b-form-input>
                                               </b-form-group>
                                               <b-form-group class="col-md-12" label-cols-sm="4" label-for="mobile_no" label="Mobile number:">
-                                                  <b-form-input :disabled="disabled == 0" name="mobile_no" type="text" v-model="user.mobile_no"></b-form-input>
+                                                  <b-form-input :disabled="disabled" name="mobile_no" type="text" v-model="user.mobile_no"></b-form-input>
                                               </b-form-group>
                                               <b-form-group class="col-md-12" label-cols-sm="4" label-for="email" label="Email-address:">
-                                                  <b-form-input :disabled="disabled == 0" name="email" type="text" v-model="user.email"></b-form-input>
+                                                  <b-form-input :disabled="disabled" name="email" type="text" v-model="user.email"></b-form-input>
                                               </b-form-group>
                                               <b-form-group class="col-md-12" label-cols-sm="4" label-for="tax_no" label="Tax number:">
-                                                  <b-form-input :disabled="disabled == 0" name="tax_no" type="text" v-model="user.tax_no"></b-form-input>
+                                                  <b-form-input :disabled="disabled" name="tax_no" type="text" v-model="user.tax_no"></b-form-input>
                                               </b-form-group>
                                           </b-row>
                                       </template>
@@ -343,17 +343,17 @@
                                               <h4>Allergies and sensitivities</h4>
                                           </div>
                                           <div class="iq-card-body p-0">
-                                              <textarea :disabled="disabled == 0" style="line-height: 30px;" v-model="user.allergies" class="textarea form-control" rows="7"></textarea>
+                                              <textarea :disabled="disabled" style="line-height: 30px;" v-model="user.allergies" class="textarea form-control" rows="7"></textarea>
                                           </div>
                                       </template>
                                   </iq-card>
                                   <iq-card>
                                       <template v-slot:body>
                                           <div class="pl-0 iq-card-header d-flex justify-content-between">
-                                              <h4>Reminders</h4>
+                                              <h4>General Notes</h4>
                                           </div>
                                           <div class="iq-card-body p-0">
-                                              <textarea :disabled="disabled == 0" style="line-height: 30px;" v-model="user.reminder" class="textarea form-control" rows="7"></textarea>
+                                              <textarea :disabled="disabled" style="line-height: 30px;" v-model="user.reminder" class="textarea form-control" rows="7"></textarea>
                                           </div>
                                       </template>
                                   </iq-card>
@@ -366,17 +366,17 @@
                                           <div class="iq-card-body">
                                               <div class="row">
                                                   <div class="col-4 pr-1 pl-0 text-black">Dentist:</div>
-                                                  <b-form-input :disabled="disabled == 0" v-model="user.dentist" class="col-8 mb-2" type="text"></b-form-input>
+                                                  <b-form-input :disabled="disabled" v-model="user.dentist" class="col-8 mb-2" type="text"></b-form-input>
                                                   <div class="col-4 pr-1 pl-0 text-black">Surgeon:</div>
-                                                  <b-form-input :disabled="disabled == 0" v-model="user.surgeon" class="col-8" type="text"></b-form-input>
+                                                  <b-form-input :disabled="disabled" v-model="user.surgeon" class="col-8" type="text"></b-form-input>
                                               </div>
                                           </div>
                                       </template>
                                   </iq-card>
                               </b-col>
                           </b-row>
-                          <div class="text-center p-1" v-if="disabled !== 1">
-                              <b-button style="padding: 5px 25px;" @click="submitData(true)" variant="primary" class="mr-2">Submit</b-button>
+                          <div class="text-center p-1" v-if="!disabled">
+                              <b-button style="padding: 5px 25px;" @click="submitData()" variant="primary" class="mr-2">Submit</b-button>
                               <b-button style="padding: 5px 25px;" v-b-modal.modal-1 variant="none" class="iq-bg-danger">Cancel</b-button>
                               <b-modal id="modal-1" ok-title="OK" cancel-title="Cancel" @ok="(resetForm()), (disabled = (disabled + 1) % 2)">
                                   <h4 class="my-4 card-title text-center">Are you sure you want to the<br>discard changes?</h4>
@@ -387,7 +387,9 @@
                                       <h4 class="my-4 card-title text-center">Unable to save changes, please try again</h4>
                                   </div>
                               </b-modal>
-                              <b-alert :show="dismissCountDown" @dismissed="(disabled = (disabled + 1) % 2), dismissCountDown = 0" variant="success" style="shape-outside: content-box;" class="text-white bg-success col-md-4 float-right">
+                          </div>
+                          <div class="text-center p-1" v-if="successfullEditMessage">
+                              <b-alert :show="dismissCountDown" @dismissed="dismissCountDown=0" variant="success" style="shape-outside: content-box;" class="text-white bg-success col-md-4 float-right">
                                   <div class="iq-alert-icon">
                                       <i class="ri-checkbox-circle-line"></i>
                                   </div>
@@ -644,14 +646,16 @@ export default {
   },
   data () {
     return {
-      dismissCountDown: null,
+      dismissCountDown: 0,
+      dismissSecs: 3,
+      successfullEditMessage: false,
       dropDownText: '',
       selected: this.value,
       searchOptions: [
         { value: 'file_name', text: 'File Name' },
         { value: 'created_at', text: 'Created Date' }
       ],
-      disabled: 1,
+      disabled: true,
       doctor: {
         profile: require('../../assets/images/user/1.jpg')
       },
@@ -771,14 +775,11 @@ export default {
       }
       console.log('RESET FORM', this.user)
     },
-    submitData (args) {
-      console.log('ARGS:', args)
-      if (args) {
-        this.dismissCountDown = 2
-      } else {
-        this.$refs['my-modal'].show()
-      }
-      console.log('FORM DATA:', this.user)
+    submitData () {
+      this.disabled = true
+      this.dismissCountDown = this.dismissSecs
+      this.successfullEditMessage = true
+      // this.$refs['my-modal'].show() prikazi modal ukoliko dodje do greske neke
     },
     previewImage: function (event) {
       const input = event.target
