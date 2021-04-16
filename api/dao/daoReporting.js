@@ -12,7 +12,7 @@ const pool = new Pool({
 const getEmazingServicesReport = (request, response, startdate, endate) =>  {
     var statement = ["SELECT pr.name as service_title, COUNT(se.id), SUM(se.price) FROM services se ",
                      "LEFT JOIN products pr ON se.product_id = pr.id ",
-                     "WHERE date_trunc('day', se.date) >= $1 AND date_trunc('day', se.date) <= $2 ",
+                     "WHERE date_trunc('day', se.date) >= $1 AND (date_trunc('day', se.date) - INTERVAL '1 DAY' ) <= $2 ",
                      "GROUP BY pr.id "].join('\n')                       
     pool.query(statement, [startdate, endate], (error, results) => {
         if (error) {
@@ -29,7 +29,8 @@ const getServiceList = (request, response, startdate, endate) =>  {
                      "LEFT JOIN enquiries en ON se.enquiry_id = en.id ",
                      "LEFT JOIN client_users cu ON se.doctor_id = cu.id ",
                      "LEFT JOIN users us ON cu.user_id = us.id ",
-                     "WHERE date_trunc('day', se.date) >= $1 AND date_trunc('day', se.date) <= $2 "].join('\n') 
+                     "WHERE date_trunc('day', se.date) >= $1 AND (date_trunc('day', se.date) - INTERVAL '1 DAY' ) <= $2 ",
+                     "ORDER BY se.date ASC "].join('\n')
     pool.query(statement, [startdate, endate], (error, results) => {
         if (error) {
             throw error
