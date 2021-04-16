@@ -88,23 +88,42 @@ app.get('/api/profile', async function(req, res) {
 // enquiries, patients
 ///////////////////////////////////
 app.get('/api/enquiries', (req, res) => {
-  console.log('GET: api/enquiries called')
   if(req.session.prm_user && req.session.prm_user.permissions && checkPermission(req.session.prm_user.permissions, enquiriesPermission))
       daoEnquiries.getEnquiries(req, res)
   else
       res.status(401).json("OK: user unauthorized")
 });
 
+app.get('/api/enquiries/:id', (req, res) => {
+  const id = req.params.id
+  if(req.session.prm_user && req.session.prm_user.permissions && checkPermission(req.session.prm_user.permissions, enquiriesPermission))
+      daoEnquiries.getEnquiriesById(req, res, id)
+  else
+      res.status(401).json("OK: user unauthorized")
+});
+
+app.put('/api/enquiries', (req, res) => {
+  const enquiry = req.body
+  if(req.session.prm_user && req.session.prm_user.permissions && checkPermission(req.session.prm_user.permissions, enquiriesPermission))
+      daoEnquiries.createEnquiry(req, res, enquiry)
+  else
+      res.status(401).json("OK: user unauthorized")
+});
+
 app.post('/api/enquiries', (req, res) => {
-   const enquiry = req.body.enquiry;
-   console.log('POST: api/enquiries called with ', enquiry)
-   res.json("OK:");
+  const enquiry = req.body
+  if(req.session.prm_user && req.session.prm_user.permissions && checkPermission(req.session.prm_user.permissions, enquiriesPermission))
+      daoEnquiries.updateEnquiry(req, res, enquiry)
+  else
+      res.status(401).json("OK: user unauthorized")
 });
 
 app.delete('/api/enquiries/:id', (req, res) => {
-   const id = req.params.id
-   console.log('DELETE: api/enquiries for ', id)
-   res.json("OK: " + id);
+  const id = req.params.id
+  if(req.session.prm_user && req.session.prm_user.permissions && checkPermission(req.session.prm_user.permissions, enquiriesPermission))
+      daoEnquiries.deleteEnquiries(req, res, id)
+  else
+      res.status(401).json("OK: user unauthorized")
 });
 
 ///////////////////////////////////
