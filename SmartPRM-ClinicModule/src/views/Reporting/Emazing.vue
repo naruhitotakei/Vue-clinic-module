@@ -70,7 +70,7 @@ export default {
       ],
       servicesSummary: [],
       servicesListColumns: [
-        { label: this.$t('reportingEmazing.servicesListColumn.serviceDate'), key: 'date', class: 'text-left' },
+        { label: this.$t('reportingEmazing.servicesListColumn.serviceDate'), key: 'date', formatter: (value, key, item) => { return this.formatDateString(value) } },
         { label: this.$t('reportingEmazing.servicesListColumn.serviceTitle'), key: 'service_title', class: 'text-left' },
         { label: this.$t('reportingEmazing.servicesListColumn.serviceLeadName'), key: 'name', class: 'text-left' },
         { label: this.$t('reportingEmazing.servicesListColumn.serviceAmount'), key: 'price', class: 'text-left' },
@@ -112,6 +112,13 @@ export default {
       var mo = new Intl.DateTimeFormat('en', { month: '2-digit' }).format(date)
       var da = new Intl.DateTimeFormat('en', { day: '2-digit' }).format(date)
       return (`${ye}-${mo}-${da}`)
+    },
+    formatDateString (dateString) {
+      var date = Date.parse(dateString)
+      var ye = new Intl.DateTimeFormat('en', { year: 'numeric' }).format(date)
+      var mo = new Intl.DateTimeFormat('en', { month: 'numeric' }).format(date)
+      var da = new Intl.DateTimeFormat('en', { day: 'numeric' }).format(date)
+      return (`${da}. ${mo}. ${ye}`)
     }
   },
   mounted () {
