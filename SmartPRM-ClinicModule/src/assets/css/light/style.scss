@@ -199,7 +199,7 @@ a:hover { text-decoration: none; color: #02818f; }
                                Sign In
 -----------------------------------------------------------------------*/
 .sign-in-page { height: 100%; }
-.sign-in-detail { padding: 100px; height: 100vh; border-radius: 40px; }
+.sign-in-detail { padding: 100px 100px 100px 0; height: 100vh; border-radius: 40px; }
 .sign-in-logo { display: inline-block; width: 100%; }
 .sign-in-logo img { height: 100px; }
 .sign-in-from { padding: 20px 60px; border-radius: 37px; position: absolute; top: 10%; bottom: 10%; left: 0; right: 0; background: #fff; }
