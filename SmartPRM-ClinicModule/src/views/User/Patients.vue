@@ -34,12 +34,19 @@
                                 <b-table id="my-table"
                                          bordered
                                          hover
+                                         :busy="!isDataLoaded"
                                          @row-clicked="onPatientClick"
                                          style="cursor: pointer;"
-                                         :items="computedList"
+                                         :items="patients"
                                          :fields="columns"
                                          :per-page="perPage"
                                          :current-page="currentPage">
+                                    <template #table-busy>
+                                      <div class="text-center text-primary my-2">
+                                        <b-spinner class="align-middle"></b-spinner>
+                                        <strong class="loading">Loading...</strong>
+                                      </div>
+                                    </template>
                                     <template v-slot:cell(name)="data">
                                         <span v-if="!data.item.editable">{{ data.item.name }}</span>
                                         <input type="text"
@@ -181,12 +188,7 @@ export default {
   // components: { ViewPatient },
   async mounted () {
     xray.index()
-  },
-  computed: {
-    computedList () {
-      this.replace()
-      return this.items
-    }
+    this.getPatients()
   },
   methods: {
     add () {
@@ -219,9 +221,10 @@ export default {
       let index = this.rows.indexOf(item)
       this.rows.splice(index, 1)
     },
-    async replace () {
+    async getPatients () {
       let finalData = await Promise.all([getEnquires()])
       finalData = finalData[0]
+      this.toggleDataLoaded()
       if (finalData.constructor === Array && finalData.length > 0) {
         finalData.map((currentElementOfFinalArray, indexOfDefaultItems) => {
           this.$set(this.items, indexOfDefaultItems, {
@@ -239,6 +242,7 @@ export default {
           })
         })
       }
+      this.patients = finalData
     },
     searchFunction (event) {
       this.dropDownText = event
@@ -257,11 +261,16 @@ export default {
         this.items = sorted
       }
       console.log('sorted', sorted)
+    },
+    toggleDataLoaded () {
+      this.isDataLoaded = !this.isDataLoaded
     }
   },
   data () {
     return {
       dropDownText: '',
+      isDataLoaded: false,
+      patients: [],
       items: rows,
       paginatedItems: rows,
       currentPage: 1,
@@ -296,3 +305,9 @@ export default {
   }
 }
 </script>
+
+<style scoped>
+.loading {
+  padding-left: 10px;
+}
+</style>
