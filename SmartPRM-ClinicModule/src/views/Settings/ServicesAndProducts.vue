@@ -48,19 +48,19 @@
                                         <span v-if="!data.item.editable">
                                             {{ data.item.group }}
                                         </span>
-                                        <input type="text"
-                                               v-model="data.item.group"
-                                               v-else
-                                               class="form-control" />
+                                        <b-form-select v-else v-model="data.item.group"
+                                                       :options="groupOptions"
+                                                       class="form-control">
+                                        </b-form-select>
                                     </template>
                                     <template v-slot:cell(type)="data">
                                         <span v-if="!data.item.editable">
                                             {{ data.item.type }}
                                         </span>
-                                        <input type="text"
-                                               v-model="data.item.type"
-                                               v-else
-                                               class="form-control" />
+                                        <b-form-select v-else v-model="data.item.type"
+                                                       :options="typeOptions"
+                                                       class="form-control">
+                                        </b-form-select>
                                     </template>
                                     <template v-slot:cell(category)="data">
                                         <span v-if="!data.item.editable">
@@ -134,10 +134,10 @@
                                         <span v-if="!data.item.editable">
                                             {{ data.item.category }}
                                         </span>
-                                        <input type="text"
-                                               v-model="data.item.category"
-                                               v-else
-                                               class="form-control" />
+                                        <b-form-select v-else v-model="data.item.category"
+                                                       :options="categoryOptions"
+                                                       class="form-control">
+                                        </b-form-select>
                                     </template>
                                     <template v-slot:cell(emazingFee)="data">
                                         <span v-if="!data.item.editable">
@@ -263,8 +263,18 @@ export default {
         { label: 'Price', key: 'price', class: 'text-left' },
         { label: 'Group', key: 'group', class: 'text-left' },
         { label: 'Type', key: 'type', class: 'text-left' },
-        { label: 'Category', key: 'category', class: 'text-left' },
         { label: 'Action', key: 'action', class: 'text-center' }
+      ],
+      groupOptions: [
+        { value: null, text: 'Please select group' },
+        { value: 'Group 1', text: 'Group 1' },
+        { value: 'Group 2', text: 'Group 2' },
+        { value: 'Group 3', text: 'Group 3' }
+      ],
+      typeOptions: [
+        { value: null, text: 'Please select type' },
+        { value: 'Product', text: 'Product' },
+        { value: 'Service', text: 'Service' }
       ],
       productRows: [
         {
@@ -326,7 +336,7 @@ export default {
       productGroupRows: [
         {
           name: 'Tooth cleaning',
-          category: 'Category 1',
+          category: 'Braces',
           emazingFee: '30 €',
           editable: false
         }
@@ -339,9 +349,23 @@ export default {
         { label: 'Name', key: 'name', class: 'text-left' },
         { label: 'Action', key: 'action', class: 'text-center' }
       ],
+      categoryOptions: [
+        { value: null, text: 'Please select category' },
+        { value: 'Tooth cleaning', text: 'Tooth cleaning' },
+        { value: 'Tooth whitening', text: 'Tooth whitening' },
+        { value: 'Braces', text: 'Braces' }
+      ],
       productCategoryRows: [
         {
           name: 'Tooth cleaning',
+          editable: false
+        },
+        {
+          name: 'Tooth whitening',
+          editable: false
+        },
+        {
+          name: 'Braces',
           editable: false
         }
       ],
