@@ -41,6 +41,7 @@ import AdvancePaymentExample from '../views/Pages/AdvancePaymentExample'
 import NewInvoice from '../views/Pages/NewInvoice'
 /* Patients */
 import ViewPatient from '../views/User/ViewPatient'
+import Patients from '../views/User/Patients'
 /* Apps Views */
 import EmailListing from '../views/Apps/Email/EmailListing'
 import EmailCompose from '../views/Apps/Email/EmailCompose'
@@ -110,7 +111,7 @@ const childRoutes = (prop, mode) => [
     path: 'patients',
     name: prop + '.patients',
     meta: { dark: mode, auth: true, name: 'Editable' },
-    component: EditableTable
+    component: Patients
   },
   {
     path: 'assignments',
@@ -344,13 +345,13 @@ const tableChildRoute = (prop, mode = false) => [
     name: prop + '.dataTable',
     meta: { dark: mode, auth: true, name: 'Datatable' },
     component: DataTable
+  },
+  {
+    path: 'editable',
+    name: prop + '.editable',
+    meta: { dark: mode, auth: true, name: 'Editable' },
+    component: EditableTable
   }
-  // {
-  //   path: 'editable',
-  //   name: prop + '.editable',
-  //   meta: { dark: mode, auth: true, name: 'Editable' },
-  //   component: EditableTable
-  // }
 ]
 
 const statisticsChildRoute = (prop, mode = false) => [
