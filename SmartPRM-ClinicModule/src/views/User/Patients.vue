@@ -292,7 +292,7 @@ export default {
       columns: [
         { label: this.$t('patients.patientsColumn.name'), key: 'name', class: 'text-left' },
         { label: this.$t('patients.patientsColumn.lastName'), key: 'last_name', class: 'text-left' },
-        { label: this.$t('patients.patientsColumn.telephone'), key: 'telephone', class: 'text-left' },
+        { label: this.$t('patients.patientsColumn.telephone'), key: 'phone', class: 'text-left' },
         { label: this.$t('patients.patientsColumn.email'), key: 'email', class: 'text-left' },
         { label: this.$t('patients.patientsColumn.region'), key: 'region', class: 'text-left' },
         { label: this.$t('patients.patientsColumn.state'), key: 'state', class: 'text-left' },
