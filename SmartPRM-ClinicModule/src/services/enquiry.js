@@ -1,4 +1,4 @@
-export async function enquiry () {
+export async function getEnquires () {
   const rawResponse = await fetch('/api/enquiries', {
     method: 'GET',
     credentials: 'same-origin',
@@ -7,11 +7,10 @@ export async function enquiry () {
       'Content-Type': 'application/json'
     }
   })
-  console.log('raw response', rawResponse)
   return rawResponse.json()
 }
 
-export async function enquiryById (id) {
+export async function getEnquiryById (id) {
   const rawResponse = await fetch('/api/enquiries/' + id, {
     method: 'GET',
     credentials: 'same-origin',
@@ -36,7 +35,7 @@ export async function enquiryById (id) {
 // }
 export async function createEnquiry (enquiry) {
   const rawResponse = await fetch('/api/enquiries/', {
-    method: 'PUT',
+    method: 'POST',
     credentials: 'same-origin',
     headers: {
       'Accept': 'application/json',
@@ -48,8 +47,8 @@ export async function createEnquiry (enquiry) {
 }
 
 export async function updateEnquiry (id, enquiry) {
-  const rawResponse = await fetch('/api/enquiries/', {
-    method: 'POST',
+  const rawResponse = await fetch('/api/enquiries/' + id, {
+    method: 'PUT',
     credentials: 'same-origin',
     headers: {
       'Accept': 'application/json',

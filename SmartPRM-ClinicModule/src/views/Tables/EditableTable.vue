@@ -172,7 +172,7 @@
 </template>
 <script>
 import { xray } from '../../config/pluginInit'
-import { enquiry } from '../../services/enquiry'
+import { getEnquires } from '../../services/enquiry'
 // import ViewPatient from '../User/ViewPatient'
 // import Pagination from './Pagination.vue'
 var rows = []
@@ -193,9 +193,8 @@ export default {
       let obj = this.default()
       this.rows.push(obj)
     },
-    onPatientClick () {
-      // alert('hii')
-      this.$router.push('/patients/viewpatient')
+    onPatientClick (item) {
+      this.$router.push({ path: `/patients/${item.id}` })
     },
     default () {
       return {
@@ -221,7 +220,7 @@ export default {
       this.rows.splice(index, 1)
     },
     async replace () {
-      let finalData = await Promise.all([enquiry()])
+      let finalData = await Promise.all([getEnquires()])
       finalData = finalData[0]
       if (finalData.constructor === Array && finalData.length > 0) {
         finalData.map((currentElementOfFinalArray, indexOfDefaultItems) => {
