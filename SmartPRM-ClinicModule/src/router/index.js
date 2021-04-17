@@ -35,7 +35,7 @@ import RecoverPassword1 from '../views/AuthPages/Default/RecoverPassword1'
 import LockScreen1 from '../views/AuthPages/Default/LockScreen1'
 import ConfirmMail1 from '../views/AuthPages/Default/ConfirmMail1'
 /* Extra Pages */
-import InvoiceExample from '../views/Pages/InvoiceExample'
+import Invoice from '../views/Pages/Invoice'
 import OfferExample from '../views/Pages/OfferExample'
 import AdvancePaymentExample from '../views/Pages/AdvancePaymentExample'
 import NewInvoice from '../views/Pages/NewInvoice'
@@ -151,6 +151,12 @@ const documentChildRoute = (prop, mode) => [
     component: Invoices
   },
   {
+    path: 'invoices/:invoiceId',
+    name: prop + '.invoiceId',
+    meta: { dark: mode, auth: true, name: 'Invoice' },
+    component: Invoice
+  },
+  {
     path: 'advance-payments',
     name: prop + '.advance-payments',
     meta: { dark: mode, auth: true, name: 'Advance Payments' },
@@ -171,6 +177,7 @@ const patientChildRoute = (prop, mode) => [
     component: ViewPatient
   }
 ]
+
 const coreChildRoute = (prop, mode) => [
   {
     path: 'ui-colors',
@@ -531,12 +538,6 @@ const authChildRoutes = (prop, mode = false) => [
 
 const defaultlayout = (prop, mode = false) => [
   {
-    path: 'invoice-example',
-    name: prop + '.invoice-example',
-    meta: { dark: mode, auth: true, name: 'Invoices Example' },
-    component: InvoiceExample
-  },
-  {
     path: 'offer-example',
     name: prop + '.offer-example',
     meta: { dark: mode, auth: true, name: 'Offer Example' },
@@ -628,6 +629,13 @@ const routes = [
     meta: { auth: true },
     children: patientChildRoute('patients')
   },
+  // {
+  //   path: '/invoices',
+  //   name: 'invoices',
+  //   component: Layout1,
+  //   meta: { auth: true },
+  //   children: invoiceChildRoute('invoices')
+  // },
   {
     path: '/statistics',
     name: 'statistics',

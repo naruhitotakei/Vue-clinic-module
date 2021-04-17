@@ -35,9 +35,9 @@
                   id="my-table"
                   bordered
                   hover
-                  @row-clicked="$router.push('/extra-pages/invoice-example')"
+                  @row-clicked="onInvoiceClick"
                   style="cursor: pointer;"
-                  :items="paginatedItems"
+                  :items="invoiceItems"
                   :fields="columns"
                   :per-page="perPage"
                   :current-page="currentPage"
@@ -50,7 +50,7 @@
               <div class="mt-3">
                 <b-pagination
                 v-model="currentPage"
-                :total-rows="totalRows"
+                :total-rows="invoiceItems.length"
                 :per-page="perPage"
                 aria-controls="my-table"
               ></b-pagination>
@@ -64,32 +64,9 @@
 </template>
 
 <script>
-var rows = [
-  {
-    invoice_no: 'invoice12312',
-    patient_name: 'Matej Dolenc',
-    amount: '90 EUR',
-    issued_by: 'Dr. Damjan Ahlin',
-    date: '27.01.2021-18:00',
-    status: 'Paid'
-  },
-  {
-    invoice_no: 'invoice1454',
-    patient_name: 'Damjan Rupnik',
-    amount: '70 EUR',
-    issued_by: 'Dr. Silvija Lenart',
-    date: '27.01.2021-18:00',
-    status: 'Unpaid'
-  },
-  {
-    invoice_no: 'invoice111',
-    patient_name: 'Ljudmila Furlan',
-    amount: '70 EUR',
-    issued_by: 'Dr. Bojan Jernejc',
-    date: '27.01.2021-18:00',
-    status: 'Paid'
-  }
-]
+import { xray } from '../../config/pluginInit'
+import { getInvoices } from '../../services/invoice'
+
 export default {
   components: {
   },
@@ -106,18 +83,35 @@ export default {
         { value: 'amount', text: 'Invoice amount' },
         { value: 'status', text: 'Status' }
       ],
-      items: rows,
-      paginatedItems: rows,
+      invoiceItems: [],
       currentPage: 1,
       perPage: 10,
-      totalRows: rows.length,
       columns: [
-        { label: this.$t('invoices.invoicesColumn.no'), key: 'invoice_no', class: 'text-left' },
-        { label: this.$t('invoices.invoicesColumn.patientName'), key: 'patient_name', class: 'text-left' },
-        { label: this.$t('invoices.invoicesColumn.date'), key: 'date', class: 'text-left' },
-        { label: this.$t('invoices.invoicesColumn.issuedBy'), key: 'issued_by', class: 'text-left' },
-        { label: this.$t('invoices.invoicesColumn.amount'), key: 'amount', class: 'text-left' },
-        { label: this.$t('invoices.invoicesColumn.status'), key: 'status', class: 'text-left' }
+        { label: this.$t('invoices.invoicesColumn.no'), key: 'invoice_id', class: 'text-left' },
+        { label: this.$t('invoices.invoicesColumn.patientName'),
+          key: 'patient_name',
+          formatter: (value, key, item) => {
+            return item.enquiries_name + ' ' + item.enquiries_last_name
+          },
+          class: 'text-left' },
+        { label: this.$t('invoices.invoicesColumn.date'),
+          key: 'invoice_time',
+          class: 'text-left',
+          formatter: value => {
+            return value.split('T').shift()
+          }
+        },
+        { label: this.$t('invoices.invoicesColumn.issuedBy'), key: 'company_name', class: 'text-left' },
+        { label: this.$t('invoices.invoicesColumn.amount'), key: 'total_with_vat', class: 'text-left' },
+        { label: this.$t('invoices.invoicesColumn.status'),
+          key: 'status',
+          formatter: (value, key, item) => {
+            if (item.paid_amount === '$0.00') {
+              return 'Unpaid'
+            }
+            return item.total_with_vat === item.paid_amount ? 'Paid' : 'Partialy Paid'
+          },
+          class: 'text-left' }
       ]
     }
   },
@@ -132,6 +126,9 @@ export default {
         date: ''
       }
     },
+    onInvoiceClick (item) {
+      this.$router.push({ path: `/documents/invoices/${item.invoice_id}` })
+    },
     searchFunction (event) {
       this.dropDownText = event
       console.log('SEARCHBY OPTION:', event)
@@ -142,7 +139,7 @@ export default {
       console.log('this.dropDownText', this.dropDownText)
 
       if (this.dropDownText) {
-        var sorted = rows.filter((item) => {
+        var sorted = this.invoiceItems.filter((item) => {
           return item[this.dropDownText].toLowerCase().includes(event.toLowerCase())
         })
         this.paginatedItems = sorted
@@ -151,9 +148,16 @@ export default {
     },
     add_invoice () {
       this.$router.push('/extra-pages/new-invoice')
+    },
+    getInvoices () {
+      getInvoices().then(response => {
+        this.invoiceItems = response
+      })
     }
   },
   mounted () {
+    xray.index()
+    this.getInvoices()
   }
 }
 </script>
