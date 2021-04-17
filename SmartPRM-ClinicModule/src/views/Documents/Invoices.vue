@@ -87,7 +87,7 @@ export default {
       currentPage: 1,
       perPage: 10,
       columns: [
-        { label: this.$t('invoices.invoicesColumn.no'), key: 'invoice_id', class: 'text-left' },
+        { label: this.$t('invoices.invoicesColumn.no'), key: 'invoice_number', class: 'text-left' },
         { label: this.$t('invoices.invoicesColumn.patientName'),
           key: 'patient_name',
           formatter: (value, key, item) => {

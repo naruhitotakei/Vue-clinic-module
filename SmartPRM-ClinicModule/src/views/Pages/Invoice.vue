@@ -90,13 +90,14 @@ export default {
   },
   computed: {
     title () {
-      return this.text + this.invoiceId
+      return this.text + this.invoiceNumber
     }
   },
   methods: {
     getInvoice (id) {
       getInvoiceById(id).then(response => {
         this.invoice = response
+        this.invoiceNumber = this.invoice[0].invoice_number
       }
       )
     }
@@ -104,6 +105,7 @@ export default {
   data () {
     return {
       invoiceId: this.$route.params.invoiceId,
+      invoiceNumber: '',
       text: this.$t('invoice.invoiceHeader') + ' N° : ',
       summary: this.$t('invoice.invoiceSummary'),
       detail: this.$t('invoice.invoiceDetail'),
