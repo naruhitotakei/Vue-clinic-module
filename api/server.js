@@ -159,6 +159,14 @@ app.get('/api/invoices', (req, res) => {
         res.status(401).json("OK: user unauthorized")
 });
 
+app.get('/api/invoices/:id', (req, res) => {
+    const id = req.params.id
+    if (req.session.prm_user && req.session.prm_user.permissions && checkPermission(req.session.prm_user.permissions, invoicesPermission))
+        daoInvoices.getInvoicesById(req, res, id)
+    else
+        res.status(401).json("OK: user unauthorized")
+});
+
 ///////////////////////////////////
 // statistics & Reporting
 ///////////////////////////////////
