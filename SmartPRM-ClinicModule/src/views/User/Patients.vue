@@ -166,7 +166,7 @@
                             <b-collapse id="collapse-6" class="mb-2"> </b-collapse>
                             <div class="mt-3">
                                 <b-pagination v-model="currentPage"
-                                              :total-rows="totalRows"
+                                              :total-rows="patients.length"
                                               :per-page="perPage"
                                               aria-controls="my-table"></b-pagination>
                             </div>
