@@ -165,8 +165,8 @@ const documentChildRoute = (prop, mode) => [
 ]
 const patientChildRoute = (prop, mode) => [
   {
-    path: 'viewpatient',
-    name: prop + '.viewpatient',
+    path: ':patientId',
+    name: prop + '.patientId',
     meta: { dark: mode, auth: true, name: 'ViewPatient' },
     component: ViewPatient
   }

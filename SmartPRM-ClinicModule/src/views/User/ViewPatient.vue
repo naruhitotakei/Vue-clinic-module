@@ -30,10 +30,11 @@
                                       <template v-slot:body>
                                           <div class="user-details-block">
                                               <div class="user-profile text-center">
-                                                  <img src="../../assets/images/user/11.png" alt="profile-img" class="avatar-130 img-fluid">
+                                                  <img v-if="patient.gender == 'female'" src="../../assets/images/user/11.png" alt="profile-img" class="avatar-130 img-fluid">
+                                                  <img v-else src="../../assets/images/user/08.png" alt="profile-img" class="avatar-130 img-fluid">
                                               </div>
                                               <div class="text-center mt-3">
-                                                  <h4><b>Anita Jereb</b></h4>
+                                                  <h4><b>{{fullName}}</b></h4>
                                               </div>
                                               <hr>
                                               <ul class="doctoe-sedual d-flex align-items-center justify-content-between p-0 m-0">
@@ -49,11 +50,12 @@
                                               <hr>
                                               <div class="row ml-1">
                                                   <div class="col-3">Phone:</div>
-                                                  <div class="col-9">+38640076191</div>
+                                                  <div class="col-9">{{patient.phone}}</div>
                                                   <div class="col-3">Email:</div>
-                                                  <div class="col-9">anita.jereb@staging.emazing.si</div>
+                                                  <div class="col-9">{{patient.email}}</div>
                                                   <div class="col-3">Address:</div>
-                                                  <div class="col-9">Prva ulica 11, 1000 Ljubljana</div>
+                                                  <div class="col-9" v-if="patient.address_line_1">{{patient.address_line_1}}</div>
+                                                  <div class="col-9" v-else>Unknown</div>
                                               </div>
                                           </div>
                                       </template>
@@ -273,7 +275,7 @@
                                           <b-row align-v="center">
                                               <b-form-group class="col-md-12" label-cols-sm="4" label="First Name:" label-for="fname">
                                                   <ValidationProvider name="fname" rules="required" v-slot="{ errors }">
-                                                      <b-form-input :disabled="disabled" v-model="user.fname" type="text" :class="(errors.length > 0 ? ' is-invalid' : '')"></b-form-input>
+                                                      <b-form-input :disabled="disabled" v-model="patient.name" type="text" :class="(errors.length > 0 ? ' is-invalid' : '')"></b-form-input>
                                                       <div class="invalid-feedback">
                                                           <span>{{ errors[0] }}</span>
                                                       </div>
@@ -281,7 +283,7 @@
                                               </b-form-group>
                                               <b-form-group class="col-md-12" label-cols-sm="4" label="Last Name:" label-for="lname">
                                                   <ValidationProvider name="lname" rules="required" v-slot="{ errors }">
-                                                      <b-form-input :disabled="disabled" v-model="user.lname" type="text" :class="(errors.length > 0 ? ' is-invalid' : '')"></b-form-input>
+                                                      <b-form-input :disabled="disabled" v-model="patient.last_name" type="text" :class="(errors.length > 0 ? ' is-invalid' : '')"></b-form-input>
                                                       <div class="invalid-feedback">
                                                           <span>{{ errors[0] }}</span>
                                                       </div>
@@ -290,47 +292,47 @@
 
                                               <b-form-group class="col-md-12" label-cols-sm="4" label="Date of birth:" label-for="dob">
                                                   <ValidationProvider name="dob" rules="required" v-slot="{ errors }">
-                                                      <b-form-input :disabled="disabled" v-model="user.dob" type="date" :class="(errors.length > 0 ? ' is-invalid' : '')"></b-form-input>
+                                                      <b-form-input :disabled="disabled" v-model="patient.date_of_birth" type="date" :class="(errors.length > 0 ? ' is-invalid' : '')"></b-form-input>
                                                       <div class="invalid-feedback">
                                                           <span>{{ errors[0] }}</span>
                                                       </div>
                                                   </ValidationProvider>
                                               </b-form-group>
                                               <b-form-group class="col-md-12" label-cols-sm="4" label="Gender:" label-for="gender" label-class="d-block">
-                                                  <b-form-radio inline v-model="user.gender" :disabled="disabled" value="male">Male</b-form-radio>
-                                                  <b-form-radio inline v-model="user.gender" :disabled="disabled" value="female">Female</b-form-radio>
-                                                  <b-form-radio inline v-model="user.gender" :disabled="disabled" value="unspecified">Unspecified</b-form-radio>
+                                                  <b-form-radio inline v-model="patient.gender" :disabled="disabled" value="male">Male</b-form-radio>
+                                                  <b-form-radio inline v-model="patient.gender" :disabled="disabled" value="female">Female</b-form-radio>
+                                                  <b-form-radio inline v-model="patient.gender" :disabled="disabled" value="unspecified">Unspecified</b-form-radio>
                                               </b-form-group>
                                               <b-form-group class="col-md-12" label-cols-sm="4" label="Address:" label-for="address">
-                                                  <b-form-textarea :disabled="disabled" name="address" v-model="user.address" style="line-height: 22px;" rows="3">
+                                                  <b-form-textarea :disabled="disabled" name="address" v-model="patient.address_line_1" style="line-height: 22px;" rows="3">
                                                   </b-form-textarea>
                                               </b-form-group>
                                               <b-form-group class="col-md-12" style="justify-content: space-between;" label-cols-sm="4" label="Postcode, City:" label-for="city">
-                                                  <b-form-input :disabled="disabled" class="col-md-6" style="float: left;" v-model="user.postcode" type="text"></b-form-input>
-                                                  <b-form-input :disabled="disabled" class="col-md-6" v-model="user.city" type="text"></b-form-input>
+                                                  <b-form-input :disabled="disabled" class="col-md-6" style="float: left;" v-model="patient.post_code" type="text"></b-form-input>
+                                                  <b-form-input :disabled="disabled" class="col-md-6" v-model="patient.city" type="text"></b-form-input>
                                               </b-form-group>
                                               <b-form-group class="col-md-12" label-cols-sm="4" label-for="country" label="Country:">
-                                                  <b-form-select :disabled="disabled" plain v-model="user.country" :selected="user.country" :options="countries" id="exampleFormControlSelect3">
+                                                  <b-form-select :disabled="disabled" plain v-model="patient.country" :selected="patient.country" :options="countries" id="exampleFormControlSelect3">
                                                   </b-form-select>
                                               </b-form-group>
                                               <b-form-group class="col-md-12" label-cols-sm="4" label-for="citizenship" label="Citizenship:">
-                                                  <b-form-input :disabled="disabled" name="citizenship" type="text" v-model="user.citizenship"></b-form-input>
+                                                  <b-form-input :disabled="disabled" name="citizenship" type="text" v-model="patient.citizenship"></b-form-input>
                                               </b-form-group>
                                               <b-form-group class="col-md-12" label-cols-sm="4" label-for="region" label="Region(EU):">
-                                                  <b-form-input :disabled="disabled" name="region" type="text" v-model="user.region"></b-form-input>
+                                                  <b-form-input :disabled="disabled" name="region" type="text" v-model="patient.region"></b-form-input>
                                               </b-form-group>
                                               <b-form-group class="col-md-12" label-cols-sm="4" label-for="insurance" label="Insurance number, insured at:">
-                                                  <b-form-input :disabled="disabled" class="col-md-6" style="float: left;" name="insurance_no" type="text" v-model="user.insurance_no"></b-form-input>
-                                                  <b-form-input :disabled="disabled" class="col-md-6" name="insured_at" type="text" v-model="user.insured_at"></b-form-input>
+                                                  <b-form-input :disabled="disabled" class="col-md-6" style="float: left;" name="insurance_no" type="text" v-model="patient.insurance_no"></b-form-input>
+                                                  <b-form-input :disabled="disabled" class="col-md-6" name="insured_at" type="text" v-model="patient.insured_at"></b-form-input>
                                               </b-form-group>
                                               <b-form-group class="col-md-12" label-cols-sm="4" label-for="mobile_no" label="Mobile number:">
-                                                  <b-form-input :disabled="disabled" name="mobile_no" type="text" v-model="user.mobile_no"></b-form-input>
+                                                  <b-form-input :disabled="disabled" name="mobile_no" type="text" v-model="patient.phone"></b-form-input>
                                               </b-form-group>
                                               <b-form-group class="col-md-12" label-cols-sm="4" label-for="email" label="Email-address:">
-                                                  <b-form-input :disabled="disabled" name="email" type="text" v-model="user.email"></b-form-input>
+                                                  <b-form-input :disabled="disabled" name="email" type="text" v-model="patient.email"></b-form-input>
                                               </b-form-group>
                                               <b-form-group class="col-md-12" label-cols-sm="4" label-for="tax_no" label="Tax number:">
-                                                  <b-form-input :disabled="disabled" name="tax_no" type="text" v-model="user.tax_no"></b-form-input>
+                                                  <b-form-input :disabled="disabled" name="tax_no" type="text" v-model="user.tax_registration_number"></b-form-input>
                                               </b-form-group>
                                           </b-row>
                                       </template>
@@ -531,7 +533,7 @@
                           <template v-slot:headerTitle>
                               <h3 class="card-title" style="margin-top: 10px;">
                                   Invoices<span class="float-right">
-                                      <b-button variant="primary" @click="add_invoice"><i class="ri-add-line mr-2"></i>New Invoice</b-button>
+                                      <b-button variant="primary" @click="addInvoice"><i class="ri-add-line mr-2"></i>New Invoice</b-button>
                                   </span>
                               </h3>
                           </template>
@@ -543,19 +545,19 @@
                                                hover
                                                @row-clicked="$router.push('/extra-pages/invoice-example')"
                                                style="cursor: pointer;"
-                                               :items="itemsInvoices"
+                                               :items="invoiceItems"
                                                :fields="columnsInvoices"
-                                               :per-page="perPage"
-                                               :current-page="currentPage">
+                                               :per-page="invoicesPerPage"
+                                               :current-page="currentInvoicePage">
                                       </b-table>
                                   </b-col>
                               </b-row>
                               <template>
                                   <b-collapse id="collapse-6" class="mb-2"> </b-collapse>
                                   <div class="mt-3">
-                                      <b-pagination v-model="currentPage"
-                                                    :total-rows="totalRows"
-                                                    :per-page="perPage"
+                                      <b-pagination v-model="currentInvoicePage"
+                                                    :total-rows="invoiceItems.length"
+                                                    :per-page="invoicesPerPage"
                                                     aria-controls="patient-invoices"></b-pagination>
                                   </div>
                               </template>
@@ -567,7 +569,7 @@
                           <template v-slot:headerTitle>
                               <h3 class="card-title" style="margin-top: 10px;">
                                   Offers<span class="float-right">
-                                      <b-button variant="primary" @click="add_offer"><i class="ri-add-line mr-2"></i>New Offer</b-button>
+                                      <b-button variant="primary" @click="addOffer"><i class="ri-add-line mr-2"></i>New Offer</b-button>
                                   </span>
                               </h3>
                           </template>
@@ -579,19 +581,19 @@
                                                hover
                                                @row-clicked="$router.push('/extra-pages/invoice-example')"
                                                style="cursor: pointer;"
-                                               :items="itemsOffers"
+                                               :items="offerItems"
                                                :fields="columnsOffers"
-                                               :per-page="perPage"
-                                               :current-page="currentPage">
+                                               :per-page="offersPerPage"
+                                               :current-page="currentOfferPage">
                                       </b-table>
                                   </b-col>
                               </b-row>
                               <template>
                                   <b-collapse id="collapse-6" class="mb-2"> </b-collapse>
                                   <div class="mt-3">
-                                      <b-pagination v-model="currentPage"
-                                                    :total-rows="totalRows"
-                                                    :per-page="perPage"
+                                      <b-pagination v-model="currentOfferPage"
+                                                    :total-rows="offerItems.length"
+                                                    :per-page="offersPerPage"
                                                     aria-controls="patient-offers"></b-pagination>
                                   </div>
                               </template>
@@ -607,30 +609,32 @@
 </template>
 <script>
 import { xray } from '../../config/pluginInit'
+import { getEnquiryById } from '../../services/enquiry'
+import { getInvoices } from '../../services/invoice'
 
-var rowsInvoices = [
-  {
-    invoice_no: 'invoice372',
-    amount: '90 EUR',
-    issued_by: 'Dr. Damjan Ahlin',
-    date: '27.02.2021-14:00',
-    status: 'Paid'
-  },
-  {
-    invoice_no: 'invoice405',
-    amount: '70 EUR',
-    issued_by: 'Dr. Silvija Lenart',
-    date: '14.03.2021-11:00',
-    status: 'Paid'
-  },
-  {
-    invoice_no: 'invoice499',
-    amount: '70 EUR',
-    issued_by: 'Dr. Bojan Jernejc',
-    date: '28.03.2021-12:00',
-    status: 'Unpaid'
-  }
-]
+// var rowsInvoices = [
+//   {
+//     invoice_no: 'invoice372',
+//     amount: '90 EUR',
+//     issued_by: 'Dr. Damjan Ahlin',
+//     date: '27.02.2021-14:00',
+//     status: 'Paid'
+//   },
+//   {
+//     invoice_no: 'invoice405',
+//     amount: '70 EUR',
+//     issued_by: 'Dr. Silvija Lenart',
+//     date: '14.03.2021-11:00',
+//     status: 'Paid'
+//   },
+//   {
+//     invoice_no: 'invoice499',
+//     amount: '70 EUR',
+//     issued_by: 'Dr. Bojan Jernejc',
+//     date: '28.03.2021-12:00',
+//     status: 'Unpaid'
+//   }
+// ]
 var rowsOffers = [
   {
     offer_no: 'offer112',
@@ -643,12 +647,27 @@ export default {
   name: 'ViewPatient',
   mounted () {
     xray.index()
+    this.getPatient(this.patientId)
+    this.getInvoices()
+  },
+  computed: {
+    fullName () {
+      return this.patient.name + ' ' + this.patient.last_name
+    }
   },
   data () {
     return {
+      patientId: this.$route.params.patientId,
+      patient: {},
+      invoiceItems: [],
+      offerItems: rowsOffers,
       dismissCountDown: 0,
       dismissSecs: 3,
       successfullEditMessage: false,
+      currentInvoicePage: 1,
+      invoicesPerPage: 10,
+      currentOfferPage: 1,
+      offersPerPage: 10,
       dropDownText: '',
       selected: this.value,
       searchOptions: [
@@ -695,25 +714,47 @@ export default {
         { value: 'Africa', text: 'Africa' }
       ],
       columnsInvoices: [
-        { label: 'Number', key: 'invoice_no', class: 'text-left' },
-        { label: 'Date', key: 'date', class: 'text-left' },
-        { label: 'Issued by', key: 'issued_by', class: 'text-left' },
-        { label: 'Invoice amount', key: 'amount', class: 'text-left' },
-        { label: 'Status', key: 'status', class: 'text-left' }
+        { label: 'Number', key: 'invoice_id', class: 'text-left' },
+        { label: 'Date',
+          key: 'invoice_time',
+          class: 'text-left',
+          formatter: value => {
+            return value.split('T').shift()
+          }
+        },
+        { label: 'Issued by', key: 'company_name', class: 'text-left' },
+        { label: 'Invoice amount', key: 'total_with_vat', class: 'text-left' },
+        { label: 'Status',
+          key: 'status',
+          class: 'text-left',
+          formatter: (value, key, item) => {
+            if (item.paid_amount === '$0.00') {
+              return 'Unpaid'
+            }
+            return item.total_with_vat === item.paid_amount ? 'Paid' : 'Partialy Paid'
+          }
+        }
       ],
       columnsOffers: [
         { label: 'Number', key: 'offer_no', class: 'text-left' },
         { label: 'Date', key: 'date', class: 'text-left' },
         { label: 'Issued by', key: 'issued_by', class: 'text-left' },
         { label: 'Amount', key: 'amount', class: 'text-left' }
-      ],
-      itemsInvoices: rowsInvoices,
-      itemsOffers: rowsOffers,
-      currentPage: 1,
-      perPage: 10
+      ]
     }
   },
   methods: {
+    getPatient (id) {
+      getEnquiryById(id).then(response => {
+        this.patient = response[0]
+      }
+      )
+    },
+    getInvoices () {
+      getInvoices().then(response => {
+        this.invoiceItems = response
+      })
+    },
     default () {
       return {
         invoice_no: this.rowsInvoices.length,
@@ -723,6 +764,12 @@ export default {
         date: '',
         offer_no: this.rowsOffers.length
       }
+    },
+    addInvoice () {
+      this.$router.push('/extra-pages/new-invoice')
+    },
+    addOffer () {
+
     },
     searchFunction (event) {
       this.dropDownText = event
