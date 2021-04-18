@@ -103,10 +103,11 @@
                                       <b-button variant=" iq-bg-success mr-1 mb-1" size="sm" @click="edit(data.item)" v-if="!data.item.editable">
                                           <i class="ri-ball-pen-fill m-0"></i>
                                       </b-button>
-                                      <b-button variant=" iq-bg-success mr-1 mb-1" size="sm" @click="submit(data.item)" v-else>Ok</b-button>
-                                      <b-button variant=" iq-bg-warning" size="sm" @click="remove(data.item)">
+                                      <b-button variant=" iq-bg-primary mr-1 mb-1" size="sm" @click="emailPatient(data.item)" v-if="!data.item.editable">
                                           <i class="ri-mail-line m-0"></i>
                                       </b-button>
+                                      <b-button variant=" iq-bg-success mr-1 mb-1" size="sm" @click="submit(data.item)" v-if="data.item.editable"><i class="ri-checkbox-circle-fill m-0"></i></b-button>
+                                      <b-button variant=" iq-bg-danger mr-1 mb-1" size="sm" @click="cancel(data.item)" v-if="data.item.editable"><i class="ri-close-circle-fill m-0"></i></b-button>
                                     </template>
                                 </b-table>
                             </b-col>
@@ -130,12 +131,10 @@
 <script>
 import { xray } from '../../config/pluginInit'
 import { getEnquires } from '../../services/enquiry'
-// import ViewPatient from '../User/ViewPatient'
-// import Pagination from './Pagination.vue'
+
 var rows = []
 export default {
   name: 'UiDataTable',
-  // components: { ViewPatient },
   async mounted () {
     xray.index()
     this.getPatients()
@@ -162,37 +161,33 @@ export default {
       }
     },
     edit (item) {
+      this.tempPatient = Object.assign({}, item)
       item.editable = true
     },
     submit (item) {
       item.editable = false
     },
-    remove (item) {
-      let index = this.rows.indexOf(item)
-      this.rows.splice(index, 1)
+    cancel (item) {
+      let index = this.patients.indexOf(item)
+      this.patients.splice(index, 1, this.tempPatient)
+    },
+    emailPatient (item) {
+      console.log('Email sent to patients address: ' + item.email)
     },
     async getPatients () {
-      let finalData = await Promise.all([getEnquires()])
-      finalData = finalData[0]
-      this.toggleDataLoaded()
-      if (finalData.constructor === Array && finalData.length > 0) {
-        finalData.map((currentElementOfFinalArray, indexOfDefaultItems) => {
-          this.$set(this.items, indexOfDefaultItems, {
-            id: currentElementOfFinalArray.id,
-            name: currentElementOfFinalArray.name,
-            last_name: currentElementOfFinalArray.last_name,
-            telephone: currentElementOfFinalArray.phone,
-            email: currentElementOfFinalArray.email,
+      getEnquires().then(response => {
+        this.toggleDataLoaded()
+        this.patients = response.map(obj => (
+          { ...obj,
+            editable: false,
             region: 'n/a',
-            state: 'n/a',
+            country: 'n/a',
             last_visit: '2011/04/25',
             next_visit: '2011/04/30',
-            personal_dentist: 'Doctor3',
-            editable: false
-          })
-        })
-      }
-      this.patients = finalData
+            personal_dentist: 'Doctor3'
+          }
+        ))
+      })
     },
     searchFunction (event) {
       this.dropDownText = event
@@ -223,6 +218,7 @@ export default {
       patients: [],
       items: rows,
       paginatedItems: rows,
+      tempPatient: null,
       currentPage: 1,
       perPage: 10,
       totalRows: rows.length,
@@ -233,7 +229,7 @@ export default {
         { value: 'last_name', text: 'Last Name' },
         { value: 'telephone', text: 'Phone' },
         { value: 'email', text: 'Email' },
-        { value: 'state', text: 'State' },
+        { value: 'country', text: 'Country' },
         { value: 'region', text: 'Region' },
         { value: 'last_visit', text: 'Last Visit' },
         { value: 'next_visit', text: 'Next Visit' },
@@ -245,11 +241,11 @@ export default {
         { label: this.$t('patients.patientsColumn.telephone'), key: 'phone', class: 'text-left' },
         { label: this.$t('patients.patientsColumn.email'), key: 'email', class: 'text-left' },
         { label: this.$t('patients.patientsColumn.region'), key: 'region', class: 'text-left' },
-        { label: this.$t('patients.patientsColumn.state'), key: 'state', class: 'text-left' },
+        { label: this.$t('patients.patientsColumn.state'), key: 'country', class: 'text-left' },
         { label: this.$t('patients.patientsColumn.lastVisit'), key: 'last_visit', class: 'text-left' },
         { label: this.$t('patients.patientsColumn.nextVisit'), key: 'next_visit', class: 'text-center' },
         { label: this.$t('patients.patientsColumn.personalDentist'), key: 'personal_dentist', class: 'text-center' },
-        { label: this.$t('patients.patientsColumn.action'), key: 'action', class: 'text-center' }
+        { label: this.$t('patients.patientsColumn.action'), key: 'action', class: 'text-center action-column' }
       ]
     }
   }
@@ -259,5 +255,8 @@ export default {
 <style scoped>
 .loading {
   padding-left: 10px;
+}
+/deep/ .action-column {
+  width: 120px !important;
 }
 </style>
