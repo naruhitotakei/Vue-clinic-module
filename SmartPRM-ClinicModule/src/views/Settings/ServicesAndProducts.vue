@@ -72,21 +72,10 @@
                                                class="form-control" />
                                     </template>
                                     <template v-slot:cell(action)="data">
-                                        <b-button variant=" iq-bg-success mr-1 mb-1"
-                                                  size="sm"
-                                                  @click="editProduct(data.item)"
-                                                  v-if="!data.item.editable">
-                                            <i class="ri-ball-pen-fill m-0"></i>
-                                        </b-button>
-                                        <b-button variant=" iq-bg-success mr-1 mb-1"
-                                                  size="sm"
-                                                  @click="submitProduct(data.item)"
-                                                  v-else>Ok</b-button>
-                                        <b-button variant=" iq-bg-danger"
-                                                  size="sm"
-                                                  @click="removeProduct(data.item)">
-                                            <i class="ri-delete-bin-line m-0"></i>
-                                        </b-button>
+                                      <b-button variant=" iq-bg-success mr-1 mb-1" size="sm" @click="editProduct(data.item)" v-if="!data.item.editable"><i class="ri-ball-pen-fill m-0"></i></b-button>
+                                      <b-button variant=" iq-bg-danger" size="sm" v-if="!data.item.editable" @click="removeProduct(data.item)"><i class="ri-delete-bin-line m-0"></i></b-button>
+                                      <b-button variant=" iq-bg-success mr-1 mb-1" size="sm" @click="submitProduct(data.item)" v-if="data.item.editable"><i class="ri-checkbox-circle-fill m-0"></i></b-button>
+                                      <b-button variant=" iq-bg-danger mr-1 mb-1" size="sm" @click="cancelProduct(data.item)" v-if="data.item.editable"><i class="ri-close-circle-fill m-0"></i></b-button>
                                     </template>
                                 </b-table>
                             </b-col>
@@ -95,9 +84,10 @@
                             <b-collapse id="collapse-6" class="mb-2"> </b-collapse>
                             <div class="mt-3">
                                 <b-pagination v-model="currentProductPage"
-                                              :total-rows="productRows.length"
-                                              :per-page="productsPerPage"
-                                              aria-controls="my-table"></b-pagination>
+                                  :total-rows="productRows.length"
+                                  :per-page="productsPerPage"
+                                  aria-controls="my-table">
+                                </b-pagination>
                             </div>
                         </template>
                     </template>
@@ -115,12 +105,12 @@
                         <b-row>
                             <b-col md="12" class="table-responsive">
                                 <b-table id="my-table"
-                                         bordered
-                                         hover
-                                         :items="productGroupRows"
-                                         :fields="productGroupColumns"
-                                         :per-page="productGroupsPerPage"
-                                         :current-page="currentProductGroupPage">
+                                  bordered
+                                  hover
+                                  :items="productGroupRows"
+                                  :fields="productGroupColumns"
+                                  :per-page="productGroupsPerPage"
+                                  :current-page="currentProductGroupPage">
                                     <template v-slot:cell(name)="data">
                                         <span v-if="!data.item.editable">
                                             {{ data.item.name }}
@@ -149,21 +139,10 @@
                                                class="form-control" />
                                     </template>
                                     <template v-slot:cell(action)="data">
-                                        <b-button variant=" iq-bg-success mr-1 mb-1"
-                                                  size="sm"
-                                                  @click="editProductGroup(data.item)"
-                                                  v-if="!data.item.editable">
-                                            <i class="ri-ball-pen-fill m-0"></i>
-                                        </b-button>
-                                        <b-button variant=" iq-bg-success mr-1 mb-1"
-                                                  size="sm"
-                                                  @click="submitProductGroup(data.item)"
-                                                  v-else>Ok</b-button>
-                                        <b-button variant=" iq-bg-danger"
-                                                  size="sm"
-                                                  @click="removeProductGroup(data.item)">
-                                            <i class="ri-delete-bin-line m-0"></i>
-                                        </b-button>
+                                      <b-button variant=" iq-bg-success mr-1 mb-1" size="sm" @click="editProductGroup(data.item)" v-if="!data.item.editable"><i class="ri-ball-pen-fill m-0"></i></b-button>
+                                      <b-button variant=" iq-bg-danger" size="sm" v-if="!data.item.editable" @click="removeProductGroup(data.item)"><i class="ri-delete-bin-line m-0"></i></b-button>
+                                      <b-button variant=" iq-bg-success mr-1 mb-1" size="sm" @click="submitProductGroup(data.item)" v-if="data.item.editable"><i class="ri-checkbox-circle-fill m-0"></i></b-button>
+                                      <b-button variant=" iq-bg-danger mr-1 mb-1" size="sm" @click="cancelProductGroup(data.item)" v-if="data.item.editable"><i class="ri-close-circle-fill m-0"></i></b-button>
                                     </template>
                                 </b-table>
                             </b-col>
@@ -192,12 +171,12 @@
                         <b-row>
                             <b-col md="12" class="table-responsive">
                                 <b-table id="my-table"
-                                         bordered
-                                         hover
-                                         :items="productCategoryRows"
-                                         :fields="productCategoryColumns"
-                                         :per-page="productCategoriesPerPage"
-                                         :current-page="currentProductCategoryPage">
+                                  bordered
+                                  hover
+                                  :items="productCategoryRows"
+                                  :fields="productCategoryColumns"
+                                  :per-page="productCategoriesPerPage"
+                                  :current-page="currentProductCategoryPage">
                                     <template v-slot:cell(name)="data">
                                         <span v-if="!data.item.editable">
                                             {{ data.item.name }}
@@ -208,21 +187,10 @@
                                                class="form-control" />
                                     </template>
                                     <template v-slot:cell(action)="data">
-                                        <b-button variant=" iq-bg-success mr-1 mb-1"
-                                                  size="sm"
-                                                  @click="editProductCategory(data.item)"
-                                                  v-if="!data.item.editable">
-                                            <i class="ri-ball-pen-fill m-0"></i>
-                                        </b-button>
-                                        <b-button variant=" iq-bg-success mr-1 mb-1"
-                                                  size="sm"
-                                                  @click="submitProductCategory(data.item)"
-                                                  v-else>Ok</b-button>
-                                        <b-button variant=" iq-bg-danger"
-                                                  size="sm"
-                                                  @click="removeProductCategory(data.item)">
-                                            <i class="ri-delete-bin-line m-0"></i>
-                                        </b-button>
+                                      <b-button variant=" iq-bg-success mr-1 mb-1" size="sm" @click="editProductCategory(data.item)" v-if="!data.item.editable"><i class="ri-ball-pen-fill m-0"></i></b-button>
+                                      <b-button variant=" iq-bg-danger" size="sm" v-if="!data.item.editable" @click="removeProductCategory(data.item)"><i class="ri-delete-bin-line m-0"></i></b-button>
+                                      <b-button variant=" iq-bg-success mr-1 mb-1" size="sm" @click="submitProductCategory(data.item)" v-if="data.item.editable"><i class="ri-checkbox-circle-fill m-0"></i></b-button>
+                                      <b-button variant=" iq-bg-danger mr-1 mb-1" size="sm" @click="cancelProductCategory(data.item)" v-if="data.item.editable"><i class="ri-close-circle-fill m-0"></i></b-button>
                                     </template>
                                 </b-table>
                             </b-col>
@@ -231,9 +199,10 @@
                             <b-collapse id="collapse-6" class="mb-2"> </b-collapse>
                             <div class="mt-3">
                                 <b-pagination v-model="currentProductCategoryPage"
-                                              :total-rows="productCategoryRows.length"
-                                              :per-page="productCategoriesPerPage"
-                                              aria-controls="my-table"></b-pagination>
+                                  :total-rows="productCategoryRows.length"
+                                  :per-page="productCategoriesPerPage"
+                                  aria-controls="my-table">
+                                </b-pagination>
                             </div>
                         </template>
                     </template>
@@ -370,11 +339,15 @@ export default {
         }
       ],
       currentProductCategoryPage: 1,
-      productCategoriesPerPage: 4
+      productCategoriesPerPage: 4,
+      tempProduct: null,
+      tempProductGroup: null,
+      tempProductCategory: null
     }
   },
   methods: {
     editProduct (item) {
+      this.tempProduct = Object.assign({}, item)
       item.editable = true
     },
     submitProduct (item) {
@@ -383,6 +356,10 @@ export default {
     removeProduct (item) {
       let index = this.productRows.indexOf(item)
       this.productRows.splice(index, 1)
+    },
+    cancelProduct (item) {
+      let index = this.productRows.indexOf(item)
+      this.productRows.splice(index, 1, this.tempProduct)
     },
     setCurrentProductPage () {
       this.currentProductPage = 1
@@ -404,6 +381,7 @@ export default {
       }
     },
     editProductGroup (item) {
+      this.tempProductGroup = Object.assign({}, item)
       item.editable = true
     },
     submitProductGroup (item) {
@@ -412,6 +390,10 @@ export default {
     removeProductGroup (item) {
       let index = this.productGroupRows.indexOf(item)
       this.productGroupRows.splice(index, 1)
+    },
+    cancelProductGroup (item) {
+      let index = this.productGroupRows.indexOf(item)
+      this.productGroupRows.splice(index, 1, this.tempProductGroup)
     },
     setCurrentProductGroupPage () {
       this.currentProductGroupPage = 1
@@ -430,6 +412,7 @@ export default {
       }
     },
     editProductCategory (item) {
+      this.tempProductCategory = Object.assign({}, item)
       item.editable = true
     },
     submitProductCategory (item) {
@@ -438,6 +421,10 @@ export default {
     removeProductCategory (item) {
       let index = this.productCategoryRows.indexOf(item)
       this.productCategoryRows.splice(index, 1)
+    },
+    cancelProductCategory (item) {
+      let index = this.productCategoryRows.indexOf(item)
+      this.productCategoryRows.splice(index, 1, this.tempProductCategory)
     },
     setCurrentProductCategoryPage () {
       this.currentProductCategoryPage = 1
