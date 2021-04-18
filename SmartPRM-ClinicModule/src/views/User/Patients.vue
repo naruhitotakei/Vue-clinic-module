@@ -16,8 +16,7 @@
                                 </form>
                             </div>
                             <iq-card>
-                                <b-form-group label-for="searchOptions"
-                                              label="Search By:">
+                                <b-form-group label-for="searchOptions" label="Search By:">
                                     <b-form-select
                                       plain
                                       v-model="filterOn"
@@ -32,7 +31,8 @@
                     <template v-slot:body>
                         <b-row>
                             <b-col md="12" class="table-responsive">
-                                <b-table id="my-table"
+                                <b-table
+                                  id="my-table"
                                   bordered
                                   hover
                                   :busy="!isDataLoaded"
@@ -197,7 +197,6 @@ export default {
       })
     },
     onFiltered (filteredItems) {
-      // Trigger pagination to update the number of buttons/pages due to filtering
       this.totalRows = filteredItems.length
       this.currentPage = 1
     },
@@ -222,16 +221,15 @@ export default {
       filter: '',
       filterOn: [],
       searchOptions: [
-        // { value: null, text: 'Select search option' },
-        { value: 'name', text: 'Name' },
-        { value: 'last_name', text: 'Last Name' },
-        { value: 'phone', text: 'Phone' },
-        { value: 'email', text: 'Email' },
-        { value: 'country', text: 'Country' },
-        { value: 'region', text: 'Region' },
-        { value: 'last_visit', text: 'Last Visit' },
-        { value: 'next_visit', text: 'Next Visit' },
-        { value: 'personal_dentist', text: 'Personal Dentist' }
+        { value: ['name'], text: 'Name' },
+        { value: ['last_name'], text: 'Last Name' },
+        { value: ['phone'], text: 'Phone' },
+        { value: ['email'], text: 'Email' },
+        { value: ['region'], text: 'Region' },
+        { value: ['country'], text: 'Country' },
+        { value: ['last_visit'], text: 'Last Visit' },
+        { value: ['next_visit'], text: 'Next Visit' },
+        { value: ['personal_dentist'], text: 'Personal Dentist' }
       ],
       columns: [
         { label: this.$t('patients.patientsColumn.name'), key: 'name', class: 'text-left' },
