@@ -11,18 +11,19 @@
                         <div class="iq-card-header-toolbar d-flex align-items-center" style="margin-top: -10px;">
                             <div class="iq-search-bar">
                                 <form action="#" class="searchbox">
-                                    <input type="text" class="text search-input" placeholder="Search" @keyup="myFunction($event.target.value)">
+                                    <input type="search" class="text search-input" v-model="filter" placeholder="Search">
                                     <a class="search-link" href="#"><i class="ri-search-line"></i></a>
                                 </form>
                             </div>
                             <iq-card>
                                 <b-form-group label-for="searchOptions"
                                               label="Search By:">
-                                    <b-form-select plain
-                                      v-model="selected"
+                                    <b-form-select
+                                      plain
+                                      v-model="filterOn"
                                       :options="searchOptions"
                                       id="searchOptions"
-                                      @change="searchFunction($event)">
+                                    >
                                     </b-form-select>
                                 </b-form-group>
                             </iq-card>
@@ -40,7 +41,11 @@
                                   :items="patients"
                                   :fields="columns"
                                   :per-page="perPage"
-                                  :current-page="currentPage">
+                                  :current-page="currentPage"
+                                  :filter="filter"
+                                  :filter-included-fields="filterOn"
+                                  @filtered="onFiltered"
+                                >
                                     <template #table-busy>
                                       <div class="text-center text-primary my-2">
                                         <b-spinner class="align-middle"></b-spinner>
@@ -117,7 +122,7 @@
                             <div class="mt-3">
                                 <b-pagination
                                   v-model="currentPage"
-                                  :total-rows="patients.length"
+                                  :total-rows="totalRows"
                                   :per-page="perPage"
                                   aria-controls="my-table"></b-pagination>
                             </div>
@@ -142,7 +147,8 @@ export default {
   methods: {
     add () {
       let obj = this.default()
-      this.rows.push(obj)
+      this.patients.push(obj)
+      this.setTotalRows(this.patients.length)
     },
     onPatientClick (item) {
       this.$router.push({ path: `/patients/${item.id}` })
@@ -187,25 +193,16 @@ export default {
             personal_dentist: 'Doctor3'
           }
         ))
+        this.setTotalRows(this.patients.length)
       })
     },
-    searchFunction (event) {
-      this.dropDownText = event
-      console.log('SEARCHBY OPTION:', event)
-      console.log('DROPDOWN:', this.dropDownText)
-      return event
+    onFiltered (filteredItems) {
+      // Trigger pagination to update the number of buttons/pages due to filtering
+      this.totalRows = filteredItems.length
+      this.currentPage = 1
     },
-    myFunction (event) {
-      console.log('EVENT:', event)
-      console.log('DROPDOWN:', this.dropDownText)
-
-      if (this.dropDownText) {
-        var sorted = rows.filter((item) => {
-          return item[this.dropDownText].toLowerCase().includes(event.toLowerCase())
-        })
-        this.items = sorted
-      }
-      console.log('sorted', sorted)
+    setTotalRows (number) {
+      this.totalRows = number
     },
     toggleDataLoaded () {
       this.isDataLoaded = !this.isDataLoaded
@@ -221,13 +218,14 @@ export default {
       tempPatient: null,
       currentPage: 1,
       perPage: 10,
-      totalRows: rows.length,
-      selected: this.value,
+      totalRows: 1,
+      filter: '',
+      filterOn: [],
       searchOptions: [
-        // { text: 'Search By', disabled },
+        // { value: null, text: 'Select search option' },
         { value: 'name', text: 'Name' },
         { value: 'last_name', text: 'Last Name' },
-        { value: 'telephone', text: 'Phone' },
+        { value: 'phone', text: 'Phone' },
         { value: 'email', text: 'Email' },
         { value: 'country', text: 'Country' },
         { value: 'region', text: 'Region' },
