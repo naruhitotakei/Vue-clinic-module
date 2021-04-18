@@ -19,10 +19,10 @@
                                 <b-form-group label-for="searchOptions"
                                               label="Search By:">
                                     <b-form-select plain
-                                                   v-model="selected"
-                                                   :options="searchOptions"
-                                                   id="searchOptions"
-                                                   @change="searchFunction($event)">
+                                      v-model="selected"
+                                      :options="searchOptions"
+                                      id="searchOptions"
+                                      @change="searchFunction($event)">
                                     </b-form-select>
                                 </b-form-group>
                             </iq-card>
@@ -32,15 +32,15 @@
                         <b-row>
                             <b-col md="12" class="table-responsive">
                                 <b-table id="my-table"
-                                         bordered
-                                         hover
-                                         :busy="!isDataLoaded"
-                                         @row-clicked="onPatientClick"
-                                         style="cursor: pointer;"
-                                         :items="patients"
-                                         :fields="columns"
-                                         :per-page="perPage"
-                                         :current-page="currentPage">
+                                  bordered
+                                  hover
+                                  :busy="!isDataLoaded"
+                                  @row-clicked="onPatientClick"
+                                  style="cursor: pointer;"
+                                  :items="patients"
+                                  :fields="columns"
+                                  :per-page="perPage"
+                                  :current-page="currentPage">
                                     <template #table-busy>
                                       <div class="text-center text-primary my-2">
                                         <b-spinner class="align-middle"></b-spinner>
@@ -48,116 +48,65 @@
                                       </div>
                                     </template>
                                     <template v-slot:cell(name)="data">
-                                        <span v-if="!data.item.editable">{{ data.item.name }}</span>
-                                        <input type="text"
-                                               v-model="data.item.name"
-                                               v-else
-                                               class="form-control" />
+                                      <span v-if="!data.item.editable">{{ data.item.name }}</span>
+                                      <input type="text" v-model="data.item.name" v-else class="form-control" />
                                     </template>
                                     <template v-slot:cell(last_name)="data">
-                                        <span v-if="!data.item.editable">
-                                            {{
-                      data.item.last_name
-                                            }}
-                                        </span>
-                                        <input type="text"
-                                               v-model="data.item.last_name"
-                                               v-else
-                                               class="form-control" />
+                                      <span v-if="!data.item.editable">
+                                          {{ data.item.last_name }}
+                                      </span>
+                                      <input type="text" v-model="data.item.last_name" v-else class="form-control" />
                                     </template>
                                     <template v-slot:cell(phone)="data">
-                                        <span v-if="!data.item.editable">
-                                            {{
-                      data.item.phone
-                                            }}
-                                        </span>
-                                        <input type="text"
-                                               v-model="data.item.phone"
-                                               v-else
-                                               class="form-control" />
+                                      <span v-if="!data.item.editable">
+                                          {{ data.item.phone }}
+                                      </span>
+                                      <input type="text" v-model="data.item.phone" v-else class="form-control" />
                                     </template>
                                     <template v-slot:cell(email)="data">
-                                        <span v-if="!data.item.editable">
-                                            {{
-                      data.item.email
-                                            }}
-                                        </span>
-                                        <input type="text"
-                                               v-model="data.item.email"
-                                               v-else
-                                               class="form-control" />
+                                      <span v-if="!data.item.editable">
+                                          {{ data.item.email }}
+                                      </span>
+                                      <input type="text" v-model="data.item.email" v-else class="form-control" />
                                     </template>
                                     <template v-slot:cell(region)="data">
-                                        <span v-if="!data.item.editable">
-                                            {{
-                      data.item.region
-                                            }}
-                                        </span>
-                                        <input type="text"
-                                               v-model="data.item.region"
-                                               v-else
-                                               class="form-control" />
+                                      <span v-if="!data.item.editable">
+                                          {{ data.item.region }}
+                                      </span>
+                                      <input type="text" v-model="data.item.region" v-else class="form-control" />
                                     </template>
                                     <template v-slot:cell(country)="data">
-                                        <span v-if="!data.item.editable">
-                                            {{
-                      data.item.country
-                                            }}
-                                        </span>
-                                        <input type="text"
-                                               v-model="data.item.country"
-                                               v-else
-                                               class="form-control" />
+                                      <span v-if="!data.item.editable">
+                                          {{ data.item.country }}
+                                      </span>
+                                      <input type="text" v-model="data.item.country" v-else class="form-control" />
                                     </template>
                                     <template v-slot:cell(last_visit)="data">
-                                        <span v-if="!data.item.editable">
-                                            {{
-                      data.item.last_visit
-                                            }}
-                                        </span>
-                                        <input type="text"
-                                               v-model="data.item.last_visit"
-                                               v-else
-                                               class="form-control" />
+                                      <span v-if="!data.item.editable">
+                                          {{ data.item.last_visit }}
+                                      </span>
+                                      <input type="text" v-model="data.item.last_visit" v-else class="form-control" />
                                     </template>
                                     <template v-slot:cell(next_visit)="data">
-                                        <span v-if="!data.item.editable">
-                                            {{
-                      data.item.next_visit
-                                            }}
-                                        </span>
-                                        <input type="text"
-                                               v-model="data.item.next_visit"
-                                               v-else
-                                               class="form-control" />
+                                      <span v-if="!data.item.editable">
+                                          {{ data.item.next_visit }}
+                                      </span>
+                                      <input type="text" v-model="data.item.next_visit" v-else class="form-control" />
                                     </template>
                                     <template v-slot:cell(personal_dentist)="data">
-                                        <span v-if="!data.item.editable">
-                                            {{
-                      data.item.personal_dentist
-                                            }}
-                                        </span>
-                                        <input type="text"
-                                               v-model="data.item.personal_dentist"
-                                               v-else
-                                               class="form-control" />
+                                      <span v-if="!data.item.editable">
+                                          {{ data.item.personal_dentist }}
+                                      </span>
+                                      <input type="text" v-model="data.item.personal_dentist" v-else class="form-control" />
                                     </template>
                                     <template v-slot:cell(action)="data">
-                                        <b-button variant=" iq-bg-success mr-1 mb-1"
-                                                  size="sm"
-                                                  @click="edit(data.item)"
-                                                  v-if="!data.item.editable">
-                                            <i class="ri-ball-pen-fill m-0"></i>
-                                        </b-button>
-                                        <b-button variant=" iq-bg-success mr-1 mb-1"
-                                                  size="sm"
-                                                  @click="submit(data.item)"
-                                                  v-else>Ok</b-button>
-                                        <b-button variant=" iq-bg-warning"
-                                                  size="sm"
-                                                  @click="remove(data.item)">
-                                            <i class="ri-mail-line m-0"></i>
-                                        </b-button>
+                                      <b-button variant=" iq-bg-success mr-1 mb-1" size="sm" @click="edit(data.item)" v-if="!data.item.editable">
+                                          <i class="ri-ball-pen-fill m-0"></i>
+                                      </b-button>
+                                      <b-button variant=" iq-bg-success mr-1 mb-1" size="sm" @click="submit(data.item)" v-else>Ok</b-button>
+                                      <b-button variant=" iq-bg-warning" size="sm" @click="remove(data.item)">
+                                          <i class="ri-mail-line m-0"></i>
+                                      </b-button>
                                     </template>
                                 </b-table>
                             </b-col>
@@ -165,10 +114,11 @@
                         <template>
                             <b-collapse id="collapse-6" class="mb-2"> </b-collapse>
                             <div class="mt-3">
-                                <b-pagination v-model="currentPage"
-                                              :total-rows="patients.length"
-                                              :per-page="perPage"
-                                              aria-controls="my-table"></b-pagination>
+                                <b-pagination
+                                  v-model="currentPage"
+                                  :total-rows="patients.length"
+                                  :per-page="perPage"
+                                  aria-controls="my-table"></b-pagination>
                             </div>
                         </template>
                     </template>
