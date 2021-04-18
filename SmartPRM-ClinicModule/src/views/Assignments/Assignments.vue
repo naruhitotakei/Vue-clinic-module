@@ -12,7 +12,7 @@
                         </template>
                         <template v-slot:body>
                             <b-list-group class="list-group-flush" id="todaysAssignments">
-                                <b-list-group-item v-for="item in todaysAssigments" :key="item.id">
+                                <b-list-group-item v-for="(item, index) in todaysAssigments" :key="index">
                                     <div class="assignments-container" :class="{ 'taskIsActive' : !item.completed}">
                                         <b-checkbox v-model="item.completed" :disabled="item.disabled" name="check-button" inline :key="index" class="completed-assignment"></b-checkbox>
                                         <span>{{ item.description }}</span>
@@ -44,7 +44,7 @@
                     </template>
                     <template v-slot:body>
                         <b-list-group class="list-group-flush" id="overdueAssignments">
-                            <b-list-group-item v-for="item in overdueAssignments" :key="item.id">
+                            <b-list-group-item v-for="(item, index) in overdueAssignments" :key="index">
                                 <div class="assignments-container" :class="{ 'taskIsActive' : !item.completed}">
                                     <b-checkbox v-model="item.completed" :disabled="item.disabled" name="check-button" inline :key="index" class="completed-assignment"></b-checkbox>
                                     <span>{{ item.description }}</span>
@@ -74,8 +74,8 @@
                         <h5>{{ $t('assignments.futureAssignments') }}</h5>
                     </template>
                     <template v-slot:body>
-                        <b-list-group class="list-group-flush" id="futureAssignments" :per-page="perPage" :current-page="currentPage">
-                            <b-list-group-item v-for="item in futureAssigments" :key="item.id">
+                        <b-list-group class="list-group-flush" id="futureAssignments" :per-page="futurePerPage" :current-page="futureCurrentPage">
+                            <b-list-group-item v-for="(item, index) in futureAssigments" :key="index">
                                 <div class="assignments-container" :class="{ 'taskIsActive' : !item.completed}">
                                     <b-checkbox v-model="item.completed" :disabled="item.disabled" name="check-button" inline :key="index" class="completed-assignment"></b-checkbox>
                                     <span>{{ item.description }}</span>
@@ -105,8 +105,8 @@
                         <h5>{{ $t('assignments.completedAssignments') }}</h5>
                     </template>
                     <template v-slot:body>
-                        <b-list-group class="list-group-flush" id="completedAssignments" :per-page="perPage" :current-page="currentPage">
-                            <b-list-group-item v-for="item in completedAssigments" :key="item.id">
+                        <b-list-group class="list-group-flush" id="completedAssignments" :per-page="completedPerPage" :current-page="completedCurrentPage">
+                            <b-list-group-item v-for="(item, index) in completedAssigments" :key="index">
                                 <div class="assignments-container" :class="{ 'taskIsActive' : !item.completed}">
                                     <b-checkbox v-model="item.completed" :disabled="item.disabled" name="check-button" inline :key="index" class="completed-assignment"></b-checkbox>
                                     <span>{{ item.description }}</span>
