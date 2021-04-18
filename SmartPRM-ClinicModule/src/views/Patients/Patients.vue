@@ -147,7 +147,7 @@ export default {
   methods: {
     add () {
       let obj = this.default()
-      this.patients.push(obj)
+      this.patients.unshift(obj)
       this.setTotalRows(this.patients.length)
     },
     onPatientClick (item) {
@@ -155,7 +155,7 @@ export default {
     },
     default () {
       return {
-        id: this.rows.length,
+        id: this.patients.length + 1,
         name: '',
         last_name: '',
         phone: '',
@@ -163,7 +163,7 @@ export default {
         age: '',
         start_date: '2011/04/25',
         salary: '$0',
-        editable: false
+        editable: true
       }
     },
     edit (item) {
