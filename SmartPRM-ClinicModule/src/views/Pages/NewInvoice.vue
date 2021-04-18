@@ -12,7 +12,7 @@
                     <b-row>
                         <b-col lg="12">
                             <div class="table-responsive-sm">
-                                <b-table :items="invoice.invoice">
+                                <b-table :items="invoice">
                                     <template v-slot:cell(invoiceStatus)="data">
                                         <span class="badge badge-danger">Unpaid</span>
                                     </template>
@@ -30,7 +30,7 @@
                         <b-col lg="12">
                           <iq-card>
                                 <template v-slot:headerTitle>
-                                  <h5 style="margin-bottom: 15px;">{{ invoice.detail }}</h5>
+                                  <h5 style="margin-bottom: 15px;">{{ detail }}</h5>
                                 </template>
                                 <template v-slot:headerAction>
                                   <b-button variant="primary" style="white-space:nowrap" @click="add"><i class="ri-add-line mr-2"></i>Add New Item</b-button>
@@ -68,26 +68,27 @@
                                           <input type="text" v-model="data.item.total" v-else class="form-control">
                                         </template>
                                         <template v-slot:cell(action)="data">
-                                          <b-button variant=" iq-bg-success mr-1 mb-1" size="sm" @click="edit(data.item)" v-if="!data.item.editable"><i class="ri-ball-pen-fill m-0"></i></b-button>
-                                          <b-button variant=" iq-bg-success mr-1 mb-1" size="sm" @click="submit(data.item)" v-else>Ok</b-button>
-                                          <b-button variant=" iq-bg-danger" size="sm" @click="remove(data.item)"><i class="ri-delete-bin-line m-0"></i></b-button>
+                                            <b-button variant=" iq-bg-success mr-1 mb-1" size="sm" @click="edit(data.item)" v-if="!data.item.editable"><i class="ri-ball-pen-fill m-0"></i></b-button>
+                                            <b-button variant=" iq-bg-danger" size="sm" v-if="!data.item.editable" @click="remove(data.item)"><i class="ri-delete-bin-line m-0"></i></b-button>
+                                            <b-button variant=" iq-bg-success mr-1 mb-1" size="sm" @click="submit(data.item)" v-if="data.item.editable"><i class="ri-checkbox-circle-fill m-0"></i></b-button>
+                                            <b-button variant=" iq-bg-danger mr-1 mb-1" size="sm" @click="cancel(data.item)" v-if="data.item.editable"><i class="ri-close-circle-fill m-0"></i></b-button>
                                         </template>
                                       </b-table>
                                     </b-col>
                                   </b-row>
                                 </template>
                               </iq-card>
-                            <h5 style="margin-bottom: 15px;">{{ invoice.summary }}</h5>
+                            <h5 style="margin-bottom: 15px;">{{ summary }}</h5>
                             <div class="table-responsive-sm">
                                 <b-table-simple striped>
                                     <thead>
                                         <tr>
-                                            <th v-for="(item,index) in invoice.invoiceSummaryFields" :key="index" :class="item.key === 'bank' ? 'text-left' : ''">{{ item.label }}</th>
+                                            <th v-for="(item,index) in invoiceSummaryFields" :key="index" :class="item.key === 'bank' ? 'text-left' : ''">{{ item.label }}</th>
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        <tr v-for="(body, bodyKey) in invoice.invoiceSummary" :key="bodyKey">
-                                            <template v-for="(item,index) in invoice.invoiceSummaryFields">
+                                        <tr v-for="(body, bodyKey) in invoiceSummary" :key="bodyKey">
+                                            <template v-for="(item,index) in invoiceSummaryFields">
                                                 <th v-if="item.key === 'bank'" :key="item.key+index">{{ body[item.key] }}</th>
                                                 <td v-else :key="item.key+index" :class="item.key === 'total' ? 'font-weight-bold' : ''">
                                                     {{ body[item.key] }}
@@ -136,7 +137,7 @@ export default {
         { label: 'Price', key: 'price', class: 'text-left' },
         { label: 'Discount', key: 'discount', class: 'text-left' },
         { label: 'Total', key: 'total', class: 'text-left' },
-        { label: 'Action', key: 'action', class: 'text-center' }
+        { label: 'Action', key: 'action', class: 'text-center action-column' }
       ],
       rows: [
         {
@@ -189,127 +190,62 @@ export default {
       ],
       text: 'Invoice N° : ',
       invoiceID: '250028',
-      invoice: {
-        summary: 'Invoice Summary',
-        detail: 'Invoice Detail',
-        description: 'It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout. The point of using Lorem Ipsum is that it has a more-or-less normal distribution of letters, as opposed to using \'Content here, content here\', making it look like readable English.',
-        invoice: [
-          {
-            invoiceDate: '20 Mar, 2021',
-            invoiceTotal: '1.500 EUR',
-            billingDetails: 'Natalija Kogoj <br> Prva cesta 1 <br> 1000 Ljubljana, Slovenija <br> Telefon: +38651365682 <br> Email: natalija.kogoj@staging-emazing.si',
-            issuedIn: 'Ljubljana',
-            issuedBy: 'Dr. Bojan Jernejc'
-          }
-        ],
-        InvoiceDetailField: [
-          {
-            key: 'id',
-            label: '#'
-          },
-          {
-            key: 'item',
-            label: 'Item'
-          },
-          {
-            key: 'quantity',
-            label: 'Quantity'
-          },
-          {
-            key: 'price',
-            label: 'Price'
-          },
-          {
-            key: 'discount',
-            label: 'Discount'
-          },
-          {
-            key: 'total',
-            label: 'Total'
-          }
-        ],
-        InvoiceDetails: [
-          {
-            id: 1,
-            item: {
-              title: 'Odstranitev zobnega kamna'
-            },
-            quantity: '1',
-            price: '100 EUR',
-            discount: '20%',
-            total: '80 EUR'
-          },
-          {
-            id: 2,
-            item: {
-              title: 'Zobna krona'
-            },
-            quantity: '1',
-            price: '350 EUR',
-            discount: '/',
-            total: '350 EUR'
-          },
-          {
-            id: 3,
-            item: {
-              title: 'Beljenje zob'
-            },
-            quantity: '1',
-            price: '350 EUR',
-            discount: '/',
-            total: '350 EUR'
-          },
-          {
-            id: 4,
-            item: {
-              title: 'Zobni implantat'
-            },
-            quantity: '1',
-            price: '800 EUR',
-            discount: '10%',
-            total: '720 EUR'
-          }
-        ],
-        invoiceSummaryFields: [
-          {
-            key: 'dueDate',
-            label: 'Due Date'
-          },
-          {
-            key: 'paymentMethod',
-            label: 'Payment Method'
-          },
-          {
-            key: 'subTotal',
-            label: 'Sub-total'
-          },
-          {
-            key: 'discount',
-            label: 'Discount'
-          },
-          {
-            key: 'total',
-            label: 'Total'
-          }
-        ],
-        invoiceSummary: [
-          {
-            dueDate: '20 April 2021',
-            subTotal: '1.600 EUR',
-            paymentMethod: 'Gotovina',
-            discount: '100 EUR',
-            total: '1.500 EUR'
-          }
-        ]
-      }
+      summary: 'Invoice Summary',
+      detail: 'Invoice Detail',
+      invoiceSummaryFields: [
+        {
+          key: 'dueDate',
+          label: 'Due Date'
+        },
+        {
+          key: 'paymentMethod',
+          label: 'Payment Method'
+        },
+        {
+          key: 'subTotal',
+          label: 'Sub-total'
+        },
+        {
+          key: 'discount',
+          label: 'Discount'
+        },
+        {
+          key: 'total',
+          label: 'Total'
+        }
+      ],
+      invoiceSummary: [
+        {
+          dueDate: '20 April 2021',
+          subTotal: '1.600 EUR',
+          paymentMethod: 'Gotovina',
+          discount: '100 EUR',
+          total: '1.500 EUR'
+        }
+      ],
+      invoice: [
+        {
+          invoiceDate: '20 Mar, 2021',
+          invoiceTotal: '1.500 EUR',
+          billingDetails: 'Natalija Kogoj <br> Prva cesta 1 <br> 1000 Ljubljana, Slovenija <br> Telefon: +38651365682 <br> Email: natalija.kogoj@staging-emazing.si',
+          issuedIn: 'Ljubljana',
+          issuedBy: 'Dr. Bojan Jernejc'
+        }
+      ],
+      tempInvoice: null
     }
   },
   methods: {
     edit (item) {
+      this.tempInvoice = Object.assign({}, item)
       item.editable = true
     },
     submit (item) {
       item.editable = false
+    },
+    cancel (item) {
+      let index = this.rows.indexOf(item)
+      this.rows.splice(index, 1, this.tempInvoice)
     },
     remove (item) {
       let index = this.rows.indexOf(item)
@@ -335,3 +271,9 @@ export default {
   }
 }
 </script>
+
+<style scoped>
+/deep/ .action-column {
+  width: 120px !important;
+}
+</style>
