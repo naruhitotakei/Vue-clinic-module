@@ -99,8 +99,8 @@
   </b-container>
 </template>
 <script>
-import { xray } from '../../../config/pluginInit'
-import appointmentBook from '../../../services/appointbook'
+import { xray } from '../../config/pluginInit'
+import appointmentBook from '../../services/appointbook'
 export default {
   name: 'GoogleCalendar',
   components: { },

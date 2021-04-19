@@ -4,7 +4,7 @@ import VueRouter from 'vue-router'
 import Layout1 from '../layouts/Layout1'
 import AuthLayout1 from '../layouts/AuthLayouts/AuthLayout1'
 /* Calendar */
-import Calendar from '../views/Apps/Calendar/Calendar'
+import Calendar from '../views/Calendars/Calendar'
 /* Assignments */
 import Assignments from '../views/Assignments/Assignments'
 import Dashboard4 from '../views/Dashboards/Dashboard4'
