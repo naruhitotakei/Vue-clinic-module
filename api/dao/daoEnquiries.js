@@ -32,6 +32,8 @@ const createEnquiry = (req, res, enquiry) => {
     if (enquiry.phone) statement += "phone,"
     if (enquiry.email) statement += "email,"
     if (enquiry.client_id) statement += "client_id,"
+    if (enquiry.country_id) statement += "country_id,"
+    if (enquiry.region_id) statement += "region_id,"
     if (enquiry.gender) statement += "gender,"
     if (enquiry.last_name) statement += "last_name,"
     statement += "lead_owner_id,"
@@ -43,6 +45,8 @@ const createEnquiry = (req, res, enquiry) => {
     if (enquiry.phone) statement += "'" + enquiry.phone + "',"
     if (enquiry.email) statement += "'" + enquiry.email + "',"
     if (enquiry.client_id) statement += enquiry.client_id + ","
+    if (enquiry.country_id) statement += enquiry.country_id + ","
+    if (enquiry.region_id) statement += enquiry.region_id + ","
     if (enquiry.gender) statement += "'" + enquiry.gender + "',"
     if (enquiry.last_name) statement += "'" + enquiry.last_name + "',"
     if (enquiry.lead_owner_id) { statement += enquiry.lead_owner_id + ","} else {statement += "0,"}
@@ -58,8 +62,25 @@ const createEnquiry = (req, res, enquiry) => {
     })    
 }
 
-const updateEnquiry = (req, res, enquiry) => {
-    res.status(200).json("OK")   
+const updateEnquiry = (req, res, id, enquiry) => {
+    var statement = "UPDATE enquiries SET "
+    if (enquiry.name) statement += "name=" + "'" + enquiry.name + "',"
+    if (enquiry.phone) statement += "phone=" + "'" + enquiry.phone + "',"
+    if (enquiry.email) statement += "email=" + "'" + enquiry.email + "',"
+    if (enquiry.client_id) statement += "client_id=" + enquiry.client_id + ", "
+    if (enquiry.country_id) statement += "country_id=" + enquiry.country_id + ", "
+    if (enquiry.region_id) statement += "region_id=" + enquiry.region_id + ", "
+    if (enquiry.gender) statement += "gender=" + "'" + enquiry.gender + "',"
+    if (enquiry.last_name) statement += "last_name=" + "'" + enquiry.last_name + "',"
+    statement = statement.slice(0, -1)
+    statement +=" WHERE id=" + id
+    console.log(statement)
+    pool.query(statement , (error, results) => {
+        if (error) {
+            throw error
+        }
+        res.status(200).json("OK")
+    })  
 }
 
 const deleteEnquiries = (request, response, id) => {
@@ -67,7 +88,7 @@ const deleteEnquiries = (request, response, id) => {
     if (error) {
       throw error
     }
-    response.status(200).send(`User with ID: ${id} deleted`)
+    response.status(200).json("OK")
   })
 }
 
