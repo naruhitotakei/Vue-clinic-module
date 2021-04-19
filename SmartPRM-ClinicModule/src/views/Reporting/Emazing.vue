@@ -41,6 +41,7 @@
 
 <script>
 import IqCard from '../../components/xray/cards/iq-card.vue'
+import { xray } from '../../config/pluginInit'
 import { getEmazingServicesReport, getServiceList, getCountryList } from '../../services/reporting'
 export default {
   components: {
@@ -184,6 +185,7 @@ export default {
     }
   },
   mounted () {
+    xray.index()
     var today = new Date()
     var firstThisMonth = new Date()
     firstThisMonth.setDate(1)
