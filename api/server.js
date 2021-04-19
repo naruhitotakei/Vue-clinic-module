@@ -14,6 +14,7 @@ const daoReporting = require('./dao/daoReporting')
 const fiscalVerification = require('./services/fiscalVerification')
 const daoInvoices = require('./dao/daoInvoices')
 const daoCodeLists = require('./dao/daoCodeLists')
+const daoCountries = require('./dao/daoCountries')
 
 app.use(cors({
     origin: process.env.APP_URL || 'http://localhost:8080',
@@ -33,6 +34,7 @@ const assignmentsPermission = "Assignments"
 const clinicStatisticsPermission = "Statistics For Clinic"
 const reportingEmazingPermission = "Emazing"
 const invoicesPermission = "Invoices"
+const countriesPermission = "Countries"
 
 ///////////////////////////////////
 // user login, logout, ...
@@ -105,7 +107,7 @@ app.get('/api/enquiries/:id', (req, res) => {
       res.status(401).json("OK: user unauthorized")
 });
 
-app.put('/api/enquiries', (req, res) => {
+app.post('/api/enquiries', (req, res) => {
   const enquiry = req.body
   if(req.session.prm_user && req.session.prm_user.permissions && checkPermission(req.session.prm_user.permissions, enquiriesPermission))
       daoEnquiries.createEnquiry(req, res, enquiry)
@@ -113,7 +115,7 @@ app.put('/api/enquiries', (req, res) => {
       res.status(401).json("OK: user unauthorized")
 });
 
-app.post('/api/enquiries/:id', (req, res) => {
+app.put('/api/enquiries/:id', (req, res) => {
   const enquiry = req.body
   const id = req.params.id
   if(req.session.prm_user && req.session.prm_user.permissions && checkPermission(req.session.prm_user.permissions, enquiriesPermission))
@@ -162,6 +164,15 @@ app.get('/apitest/deleteenquiries/:id', (req, res) => {
   daoEnquiries.deleteEnquiries(req, res, id)
 });
 
+///////////////////////////////////
+// countries
+///////////////////////////////////
+app.get('/api/countries', (req, res) => {
+    if(req.session.prm_user && req.session.prm_user.permissions)
+        daoCountries.getCountries(req, res)
+    else
+        res.status(401).json("OK: user unauthorized")
+});
 ///////////////////////////////////
 // assignments
 ///////////////////////////////////

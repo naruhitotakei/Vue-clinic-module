@@ -18,7 +18,7 @@ const getEnquiries = (request, response) => {
 }
 
 const getEnquiriesById = (request, response, id) => {
-    pool.query("SELECT enquiries.* FROM enquiries JOIN clients ON enquiries.client_id = clients.id WHERE enquiries.trashed IS FALSE AND clients.slug = 'primadent_si' AND enquiries.id = $1", [id] , (error, results) => {
+    pool.query("SELECT enquiries.*,u.name as dentist_name FROM enquiries JOIN clients ON enquiries.client_id = clients.id JOIN users u on enquiries.prm_dentist_user_id = u.id WHERE enquiries.trashed IS FALSE AND clients.slug = 'primadent_si' AND enquiries.id = $1", [id] , (error, results) => {
         if (error) {
             throw error
         }
@@ -66,15 +66,18 @@ const createEnquiry = (req, res, enquiry) => {
 
 const updateEnquiry = (req, res, id, enquiry) => {
     var statement = "UPDATE enquiries SET "
-    if (enquiry.name) statement += "name=" + "'" + enquiry.name + "',"
-    if (enquiry.phone) statement += "phone=" + "'" + enquiry.phone + "',"
-    if (enquiry.email) statement += "email=" + "'" + enquiry.email + "',"
-    if (enquiry.client_id) statement += "client_id=" + enquiry.client_id + ", "
-    if (enquiry.country_id) statement += "country_id=" + enquiry.country_id + ", "
-    if (enquiry.region_id) statement += "region_id=" + enquiry.region_id + ", "
-    if (enquiry.prm_dentist_user_id) statement += "prm_dentist_user_id=" + enquiry.prm_dentist_user_id + ", "
-    if (enquiry.gender) statement += "gender=" + "'" + enquiry.gender + "',"
-    if (enquiry.last_name) statement += "last_name=" + "'" + enquiry.last_name + "',"
+    if (enquiry.name) statement += "name='" + enquiry.name + "',"
+    if (enquiry.last_name) statement += "last_name='" + enquiry.last_name + "',"
+    if (enquiry.date_of_birth) statement += "date_of_birth='" + enquiry.date_of_birth + "',"
+    if (enquiry.gender) statement += "gender='"+ enquiry.gender + "',"
+    if (enquiry.address_line_1) statement += "address_line_1='" + enquiry.address_line_1 + "',"
+    if (enquiry.post_code) statement += "post_code='" + enquiry.post_code + "',"
+    if (enquiry.city) statement += "city='" + enquiry.city + "',"
+    if (enquiry.country_id) statement += "country_id='" + enquiry.country_id + "',"
+    if (enquiry.region_id) statement += "region_id='" + enquiry.region_id + "', "
+    if (enquiry.phone) statement += "phone='" + enquiry.phone + "', "
+    if (enquiry.email) statement += "email='" + enquiry.email + "',"
+    if (enquiry.tax_registration_number) statement += "tax_registration_number='" + enquiry.tax_registration_number + "',"
     statement = statement.slice(0, -1)
     statement +=" WHERE id=" + id
     console.log(statement)
