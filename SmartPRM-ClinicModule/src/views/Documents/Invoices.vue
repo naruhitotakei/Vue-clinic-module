@@ -36,7 +36,7 @@
                   bordered
                   hover
                   :busy="!isDataLoaded"
-                  @row-clicked="onInvoiceClick"
+                  @row-clicked="invoiceSelected"
                   style="cursor: pointer;"
                   :items="invoices"
                   :fields="columns"
@@ -135,8 +135,8 @@ export default {
     }
   },
   methods: {
-    onInvoiceClick (item) {
-      this.$router.push({ path: `/documents/invoices/${item.invoice_id}` })
+    invoiceSelected (item) {
+      this.$router.push({ path: `/documents/invoices/${item.invoice_number}` })
     },
     add_invoice () {
       this.$router.push('/extra-pages/new-invoice')
