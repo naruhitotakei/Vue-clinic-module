@@ -308,22 +308,23 @@
                                                   </b-form-textarea>
                                               </b-form-group>
                                               <b-form-group class="col-md-12" style="justify-content: space-between;" label-cols-sm="4" label="Postcode, City:" label-for="city">
-                                                  <b-form-input :disabled="disabled" class="col-md-6" style="float: left;" v-model="patient.post_code" type="text"></b-form-input>
-                                                  <b-form-input :disabled="disabled" class="col-md-6" v-model="patient.city" type="text"></b-form-input>
+                                                  <b-form-input :disabled="disabled" class="col-md-4" style="float: left;" v-model="patient.post_code" type="text"></b-form-input>
+                                                  <b-form-input :disabled="disabled" class="col-md-6" style="float: right;" v-model="patient.city" type="text"></b-form-input>
                                               </b-form-group>
                                               <b-form-group class="col-md-12" label-cols-sm="4" label-for="country" label="Country:">
-                                                  <b-form-select :disabled="disabled" plain v-model="patient.country" :selected="patient.country" :options="countries" id="exampleFormControlSelect3">
+                                                  <b-form-select :disabled="disabled" plain v-model="patient.country_id" :options="countries" id="exampleFormControlSelect3">
                                                   </b-form-select>
                                               </b-form-group>
                                               <b-form-group class="col-md-12" label-cols-sm="4" label-for="citizenship" label="Citizenship:">
                                                   <b-form-input :disabled="disabled" name="citizenship" type="text" v-model="patient.citizenship"></b-form-input>
                                               </b-form-group>
                                               <b-form-group class="col-md-12" label-cols-sm="4" label-for="region" label="Region(EU):">
-                                                  <b-form-input :disabled="disabled" name="region" type="text" v-model="patient.region"></b-form-input>
+                                                  <b-form-select :disabled="disabled" plain v-model="patient.region_id" :options="filteredRegions" id="exampleFormControlSelect3">
+                                                  </b-form-select>
                                               </b-form-group>
                                               <b-form-group class="col-md-12" label-cols-sm="4" label-for="insurance" label="Insurance number, insured at:">
-                                                  <b-form-input :disabled="disabled" class="col-md-6" style="float: left;" name="insurance_no" type="text" v-model="patient.insurance_no"></b-form-input>
-                                                  <b-form-input :disabled="disabled" class="col-md-6" name="insured_at" type="text" v-model="patient.insured_at"></b-form-input>
+                                                  <b-form-input :disabled="disabled" class="col-md-5" style="float: left;" name="insurance_no" type="text" v-model="patient.insurance_no"></b-form-input>
+                                                  <b-form-input :disabled="disabled" class="col-md-5" style="float: right;" name="insured_at" type="text" v-model="patient.insured_at"></b-form-input>
                                               </b-form-group>
                                               <b-form-group class="col-md-12" label-cols-sm="4" label-for="mobile_no" label="Mobile number:">
                                                   <b-form-input :disabled="disabled" name="mobile_no" type="text" v-model="patient.phone"></b-form-input>
@@ -332,7 +333,7 @@
                                                   <b-form-input :disabled="disabled" name="email" type="text" v-model="patient.email"></b-form-input>
                                               </b-form-group>
                                               <b-form-group class="col-md-12" label-cols-sm="4" label-for="tax_no" label="Tax number:">
-                                                  <b-form-input :disabled="disabled" name="tax_no" type="text" v-model="user.tax_registration_number"></b-form-input>
+                                                  <b-form-input :disabled="disabled" name="tax_no" type="text" v-model="patient.tax_registration_number"></b-form-input>
                                               </b-form-group>
                                           </b-row>
                                       </template>
@@ -368,9 +369,9 @@
                                           <div class="iq-card-body">
                                               <div class="row">
                                                   <div class="col-4 pr-1 pl-0 text-black">Dentist:</div>
-                                                  <b-form-input :disabled="disabled" v-model="user.dentist" class="col-8 mb-2" type="text"></b-form-input>
+                                                  <b-form-input :disabled="disabled" v-model="patient.dentist_name" class="col-8 mb-2" type="text"></b-form-input>
                                                   <div class="col-4 pr-1 pl-0 text-black">Surgeon:</div>
-                                                  <b-form-input :disabled="disabled" v-model="user.surgeon" class="col-8" type="text"></b-form-input>
+                                                  <b-form-input :disabled="disabled" v-model="patient.surgeon" class="col-8" type="text"></b-form-input>
                                               </div>
                                           </div>
                                       </template>
@@ -609,8 +610,9 @@
 </template>
 <script>
 import { xray } from '../../config/pluginInit'
-import { getEnquiryById } from '../../services/enquiry'
+import { getEnquiryById, updateEnquiry } from '../../services/enquiry'
 import { getInvoices } from '../../services/invoice'
+import { getCountriesList, getRegionsList } from '../../services/commonCodeLists'
 
 // var rowsInvoices = [
 //   {
@@ -649,10 +651,17 @@ export default {
     xray.index()
     this.getPatient(this.patientId)
     this.getInvoices()
+    this.getCountries()
+    this.getRegions()
   },
   computed: {
     fullName () {
       return this.patient.name + ' ' + this.patient.last_name
+    },
+    filteredRegions () {
+      return this.regions.filter((item) => {
+        return item.country_id === this.patient.country_id
+      })
     }
   },
   data () {
@@ -705,14 +714,8 @@ export default {
         background: require('../../assets/images/page-img/profile-bg.jpg'),
         profile: require('../../assets/images/user/11.png')
       },
-      countries: [
-        { value: 'Slovenia', text: 'Slovenia' },
-        { value: 'Canada', text: 'Canada' },
-        { value: 'Niada', text: 'Niada' },
-        { value: 'USA', text: 'USA' },
-        { value: 'India', text: 'India' },
-        { value: 'Africa', text: 'Africa' }
-      ],
+      countries: [],
+      regions: [],
       columnsInvoices: [
         { label: 'Number', key: 'invoice_number', class: 'text-left' },
         { label: 'Date',
@@ -747,12 +750,23 @@ export default {
     getPatient (id) {
       getEnquiryById(id).then(response => {
         this.patient = response[0]
+        this.patient.date_of_birth = this.patient.date_of_birth.split('T').shift()
       }
       )
     },
     getInvoices () {
       getInvoices().then(response => {
         this.invoiceItems = response
+      })
+    },
+    getCountries () {
+      getCountriesList().then(response => {
+        this.countries = response
+      })
+    },
+    getRegions () {
+      getRegionsList().then(response => {
+        this.regions = response
       })
     },
     invoiceSelected (item) {
@@ -770,6 +784,9 @@ export default {
     },
     addInvoice () {
       this.$router.push('/extra-pages/new-invoice')
+    },
+    updatePatient () {
+      updateEnquiry(this.patientId, this.patient)
     },
     addOffer () {
 
@@ -829,6 +846,7 @@ export default {
       this.disabled = true
       this.dismissCountDown = this.dismissSecs
       this.successfullEditMessage = true
+      this.updatePatient()
       // this.$refs['my-modal'].show() prikazi modal ukoliko dodje do greske neke
     },
     previewImage: function (event) {
