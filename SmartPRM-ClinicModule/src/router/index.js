@@ -2,6 +2,7 @@ import Vue from 'vue'
 import VueRouter from 'vue-router'
 /* Layouts */
 import Layout1 from '../layouts/Layout1'
+import AuthLayout1 from '../layouts/AuthLayouts/AuthLayout1'
 /* Calendar */
 import Calendar from '../views/Apps/Calendar/Calendar'
 /* Assignments */
@@ -29,8 +30,47 @@ import Users from '../views/Settings/Users'
 /* Statistics */
 import ClinicStatistics from '../views/Statistics/ClinicStatistics'
 import PersonalStatistics from '../views/Statistics/PersonalStatistics'
+/* Authentic View */
+import SignIn from '../views/Auth/Pages/SignIn'
+import SignUp from '../views/Auth/Pages/SignUp'
+import RecoverPassword from '../views/Auth/Pages/RecoverPassword'
+import LockScreen from '../views/Auth/Pages/LockScreen'
+import ConfirmMail from '../views/Auth/Pages/ConfirmMail'
 
 Vue.use(VueRouter)
+
+const authChildRoutes = (prop, mode = false) => [
+  {
+    path: 'sign-in',
+    name: prop + '.sign-in',
+    meta: { dark: mode, auth: true },
+    component: SignIn
+  },
+  {
+    path: 'sign-up',
+    name: prop + '.sign-up',
+    meta: { dark: mode, auth: true },
+    component: SignUp
+  },
+  {
+    path: 'password-reset',
+    name: prop + '.password-reset',
+    meta: { dark: mode, auth: true },
+    component: RecoverPassword
+  },
+  {
+    path: 'lock-screen',
+    name: prop + '.lock-screen',
+    meta: { dark: mode, auth: true },
+    component: LockScreen
+  },
+  {
+    path: 'confirm-mail',
+    name: prop + '.confirm-mail',
+    meta: { dark: mode, auth: true },
+    component: ConfirmMail
+  }
+]
 
 const childRoutes = (prop, mode) => [
   {
@@ -214,6 +254,13 @@ const routes = [
     component: Layout1,
     meta: { auth: true },
     children: defaultlayout('extra-pages')
+  },
+  {
+    path: '/auth',
+    name: 'auth1',
+    component: AuthLayout1,
+    meta: { auth: true },
+    children: authChildRoutes('auth1')
   }
 ]
 

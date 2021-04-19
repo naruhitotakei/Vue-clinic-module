@@ -382,14 +382,14 @@ export default {
           this.logedInUser = response
           this.verticalMenu = this.filterMenu(SideBarItems)
         } else {
-          this.$router.push({ name: 'auth1.sign-in1' })
+          this.$router.push({ name: 'auth1.sign-in' })
         }
       })
     },
     userLogout () {
       logout()
       this.logedInUser = {}
-      this.$router.push({ name: 'auth1.sign-in1' })
+      this.$router.push({ name: 'auth1.sign-in' })
     },
     filterMenu (sideBarItems) {
       var rVal = []
