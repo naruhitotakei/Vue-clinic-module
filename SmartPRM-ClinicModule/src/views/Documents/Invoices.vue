@@ -76,6 +76,7 @@
 <script>
 import { xray } from '../../config/pluginInit'
 import { getInvoices } from '../../services/invoice'
+import moment from 'moment'
 
 export default {
   components: {
@@ -110,7 +111,7 @@ export default {
           key: 'invoice_time',
           class: 'text-left',
           formatter: value => {
-            return value.split('T').shift()
+            return moment(value).format('YYYY-MM-DD')
           },
           filterByFormatted: true
         },

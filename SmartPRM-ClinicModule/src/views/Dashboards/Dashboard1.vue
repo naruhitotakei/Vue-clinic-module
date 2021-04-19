@@ -97,6 +97,8 @@
 import { xray } from '../../config/pluginInit'
 import IqCard from '../../components/xray/cards/iq-card'
 import { clinicStatistics, clinicStatisticsAttendance } from '../../services/statistics'
+import moment from 'moment'
+
 let dates = []
 let totalRevenue = []
 export default {
@@ -193,7 +195,7 @@ export default {
         if (typeof response !== 'string') {
           this.statistics = response
           this.statistics.forEach(function (item) {
-            dates.push(item.date.split('T').shift())
+            dates.push(moment(item.date).format('YYYY-MM-DD'))
             totalRevenue.push(parseFloat(item.totalrevenue))
           })
         } else {

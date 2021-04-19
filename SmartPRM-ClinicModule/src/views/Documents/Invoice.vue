@@ -81,6 +81,7 @@
 <script>
 import { xray } from '../../config/pluginInit'
 import { getInvoiceById } from '../../services/invoice'
+import moment from 'moment'
 
 export default {
   name: 'Invoice',
@@ -182,7 +183,7 @@ export default {
           label: this.$t('invoice.invoiceSummaryColumn.dueDate'),
           key: 'invoice_time',
           formatter: value => {
-            return value.split('T').shift()
+            return moment(value).format('YYYY-MM-DD')
           }
         },
         {
@@ -207,7 +208,7 @@ export default {
           key: 'invoice_time',
           class: 'text-left',
           formatter: value => {
-            return value.split('T').shift()
+            return moment(value).format('YYYY-MM-DD')
           }
         },
         { label: this.$t('invoice.invoiceInfo.invoiceTotal'), key: 'total_with_vat', class: 'text-left' },

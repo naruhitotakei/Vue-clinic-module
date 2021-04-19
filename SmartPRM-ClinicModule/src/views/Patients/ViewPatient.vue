@@ -723,7 +723,7 @@ export default {
           key: 'invoice_time',
           class: 'text-left',
           formatter: value => {
-            return value.split('T').shift()
+            return moment(value).format('YYYY-MM-DD')
           }
         },
         { label: 'Issued by', key: 'company_name', class: 'text-left' },
