@@ -14,7 +14,6 @@ const daoReporting = require('./dao/daoReporting')
 const fiscalVerification = require('./services/fiscalVerification')
 const daoInvoices = require('./dao/daoInvoices')
 const daoCodeLists = require('./dao/daoCodeLists')
-const daoCountries = require('./dao/daoCountries')
 
 app.use(cors({
     origin: process.env.APP_URL || 'http://localhost:8080',
@@ -34,7 +33,6 @@ const assignmentsPermission = "Assignments"
 const clinicStatisticsPermission = "Statistics For Clinic"
 const reportingEmazingPermission = "Emazing"
 const invoicesPermission = "Invoices"
-const countriesPermission = "Countries"
 
 ///////////////////////////////////
 // user login, logout, ...
@@ -164,15 +162,6 @@ app.get('/apitest/deleteenquiries/:id', (req, res) => {
   daoEnquiries.deleteEnquiries(req, res, id)
 });
 
-///////////////////////////////////
-// countries
-///////////////////////////////////
-app.get('/api/countries', (req, res) => {
-    if(req.session.prm_user && req.session.prm_user.permissions)
-        daoCountries.getCountries(req, res)
-    else
-        res.status(401).json("OK: user unauthorized")
-});
 ///////////////////////////////////
 // assignments
 ///////////////////////////////////
