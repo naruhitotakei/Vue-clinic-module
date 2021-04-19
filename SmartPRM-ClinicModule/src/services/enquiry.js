@@ -27,9 +27,11 @@ export async function enquiryById (id) {
 // all elements are optionall
 // {
 //   name: 'ime',
-//   phone, 'tel',
-//   email, 'email',
+//   phone: 'tel',
+//   email: 'email',
 //   client_id: 23,
+//   country_id: 1,
+//   region_id: 23,
 //   gender: 'female',
 //   last_name: 'priimek',
 //   lead_owner_id: 0

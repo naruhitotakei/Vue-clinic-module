@@ -110,10 +110,11 @@ app.put('/api/enquiries', (req, res) => {
       res.status(401).json("OK: user unauthorized")
 });
 
-app.post('/api/enquiries', (req, res) => {
+app.post('/api/enquiries/:id', (req, res) => {
   const enquiry = req.body
+  const id = req.params.id
   if(req.session.prm_user && req.session.prm_user.permissions && checkPermission(req.session.prm_user.permissions, enquiriesPermission))
-      daoEnquiries.updateEnquiry(req, res, enquiry)
+      daoEnquiries.updateEnquiry(req, res, id, enquiry)
   else
       res.status(401).json("OK: user unauthorized")
 });
@@ -124,6 +125,38 @@ app.delete('/api/enquiries/:id', (req, res) => {
       daoEnquiries.deleteEnquiries(req, res, id)
   else
       res.status(401).json("OK: user unauthorized")
+});
+
+app.get('/apitest/createenquiries', (req, res) => {
+  const enquiry = {
+    name: 'aaaaaa',
+    phone: '123',
+    email: 'email',
+    client_id: 23,
+    gender: 'female',
+    last_name: 'priimek',
+    lead_owner_id: 0
+  }
+  daoEnquiries.createEnquiry(req, res, enquiry)
+});
+
+app.get('/apitest/updateenquiries/:id', (req, res) => {
+  const enquiry = {
+    name: 'aaaaaa',
+    phone: '123',
+    email: 'email1',
+    client_id: 23,
+    gender: 'male',
+    last_name: 'priimek',
+    lead_owner_id: 0
+  }
+  const id = req.params.id
+  daoEnquiries.updateEnquiry(req, res, id, enquiry)
+});
+
+app.get('/apitest/deleteenquiries/:id', (req, res) => {
+  const id = req.params.id
+  daoEnquiries.deleteEnquiries(req, res, id)
 });
 
 ///////////////////////////////////
