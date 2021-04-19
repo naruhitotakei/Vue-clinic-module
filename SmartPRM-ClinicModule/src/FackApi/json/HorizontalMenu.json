@@ -9,16 +9,6 @@
     "icon": "ri-home-4-line",
     "children": [
       {
-        "title": "Dashboard1",
-        "is_active": false,
-        "link": {
-          "name": "dashboard1.home"
-        },
-        "class_name": "",
-        "is_icon_class": false,
-        "icon": ""
-      },
-      {
         "title": "Dashboard2",
         "is_active": false,
         "link": {

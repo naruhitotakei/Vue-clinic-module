@@ -41,7 +41,7 @@ import SideBarItems from '../../../FackApi/json/SideBar'
 export default {
   name: 'NavBarStyle1',
   props: {
-    homeURL: { type: Object, default: () => ({ name: 'dashboard.home-1' }) },
+    homeURL: { type: Object, default: () => ({ name: 'dashboard.home' }) },
     title: { type: String, default: 'Dashboard' },
     logo: { type: String, default: require('../../../assets/images/smallPRM-logo-white.png') },
     horizontal: { type: Boolean, default: false },

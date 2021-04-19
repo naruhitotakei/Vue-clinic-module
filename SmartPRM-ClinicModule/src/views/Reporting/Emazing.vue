@@ -27,13 +27,13 @@
         <iq-card>
           <template v-slot:body>
               <h5 class="card-title">{{ $t('reportingEmazing.servicesSummary') }}</h5>
-            <b-table small :items="servicesSummary" :fields="servicesSummaryColumns" class="mb-0" :tbody-tr-class="table-success"></b-table>
+            <b-table small :items="items1" :fields="columns1" class="mb-0"></b-table>
           </template>
         </iq-card>
         <iq-card>
           <template v-slot:body>
               <h5 class="card-title">{{ $t('reportingEmazing.servicesList') }}</h5>
-            <b-table small :items="servicesList" :fields="servicesListColumns" class="mb-0" :tbody-tr-class="table-success"></b-table>
+            <b-table small :items="items2" :fields="columns2" class="mb-0"></b-table>
           </template>
         </iq-card>
     </div>
