@@ -34,6 +34,7 @@ const createEnquiry = (req, res, enquiry) => {
     if (enquiry.client_id) statement += "client_id,"
     if (enquiry.country_id) statement += "country_id,"
     if (enquiry.region_id) statement += "region_id,"
+    if (enquiry.prm_dentist_user_id) statement += "prm_dentist_user_id,"
     if (enquiry.gender) statement += "gender,"
     if (enquiry.last_name) statement += "last_name,"
     statement += "lead_owner_id,"
@@ -47,6 +48,7 @@ const createEnquiry = (req, res, enquiry) => {
     if (enquiry.client_id) statement += enquiry.client_id + ","
     if (enquiry.country_id) statement += enquiry.country_id + ","
     if (enquiry.region_id) statement += enquiry.region_id + ","
+    if (enquiry.prm_dentist_user_id) statement += enquiry.prm_dentist_user_id + ","
     if (enquiry.gender) statement += "'" + enquiry.gender + "',"
     if (enquiry.last_name) statement += "'" + enquiry.last_name + "',"
     if (enquiry.lead_owner_id) { statement += enquiry.lead_owner_id + ","} else {statement += "0,"}
@@ -70,6 +72,7 @@ const updateEnquiry = (req, res, id, enquiry) => {
     if (enquiry.client_id) statement += "client_id=" + enquiry.client_id + ", "
     if (enquiry.country_id) statement += "country_id=" + enquiry.country_id + ", "
     if (enquiry.region_id) statement += "region_id=" + enquiry.region_id + ", "
+    if (enquiry.prm_dentist_user_id) statement += "prm_dentist_user_id=" + enquiry.prm_dentist_user_id + ", "
     if (enquiry.gender) statement += "gender=" + "'" + enquiry.gender + "',"
     if (enquiry.last_name) statement += "last_name=" + "'" + enquiry.last_name + "',"
     statement = statement.slice(0, -1)
