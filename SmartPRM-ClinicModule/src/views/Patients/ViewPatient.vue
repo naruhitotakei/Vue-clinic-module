@@ -543,7 +543,7 @@
                                       <b-table id="patient-invoices"
                                                bordered
                                                hover
-                                               @row-clicked="$router.push('/extra-pages/invoice-example')"
+                                               @row-clicked="invoiceSelected"
                                                style="cursor: pointer;"
                                                :items="invoiceItems"
                                                :fields="columnsInvoices"
@@ -714,7 +714,7 @@ export default {
         { value: 'Africa', text: 'Africa' }
       ],
       columnsInvoices: [
-        { label: 'Number', key: 'invoice_id', class: 'text-left' },
+        { label: 'Number', key: 'invoice_number', class: 'text-left' },
         { label: 'Date',
           key: 'invoice_time',
           class: 'text-left',
@@ -754,6 +754,9 @@ export default {
       getInvoices().then(response => {
         this.invoiceItems = response
       })
+    },
+    invoiceSelected (item) {
+      this.$router.push({ path: `/documents/invoices/${item.invoice_number}` })
     },
     default () {
       return {
