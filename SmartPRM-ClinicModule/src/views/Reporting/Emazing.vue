@@ -4,22 +4,22 @@
           <template v-slot:headerTitle>
             <div class="row pt-3">
           <b-form-group class="col-md-3">
-              <b-form-select plain v-model="selected2" :options="options2" style="padding: 10px;">
-                  <b-form-select-option :value="null">All invoice recipients</b-form-select-option>
+              <b-form-select plain v-model="countrySelect" :options="countrySelectOptions" style="padding: 10px;" @change.native="onCountryChange">
+                  <b-form-select-option :value="null">{{ $t('reportingEmazing.countrySelect') }}</b-form-select-option>
               </b-form-select>
             </b-form-group>
             <b-form-group class="col-md-2">
-              <b-form-select plain v-model="selected3" :options="options3" style="padding: 10px;">
-                  <b-form-select-option :value="null">Custom</b-form-select-option>
+              <b-form-select plain v-model="periodSelect" :options="periodSelectOptions" style="padding: 10px;" @change.native="onPeriodChange">
+                  <b-form-select-option :value="null">{{ $t('reportingEmazing.periodSelect') }}</b-form-select-option>
               </b-form-select>
             </b-form-group>
               <label style="padding-top: 8px;">From:</label>
             <b-form-group label-for="exampleInputdate" class="col-md-2">
-                <b-form-input id="exampleInputdate" type="date" value="2021-03-03"></b-form-input>
+                <b-form-input id="exampleInputdate" type="date" v-model="fromdate" @change="onFromChange"></b-form-input>
               </b-form-group>
               <label style="padding-top: 8px;">To:</label>
             <b-form-group label-for="exampleInputdate" class="col-md-2">
-                <b-form-input id="exampleInputdate" type="date" value="2021-03-03"></b-form-input>
+                <b-form-input id="exampleInputdate" type="date" v-model="todate" @change="onToChange"></b-form-input>
             </b-form-group>
             </div>
           </template>
@@ -41,6 +41,8 @@
 
 <script>
 import IqCard from '../../components/xray/cards/iq-card.vue'
+import { xray } from '../../config/pluginInit'
+import { getEmazingServicesReport, getServiceList, getCountryList } from '../../services/reporting'
 export default {
   components: {
     IqCard
@@ -48,65 +50,150 @@ export default {
   name: 'Emazing',
   data: function () {
     return {
-      options2: [
-        { value: 'a', text: 'One' },
-        { value: 'b', text: 'Two' },
-        { value: 'c', text: 'Three' }
+      fromdate: null,
+      todate: null,
+      countrySelectOptions: [],
+      periodSelectOptions: [
+        { value: '1', text: this.$t('reportingEmazing.currentMonth') },
+        { value: '2', text: this.$t('reportingEmazing.lastMonth') },
+        { value: '3', text: this.$t('reportingEmazing.thisYear') },
+        { value: '4', text: this.$t('reportingEmazing.lastYear') }
       ],
-      options3: [
-        { value: '1', text: 'One' },
-        { value: '2', text: 'Two' },
-        { value: '3', text: 'Three' }
-      ],
-      selected2: null,
-      selected3: null,
-      columns1: [
+      countrySelect: null,
+      periodSelect: null,
+      servicesSummaryColumns: [
         { label: this.$t('reportingEmazing.servicesSummaryColumn.serviceTitle'), key: 'service_title', class: 'text-left' },
-        { label: this.$t('reportingEmazing.servicesSummaryColumn.serviceCount'), key: 'service_count', class: 'text-left' },
-        { label: this.$t('reportingEmazing.servicesSummaryColumn.serviceAmount'), key: 'amount', class: 'text-left' }
+        { label: this.$t('reportingEmazing.servicesSummaryColumn.serviceCount'), key: 'count', class: 'text-left' },
+        { label: this.$t('reportingEmazing.servicesSummaryColumn.serviceAmount'), key: 'sum', class: 'text-left' }
       ],
-      items1: [
-        { service_title: 'General dentistry', service_count: 245, amount: '48.805,55', _rowVariant: 'active' },
-        { service_title: 'Dental procedure', service_count: 242, amount: '48.260,55' },
-        { service_title: 'Ekstrakcija zoba', service_count: 2, amount: '395,00' },
-        { service_title: 'Zalivka | Plomba', service_count: 1, amount: '150,00' },
-        { service_title: 'Preventive dentistry', service_count: 1, amount: '50,55', _rowVariant: 'active' },
-        { service_title: 'Zobni kamen', service_count: 242, amount: '48.260,55' },
-        { service_title: 'Consultation', service_count: 1, amount: '35,00', _rowVariant: 'active' },
-        { service_title: 'Consultation', service_count: 1, amount: '35,00' },
-        { service_title: 'Sum', service_count: 247, amount: '48.890,00', _rowVariant: 'active' }
-      ],
-      columns2: [
-        { label: this.$t('reportingEmazing.servicesListColumn.serviceDate'), key: 'service_date', class: 'text-left' },
-        { label: this.$t('reportingEmazing.servicesListColumn.serviceTitle'), key: 'title', class: 'text-left' },
-        { label: this.$t('reportingEmazing.servicesListColumn.serviceLeadName'), key: 'lead_name', class: 'text-left' },
-        { label: this.$t('reportingEmazing.servicesListColumn.serviceAmount'), key: 'amount', class: 'text-left' },
+      servicesSummary: [],
+      servicesListColumns: [
+        { label: this.$t('reportingEmazing.servicesListColumn.serviceDate'), key: 'date', formatter: (value, key, item) => { return this.formatDateString(value) } },
+        { label: this.$t('reportingEmazing.servicesListColumn.serviceTitle'), key: 'service_title', class: 'text-left' },
+        { label: this.$t('reportingEmazing.servicesListColumn.serviceLeadName'), key: 'name', class: 'text-left' },
+        { label: this.$t('reportingEmazing.servicesListColumn.serviceAmount'), key: 'price', class: 'text-left' },
         { label: this.$t('reportingEmazing.servicesListColumn.serviceFee'), key: 'fee', class: 'text-left' },
-        { label: this.$t('reportingEmazing.servicesListColumn.serviceLocation'), key: 'location', class: 'text-left' },
-        { label: this.$t('reportingEmazing.servicesListColumn.serviceDoctor'), key: 'doctor', class: 'text-left' },
-        { label: this.$t('reportingEmazing.servicesListColumn.serviceLastConsult'), key: 'last_consultant_location', class: 'text-left' }
+        { label: this.$t('reportingEmazing.servicesListColumn.serviceDoctor'), key: 'doctor', class: 'text-left' }
       ],
-      items2: [
-        { service_date: 'General dentistry', title: '', lead_name: '', amount: '', fee: '', location: '', doctor: '', last_consultant_location: '', _rowVariant: 'active' },
-        { service_date: 'March 1, 2021', title: 'Dental Procedure', lead_name: 'Urban Perko', amount: '35,00€', fee: '5,95€', location: 'Spodnje Škofije', doctor: 'Dr. Bojan Jernejc', last_consultant_location: '' },
-        { service_date: 'March 3, 2021', title: 'Dental Procedure', lead_name: 'Mirko Pušnik', amount: '35,00€', fee: '5,95€', location: 'Spodnje Škofije', doctor: 'Dr. Silvija Lenart', last_consultant_location: 'Spodnje Škofije' },
-        { service_date: 'March 4, 2021', title: 'Dental Procedure', lead_name: 'Maks Krajnc', amount: '30,00€', fee: '5,10€', location: 'Ljubljana', doctor: 'Dr. Damjan Ahlin', last_consultant_location: 'Ljubljana' },
-        { service_date: 'March 5, 2021', title: 'Dental Procedure', lead_name: 'Štefanija Močnik', amount: '5.025€', fee: '854,25€', location: 'Spodnje Škofije', doctor: 'Dr. Martin Sever', last_consultant_location: 'Spodnje Škofije' },
-        { service_date: 'March 8, 2021', title: 'Dental Procedure', lead_name: 'Uroš Zajc', amount: '35,00€', fee: '5,10€', location: 'Šencur', doctor: 'Dr. Tanja Perme', last_consultant_location: '' },
-        { service_date: 'March 8, 2021', title: 'Dental Procedure', lead_name: 'Jožef Pušnik', amount: '35,00€', fee: '5,95€', location: 'Spodnje Škofije', doctor: 'Dr. Renata Kobler', last_consultant_location: '' },
-        { service_date: 'March 9, 2021', title: 'Dental Procedure', lead_name: 'Matija Primožič', amount: '35,00€', fee: '5,95€', location: 'Spodnje Škofije', doctor: 'Dr. Silvija Lenart', last_consultant_location: '' },
-        { service_date: 'March 10, 2021', title: 'Dental Procedure', lead_name: 'Damjan Novak', amount: '75,00€', fee: '12,75€', location: 'Ljubljana', doctor: 'Dr. Martin Sever', last_consultant_location: 'Ljubljana' },
-        { service_date: 'Preventive dentistry', title: '', lead_name: '', amount: '', fee: '', location: '', doctor: '', last_consultant_location: '', _rowVariant: 'active' },
-        { service_date: 'March 5, 2021', title: 'Sandblasting', lead_name: 'Štefanija Močnik', amount: '75,00€', fee: '12,75€', location: 'Spodnje Škofije', doctor: 'Dr. Martin Sever', last_consultant_location: 'Spodnje Škofije' },
-        { service_date: 'March 10, 2021', title: 'Tartar cleaning', lead_name: 'Damjan Novak', amount: '75,00€', fee: '12,75€', location: 'Ljubljana', doctor: 'Dr. Martin Sever', last_consultant_location: 'Ljubljana' },
-        { service_date: 'Consultation', title: '', lead_name: '', amount: '', fee: '', location: '', doctor: '', last_consultant_location: '', _rowVariant: 'active' },
-        { service_date: 'March 8, 2021', title: 'Consultation', lead_name: 'Stanislava Klemenčič', amount: '75,00€', fee: '12,75€', location: 'Ljubljana', doctor: 'Dr. Sebastjan Bras', last_consultant_location: 'Ljubljana' }
-      ]
+      servicesList: []
     }
   },
   methods: {
+    onFromChange () {
+      this.getServicesReport()
+      this.getServicesList()
+      this.getCountryList()
+    },
+    onToChange () {
+      this.getServicesReport()
+      this.getServicesList()
+      this.getCountryList()
+    },
+    onPeriodChange () {
+      if (this.periodSelect === '1') {
+        let today = new Date()
+        let firstThisMonth = new Date()
+        firstThisMonth.setDate(1)
+        this.fromdate = this.formatDate(firstThisMonth)
+        this.todate = this.formatDate(today)
+      } else if (this.periodSelect === '2') {
+        let lastLastMonth = new Date()
+        lastLastMonth.setDate(1)
+        lastLastMonth.setDate(lastLastMonth.getDate() - 1)
+        let firstLastMonth = new Date()
+        firstLastMonth.setMonth(firstLastMonth.getMonth() - 1)
+        firstLastMonth.setDate(1)
+        this.fromdate = this.formatDate(firstLastMonth)
+        this.todate = this.formatDate(lastLastMonth)
+      } else if (this.periodSelect === '3') {
+        let today = new Date()
+        let firstThisYear = new Date()
+        firstThisYear.setMonth(0)
+        firstThisYear.setDate(1)
+        this.fromdate = this.formatDate(firstThisYear)
+        this.todate = this.formatDate(today)
+      } else if (this.periodSelect === '4') {
+        let lastLastYear = new Date()
+        lastLastYear.setMonth(0)
+        lastLastYear.setDate(1)
+        lastLastYear.setDate(lastLastYear.getDate() - 1)
+        let firstLastYear = new Date()
+        firstLastYear.setMonth(0)
+        firstLastYear.setDate(1)
+        firstLastYear.setYear(1900 + firstLastYear.getYear() - 1)
+        this.fromdate = this.formatDate(firstLastYear)
+        this.todate = this.formatDate(lastLastYear)
+      } else {
+        return
+      }
+      this.getServicesReport()
+      this.getServicesList()
+      this.getCountryList()
+    },
+    onCountryChange () {
+      this.getServicesReport()
+      this.getServicesList()
+      this.getCountryList()
+    },
+    getServicesReport () {
+      getEmazingServicesReport(this.fromdate, this.todate, this.countrySelect).then(response => {
+        if (typeof response !== 'string') {
+          this.servicesSummary = response
+        } else {
+          console.error(response)
+        }
+      })
+    },
+    getServicesList () {
+      getServiceList(this.fromdate, this.todate, this.countrySelect).then(response => {
+        if (typeof response !== 'string') {
+          this.servicesList = response
+        } else {
+          console.error(response)
+        }
+      })
+    },
+    getCountryList () {
+      getCountryList(this.fromdate, this.todate).then(response => {
+        if (typeof response !== 'string') {
+          console.log('RESPONSE', response)
+          this.countrySelectOptions = []
+          for (var cnt in response) {
+            console.log('CNT', cnt)
+            if (response[cnt].id) {
+              var cntEnt = { value: response[cnt].id, text: response[cnt].name }
+              this.countrySelectOptions.push(cntEnt)
+            }
+          }
+        } else {
+          this.countrySelectOptions = []
+        }
+      })
+    },
+    formatDate (date) {
+      var ye = new Intl.DateTimeFormat('en', { year: 'numeric' }).format(date)
+      var mo = new Intl.DateTimeFormat('en', { month: '2-digit' }).format(date)
+      var da = new Intl.DateTimeFormat('en', { day: '2-digit' }).format(date)
+      return (`${ye}-${mo}-${da}`)
+    },
+    formatDateString (dateString) {
+      var date = Date.parse(dateString)
+      var ye = new Intl.DateTimeFormat('en', { year: 'numeric' }).format(date)
+      var mo = new Intl.DateTimeFormat('en', { month: 'numeric' }).format(date)
+      var da = new Intl.DateTimeFormat('en', { day: 'numeric' }).format(date)
+      return (`${da}. ${mo}. ${ye}`)
+    }
   },
   mounted () {
+    xray.index()
+    var today = new Date()
+    var firstThisMonth = new Date()
+    firstThisMonth.setDate(1)
+    this.fromdate = this.formatDate(firstThisMonth)
+    this.todate = this.formatDate(today)
+    this.getServicesReport()
+    this.getServicesList()
+    this.getCountryList()
   }
 }
 </script>

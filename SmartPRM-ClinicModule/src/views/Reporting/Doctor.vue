@@ -5,6 +5,8 @@
 </template>
 
 <script>
+import { xray } from '../../config/pluginInit'
+
 export default {
   components: {
   },
@@ -16,6 +18,7 @@ export default {
   methods: {
   },
   mounted () {
+    xray.index()
   }
 }
 </script>

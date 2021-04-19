@@ -64,6 +64,8 @@
 </template>
 
 <script>
+import { xray } from '../../config/pluginInit'
+
 var rows = [
   {
     offer_no: 'offer12312',
@@ -135,6 +137,7 @@ export default {
     }
   },
   mounted () {
+    xray.index()
   }
 }
 </script>

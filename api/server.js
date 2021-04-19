@@ -12,6 +12,8 @@ const daoAssignments = require('./dao/daoAssignments')
 const daoStatistics = require('./dao/daoStatistics')
 const daoReporting = require('./dao/daoReporting')
 const fiscalVerification = require('./services/fiscalVerification')
+const daoInvoices = require('./dao/daoInvoices')
+const daoCodeLists = require('./dao/daoCodeLists')
 
 app.use(cors({
     origin: process.env.APP_URL || 'http://localhost:8080',
@@ -30,6 +32,7 @@ const enquiriesPermission = "Patients"
 const assignmentsPermission = "Assignments"
 const clinicStatisticsPermission = "Statistics For Clinic"
 const reportingEmazingPermission = "Emazing"
+const invoicesPermission = "Invoices"
 
 ///////////////////////////////////
 // user login, logout, ...
@@ -88,23 +91,75 @@ app.get('/api/profile', async function(req, res) {
 // enquiries, patients
 ///////////////////////////////////
 app.get('/api/enquiries', (req, res) => {
-  console.log('GET: api/enquiries called')
   if(req.session.prm_user && req.session.prm_user.permissions && checkPermission(req.session.prm_user.permissions, enquiriesPermission))
       daoEnquiries.getEnquiries(req, res)
   else
       res.status(401).json("OK: user unauthorized")
 });
 
-app.post('/api/enquiries', (req, res) => {
-   const enquiry = req.body.enquiry;
-   console.log('POST: api/enquiries called with ', enquiry)
-   res.json("OK:");
+app.get('/api/enquiries/:id', (req, res) => {
+  const id = req.params.id
+  if(req.session.prm_user && req.session.prm_user.permissions && checkPermission(req.session.prm_user.permissions, enquiriesPermission))
+      daoEnquiries.getEnquiriesById(req, res, id)
+  else
+      res.status(401).json("OK: user unauthorized")
+});
+
+app.put('/api/enquiries', (req, res) => {
+  const enquiry = req.body
+  if(req.session.prm_user && req.session.prm_user.permissions && checkPermission(req.session.prm_user.permissions, enquiriesPermission))
+      daoEnquiries.createEnquiry(req, res, enquiry)
+  else
+      res.status(401).json("OK: user unauthorized")
+});
+
+app.post('/api/enquiries/:id', (req, res) => {
+  const enquiry = req.body
+  const id = req.params.id
+  if(req.session.prm_user && req.session.prm_user.permissions && checkPermission(req.session.prm_user.permissions, enquiriesPermission))
+      daoEnquiries.updateEnquiry(req, res, id, enquiry)
+  else
+      res.status(401).json("OK: user unauthorized")
 });
 
 app.delete('/api/enquiries/:id', (req, res) => {
-   const id = req.params.id
-   console.log('DELETE: api/enquiries for ', id)
-   res.json("OK: " + id);
+  const id = req.params.id
+  if(req.session.prm_user && req.session.prm_user.permissions && checkPermission(req.session.prm_user.permissions, enquiriesPermission))
+      daoEnquiries.deleteEnquiries(req, res, id)
+  else
+      res.status(401).json("OK: user unauthorized")
+});
+
+app.get('/apitest/createenquiries', (req, res) => {
+  const enquiry = {
+    name: 'aaaaaa',
+    phone: '123',
+    email: 'email',
+    client_id: 23,
+    gender: 'female',
+    last_name: 'priimek',
+    lead_owner_id: 0
+  }
+  daoEnquiries.createEnquiry(req, res, enquiry)
+});
+
+app.get('/apitest/updateenquiries/:id', (req, res) => {
+  const enquiry = {
+    name: 'aaaaaa',
+    phone: '123',
+    email: 'email1',
+    client_id: 23,
+    gender: 'male',
+    last_name: 'priimek',
+    lead_owner_id: 0
+  }
+  const id = req.params.id
+  daoEnquiries.updateEnquiry(req, res, id, enquiry)
+});
+
+app.get('/apitest/deleteenquiries/:id', (req, res) => {
+  const id = req.params.id
+  daoEnquiries.deleteEnquiries(req, res, id)
 });
 
 ///////////////////////////////////
@@ -131,6 +186,21 @@ app.get('/api/invoice/premises/:premiseId', (req, res) => {
 
 });
 
+app.get('/api/invoices', (req, res) => {
+    if (req.session.prm_user && req.session.prm_user.permissions && checkPermission(req.session.prm_user.permissions, invoicesPermission))
+        daoInvoices.getInvoices(req, res)
+    else
+        res.status(401).json("OK: user unauthorized")
+});
+
+app.get('/api/invoices/:id', (req, res) => {
+    const id = req.params.id
+    if (req.session.prm_user && req.session.prm_user.permissions && checkPermission(req.session.prm_user.permissions, invoicesPermission))
+        daoInvoices.getInvoicesById(req, res, id)
+    else
+        res.status(401).json("OK: user unauthorized")
+});
+
 ///////////////////////////////////
 // statistics & Reporting
 ///////////////////////////////////
@@ -142,22 +212,52 @@ app.get('/api/statistics/clinic', (req, res) => {
       res.status(401).json("OK: user unauthorized")
 });
 
-app.get('/api/statistics/emazing/services/:statrtdate/:enddate', (req, res) => {
-  const statrtdate = req.params.statrtdate
-  const enddate = req.params.enddate
-  if(req.session.prm_user && req.session.prm_user.permissions && checkPermission(req.session.prm_user.permissions, reportingEmazingPermission))
-      daoReporting.getEmazingServicesReport(req, res, statrtdate, enddate)
+app.get('/api/statistics/clinic/attendance', (req, res) => {
+  const clinicId = 123 // todo - get it from session
+  if(req.session.prm_user && req.session.prm_user.permissions && checkPermission(req.session.prm_user.permissions, clinicStatisticsPermission))
+      daoStatistics.getClinicAttendance(req, res, clinicId)
   else
       res.status(401).json("OK: user unauthorized")
 });
 
-app.get('/api/statistics/emazing/serviceslist/:statrtdate/:enddate', (req, res) => {
+app.get('/api/report/emazing/services/:statrtdate/:enddate/:countrie', (req, res) => {
+  const statrtdate = req.params.statrtdate
+  const enddate = req.params.enddate
+  const countrie = req.params.countrie
+  if(req.session.prm_user && req.session.prm_user.permissions && checkPermission(req.session.prm_user.permissions, reportingEmazingPermission))
+      daoReporting.getEmazingServicesReport(req, res, statrtdate, enddate, countrie)
+  else
+      res.status(401).json("OK: user unauthorized")
+});
+
+app.get('/api/report/emazing/serviceslist/:statrtdate/:enddate/:countrie', (req, res) => {
+  const statrtdate = req.params.statrtdate
+  const enddate = req.params.enddate
+  const countrie = req.params.countrie
+  if(req.session.prm_user && req.session.prm_user.permissions && checkPermission(req.session.prm_user.permissions, reportingEmazingPermission))
+      daoReporting.getServiceList(req, res, statrtdate, enddate, countrie)
+  else
+      res.status(401).json("OK: user unauthorized")
+});
+
+app.get('/api/report/emazing/countrylist/:statrtdate/:enddate', (req, res) => {
   const statrtdate = req.params.statrtdate
   const enddate = req.params.enddate
   if(req.session.prm_user && req.session.prm_user.permissions && checkPermission(req.session.prm_user.permissions, reportingEmazingPermission))
-      daoReporting.getServiceList(req, res, statrtdate, enddate)
+      daoReporting.getCountryList(req, res, statrtdate, enddate)
   else
       res.status(401).json("OK: user unauthorized")
+});
+
+///////////////////////////////////
+// codelist methodes
+///////////////////////////////////
+app.get('/api/codelist/countries', (req, res) => {
+    daoCodeLists.getCountriesList(req, res)
+});
+
+app.get('/api/codelist/regions', (req, res) => {
+    daoCodeLists.getRegionsList(req, res)
 });
 
 ///////////////////////////////////

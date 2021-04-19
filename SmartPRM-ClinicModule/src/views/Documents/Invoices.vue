@@ -11,19 +11,19 @@
                         <div class="iq-card-header-toolbar d-flex align-items-center" style="margin-top: -10px;">
                             <div class="iq-search-bar">
                                 <form action="#" class="searchbox">
-                                    <input type="text" v-on:keyup="myFunction($event.target.value)" class="text search-input" placeholder="Search" >
+                                    <input type="search" v-model="filter" class="text search-input" placeholder="Search">
                                     <a class="search-link" href="#"><i class="ri-search-line"></i></a>
                                 </form>
                             </div>
                             <iq-card>
-                                <b-form-group label-for="searchOptions"
-                                              label="Search By:">
-                                    <b-form-select plain
-                                                   v-model="selected"
-                                                   :options="searchOptions"
-                                                   id="searchFunction"
-                                                   @change="searchFunction($event)">
-                                    </b-form-select>
+                                <b-form-group label-for="searchOptions" label="Search By:">
+                                  <b-form-select
+                                    plain
+                                    v-model="filterOn"
+                                    :options="searchOptions"
+                                    id="searchFunction"
+                                  >
+                                  </b-form-select>
                                 </b-form-group>
                             </iq-card>
                         </div>
@@ -35,13 +35,23 @@
                   id="my-table"
                   bordered
                   hover
-                  @row-clicked="$router.push('/extra-pages/invoice-example')"
+                  :busy="!isDataLoaded"
+                  @row-clicked="invoiceSelected"
                   style="cursor: pointer;"
-                  :items="paginatedItems"
+                  :items="invoices"
                   :fields="columns"
                   :per-page="perPage"
                   :current-page="currentPage"
+                  :filter="filter"
+                  :filter-included-fields="filterOn"
+                  @filtered="onFiltered"
                 >
+                <template #table-busy>
+                  <div class="text-center text-primary my-2">
+                    <b-spinner class="align-middle"></b-spinner>
+                    <strong class="loading">Loading...</strong>
+                  </div>
+                </template>
                 </b-table>
               </b-col>
             </b-row>
@@ -49,10 +59,10 @@
               <b-collapse id="collapse-6" class="mb-2"> </b-collapse>
               <div class="mt-3">
                 <b-pagination
-                v-model="currentPage"
-                :total-rows="totalRows"
-                :per-page="perPage"
-                aria-controls="my-table"
+                  v-model="currentPage"
+                  :total-rows="totalRows"
+                  :per-page="perPage"
+                  aria-controls="my-table"
               ></b-pagination>
               </div>
             </template>
@@ -64,32 +74,9 @@
 </template>
 
 <script>
-var rows = [
-  {
-    invoice_no: 'invoice12312',
-    patient_name: 'Matej Dolenc',
-    amount: '90 EUR',
-    issued_by: 'Dr. Damjan Ahlin',
-    date: '27.01.2021-18:00',
-    status: 'Paid'
-  },
-  {
-    invoice_no: 'invoice1454',
-    patient_name: 'Damjan Rupnik',
-    amount: '70 EUR',
-    issued_by: 'Dr. Silvija Lenart',
-    date: '27.01.2021-18:00',
-    status: 'Unpaid'
-  },
-  {
-    invoice_no: 'invoice111',
-    patient_name: 'Ljudmila Furlan',
-    amount: '70 EUR',
-    issued_by: 'Dr. Bojan Jernejc',
-    date: '27.01.2021-18:00',
-    status: 'Paid'
-  }
-]
+import { xray } from '../../config/pluginInit'
+import { getInvoices } from '../../services/invoice'
+
 export default {
   components: {
   },
@@ -99,61 +86,82 @@ export default {
       dropDownText: '',
       selected: this.value,
       searchOptions: [
-        { value: 'invoice_no', text: 'Number' },
-        { value: 'patient_name', text: 'Patient Name' },
-        { value: 'date', text: 'Date' },
-        { value: 'issued_by', text: 'Issued by' },
-        { value: 'amount', text: 'Invoice amount' },
-        { value: 'status', text: 'Status' }
+        { value: ['invoice_number'], text: 'Number' },
+        { value: ['patient_name'], text: 'Patient Name' },
+        { value: ['invoice_time'], text: 'Date' },
+        { value: ['company_name'], text: 'Issued by' },
+        { value: ['total_with_vat'], text: 'Invoice amount' },
+        { value: ['status'], text: 'Status' }
       ],
-      items: rows,
-      paginatedItems: rows,
+      invoices: [],
       currentPage: 1,
       perPage: 10,
-      totalRows: rows.length,
       columns: [
-        { label: this.$t('invoices.invoicesColumn.no'), key: 'invoice_no', class: 'text-left' },
-        { label: this.$t('invoices.invoicesColumn.patientName'), key: 'patient_name', class: 'text-left' },
-        { label: this.$t('invoices.invoicesColumn.date'), key: 'date', class: 'text-left' },
-        { label: this.$t('invoices.invoicesColumn.issuedBy'), key: 'issued_by', class: 'text-left' },
-        { label: this.$t('invoices.invoicesColumn.amount'), key: 'amount', class: 'text-left' },
-        { label: this.$t('invoices.invoicesColumn.status'), key: 'status', class: 'text-left' }
-      ]
+        { label: this.$t('invoices.invoicesColumn.no'), key: 'invoice_number', class: 'text-left' },
+        { label: this.$t('invoices.invoicesColumn.patientName'),
+          key: 'patient_name',
+          class: 'text-left',
+          formatter: (value, key, item) => {
+            return item.enquiries_name + ' ' + item.enquiries_last_name
+          },
+          filterByFormatted: true
+        },
+        { label: this.$t('invoices.invoicesColumn.date'),
+          key: 'invoice_time',
+          class: 'text-left',
+          formatter: value => {
+            return value.split('T').shift()
+          },
+          filterByFormatted: true
+        },
+        { label: this.$t('invoices.invoicesColumn.issuedBy'), key: 'company_name', class: 'text-left' },
+        { label: this.$t('invoices.invoicesColumn.amount'), key: 'total_with_vat', class: 'text-left' },
+        { label: this.$t('invoices.invoicesColumn.status'),
+          key: 'status',
+          class: 'text-left',
+          formatter: (value, key, item) => {
+            if (item.paid_amount === '$0.00') {
+              return 'Unpaid'
+            }
+            return item.total_with_vat === item.paid_amount ? 'Paid' : 'Partialy Paid'
+          },
+          filterByFormatted: true
+        }
+      ],
+      filter: '',
+      filterOn: [],
+      isDataLoaded: false,
+      totalRows: 1
     }
   },
   methods: {
-    default () {
-      return {
-        invoice_no: this.rows.length,
-        patient_name: '',
-        amount: '',
-        issued_by: '',
-        status: '',
-        date: ''
-      }
-    },
-    searchFunction (event) {
-      this.dropDownText = event
-      console.log('SEARCHBY OPTION:', event)
-      return event
-    },
-    myFunction (event) {
-      console.log('evemt', event)
-      console.log('this.dropDownText', this.dropDownText)
-
-      if (this.dropDownText) {
-        var sorted = rows.filter((item) => {
-          return item[this.dropDownText].toLowerCase().includes(event.toLowerCase())
-        })
-        this.paginatedItems = sorted
-      }
-      console.log('sorted', sorted)
+    invoiceSelected (item) {
+      this.$router.push({ path: `/documents/invoices/${item.invoice_number}` })
     },
     add_invoice () {
       this.$router.push('/extra-pages/new-invoice')
+    },
+    getInvoices () {
+      getInvoices().then(response => {
+        this.invoices = response
+        this.setTotalRows(this.invoices.length)
+        this.toggleDataLoaded()
+      })
+    },
+    onFiltered (filteredItems) {
+      this.totalRows = filteredItems.length
+      this.currentPage = 1
+    },
+    setTotalRows (number) {
+      this.totalRows = number
+    },
+    toggleDataLoaded () {
+      this.isDataLoaded = !this.isDataLoaded
     }
   },
   mounted () {
+    xray.index()
+    this.getInvoices()
   }
 }
 </script>

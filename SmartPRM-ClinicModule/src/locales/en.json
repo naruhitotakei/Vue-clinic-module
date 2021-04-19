@@ -235,7 +235,7 @@
     "completedAssignments": "Completed Assignments"
   },
   "statisticsForClinic": {
-    "doctors": "Doctors",
+    "attendance": "Number of attended appointments",
     "nurses": "Nurses",
     "patients": "Patients",
     "pharmacists": "Pharmacists",
@@ -250,6 +250,12 @@
   },
   "reportingEmazing": {
     "servicesSummary": "Services Summary",
+    "periodSelect": "Select Period",
+    "currentMonth": "Current Month",
+    "lastMonth": "Last Month",
+    "thisYear": "This Year",
+    "lastYear": "Last Year",
+    "countrySelect": "All Countries",
     "servicesSummaryColumn": {
       "serviceTitle": "Service Title",
       "serviceCount": "Service Count",

@@ -1,4 +1,4 @@
-﻿{
+{
   "sidebar": {
     "dashboard": "Domov",
     "calendar": "Koledar",
@@ -235,7 +235,7 @@
     "completedAssignments": "Opravljene Naloge"
   },
   "statisticsForClinic": {
-    "doctors": "Doktorji",
+    "attendance": "Število terminov z udeležbo",
     "nurses": "Sestre",
     "patients": "Pacienti",
     "pharmacists": "Farmacevti",
@@ -247,6 +247,12 @@
   },
   "reportingEmazing": {
     "servicesSummary": "Povzetek Storitev",
+    "periodSelect": "Izberi Obdobje",
+    "currentMonth": "Tekoči mesec",
+    "lastMonth": "Prejšnji mesec",
+    "thisYear": "Letos",
+    "lastYear": "Lani",
+    "countrySelect": "Vse države",
     "servicesSummaryColumn": {
       "serviceTitle": "Ime storitve",
       "serviceCount": "Število storitev",
