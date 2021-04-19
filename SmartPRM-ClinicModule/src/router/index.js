@@ -5,9 +5,10 @@ import Layout1 from '../layouts/Layout1'
 import AuthLayout1 from '../layouts/AuthLayouts/AuthLayout1'
 /* Calendar */
 import Calendar from '../views/Calendars/Calendar'
+/* Home */
+import Home from '../views/Home/Home'
 /* Assignments */
 import Assignments from '../views/Assignments/Assignments'
-import Dashboard4 from '../views/Dashboards/Dashboard4'
 import AdvInvoices from '../views/Documents/AdvPayments'
 import Invoice from '../views/Documents/Invoice'
 import Invoices from '../views/Documents/Invoices'
@@ -77,7 +78,7 @@ const childRoutes = (prop, mode) => [
     path: '/',
     name: prop + '.home',
     meta: { dark: mode, auth: true, name: 'Home' },
-    component: Dashboard4
+    component: Home
   },
   {
     path: 'calendar',

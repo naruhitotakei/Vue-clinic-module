@@ -250,7 +250,7 @@ import IqCard from '../../components/xray/cards/iq-card'
 import { xray } from '../../config/pluginInit'
 const body = document.getElementsByTagName('body')
 export default {
-  name: 'Dashboard4',
+  name: 'Home',
   components: { IqCard },
   data () {
     return {
