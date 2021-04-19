@@ -31,7 +31,7 @@ import List from '../menus/ListStyle1'
 export default {
   name: 'SideBarStyle1',
   props: {
-    homeURL: { type: Object, default: () => ({ name: 'dashboard.home-1' }) },
+    homeURL: { type: Object, default: () => ({ name: 'dashboard.home' }) },
     items: {},
     logo: { type: String, default: require('../../../assets/images/logo.png') },
     horizontal: { type: Boolean },

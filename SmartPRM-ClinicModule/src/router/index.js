@@ -95,10 +95,10 @@ Vue.use(VueRouter)
 
 const childRoutes = (prop, mode) => [
   {
-    path: 'home-1',
-    name: prop + '.home-1',
-    meta: { dark: mode, auth: true, name: 'Home 1' },
-    component: Dashboard1
+    path: '/',
+    name: prop + '.home',
+    meta: { dark: mode, auth: true, name: 'Home' },
+    component: Dashboard4
   },
   {
     path: 'calendar',
@@ -129,18 +129,6 @@ const childRoutes = (prop, mode) => [
     name: prop + '.home-3',
     meta: { dark: mode, auth: true, name: 'Home 3' },
     component: Dashboard3
-  },
-  {
-    path: '/',
-    name: prop + '.home',
-    meta: { dark: mode, auth: true, name: 'Home' },
-    component: Dashboard4
-  },
-  {
-    path: '/home',
-    name: prop + '.home',
-    meta: { dark: mode, auth: true, name: 'Home' },
-    component: Dashboard4
   }
 ]
 const documentChildRoute = (prop, mode) => [

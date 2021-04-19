@@ -7,7 +7,7 @@
       <SideBarStyle1 :items="verticalMenu" :horizontal="horizontal" :logo="logo" @toggle="sidebarMini" />
       <div id="content-page" class="content-page" :class="horizontal ? 'ml-0' : ''">
         <!-- TOP Nav Bar -->
-        <NavBarStyle1 title="Dashboard" :homeURL="{ name: 'dashboard1.home' }" @toggle="sidebarMini" :logo="logo" :horizontal="horizontal" :items="horizontalMenu">
+        <NavBarStyle1 title="Dashboard" :homeURL="{ name: 'dashboard.home' }" @toggle="sidebarMini" :logo="logo" :horizontal="horizontal" :items="horizontalMenu">
           <template slot="responsiveRight">
             <ul class="navbar-nav ml-auto navbar-list">
               <li class="nav-item">
