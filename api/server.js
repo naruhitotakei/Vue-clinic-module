@@ -13,6 +13,7 @@ const daoStatistics = require('./dao/daoStatistics')
 const daoReporting = require('./dao/daoReporting')
 const fiscalVerification = require('./services/fiscalVerification')
 const daoInvoices = require('./dao/daoInvoices')
+const daoCodeLists = require('./dao/daoCodeLists')
 
 app.use(cors({
     origin: process.env.APP_URL || 'http://localhost:8080',
@@ -246,6 +247,17 @@ app.get('/api/report/emazing/countrylist/:statrtdate/:enddate', (req, res) => {
       daoReporting.getCountryList(req, res, statrtdate, enddate)
   else
       res.status(401).json("OK: user unauthorized")
+});
+
+///////////////////////////////////
+// codelist methodes
+///////////////////////////////////
+app.get('/api/codelist/countries', (req, res) => {
+    daoCodeLists.getCountriesList(req, res)
+});
+
+app.get('/api/codelist/regions', (req, res) => {
+    daoCodeLists.getRegionsList(req, res)
 });
 
 ///////////////////////////////////
