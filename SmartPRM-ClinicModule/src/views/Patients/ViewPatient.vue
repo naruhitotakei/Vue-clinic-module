@@ -613,6 +613,7 @@ import { xray } from '../../config/pluginInit'
 import { getEnquiryById, updateEnquiry } from '../../services/enquiry'
 import { getInvoices } from '../../services/invoice'
 import { getCountriesList, getRegionsList } from '../../services/commonCodeLists'
+import moment from 'moment'
 
 // var rowsInvoices = [
 //   {
@@ -750,7 +751,7 @@ export default {
     getPatient (id) {
       getEnquiryById(id).then(response => {
         this.patient = response[0]
-        this.patient.date_of_birth = this.patient.date_of_birth.split('T').shift()
+        this.patient.date_of_birth = moment(this.patient.date_of_birth).format('YYYY-MM-DD')
       }
       )
     },
