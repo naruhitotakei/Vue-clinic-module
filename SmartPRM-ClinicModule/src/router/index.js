@@ -98,18 +98,6 @@ const childRoutes = (prop, mode) => [
     meta: { dark: mode, auth: true, name: 'assignments' },
     component: Assignments
   }
-  // {
-  //   path: 'home-2',
-  //   name: prop + '.home-2',
-  //   meta: { dark: mode, auth: true, name: 'Home 2' },
-  //   component: Dashboard2
-  // },
-  // {
-  //   path: 'home-3',
-  //   name: prop + '.home-3',
-  //   meta: { dark: mode, auth: true, name: 'Home 3' },
-  //   component: Dashboard3
-  // }
 ]
 const documentChildRoute = (prop, mode) => [
   {
