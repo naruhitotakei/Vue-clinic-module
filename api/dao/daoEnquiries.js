@@ -18,7 +18,7 @@ const getEnquiries = (request, response) => {
 }
 
 const getEnquiriesById = (request, response, id) => {
-    pool.query("SELECT enquiries.*,u.name as dentist_name FROM enquiries JOIN clients ON enquiries.client_id = clients.id JOIN users u on enquiries.prm_dentist_user_id = u.id WHERE enquiries.trashed IS FALSE AND clients.slug = 'primadent_si' AND enquiries.id = $1", [id] , (error, results) => {
+    pool.query("SELECT enquiries.* FROM enquiries JOIN clients ON enquiries.client_id = clients.id WHERE enquiries.trashed IS FALSE AND clients.slug = 'primadent_si' AND enquiries.id = $1", [id] , (error, results) => {
         if (error) {
             throw error
         }
