@@ -237,10 +237,10 @@
     "invoicesHeader": "Računi",
     "invoicesBtn": "Dodaj Račun",
     "invoicesColumn": {
-      "no": "Številka",
+      "no": "Št.",
       "patientName": "Ime pacienta",
       "date": "Datum",
-      "issuedBy": "Izdal",
+      "issuedBy": "Izdan s strani",
       "amount": "Znesek",
       "status": "Status"
     }
@@ -263,10 +263,10 @@
       "discount": "Popust",
       "total": "Znesek"
     },
-    "invoiceSummary": "Povzetek Računa",
+    "invoiceSummary": "Povzetek računa",
     "invoiceSummaryColumn": {
       "dueDate": "Datum zapadlosti",
-      "paymentMethod": "Način Plačila",
+      "paymentMethod": "Način plačila",
       "subTotal": "Cena",
       "discount": "Popust",
       "total": "Znesek"
