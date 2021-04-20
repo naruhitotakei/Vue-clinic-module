@@ -424,7 +424,7 @@
                               </b-modal>
                           </div>
                           <div class="text-center p-1" v-if="successfullEditMessage">
-                              <b-alert :show="dismissCountDown" @dismissed="dismissCountDown=0" variant="success" style="shape-outside: content-box;" class="text-white bg-success col-md-4 float-right">
+                              <b-alert :show="dismissCountDown" @dismissed="dismissCountDown=0" style="shape-outside: content-box;" class="text-white bg-primary col-md-4 float-right">
                                   <div class="iq-alert-icon">
                                       <i class="ri-checkbox-circle-line"></i>
                                   </div>
