@@ -110,7 +110,7 @@
                               </b-col>
                               <b-col lg="8">
                                   <b-col md="14">
-                                      <b-card>
+                                      <b-card class="iq-card">
                                           <b-card-title>{{ $t('EPR.overview.generalNotes') }}</b-card-title>
                                           <hr />
                                           <b-card-text style="color:black;">Opombe o pacientu.</b-card-text>
