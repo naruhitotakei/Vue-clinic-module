@@ -114,6 +114,89 @@
       "action": "Urejaj"
     }
   },
+  "EPR": {
+    "overviewTab": "Pregled",
+    "overview": {
+      "numberOfVisits": "Število obiskov",
+      "firstVisit": "Čas od prvega obiska",
+      "phone": "Telefon",
+      "email": "Email",
+      "address": "Naslov",
+      "addressUnknown": "Neznano",
+      "addAppointment": "Dodaj termin",
+      "addAssignment": "Dodaj nalogo",
+      "deletePatient": "Izbriši pacienta",
+      "personalDoctors": "Osebni zdravniki",
+      "personalDentist": "Osebni zobozdravnik",
+      "personalSurgeon": "Osebni kirurg",
+      "files": "Datoteke",
+      "generalNotes": "Splošne opombe",
+      "generalNotesUpdated": "Nazadnje posodobljeno",
+      "allergies": "Alergije",
+      "allergiesUpdated": "Nazadnje posodobljeno",
+      "patientNotes": "Opombe o pacientu",
+      "patientNotesOpen": "Odpri",
+      "futureAppointments": "Bodoči termini",
+      "pastAppointments": "Pretekli termini"
+    },
+    "personalInfoTab": "Osebni podatki",
+    "personalInfo": {
+      "edit": "Uredi",
+      "personalInformation": "Osebni podatki",
+      "firstName": "Ime",
+      "lastName": "Priimek",
+      "dob": "Datum rojstva",
+      "gender": "Spol",
+      "male": "Moški",
+      "female": "Ženski",
+      "unspecified": "Neopredeljeno",
+      "address": "Naslov",
+      "postCodeCity": "Poštna številka, Mesto",
+      "country": "Država",
+      "region": "Regija(EU)",
+      "insurance": "Številka zavarovanja, zavarovan pri",
+      "phone": "Telefonska številka",
+      "email": "Email naslov",
+      "taxNumber": "Davčna številka",
+      "allergiesAndSensitivites": "Alergije in preobčutljivosti",
+      "generalNotes": "Splošne opombe",
+      "personalDoctors": "Osebni zdravniki",
+      "personalDentist": "Zobozdravnik",
+      "personalSurgeon": "Kirurg"
+    },
+    "filesTab": "Datoteke",
+    "filesHeader": "Datoteke",
+    "files": {
+      "search": "Išči",
+      "searchBy": "Išči glede na",
+      "addFile": "Dodaj datoteko",
+      "fileName": "Ime datoteke",
+      "fileCreatedAt": "Ustvarjeno"
+    },
+    "invoicesTab": "Računi",
+    "invoices": {
+      "invoicesHeader": "Računi",
+      "addInvoice": "Nov račun"
+    },
+    "invoicesColumn": {
+      "no": "Številka",
+      "date": "Datum",
+      "issuedBy": "Izdal",
+      "amount": "Znesek",
+      "status": "Status"
+    },
+    "offersTab": "Ponudbe",
+    "offers": {
+      "offersHeader": "Ponudbe",
+      "addOffer": "Nova ponudba"
+    },
+    "offersColumn": {
+      "no": "Številka",
+      "date": "Datum",
+      "issuedBy": "Izdal",
+      "amount": "Znesek"
+    }
+  },
   "offers": {
     "offersHeader": "Ponudbe",
     "offersBtn": "Dodaj ponudbo",

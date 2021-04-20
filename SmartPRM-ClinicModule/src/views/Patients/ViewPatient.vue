@@ -8,7 +8,6 @@
               <div class="iq-edit-list">
                   <tab-nav :pills="true" class="iq-edit-profile d-flex">
                       <a id="myTab" class="nav-link show col p-0 ri-arrow-left-line" style="padding: 10px 0px !important; font-size: x-large;" @click="$router.push('/patients')" :active="false"></a>
-                      <!-- <tab-nav-items class="col p-0" :active="false" href="/patients" title="Back" /> -->
                       <tab-nav-items class="col p-0" :active="true" href="#overview" title="Overview" />
                       <tab-nav-items class="col-md-2 p-0" :active="false" href="#info" title="Personal Information" />
                       <tab-nav-items class="col p-0" :active="false" href="#files" title="Files" />
@@ -40,32 +39,32 @@
                                               <ul class="doctoe-sedual d-flex align-items-center justify-content-between p-0 m-0">
                                                   <li class="text-center">
                                                       <h4 class="counter">4</h4>
-                                                      <span>Number of visits</span>
+                                                      <span>{{ $t('EPR.overview.numberOfVisits') }}</span>
                                                   </li>
                                                   <li class="text-center">
                                                       <h4 class="counter">9 m, 13 d</h4>
-                                                      <span>Time since first visit</span>
+                                                      <span>{{ $t('EPR.overview.firstVisit') }}</span>
                                                   </li>
                                               </ul>
                                               <hr>
                                               <div class="row ml-1">
-                                                  <div class="col-3">Phone:</div>
+                                                  <div class="col-3">{{ $t('EPR.overview.phone') }}:</div>
                                                   <div class="col-9">{{patient.phone}}</div>
-                                                  <div class="col-3">Email:</div>
+                                                  <div class="col-3">{{ $t('EPR.overview.email') }}:</div>
                                                   <div class="col-9">{{patient.email}}</div>
-                                                  <div class="col-3">Address:</div>
+                                                  <div class="col-3">{{ $t('EPR.overview.address') }}:</div>
                                                   <div class="col-9" v-if="patient.address_line_1">{{patient.address_line_1}}</div>
-                                                  <div class="col-9" v-else>Unknown</div>
+                                                  <div class="col-9" v-else>{{ $t('EPR.overview.addressUnknown') }}</div>
                                               </div>
                                           </div>
                                       </template>
                                       <div class="bg-primary pb-2 p-1" style="border-radius: 0 0 25px 25px;">
                                           <b-col md="14" class="d-flex justify-content-center">
-                                              <button type="" class="btn btn-light m-2">Add Appointment</button>&nbsp;
-                                              <button type="" class="btn btn-light m-2">Add Assignment</button>&nbsp;
+                                              <button type="" class="btn btn-light m-2">{{ $t('EPR.overview.addAppointment') }}</button>&nbsp;
+                                              <button type="" class="btn btn-light m-2">{{ $t('EPR.overview.addAssignment') }}</button>&nbsp;
                                           </b-col>
                                           <b-col class="text-center">
-                                              <button type="" class="btn btn-danger">Delete Patient</button>
+                                              <button type="" class="btn btn-danger">{{ $t('EPR.overview.deletePatient') }}</button>
                                           </b-col>
                                       </div>
                                   </iq-card>
@@ -73,14 +72,14 @@
                                       <template v-slot:body>
                                           <div class="iq-card-header d-flex justify-content-between">
                                               <div class="iq-header-title">
-                                                  <h4 class="card-title">Personal doctors</h4><hr />
+                                                  <h4 class="card-title">{{ $t('EPR.overview.personalDoctors') }}</h4><hr />
                                               </div>
                                           </div>
                                           <div class="iq-card-body">
-                                              <div class="row font-size-16">
-                                                  <div class="col-6"><h6>Personal dentist:</h6></div>
+                                              <div class="row font-size-16 ">
+                                                  <div class="col-6"><h6>{{ $t('EPR.overview.personalDentist') }}:</h6></div>
                                                   <div class="col-6">Dr. Miha Breznik</div>
-                                                  <div class="col-6"><h6>Personal surgeon:</h6></div>
+                                                  <div class="col-6"><h6>{{ $t('EPR.overview.personalSurgeon') }}:</h6></div>
                                                   <div class="col-6">Dr. Nika Klemenc</div>
                                               </div>
                                           </div>
@@ -90,7 +89,7 @@
                                       <template v-slot:body>
                                           <div class="iq-card-header d-flex justify-content-between">
                                               <div class="iq-header-title">
-                                                  <h4 class="card-title">Files (9)</h4><hr />
+                                                  <h4 class="card-title">{{ $t('EPR.overview.files') }} (9)</h4><hr />
                                               </div>
                                           </div>
                                           <div class="iq-card-body p-0">
@@ -111,19 +110,20 @@
                               </b-col>
                               <b-col lg="8">
                                   <b-col md="14">
-                                      <b-card title="General Notes" class="iq-card">
+                                      <b-card>
+                                          <b-card-title>{{ $t('EPR.overview.generalNotes') }}</b-card-title>
                                           <hr />
-                                          <b-card-text style="color:black;">This is another card with title and supporting text below. This card has some additional content to make it slightly taller overall.</b-card-text>
-                                          <b-card-text><small class="text-muted">Last updated 3 mins ago</small></b-card-text>
+                                          <b-card-text style="color:black;">Opombe o pacientu.</b-card-text>
+                                          <b-card-text><small class="text-muted">{{ $t('EPR.overview.generalNotesUpdated') }} 3 mins ago</small></b-card-text>
                                       </b-card>
                                   </b-col>
                                   <b-card text-variant="white"
                                           bg-variant="danger"
                                           class="iq-card">
-                                      <b-card-title class="text-white">Allergies</b-card-title>
+                                      <b-card-title class="text-white">{{ $t('EPR.overview.allergies') }}</b-card-title>
                                       <blockquote class="blockquote mb-0">
-                                          <p class="font-size-14">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer posuere erat a ante.</p>
-                                          <footer class="blockquote-footer text-white font-size-12">Last updated 2 weeks ago</footer>
+                                          <p class="font-size-14">Podatki o alergijah.</p>
+                                          <footer class="blockquote-footer text-white font-size-12">{{ $t('EPR.overview.allergiesUpdated') }} 2 weeks ago</footer>
                                       </blockquote>
                                   </b-card>
                                   <b-row>
@@ -132,65 +132,65 @@
                                               <template v-slot:body>
                                                   <div class="iq-card-header d-flex justify-content-between">
                                                       <div class="iq-header-title">
-                                                          <h4 class="card-title">Patient Notes</h4><hr />
+                                                          <h4 class="card-title">{{ $t('EPR.overview.patientNotes') }}</h4><hr />
                                                       </div>
                                                   </div>
                                                   <ul class="list-inline m-0 overflow-y-scroll" style="max-height: 300px;">
                                                       <li class="d-flex align-items-center justify-content-between mb-3">
                                                           <div>
-                                                              <h6>Treatment was good!</h6>
+                                                              <h6>Zdravljenje je uspelo!</h6>
                                                               <p class="mb-0">03/03/2021</p>
                                                           </div>
-                                                          <div><a href="#" class="btn iq-bg-primary mr-2">Open</a></div>
+                                                          <div><a href="#" class="btn iq-bg-primary mr-2">{{ $t('EPR.overview.patientNotesOpen') }}</a></div>
                                                       </li>
                                                       <li class="d-flex align-items-center justify-content-between mb-3">
                                                           <div>
-                                                              <h6>My Health in better now</h6>
+                                                              <h6>Rana se celi</h6>
                                                               <p class="mb-0">03/03/2021</p>
                                                           </div>
-                                                          <div><a href="#" class="btn iq-bg-primary mr-2">Open</a></div>
+                                                          <div><a href="#" class="btn iq-bg-primary mr-2">{{ $t('EPR.overview.patientNotesOpen') }}</a></div>
                                                       </li>
                                                       <li class="d-flex align-items-center justify-content-between mb-3">
                                                           <div>
-                                                              <h6>Not Effected</h6>
+                                                              <h6>Brez efekta</h6>
                                                               <p class="mb-0">03/03/2021</p>
                                                           </div>
-                                                          <div><a href="#" class="btn iq-bg-primary mr-2">Open</a></div>
+                                                          <div><a href="#" class="btn iq-bg-primary mr-2">{{ $t('EPR.overview.patientNotesOpen') }}</a></div>
                                                       </li>
                                                       <li class="d-flex align-items-center justify-content-between mb-3">
                                                           <div>
-                                                              <h6>Operation Successful</h6>
+                                                              <h6>Poseg uspel</h6>
                                                               <p class="mb-0">03/03/2021</p>
                                                           </div>
-                                                          <div><a href="#" class="btn iq-bg-primary mr-2">Open</a></div>
+                                                          <div><a href="#" class="btn iq-bg-primary mr-2">{{ $t('EPR.overview.patientNotesOpen') }}</a></div>
                                                       </li>
                                                       <li class="d-flex align-items-center justify-content-between mb-3">
                                                           <div>
-                                                              <h6>Medical Care is just a click away</h6>
+                                                              <h6>Zlom zalivke</h6>
                                                               <p class="mb-0">03/03/2021 </p>
                                                           </div>
-                                                          <div><a href="#" class="btn iq-bg-primary mr-2">Open</a></div>
+                                                          <div><a href="#" class="btn iq-bg-primary mr-2">{{ $t('EPR.overview.patientNotesOpen') }}</a></div>
                                                       </li>
                                                       <li class="d-flex align-items-center justify-content-between mb-3">
                                                           <div>
-                                                              <h6>Not Effected</h6>
+                                                              <h6>Brez efekta</h6>
                                                               <p class="mb-0">03/03/2021 </p>
                                                           </div>
-                                                          <div><a href="#" class="btn iq-bg-primary mr-2">Open</a></div>
+                                                          <div><a href="#" class="btn iq-bg-primary mr-2">{{ $t('EPR.overview.patientNotesOpen') }}</a></div>
                                                       </li>
                                                       <li class="d-flex align-items-center justify-content-between mb-3">
                                                           <div>
-                                                              <h6>Treatment was good!</h6>
+                                                              <h6>Zdravljenje je uspelo!</h6>
                                                               <p class="mb-0">03/03/2021 </p>
                                                           </div>
-                                                          <div><a href="#" class="btn iq-bg-primary mr-2">Open</a></div>
+                                                          <div><a href="#" class="btn iq-bg-primary mr-2">{{ $t('EPR.overview.patientNotesOpen') }}</a></div>
                                                       </li>
                                                       <li class="d-flex align-items-center justify-content-between mb-3">
                                                           <div>
-                                                              <h6>My Health in better now</h6>
+                                                              <h6>Zdravljenje zoba</h6>
                                                               <p class="mb-0">03/03/2021 </p>
                                                           </div>
-                                                          <div><a href="#" class="btn iq-bg-primary mr-2">Open</a></div>
+                                                          <div><a href="#" class="btn iq-bg-primary mr-2">{{ $t('EPR.overview.patientNotesOpen') }}</a></div>
                                                       </li>
                                                   </ul>
                                               </template>
@@ -201,13 +201,13 @@
                                               <template v-slot:body>
                                                   <div class="iq-card-header d-flex justify-content-between">
                                                       <div class="iq-header-title">
-                                                          <h4 class="card-title">Future Appointments</h4><hr />
+                                                          <h4 class="card-title">{{ $t('EPR.overview.futureAppointments') }}</h4><hr />
                                                       </div>
                                                   </div>
                                                   <ul class="iq-timeline">
                                                       <li>
                                                           <div class="timeline-dots border-success"></div>
-                                                          <h6 class="">Check up</h6>
+                                                          <h6 class="">Pregled</h6>
                                                           <small class="mt-1">23 June 2021</small>
                                                       </li>
                                                   </ul>
@@ -217,24 +217,24 @@
                                               <template v-slot:body>
                                                   <div class="iq-card-header d-flex justify-content-between">
                                                       <div class="iq-header-title">
-                                                          <h4 class="card-title">Past Appointments</h4>
+                                                          <h4 class="card-title">{{ $t('EPR.overview.pastAppointments') }}</h4>
                                                           <hr />
                                                       </div>
                                                   </div>
                                                   <ul class="iq-timeline">
                                                       <li>
                                                           <div class="timeline-dots border-success"></div>
-                                                          <h6 class="">Dr. Ahlin Send you Photo</h6>
+                                                          <h6 class="">Zalivka</h6>
                                                           <small class="mt-1">23 November 2019</small>
                                                       </li>
                                                       <li>
                                                           <div class="timeline-dots border-danger"></div>
-                                                          <h6 class="">Reminder : Opertion Time!</h6>
+                                                          <h6 class="">Beljenje zob</h6>
                                                           <small class="mt-1">20 November 2019</small>
                                                       </li>
                                                       <li>
                                                           <div class="timeline-dots border-primary"></div>
-                                                          <h6 class="mb-1">Patient Call</h6>
+                                                          <h6 class="mb-1">Rentgen</h6>
                                                           <small class="mt-1">19 November 2019</small>
                                                       </li>
                                                   </ul>
@@ -260,7 +260,7 @@
                                           </div>
                                       </div>
                                   </div>
-                                  <b-button variant="primary" @click="disabled = !disabled" class="btn-add-patient btn-edit-patient" >Edit</b-button>
+                                  <b-button variant="primary" @click="disabled = !disabled" class="btn-add-patient btn-edit-patient">{{ $t('EPR.personalInfo.edit') }}</b-button>
                               </b-col>
                           </b-form-group>
                           <b-row>
@@ -269,11 +269,14 @@
                                       <template v-slot:body>
                                           <div class="pl-0 iq-card-header d-flex justify-content-between">
                                               <div class="iq-header-title">
-                                                  <h4 class="card-title">Personal Information</h4>
+                                                  <h4 class="card-title">{{ $t('EPR.personalInfo.personalInformation') }}</h4>
                                               </div>
                                           </div>
                                           <b-row align-v="center">
-                                              <b-form-group class="col-md-12" label-cols-sm="4" label="First Name:" label-for="fname">
+                                              <b-form-group class="col-md-12" label-cols-sm="4" label-for="fname">
+                                                  <template slot="label">
+                                                      {{ $t('EPR.personalInfo.firstName') }}:
+                                                  </template>
                                                   <ValidationProvider name="fname" rules="required" v-slot="{ errors }">
                                                       <b-form-input :disabled="disabled" v-model="patient.name" type="text" :class="(errors.length > 0 ? ' is-invalid' : '')"></b-form-input>
                                                       <div class="invalid-feedback">
@@ -281,7 +284,10 @@
                                                       </div>
                                                   </ValidationProvider>
                                               </b-form-group>
-                                              <b-form-group class="col-md-12" label-cols-sm="4" label="Last Name:" label-for="lname">
+                                              <b-form-group class="col-md-12" label-cols-sm="4" label-for="lname">
+                                                  <template slot="label">
+                                                      {{ $t('EPR.personalInfo.lastName') }}:
+                                                  </template>
                                                   <ValidationProvider name="lname" rules="required" v-slot="{ errors }">
                                                       <b-form-input :disabled="disabled" v-model="patient.last_name" type="text" :class="(errors.length > 0 ? ' is-invalid' : '')"></b-form-input>
                                                       <div class="invalid-feedback">
@@ -289,8 +295,10 @@
                                                       </div>
                                                   </ValidationProvider>
                                               </b-form-group>
-
-                                              <b-form-group class="col-md-12" label-cols-sm="4" label="Date of birth:" label-for="dob">
+                                              <b-form-group class="col-md-12" label-cols-sm="4" label-for="dob">
+                                                  <template slot="label">
+                                                      {{ $t('EPR.personalInfo.dob') }}:
+                                                  </template>
                                                   <ValidationProvider name="dob" rules="required" v-slot="{ errors }">
                                                       <b-form-input :disabled="disabled" v-model="patient.date_of_birth" type="date" :class="(errors.length > 0 ? ' is-invalid' : '')"></b-form-input>
                                                       <div class="invalid-feedback">
@@ -298,41 +306,65 @@
                                                       </div>
                                                   </ValidationProvider>
                                               </b-form-group>
-                                              <b-form-group class="col-md-12" label-cols-sm="4" label="Gender:" label-for="gender" label-class="d-block">
-                                                  <b-form-radio inline v-model="patient.gender" :disabled="disabled" value="male">Male</b-form-radio>
-                                                  <b-form-radio inline v-model="patient.gender" :disabled="disabled" value="female">Female</b-form-radio>
-                                                  <b-form-radio inline v-model="patient.gender" :disabled="disabled" value="unspecified">Unspecified</b-form-radio>
+                                              <b-form-group class="col-md-12" label-cols-sm="4" label-for="gender" label-class="d-block">
+                                                  <template slot="label">
+                                                      {{ $t('EPR.personalInfo.gender') }}:
+                                                  </template>
+                                                  <b-form-radio inline v-model="patient.gender" :disabled="disabled" value="male">{{ $t('EPR.personalInfo.male') }}</b-form-radio>
+                                                  <b-form-radio inline v-model="patient.gender" :disabled="disabled" value="female">{{ $t('EPR.personalInfo.female') }}</b-form-radio>
+                                                  <b-form-radio inline v-model="patient.gender" :disabled="disabled" value="unspecified">{{ $t('EPR.personalInfo.unspecified') }}</b-form-radio>
                                               </b-form-group>
-                                              <b-form-group class="col-md-12" label-cols-sm="4" label="Address:" label-for="address">
-                                                  <b-form-textarea :disabled="disabled" name="address" v-model="patient.address_line_1" style="line-height: 22px;" rows="3">
-                                                  </b-form-textarea>
+                                              <b-form-group class="col-md-12" label-cols-sm="4" label-for="address">
+                                                  <template slot="label">
+                                                      {{ $t('EPR.personalInfo.address') }}:
+                                                  </template>
+                                                  <b-form-input :disabled="disabled" name="address" v-model="patient.address_line_1" style="line-height: 22px;">
+                                                  </b-form-input>
                                               </b-form-group>
-                                              <b-form-group class="col-md-12" style="justify-content: space-between;" label-cols-sm="4" label="Postcode, City:" label-for="city">
+                                              <b-form-group class="col-md-12" style="justify-content: space-between;" label-cols-sm="4" label-for="city">
+                                                  <template slot="label">
+                                                      {{ $t('EPR.personalInfo.postCodeCity') }}:
+                                                  </template>
                                                   <b-form-input :disabled="disabled" class="col-md-4" style="float: left;" v-model="patient.post_code" type="text"></b-form-input>
                                                   <b-form-input :disabled="disabled" class="col-md-6" style="float: right;" v-model="patient.city" type="text"></b-form-input>
                                               </b-form-group>
-                                              <b-form-group class="col-md-12" label-cols-sm="4" label-for="country" label="Country:">
+                                              <b-form-group class="col-md-12" label-cols-sm="4" label-for="country">
+                                                  <template slot="label">
+                                                      {{ $t('EPR.personalInfo.country') }}:
+                                                  </template>
                                                   <b-form-select :disabled="disabled" plain v-model="patient.country_id" :options="countries" id="exampleFormControlSelect3">
                                                   </b-form-select>
                                               </b-form-group>
-                                              <b-form-group class="col-md-12" label-cols-sm="4" label-for="citizenship" label="Citizenship:">
-                                                  <b-form-input :disabled="disabled" name="citizenship" type="text" v-model="patient.citizenship"></b-form-input>
-                                              </b-form-group>
-                                              <b-form-group class="col-md-12" label-cols-sm="4" label-for="region" label="Region(EU):">
+                                              <b-form-group class="col-md-12" label-cols-sm="4" label-for="region">
+                                                  <template slot="label">
+                                                      {{ $t('EPR.personalInfo.region') }}:
+                                                  </template>
                                                   <b-form-select :disabled="disabled" plain v-model="patient.region_id" :options="filteredRegions" id="exampleFormControlSelect3">
                                                   </b-form-select>
                                               </b-form-group>
-                                              <b-form-group class="col-md-12" label-cols-sm="4" label-for="insurance" label="Insurance number, insured at:">
+                                              <b-form-group class="col-md-12" label-cols-sm="4" label-for="insurance">
+                                                  <template slot="label">
+                                                      {{ $t('EPR.personalInfo.insurance') }}:
+                                                  </template>
                                                   <b-form-input :disabled="disabled" class="col-md-5" style="float: left;" name="insurance_no" type="text" v-model="patient.insurance_no"></b-form-input>
                                                   <b-form-input :disabled="disabled" class="col-md-5" style="float: right;" name="insured_at" type="text" v-model="patient.insured_at"></b-form-input>
                                               </b-form-group>
-                                              <b-form-group class="col-md-12" label-cols-sm="4" label-for="mobile_no" label="Mobile number:">
+                                              <b-form-group class="col-md-12" label-cols-sm="4" label-for="mobile_no">
+                                                  <template slot="label">
+                                                      {{ $t('EPR.personalInfo.phone') }}:
+                                                  </template>
                                                   <b-form-input :disabled="disabled" name="mobile_no" type="text" v-model="patient.phone"></b-form-input>
                                               </b-form-group>
-                                              <b-form-group class="col-md-12" label-cols-sm="4" label-for="email" label="Email-address:">
+                                              <b-form-group class="col-md-12" label-cols-sm="4" label-for="email">
+                                                  <template slot="label">
+                                                      {{ $t('EPR.personalInfo.email') }}:
+                                                  </template>
                                                   <b-form-input :disabled="disabled" name="email" type="text" v-model="patient.email"></b-form-input>
                                               </b-form-group>
-                                              <b-form-group class="col-md-12" label-cols-sm="4" label-for="tax_no" label="Tax number:">
+                                              <b-form-group class="col-md-12" label-cols-sm="4" label-for="tax_no">
+                                                  <template slot="label">
+                                                      {{ $t('EPR.personalInfo.taxNumber') }}:
+                                                  </template>
                                                   <b-form-input :disabled="disabled" name="tax_no" type="text" v-model="patient.tax_registration_number"></b-form-input>
                                               </b-form-group>
                                           </b-row>
@@ -343,7 +375,7 @@
                                   <iq-card>
                                       <template v-slot:body>
                                           <div class="pl-0 iq-card-header d-flex justify-content-between">
-                                              <h4>Allergies and sensitivities</h4>
+                                              <h4>{{ $t('EPR.personalInfo.allergiesAndSensitivites') }}</h4>
                                           </div>
                                           <div class="iq-card-body p-0">
                                               <textarea :disabled="disabled" style="line-height: 30px;" v-model="user.allergies" class="textarea form-control" rows="7"></textarea>
@@ -353,7 +385,7 @@
                                   <iq-card>
                                       <template v-slot:body>
                                           <div class="pl-0 iq-card-header d-flex justify-content-between">
-                                              <h4>General Notes</h4>
+                                              <h4>{{ $t('EPR.personalInfo.generalNotes') }}</h4>
                                           </div>
                                           <div class="iq-card-body p-0">
                                               <textarea :disabled="disabled" style="line-height: 30px;" v-model="user.reminder" class="textarea form-control" rows="7"></textarea>
@@ -363,14 +395,14 @@
                                   <iq-card>
                                       <template v-slot:body>
                                           <div class="pl-0 iq-card-header d-flex justify-content-between">
-                                              <h4>Personal Doctors</h4>
+                                              <h4>{{ $t('EPR.personalInfo.personalDoctors') }}</h4>
                                               <hr />
                                           </div>
                                           <div class="iq-card-body">
                                               <div class="row">
-                                                  <div class="col-4 pr-1 pl-0 text-black">Dentist:</div>
+                                                  <div class="col-4 pr-1 pl-0 text-black">{{ $t('EPR.personalInfo.personalDentist') }}:</div>
                                                   <b-form-input :disabled="disabled" v-model="patient.dentist_name" class="col-8 mb-2" type="text"></b-form-input>
-                                                  <div class="col-4 pr-1 pl-0 text-black">Surgeon:</div>
+                                                  <div class="col-4 pr-1 pl-0 text-black">{{ $t('EPR.personalInfo.personalSurgeon') }}:</div>
                                                   <b-form-input :disabled="disabled" v-model="patient.surgeon" class="col-8" type="text"></b-form-input>
                                               </div>
                                           </div>
@@ -401,96 +433,12 @@
                           </div>
                       </iq-card>
                   </tab-content-item>
-                  <tab-content-item :active="false" id="emailandsms">
-                      <iq-card>
-                          <template v-slot:headerTitle>
-                              <h4 class="card-title">Email and SMS</h4>
-                          </template>
-                          <template v-slot:body>
-                              <div class="form-group row align-items-center">
-                                  <label class="col-md-3" for="emailnotification">Email Notification:</label>
-                                  <div class="col-md-9 custom-control custom-switch">
-                                      <input type="checkbox" class="custom-control-input" id="emailnotification" checked="">
-                                      <label class="custom-control-label" for="emailnotification"></label>
-                                  </div>
-                              </div>
-                              <div class="form-group row align-items-center">
-                                  <label class="col-md-3" for="smsnotification">SMS Notification:</label>
-                                  <div class="col-md-9 custom-control custom-switch">
-                                      <input type="checkbox" class="custom-control-input" id="smsnotification" checked="">
-                                      <label class="custom-control-label" for="smsnotification"></label>
-                                  </div>
-                              </div>
-                              <div class="form-group row align-items-center">
-                                  <label class="col-md-3" for="npass">When To Email</label>
-                                  <div class="col-md-9">
-                                      <div class="custom-control custom-checkbox">
-                                          <input type="checkbox" class="custom-control-input" id="email01">
-                                          <label class="custom-control-label" for="email01">You have new notifications.</label>
-                                      </div>
-                                      <div class="custom-control custom-checkbox">
-                                          <input type="checkbox" class="custom-control-input" id="email02">
-                                          <label class="custom-control-label" for="email02">You're sent a direct message</label>
-                                      </div>
-                                      <div class="custom-control custom-checkbox">
-                                          <input type="checkbox" class="custom-control-input" id="email03" checked="">
-                                          <label class="custom-control-label" for="email03">Someone adds you as a connection</label>
-                                      </div>
-                                  </div>
-                              </div>
-                              <div class="form-group row align-items-center">
-                                  <label class="col-md-3" for="npass">When To Escalate Emails</label>
-                                  <div class="col-md-9">
-                                      <div class="custom-control custom-checkbox">
-                                          <input type="checkbox" class="custom-control-input" id="email04">
-                                          <label class="custom-control-label" for="email04"> Upon new order.</label>
-                                      </div>
-                                      <div class="custom-control custom-checkbox">
-                                          <input type="checkbox" class="custom-control-input" id="email05">
-                                          <label class="custom-control-label" for="email05"> New membership approval</label>
-                                      </div>
-                                      <div class="custom-control custom-checkbox">
-                                          <input type="checkbox" class="custom-control-input" id="email06" checked="">
-                                          <label class="custom-control-label" for="email06"> Member registration</label>
-                                      </div>
-                                  </div>
-                              </div>
-                              <b-button type="submit" variant="primary" class="mr-2">Submit</b-button>
-                              <b-button type="reset" variant="none" class="iq-bg-danger">Cancel</b-button>
-                          </template>
-                      </iq-card>
-                  </tab-content-item>
-                  <tab-content-item :active="false" id="manage-contact">
-                      <iq-card>
-                          <template v-slot:headerTitle>
-                              <h4 class="card-title">Manage Contact</h4>
-                          </template>
-                          <template v-slot:body>
-                              <b-form>
-                                  <b-form-group>
-                                      <label for="contact_no">Contact Number:</label>
-                                      <b-form-input id="contact_no" type="text" v-model="user.mobile_no"></b-form-input>
-                                  </b-form-group>
-                                  <b-form-group>
-                                      <label for="email">Email:</label>
-                                      <b-form-input id="email" type="text" v-model="user.email"></b-form-input>
-                                  </b-form-group>
-                                  <b-form-group>
-                                      <label for="url">Url:</label>
-                                      <b-form-input id="url" type="text" v-model="user.url"></b-form-input>
-                                  </b-form-group>
-                                  <b-button type="submit" variant="primary" class="mr-2">Submit</b-button>
-                                  <b-button type="reset" variant="none" class="iq-bg-danger">Cancel</b-button>
-                              </b-form>
-                          </template>
-                      </iq-card>
-                  </tab-content-item>
                   <tab-content-item :active="false" id="files">
                       <iq-card body-class="iq-card-body">
                           <template v-slot:headerTitle>
-                              <h3 class="card-title" style="margin-top: 10px;">Files</h3>
+                              <h3 class="card-title" style="margin-top: 10px;">{{ $t('EPR.filesHeader') }}</h3>
                               <div class="btn-add-patient">
-                                  <b-button variant="primary" @click="add_file"><i class="ri-add-line mr-2"></i>New File</b-button>
+                                  <b-button variant="primary" @click="add_file"><i class="ri-add-line mr-2"></i>{{ $t('EPR.files.addFile') }}</b-button>
                               </div>
                               <div class="iq-card-header-toolbar d-flex align-items-center" style="margin-top: -10px;">
                                   <div class="iq-search-bar">
@@ -500,8 +448,10 @@
                                       </form>
                                   </div>
                                   <iq-card>
-                                      <b-form-group label-for="searchOptions"
-                                                    label="Search By:">
+                                      <b-form-group label-for="searchOptions">
+                                          <template slot="label">
+                                              {{ $t('EPR.files.searchBy') }}:
+                                          </template>
                                           <b-form-select plain
                                                          v-model="selected"
                                                          :options="searchOptions"
@@ -515,15 +465,16 @@
                           <template v-slot:body>
                               <div class="iq-card-body">
                                   <ul class="profile-img-gallary d-flex flex-wrap p-0 m-0">
-                                      <li class="col-md-4 col-6 pb-3"><a href="javascript:void(0);"><img src="../../assets/images/login/1.png" alt="gallary-image" class="img-fluid"></a><div class="text-center"><p class="mb-0">File name: File 1</p><p>Created at: 03-03-2021</p></div></li>
-                                      <li class="col-md-4 col-6 pb-3"><a href="javascript:void(0);"><img src="../../assets/images/login/2.png" alt="gallary-image" class="img-fluid"></a><div class="text-center"><p class="mb-0">File name: File 2</p><p>Created at: 03-03-2021</p></div></li>
-                                      <li class="col-md-4 col-6 pb-3"><a href="javascript:void(0);"><img src="../../assets/images/login/3.png" alt="gallary-image" class="img-fluid"></a><div class="text-center"><p class="mb-0">File name: File 3</p><p>Created at: 03-03-2021</p></div></li>
-                                      <li class="col-md-4 col-6 pb-3"><a href="javascript:void(0);"><img src="../../assets/images/login/1.png" alt="gallary-image" class="img-fluid"></a><div class="text-center"><p class="mb-0">File name: File 4</p><p>Created at: 03-03-2021</p></div></li>
-                                      <li class="col-md-4 col-6 pb-3"><a href="javascript:void(0);"><img src="../../assets/images/login/2.png" alt="gallary-image" class="img-fluid"></a><div class="text-center"><p class="mb-0">File name: File 5</p><p>Created at: 03-03-2021</p></div></li>
-                                      <li class="col-md-4 col-6 pb-3"><a href="javascript:void(0);"><img src="../../assets/images/login/3.png" alt="gallary-image" class="img-fluid"></a><div class="text-center"><p class="mb-0">File name: File 6</p><p>Created at: 03-03-2021</p></div></li>
-                                      <li class="col-md-4 col-6 pb-0"><a href="javascript:void(0);"><img src="../../assets/images/login/1.png" alt="gallary-image" class="img-fluid"></a><div class="text-center"><p class="mb-0">File name: File 7</p><p>Created at: 03-03-2021</p></div></li>
-                                      <li class="col-md-4 col-6 pb-0"><a href="javascript:void(0);"><img src="../../assets/images/login/2.png" alt="gallary-image" class="img-fluid"></a><div class="text-center"><p class="mb-0">File name: File 8</p><p>Created at: 03-03-2021</p></div></li>
-                                      <li class="col-md-4 col-6 pb-0"><a href="javascript:void(0);"><img src="../../assets/images/login/3.png" alt="gallary-image" class="img-fluid"></a><div class="text-center"><p class="mb-0">File name: File 9</p><p>Created at: 03-03-2021</p></div></li>
+                                      <li class="col-md-4 col-6 pb-3"><a href="javascript:void(0);"><img src="../../assets/images/login/1.png" alt="gallary-image" class="img-fluid"></a><div class="text-center"><p class="mb-0">{{ $t('EPR.files.fileName') }}: File 1</p><p>{{ $t('EPR.files.fileCreatedAt') }}: 03-03-2021</p></div></li>
+                                      <li class="col-md-4 col-6 pb-3"><a href="javascript:void(0);"><img src="../../assets/images/login/2.png" alt="gallary-image" class="img-fluid"></a><div class="text-center"><p class="mb-0">{{ $t('EPR.files.fileName') }}: File 2</p><p>{{ $t('EPR.files.fileCreatedAt') }}: 03-03-2021</p></div></li>
+                                      <li class="col-md-4 col-6 pb-3"><a href="javascript:void(0);"><img src="../../assets/images/login/3.png" alt="gallary-image" class="img-fluid"></a><div class="text-center"><p class="mb-0">{{ $t('EPR.files.fileName') }}: File 3</p><p>{{ $t('EPR.files.fileCreatedAt') }}: 03-03-2021</p></div></li>
+                                      <li class="col-md-4 col-6 pb-3"><a href="javascript:void(0);"><img src="../../assets/images/login/1.png" alt="gallary-image" class="img-fluid"></a><div class="text-center"><p class="mb-0">{{ $t('EPR.files.fileName') }}: File 4</p><p>{{ $t('EPR.files.fileCreatedAt') }}: 03-03-2021</p></div></li>
+                                      <li class="col-md-4 col-6 pb-3"><a href="javascript:void(0);"><img src="../../assets/images/login/2.png" alt="gallary-image" class="img-fluid"></a><div class="text-center"><p class="mb-0">{{ $t('EPR.files.fileName') }}: File 5</p><p>{{ $t('EPR.files.fileCreatedAt') }}: 03-03-2021</p></div></li>
+                                      <li class="col-md-4 col-6 pb-3"><a href="javascript:void(0);"><img src="../../assets/images/login/3.png" alt="gallary-image" class="img-fluid"></a><div class="text-center"><p class="mb-0">{{ $t('EPR.files.fileName') }}: File 6</p><p>{{ $t('EPR.files.fileCreatedAt') }}: 03-03-2021</p></div></li>
+                                      <li class="col-md-4 col-6 pb-0"><a href="javascript:void(0);"><img src="../../assets/images/login/1.png" alt="gallary-image" class="img-fluid"></a><div class="text-center"><p class="mb-0">{{ $t('EPR.files.fileName') }}: File 7</p><p>{{ $t('EPR.files.fileCreatedAt') }}: 03-03-2021</p></div></li>
+                                      <li class="col-md-4 col-6 pb-0"><a href="javascript:void(0);"><img src="../../assets/images/login/2.png" alt="gallary-image" class="img-fluid"></a><div class="text-center"><p class="mb-0">{{ $t('EPR.files.fileName') }}: File 8</p><p>{{ $t('EPR.files.fileCreatedAt') }}: 03-03-2021</p></div></li>
+                                      <li class="col-md-4 col-6 pb-0"><a href="javascript:void(0);"><img src="../../assets/images/login/3.png" alt="gallary-image" class="img-fluid"></a><div class="text-center"><p class="mb-0">{{ $t('EPR.files.fileName') }}: File 9</p><p>{{ $t('EPR.files.fileCreatedAt') }}: 03-03-2021</p></div></li>
+                                      <li class="col-md-4 col-6 pb-0"><a href="javascript:void(0);"><img src="../../assets/images/login/3.png" alt="gallary-image" class="img-fluid"></a><div class="text-center"><p class="mb-0">{{ $t('EPR.files.fileName') }}: File 9</p><p>{{ $t('EPR.files.fileCreatedAt') }}: 03-03-2021</p></div></li>
                                   </ul>
                               </div>
                           </template>
@@ -533,8 +484,8 @@
                       <iq-card>
                           <template v-slot:headerTitle>
                               <h3 class="card-title" style="margin-top: 10px;">
-                                  Invoices<span class="float-right">
-                                      <b-button variant="primary" @click="addInvoice"><i class="ri-add-line mr-2"></i>New Invoice</b-button>
+                                  {{ $t('EPR.invoices.invoicesHeader') }}<span class="float-right">
+                                      <b-button variant="primary" @click="addInvoice"><i class="ri-add-line mr-2"></i>{{ $t('EPR.invoices.addInvoice') }}</b-button>
                                   </span>
                               </h3>
                           </template>
@@ -569,8 +520,8 @@
                       <iq-card>
                           <template v-slot:headerTitle>
                               <h3 class="card-title" style="margin-top: 10px;">
-                                  Offers<span class="float-right">
-                                      <b-button variant="primary" @click="addOffer"><i class="ri-add-line mr-2"></i>New Offer</b-button>
+                                  {{ $t('EPR.offers.offersHeader') }}<span class="float-right">
+                                      <b-button variant="primary" @click="addOffer"><i class="ri-add-line mr-2"></i>{{ $t('EPR.offers.addOffer') }}</b-button>
                                   </span>
                               </h3>
                           </template>
@@ -681,8 +632,8 @@ export default {
       dropDownText: '',
       selected: this.value,
       searchOptions: [
-        { value: 'file_name', text: 'File Name' },
-        { value: 'created_at', text: 'Created Date' }
+        { value: 'file_name', text: this.$t('EPR.files.fileName') },
+        { value: 'created_at', text: this.$t('EPR.files.fileCreatedAt') }
       ],
       disabled: true,
       doctor: {
@@ -718,17 +669,18 @@ export default {
       countries: [],
       regions: [],
       columnsInvoices: [
-        { label: 'Number', key: 'invoice_number', class: 'text-left' },
-        { label: 'Date',
+        { label: this.$t('EPR.invoicesColumn.no'), key: 'invoice_number', class: 'text-left' },
+        {
+          label: this.$t('EPR.invoicesColumn.date'),
           key: 'invoice_time',
           class: 'text-left',
           formatter: value => {
             return moment(value).format('YYYY-MM-DD')
           }
         },
-        { label: 'Issued by', key: 'company_name', class: 'text-left' },
-        { label: 'Invoice amount', key: 'total_with_vat', class: 'text-left' },
-        { label: 'Status',
+        { label: this.$t('EPR.invoicesColumn.issuedBy'), key: 'company_name', class: 'text-left' },
+        { label: this.$t('EPR.invoicesColumn.amount'), key: 'total_with_vat', class: 'text-left' },
+        { label: this.$t('EPR.invoicesColumn.status'),
           key: 'status',
           class: 'text-left',
           formatter: (value, key, item) => {
@@ -740,10 +692,10 @@ export default {
         }
       ],
       columnsOffers: [
-        { label: 'Number', key: 'offer_no', class: 'text-left' },
-        { label: 'Date', key: 'date', class: 'text-left' },
-        { label: 'Issued by', key: 'issued_by', class: 'text-left' },
-        { label: 'Amount', key: 'amount', class: 'text-left' }
+        { label: this.$t('EPR.offersColumn.no'), key: 'offer_no', class: 'text-left' },
+        { label: this.$t('EPR.offersColumn.date'), key: 'date', class: 'text-left' },
+        { label: this.$t('EPR.offersColumn.issuedBy'), key: 'issued_by', class: 'text-left' },
+        { label: this.$t('EPR.offersColumn.amount'), key: 'amount', class: 'text-left' }
       ]
     }
   },

@@ -114,6 +114,89 @@
       "action": "Actions"
     }
   },
+  "EPR": {
+    "overviewTab": "Overview",
+    "overview": {
+      "numberOfVisits": "Number of visits",
+      "firstVisit": "Time since first visit",
+      "phone": "Phone",
+      "email": "Email",
+      "address": "Address",
+      "addressUnknown": "Unknown",
+      "addAppointment": "Add appointment",
+      "addAssignment": "Add assignment",
+      "deletePatient": "Delete patient",
+      "personalDoctors": "Personal doctors",
+      "personalDentist": "Personal dentist",
+      "personalSurgeon": "Personal surgeon",
+      "files": "Files",
+      "generalNotes": "General notes",
+      "generalNotesUpdated": "Last updated",
+      "allergies": "Allergies",
+      "allergiesUpdated": "Last updated",
+      "patientNotes": "Patient notes",
+      "patientNotesOpen": "Open",
+      "futureAppointments": "Future appointments",
+      "pastAppointments": "Past appointments"
+    },
+    "personalInfoTab": "Personal Information",
+    "personalInfo": {
+      "edit": "Edit",
+      "personalInformation": "Personal Information",
+      "firstName": "First name",
+      "lastName": "Last name",
+      "dob": "Date of birth",
+      "gender": "Gender",
+      "male": "Male",
+      "female": "Female",
+      "unspecified": "Unspecified",
+      "address": "Address",
+      "postCodeCity": "Postcode, City",
+      "country": "Country",
+      "region": "Region(EU)",
+      "insurance": "Insurance number, insured at",
+      "phone": "Mobile number",
+      "email": "Email address",
+      "taxNumber": "Tax Number",
+      "allergiesAndSensitivites": "Allergies and sensitivites",
+      "generalNotes": "General notes",
+      "personalDoctors": "Personal doctors",
+      "personalDentist": "Dentist",
+      "personalSurgeon": "Surgeon"
+    },
+    "filesTab": "Files",
+    "filesHeader": "Files",
+    "files": {
+      "search": "Search",
+      "searchBy": "Search by",
+      "addFile": "Add file",
+      "fileName": "File name",
+      "fileCreatedAt": "Created at"
+    },
+    "invoicesTab": "Invoices",
+    "invoices": {
+      "invoicesHeader": "Invoices",
+      "addInvoice": "New invoice"
+    },
+    "invoicesColumn": {
+      "no": "Number",
+      "date": "Date",
+      "issuedBy": "Issued by",
+      "amount": "Amount",
+      "status": "Status"
+    },
+    "offersTab": "Offers",
+    "offers": {
+      "offersHeader": "Offers",
+      "addOffer": "New offer"
+    },
+    "offersColumn": {
+      "no": "Number",
+      "date": "Date",
+      "issuedBy": "Issued by",
+      "amount": "Amount"
+    }
+  },
   "offers": {
     "offersHeader": "Offers",
     "offersBtn": "Add Offer",
