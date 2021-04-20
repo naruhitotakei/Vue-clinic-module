@@ -1,14 +1,5 @@
 [
   {
-    "title": "Dashboard",
-    "name": "sidebar.dashboard",
-    "is_heading": true,
-    "is_active": false,
-    "class_name": "",
-    "is_icon_class": true,
-    "icon": ""
-  },
-  {
     "title": "Home",
     "name": "sidebar.dashboard",
     "is_heading": false,
