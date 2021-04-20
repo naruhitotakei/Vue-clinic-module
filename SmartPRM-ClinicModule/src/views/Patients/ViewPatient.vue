@@ -423,14 +423,6 @@
                                   </div>
                               </b-modal>
                           </div>
-                          <div class="text-center p-1" v-if="successfullEditMessage">
-                              <b-alert :show="dismissCountDown" @dismissed="dismissCountDown=0" style="shape-outside: content-box;" class="text-white bg-primary col-md-4 float-right">
-                                  <div class="iq-alert-icon">
-                                      <i class="ri-checkbox-circle-line"></i>
-                                  </div>
-                                  <div class="iq-alert-text">Changes saved</div>
-                              </b-alert>
-                          </div>
                       </iq-card>
                   </tab-content-item>
                   <tab-content-item :active="false" id="files">
@@ -557,6 +549,16 @@
         </b-col>
       </b-row>
     </form>
+    <b-toast id="b-toaster-bottom-right" variant="primary" solid>
+      <template #toast-title>
+        <div class="d-flex flex-grow-1 align-items-baseline">
+          <strong class="mr-auto">Notice</strong>
+        </div>
+      </template>
+      <template #default>
+        <span><i class="ri-checkbox-circle-line"></i>  Changes saved</span>
+      </template>
+    </b-toast>
   </b-container>
 </template>
 <script>
@@ -599,9 +601,6 @@ export default {
       patient: {},
       invoiceItems: [],
       offerItems: rowsOffers,
-      dismissCountDown: 0,
-      dismissSecs: 3,
-      successfullEditMessage: false,
       currentInvoicePage: 1,
       invoicesPerPage: 10,
       currentOfferPage: 1,
@@ -718,7 +717,12 @@ export default {
       this.$router.push('/extra-pages/new-invoice')
     },
     updatePatient () {
-      updateEnquiry(this.patientId, this.patient)
+      updateEnquiry(this.patientId, this.patient).then(() => {
+        console.log('Successful update')
+        this.$bvToast.show('b-toaster-bottom-right')
+      }).catch(errorMsg => {
+        console.log('Error: ' + errorMsg)
+      })
     },
     addOffer () {
 
@@ -776,8 +780,6 @@ export default {
     },
     submitData () {
       this.disabled = true
-      this.dismissCountDown = this.dismissSecs
-      this.successfullEditMessage = true
       this.updatePatient()
       // this.$refs['my-modal'].show() prikazi modal ukoliko dodje do greske neke
     },
