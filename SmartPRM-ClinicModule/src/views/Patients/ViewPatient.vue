@@ -8,11 +8,11 @@
               <div class="iq-edit-list">
                   <tab-nav :pills="true" class="iq-edit-profile d-flex">
                       <a id="myTab" class="nav-link show col p-0 ri-arrow-left-line" style="padding: 10px 0px !important; font-size: x-large;" @click="$router.push('/patients')" :active="false"></a>
-                      <tab-nav-items class="col p-0" :active="true" href="#overview" title="Overview" />
-                      <tab-nav-items class="col-md-2 p-0" :active="false" href="#info" title="Personal Information" />
-                      <tab-nav-items class="col p-0" :active="false" href="#files" title="Files" />
-                      <tab-nav-items class="col p-0" :active="false" href="#invoices" title="Invoices" />
-                      <tab-nav-items class="col p-0" :active="false" href="#offers" title="Offers" />
+                      <tab-nav-items class="col p-0" :active="true" href="#overview" :title="$t('EPR.overviewTab')" />
+                      <tab-nav-items class="col-md-2 p-0" :active="false" href="#info" :title="$t('EPR.personalInfoTab')" />
+                      <tab-nav-items class="col p-0" :active="false" href="#files" :title="$t('EPR.filesTab')" />
+                      <tab-nav-items class="col p-0" :active="false" href="#invoices" :title="$t('EPR.invoicesTab')" />
+                      <tab-nav-items class="col p-0" :active="false" href="#offers" :title="$t('EPR.offersTab')" />
                   </tab-nav>
               </div>
             </template>
