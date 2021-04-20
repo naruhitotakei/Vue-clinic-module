@@ -250,17 +250,17 @@
                       <iq-card style="background: none;">
                           <b-form-group class="row align-items-center /*justify-content-center*/">
                               <b-col md="12">
-                                  <div class="profile-img-edit">
-                                      <b-img :src="user.profile_image" class="profile-pic height-150 width-150" alt="profile-pic" />
-                                      <input type="hidden" v-model="user.profile_image">
-                                      <div class="p-image">
-                                          <div class="position-relative">
-                                              <i class="ri-camera-line upload-button"></i>
-                                              <b-form-file class="h-100 position-absolute" accept="image/*" style="opacity: 0;" @change="previewImage"></b-form-file>
-                                          </div>
-                                      </div>
-                                  </div>
-                                  <b-button variant="primary" @click="disabled = !disabled" class="btn-add-patient btn-edit-patient">{{ $t('EPR.personalInfo.edit') }}</b-button>
+                                <div class="profile-img-edit">
+                                    <b-img :src="user.profile_image" class="profile-pic height-150 width-150" alt="profile-pic" />
+                                    <input type="hidden" v-model="user.profile_image">
+                                    <div class="p-image">
+                                        <div class="position-relative">
+                                            <i class="ri-camera-line upload-button"></i>
+                                            <b-form-file class="h-100 position-absolute upload-image" accept="image/*" @change="previewImage"></b-form-file>
+                                        </div>
+                                    </div>
+                                </div>
+                                <b-button variant="primary" @click="disabled = !disabled" class="btn-add-patient btn-edit-patient">{{ $t('EPR.personalInfo.edit') }}</b-button>
                               </b-col>
                           </b-form-group>
                           <b-row>
@@ -401,7 +401,7 @@
                                           <div class="iq-card-body">
                                               <div class="row">
                                                   <div class="col-4 pr-1 pl-0 text-black">{{ $t('EPR.personalInfo.personalDentist') }}:</div>
-                                                  <b-form-input :disabled="disabled" v-model="patient.dentist_name" class="col-8 mb-2" type="text"></b-form-input>
+                                                  <b-form-input :disabled="disabled" class="col-8 mb-2" type="text"></b-form-input>
                                                   <div class="col-4 pr-1 pl-0 text-black">{{ $t('EPR.personalInfo.personalSurgeon') }}:</div>
                                                   <b-form-input :disabled="disabled" v-model="patient.surgeon" class="col-8" type="text"></b-form-input>
                                               </div>
@@ -566,29 +566,6 @@ import { getInvoices } from '../../services/invoice'
 import { getCountriesList, getRegionsList } from '../../services/commonCodeLists'
 import moment from 'moment'
 
-// var rowsInvoices = [
-//   {
-//     invoice_no: 'invoice372',
-//     amount: '90 EUR',
-//     issued_by: 'Dr. Damjan Ahlin',
-//     date: '27.02.2021-14:00',
-//     status: 'Paid'
-//   },
-//   {
-//     invoice_no: 'invoice405',
-//     amount: '70 EUR',
-//     issued_by: 'Dr. Silvija Lenart',
-//     date: '14.03.2021-11:00',
-//     status: 'Paid'
-//   },
-//   {
-//     invoice_no: 'invoice499',
-//     amount: '70 EUR',
-//     issued_by: 'Dr. Bojan Jernejc',
-//     date: '28.03.2021-12:00',
-//     status: 'Unpaid'
-//   }
-// ]
 var rowsOffers = [
   {
     offer_no: 'offer112',
@@ -703,7 +680,9 @@ export default {
     getPatient (id) {
       getEnquiryById(id).then(response => {
         this.patient = response[0]
-        this.patient.date_of_birth = moment(this.patient.date_of_birth).format('YYYY-MM-DD')
+        if (this.patient.date_of_birth !== null) {
+          this.patient.date_of_birth = moment(this.patient.date_of_birth).format('YYYY-MM-DD')
+        }
       }
       )
     },
@@ -818,3 +797,13 @@ export default {
   }
 }
 </script>
+
+<style lang="scss">
+.upload-image {
+    margin-left: -25px;
+    opacity: 0;
+}
+.upload-image .custom-file-label {
+    cursor: pointer;
+}
+</style>
