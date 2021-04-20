@@ -7,12 +7,12 @@
             <template v-slot:body>
               <div class="iq-edit-list">
                   <tab-nav :pills="true" class="iq-edit-profile d-flex">
-                      <a id="myTab" class="nav-link show col-12 col-sm-1 p-0 ri-arrow-left-line" style="padding: 10px 0px !important; font-size: x-large;" @click="$router.push('/patients')" :active="false"></a>
-                      <tab-nav-items class="col-12 col-sm-2 p-0" :active="true" href="#overview" :title="$t('EPR.overviewTab')" />
-                      <tab-nav-items class="col-12 col-sm-4 p-0" :active="false" href="#info" :title="$t('EPR.personalInfoTab')" />
-                      <tab-nav-items class="col-12 col-sm-1 p-0" :active="false" href="#files" :title="$t('EPR.filesTab')" />
-                      <tab-nav-items class="col-12 col-sm-2 p-0" :active="false" href="#invoices" :title="$t('EPR.invoicesTab')" />
-                      <tab-nav-items class="col-12 col-sm-2 p-0 mobile-border" :active="false" href="#offers" :title="$t('EPR.offersTab')" />
+                      <a id="myTab" class="nav-link show col-12 col-sm-1 col-md-2 p-0 ri-arrow-left-line" style="padding: 10px 0px !important; font-size: x-large;" @click="$router.push('/patients')" :active="false"></a>
+                      <tab-nav-items class="col-12 col-sm-2 col-md-2 p-0" :active="true" href="#overview" :title="$t('EPR.overviewTab')" />
+                      <tab-nav-items class="col-12 col-sm-4 col-md-2 p-0" :active="false" href="#info" :title="$t('EPR.personalInfoTab')" />
+                      <tab-nav-items class="col-12 col-sm-1 col-md-2 p-0" :active="false" href="#files" :title="$t('EPR.filesTab')" />
+                      <tab-nav-items class="col-12 col-sm-2 col-md-2 p-0" :active="false" href="#invoices" :title="$t('EPR.invoicesTab')" />
+                      <tab-nav-items class="col-12 col-sm-2 col-md-2 p-0 mobile-border" :active="false" href="#offers" :title="$t('EPR.offersTab')" />
                   </tab-nav>
               </div>
             </template>
