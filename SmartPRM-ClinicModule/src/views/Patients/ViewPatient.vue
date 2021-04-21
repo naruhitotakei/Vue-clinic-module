@@ -552,11 +552,11 @@
     <b-toast id="b-toaster-bottom-right" variant="primary" solid>
       <template #toast-title>
         <div class="d-flex flex-grow-1 align-items-baseline">
-          <strong class="mr-auto">Notice</strong>
+            <strong class="mr-auto">{{ $t('EPR.notification') }}</strong>
         </div>
       </template>
       <template #default>
-        <span><i class="ri-checkbox-circle-line"></i>  Changes saved</span>
+          <span><i class="ri-checkbox-circle-line"></i>  {{ $t('EPR.changesSaved') }}</span>
       </template>
     </b-toast>
   </b-container>

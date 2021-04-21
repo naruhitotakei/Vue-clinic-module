@@ -195,7 +195,9 @@
       "date": "Datum",
       "issuedBy": "Izdal",
       "amount": "Znesek"
-    }
+    },
+    "notification": "Obvestilo",
+    "changesSaved": "Spremembe shranjene"
   },
   "offers": {
     "offersHeader": "Ponudbe",

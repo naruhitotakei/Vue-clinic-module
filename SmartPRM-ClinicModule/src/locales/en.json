@@ -195,7 +195,9 @@
       "date": "Date",
       "issuedBy": "Issued by",
       "amount": "Amount"
-    }
+    },
+    "notification": "Notification",
+    "changesSaved": "Changes saved"
   },
   "offers": {
     "offersHeader": "Offers",
