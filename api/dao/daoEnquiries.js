@@ -77,6 +77,7 @@ const updateEnquiry = (req, res, id, enquiry) => {
     if (enquiry.region_id) statement += "region_id='" + enquiry.region_id + "', "
     if (enquiry.phone) statement += "phone='" + enquiry.phone + "', "
     if (enquiry.email) statement += "email='" + enquiry.email + "',"
+    if (enquiry.prm_dentist_user_id) statement += "prm_dentist_user_id='" + enquiry.prm_dentist_user_id + "',"
     if (enquiry.tax_registration_number) statement += "tax_registration_number='" + enquiry.tax_registration_number + "',"
     statement = statement.slice(0, -1)
     statement +=" WHERE id=" + id
