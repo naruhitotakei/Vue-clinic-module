@@ -9,7 +9,7 @@ const pool = new Pool({
 })
 
 const getCountriesList = (request, response) => {
-    pool.query("SELECT c.id as value, c.name as text FROM countries c", (error, results) => {
+    pool.query("SELECT c.id as code, c.name as label FROM countries c", (error, results) => {
         if (error) {
             throw error
         }
@@ -18,7 +18,7 @@ const getCountriesList = (request, response) => {
 }
 
 const getRegionsList = (request, response) => {
-    pool.query("SELECT r.id as value, r.country_id, r.name as text FROM regions r", (error, results) => {
+    pool.query("SELECT r.id as code, r.country_id, r.name as label FROM regions r", (error, results) => {
         if (error) {
             throw error
         }
