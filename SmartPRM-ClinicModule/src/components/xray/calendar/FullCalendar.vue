@@ -50,7 +50,6 @@
         </div>
       </div>
       <button type="" class="btn btn-primary">{{ $t('calendarEvent.viewPatient') }}</button>&nbsp;&nbsp;
-      <button type="" class="btn btn-primary">{{ $t('calendarEvent.changeDisplayColor') }}</button>&nbsp;&nbsp;
       <button type="" class="btn btn-primary">{{ $t('calendarEvent.appointmentCancelled') }}</button>
     </form>
   </b-modal>
@@ -89,34 +88,34 @@ export default {
       ],
       color: [
         {
-          label: 'Purple',
-          color: 'primary',
-          value: 'primary'
+          label: 'Default',
+          color: 'default',
+          value: 'default'
         },
         {
-          label: 'Green',
-          color: 'success',
-          value: 'success'
+          label: 'Label 1',
+          color: 'label1',
+          value: 'label1'
         },
         {
-          label: 'Red',
-          color: 'danger',
-          value: 'danger'
+          label: 'Label 2',
+          color: 'label2',
+          value: 'label2'
         },
         {
-          label: 'Yellow',
-          color: 'warning',
-          value: 'warning'
+          label: 'Label 3',
+          color: 'label3',
+          value: 'label3'
         },
         {
-          label: 'Black',
-          color: 'dark',
-          value: 'dark'
+          label: 'Label 4',
+          color: 'label4',
+          value: 'label4'
         },
         {
-          label: 'Blue',
-          color: 'info',
-          value: 'info'
+          label: 'Label 5',
+          color: 'label5',
+          value: 'label5'
         }
       ],
       formData: {
