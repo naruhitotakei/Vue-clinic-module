@@ -260,7 +260,7 @@
                                         </div>
                                     </div>
                                 </div>
-                                <b-button variant="primary" @click="disabled = !disabled" class="btn-add-patient btn-edit-patient">{{ $t('EPR.personalInfo.edit') }}</b-button>
+                                <b-button variant="primary" @click="disabled = !disabled" class="edit-btn">{{ $t('EPR.personalInfo.edit') }}</b-button>
                               </b-col>
                           </b-form-group>
                           <b-row>
@@ -807,6 +807,12 @@ export default {
 }
 .upload-image .custom-file-label {
     cursor: pointer;
+}
+
+.edit-btn {
+    float: right;
+    margin-top: 6.825rem !important;
+    margin-left: 50px !important;
 }
 
 @media (max-width: 576px) {
