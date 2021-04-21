@@ -78,9 +78,9 @@
                                           <div class="iq-card-body">
                                               <div class="row font-size-16 ">
                                                   <div class="col-6"><h6>{{ $t('EPR.overview.personalDentist') }}:</h6></div>
-                                                  <div class="col-6">Dr. Miha Breznik</div>
+                                                  <div v-if="patientsDentist" class="col-6">{{patientsDentist.label}}</div>
                                                   <div class="col-6"><h6>{{ $t('EPR.overview.personalSurgeon') }}:</h6></div>
-                                                  <div class="col-6">Dr. Nika Klemenc</div>
+                                                  <div v-if="patientsSurgeon" class="col-6">{{patientsSurgeon.label}}</div>
                                               </div>
                                           </div>
                                       </template>
@@ -600,6 +600,16 @@ export default {
     filteredRegions () {
       return this.regions.filter((item) => {
         return item.country_id === this.patient.country_id
+      })
+    },
+    patientsDentist: function () {
+      return this.dentists.find((item) => {
+        return item.code === this.patient.prm_dentist_user_id
+      })
+    },
+    patientsSurgeon: function () {
+      return this.dentists.find((item) => {
+        return item.code === this.patient.prm_dentist_user_id
       })
     }
   },
