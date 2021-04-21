@@ -87,6 +87,14 @@ app.get('/api/profile', async function(req, res) {
     }    
 });
 
+app.get('/api/dentists', async function(req, res) {
+    if (req.session.prm_user) { 
+        daoUser.getDentists(req, res)
+    } else {
+       res.status(200).json("NOK: user not logged in")
+    }    
+});
+
 ///////////////////////////////////
 // enquiries, patients
 ///////////////////////////////////

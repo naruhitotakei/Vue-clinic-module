@@ -126,9 +126,19 @@ const editProfile = ((request, response, email, data) => {
     }
 })
 
+const getDentists = (request, response) => {
+    pool.query("SELECT u.id as code, u.name as label FROM users u", (error, results) => {
+        if (error) {
+            throw error
+        }
+        response.status(200).json(results.rows)
+    })
+}
+
 module.exports = {
   getUser,
   hash,
   changePassword,
-  editProfile
+  editProfile,
+  getDentists
 }

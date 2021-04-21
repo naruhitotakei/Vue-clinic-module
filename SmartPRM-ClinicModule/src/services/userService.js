@@ -55,3 +55,15 @@ export async function editProfile (name, email, phoneNumber) {
   })
   return rawResponse.json()
 }
+
+export async function getDentists () {
+  const rawResponse = await fetch('/api/dentists', {
+    method: 'GET',
+    credentials: 'same-origin',
+    headers: {
+      'Accept': 'application/json',
+      'Content-Type': 'application/json'
+    }
+  })
+  return rawResponse.json()
+}
