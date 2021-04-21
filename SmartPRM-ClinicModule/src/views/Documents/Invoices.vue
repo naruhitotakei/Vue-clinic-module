@@ -16,15 +16,12 @@
                                 </form>
                             </div>
                             <iq-card>
-                                <b-form-group label-for="searchOptions" label="Search By:">
-                                  <b-form-select
-                                    plain
-                                    v-model="filterOn"
-                                    :options="searchOptions"
-                                    id="searchFunction"
-                                  >
-                                  </b-form-select>
-                                </b-form-group>
+                              <b-form-group label-for="searchOptions" label="Search By:">
+                              <v-select class="patients" label="text"
+                                :clearable="false" :reduce="filter => filter.value"
+                                :options="searchOptions" @input="filterSelected">
+                              </v-select>
+                              </b-form-group>
                             </iq-card>
                         </div>
                     </template>
@@ -87,12 +84,12 @@ export default {
       dropDownText: '',
       selected: this.value,
       searchOptions: [
-        { value: ['invoice_number'], text: 'Number' },
-        { value: ['patient_name'], text: 'Patient Name' },
-        { value: ['invoice_time'], text: 'Date' },
-        { value: ['company_name'], text: 'Issued by' },
-        { value: ['total_with_vat'], text: 'Invoice amount' },
-        { value: ['status'], text: 'Status' }
+        { value: 'invoice_number', text: 'Number' },
+        { value: 'patient_name', text: 'Patient Name' },
+        { value: 'invoice_time', text: 'Date' },
+        { value: 'company_name', text: 'Issued by' },
+        { value: 'total_with_vat', text: 'Invoice amount' },
+        { value: 'status', text: 'Status' }
       ],
       invoices: [],
       currentPage: 1,
@@ -158,6 +155,10 @@ export default {
     },
     toggleDataLoaded () {
       this.isDataLoaded = !this.isDataLoaded
+    },
+    filterSelected (value) {
+      let array = [value]
+      this.filterOn = array
     }
   },
   mounted () {

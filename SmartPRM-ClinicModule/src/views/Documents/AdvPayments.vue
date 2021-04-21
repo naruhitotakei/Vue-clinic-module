@@ -11,20 +11,17 @@
                         <div class="iq-card-header-toolbar d-flex align-items-center" style="margin-top: -10px;">
                             <div class="iq-search-bar">
                                 <form action="#" class="searchbox">
-                                    <input type="text" v-on:keyup="myFunction($event.target.value)" class="text search-input" placeholder="Search">
+                                    <input type="text" v-model="filter" class="text search-input" placeholder="Search">
                                     <a class="search-link" href="#"><i class="ri-search-line"></i></a>
                                 </form>
                             </div>
                             <iq-card>
-                                <b-form-group label-for="searchOptions"
-                                              label="Search By:">
-                                    <b-form-select plain
-                                                   v-model="selected"
-                                                   :options="searchOptions"
-                                                   id="searchFunction"
-                                                   @change="searchFunction($event)">
-                                    </b-form-select>
-                                </b-form-group>
+                              <b-form-group label-for="searchOptions" label="Search By:">
+                              <v-select class="patients" label="text"
+                                :clearable="false" :reduce="filter => filter.value"
+                                :options="searchOptions" @input="filterSelected">
+                              </v-select>
+                              </b-form-group>
                             </iq-card>
                         </div>
                     </template>
@@ -32,14 +29,17 @@
                         <b-row>
                             <b-col md="12" class="table-responsive">
                                 <b-table id="my-table"
-                                         bordered
-                                         hover
-                                         @row-clicked="$router.push('/extra-pages/advance-payment-example')"
-                                         style="cursor: pointer;"
-                                         :items="paginatedItems"
-                                         :fields="columns"
-                                         :per-page="perPage"
-                                         :current-page="currentPage">
+                                  bordered
+                                  hover
+                                  @row-clicked="$router.push('/extra-pages/advance-payment-example')"
+                                  style="cursor: pointer;"
+                                  :items="paginatedItems"
+                                  :fields="columns"
+                                  :per-page="perPage"
+                                  :current-page="currentPage"
+                                  :filter="filter"
+                                  :filter-included-fields="filterOn"
+                                  @filtered="onFiltered">
                                 </b-table>
                             </b-col>
                         </b-row>
@@ -47,9 +47,9 @@
                             <b-collapse id="collapse-6" class="mb-2"> </b-collapse>
                             <div class="mt-3">
                                 <b-pagination v-model="currentPage"
-                                              :total-rows="totalRows"
-                                              :per-page="perPage"
-                                              aria-controls="my-table"></b-pagination>
+                                  :total-rows="totalRows"
+                                  :per-page="perPage"
+                                  aria-controls="my-table"></b-pagination>
                             </div>
                         </template>
                     </template>
@@ -60,6 +60,8 @@
 </template>
 
 <script>
+import { xray } from '../../config/pluginInit'
+
 var rows = [
   {
     invoice_no: 'advancepayment2393',
@@ -131,6 +133,8 @@ export default {
       currentPage: 1,
       perPage: 10,
       totalRows: rows.length,
+      filter: '',
+      filterOn: [],
       columns: [
         { label: this.$t('advPayments.advPaymentsColumn.no'), key: 'invoice_no', class: 'text-left' },
         { label: this.$t('advPayments.advPaymentsColumn.patientName'), key: 'patient_name', class: 'text-left' },
@@ -150,28 +154,20 @@ export default {
         date: ''
       }
     },
-    searchFunction (event) {
-      this.dropDownText = event
-      console.log('SEARCHBY OPTION:', event)
-      return event
-    },
-    myFunction (event) {
-      console.log('evemt', event)
-      console.log('this.dropDownText', this.dropDownText)
-
-      if (this.dropDownText) {
-        var sorted = rows.filter((item) => {
-          return item[this.dropDownText].toLowerCase().includes(event.toLowerCase())
-        })
-        this.paginatedItems = sorted
-      }
-      console.log('sorted', sorted)
+    filterSelected (value) {
+      let array = [value]
+      this.filterOn = array
     },
     add_invoice () {
       console.log('ADD NEW ADVANCE PAYMENT CLICKED')
+    },
+    onFiltered (filteredItems) {
+      this.totalRows = filteredItems.length
+      this.currentPage = 1
     }
   },
   mounted () {
+    xray.index()
   }
 }
 </script>

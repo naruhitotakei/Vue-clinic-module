@@ -17,13 +17,10 @@
                             </div>
                             <iq-card>
                                 <b-form-group label-for="searchOptions" label="Search By:">
-                                    <b-form-select
-                                      plain
-                                      v-model="filterOn"
-                                      :options="searchOptions"
-                                      id="searchOptions"
-                                    >
-                                    </b-form-select>
+                                  <v-select class="patients" label="text"
+                                    :clearable="false" :reduce="filter => filter.value"
+                                    :options="searchOptions" @input="filterSelected">
+                                  </v-select>
                                 </b-form-group>
                             </iq-card>
                         </div>
@@ -205,6 +202,10 @@ export default {
     },
     toggleDataLoaded () {
       this.isDataLoaded = !this.isDataLoaded
+    },
+    filterSelected (value) {
+      let array = [value]
+      this.filterOn = array
     }
   },
   data () {
@@ -221,15 +222,15 @@ export default {
       filter: '',
       filterOn: [],
       searchOptions: [
-        { value: ['name'], text: 'Name' },
-        { value: ['last_name'], text: 'Last Name' },
-        { value: ['phone'], text: 'Phone' },
-        { value: ['email'], text: 'Email' },
-        { value: ['region'], text: 'Region' },
-        { value: ['country'], text: 'Country' },
-        { value: ['last_visit'], text: 'Last Visit' },
-        { value: ['next_visit'], text: 'Next Visit' },
-        { value: ['personal_dentist'], text: 'Personal Dentist' }
+        { value: 'name', text: 'Name' },
+        { value: 'last_name', text: 'Last Name' },
+        { value: 'phone', text: 'Phone' },
+        { value: 'email', text: 'Email' },
+        { value: 'region', text: 'Region' },
+        { value: 'country', text: 'Country' },
+        { value: 'last_visit', text: 'Last Visit' },
+        { value: 'next_visit', text: 'Next Visit' },
+        { value: 'personal_dentist', text: 'Personal Dentist' }
       ],
       columns: [
         { label: this.$t('patients.patientsColumn.name'), key: 'name', class: 'text-left' },
@@ -248,11 +249,20 @@ export default {
 }
 </script>
 
-<style scoped>
+<style lang="scss">
 .loading {
   padding-left: 10px;
 }
-/deep/ .action-column {
+
+.action-column {
   width: 120px !important;
+}
+
+.patients .vs__search::placeholder,
+.patients .vs__dropdown-toggle,
+.patients .vs__dropdown-menu {
+    border-radius: 10px;
+    min-height: 35px;
+    min-width: 150px;
 }
 </style>

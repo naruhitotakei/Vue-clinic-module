@@ -11,20 +11,17 @@
                         <div class="iq-card-header-toolbar d-flex align-items-center" style="margin-top: -10px;">
                             <div class="iq-search-bar">
                                 <form action="#" class="searchbox">
-                                    <input type="text" class="text search-input" placeholder="Search" @keyup="myFunction($event.target.value)">
+                                    <input type="text" class="text search-input" v-model="filter" placeholder="Search">
                                     <a class="search-link" href="#"><i class="ri-search-line"></i></a>
                                 </form>
                             </div>
                             <iq-card>
-                                <b-form-group label-for="searchoption"
-                                              label="Search By:">
-                                    <b-form-select plain
-                                                   v-model="selected"
-                                                   :options="searchOptions"
-                                                   id="searchOptions"
-                                                   @change="searchfunction($event)">
-                                    </b-form-select>
-                                </b-form-group>
+                              <b-form-group label-for="searchOptions" label="Search By:">
+                              <v-select class="patients" label="text"
+                                :clearable="false" :reduce="filter => filter.value"
+                                :options="searchOptions" @input="filterSelected">
+                              </v-select>
+                              </b-form-group>
                             </iq-card>
                         </div>
                     </template>
@@ -41,6 +38,9 @@
                   :fields="columns"
                   :per-page="perPage"
                   :current-page="currentPage"
+                  :filter="filter"
+                  :filter-included-fields="filterOn"
+                  @filtered="onFiltered"
                 >
                 </b-table>
               </b-col>
@@ -89,26 +89,16 @@ export default {
         amount: ''
       }
     },
-    searchfunction (event) {
-      this.dropDownText = event
-      console.log('SEARCHBY OPTION:', event)
-      console.log('DROPDOWN:', this.dropDownText)
-      return event
-    },
-    myFunction (event) {
-      console.log('evemt', event)
-      console.log('DROPDOWN:', this.dropDownText)
-
-      if (this.dropDownText) {
-        var sorted = rows.filter((item) => {
-          return item[this.dropDownText].toLowerCase().includes(event.toLowerCase())
-        })
-        this.paginatedItems = sorted
-      }
-      console.log('sorted', sorted)
-    },
     add_offer () {
       console.log('ADD NEW OFFER CLICKED')
+    },
+    filterSelected (value) {
+      let array = [value]
+      this.filterOn = array
+    },
+    onFiltered (filteredItems) {
+      this.totalRows = filteredItems.length
+      this.currentPage = 1
     }
   },
   data  () {
@@ -122,6 +112,8 @@ export default {
         { value: 'issue_by', text: 'Issued by' },
         { value: 'amount', text: 'Amount' }
       ],
+      filter: '',
+      filterOn: [],
       items: rows,
       paginatedItems: rows,
       currentPage: 1,
