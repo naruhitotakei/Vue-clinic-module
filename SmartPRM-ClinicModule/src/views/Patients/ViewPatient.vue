@@ -332,15 +332,13 @@
                                                   <template slot="label">
                                                       {{ $t('EPR.personalInfo.country') }}:
                                                   </template>
-                                                  <b-form-select :disabled="disabled" plain v-model="patient.country_id" :options="countries" id="exampleFormControlSelect3">
-                                                  </b-form-select>
+                                                  <v-select :disabled="disabled" :clearable="false" :reduce="country => country.code" class="style-chooser" v-model="patient.country_id" :options="countries"></v-select>
                                               </b-form-group>
                                               <b-form-group class="col-md-12" label-cols-sm="4" label-for="region">
                                                   <template slot="label">
                                                       {{ $t('EPR.personalInfo.region') }}:
                                                   </template>
-                                                  <b-form-select :disabled="disabled" plain v-model="patient.region_id" :options="filteredRegions" id="exampleFormControlSelect3">
-                                                  </b-form-select>
+                                                  <v-select class="style-chooser" :clearable="false" :reduce="region => region.code" :disabled="disabled" v-model="patient.region_id" :options="filteredRegions"> </v-select>
                                               </b-form-group>
                                               <b-form-group class="col-md-12" label-cols-sm="4" label-for="insurance">
                                                   <template slot="label">
@@ -400,10 +398,18 @@
                                           </div>
                                           <div class="iq-card-body">
                                               <div class="row">
-                                                  <div class="col-4 pr-1 pl-0 text-black">{{ $t('EPR.personalInfo.personalDentist') }}:</div>
-                                                  <b-form-input :disabled="disabled" class="col-8 mb-2" type="text"></b-form-input>
-                                                  <div class="col-4 pr-1 pl-0 text-black">{{ $t('EPR.personalInfo.personalSurgeon') }}:</div>
-                                                  <b-form-input :disabled="disabled" v-model="patient.surgeon" class="col-8" type="text"></b-form-input>
+                                                <b-form-group class="col-md-12" label-cols-sm="3" label-for="region">
+                                                  <template slot="label">
+                                                      {{ $t('EPR.personalInfo.personalDentist') }}:
+                                                  </template>
+                                                <v-select :disabled="disabled" :clearable="false" :reduce="dentist => dentist.code" class="style-chooser" v-model="patient.prm_dentist_user_id" :options="dentists"></v-select>
+                                                </b-form-group>
+                                                <b-form-group class="col-md-12" label-cols-sm="3" label-for="region">
+                                                  <template slot="label">
+                                                      {{ $t('EPR.personalInfo.personalSurgeon') }}:
+                                                  </template>
+                                                <v-select :disabled="disabled" :clearable="false" :reduce="dentist => dentist.code" class="style-chooser" v-model="patient.prm_surgeon_user_id" :options="dentists"></v-select>
+                                                </b-form-group>
                                               </div>
                                           </div>
                                       </template>
@@ -565,6 +571,7 @@
 import { xray } from '../../config/pluginInit'
 import { getEnquiryById, updateEnquiry } from '../../services/enquiry'
 import { getInvoices } from '../../services/invoice'
+import { getDentists } from '../../services/userService'
 import { getCountriesList, getRegionsList } from '../../services/commonCodeLists'
 import moment from 'moment'
 
@@ -584,6 +591,7 @@ export default {
     this.getInvoices()
     this.getCountries()
     this.getRegions()
+    this.getDentists()
   },
   computed: {
     fullName () {
@@ -599,6 +607,7 @@ export default {
     return {
       patientId: this.$route.params.patientId,
       patient: {},
+      dentists: [],
       invoiceItems: [],
       offerItems: rowsOffers,
       currentInvoicePage: 1,
@@ -642,6 +651,12 @@ export default {
         background: require('../../assets/images/page-img/profile-bg.jpg'),
         profile: require('../../assets/images/user/11.png')
       },
+      countries1: [
+        { code: 1, label: 'Slovenia' },
+        { code: 2, label: 'Italy' },
+        { code: 3, label: 'Austria' },
+        { code: 4, label: 'Afghanistan' }
+      ],
       countries: [],
       regions: [],
       columnsInvoices: [
@@ -688,6 +703,11 @@ export default {
     getInvoices () {
       getInvoices().then(response => {
         this.invoiceItems = response
+      })
+    },
+    getDentists () {
+      getDentists().then(response => {
+        this.dentists = response
       })
     },
     getCountries () {
@@ -813,6 +833,18 @@ export default {
     float: right;
     margin-top: 6.825rem !important;
     margin-left: 50px !important;
+}
+
+.style-chooser .vs__search::placeholder,
+.style-chooser .vs__dropdown-toggle,
+.style-chooser .vs__dropdown-menu {
+    border-radius: 10px;
+    min-height: 45px;
+}
+
+.vs--disabled .vs__dropdown-toggle, .vs--disabled .vs__clear, .vs--disabled .vs__search, .vs--disabled .vs__selected, .vs--disabled .vs__open-indicator {
+    background-color: #e9ecef !important;
+    margin-top: 4px;
 }
 
 @media (max-width: 576px) {
