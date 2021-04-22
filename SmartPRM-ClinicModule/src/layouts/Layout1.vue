@@ -10,14 +10,6 @@
         <NavBarStyle1 title="Dashboard" :homeURL="{ name: 'dashboard.home' }" @toggle="sidebarMini" :logo="logo" :horizontal="horizontal" :items="horizontalMenu">
           <template slot="responsiveRight">
             <ul class="navbar-nav ml-auto navbar-list">
-              <li class="nav-item">
-                <a class="search-toggle iq-waves-effect language-title" href="#"><img :src="selectedLang.image" alt="img-flaf" class="img-fluid mr-1" style="height: 14px; width: 18px;" /> {{ selectedLang.title }} <i class="ri-arrow-down-s-line"></i></a>
-                <div class="iq-sub-dropdown">
-                  <a class="iq-sub-card" href="javascript:void(0)" v-for="(lang, i) in langsOptions" :key="`Lang${i}`" @click="langChange(lang)">
-                    <img :src="lang.image" alt="img-flaf" class="img-fluid mr-2" />{{ lang.title }}
-                  </a>
-                </div>
-              </li>
               <li class="nav-item iq-full-screen">
                 <a href="#" class="iq-waves-effect" id="btnFullscreen"><i class="ri-fullscreen-line"></i></a>
               </li>
@@ -149,29 +141,33 @@
                   </div>
                 </div>
         <div class="col-md-12 mb-3">
-          <label for="validationDefault01">Name:</label>
-          <input type="text" class="form-control" v-model="logedInUser.name" id="validationDefault01" required>
+          <label for="name">Name:</label>
+          <input type="text" class="form-control" v-model="logedInUser.name" id="name" required>
         </div>
         <div class="col-md-12 mb-3">
-          <label for="validationDefault01">Email:</label>
-          <input type="email" disabled class="form-control" v-model="logedInUser.email" id="validationDefault01" required>
+          <label for="email">Email:</label>
+          <input type="email" disabled class="form-control" v-model="logedInUser.email" id="email" required>
         </div>
         <div class="col-md-12 mb-3">
-          <label for="validationDefault01">Phone:</label>
-          <input type="tel" class="form-control" v-model="logedInUser.phone_number" id="validationDefault01" required>
+          <label for="phone">Phone:</label>
+          <input type="tel" class="form-control" v-model="logedInUser.phone_number" id="phone" required>
         </div>
       </div>
     </form>
   </b-modal>
   <!-- Account Setting -->
   <b-modal v-model="accountModalShow" title="Account Setting" ok-title="Save Changes" @ok="handleSubmit(settingData)" cancel-title="Close">
+    <div class="mb-3">
+      <label>Language</label>
+      <v-select :clearable="false" @input="langChange" :reduce="language => language.value" class="style-chooser" label="title" v-model="logedInUser.locale" :options="langsOptions"></v-select>
+    </div>
     <ValidationObserver ref="form" v-slot="{ handleSubmit }">
     <form novalidate @submit.prevent="handleSubmit(settingData)">
       <div class="form-row">
-      <ValidationProvider class="col-md-12 mb-3" vid="old_password" name="Old password" rules="required|old_password" v-slot="{ errors }">
+      <ValidationProvider class="col-md-12 mb-3" vid="old_password" name="Old password" rules="required" v-slot="{ errors }">
         <div>
-          <label for="validationDefault01">Old Password:</label>
-          <input type="password" v-model="formData.old_password" class="form-control" id="validationDefault01" :class="'form-control mb-0' +(errors.length > 0 ? ' is-invalid' : '')">
+          <label for="oldPassword">Old Password</label>
+          <input type="password" v-model="formData.old_password" class="form-control" id="oldPassword" :class="'form-control mb-0' +(errors.length > 0 ? ' is-invalid' : '')">
           <div class="invalid-feedback">
             <span>{{ errors[0] }}</span>
           </div>
@@ -179,8 +175,8 @@
       </ValidationProvider>
       <ValidationProvider class="col-md-12 mb-3" vid="confirm_password" name="New password" rules="required" v-slot="{ errors }">
         <div>
-          <label for="validationDefault01">New Password:</label>
-          <input type="password" v-model="formData.confirm_password" class="form-control" id="validationDefault01" :class="'form-control mb-0' +(errors.length > 0 ? ' is-invalid' : '')">
+          <label for="newPassword">New Password</label>
+          <input type="password" v-model="formData.confirm_password" class="form-control" id="newPassword" :class="'form-control mb-0' +(errors.length > 0 ? ' is-invalid' : '')">
           <div class="invalid-feedback">
             <span>{{ errors[0] }}</span>
           </div>
@@ -188,8 +184,8 @@
       </ValidationProvider>
       <ValidationProvider class="col-md-12 mb-3" name="Confirm Password" rules="required|confirmed:confirm_password" v-slot="{ errors }">
         <div>
-          <label for="validationDefault01">Confirm New Password:</label>
-          <input type="password" v-model="formData.new_password" class="form-control" id="validationDefault01" :class="'form-control mb-0' +(errors.length > 0 ? ' is-invalid' : '')">
+          <label for="confirmNewPassword">Confirm New Password</label>
+          <input type="password" v-model="formData.new_password" class="form-control" id="confirmNewPassword" :class="'form-control mb-0' +(errors.length > 0 ? ' is-invalid' : '')">
           <div class="invalid-feedback">
             <span>{{ errors[0] }}</span>
           </div>
@@ -231,6 +227,7 @@ import { xray } from '../config/pluginInit'
 import { Users } from '../FackApi/api/chat'
 import { mapGetters, mapActions } from 'vuex'
 import { sso, logout, editProfile } from '../services/userService'
+
 export default {
   name: 'Layout1',
   components: {
@@ -385,6 +382,7 @@ export default {
       sso().then(response => {
         if (typeof response !== 'string') {
           this.logedInUser = response
+          this.$i18n.locale = this.logedInUser.locale
           this.verticalMenu = this.filterMenu(SideBarItems)
         } else {
           this.$router.push({ name: 'auth1.sign-in' })
@@ -424,9 +422,9 @@ export default {
     },
     langChange (lang) {
       this.langChangeState(lang)
-      this.$i18n.locale = lang.value
+      this.$i18n.locale = lang
       document.getElementsByClassName('iq-show')[0].classList.remove('iq-show')
-      if (lang.value === 'ar') {
+      if (lang === 'ar') {
         this.rtlAdd(lang)
       } else {
         this.rtlRemove(lang)
