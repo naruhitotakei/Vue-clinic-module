@@ -76,10 +76,7 @@ app.post('/api/password', async function(req, res) {
 });
 
 // /api/password
-app.get('/api/profile', async function(req, res) {
-    const data = {
-      phone_number: 1234
-    }
+app.post('/api/profile', async function(req, res) {
     if (req.session.prm_user) { 
         daoUser.editProfile(req, res, req.session.prm_user.email, data)
     } else {
