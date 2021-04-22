@@ -384,7 +384,7 @@ export default {
     getUserLogin () {
       sso().then(response => {
         if (typeof response !== 'string') {
-          this.logedInUser = response
+          this.logedInUser = response[0]
           this.verticalMenu = this.filterMenu(SideBarItems)
         } else {
           this.$router.push({ name: 'auth1.sign-in' })
