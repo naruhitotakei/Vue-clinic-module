@@ -124,7 +124,7 @@
               </li>
             </ul>
   <!-- Edit profile modal -->
-  <b-modal v-model="profileModalShow" title="Edit Profile" ok-title="Save Changes" @ok="editProfileData" cancel-title="Close">
+  <b-modal v-model="profileModalShow" title="Edit Profile" ok-title="Save Changes" @ok="editProfile" cancel-title="Close">
     <form>
       <div class="form-row">
         <div style="margin: auto; text-align: center;">
@@ -150,15 +150,15 @@
                 </div>
         <div class="col-md-12 mb-3">
           <label for="validationDefault01">Name:</label>
-          <input type="text" class="form-control" :value="logedInUser.name" id="validationDefault01" required>
+          <input type="text" class="form-control" v-model="logedInUser.name" id="validationDefault01" required>
         </div>
         <div class="col-md-12 mb-3">
           <label for="validationDefault01">Email:</label>
-          <input type="email" class="form-control" :value="logedInUser.email" id="validationDefault01" required>
+          <input type="email" disabled class="form-control" v-model="logedInUser.email" id="validationDefault01" required>
         </div>
         <div class="col-md-12 mb-3">
           <label for="validationDefault01">Phone:</label>
-          <input type="tel" class="form-control" :value="logedInUser.phone_number" id="validationDefault01" required>
+          <input type="tel" class="form-control" v-model="logedInUser.phone_number" id="validationDefault01" required>
         </div>
       </div>
     </form>
@@ -230,7 +230,7 @@ import loader from '../assets/images/logo.png'
 import { xray } from '../config/pluginInit'
 import { Users } from '../FackApi/api/chat'
 import { mapGetters, mapActions } from 'vuex'
-import { sso, logout } from '../services/userService'
+import { sso, logout, editProfile } from '../services/userService'
 export default {
   name: 'Layout1',
   components: {
@@ -336,8 +336,13 @@ export default {
         this.accountModalShow = true
       }
     },
-    editProfileData () {
-      console.log('EDIT FORMDATA:', this.formData)
+    editProfile () {
+      editProfile(this.logedInUser).then(() => {
+        console.log('Successful update')
+        // this.$bvToast.show('b-toaster-bottom-right')
+      }).catch(errorMsg => {
+        console.log('Error: ' + errorMsg)
+      })
     },
     settingData () {
       console.log('setting data submitted')

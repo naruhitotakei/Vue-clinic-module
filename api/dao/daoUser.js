@@ -57,6 +57,25 @@ const getUser = ((request, response, email, password) => {
     )
 })
 
+const getUserById = ((request, response, id) => {
+    return new Promise((resolve, reject) =>
+        pool.query('SELECT * FROM users WHERE id = $1 AND active = true', [id], (error, qResult) => {
+            
+        pool.query('SELECT p.resource_name, s.scope_name FROM prm_role_permission rp JOIN prm_role r ON rp.role_id=r.role_id JOIN prm_permission p ON rp.permission_id=p.permission_id JOIN prm_scope s ON p.scope_id=s.scope_id WHERE rp.role_id = $1', [qResult.rows[0].prm_role_id], (error, qRoleResult) => {
+            if (error) {
+                reject("SQL roles error " + error)
+            }
+            var user = qResult.rows[0]
+            user.permissions = qRoleResult.rows
+            request.session.prm_user = user
+            response.status(200).json(user)
+            resolve(user)
+            return                   
+        })              
+        })
+    )
+})
+
 const hash = ((request, response, password) => {
     console.log("Hashing " + password)
     bcrypt.hash(password, 12).then(function(hash) {
@@ -102,28 +121,19 @@ const changePassword = ((request, response, email, oldpasswordhash, credentials)
     });   
 })
 
-const editProfile = ((request, response, email, data) => {
-    if (data.email || data.name || data.phone_number) {
-         var statement = ["UPDATE users SET "]
-         if (data.email) {
-             request.session.prm_user.email = data.email
-             statement.push("email = " + data.email)
-         }
-         if (data.name) {
-             request.session.prm_user.name = data.name
-             statement.push("name = " + data.name)
-         }
-         if (data.phone_number) {
-             request.session.prm_user.phone_number = data.phone_number
-             statement.push("phone_number = '" + data.phone_number + "'")
-         } 
-         statement.push(" WHERE email = '" + email + "'");
-         pool.query(statement.join('\n') , (error, qResult) => {
-             response.status(200).json("OK: Updated")
-         })                 
-    } else {
-        response.status(200).json("OK: Nothing to do")
-    }
+const editProfile = ((request, response, profile) => {
+    var statement = "UPDATE users SET "
+    if (profile.name) statement += "name='" + profile.name + "',"
+    if (profile.phone_number) statement += "phone_number='" + profile.phone_number + "',"
+    statement = statement.slice(0, -1)
+    statement +=" WHERE email='" + profile.email + "'"
+    console.log('stat: ' + statement)
+    pool.query(statement , (error, results) => {
+        if (error) {
+            throw error
+        }
+        response.status(200).json("OK")
+    })
 })
 
 const getDentists = (request, response) => {
@@ -137,6 +147,7 @@ const getDentists = (request, response) => {
 
 module.exports = {
   getUser,
+  getUserById,
   hash,
   changePassword,
   editProfile,
