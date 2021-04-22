@@ -1,5 +1,11 @@
 const path = require('path');
 const express = require('express');
+var Rollbar = require('rollbar');
+var rollbar = new Rollbar({
+  accessToken: '1922e9135f0a45a292341f0137316fc7',
+  captureUncaught: true,
+  captureUnhandledRejections: true
+});
 const session = require("express-session");
 var cors = require('cors')
 const app = express(),
@@ -22,6 +28,7 @@ app.use(cors({
 app.use(bodyParser.json());
 app.use(express.static(path.join(__dirname, '../prmApp/dist')));
 app.use(session({resave: true, saveUninitialized: true, secret: 'BwhFeenj9DcRqANH', cookie: { maxAge: null }}));
+app.use(rollbar.errorHandler());
  
 ///////////////////////////////////
 //
