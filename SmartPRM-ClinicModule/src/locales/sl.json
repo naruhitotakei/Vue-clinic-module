@@ -137,7 +137,8 @@
       "patientNotes": "Opombe o pacientu",
       "patientNotesOpen": "Odpri",
       "futureAppointments": "Bodoči termini",
-      "pastAppointments": "Pretekli termini"
+      "pastAppointments": "Pretekli termini",
+      "notSelected": "Ni izbrano"
     },
     "personalInfoTab": "Osebni podatki",
     "personalInfo": {

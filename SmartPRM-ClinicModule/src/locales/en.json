@@ -137,7 +137,8 @@
       "patientNotes": "Patient notes",
       "patientNotesOpen": "Open",
       "futureAppointments": "Future appointments",
-      "pastAppointments": "Past appointments"
+      "pastAppointments": "Past appointments",
+      "notSelected": "Not selected"
     },
     "personalInfoTab": "Personal Information",
     "personalInfo": {

@@ -77,10 +77,12 @@
                                           </div>
                                           <div class="iq-card-body">
                                               <div class="row font-size-16 ">
-                                                  <div class="col-6"><h6>{{ $t('EPR.overview.personalDentist') }}:</h6></div>
-                                                  <div v-if="patientsDentist" class="col-6">{{patientsDentist.label}}</div>
-                                                  <div class="col-6"><h6>{{ $t('EPR.overview.personalSurgeon') }}:</h6></div>
-                                                  <div v-if="patientsSurgeon" class="col-6">{{patientsSurgeon.label}}</div>
+                                                  <div class="col-12 col-sm-7"><h6>{{ $t('EPR.overview.personalDentist') }}:</h6></div>
+                                                  <div v-if="patientsDentist" class="col-12 col-sm-5">{{patientsDentist.label}}</div>
+                                                  <div v-if="!patientsDentist" class="col-5">{{ $t('EPR.overview.notSelected') }}</div>
+                                                  <div class="col-7"><h6>{{ $t('EPR.overview.personalSurgeon') }}:</h6></div>
+                                                  <div v-if="patientsSurgeon" class="col-12 col-sm-5">{{patientsSurgeon.label}}</div>
+                                                  <div v-if="!patientsSurgeon" class="col-5">{{ $t('EPR.overview.notSelected') }}</div>
                                               </div>
                                           </div>
                                       </template>
