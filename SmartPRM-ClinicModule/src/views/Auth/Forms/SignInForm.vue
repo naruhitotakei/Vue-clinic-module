@@ -83,8 +83,6 @@ export default {
         } else {
           this.data = response
           this.$i18n.locale = this.data.locale
-          console.log('$i18n:', this.$i18n.locale)
-          console.log('data', this.data.locale)
           if (this.data.locale) {
             sso().then(response1 => {
               this.$emit('logedIn', this.data)
