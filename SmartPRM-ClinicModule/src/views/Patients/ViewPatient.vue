@@ -663,12 +663,6 @@ export default {
         background: require('../../assets/images/page-img/profile-bg.jpg'),
         profile: require('../../assets/images/user/11.png')
       },
-      countries1: [
-        { code: 1, label: 'Slovenia' },
-        { code: 2, label: 'Italy' },
-        { code: 3, label: 'Austria' },
-        { code: 4, label: 'Afghanistan' }
-      ],
       countries: [],
       regions: [],
       columnsInvoices: [
