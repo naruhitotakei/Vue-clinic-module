@@ -47,7 +47,7 @@ app.post('/api/login', async function(req, res) {
 // get loged user data
 app.get('/api/login', (req, res) => {
    if (req.session.prm_user) { 
-        res.status(200).json(req.session.prm_user)
+        daoUser.getUserById(req, res, req.session.prm_user.id)
    } else {
        res.status(200).json("NOK: user not logged in")
    }
@@ -77,8 +77,9 @@ app.post('/api/password', async function(req, res) {
 
 // /api/password
 app.post('/api/profile', async function(req, res) {
+    const data = req.body
     if (req.session.prm_user) { 
-        daoUser.editProfile(req, res, req.session.prm_user.email, data)
+        daoUser.editProfile(req, res, data)
     } else {
        res.status(200).json("NOK: user not logged in")
     }    

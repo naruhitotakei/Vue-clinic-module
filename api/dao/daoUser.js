@@ -102,32 +102,32 @@ const changePassword = ((request, response, email, oldpasswordhash, credentials)
     });   
 })
 
-const editProfile = ((request, response, email, data) => {
-    if (data.email || data.name || data.phone_number) {
-         var statement = ["UPDATE users SET "]
-         if (data.email) {
-             request.session.prm_user.email = data.email
-             statement.push("email = " + data.email)
-         }
-         if (data.name) {
-             request.session.prm_user.name = data.name
-             statement.push("name = " + data.name)
-         }
-         if (data.phone_number) {
-             request.session.prm_user.phone_number = data.phone_number
-             statement.push("phone_number = '" + data.phone_number + "'")
-         } 
-         statement.push(" WHERE email = '" + email + "'");
-         pool.query(statement.join('\n') , (error, qResult) => {
-             response.status(200).json("OK: Updated")
-         })                 
-    } else {
-        response.status(200).json("OK: Nothing to do")
-    }
+const editProfile = ((request, response, profile) => {
+    var statement = "UPDATE users SET "
+    if (profile.name) statement += "name='" + profile.name + "',"
+    if (profile.phone_number) statement += "phone_number='" + profile.phone_number + "',"
+    statement = statement.slice(0, -1)
+    statement +=" WHERE email='" + profile.email + "'"
+    console.log('stat: ' + statement)
+    pool.query(statement , (error, results) => {
+        if (error) {
+            throw error
+        }
+        response.status(200).json("OK")
+    })
 })
 
 const getDentists = (request, response) => {
     pool.query("SELECT u.id as code, u.name as label FROM users u", (error, results) => {
+        if (error) {
+            throw error
+        }
+        response.status(200).json(results.rows)
+    })
+}
+
+const getUserById = (request, response, id) => {
+    pool.query("SELECT * FROM users WHERE id = $1", [id], (error, results) => {
         if (error) {
             throw error
         }
@@ -140,5 +140,6 @@ module.exports = {
   hash,
   changePassword,
   editProfile,
-  getDentists
+  getDentists,
+  getUserById
 }
