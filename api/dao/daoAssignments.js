@@ -53,6 +53,12 @@ const getAssignments = (request, response, scope, userid) =>  {
     }
 }
 
+const finishAssignment = (req, res, assignmentDescriptor) =>  {
+    pool.query("UPDATE todos SET completed=$2 WHERE id=$1" , [assignmentDescriptor.id, assignmentDescriptor.finished])
+    res.status(200).json("OK")
+}
+
 module.exports = {
-  getAssignments
+  getAssignments,
+  finishAssignment
 }

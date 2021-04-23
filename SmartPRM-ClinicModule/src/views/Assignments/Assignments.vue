@@ -14,7 +14,7 @@
                             <b-list-group class="list-group-flush" id="todaysAssignments">
                                 <b-list-group-item v-for="(item, index) in todaysAssigments" :key="index">
                                     <div class="assignments-container" :class="{ 'taskIsActive' : !item.completed}">
-                                        <b-checkbox v-model="item.completed" :disabled="item.disabled" name="check-button" inline :key="index" class="completed-assignment"></b-checkbox>
+                                        <b-checkbox v-model="item.completed" :disabled="item.disabled" name="check-button" inline :key="index" class="completed-assignment" @change="finishAssignment(item.id, $event)"></b-checkbox>
                                         <span>{{ item.description }}</span>
                                         <span class="pl-5">{{ item.patientname }} {{ item.patientlastname }}</span>
                                         <span class="pl-5">Dr. Zobo Zdravnik</span>
@@ -46,7 +46,7 @@
                         <b-list-group class="list-group-flush" id="overdueAssignments">
                             <b-list-group-item v-for="(item, index) in overdueAssignments" :key="index">
                                 <div class="assignments-container" :class="{ 'taskIsActive' : !item.completed}">
-                                    <b-checkbox v-model="item.completed" :disabled="item.disabled" name="check-button" inline :key="index" class="completed-assignment"></b-checkbox>
+                                    <b-checkbox v-model="item.completed" :disabled="item.disabled" name="check-button" inline :key="index" class="completed-assignment" @change="finishAssignment(item.id, $event)"></b-checkbox>
                                     <span>{{ item.description }}</span>
                                     <span class="pl-5">{{ item.patientname }} {{ item.patientlastname }}</span>
                                     <span class="pl-5">Dr. Zobo Zdravnik</span>
@@ -77,7 +77,7 @@
                         <b-list-group class="list-group-flush" id="futureAssignments" :per-page="futurePerPage" :current-page="futureCurrentPage">
                             <b-list-group-item v-for="(item, index) in futureAssigments" :key="index">
                                 <div class="assignments-container" :class="{ 'taskIsActive' : !item.completed}">
-                                    <b-checkbox v-model="item.completed" :disabled="item.disabled" name="check-button" inline :key="index" class="completed-assignment"></b-checkbox>
+                                    <b-checkbox v-model="item.completed" :disabled="item.disabled" name="check-button" inline :key="index" class="completed-assignment" @change="finishAssignment(item.id, $event)"></b-checkbox>
                                     <span>{{ item.description }}</span>
                                     <span class="pl-5">{{ item.patientname }} {{ item.patientlastname }}</span>
                                     <span class="pl-5">Dr. Zobo Zdravnik</span>
@@ -108,7 +108,7 @@
                         <b-list-group class="list-group-flush" id="completedAssignments" :per-page="completedPerPage" :current-page="completedCurrentPage">
                             <b-list-group-item v-for="(item, index) in completedAssigments" :key="index">
                                 <div class="assignments-container" :class="{ 'taskIsActive' : !item.completed}">
-                                    <b-checkbox v-model="item.completed" :disabled="item.disabled" name="check-button" inline :key="index" class="completed-assignment"></b-checkbox>
+                                    <b-checkbox v-model="item.completed" :disabled="item.disabled" name="check-button" inline :key="index" class="completed-assignment" @change="finishAssignment(item.id, $event)"></b-checkbox>
                                     <span>{{ item.description }}</span>
                                     <span class="pl-5">{{ item.patientname }} {{ item.patientlastname }}</span>
                                     <span class="pl-5">Dr. Zobo Zdravnik</span>
@@ -142,7 +142,7 @@
 </style>
 <script>
 import { xray } from '../../config/pluginInit'
-import { getAssignments } from '../../services/assignmentsService'
+import { getAssignments, finishAssignment } from '../../services/assignmentsService'
 
 export default {
   name: 'Assignments',
@@ -174,8 +174,11 @@ export default {
         this.overdueTotalRows = this.items.length
         this.futureTotalRows = this.items.length
         // this.completedTotalRows = this.items.length
-      }
-      )
+      })
+    },
+    finishAssignment (id, finished) {
+      finishAssignment(id, finished).then(response => {
+      })
     }
   },
   data () {
