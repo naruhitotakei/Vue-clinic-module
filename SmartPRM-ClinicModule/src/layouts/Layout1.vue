@@ -10,7 +10,7 @@
         <NavBarStyle1 title="Dashboard" :homeURL="{ name: 'dashboard.home' }" @toggle="sidebarMini" :logo="logo" :horizontal="horizontal" :items="horizontalMenu">
           <template slot="responsiveRight">
             <ul class="navbar-nav ml-auto navbar-list">
-              <li class="nav-item iq-full-screen">
+              <li class="nav-item iq-full-screen full-screen">
                 <a href="#" class="iq-waves-effect" id="btnFullscreen"><i class="ri-fullscreen-line"></i></a>
               </li>
               <li class="nav-item">
@@ -18,7 +18,7 @@
                   <i class="ri-notification-3-fill"></i>
                   <span class="bg-danger dots"></span>
                 </a>
-                <div class="iq-sub-dropdown">
+                <div class="iq-sub-dropdown sub-font sub-notification">
                   <div class="iq-card shadow-none m-0">
                     <div class="iq-card-body p-0 ">
                       <div class="bg-primary p-3">
@@ -45,7 +45,7 @@
                   <i class="ri-mail-open-fill"></i>
                   <span class="bg-primary count-mail"></span>
                 </a>
-                <div class="iq-sub-dropdown">
+                <div class="iq-sub-dropdown sub-font">
                   <div class="iq-card shadow-none m-0">
                     <div class="iq-card-body p-0 ">
                       <div class="bg-primary p-3">
@@ -440,4 +440,9 @@ export default {
 </script>
 <style>
   @import url("../assets/css/custom.css");
+  @media (max-width: 992px) {
+  .full-screen {
+    display: none;
+  }
+}
 </style>

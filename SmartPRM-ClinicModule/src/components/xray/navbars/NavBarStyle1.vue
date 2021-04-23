@@ -15,19 +15,18 @@
           <List :items="items" class="d-flex"></List>
         </div>
       </div>
-      <nav class="navbar navbar-expand-lg navbar-light p-0">
-        <b-navbar-toggle target="nav-collapse">
-          <i class="ri-menu-3-line"></i>
-        </b-navbar-toggle>
-        <div class="iq-menu-bt align-self-center">
+      <nav class="navbar navbar-expand-lg navbar-light p-0 lg-position">
+        <div class="nav-responsive">
+          <slot name="responsiveRight" />
+        </div>
+        <div class="iq-menu-bt">
           <div class="wrapper-menu" @click="miniSidebar">
             <div class="main-circle"><i class="ri-more-fill"></i></div>
             <div class="hover-circle"><i class="ri-more-2-fill"></i></div>
           </div>
         </div>
-        <b-collapse id="nav-collapse" is-nav>
-          <slot name="responsiveRight" />
-        </b-collapse>
+        <!-- <b-collapse id="nav-collapse" is-nav>
+        </b-collapse> -->
         <slot name="right" />
       </nav>
     </div>
@@ -70,3 +69,7 @@ export default {
   }
 }
 </script>
+
+<style scoped>
+  @import url("../../../assets/css/navbar-responsive.css");
+</style>

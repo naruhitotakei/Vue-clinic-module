@@ -1,0 +1,118 @@
+@media (max-width: 330px) {
+    .nav-responsive {
+      font-size: 30px;
+      line-height: 15px;
+      width: 210px;
+      position: absolute;
+    }
+    .iq-menu-bt {
+      right: 200px !important;
+    }
+  }
+  
+@media (min-width: 331px) and (max-width: 409px) {
+    .nav-responsive {
+      font-size: 30px;
+      line-height: 15px;
+      width: 255px;
+      position: absolute;
+    }
+    .iq-menu-bt {
+      right: 200px !important;
+    }
+}
+  
+@media (min-width: 410px) and (max-width: 529px) {
+    .nav-responsive {
+      font-size: 30px;
+      line-height: 15px;
+      width: 300px;
+      position: absolute;
+    }
+    .iq-menu-bt {
+      right: 200px !important;
+    }
+}
+  
+@media (min-width: 530px) and (max-width: 620px) {
+    .nav-responsive {
+      font-size: 30px;
+      line-height: 15px;
+      width: 415px;
+    }
+    .iq-menu-bt {
+      right: 200px !important;
+    }
+}
+@media (min-width: 621px) and (max-width: 700px) {
+    .nav-responsive {
+      font-size: 30px;
+      line-height: 15px;
+      width: 520px;
+    }
+    .iq-menu-bt {
+      right: 200px !important;
+    }
+}
+  
+@media (min-width: 701px) and (max-width: 740px) {
+    .nav-responsive {
+      font-size: 30px;
+      line-height: 15px;
+      width: 600px;
+    }
+    .iq-menu-bt {
+      right: 190px !important;
+    }
+}
+  
+@media (min-width: 741px) and (max-width: 810px) {
+    .nav-responsive {
+      font-size: 30px;
+      line-height: 15px;
+      width: 640px;
+    }
+    .iq-menu-bt {
+      right: 180px !important;
+    }
+}
+  
+@media (min-width: 811px) and (max-width: 992px) {
+    .nav-responsive {
+      font-size: 30px;
+      line-height: 15px;
+      width: 690px;
+    }
+    .iq-menu-bt {
+      right: 180px !important;
+    }
+}
+  
+@media (min-width: 993px) {
+    .lg-position {
+      float: right;
+    }
+    .iq-menu-bt {
+      right: 285px !important;
+    }
+}
+
+@media (max-width: 993px) {
+    .sub-font {
+        font-size: 13px;
+    }
+}
+
+@media (max-width: 409px) {
+    .sub-notification {
+        right: -20px !important;
+        width: 225px !important;
+    }
+}
+
+@media (max-width: 340px) {
+    .sub-notification {
+        right: -12px !important;
+        width: 170px !important;
+    }
+}
