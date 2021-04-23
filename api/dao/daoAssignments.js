@@ -8,13 +8,24 @@ const pool = new Pool({
   port: process.env.POSTGRES_PORT || 5432,
 })
 
-const getAssignments = (request, response, scope, userid) =>  {
+const getAssignments = (request, response, scope, userid, due) =>  {
+    var condition = null;
+    if (due == "today") {
+        condition = "WHERE (todos.due_at = now()::date) AND completed = false"
+    } else if (due == "future") {
+        condition = "WHERE (todos.due_at > now()::date) AND completed = false"
+    } else if (due == "past") {
+        condition = "WHERE (todos.due_at < now()::date)  AND completed = false"
+    } else {
+        response.status(200).json("NOK: Unknown due " + due)
+        return
+    }
     if (scope == "All") {
         var statement = ["SELECT todos.*, enquiries.name AS patientname, enquiries.last_name AS patientlastname, users.name AS todoname, dentists.name AS dentistname FROM todos",
                          "LEFT JOIN enquiries ON todos.enquiry_id = enquiries.id",
                          "LEFT JOIN users ON todos.user_id = users.id",
                          "LEFT JOIN users dentists ON enquiries.prm_dentist_user_id = users.id",
-                         "WHERE ( (todos.due_at = now()::date) OR (todos.due_at < now()::date AND todos.completed=false) )",
+                         condition,
                          "ORDER BY todos.due_at ASC"].join('\n') 
         pool.query(statement, (error, results) => {
             if (error) {
@@ -27,7 +38,7 @@ const getAssignments = (request, response, scope, userid) =>  {
                          "LEFT JOIN enquiries ON todos.enquiry_id = enquiries.id",
                          "LEFT JOIN users ON todos.user_id = users.id",
                          "LEFT JOIN users dentists ON enquiries.prm_dentist_user_id = users.id",
-                         "WHERE ( (todos.due_at = now()::date) OR (todos.due_at < now()::date AND todos.completed=false) )",
+                         condition,
                          "AND users.id = $1",
                          "ORDER BY todos.due_at ASC"].join('\n') 
         pool.query(statement, [userid], (error, results) => {
@@ -41,7 +52,7 @@ const getAssignments = (request, response, scope, userid) =>  {
                          "LEFT JOIN enquiries ON todos.enquiry_id = enquiries.id",
                          "LEFT JOIN users ON todos.user_id = users.id",
                          "LEFT JOIN users dentists ON enquiries.prm_dentist_user_id = users.id",
-                         "WHERE ( (todos.due_at = now()::date) OR (todos.due_at < now()::date AND todos.completed=false) )",
+                         condition,
                          "AND ( users.prm_role_id = (SELECT role_id FROM prm_role where role_name = 'Nurse') OR users.prm_role_id = (SELECT role_id FROM prm_role where role_name = 'SuperNurse') )",
                          "ORDER BY todos.due_at ASC"].join('\n') 
         pool.query(statement, [userid], (error, results) => {
@@ -54,7 +65,7 @@ const getAssignments = (request, response, scope, userid) =>  {
 }
 
 const finishAssignment = (req, res, assignmentDescriptor) =>  {
-    pool.query("UPDATE todos SET completed=$2 WHERE id=$1" , [assignmentDescriptor.id, assignmentDescriptor.finished])
+    pool.query("UPDATE todos SET completed=$2, updated_at=now()  WHERE id=$1" , [assignmentDescriptor.id, assignmentDescriptor.finished])
     res.status(200).json("OK")
 }
 

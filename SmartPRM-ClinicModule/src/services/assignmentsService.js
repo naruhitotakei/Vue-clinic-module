@@ -1,5 +1,5 @@
-export async function getAssignments () {
-  const rawResponse = await fetch('/api/assignments', {
+export async function getAssignments (due) {
+  const rawResponse = await fetch('/api/assignments/' + due, {
     credentials: 'same-origin',
     headers: {
       'Accept': 'application/json'

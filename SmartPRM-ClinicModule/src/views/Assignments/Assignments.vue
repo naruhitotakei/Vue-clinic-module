@@ -150,30 +150,21 @@ export default {
     xray.index()
     this.getAssignments()
   },
-  computed: {
-    todaysAssigments () {
-      return this.todaysTotalRows === 0 ? [] : this.items.slice((this.todayCurrentPage - 1) * this.todayPerPage, this.todayCurrentPage * this.todayPerPage)
-    },
-    overdueAssignments () {
-      return this.overdueTotalRows === 0 ? [] : this.items.slice((this.overdueCurrentPage - 1) * this.overduePerPage, this.overdueCurrentPage * this.overduePerPage)
-    },
-    futureAssigments () {
-      return this.futureTotalRows === 0 ? [] : this.items.slice((this.futureCurrentPage - 1) * this.futurePerPage, this.futureCurrentPage * this.futurePerPage)
-    },
-    completedAssigments () {
-      return this.completedTotalRows === 0 ? [] : this.items.slice((this.completedCurrentPage - 1) * this.completedPerPage, this.completedCurrentPage * this.completedPerPage)
-    }
-  },
   watch: {
   },
   methods: {
     getAssignments () {
-      getAssignments().then(response => {
-        this.items = response
-        this.todaysTotalRows = this.items.length
-        this.overdueTotalRows = this.items.length
-        this.futureTotalRows = this.items.length
-        // this.completedTotalRows = this.items.length
+      getAssignments('today').then(response => {
+        this.todaysAssigments = response
+        this.todaysTotalRows = response.length
+      })
+      getAssignments('future').then(response => {
+        this.futureAssigments = response
+        this.todaysTotalRows = response.length
+      })
+      getAssignments('past').then(response => {
+        this.overdueAssignments = response
+        this.overdueTotalRows = response.length
       })
     },
     finishAssignment (id, finished) {
@@ -185,10 +176,13 @@ export default {
     return {
       disabled: false,
       index: [],
-      items: [],
+      todaysAssigments: [],
+      overdueAssignments: [],
+      futureAssigments: [],
       todaysTotalRows: 0,
       overdueTotalRows: 0,
       futureTotalRows: 0,
+      completedAssigments: [],
       completedTotalRows: 0,
       todayCurrentPage: 1,
       todayPerPage: 10,

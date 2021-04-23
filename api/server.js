@@ -178,9 +178,10 @@ app.get('/apitest/deleteenquiries/:id', (req, res) => {
 ///////////////////////////////////
 // assignments
 ///////////////////////////////////
-app.get('/api/assignments', (req, res) => {
+app.get('/api/assignments/:due', (req, res) => {
+  const due = req.params.due
   if(req.session.prm_user && req.session.prm_user.permissions && checkPermission(req.session.prm_user.permissions, assignmentsPermission))
-      daoAssignments.getAssignments(req, res, getScope(req.session.prm_user.permissions, assignmentsPermission), req.session.prm_user.id)
+      daoAssignments.getAssignments(req, res, getScope(req.session.prm_user.permissions, assignmentsPermission), req.session.prm_user.id, due)
   else
       res.status(401).json("OK: user unauthorized")
 });
