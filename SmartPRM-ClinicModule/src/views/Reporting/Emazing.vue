@@ -27,13 +27,13 @@
         <iq-card>
           <template v-slot:body>
               <h5 class="card-title">{{ $t('reportingEmazing.servicesSummary') }}</h5>
-            <b-table small :items="items1" :fields="columns1" class="mb-0"></b-table>
+            <b-table small :items="servicesSummaryItems" :fields="servicesSummaryColumns" class="mb-0"></b-table>
           </template>
         </iq-card>
         <iq-card>
           <template v-slot:body>
               <h5 class="card-title">{{ $t('reportingEmazing.servicesList') }}</h5>
-            <b-table small :items="items2" :fields="columns2" class="mb-0"></b-table>
+            <b-table small :items="servicesListItems" :fields="servicesListColumns" class="mb-0"></b-table>
           </template>
         </iq-card>
     </div>
@@ -66,7 +66,7 @@ export default {
         { label: this.$t('reportingEmazing.servicesSummaryColumn.serviceCount'), key: 'count', class: 'text-left' },
         { label: this.$t('reportingEmazing.servicesSummaryColumn.serviceAmount'), key: 'sum', class: 'text-left' }
       ],
-      servicesSummary: [],
+      servicesSummaryItems: [],
       servicesListColumns: [
         { label: this.$t('reportingEmazing.servicesListColumn.serviceDate'), key: 'date', formatter: (value, key, item) => { return this.formatDateString(value) } },
         { label: this.$t('reportingEmazing.servicesListColumn.serviceTitle'), key: 'service_title', class: 'text-left' },
@@ -75,7 +75,7 @@ export default {
         { label: this.$t('reportingEmazing.servicesListColumn.serviceFee'), key: 'fee', class: 'text-left' },
         { label: this.$t('reportingEmazing.servicesListColumn.serviceDoctor'), key: 'doctor', class: 'text-left' }
       ],
-      servicesList: []
+      servicesListItems: []
     }
   },
   methods: {
@@ -138,7 +138,7 @@ export default {
     getServicesReport () {
       getEmazingServicesReport(this.fromdate, this.todate, this.countrySelect).then(response => {
         if (typeof response !== 'string') {
-          this.servicesSummary = response
+          this.servicesSummaryItems = response
         } else {
           console.error(response)
         }
@@ -147,7 +147,7 @@ export default {
     getServicesList () {
       getServiceList(this.fromdate, this.todate, this.countrySelect).then(response => {
         if (typeof response !== 'string') {
-          this.servicesList = response
+          this.servicesListItems = response
         } else {
           console.error(response)
         }
