@@ -17,16 +17,6 @@ ALTER TABLE invoice ADD COLUMN device_id VARCHAR(20)
 CONSTRAINT invoice_company_premise_device_fk REFERENCES prm_company_premise_device(device_id);
 
 --############################################################
---# adding invoice item key to invoice
---############################################################
-
-ALTER TABLE prm_invoice_item 
-ALTER COLUMN item_id TYPE SERIAL;
-
-ALTER TABLE invoice ADD COLUMN invoice_item_id SERIAL 
-CONSTRAINT invoice_invoiceitem_fk REFERENCES prm_invoice_item(item_id);
-
---############################################################
 --# Linking prm_product table to invoice_line_item
 --############################################################
 
