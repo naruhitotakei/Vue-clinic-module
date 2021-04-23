@@ -166,6 +166,10 @@ export default {
         this.overdueAssignments = response
         this.overdueTotalRows = response.length
       })
+      getAssignments('finished').then(response => {
+        this.completedAssigments = response
+        this.completedTotalRows = response.length
+      })
     },
     finishAssignment (id, finished) {
       finishAssignment(id, finished).then(response => {

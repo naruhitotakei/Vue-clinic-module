@@ -16,6 +16,8 @@ const getAssignments = (request, response, scope, userid, due) =>  {
         condition = "WHERE (todos.due_at > now()::date) AND completed = false"
     } else if (due == "past") {
         condition = "WHERE (todos.due_at < now()::date)  AND completed = false"
+    } else if (due == "finished") {
+        condition = "WHERE ( (date_trunc('month', todos.updated_at) + INTERVAL '1 MONTH') > now()::date  ) AND completed = true"        
     } else {
         response.status(200).json("NOK: Unknown due " + due)
         return
