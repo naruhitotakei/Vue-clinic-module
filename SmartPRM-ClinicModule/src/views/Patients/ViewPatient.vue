@@ -116,7 +116,7 @@
                                           <b-card-title>{{ $t('EPR.overview.generalNotes') }}</b-card-title>
                                           <hr />
                                           <b-card-text style="color:black;">{{patient.general_notes}}</b-card-text>
-                                          <b-card-text><small class="text-muted">{{ $t('EPR.overview.generalNotesUpdated') }} {{patient.general_notes_updated_at | formatDate}}</small></b-card-text>
+                                          <b-card-text><small class="text-muted">{{ $t('EPR.overview.generalNotesUpdated') }} {{patient.general_notes_updated_at | fromNowDate}}</small></b-card-text>
                                       </b-card>
                                   </b-col>
                                   <b-card text-variant="white"
@@ -125,7 +125,7 @@
                                       <b-card-title class="text-white">{{ $t('EPR.overview.allergies') }}</b-card-title>
                                       <blockquote class="blockquote mb-0">
                                           <p class="font-size-14">{{patient.allergies}}</p>
-                                          <footer class="blockquote-footer text-white font-size-12">{{ $t('EPR.overview.allergiesUpdated') }} {{patient.allergies_updated_at | formatDate}}</footer>
+                                          <footer class="blockquote-footer text-white font-size-12">{{ $t('EPR.overview.allergiesUpdated') }} {{patient.allergies_updated_at | fromNowDate}}</footer>
                                       </blockquote>
                                   </b-card>
                                   <b-row>
@@ -138,59 +138,10 @@
                                                       </div>
                                                   </div>
                                                   <ul class="list-inline m-0 overflow-y-scroll" style="max-height: 300px;">
-                                                      <li class="d-flex align-items-center justify-content-between mb-3">
+                                                      <li v-for="(note,index) in notes" :key="index" class="d-flex align-items-center justify-content-between mb-3">
                                                           <div>
-                                                              <h6>Zdravljenje je uspelo!</h6>
-                                                              <p class="mb-0">03/03/2021</p>
-                                                          </div>
-                                                          <div><a href="#" class="btn iq-bg-primary mr-2">{{ $t('EPR.overview.patientNotesOpen') }}</a></div>
-                                                      </li>
-                                                      <li class="d-flex align-items-center justify-content-between mb-3">
-                                                          <div>
-                                                              <h6>Rana se celi</h6>
-                                                              <p class="mb-0">03/03/2021</p>
-                                                          </div>
-                                                          <div><a href="#" class="btn iq-bg-primary mr-2">{{ $t('EPR.overview.patientNotesOpen') }}</a></div>
-                                                      </li>
-                                                      <li class="d-flex align-items-center justify-content-between mb-3">
-                                                          <div>
-                                                              <h6>Brez efekta</h6>
-                                                              <p class="mb-0">03/03/2021</p>
-                                                          </div>
-                                                          <div><a href="#" class="btn iq-bg-primary mr-2">{{ $t('EPR.overview.patientNotesOpen') }}</a></div>
-                                                      </li>
-                                                      <li class="d-flex align-items-center justify-content-between mb-3">
-                                                          <div>
-                                                              <h6>Poseg uspel</h6>
-                                                              <p class="mb-0">03/03/2021</p>
-                                                          </div>
-                                                          <div><a href="#" class="btn iq-bg-primary mr-2">{{ $t('EPR.overview.patientNotesOpen') }}</a></div>
-                                                      </li>
-                                                      <li class="d-flex align-items-center justify-content-between mb-3">
-                                                          <div>
-                                                              <h6>Zlom zalivke</h6>
-                                                              <p class="mb-0">03/03/2021 </p>
-                                                          </div>
-                                                          <div><a href="#" class="btn iq-bg-primary mr-2">{{ $t('EPR.overview.patientNotesOpen') }}</a></div>
-                                                      </li>
-                                                      <li class="d-flex align-items-center justify-content-between mb-3">
-                                                          <div>
-                                                              <h6>Brez efekta</h6>
-                                                              <p class="mb-0">03/03/2021 </p>
-                                                          </div>
-                                                          <div><a href="#" class="btn iq-bg-primary mr-2">{{ $t('EPR.overview.patientNotesOpen') }}</a></div>
-                                                      </li>
-                                                      <li class="d-flex align-items-center justify-content-between mb-3">
-                                                          <div>
-                                                              <h6>Zdravljenje je uspelo!</h6>
-                                                              <p class="mb-0">03/03/2021 </p>
-                                                          </div>
-                                                          <div><a href="#" class="btn iq-bg-primary mr-2">{{ $t('EPR.overview.patientNotesOpen') }}</a></div>
-                                                      </li>
-                                                      <li class="d-flex align-items-center justify-content-between mb-3">
-                                                          <div>
-                                                              <h6>Zdravljenje zoba</h6>
-                                                              <p class="mb-0">03/03/2021 </p>
+                                                              <h6>{{note.content}}</h6>
+                                                              <p class="mb-0">{{note.created_at | formatDate}}</p>
                                                           </div>
                                                           <div><a href="#" class="btn iq-bg-primary mr-2">{{ $t('EPR.overview.patientNotesOpen') }}</a></div>
                                                       </li>
@@ -207,10 +158,10 @@
                                                       </div>
                                                   </div>
                                                   <ul class="iq-timeline">
-                                                      <li>
+                                                      <li v-for="(item,index) in futureAppointments" :key="index">
                                                           <div class="timeline-dots border-success"></div>
-                                                          <h6 class="">Pregled</h6>
-                                                          <small class="mt-1">23 June 2021</small>
+                                                          <h6 class="">{{item.kind}}</h6>
+                                                          <small class="mt-1">{{item.date | formatDate}}</small>
                                                       </li>
                                                   </ul>
                                               </template>
@@ -224,20 +175,10 @@
                                                       </div>
                                                   </div>
                                                   <ul class="iq-timeline">
-                                                      <li>
+                                                      <li v-for="(item,index) in pastAppointments" :key="index">
                                                           <div class="timeline-dots border-success"></div>
-                                                          <h6 class="">Zalivka</h6>
-                                                          <small class="mt-1">23 November 2019</small>
-                                                      </li>
-                                                      <li>
-                                                          <div class="timeline-dots border-danger"></div>
-                                                          <h6 class="">Beljenje zob</h6>
-                                                          <small class="mt-1">20 November 2019</small>
-                                                      </li>
-                                                      <li>
-                                                          <div class="timeline-dots border-primary"></div>
-                                                          <h6 class="mb-1">Rentgen</h6>
-                                                          <small class="mt-1">19 November 2019</small>
+                                                          <h6>{{item.kind}}</h6>
+                                                          <small class="mt-1">{{item.date | formatDate}}</small>
                                                       </li>
                                                   </ul>
                                               </template>
@@ -571,7 +512,7 @@
 </template>
 <script>
 import { xray } from '../../config/pluginInit'
-import { getEnquiryById, updateEnquiry } from '../../services/enquiry'
+import { getEnquiryById, updateEnquiry, getEnquiryNotes, getEnquiryAppointments } from '../../services/enquiry'
 import { getInvoices } from '../../services/invoice'
 import { getDentists } from '../../services/userService'
 import { getCountriesList, getRegionsList } from '../../services/commonCodeLists'
@@ -590,6 +531,8 @@ export default {
   mounted () {
     xray.index()
     this.getPatient(this.patientId)
+    this.getPatientNotes(this.patientId)
+    this.getPatientAppointments(this.patientId)
     this.getInvoices()
     this.getCountries()
     this.getRegions()
@@ -613,14 +556,30 @@ export default {
       return this.dentists.find((item) => {
         return item.code === this.patient.prm_dentist_user_id
       })
+    },
+    futureAppointments: function () {
+      return this.appointments.filter((item) => {
+        return this.filterAppointments(item)
+      })
+    },
+    pastAppointments: function () {
+      return this.appointments.filter((item) => {
+        return !this.filterAppointments(item)
+      })
     }
   },
   filters: {
-    formatDate (val) {
+    fromNowDate (val) {
       if (!val) {
         return '-'
       }
       return moment(val).fromNow()
+    },
+    formatDate (val) {
+      if (!val) {
+        return '-'
+      }
+      return moment(val).format('YYYY-MM-DD')
     }
   },
   data () {
@@ -628,6 +587,8 @@ export default {
       patientId: this.$route.params.patientId,
       patient: {},
       tempPatient: {},
+      notes: [],
+      appointments: [],
       dentists: [],
       invoiceItems: [],
       offerItems: rowsOffers,
@@ -706,12 +667,32 @@ export default {
     }
   },
   methods: {
+    filterAppointments (appointment) {
+      let currentDate = moment()
+      let date = moment(appointment.date).format('YYYY-MM-DD')
+      if (appointment.time !== null) {
+        date += ' ' + appointment.time
+      }
+      return moment(date).isAfter(currentDate)
+    },
     getPatient (id) {
       getEnquiryById(id).then(response => {
         this.patient = response[0]
         if (this.patient.date_of_birth !== null) {
           this.patient.date_of_birth = moment(this.patient.date_of_birth).format('YYYY-MM-DD')
         }
+      }
+      )
+    },
+    getPatientNotes (id) {
+      getEnquiryNotes(id).then(response => {
+        this.notes = response
+      }
+      )
+    },
+    getPatientAppointments (id) {
+      getEnquiryAppointments(id).then(response => {
+        this.appointments = response
       }
       )
     },
@@ -738,16 +719,6 @@ export default {
     invoiceSelected (item) {
       this.$router.push({ path: `/documents/invoices/${item.invoice_number}` })
     },
-    default () {
-      return {
-        invoice_no: this.rowsInvoices.length,
-        amount: '',
-        issued_by: '',
-        status: '',
-        date: '',
-        offer_no: this.rowsOffers.length
-      }
-    },
     addInvoice () {
       this.$router.push('/extra-pages/new-invoice')
     },
@@ -771,56 +742,15 @@ export default {
     addOffer () {
 
     },
-    searchFunction (event) {
-      this.dropDownText = event
-      console.log('SEARCHBY OPTION:', event)
-      console.log('DROPDOWN:', this.dropDownText)
-      return event
-    },
     add_file () {
       console.log('Add file clicked')
-    },
-    myFunction (event) {
-      console.log('evemt', event)
-      console.log('DROPDOWN:', this.dropDownText)
-
-      // if (this.dropDownText) {
-      //   var sorted = rows.filter((item) => {
-      //     return item[this.dropDownText].toLowerCase().includes(event.toLowerCase())
-      //   })
-      //   this.paginatedItems = sorted
-      // }
-      // console.log('sorted', sorted)
     },
     resetForm () {
       this.user = {
         profile_image: require('../../assets/images/user/11.png'),
-        fname: 'Anita',
-        lname: 'Jereb',
-        dob: '1979-04-21',
-        gender: 'female',
-        address: 'Prva ulica 11',
-        postcode: '1000',
-        city: 'Ljubljana',
-        country: 'Slovenia',
-        citizenship: 'Slovenian',
-        region: 'Sl-unknown',
-        insurance_no: '1534667',
-        insured_at: 'Zavarovalnica Triglav',
-        mob_no: '+38640076191',
-        tax_no: '9877645677',
-        email: 'anita.jereb@staging.emazing.si',
-        mobile_no: '+38640076191',
-        location: 'Ljubljana',
-        edited_date: Date.now(),
-        allergies: 'Type, cause, symptom, note, date, change , doctor...',
-        reminder: 'The patient has very sensitive gums, careful not to cause bleeding...',
-        surgeon: 'Dr. Nika Klemenc',
-        dentist: 'Dr. Miha Breznik',
         background: require('../../assets/images/page-img/profile-bg.jpg'),
         profile: require('../../assets/images/user/11.png')
       }
-      console.log('RESET FORM', this.user)
     },
     submitData () {
       this.disabled = true
@@ -829,14 +759,11 @@ export default {
     },
     previewImage: function (event) {
       const input = event.target
-
       if (input.files && input.files[0]) {
         const reader = new FileReader()
-
         reader.onload = (e) => {
           this.user.profile_image = e.target.result
         }
-
         reader.readAsDataURL(input.files[0])
       }
     }
