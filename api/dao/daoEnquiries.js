@@ -124,10 +124,30 @@ const deleteEnquiries = (request, response, id) => {
   })
 }
 
+const getEnquiryNotes = (request, response, enquiryId) => {
+    pool.query("SELECT content, created_at FROM notes WHERE enquiry_id = $1", [enquiryId] , (error, results) => {
+        if (error) {
+            throw error
+        }
+        response.status(200).json(results.rows)
+    })
+}
+
+const getEnquiryAppointments = (request, response, enquiryId) => {
+    pool.query("SELECT date, time, kind FROM appointments WHERE enquiry_id = $1", [enquiryId] , (error, results) => {
+        if (error) {
+            throw error
+        }
+        response.status(200).json(results.rows)
+    })
+}
+
 module.exports = {
   getEnquiries,
   getEnquiriesById,
   createEnquiry,
   updateEnquiry,
   deleteEnquiries,
+  getEnquiryNotes,
+  getEnquiryAppointments
 }
