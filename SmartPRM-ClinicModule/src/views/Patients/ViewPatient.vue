@@ -115,8 +115,8 @@
                                       <b-card class="iq-card">
                                           <b-card-title>{{ $t('EPR.overview.generalNotes') }}</b-card-title>
                                           <hr />
-                                          <b-card-text style="color:black;">Opombe o pacientu.</b-card-text>
-                                          <b-card-text><small class="text-muted">{{ $t('EPR.overview.generalNotesUpdated') }} 3 mins ago</small></b-card-text>
+                                          <b-card-text style="color:black;">{{patient.general_notes}}</b-card-text>
+                                          <b-card-text><small class="text-muted">{{ $t('EPR.overview.generalNotesUpdated') }} {{patient.general_notes_updated_at | formatDate}}</small></b-card-text>
                                       </b-card>
                                   </b-col>
                                   <b-card text-variant="white"
@@ -124,8 +124,8 @@
                                           class="iq-card">
                                       <b-card-title class="text-white">{{ $t('EPR.overview.allergies') }}</b-card-title>
                                       <blockquote class="blockquote mb-0">
-                                          <p class="font-size-14">Podatki o alergijah.</p>
-                                          <footer class="blockquote-footer text-white font-size-12">{{ $t('EPR.overview.allergiesUpdated') }} 2 weeks ago</footer>
+                                          <p class="font-size-14">{{patient.allergies}}</p>
+                                          <footer class="blockquote-footer text-white font-size-12">{{ $t('EPR.overview.allergiesUpdated') }} {{patient.allergies_updated_at | formatDate}}</footer>
                                       </blockquote>
                                   </b-card>
                                   <b-row>
@@ -262,7 +262,7 @@
                                         </div>
                                     </div>
                                 </div>
-                                <b-button variant="primary" @click="disabled = !disabled" class="edit-btn">{{ $t('EPR.personalInfo.edit') }}</b-button>
+                                <b-button variant="primary" :disabled="!disabled" @click="editPatient" class="edit-btn">{{ $t('EPR.personalInfo.edit') }}</b-button>
                               </b-col>
                           </b-form-group>
                           <b-row>
@@ -378,7 +378,7 @@
                                               <h4>{{ $t('EPR.personalInfo.allergiesAndSensitivites') }}</h4>
                                           </div>
                                           <div class="iq-card-body p-0">
-                                              <textarea :disabled="disabled" style="line-height: 30px;" v-model="user.allergies" class="textarea form-control" rows="7"></textarea>
+                                              <textarea :disabled="disabled" style="line-height: 30px;" v-model="patient.allergies" class="textarea form-control" rows="7"></textarea>
                                           </div>
                                       </template>
                                   </iq-card>
@@ -388,7 +388,7 @@
                                               <h4>{{ $t('EPR.personalInfo.generalNotes') }}</h4>
                                           </div>
                                           <div class="iq-card-body p-0">
-                                              <textarea :disabled="disabled" style="line-height: 30px;" v-model="user.reminder" class="textarea form-control" rows="7"></textarea>
+                                              <textarea :disabled="disabled" style="line-height: 30px;" v-model="patient.general_notes" class="textarea form-control" rows="7"></textarea>
                                           </div>
                                       </template>
                                   </iq-card>
@@ -421,7 +421,7 @@
                           <div class="text-center p-1" v-if="!disabled">
                               <b-button style="padding: 5px 25px;" @click="submitData()" variant="primary" class="mr-2">Submit</b-button>
                               <b-button style="padding: 5px 25px;" v-b-modal.modal-1 variant="none" class="iq-bg-danger">Cancel</b-button>
-                              <b-modal id="modal-1" ok-title="OK" cancel-title="Cancel" @ok="(resetForm()), (disabled = (disabled + 1) % 2)">
+                              <b-modal id="modal-1" ok-title="OK" cancel-title="Cancel" @ok="cancelEditingPatient">
                                   <h4 class="my-4 card-title text-center">Are you sure you want to the<br>discard changes?</h4>
                               </b-modal>
                               <b-modal ref="my-modal" ok-only ok-variant="primary" ok-title="OK">
@@ -615,10 +615,19 @@ export default {
       })
     }
   },
+  filters: {
+    formatDate (val) {
+      if (!val) {
+        return '-'
+      }
+      return moment(val).fromNow()
+    }
+  },
   data () {
     return {
       patientId: this.$route.params.patientId,
       patient: {},
+      tempPatient: {},
       dentists: [],
       invoiceItems: [],
       offerItems: rowsOffers,
@@ -742,9 +751,18 @@ export default {
     addInvoice () {
       this.$router.push('/extra-pages/new-invoice')
     },
+    editPatient () {
+      this.disabled = !this.disabled
+      this.tempPatient = Object.assign({}, this.patient)
+    },
+    cancelEditingPatient () {
+      this.disabled = !this.disabled
+      this.patient = this.tempPatient
+    },
     updatePatient () {
-      updateEnquiry(this.patientId, this.patient).then(() => {
+      updateEnquiry(this.patientId, this.patient).then((response) => {
         console.log('Successful update')
+        this.patient = response
         this.$bvToast.show('b-toaster-bottom-right')
       }).catch(errorMsg => {
         console.log('Error: ' + errorMsg)
