@@ -11,7 +11,7 @@ const pool = new Pool({
 
 const bcrypt = require('bcrypt');
 
-const getUser = ((request, response, email, password) => {
+const loginUser = ((request, response, email, password) => {
     return new Promise((resolve, reject) =>
         pool.query('SELECT * FROM users WHERE email = $1 AND active = true', [email], (error, qResult) => {
             if (error) {
@@ -146,10 +146,10 @@ const getDentists = (request, response) => {
 }
 
 module.exports = {
-  getUser,
+  loginUser,
   getUserById,
   hash,
   changePassword,
   editProfile,
-  getDentists
+  getDentists,
 }

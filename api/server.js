@@ -48,7 +48,7 @@ const invoicesPermission = "Invoices"
 // login - email and password in body
 app.post('/api/login', async function(req, res) {
    const credentials = req.body
-   req.session.prm_user = await daoUser.getUser(req, res, credentials.loginEmail, credentials.loginPassword)
+   req.session.prm_user = await daoUser.loginUser(req, res, credentials.loginEmail, credentials.loginPassword)
 });
 
 // get loged user data
