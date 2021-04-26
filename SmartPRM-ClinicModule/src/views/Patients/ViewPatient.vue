@@ -216,10 +216,7 @@
                                               </div>
                                           </div>
                                           <b-row align-v="center">
-                                              <b-form-group class="col-md-12" label-cols-sm="4" label-for="fname">
-                                                  <template slot="label">
-                                                      {{ $t('EPR.personalInfo.firstName') }}:
-                                                  </template>
+                                              <b-form-group class="col-md-12" label-cols-sm="4" label-for="fname" :label="$t('EPR.personalInfo.firstName')">
                                                   <ValidationProvider name="fname" rules="required" v-slot="{ errors }">
                                                       <b-form-input :disabled="disabled" v-model="patient.name" type="text" :class="(errors.length > 0 ? ' is-invalid' : '')"></b-form-input>
                                                       <div class="invalid-feedback">
@@ -227,10 +224,7 @@
                                                       </div>
                                                   </ValidationProvider>
                                               </b-form-group>
-                                              <b-form-group class="col-md-12" label-cols-sm="4" label-for="lname">
-                                                  <template slot="label">
-                                                      {{ $t('EPR.personalInfo.lastName') }}:
-                                                  </template>
+                                              <b-form-group class="col-md-12" label-cols-sm="4" label-for="lname" :label="$t('EPR.personalInfo.lastName')">
                                                   <ValidationProvider name="lname" rules="required" v-slot="{ errors }">
                                                       <b-form-input :disabled="disabled" v-model="patient.last_name" type="text" :class="(errors.length > 0 ? ' is-invalid' : '')"></b-form-input>
                                                       <div class="invalid-feedback">
@@ -238,10 +232,7 @@
                                                       </div>
                                                   </ValidationProvider>
                                               </b-form-group>
-                                              <b-form-group class="col-md-12" label-cols-sm="4" label-for="dob">
-                                                  <template slot="label">
-                                                      {{ $t('EPR.personalInfo.dob') }}:
-                                                  </template>
+                                              <b-form-group class="col-md-12" label-cols-sm="4" label-for="dob" :label="$t('EPR.personalInfo.dob')">
                                                   <ValidationProvider name="dob" rules="required" v-slot="{ errors }">
                                                       <b-form-input :disabled="disabled" v-model="patient.date_of_birth" type="date" :class="(errors.length > 0 ? ' is-invalid' : '')"></b-form-input>
                                                       <div class="invalid-feedback">
@@ -249,63 +240,36 @@
                                                       </div>
                                                   </ValidationProvider>
                                               </b-form-group>
-                                              <b-form-group class="col-md-12" label-cols-sm="4" label-for="gender" label-class="d-block">
-                                                  <template slot="label">
-                                                      {{ $t('EPR.personalInfo.gender') }}:
-                                                  </template>
+                                              <b-form-group class="col-md-12" label-cols-sm="4" label-for="gender" label-class="d-block" :label="$t('EPR.personalInfo.gender')">
                                                   <b-form-radio inline v-model="patient.gender" :disabled="disabled" value="male">{{ $t('EPR.personalInfo.male') }}</b-form-radio>
                                                   <b-form-radio inline v-model="patient.gender" :disabled="disabled" value="female">{{ $t('EPR.personalInfo.female') }}</b-form-radio>
                                                   <b-form-radio inline v-model="patient.gender" :disabled="disabled" value="unspecified">{{ $t('EPR.personalInfo.unspecified') }}</b-form-radio>
                                               </b-form-group>
-                                              <b-form-group class="col-md-12" label-cols-sm="4" label-for="address">
-                                                  <template slot="label">
-                                                      {{ $t('EPR.personalInfo.address') }}:
-                                                  </template>
+                                              <b-form-group class="col-md-12" label-cols-sm="4" label-for="address" :label="$t('EPR.personalInfo.address')">
                                                   <b-form-input :disabled="disabled" name="address" v-model="patient.address_line_1" style="line-height: 22px;">
                                                   </b-form-input>
                                               </b-form-group>
-                                              <b-form-group class="col-md-12" style="justify-content: space-between;" label-cols-sm="4" label-for="city">
-                                                  <template slot="label">
-                                                      {{ $t('EPR.personalInfo.postCodeCity') }}:
-                                                  </template>
+                                              <b-form-group class="col-md-12" style="justify-content: space-between;" label-cols-sm="4" label-for="city" :label="$t('EPR.personalInfo.postCodeCity')">
                                                   <b-form-input :disabled="disabled" class="col-md-4" style="float: left;" v-model="patient.post_code" type="text"></b-form-input>
                                                   <b-form-input :disabled="disabled" class="col-md-6" style="float: right;" v-model="patient.city" type="text"></b-form-input>
                                               </b-form-group>
-                                              <b-form-group class="col-md-12" label-cols-sm="4" label-for="country">
-                                                  <template slot="label">
-                                                      {{ $t('EPR.personalInfo.country') }}:
-                                                  </template>
+                                              <b-form-group class="col-md-12" label-cols-sm="4" label-for="country" :label="$t('EPR.personalInfo.country')">
                                                   <v-select :disabled="disabled" :clearable="false" :reduce="country => country.code" class="style-chooser" v-model="patient.country_id" :options="countries"></v-select>
                                               </b-form-group>
-                                              <b-form-group class="col-md-12" label-cols-sm="4" label-for="region">
-                                                  <template slot="label">
-                                                      {{ $t('EPR.personalInfo.region') }}:
-                                                  </template>
+                                              <b-form-group class="col-md-12" label-cols-sm="4" label-for="region" :label="$t('EPR.personalInfo.region')">
                                                   <v-select class="style-chooser" :clearable="false" :reduce="region => region.code" :disabled="disabled" v-model="patient.region_id" :options="filteredRegions"> </v-select>
                                               </b-form-group>
-                                              <b-form-group class="col-md-12" label-cols-sm="4" label-for="insurance">
-                                                  <template slot="label">
-                                                      {{ $t('EPR.personalInfo.insurance') }}:
-                                                  </template>
+                                              <b-form-group class="col-md-12" label-cols-sm="4" label-for="insurance" :label="$t('EPR.personalInfo.insurance')">
                                                   <b-form-input :disabled="disabled" class="col-md-5" style="float: left;" name="insurance_no" type="text" v-model="patient.insurance_no"></b-form-input>
                                                   <b-form-input :disabled="disabled" class="col-md-5" style="float: right;" name="insured_at" type="text" v-model="patient.insured_at"></b-form-input>
                                               </b-form-group>
-                                              <b-form-group class="col-md-12" label-cols-sm="4" label-for="mobile_no">
-                                                  <template slot="label">
-                                                      {{ $t('EPR.personalInfo.phone') }}:
-                                                  </template>
+                                              <b-form-group class="col-md-12" label-cols-sm="4" label-for="mobile_no" :label="$t('EPR.personalInfo.phone')">
                                                   <b-form-input :disabled="disabled" name="mobile_no" type="text" v-model="patient.phone"></b-form-input>
                                               </b-form-group>
-                                              <b-form-group class="col-md-12" label-cols-sm="4" label-for="email">
-                                                  <template slot="label">
-                                                      {{ $t('EPR.personalInfo.email') }}:
-                                                  </template>
+                                              <b-form-group class="col-md-12" label-cols-sm="4" label-for="email" :label="$t('EPR.personalInfo.email')">
                                                   <b-form-input :disabled="disabled" name="email" type="text" v-model="patient.email"></b-form-input>
                                               </b-form-group>
-                                              <b-form-group class="col-md-12" label-cols-sm="4" label-for="tax_no">
-                                                  <template slot="label">
-                                                      {{ $t('EPR.personalInfo.taxNumber') }}:
-                                                  </template>
+                                              <b-form-group class="col-md-12" label-cols-sm="4" label-for="tax_no" :label="$t('EPR.personalInfo.taxNumber')">
                                                   <b-form-input :disabled="disabled" name="tax_no" type="text" v-model="patient.tax_registration_number"></b-form-input>
                                               </b-form-group>
                                           </b-row>
