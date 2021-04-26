@@ -10,7 +10,7 @@ const pool = new Pool({
 })
 
 const getInvoices = (request, response) => {
-    pool.query("SELECT * from prm_invoice", (error, results) => {
+    pool.query("SELECT * from invoice", (error, results) => {
         if (error) {
             throw error
         }
@@ -19,7 +19,7 @@ const getInvoices = (request, response) => {
 }
 
 const getInvoicesById = (request, response, id) => {
-    pool.query("SELECT prm_invoice.*,enquiries.email,enquiries.phone, countries.name as country FROM prm_invoice left join enquiries on prm_invoice.enquiries_id = enquiries.id left join countries on prm_invoice.enquiries_country_code = countries.code WHERE prm_invoice.invoice_number = $1", [id] , (error, results) => {
+    pool.query("SELECT invoice.*,enquiries.email,enquiries.phone, countries.name as country FROM invoice left join enquiries on invoice.enquiries_id = enquiries.id left join countries on invoice.enquiries_country_code = countries.code WHERE invoice.invoice_number = $1", [id] , (error, results) => {
         if (error) {
             throw error
         }
