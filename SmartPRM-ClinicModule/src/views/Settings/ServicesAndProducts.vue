@@ -48,19 +48,21 @@
                                         <span v-if="!data.item.editable">
                                             {{ data.item.group }}
                                         </span>
-                                        <b-form-select v-else v-model="data.item.group"
-                                                       :options="groupOptions"
-                                                       class="form-control">
-                                        </b-form-select>
+                                        <v-select v-else class="patients" label="text"
+                                          :clearable="false" v-model="data.item.group"
+                                          :reduce="filter => filter.value"
+                                          :options="groupOptions">
+                                        </v-select>
                                     </template>
                                     <template v-slot:cell(type)="data">
                                         <span v-if="!data.item.editable">
                                             {{ data.item.type }}
                                         </span>
-                                        <b-form-select v-else v-model="data.item.type"
-                                                       :options="typeOptions"
-                                                       class="form-control">
-                                        </b-form-select>
+                                        <v-select v-else class="patients" label="text"
+                                          :clearable="false" v-model="data.item.type"
+                                          :reduce="filter => filter.value"
+                                          :options="typeOptions">
+                                        </v-select>
                                     </template>
                                     <template v-slot:cell(category)="data">
                                         <span v-if="!data.item.editable">
@@ -102,7 +104,7 @@
                         </div>
                     </template>
                     <template v-slot:body>
-                        <b-row>
+                        <b-row style="min-height:250px">
                             <b-col md="12" class="table-responsive">
                                 <b-table id="my-table"
                                   bordered
@@ -124,10 +126,11 @@
                                         <span v-if="!data.item.editable">
                                             {{ data.item.category }}
                                         </span>
-                                        <b-form-select v-else v-model="data.item.category"
-                                                       :options="categoryOptions"
-                                                       class="form-control">
-                                        </b-form-select>
+                                        <v-select v-else class="patients" label="text"
+                                          :clearable="false" v-model="data.item.category"
+                                          :reduce="filter => filter.value"
+                                          :options="categoryOptions">
+                                        </v-select>
                                     </template>
                                     <template v-slot:cell(emazingFee)="data">
                                         <span v-if="!data.item.editable">
@@ -298,7 +301,7 @@ export default {
       productGroupsButtonLabel: 'Add product group',
       productGroupColumns: [
         { label: 'Name', key: 'name', class: 'text-left' },
-        { label: 'Category', key: 'category', class: 'text-left' },
+        { label: 'Category', key: 'category', class: 'text-left category-column' },
         { label: 'Emazing Fee', key: 'emazingFee', class: 'text-left' },
         { label: 'Action', key: 'action', class: 'text-center' }
       ],
@@ -443,3 +446,8 @@ export default {
   }
 }
 </script>
+<style lang="scss">
+.category-column {
+  min-width: 200px !important;
+}
+</style>
