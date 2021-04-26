@@ -15,63 +15,47 @@
                                 <b-table id="my-table"
                                          bordered
                                          hover
-                                         :items="productRows"
+                                         :items="products"
                                          :fields="productColumns"
                                          :per-page="productsPerPage"
                                          :current-page="currentProductPage">
-                                    <template v-slot:cell(code)="data">
-                                        <span v-if="!data.item.editable">{{ data.item.code }}</span>
+                                    <template v-slot:cell(product_name)="data">
+                                        <span v-if="!data.item.editable">
+                                            {{ data.item.product_name }}
+                                        </span>
                                         <input type="text"
-                                               v-model="data.item.code"
+                                               v-model="data.item.product_name"
                                                v-else
                                                class="form-control" />
                                     </template>
-                                    <template v-slot:cell(name)="data">
+                                    <template v-slot:cell(product_price)="data">
                                         <span v-if="!data.item.editable">
-                                            {{ data.item.name }}
+                                            {{ data.item.product_price | euro }}
                                         </span>
                                         <input type="text"
-                                               v-model="data.item.name"
+                                               v-model="data.item.product_price"
                                                v-else
                                                class="form-control" />
                                     </template>
-                                    <template v-slot:cell(price)="data">
+                                    <template v-slot:cell(product_group_id)="data">
                                         <span v-if="!data.item.editable">
-                                            {{ data.item.price }}
+                                            {{ data.item.group_name }}
                                         </span>
-                                        <input type="text"
-                                               v-model="data.item.price"
-                                               v-else
-                                               class="form-control" />
-                                    </template>
-                                    <template v-slot:cell(group)="data">
-                                        <span v-if="!data.item.editable">
-                                            {{ data.item.group }}
-                                        </span>
-                                        <v-select v-else class="patients" label="text"
-                                          :clearable="false" v-model="data.item.group"
-                                          :reduce="filter => filter.value"
-                                          :options="groupOptions">
+                                        <v-select v-else class="patients" label="product_group_name"
+                                          :clearable="false" v-model="data.item.product_group_id"
+                                          :reduce="filter => filter.product_group_id"
+                                          :options="productGroups">
                                         </v-select>
                                     </template>
-                                    <template v-slot:cell(type)="data">
+                                    <template v-slot:cell(product_type_id)="data">
                                         <span v-if="!data.item.editable">
-                                            {{ data.item.type }}
+                                            {{ data.item.type_name }}
                                         </span>
-                                        <v-select v-else class="patients" label="text"
-                                          :clearable="false" v-model="data.item.type"
-                                          :reduce="filter => filter.value"
-                                          :options="typeOptions">
+                                        <v-select v-else class="patients" label="product_type_name"
+                                          :clearable="false" v-model="data.item.product_type_id"
+                                          :reduce="filter => filter.product_type_id"
+                                          :options="productTypes">
                                         </v-select>
-                                    </template>
-                                    <template v-slot:cell(category)="data">
-                                        <span v-if="!data.item.editable">
-                                            {{ data.item.category }}
-                                        </span>
-                                        <input type="text"
-                                               v-model="data.item.category"
-                                               v-else
-                                               class="form-control" />
                                     </template>
                                     <template v-slot:cell(action)="data">
                                       <b-button variant=" iq-bg-success mr-1 mb-1" size="sm" @click="editProduct(data.item)" v-if="!data.item.editable"><i class="ri-ball-pen-fill m-0"></i></b-button>
@@ -86,7 +70,7 @@
                             <b-collapse id="collapse-6" class="mb-2"> </b-collapse>
                             <div class="mt-3">
                                 <b-pagination v-model="currentProductPage"
-                                  :total-rows="productRows.length"
+                                  :total-rows="products.length"
                                   :per-page="productsPerPage"
                                   aria-controls="my-table">
                                 </b-pagination>
@@ -109,7 +93,7 @@
                                 <b-table id="my-table"
                                   bordered
                                   hover
-                                  :items="productGroupRows"
+                                  :items="productGroups"
                                   :fields="productGroupColumns"
                                   :per-page="productGroupsPerPage"
                                   :current-page="currentProductGroupPage">
@@ -122,19 +106,19 @@
                                                v-else
                                                class="form-control" />
                                     </template>
-                                    <template v-slot:cell(category)="data">
+                                    <template v-slot:cell(category_id)="data">
                                         <span v-if="!data.item.editable">
-                                            {{ data.item.category }}
+                                            {{ data.item.category_name }}
                                         </span>
-                                        <v-select v-else class="patients" label="text"
-                                          :clearable="false" v-model="data.item.category"
-                                          :reduce="filter => filter.value"
-                                          :options="categoryOptions">
+                                        <v-select v-else class="patients" label="category_name"
+                                          :clearable="false" v-model="data.item.category_id"
+                                          :reduce="filter => filter.category_id"
+                                          :options="productCategories">
                                         </v-select>
                                     </template>
                                     <template v-slot:cell(emazingFee)="data">
                                         <span v-if="!data.item.editable">
-                                            {{ data.item.emazingFee }}
+                                            {{ data.item.emazingFee | euro }}
                                         </span>
                                         <input type="text"
                                                v-model="data.item.emazingFee"
@@ -154,7 +138,7 @@
                             <b-collapse id="collapse-6" class="mb-2"> </b-collapse>
                             <div class="mt-3">
                                 <b-pagination v-model="currentProductGroupPage"
-                                              :total-rows="productGroupRows.length"
+                                              :total-rows="productGroups.length"
                                               :per-page="productGroupsPerPage"
                                               aria-controls="my-table"></b-pagination>
                             </div>
@@ -176,7 +160,7 @@
                                 <b-table id="my-table"
                                   bordered
                                   hover
-                                  :items="productCategoryRows"
+                                  :items="productCategories"
                                   :fields="productCategoryColumns"
                                   :per-page="productCategoriesPerPage"
                                   :current-page="currentProductCategoryPage">
@@ -202,7 +186,7 @@
                             <b-collapse id="collapse-6" class="mb-2"> </b-collapse>
                             <div class="mt-3">
                                 <b-pagination v-model="currentProductCategoryPage"
-                                  :total-rows="productCategoryRows.length"
+                                  :total-rows="productCategories.length"
                                   :per-page="productCategoriesPerPage"
                                   aria-controls="my-table">
                                 </b-pagination>
@@ -217,129 +201,56 @@
 
 <script>
 import { xray } from '../../config/pluginInit'
+import { getProducts, getProductGroups, getProductCategories, getProductTypes } from '../../services/products'
 
 export default {
   components: {
   },
   mounted () {
     xray.index()
+    this.getProducts()
+    this.getProductCategories()
+    this.getProductGroups()
+    this.getProductTypes()
   },
   name: 'ServicesAndProducts',
+  filters: {
+    euro (val) {
+      return val + ' €'
+    }
+  },
   data: function () {
     return {
       productsHeader: 'Products',
       productsButtonLabel: 'Add product',
       productColumns: [
-        { label: 'Code', key: 'code', class: 'text-left' },
-        { label: 'Name', key: 'name', class: 'text-left' },
-        { label: 'Price', key: 'price', class: 'text-left' },
-        { label: 'Group', key: 'group', class: 'text-left' },
-        { label: 'Type', key: 'type', class: 'text-left' },
+        { label: 'Name', key: 'product_name', class: 'text-left' },
+        { label: 'Price', key: 'product_price', class: 'text-left' },
+        { label: 'Group', key: 'product_group_id', class: 'text-left' },
+        { label: 'Type', key: 'product_type_id', class: 'text-left' },
         { label: 'Action', key: 'action', class: 'text-center' }
       ],
-      groupOptions: [
-        { value: null, text: 'Please select group' },
-        { value: 'Group 1', text: 'Group 1' },
-        { value: 'Group 2', text: 'Group 2' },
-        { value: 'Group 3', text: 'Group 3' }
-      ],
-      typeOptions: [
-        { value: null, text: 'Please select type' },
-        { value: 'Product', text: 'Product' },
-        { value: 'Service', text: 'Service' }
-      ],
-      productRows: [
-        {
-          code: '1',
-          name: 'Tooth cleaning',
-          price: '80 €',
-          group: 'Group 1',
-          type: 'Product',
-          category: 'Category 1',
-          editable: false
-        },
-        {
-          code: '2',
-          name: 'Apointment',
-          price: '120 €',
-          group: 'Group 2',
-          type: 'Service',
-          category: 'Category 2',
-          editable: false
-        },
-        {
-          code: '3',
-          name: 'Apointment',
-          price: '120 €',
-          group: 'Group 2',
-          type: 'Service',
-          category: 'Category 2',
-          editable: false
-        },
-        {
-          code: '4',
-          name: 'Apointment',
-          price: '120 €',
-          group: 'Group 2',
-          type: 'Service',
-          category: 'Category 2',
-          editable: false
-        },
-        {
-          code: '5',
-          name: 'Apointment',
-          price: '120 €',
-          group: 'Group 2',
-          type: 'Service',
-          category: 'Category 2',
-          editable: false
-        }
-      ],
+      products: [],
+      productGroups: [],
+      productCategories: [],
+      productTypes: [],
       currentProductPage: 1,
       productsPerPage: 4,
       productGroupsHeader: 'Product Groups',
       productGroupsButtonLabel: 'Add product group',
       productGroupColumns: [
-        { label: 'Name', key: 'name', class: 'text-left' },
-        { label: 'Category', key: 'category', class: 'text-left category-column' },
+        { label: 'Name', key: 'product_group_name', class: 'text-left' },
+        { label: 'Category', key: 'category_id', class: 'text-left category-column' },
         { label: 'Emazing Fee', key: 'emazingFee', class: 'text-left' },
         { label: 'Action', key: 'action', class: 'text-center' }
-      ],
-      productGroupRows: [
-        {
-          name: 'Tooth cleaning',
-          category: 'Braces',
-          emazingFee: '30 €',
-          editable: false
-        }
       ],
       currentProductGroupPage: 1,
       productGroupsPerPage: 4,
       productCategoriesHeader: 'Product Categories',
       productCategoriesButtonLabel: 'Add product category',
       productCategoryColumns: [
-        { label: 'Name', key: 'name', class: 'text-left' },
+        { label: 'Name', key: 'category_name', class: 'text-left' },
         { label: 'Action', key: 'action', class: 'text-center' }
-      ],
-      categoryOptions: [
-        { value: null, text: 'Please select category' },
-        { value: 'Tooth cleaning', text: 'Tooth cleaning' },
-        { value: 'Tooth whitening', text: 'Tooth whitening' },
-        { value: 'Braces', text: 'Braces' }
-      ],
-      productCategoryRows: [
-        {
-          name: 'Tooth cleaning',
-          editable: false
-        },
-        {
-          name: 'Tooth whitening',
-          editable: false
-        },
-        {
-          name: 'Braces',
-          editable: false
-        }
       ],
       currentProductCategoryPage: 1,
       productCategoriesPerPage: 4,
@@ -349,6 +260,39 @@ export default {
     }
   },
   methods: {
+    getProducts () {
+      getProducts().then(response => {
+        this.products = response.map(obj => (
+          { ...obj,
+            editable: false
+          }
+        ))
+      })
+    },
+    getProductCategories () {
+      getProductCategories().then(response => {
+        this.productCategories = response.map(obj => (
+          { ...obj,
+            editable: false
+          }
+        ))
+      })
+    },
+    getProductGroups () {
+      getProductGroups().then(response => {
+        this.productGroups = response.map(obj => (
+          { ...obj,
+            editable: false,
+            emazingFee: 30
+          }
+        ))
+      })
+    },
+    getProductTypes () {
+      getProductTypes().then(response => {
+        this.productTypes = response
+      })
+    },
     editProduct (item) {
       this.tempProduct = Object.assign({}, item)
       item.editable = true
@@ -357,12 +301,12 @@ export default {
       item.editable = false
     },
     removeProduct (item) {
-      let index = this.productRows.indexOf(item)
-      this.productRows.splice(index, 1)
+      let index = this.products.indexOf(item)
+      this.products.splice(index, 1)
     },
     cancelProduct (item) {
-      let index = this.productRows.indexOf(item)
-      this.productRows.splice(index, 1, this.tempProduct)
+      let index = this.products.indexOf(item)
+      this.products.splice(index, 1, this.tempProduct)
     },
     setCurrentProductPage () {
       this.currentProductPage = 1
@@ -370,11 +314,11 @@ export default {
     addProduct () {
       this.setCurrentProductPage()
       let obj = this.defaultProduct()
-      this.productRows.unshift(obj)
+      this.products.unshift(obj)
     },
     defaultProduct () {
       return {
-        code: this.productRows.length + 1,
+        code: this.products.length + 1,
         name: '',
         price: '0 €',
         group: '',
@@ -391,12 +335,12 @@ export default {
       item.editable = false
     },
     removeProductGroup (item) {
-      let index = this.productGroupRows.indexOf(item)
-      this.productGroupRows.splice(index, 1)
+      let index = this.productGroups.indexOf(item)
+      this.productGroups.splice(index, 1)
     },
     cancelProductGroup (item) {
-      let index = this.productGroupRows.indexOf(item)
-      this.productGroupRows.splice(index, 1, this.tempProductGroup)
+      let index = this.productGroups.indexOf(item)
+      this.productGroups.splice(index, 1, this.tempProductGroup)
     },
     setCurrentProductGroupPage () {
       this.currentProductGroupPage = 1
@@ -404,7 +348,7 @@ export default {
     addProductGroup () {
       this.setCurrentProductGroupPage()
       let obj = this.defaultProductGroup()
-      this.productGroupRows.unshift(obj)
+      this.productGroups.unshift(obj)
     },
     defaultProductGroup () {
       return {
@@ -422,12 +366,12 @@ export default {
       item.editable = false
     },
     removeProductCategory (item) {
-      let index = this.productCategoryRows.indexOf(item)
-      this.productCategoryRows.splice(index, 1)
+      let index = this.productCategories.indexOf(item)
+      this.productCategories.splice(index, 1)
     },
     cancelProductCategory (item) {
-      let index = this.productCategoryRows.indexOf(item)
-      this.productCategoryRows.splice(index, 1, this.tempProductCategory)
+      let index = this.productCategories.indexOf(item)
+      this.productCategories.splice(index, 1, this.tempProductCategory)
     },
     setCurrentProductCategoryPage () {
       this.currentProductCategoryPage = 1
@@ -435,7 +379,7 @@ export default {
     addProductCategory () {
       this.setCurrentProductCategoryPage()
       let obj = this.defaultProductCategory()
-      this.productCategoryRows.unshift(obj)
+      this.productCategories.unshift(obj)
     },
     defaultProductCategory () {
       return {
