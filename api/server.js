@@ -20,6 +20,7 @@ const daoReporting = require('./dao/daoReporting')
 const fiscalVerification = require('./services/fiscalVerification')
 const daoInvoices = require('./dao/daoInvoices')
 const daoCodeLists = require('./dao/daoCodeLists')
+const daoProducts = require('./dao/daoProducts')
 
 app.use(cors({
     origin: process.env.APP_URL || 'http://localhost:8080',
@@ -40,6 +41,7 @@ const assignmentsPermission = "Assignments"
 const clinicStatisticsPermission = "Statistics For Clinic"
 const reportingEmazingPermission = "Emazing"
 const invoicesPermission = "Invoices"
+const productsPermission = "Services and Products"
 
 ///////////////////////////////////
 // user login, logout, ...
@@ -98,6 +100,37 @@ app.get('/api/dentists', async function(req, res) {
     } else {
        res.status(200).json("NOK: user not logged in")
     }    
+});
+
+///////////////////////////////////
+// products
+///////////////////////////////////
+app.get('/api/products', (req, res) => {
+    if(req.session.prm_user && req.session.prm_user.permissions && checkPermission(req.session.prm_user.permissions, productsPermission))
+        daoProducts.getProducts(req, res)
+    else
+        res.status(401).json("OK: user unauthorized")
+});
+
+app.get('/api/productCategories', (req, res) => {
+    if(req.session.prm_user && req.session.prm_user.permissions && checkPermission(req.session.prm_user.permissions, productsPermission))
+        daoProducts.getProductCategories(req, res)
+    else
+        res.status(401).json("OK: user unauthorized")
+});
+
+app.get('/api/productGroups', (req, res) => {
+    if(req.session.prm_user && req.session.prm_user.permissions && checkPermission(req.session.prm_user.permissions, productsPermission))
+        daoProducts.getProductGroups(req, res)
+    else
+        res.status(401).json("OK: user unauthorized")
+});
+
+app.get('/api/productTypes', (req, res) => {
+    if(req.session.prm_user && req.session.prm_user.permissions && checkPermission(req.session.prm_user.permissions, productsPermission))
+        daoProducts.getProductTypes(req, res)
+    else
+        res.status(401).json("OK: user unauthorized")
 });
 
 ///////////////////////////////////
