@@ -38,11 +38,11 @@
                                               <hr>
                                               <ul class="doctoe-sedual d-flex align-items-center justify-content-between p-0 m-0">
                                                   <li class="text-center">
-                                                      <h4 class="counter">4</h4>
+                                                      <h4 class="counter">{{pastAppointments.length}}</h4>
                                                       <span>{{ $t('EPR.overview.numberOfVisits') }}</span>
                                                   </li>
                                                   <li class="text-center">
-                                                      <h4 class="counter">9 m, 13 d</h4>
+                                                      <h4 class="counter">{{timeSinceFirstVisit | fromNowDate}}</h4>
                                                       <span>{{ $t('EPR.overview.firstVisit') }}</span>
                                                   </li>
                                               </ul>
@@ -553,6 +553,7 @@ export default {
       tempPatient: {},
       notes: [],
       appointments: [],
+      timeSinceFirstVisit: '',
       dentists: [],
       invoiceItems: [],
       offerItems: rowsOffers,
@@ -657,6 +658,7 @@ export default {
     getPatientAppointments (id) {
       getEnquiryAppointments(id).then(response => {
         this.appointments = response
+        this.timeSinceFirstVisit = response[0].date
       }
       )
     },
