@@ -45,9 +45,7 @@ ADD COLUMN general_notes			TEXT,
 ADD COLUMN general_notes_updated_at TIMESTAMP,
 ADD COLUMN allergies				TEXT,
 ADD COLUMN allergies_updated_at		TIMESTAMP;
-ADD COLUMN prm_surgeon_user_id		INT REFERENCES users(id) ON DELETE SET NULL,
-ADD COLUMN insurance_no				INT,
-ADD COLUMN insured_at				VARCHAR(128);
+ADD COLUMN prm_surgeon_user_id		INT REFERENCES users(id) ON DELETE SET NULL;
 
 --############################################################
 --# Create table prm_company_premise_device 
