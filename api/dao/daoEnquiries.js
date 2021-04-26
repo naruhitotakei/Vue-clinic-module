@@ -85,6 +85,8 @@ const updateEnquiry = (req, res, id, enquiry) => {
         if (enquiry.email !== currentEnquiry.email) statement += "email='" + enquiry.email + "',"
         if (enquiry.prm_dentist_user_id !== currentEnquiry.prm_dentist_user_id) statement += "prm_dentist_user_id='" + enquiry.prm_dentist_user_id + "',"
         if (enquiry.tax_registration_number !== currentEnquiry.tax_registration_number) statement += "tax_registration_number='" + enquiry.tax_registration_number + "',"
+        if (enquiry.insurance_no !== currentEnquiry.insurance_no) statement += "insurance_no='" + enquiry.insurance_no + "',"
+        if (enquiry.insured_at !== currentEnquiry.insured_at) statement += "insured_at='" + enquiry.insured_at + "',"
         if (enquiry.general_notes !== currentEnquiry.general_notes) {
             statement += "general_notes='" + enquiry.general_notes + "',"
             statement += "general_notes_updated_at='" + time + "',"
@@ -134,7 +136,7 @@ const getEnquiryNotes = (request, response, enquiryId) => {
 }
 
 const getEnquiryAppointments = (request, response, enquiryId) => {
-    pool.query("SELECT date, time, kind FROM appointments WHERE enquiry_id = $1", [enquiryId] , (error, results) => {
+    pool.query("SELECT date, time, kind FROM appointments WHERE enquiry_id = $1 ORDER BY date ASC", [enquiryId] , (error, results) => {
         if (error) {
             throw error
         }
