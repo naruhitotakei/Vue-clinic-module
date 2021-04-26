@@ -22,6 +22,30 @@ export async function getEnquiryById (id) {
   return rawResponse.json()
 }
 
+export async function getEnquiryNotes (id) {
+  const rawResponse = await fetch(`/api/enquiries/${id}/notes`, {
+    method: 'GET',
+    credentials: 'same-origin',
+    headers: {
+      'Accept': 'application/json',
+      'Content-Type': 'application/json'
+    }
+  })
+  return rawResponse.json()
+}
+
+export async function getEnquiryAppointments (id) {
+  const rawResponse = await fetch(`/api/enquiries/${id}/appointments`, {
+    method: 'GET',
+    credentials: 'same-origin',
+    headers: {
+      'Accept': 'application/json',
+      'Content-Type': 'application/json'
+    }
+  })
+  return rawResponse.json()
+}
+
 // enquiry syntax
 // all elements are optionall
 // {

@@ -48,7 +48,7 @@ const invoicesPermission = "Invoices"
 // login - email and password in body
 app.post('/api/login', async function(req, res) {
    const credentials = req.body
-   req.session.prm_user = await daoUser.getUser(req, res, credentials.loginEmail, credentials.loginPassword)
+   req.session.prm_user = await daoUser.loginUser(req, res, credentials.loginEmail, credentials.loginPassword)
 });
 
 // get loged user data
@@ -116,6 +116,22 @@ app.get('/api/enquiries/:id', (req, res) => {
       daoEnquiries.getEnquiriesById(req, res, id)
   else
       res.status(401).json("OK: user unauthorized")
+});
+
+app.get('/api/enquiries/:id/notes', (req, res) => {
+    const id = req.params.id
+    if(req.session.prm_user && req.session.prm_user.permissions && checkPermission(req.session.prm_user.permissions, enquiriesPermission))
+        daoEnquiries.getEnquiryNotes(req, res, id)
+    else
+        res.status(401).json("OK: user unauthorized")
+});
+
+app.get('/api/enquiries/:id/appointments', (req, res) => {
+    const id = req.params.id
+    if(req.session.prm_user && req.session.prm_user.permissions && checkPermission(req.session.prm_user.permissions, enquiriesPermission))
+        daoEnquiries.getEnquiryAppointments(req, res, id)
+    else
+        res.status(401).json("OK: user unauthorized")
 });
 
 app.post('/api/enquiries', (req, res) => {

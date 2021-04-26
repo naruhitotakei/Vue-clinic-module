@@ -7,6 +7,7 @@ const pool = new Pool({
   password: process.env.POSTGRES_PASSWORD,
   port: process.env.POSTGRES_PORT || 5432,
 })
+var moment = require('moment');  
 
 const getEnquiries = (request, response) => {
     pool.query("SELECT enquiries.* FROM enquiries JOIN clients ON enquiries.client_id = clients.id WHERE enquiries.trashed IS FALSE AND clients.slug = 'primadent_si'", (error, results) => {
@@ -65,29 +66,53 @@ const createEnquiry = (req, res, enquiry) => {
 }
 
 const updateEnquiry = (req, res, id, enquiry) => {
-    var statement = "UPDATE enquiries SET "
-    if (enquiry.name) statement += "name='" + enquiry.name + "',"
-    if (enquiry.last_name) statement += "last_name='" + enquiry.last_name + "',"
-    if (enquiry.date_of_birth) statement += "date_of_birth='" + enquiry.date_of_birth + "',"
-    if (enquiry.gender) statement += "gender='"+ enquiry.gender + "',"
-    if (enquiry.address_line_1) statement += "address_line_1='" + enquiry.address_line_1 + "',"
-    if (enquiry.post_code) statement += "post_code='" + enquiry.post_code + "',"
-    if (enquiry.city) statement += "city='" + enquiry.city + "',"
-    if (enquiry.country_id) statement += "country_id='" + enquiry.country_id + "',"
-    if (enquiry.region_id) statement += "region_id='" + enquiry.region_id + "', "
-    if (enquiry.phone) statement += "phone='" + enquiry.phone + "', "
-    if (enquiry.email) statement += "email='" + enquiry.email + "',"
-    if (enquiry.prm_dentist_user_id) statement += "prm_dentist_user_id='" + enquiry.prm_dentist_user_id + "',"
-    if (enquiry.tax_registration_number) statement += "tax_registration_number='" + enquiry.tax_registration_number + "',"
-    statement = statement.slice(0, -1)
-    statement +=" WHERE id=" + id
-    console.log(statement)
-    pool.query(statement , (error, results) => {
-        if (error) {
-            throw error
+    pool.query("SELECT enquiries.* FROM enquiries JOIN clients ON enquiries.client_id = clients.id WHERE enquiries.trashed IS FALSE AND clients.slug = 'primadent_si' AND enquiries.id = $1", [id] , (error, results) => {
+        var currentEnquiry = results.rows[0];
+        time = moment(new Date).format('YYYY-MM-DD HH:mm:ss');
+        var initialUpdateStatement = "UPDATE enquiries SET "
+
+        var statement = initialUpdateStatement
+        if (enquiry.name !== currentEnquiry.name) statement += "name='" + enquiry.name + "',"
+        if (enquiry.last_name !== currentEnquiry.last_name) statement += "last_name='" + enquiry.last_name + "',"
+        if (enquiry.date_of_birth !== moment(currentEnquiry.date_of_birth).format('YYYY-MM-DD')) statement += "date_of_birth='" + enquiry.date_of_birth + "',"
+        if (enquiry.gender !== currentEnquiry.gender) statement += "gender='"+ enquiry.gender + "',"
+        if (enquiry.address_line_1 !== currentEnquiry.address_line_1) statement += "address_line_1='" + enquiry.address_line_1 + "',"
+        if (enquiry.post_code !== currentEnquiry.post_code) statement += "post_code='" + enquiry.post_code + "',"
+        if (enquiry.city !== currentEnquiry.city) statement += "city='" + enquiry.city + "',"
+        if (enquiry.country_id !== currentEnquiry.country_id) statement += "country_id='" + enquiry.country_id + "',"
+        if (enquiry.region_id !== currentEnquiry.region_id) statement += "region_id='" + enquiry.region_id + "', "
+        if (enquiry.phone !== currentEnquiry.phone) statement += "phone='" + enquiry.phone + "', "
+        if (enquiry.email !== currentEnquiry.email) statement += "email='" + enquiry.email + "',"
+        if (enquiry.prm_dentist_user_id !== currentEnquiry.prm_dentist_user_id) statement += "prm_dentist_user_id='" + enquiry.prm_dentist_user_id + "',"
+        if (enquiry.tax_registration_number !== currentEnquiry.tax_registration_number) statement += "tax_registration_number='" + enquiry.tax_registration_number + "',"
+        if (enquiry.general_notes !== currentEnquiry.general_notes) {
+            statement += "general_notes='" + enquiry.general_notes + "',"
+            statement += "general_notes_updated_at='" + time + "',"
+            enquiry.general_notes_updated_at = time
         }
-        res.status(200).json("OK")
-    })  
+        if (enquiry.allergies !== currentEnquiry.allergies) {
+            statement += "allergies='" + enquiry.allergies + "',"
+            statement += "allergies_updated_at='" + time + "',"
+            enquiry.allergies_updated_at = time
+        } 
+        if (enquiry.prm_surgeon_user_id !== currentEnquiry.prm_surgeon_user_id) statement += "prm_surgeon_user_id='" + enquiry.prm_surgeon_user_id + "',"
+        if (statement.length > initialUpdateStatement.length) {
+            statement += "updated_at='" + time + "',"
+            enquiry.updated_at = time
+        }
+
+        if (statement.length !== initialUpdateStatement.length) {
+            statement = statement.slice(0, -1)
+            statement +=" WHERE id=" + id
+            console.log(statement)
+            pool.query(statement , (error, results) => {
+                if (error) {
+                    throw error
+                }
+            }) 
+        }
+        res.status(200).json(enquiry)
+    });
 }
 
 const deleteEnquiries = (request, response, id) => {
@@ -99,10 +124,30 @@ const deleteEnquiries = (request, response, id) => {
   })
 }
 
+const getEnquiryNotes = (request, response, enquiryId) => {
+    pool.query("SELECT content, created_at FROM notes WHERE enquiry_id = $1", [enquiryId] , (error, results) => {
+        if (error) {
+            throw error
+        }
+        response.status(200).json(results.rows)
+    })
+}
+
+const getEnquiryAppointments = (request, response, enquiryId) => {
+    pool.query("SELECT date, time, kind FROM appointments WHERE enquiry_id = $1", [enquiryId] , (error, results) => {
+        if (error) {
+            throw error
+        }
+        response.status(200).json(results.rows)
+    })
+}
+
 module.exports = {
   getEnquiries,
   getEnquiriesById,
   createEnquiry,
   updateEnquiry,
   deleteEnquiries,
+  getEnquiryNotes,
+  getEnquiryAppointments
 }
