@@ -6,6 +6,10 @@
   :plugins="calendarOptions.plugins"
   :events="calendarOptions.events"
   :resources="resourcesOuter"
+  :minTime="calendarOptions.minTime"
+  :maxTime="calendarOptions.maxTime"
+  :allDaySlot="calendarOptions.allDaySlot"
+  :slotDuration="calendarOptions.slotDuration"
   :header="{
       left: 'prev,next today',
       center: 'title',
@@ -132,6 +136,10 @@ export default {
         timeZone: 'UTC',
         defaultView: 'dayGridMonth',
         resources: this.resourcesOuter,
+        minTime: '09:00:00',
+        maxTime: '19:00:00',
+        slotDuration: '00:15:00',
+        allDaySlot: false,
         // resources: [
         //   { id: 'a', title: 'Doctor 1', eventColor: 'sandybrown' },
         //   { id: 'b', title: 'Doctor 2', eventColor: 'blue' },
