@@ -45,10 +45,107 @@ const getProductTypes = (request, response) =>  {
     })
 }
 
+const createProduct = (req, res, products) => {
+    var statement = "INSERT INTO prm_product ("
+    if (products.product_name) statement += "product_name,"
+    if (products.product_price) statement += "product_price,"
+    if (products.product_group_id) statement += "product_group_id,"
+    if (products.product_type_id) statement += "product_type_id,"
+    statement += "created_date"
+    statement += ") VALUES ("
+    if (products.product_name) statement += "'" + products.product_name + "',"
+    if (products.product_price) statement += "'" + products.product_price + "',"
+    if (products.product_group_id) statement += "'" + products.product_group_id + "',"
+    if (products.product_type_id) statement += products.product_type_id + ","
+    statement += "NOW()" 
+    statement +=")"
+    console.log(statement)
+    pool.query(statement , (error, results) => {
+        if (error) {
+            throw error
+        }
+        res.status(200).json("OK")
+    })    
+}
+
+const updateProduct = (req, res, id, product) => {
+        var statement = "UPDATE prm_product SET "
+        if (product.product_name) statement += "product_name='" + product.product_name + "',"
+        if (product.product_price) statement += "product_price='" + product.product_price + "',"
+        if (product.product_group_id) statement += "product_group_id='"+ product.product_group_id + "',"
+        if (product.product_type_id) statement += "product_type_id='"+ product.product_type_id + "',"
+        statement = statement.slice(0, -1)
+        statement +=" WHERE product_id=" + id
+        console.log(statement)
+        pool.query(statement , (error, results) => {
+            if (error) {
+                throw error
+            }
+        }) 
+        res.status(200).json(product)
+}
+
+const deleteProduct = (request, response, id) => {
+    pool.query('DELETE FROM prm_product WHERE product_id = $1', [id], (error, results) => {
+      if (error) {
+        throw error
+      }
+      response.status(200).json("OK")
+    })
+}
+
+const createProductGroup = (req, res, productGroup) => {
+    var statement = "INSERT INTO prm_product_group ("
+    if (productGroup.product_group_name) statement += "product_group_name,"
+    if (productGroup.category_id) statement += "category_id,"
+    statement += "created_date"
+    statement += ") VALUES ("
+    if (productGroup.product_group_name) statement += "'" + productGroup.product_group_name + "',"
+    if (productGroup.category_id) statement += "'" + productGroup.category_id + "',"
+    statement += "NOW()" 
+    statement +=")"
+    console.log(statement)
+    pool.query(statement , (error, results) => {
+        if (error) {
+            throw error
+        }
+        res.status(200).json("OK")
+    })    
+}
+
+const updateProductGroup = (req, res, id, productGroup) => {
+    var statement = "UPDATE prm_product_group SET "
+    if (productGroup.product_group_name) statement += "product_group_name='" + productGroup.product_group_name + "',"
+    if (productGroup.category_id) statement += "product_price='" + productGroup.category_id + "',"
+    statement = statement.slice(0, -1)
+    statement +=" WHERE product_group_id=" + id
+    console.log(statement)
+    pool.query(statement , (error, results) => {
+        if (error) {
+            throw error
+        }
+    }) 
+    res.status(200).json(product)
+}
+
+const deleteProductGroup = (request, response, id) => {
+    pool.query('DELETE FROM prm_product_group WHERE product_group_id = $1', [id], (error, results) => {
+      if (error) {
+        throw error
+      }
+      response.status(200).json("OK")
+    })
+}
 
 module.exports = {
   getProducts,
   getProductCategories,
   getProductGroups,
-  getProductTypes
+  getProductTypes,
+  createProduct,
+  updateProduct,
+  deleteProduct,
+  createProductGroup,
+  updateProductGroup,
+  deleteProductGroup
 }

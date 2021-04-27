@@ -133,6 +133,52 @@ app.get('/api/productTypes', (req, res) => {
         res.status(401).json("OK: user unauthorized")
 });
 
+app.post('/api/products', (req, res, product) => {
+    if(req.session.prm_user && req.session.prm_user.permissions && checkPermission(req.session.prm_user.permissions, productsPermission))
+        daoProducts.createProduct(req, res, product)
+    else
+        res.status(401).json("OK: user unauthorized")
+});
+
+app.put('/api/products/:id', (req, res, product) => {
+    const id = req.params.id
+    if(req.session.prm_user && req.session.prm_user.permissions && checkPermission(req.session.prm_user.permissions, productsPermission))
+        daoProducts.updateProduct(req, res, id, product)
+    else
+        res.status(401).json("OK: user unauthorized")
+});
+
+app.delete('/api/products/:id', (req, res) => {
+    const id = req.params.id
+    if(req.session.prm_user && req.session.prm_user.permissions && checkPermission(req.session.prm_user.permissions, productsPermission))
+        daoProducts.deleteProduct(req, res, id)
+    else
+        res.status(401).json("OK: user unauthorized")
+});
+
+app.post('/api/productGroups', (req, res, productGroup) => {
+    if(req.session.prm_user && req.session.prm_user.permissions && checkPermission(req.session.prm_user.permissions, productsPermission))
+        daoProducts.createProductGroup(req, res, productGroup)
+    else
+        res.status(401).json("OK: user unauthorized")
+});
+
+app.put('/api/productGroups/:id', (req, res, productGroup) => {
+    const id = req.params.id
+    if(req.session.prm_user && req.session.prm_user.permissions && checkPermission(req.session.prm_user.permissions, productsPermission))
+        daoProducts.updateProductGroup(req, res, id, productGroup)
+    else
+        res.status(401).json("OK: user unauthorized")
+});
+
+app.delete('/api/productGroups/:id', (req, res) => {
+    const id = req.params.id
+    if(req.session.prm_user && req.session.prm_user.permissions && checkPermission(req.session.prm_user.permissions, productsPermission))
+        daoProducts.deleteProductGroup(req, res, id)
+    else
+        res.status(401).json("OK: user unauthorized")
+});
+
 ///////////////////////////////////
 // enquiries, patients
 ///////////////////////////////////
