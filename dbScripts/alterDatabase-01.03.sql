@@ -7,7 +7,7 @@ CREATE TABLE IF NOT EXISTS prm_invoice (
    invoice_time								TIMESTAMP NOT NULL,
    invoice_number							VARCHAR(128) NOT NULL,
    invoice_numbering_structure			    CHAR[1] NOT NULL,
-   company_id								SERIAL UNIQUE CONSTRAINT invoice_company_fk REFERENCES prm_company (company_id),
+   company_id								INT CONSTRAINT invoice_company_fk REFERENCES prm_company (company_id),
    company_name								VARCHAR(128) NOT NULL,
    company_address_line_1					VARCHAR(128),
    company_post_code					    INT NOT NULL,
@@ -62,7 +62,7 @@ ADD COLUMN VAT_number	              VARCHAR(32);
 --# Create company table
 --############################################################
 CREATE TABLE IF NOT EXISTS prm_company (
-   company_id								 SERIAL UNIQUE,
+   company_id								 INT,
    company_name								 VARCHAR(128) NOT NULL,
    company_address_line_1					 VARCHAR(128) NOT NULL,
    company_post_code						 INT NOT NULL,
