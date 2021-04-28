@@ -1,0 +1,16 @@
+--############################################################
+--# Altering and linking some tables
+--############################################################
+
+ALTER TABLE invoice ADD COLUMN item_id INT
+CONSTRAINT invoice_prm_invoice_item_fk REFERENCES prm_invoice_item (item_id);
+
+ALTER TABLE prm_invoice_item DROP COLUMN product_id;
+
+ALTER TABLE prm_invoice_item ADD COLUMN product_id SERIAL
+CONSTRAINT prm_invoice_item_prm_product_fk REFERENCES prm_product (product_id);
+
+UPDATE db_version SET version ='01.11', version_date=CURRENT_DATE WHERE resource='Tables';
+
+
+COMMIT;
