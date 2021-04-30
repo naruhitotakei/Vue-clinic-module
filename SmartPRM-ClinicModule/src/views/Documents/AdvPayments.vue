@@ -99,7 +99,7 @@ export default {
           key: 'patient_name',
           class: 'text-left',
           formatter: (value, key, item) => {
-            return item.enquiries.name + ' ' + item.enquiries.last_name
+            return item.enquiries_name + ' ' + item.enquiries_last_name
           },
           filterByFormatted: true
         },
@@ -113,7 +113,7 @@ export default {
           filterByFormatted: true
         },
         { label: this.$t('advPayments.advPaymentsColumn.issuedBy'), key: 'operator_name', class: 'text-left' },
-        { label: this.$t('advPayments.advPaymentsColumn.amount'), key: 'total_with_vat', class: 'text-left' }
+        { label: this.$t('advPayments.advPaymentsColumn.amount'), key: 'paid_amount', class: 'text-left' }
       ]
     }
   },

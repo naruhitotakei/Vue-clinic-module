@@ -19,6 +19,8 @@ const daoStatistics = require('./dao/daoStatistics')
 const daoReporting = require('./dao/daoReporting')
 const fiscalVerification = require('./services/fiscalVerification')
 const daoInvoices = require('./dao/daoInvoices')
+const daoAdvPayments = require('./dao/daoAdvPayments')
+const daoOffers = require('./dao/daoOffers')
 const daoCodeLists = require('./dao/daoCodeLists')
 const daoProducts = require('./dao/daoProducts')
 
@@ -41,6 +43,8 @@ const assignmentsPermission = "Assignments"
 const clinicStatisticsPermission = "Statistics For Clinic"
 const reportingEmazingPermission = "Emazing"
 const invoicesPermission = "Invoices"
+const advPaymentsPermission = "Advance Payments"
+const offersPermission = "Offers"
 const productsPermission = "Services and Products"
 
 ///////////////////////////////////
@@ -313,6 +317,20 @@ app.get('/api/invoices/:id', (req, res) => {
     const id = req.params.id
     if (req.session.prm_user && req.session.prm_user.permissions && checkPermission(req.session.prm_user.permissions, invoicesPermission))
         daoInvoices.getInvoicesById(req, res, id)
+    else
+        res.status(401).json("OK: user unauthorized")
+});
+
+app.get('/api/advPayments', (req, res) => {
+    if (req.session.prm_user && req.session.prm_user.permissions && checkPermission(req.session.prm_user.permissions, advPaymentsPermission))
+        daoAdvPayments.getAdvPayments(req, res)
+    else
+        res.status(401).json("OK: user unauthorized")
+});
+
+app.get('/api/offers', (req, res) => {
+    if (req.session.prm_user && req.session.prm_user.permissions && checkPermission(req.session.prm_user.permissions, offersPermission))
+        daoOffers.getOffers(req, res)
     else
         res.status(401).json("OK: user unauthorized")
 });
