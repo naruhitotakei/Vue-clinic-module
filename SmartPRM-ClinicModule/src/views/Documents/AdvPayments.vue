@@ -31,15 +31,22 @@
                                 <b-table id="my-table"
                                   bordered
                                   hover
+                                  :busy="!isDataLoaded"
                                   @row-clicked="$router.push('/extra-pages/advance-payment-example')"
                                   style="cursor: pointer;"
-                                  :items="paginatedItems"
+                                  :items="advPayments"
                                   :fields="columns"
                                   :per-page="perPage"
                                   :current-page="currentPage"
                                   :filter="filter"
                                   :filter-included-fields="filterOn"
                                   @filtered="onFiltered">
+                                    <template #table-busy>
+                                        <div class="text-center text-primary my-2">
+                                        <b-spinner class="align-middle"></b-spinner>
+                                        <strong class="loading">Loading...</strong>
+                                        </div>
+                                     </template>
                                 </b-table>
                             </b-col>
                         </b-row>
@@ -61,58 +68,8 @@
 
 <script>
 import { xray } from '../../config/pluginInit'
-
-var rows = [
-  {
-    invoice_no: 'advancepayment2393',
-    patient_name: 'Vinko Erjavec',
-    amount: '900 EUR',
-    issued_by: 'Dr. Ana Mencin',
-    date: '27.02.2021-13:00'
-  },
-  {
-    invoice_no: 'advancepayment2416',
-    patient_name: 'Kaja Novak',
-    amount: '300 EUR',
-    issued_by: 'Dr. Silvija Lenart',
-    date: '02.03.2021-09:00'
-  },
-  {
-    invoice_no: 'advancepayment2465',
-    patient_name: 'Simona Majcen',
-    amount: '200 EUR',
-    issued_by: 'Dr. Bojan Jernejc',
-    date: '10.03.2021-13:00'
-  },
-  {
-    invoice_no: 'advancepayment2501',
-    patient_name: 'Iztok Kotnik',
-    amount: '1100 EUR',
-    issued_by: 'Dr. Martin Sever',
-    date: '14.03.2021-11:00'
-  },
-  {
-    invoice_no: 'advancepayment2523',
-    patient_name: 'Elizabeta Kralj',
-    amount: '400 EUR',
-    issued_by: 'Dr. Tanja Perme',
-    date: '18.03.2021-12:30'
-  },
-  {
-    invoice_no: 'advancepayment2654',
-    patient_name: 'Ljudmila Furlan',
-    amount: '150 EUR',
-    issued_by: 'Dr. Bojan Jernejc',
-    date: '22.03.2021-09:30'
-  },
-  {
-    invoice_no: 'advancepayment2893',
-    patient_name: 'Helena Bogataj',
-    amount: '1000 EUR',
-    issued_by: 'Dr. Ana Mencin',
-    date: '02.04.2021-14:00'
-  }
-]
+import { getAdvPayments } from '../../services/advPayments'
+import moment from 'moment'
 export default {
   components: {
   },
@@ -128,19 +85,35 @@ export default {
         { value: 'issued_by', text: 'Issued by' },
         { value: 'amount', text: 'Invoice amount' }
       ],
-      items: rows,
-      paginatedItems: rows,
+      advPayments: [],
       currentPage: 1,
       perPage: 10,
-      totalRows: rows.length,
+      totalRows: 1,
+      isDataLoaded: false,
       filter: '',
       filterOn: [],
       columns: [
-        { label: this.$t('advPayments.advPaymentsColumn.no'), key: 'invoice_no', class: 'text-left' },
-        { label: this.$t('advPayments.advPaymentsColumn.patientName'), key: 'patient_name', class: 'text-left' },
-        { label: this.$t('advPayments.advPaymentsColumn.date'), key: 'date', class: 'text-left' },
-        { label: this.$t('advPayments.advPaymentsColumn.issuedBy'), key: 'issued_by', class: 'text-left' },
-        { label: this.$t('advPayments.advPaymentsColumn.amount'), key: 'amount', class: 'text-left' }
+        { label: this.$t('advPayments.advPaymentsColumn.no'), key: 'invoice_number', class: 'text-left' },
+        {
+          label: this.$t('advPayments.advPaymentsColumn.patientName'),
+          key: 'patient_name',
+          class: 'text-left',
+          formatter: (value, key, item) => {
+            return item.enquiries.name + ' ' + item.enquiries.last_name
+          },
+          filterByFormatted: true
+        },
+        {
+          label: this.$t('advPayments.advPaymentsColumn.date'),
+          key: 'invoice_time',
+          class: 'text-left',
+          formatter: value => {
+            return moment(value).format('YYYY-MM-DD')
+          },
+          filterByFormatted: true
+        },
+        { label: this.$t('advPayments.advPaymentsColumn.issuedBy'), key: 'operator_name', class: 'text-left' },
+        { label: this.$t('advPayments.advPaymentsColumn.amount'), key: 'total_with_vat', class: 'text-left' }
       ]
     }
   },
@@ -161,13 +134,27 @@ export default {
     add_invoice () {
       console.log('ADD NEW ADVANCE PAYMENT CLICKED')
     },
+    getAdvPayments () {
+      getAdvPayments().then(response => {
+        this.advPayments = response
+        this.setTotalRows(this.advPayments.length)
+        this.toggleDataLoaded()
+      })
+    },
     onFiltered (filteredItems) {
       this.totalRows = filteredItems.length
       this.currentPage = 1
+    },
+    setTotalRows (number) {
+      this.totalRows = number
+    },
+    toggleDataLoaded () {
+      this.isDataLoaded = !this.isDataLoaded
     }
   },
   mounted () {
     xray.index()
+    this.getAdvPayments()
   }
 }
 </script>

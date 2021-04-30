@@ -112,7 +112,7 @@ export default {
           },
           filterByFormatted: true
         },
-        { label: this.$t('invoices.invoicesColumn.issuedBy'), key: 'company_name', class: 'text-left' },
+        { label: this.$t('invoices.invoicesColumn.issuedBy'), key: 'operator_name', class: 'text-left' },
         { label: this.$t('invoices.invoicesColumn.amount'), key: 'total_with_vat', class: 'text-left' },
         { label: this.$t('invoices.invoicesColumn.status'),
           key: 'status',

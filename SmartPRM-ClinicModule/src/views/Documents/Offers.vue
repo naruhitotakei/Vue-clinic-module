@@ -32,9 +32,10 @@
                   id="my-table"
                   bordered
                   hover
+                  :busy="!isDataLoaded"
                   style="cursor: pointer;"
                   @row-clicked="$router.push('/extra-pages/offer-example')"
-                  :items="paginatedItems"
+                  :items="offers"
                   :fields="columns"
                   :per-page="perPage"
                   :current-page="currentPage"
@@ -42,6 +43,12 @@
                   :filter-included-fields="filterOn"
                   @filtered="onFiltered"
                 >
+                    <template #table-busy>
+                        <div class="text-center text-primary my-2">
+                        <b-spinner class="align-middle"></b-spinner>
+                        <strong class="loading">Loading...</strong>
+                        </div>
+                </template>
                 </b-table>
               </b-col>
             </b-row>
@@ -65,16 +72,8 @@
 
 <script>
 import { xray } from '../../config/pluginInit'
-
-var rows = [
-  {
-    offer_no: 'offer12312',
-    patient_name: 'Maks Krajnc',
-    date: '03.03.2021-14:00',
-    issued_by: 'Dr. Petra Maver',
-    amount: '90 EUR'
-  }
-]
+import { getOffers } from '../../services/offers'
+import moment from 'moment'
 export default {
   components: {
   },
@@ -99,6 +98,19 @@ export default {
     onFiltered (filteredItems) {
       this.totalRows = filteredItems.length
       this.currentPage = 1
+    },
+    getOffers () {
+      getOffers().then(response => {
+        this.offers = response
+        this.setTotalRows(this.offers.length)
+        this.toggleDataLoaded()
+      })
+    },
+    setTotalRows (number) {
+      this.totalRows = number
+    },
+    toggleDataLoaded () {
+      this.isDataLoaded = !this.isDataLoaded
     }
   },
   data  () {
@@ -112,24 +124,39 @@ export default {
         { value: 'issue_by', text: 'Issued by' },
         { value: 'amount', text: 'Amount' }
       ],
+      offers: [],
       filter: '',
       filterOn: [],
-      items: rows,
-      paginatedItems: rows,
       currentPage: 1,
       perPage: 10,
-      totalRows: rows.length,
+      isDataLoaded: false,
+      totalRows: 1,
       columns: [
-        { label: this.$t('offers.offersColumn.no'), key: 'offer_no', class: 'text-left' },
-        { label: this.$t('offers.offersColumn.patientName'), key: 'patient_name', class: 'text-left' },
-        { label: this.$t('offers.offersColumn.date'), key: 'date', class: 'text-left' },
-        { label: this.$t('offers.offersColumn.issuedBy'), key: 'issued_by', class: 'text-left' },
-        { label: this.$t('offers.offersColumn.amount'), key: 'amount', class: 'text-left' }
+        { label: this.$t('offers.offersColumn.no'), key: 'invoice_number', class: 'text-left' },
+        { label: this.$t('offers.offersColumn.patientName'),
+          key: 'patient_name',
+          class: 'text-left',
+          formatter: (value, key, item) => {
+            return item.enquiries_name + ' ' + item.enquiries_last_name
+          },
+          filterByFormatted: true
+        },
+        { label: this.$t('offers.offersColumn.date'),
+          key: 'invoice_time',
+          class: 'text-left',
+          formatter: value => {
+            return moment(value).format('YYYY-MM-DD')
+          },
+          filterByFormatted: true
+        },
+        { label: this.$t('offers.offersColumn.issuedBy'), key: 'operator_name', class: 'text-left' },
+        { label: this.$t('offers.offersColumn.amount'), key: 'total_with_vat', class: 'text-left' }
       ]
     }
   },
   mounted () {
     xray.index()
+    this.getOffers()
   }
 }
 </script>

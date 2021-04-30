@@ -10,7 +10,7 @@ const pool = new Pool({
 })
 
 const getInvoices = (request, response) => {
-    pool.query("SELECT * from invoice", (error, results) => {
+    pool.query("SELECT * FROM invoice WHERE invoice_type = 'Invoice'", (error, results) => {
         if (error) {
             throw error
         }
