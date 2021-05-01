@@ -348,7 +348,7 @@
                               <div class="iq-card-header-toolbar d-flex align-items-center" style="margin-top: -10px;">
                                   <div class="iq-search-bar">
                                       <form action="#" class="searchbox">
-                                          <input type="text" class="text search-input" placeholder="Search" @keyup="myFunction($event.target.value)">
+                                          <input type="text" class="text search-input" v-model="filter" placeholder="Search">
                                           <a class="search-link" href="#"><i class="ri-search-line"></i></a>
                                       </form>
                                   </div>
@@ -357,12 +357,10 @@
                                           <template slot="label">
                                               {{ $t('EPR.files.searchBy') }}:
                                           </template>
-                                          <b-form-select plain
-                                                         v-model="selected"
-                                                         :options="searchOptions"
-                                                         id="searchOptions"
-                                                         @change="searchFunction($event)">
-                                          </b-form-select>
+                                          <v-select class="patients" label="text"
+                                            :clearable="false" :reduce="filter => filter.value"
+                                            :options="searchOptions" @input="filterSelected">
+                                          </v-select>
                                       </b-form-group>
                                   </iq-card>
                               </div>
@@ -555,6 +553,8 @@ export default {
       appointments: [],
       timeSinceFirstVisit: '',
       dentists: [],
+      filter: '',
+      filterOn: [],
       invoiceItems: [],
       offerItems: rowsOffers,
       currentInvoicePage: 1,
@@ -732,6 +732,10 @@ export default {
         }
         reader.readAsDataURL(input.files[0])
       }
+    },
+    filterSelected (value) {
+      let array = [value]
+      this.filterOn = array
     }
   }
 }
