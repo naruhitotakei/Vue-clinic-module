@@ -1,6 +1,6 @@
 <template>
 <b-container fluid>
-  <VueFullCalendar
+  <calendar
   :datesAboveResources="true"
   :defaultView="calendarOptions.defaultView"
   :plugins="calendarOptions.plugins"
@@ -10,40 +10,46 @@
   :maxTime="calendarOptions.maxTime"
   :allDaySlot="calendarOptions.allDaySlot"
   :slotDuration="calendarOptions.slotDuration"
-  :header="{
-      left: 'prev,next today',
-      center: 'title',
-      right: 'dayGridMonth,/*timeGridWeek,timeGridDay*/,resourceTimeGridWeek,resourceTimeGridDay'
-    }"
-  @eventClick="function(view) {
-          this.modalShow = true;
-          eventData(view);
-        }.bind(this)"
+  :selectable="isSelectable"
+  editable="true"
+  @select="calendarOptions.select"
+  @eventClick="calendarOptions.eventClick"
+  :header="calendarOptions.header"
+  @datesRender="test"
+  id="calendar"
+  ref="calendar"
   />
   <!-- Event description modal -->
   <b-modal v-model="modalShow" size="lg" title="Event Details" ok-title="Save Changes" @ok="submitFormData" cancel-title="Close">
     <form @submit="submitFormData">
-      <h3 style="text-align: center;">{{this.patientData.patient_name}} - {{this.patientData.desc}}</h3>
+      <h3 v-if="formData.title" style="text-align: center;">{{this.patientData.patient_name}} - {{this.patientData.desc}}</h3>
       <div class="form-row">
         <div class="col-md-12 mb-3">
-            <label for="validationDefault01">{{ $t('calendarEvent.start') }}</label>
+          <label for="validationDefault01">Title</label>
+          <div style="display: flex;">
+            <input type="text" v-model="formData.title" class="form-control col-md-6" placeholder="Title" id="validationDefault01" required>
+          </div>
+        </div>
+        <div class="col-md-12 mb-3">
+          <label for="validationDefault01">{{ $t('calendarEvent.start') }}</label>
           <input type="date" v-model="formData.start" class="form-control" id="validationDefault01" required style="max-width: 200px;">
         </div>
         <div class="col-md-12 mb-3">
-            <label for="validationDefault01">{{ $t('calendarEvent.duration') }}</label>
+          <label for="validationDefault01">{{ $t('calendarEvent.duration') }}</label>
           <div style="display: flex;">
-          <input type="number" v-model="formData.hours" class="form-control col-md-6" min="0" placeholder="Hours" id="validationDefault01" required style="max-width: 100px;">
-          <input type="number" v-model="formData.minutes" class="form-control col-md-6" min="0" step="5" placeholder="Minutes" id="validationDefault01" required style="max-width: 100px;">
-        </div></div>
+            <input type="number" v-model="formData.hours" class="form-control col-md-6" min="0" placeholder="Hours" id="validationDefault01" required style="max-width: 150px;">
+            <input type="number" v-model="formData.minutes" class="form-control col-md-6 offset-1" min="0" step="5" placeholder="Minutes" id="validationDefault01" required style="max-width: 150px;">
+          </div>
+        </div>
         <div class="col-md-12 mb-3">
-            <label for="validationDefault01">{{ $t('calendarEvent.notes') }}</label>
+          <label for="validationDefault01">{{ $t('calendarEvent.notes') }}</label>
           <textarea row="2" v-model="formData.notes" class="form-control" placeholder="Add your notes here for event!" id="validationDefault01" required></textarea>
         </div>
         <div class="col-md-12 mb-3">
-            <label for="validationDefault01">{{ $t('calendarEvent.changeColor') }}</label><br>
+          <label for="validationDefault01">{{ $t('calendarEvent.changeColor') }}</label><br>
           <template v-for="(item,index) in color">
-              <b-form-radio class="custom-radio-color" inline v-model="formData.color" :color="item.color" name="color" :key="index" :value="item.value" :disabled="item.disabled">{{ item.label }}</b-form-radio>
-            </template>
+            <b-form-radio class="custom-radio-color" inline v-model="formData.color" :color="item.color" name="color" :key="index" :value="item.value" :disabled="item.disabled">{{ item.label }}</b-form-radio>
+          </template>
       </div>
         <div class="col-md-12 mb-3">
           <template v-for="(item,index) in state">
@@ -60,17 +66,23 @@
 </b-container>
 </template>
 <script>
-import VueFullCalendar from '@fullcalendar/vue'
+import calendar from '@fullcalendar/vue'
 import resourceTimeGrid from '@fullcalendar/resource-timegrid'
 import dayGridPlugin from '@fullcalendar/daygrid'
 import timeGridPlugin from '@fullcalendar/timegrid'
 import interactionPlugin from '@fullcalendar/interaction'
 import listPlugin from '@fullcalendar/list'
+import moment from 'moment'
+import { xray } from '../../../config/pluginInit'
 
 export default {
-  // name: 'VueFullCalendar',
   components: {
-    VueFullCalendar
+    calendar
+  },
+  computed: {
+    isSelectable () {
+      return !this.viewName.includes('dayGridMonth')
+    }
   },
   props: {
     resourcesOuter: Array
@@ -123,6 +135,7 @@ export default {
         }
       ],
       formData: {
+        title: '',
         start: '',
         hours: '',
         minutes: '',
@@ -131,8 +144,15 @@ export default {
         color: ''
       },
       modalShow: false,
+      viewName: 'dayGridMonth',
+      event: {},
       calendarOptions: {
         plugins: [dayGridPlugin, listPlugin, timeGridPlugin, interactionPlugin, resourceTimeGrid],
+        header: {
+          left: 'prev,next today',
+          center: 'title',
+          right: 'dayGridMonth,resourceTimeGridWeek,resourceTimeGridDay'
+        },
         timeZone: 'UTC',
         defaultView: 'dayGridMonth',
         resources: this.resourcesOuter,
@@ -140,17 +160,16 @@ export default {
         maxTime: '19:00:00',
         slotDuration: '00:15:00',
         allDaySlot: false,
-        // resources: [
-        //   { id: 'a', title: 'Doctor 1', eventColor: 'sandybrown' },
-        //   { id: 'b', title: 'Doctor 2', eventColor: 'blue' },
-        //   { id: 'c', title: 'Doctor 3', eventColor: 'red' }
-        // ],
+        editable: true,
+        selectable: true,
+        select: this.createAppointment,
+        eventClick: this.updateAppointment,
         events: [
           { id: '1', title: 'Appointment 1', start: '2021-04-22T16:30:00', end: '2021-04-22T18:00:00', resourceId: 'a', patient_data: { patient_name: 'Patient 1', desc: 'Zalivka' } },
-          { id: '2', title: 'Appointment 1.1', start: '2021-04-22T01:00:00', end: '2021-04-22T03:00:00', resourceId: 'a', patient_data: { patient_name: 'Patient 2', desc: 'Implant' } },
-          { id: '3', title: 'Appointment 2', start: '2021-04-22T02:00:00', end: '2021-04-22T04:00:00', resourceId: 'b', patient_data: { patient_name: 'Patient 3', desc: 'Invisalign' } },
-          { id: '4', title: 'Appointment 6', start: '2021-04-22T03:30:00', end: '2021-04-22T05:00:00', resourceId: 'b', patient_data: { patient_name: 'Patient 4', desc: 'Pregled' } },
-          { id: '5', title: 'Appointment 5', start: '2021-04-22T01:30:00', end: '2021-04-22T03:30:00', resourceId: 'c', patient_data: { patient_name: 'Patient 5', desc: 'Invisalign' } },
+          { id: '2', title: 'Appointment 1.1', start: '2021-04-22T09:00:00', end: '2021-04-22T10:00:00', resourceId: 'a', patient_data: { patient_name: 'Patient 2', desc: 'Implant' } },
+          { id: '3', title: 'Appointment 2', start: '2021-04-22T12:00:00', end: '2021-04-22T13:00:00', resourceId: 'b', patient_data: { patient_name: 'Patient 3', desc: 'Invisalign' } },
+          { id: '4', title: 'Appointment 6', start: '2021-04-22T14:30:00', end: '2021-04-22T15:00:00', resourceId: 'b', patient_data: { patient_name: 'Patient 4', desc: 'Pregled' } },
+          { id: '5', title: 'Appointment 5', start: '2021-04-22T11:30:00', end: '2021-04-22T11:45:00', resourceId: 'c', patient_data: { patient_name: 'Patient 5', desc: 'Invisalign' } },
           { id: '6', title: 'Appointment 3', start: '2021-04-23T12:00:00', end: '2021-04-23T01:00:00', resourceId: 'c', patient_data: { patient_name: 'Patient 6', desc: 'Zalivka' } },
           { id: '7', title: 'Appointment 4', start: '2021-04-23T10:00:00', end: '2021-04-23T11:00:00', resourceId: 'b', patient_data: { patient_name: 'Patient 7', desc: 'Implant' } }
         ]
@@ -159,8 +178,22 @@ export default {
   },
   mounted () {
     console.log('this.resourcesOuter', this.resourcesOuter)
+    xray.index()
   },
   methods: {
+    test (info) {
+      this.viewName = info.view.type
+    },
+    defaultEvent () {
+      return {
+        title: '',
+        start: '',
+        end: '',
+        patientName: '',
+        note: '',
+        color: ''
+      }
+    },
     submitFormData () {
       console.log('FORM DATA:', this.formData)
     },
@@ -174,6 +207,34 @@ export default {
       var patientArr = this.calendarOptions.events
       this.patientData = patientArr.find(item => item.id === this.eventId).patient_data
       console.log('PATIENT DATA:', this.patientData.patient_name)
+    },
+    createAppointment (info) {
+      this.modalShow = true
+      this.formData.start = moment(info.start).format('YYYY-MM-DD')
+      let temp = moment.duration(moment(info.endStr).diff(moment(info.startStr))).asHours()
+      let hourseAndMinutes = this.getHoursAndMinutes(temp)
+      this.formData.hours = hourseAndMinutes.hours
+      this.formData.minutes = hourseAndMinutes.minutes
+    },
+    getHoursAndMinutes (hours) {
+      if (hours === 24) {
+        return { hours: 0, minutes: 0 }
+      } else if (hours > 1) {
+        let tempHours = hours.toFixed(2).toString().split('.')
+        console.log(tempHours.length)
+        if (tempHours.length === 1) {
+          return { hours: tempHours[0], minutes: 0 }
+        }
+        return { hours: tempHours[0], minutes: 60 / 100 * tempHours[1] }
+      } else if (hours === 1) {
+        return { hours: 1, minutes: 0 }
+      } else {
+        return { hours: 0, minutes: 60 * hours }
+      }
+    },
+    updateAppointment (info) {
+      this.modalShow = true
+      this.eventData(info)
     }
   }
 }
