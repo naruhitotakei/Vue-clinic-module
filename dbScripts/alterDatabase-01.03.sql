@@ -2,12 +2,12 @@
 --# Create invoice table
 --############################################################
 CREATE TABLE IF NOT EXISTS prm_invoice (
-   invoice_id								SERIAL UNIQUE,
+   invoice_id								SERIAL,
    invoice_type								VARCHAR(32) NOT NULL,
    invoice_time								TIMESTAMP NOT NULL,
    invoice_number							VARCHAR(128) NOT NULL,
    invoice_numbering_structure			    CHAR[1] NOT NULL,
-   company_id								SERIAL UNIQUE CONSTRAINT invoice_company_fk REFERENCES prm_company (company_id),
+   company_id								INT CONSTRAINT invoice_company_fk REFERENCES prm_company (company_id),
    company_name								VARCHAR(128) NOT NULL,
    company_address_line_1					VARCHAR(128),
    company_post_code					    INT NOT NULL,
@@ -19,8 +19,8 @@ CREATE TABLE IF NOT EXISTS prm_invoice (
    company_legal_registration_identifier	BIGINT NOT NULL,
    premises_business_premise_ID				VARCHAR(20) NOT NULL,
    premises_electronic_device_ID			VARCHAR(20) NOT NULL,
-   issued_in                        VARCHAR(64) NOT NULL,
-   enquiries_id							    SERIAL UNIQUE CONSTRAINT invoice_enquiries_fk REFERENCES enquiries (id),
+   issued_in								VARCHAR(64) NOT NULL,
+   enquiries_id							    SERIAL CONSTRAINT invoice_enquiries_fk REFERENCES enquiries (id),
    enquiries_name						    VARCHAR(255) NOT NULL,
    enquiries_last_name					    VARCHAR(255) NOT NULL,
    enquiries_address_line_1					VARCHAR(128) NOT NULL,
@@ -29,14 +29,14 @@ CREATE TABLE IF NOT EXISTS prm_invoice (
    enquiries_country_code					TEXT NOT NULL,
    enquiries_tax_registration_number 		VARCHAR(32) NOT NULL,
    enquiries_VAT_number		 				VARCHAR(32) NOT NULL,
-   lines_sum								MONEY NOT NULL,
-   discount_sum								DECIMAL,
-   charges_sum								MONEY NOT NULL,
-   total_without_VAT						MONEY NOT NULL,
-   total_VAT_amount							MONEY,
-   total_with_VAT							MONEY NOT NULL,
-   paid_amount								MONEY,
-   amount_due_for_payment					MONEY NOT NULL,
+   lines_sum								NUMERIC(8,2) NOT NULL,
+   discount_sum								NUMERIC(8,2),
+   charges_sum								NUMERIC(8,2) NOT NULL,
+   total_without_VAT						NUMERIC(8,2) NOT NULL,
+   total_VAT_amount							NUMERIC(8,2),
+   total_with_VAT							NUMERIC(8,2) NOT NULL,
+   paid_amount								NUMERIC(8,2),
+   amount_due_for_payment					NUMERIC(8,2) NOT NULL,
    payment_method							VARCHAR(64) NOT NULL,
    warranty									BOOLEAN DEFAULT 't',
    VAT_exemption_reason						TEXT,
@@ -44,7 +44,7 @@ CREATE TABLE IF NOT EXISTS prm_invoice (
    operator_tax_number						VARCHAR(32) NOT NULL,
    ZOI										VARCHAR(64) NOT NULL,
    EOR										VARCHAR(64) NOT NULL,
-   invoice_special_notes    TEXT,
+   invoice_special_notes					TEXT,
    reverted									BOOLEAN DEFAULT 'f',
    created_date								DATE NOT NULL DEFAULT CURRENT_DATE 
 );
@@ -62,7 +62,7 @@ ADD COLUMN VAT_number	              VARCHAR(32);
 --# Create company table
 --############################################################
 CREATE TABLE IF NOT EXISTS prm_company (
-   company_id								 SERIAL UNIQUE,
+   company_id								 INT,
    company_name								 VARCHAR(128) NOT NULL,
    company_address_line_1					 VARCHAR(128) NOT NULL,
    company_post_code						 INT NOT NULL,
