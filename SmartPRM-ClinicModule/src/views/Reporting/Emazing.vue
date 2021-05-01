@@ -4,22 +4,24 @@
           <template v-slot:headerTitle>
             <div class="row pt-3">
           <b-form-group class="col-md-3">
-              <b-form-select plain v-model="countrySelect" :options="countrySelectOptions" style="padding: 10px;" @change.native="onCountryChange">
-                  <b-form-select-option :value="null">{{ $t('reportingEmazing.countrySelect') }}</b-form-select-option>
-              </b-form-select>
+              <v-select class="patients" v-model="countrySelect" label="text"
+                :clearable="false" :reduce="period => period.value"
+                :options="countrySelectOptions" @input="onCountryChange">
+              </v-select>
             </b-form-group>
             <b-form-group class="col-md-2">
-              <b-form-select plain v-model="periodSelect" :options="periodSelectOptions" style="padding: 10px;" @change.native="onPeriodChange">
-                  <b-form-select-option :value="null">{{ $t('reportingEmazing.periodSelect') }}</b-form-select-option>
-              </b-form-select>
+              <v-select class="patients" v-model="periodSelect" label="text"
+                :clearable="false" :reduce="period => period.value"
+                :options="periodSelectOptions" @input="onPeriodChange">
+              </v-select>
             </b-form-group>
               <label style="padding-top: 8px;">From:</label>
             <b-form-group label-for="exampleInputdate" class="col-md-2">
-                <b-form-input id="exampleInputdate" type="date" v-model="fromdate" @change="onFromChange"></b-form-input>
+                <b-form-input class="date" id="exampleInputdate" type="date" v-model="fromdate" @change="onFromChange"></b-form-input>
               </b-form-group>
               <label style="padding-top: 8px;">To:</label>
             <b-form-group label-for="exampleInputdate" class="col-md-2">
-                <b-form-input id="exampleInputdate" type="date" v-model="todate" @change="onToChange"></b-form-input>
+                <b-form-input class="date" id="exampleInputdate" type="date" v-model="todate" @change="onToChange"></b-form-input>
             </b-form-group>
             </div>
           </template>
@@ -52,8 +54,11 @@ export default {
     return {
       fromdate: null,
       todate: null,
-      countrySelectOptions: [],
+      countrySelectOptions: [
+        { value: null, text: this.$t('reportingEmazing.countrySelect') }
+      ],
       periodSelectOptions: [
+        { value: null, text: this.$t('reportingEmazing.periodSelect') },
         { value: '1', text: this.$t('reportingEmazing.currentMonth') },
         { value: '2', text: this.$t('reportingEmazing.lastMonth') },
         { value: '3', text: this.$t('reportingEmazing.thisYear') },
@@ -156,10 +161,10 @@ export default {
     getCountryList () {
       getCountryList(this.fromdate, this.todate).then(response => {
         if (typeof response !== 'string') {
-          console.log('RESPONSE', response)
+          // console.log('RESPONSE', response)
           this.countrySelectOptions = []
           for (var cnt in response) {
-            console.log('CNT', cnt)
+            // console.log('CNT', cnt)
             if (response[cnt].id) {
               var cntEnt = { value: response[cnt].id, text: response[cnt].name }
               this.countrySelectOptions.push(cntEnt)
@@ -167,6 +172,10 @@ export default {
           }
         } else {
           this.countrySelectOptions = []
+        }
+        this.countrySelectOptions.push({ value: null, text: this.$t('reportingEmazing.countrySelect') })
+        if (!this.countrySelectOptions.some(e => e.value === this.countrySelect)) {
+          this.countrySelect = null
         }
       })
     },
@@ -200,5 +209,8 @@ export default {
 <style>
 .hidden_header {
   display: none;
+}
+.date {
+  height: 35px !important;
 }
 </style>
