@@ -38,8 +38,8 @@
         <div class="col-md-12 mb-3">
           <label for="validationDefault01">{{ $t('calendarEvent.duration') }}</label>
           <div style="display: flex;">
-            <input type="number" v-model="formData.hours" class="form-control col-md-6" min="0" placeholder="Hours" id="validationDefault01" required style="max-width: 150px;">
-            <input type="number" v-model="formData.minutes" class="form-control col-md-6 offset-1" min="0" step="5" placeholder="Minutes" id="validationDefault01" required style="max-width: 150px;">
+            <input type="number" v-model="formData.hours" class="form-control col-md-6" min="0" max="9" placeholder="Hours" id="validationDefault01" required style="max-width: 150px;">
+            <input type="number" v-model="formData.minutes" min="0" max="59" class="form-control col-md-6 offset-1" step="15" placeholder="Minutes" id="validationDefault01" required style="max-width: 150px;">
           </div>
         </div>
         <div class="col-md-12 mb-3">
