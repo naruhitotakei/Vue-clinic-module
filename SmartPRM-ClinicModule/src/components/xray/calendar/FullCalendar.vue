@@ -48,12 +48,12 @@
         <div class="col-md-12 mb-3">
           <label for="validationDefault01">{{ $t('calendarEvent.changeColor') }}</label><br>
           <template v-for="(item,index) in color">
-            <b-form-radio class="custom-radio-color" inline v-model="formData.color" :color="item.color" name="color" :key="index" :value="item.value" :disabled="item.disabled">{{ item.label }}</b-form-radio>
+            <b-form-radio class="custom-radio-color" inline v-model="formData.assignmentColor" :color="item.color" :value="item.value" :key="index">{{ item.label }}</b-form-radio>
           </template>
       </div>
         <div class="col-md-12 mb-3">
           <template v-for="(item,index) in state">
-          <b-form-radio class="custom-switch-color" v-model="formData.attended" :value="item.value" name="check-button" inline :key="index">
+          <b-form-radio class="custom-switch-color" v-model="formData.attended" :value="item.value" inline :key="index">
             {{ item.label }}
           </b-form-radio>
         </template>
@@ -143,7 +143,7 @@ export default {
         minutes: '',
         notes: '',
         attended: '',
-        color: '',
+        assignmentColor: '',
         resourceId: ''
       },
       calendarApi: null,
@@ -198,7 +198,7 @@ export default {
         minutes: '',
         notes: '',
         attended: '',
-        color: '',
+        assignmentColor: '',
         resourceId: ''
       }
     },
@@ -215,7 +215,7 @@ export default {
           minutes: this.formData.minutes,
           notes: this.formData.notes,
           attended: this.formData.attended,
-          color: this.formData.color,
+          assignmentColor: this.formData.assignmentColor,
           resourceId: this.formData.resourceId
         })
       this.formData = this.defaultAppointment()
@@ -249,6 +249,7 @@ export default {
     updateAppointment (info) {
       this.modalShow = true
       this.formData = this.calendarOptions.events.find(event => event.id === +info.event.id)
+      console.log(JSON.stringify(this.formData))
     }
   }
 }
