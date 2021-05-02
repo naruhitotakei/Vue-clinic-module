@@ -15,14 +15,14 @@
   @select="calendarOptions.select"
   @eventClick="calendarOptions.eventClick"
   :header="calendarOptions.header"
-  @datesRender="test"
+  @datesRender="onViewChange"
   id="calendar"
   ref="calendar"
   />
   <!-- Event description modal -->
-  <b-modal v-model="modalShow" size="lg" title="Event Details" ok-title="Save Changes" @ok="submitFormData" cancel-title="Close">
-    <form @submit="submitFormData">
-      <h3 v-if="formData.title" style="text-align: center;">{{this.patientData.patient_name}} - {{this.patientData.desc}}</h3>
+  <b-modal v-model="modalShow" size="lg" title="Event Details" ok-title="Save Changes" @ok="saveAppointment" cancel-title="Close">
+    <form @submit="saveAppointment">
+      <h3 v-if="formData.title" style="text-align: center;">{{formData.title}}</h3>
       <div class="form-row">
         <div class="col-md-12 mb-3">
           <label for="validationDefault01">Title</label>
@@ -32,7 +32,7 @@
         </div>
         <div class="col-md-12 mb-3">
           <label for="validationDefault01">{{ $t('calendarEvent.start') }}</label>
-          <input type="date" v-model="formData.start" class="form-control" id="validationDefault01" required style="max-width: 200px;">
+          <input type="date" v-model="formData.date" class="form-control" id="validationDefault01" required style="max-width: 200px;">
         </div>
         <div class="col-md-12 mb-3">
           <label for="validationDefault01">{{ $t('calendarEvent.duration') }}</label>
@@ -53,7 +53,7 @@
       </div>
         <div class="col-md-12 mb-3">
           <template v-for="(item,index) in state">
-          <b-form-radio class="custom-switch-color" v-model="formData.checked" :value="item.value" name="check-button" inline :key="index">
+          <b-form-radio class="custom-switch-color" v-model="formData.attended" :value="item.value" name="check-button" inline :key="index">
             {{ item.label }}
           </b-form-radio>
         </template>
@@ -136,13 +136,17 @@ export default {
       ],
       formData: {
         title: '',
+        date: '',
         start: '',
+        end: '',
         hours: '',
         minutes: '',
         notes: '',
-        checked: '',
-        color: ''
+        attended: '',
+        color: '',
+        resourceId: ''
       },
+      calendarApi: null,
       modalShow: false,
       viewName: 'dayGridMonth',
       event: {},
@@ -165,13 +169,13 @@ export default {
         select: this.createAppointment,
         eventClick: this.updateAppointment,
         events: [
-          { id: '1', title: 'Appointment 1', start: '2021-04-22T16:30:00', end: '2021-04-22T18:00:00', resourceId: 'a', patient_data: { patient_name: 'Patient 1', desc: 'Zalivka' } },
-          { id: '2', title: 'Appointment 1.1', start: '2021-04-22T09:00:00', end: '2021-04-22T10:00:00', resourceId: 'a', patient_data: { patient_name: 'Patient 2', desc: 'Implant' } },
-          { id: '3', title: 'Appointment 2', start: '2021-04-22T12:00:00', end: '2021-04-22T13:00:00', resourceId: 'b', patient_data: { patient_name: 'Patient 3', desc: 'Invisalign' } },
-          { id: '4', title: 'Appointment 6', start: '2021-04-22T14:30:00', end: '2021-04-22T15:00:00', resourceId: 'b', patient_data: { patient_name: 'Patient 4', desc: 'Pregled' } },
-          { id: '5', title: 'Appointment 5', start: '2021-04-22T11:30:00', end: '2021-04-22T11:45:00', resourceId: 'c', patient_data: { patient_name: 'Patient 5', desc: 'Invisalign' } },
-          { id: '6', title: 'Appointment 3', start: '2021-04-23T12:00:00', end: '2021-04-23T01:00:00', resourceId: 'c', patient_data: { patient_name: 'Patient 6', desc: 'Zalivka' } },
-          { id: '7', title: 'Appointment 4', start: '2021-04-23T10:00:00', end: '2021-04-23T11:00:00', resourceId: 'b', patient_data: { patient_name: 'Patient 7', desc: 'Implant' } }
+          { id: '1', title: 'Appointment 1', start: '2021-04-22T16:30:00', end: '2021-04-22T18:00:00', resourceId: 'a' },
+          { id: '2', title: 'Appointment 1.1', start: '2021-04-22T09:00:00', end: '2021-04-22T10:00:00', resourceId: 'a' },
+          { id: '3', title: 'Appointment 2', start: '2021-04-22T12:00:00', end: '2021-04-22T13:00:00', resourceId: 'b' },
+          { id: '4', title: 'Appointment 6', start: '2021-04-22T14:30:00', end: '2021-04-22T15:00:00', resourceId: 'b' },
+          { id: '5', title: 'Appointment 5', start: '2021-04-22T11:30:00', end: '2021-04-22T11:45:00', resourceId: 'c' },
+          { id: '6', title: 'Appointment 3', start: '2021-04-23T12:00:00', end: '2021-04-23T01:00:00', resourceId: 'c' },
+          { id: '7', title: 'Appointment 4', start: '2021-04-23T10:00:00', end: '2021-04-23T11:00:00', resourceId: 'b' }
         ]
       }
     }
@@ -181,47 +185,57 @@ export default {
     xray.index()
   },
   methods: {
-    test (info) {
+    onViewChange (info) {
       this.viewName = info.view.type
     },
-    defaultEvent () {
+    defaultAppointment () {
       return {
         title: '',
+        date: '',
         start: '',
         end: '',
-        patientName: '',
-        note: '',
-        color: ''
+        hours: '',
+        minutes: '',
+        notes: '',
+        attended: '',
+        color: '',
+        resourceId: ''
       }
     },
-    submitFormData () {
-      console.log('FORM DATA:', this.formData)
-    },
-    eventData (args) {
-      console.log('EVENT INFO:', args.event)
-      this.eventInfo = args.event
-      this.eventId = this.eventInfo.id
-      // var arr = this.calendarOptions.resources
-      // var doctorName = arr.find(item => item.id === this.eventResourceId)
-      // console.log('ITEM:', doctorName.title)
-      var patientArr = this.calendarOptions.events
-      this.patientData = patientArr.find(item => item.id === this.eventId).patient_data
-      console.log('PATIENT DATA:', this.patientData.patient_name)
+    saveAppointment () {
+      let id = this.calendarOptions.events.length + 1
+      console.log('color: ' + this.formData.color)
+      console.log('att: ' + this.formData.attended)
+      this.calendarOptions.events.push(
+        { id: id,
+          title: this.formData.title,
+          start: this.formData.start,
+          end: this.formData.end,
+          hours: this.formData.hours,
+          minutes: this.formData.minutes,
+          notes: this.formData.notes,
+          attended: this.formData.attended,
+          color: this.formData.color,
+          resourceId: this.formData.resourceId
+        })
+      this.formData = this.defaultAppointment()
     },
     createAppointment (info) {
       this.modalShow = true
-      this.formData.start = moment(info.start).format('YYYY-MM-DD')
+      this.formData.date = moment(info.start).format('YYYY-MM-DD')
       let temp = moment.duration(moment(info.endStr).diff(moment(info.startStr))).asHours()
       let hourseAndMinutes = this.getHoursAndMinutes(temp)
       this.formData.hours = hourseAndMinutes.hours
       this.formData.minutes = hourseAndMinutes.minutes
+      this.formData.start = info.startStr
+      this.formData.end = info.endStr
+      this.formData.resourceId = info.resource.id
     },
     getHoursAndMinutes (hours) {
       if (hours === 24) {
         return { hours: 0, minutes: 0 }
       } else if (hours > 1) {
         let tempHours = hours.toFixed(2).toString().split('.')
-        console.log(tempHours.length)
         if (tempHours.length === 1) {
           return { hours: tempHours[0], minutes: 0 }
         }
@@ -234,7 +248,7 @@ export default {
     },
     updateAppointment (info) {
       this.modalShow = true
-      this.eventData(info)
+      this.formData = this.calendarOptions.events.find(event => event.id === +info.event.id)
     }
   }
 }
