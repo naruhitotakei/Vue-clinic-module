@@ -51,17 +51,8 @@
           <template v-for="(item,index) in color">
             <b-form-radio class="custom-radio-color" inline v-model="formData.assignmentColor" :color="item.color" :value="item.value" :key="index">{{ item.label }}</b-form-radio>
           </template>
-      </div>
-        <div class="col-md-12 mb-3">
-          <template v-for="(item,index) in state">
-          <b-form-radio class="custom-switch-color" v-model="formData.attended" :value="item.value" inline :key="index">
-            {{ item.label }}
-          </b-form-radio>
-        </template>
         </div>
       </div>
-      <button type="" class="btn btn-primary">{{ $t('calendarEvent.viewPatient') }}</button>&nbsp;&nbsp;
-      <button type="" class="btn btn-primary">{{ $t('calendarEvent.appointmentCancelled') }}</button>
     </form>
   </b-modal>
 </b-container>
@@ -143,7 +134,6 @@ export default {
         hours: '',
         minutes: '',
         notes: '',
-        attended: '',
         assignmentColor: '',
         resourceId: ''
       },
@@ -204,7 +194,6 @@ export default {
         hours: '',
         minutes: '',
         notes: '',
-        attended: '',
         assignmentColor: '',
         resourceId: ''
       }
@@ -220,7 +209,6 @@ export default {
           hours: this.formData.hours,
           minutes: this.formData.minutes,
           notes: this.formData.notes,
-          attended: this.formData.attended,
           assignmentColor: this.formData.assignmentColor,
           resourceId: this.formData.resourceId
         })
