@@ -12,10 +12,11 @@
   :slotDuration="calendarOptions.slotDuration"
   :selectable="isSelectable"
   editable="true"
-  @select="calendarOptions.select"
-  @eventClick="calendarOptions.eventClick"
   :header="calendarOptions.header"
+  @select="createAppointment"
+  @eventClick="updateAppointment"
   @datesRender="onViewChange"
+  @eventResize="eventResize"
   id="calendar"
   ref="calendar"
   />
@@ -166,8 +167,6 @@ export default {
         allDaySlot: false,
         editable: true,
         selectable: true,
-        select: this.createAppointment,
-        eventClick: this.updateAppointment,
         events: [
           { id: '1', title: 'Appointment 1', start: '2021-04-22T16:30:00', end: '2021-04-22T18:00:00', resourceId: 'a' },
           { id: '2', title: 'Appointment 1.1', start: '2021-04-22T09:00:00', end: '2021-04-22T10:00:00', resourceId: 'a' },
@@ -188,6 +187,14 @@ export default {
     onViewChange (info) {
       this.viewName = info.view.type
     },
+    eventResize (info) {
+      let resizedIndex = this.calendarOptions.events.findIndex(obj => obj.id === +info.event.id)
+      this.setAssignmentDateAndDuration(info.event.start, info.event.end)
+      this.calendarOptions.events[resizedIndex].hours = this.formData.hours
+      this.calendarOptions.events[resizedIndex].minutes = this.formData.minutes
+      this.calendarOptions.events[resizedIndex].start = this.formData.start
+      this.calendarOptions.events[resizedIndex].end = this.formData.end
+    },
     defaultAppointment () {
       return {
         title: '',
@@ -204,11 +211,10 @@ export default {
     },
     saveAppointment () {
       let id = this.calendarOptions.events.length + 1
-      console.log('color: ' + this.formData.color)
-      console.log('att: ' + this.formData.attended)
       this.calendarOptions.events.push(
         { id: id,
           title: this.formData.title,
+          date: this.formData.date,
           start: this.formData.start,
           end: this.formData.end,
           hours: this.formData.hours,
@@ -221,15 +227,19 @@ export default {
       this.formData = this.defaultAppointment()
     },
     createAppointment (info) {
+      this.formData = this.defaultAppointment()
       this.modalShow = true
-      this.formData.date = moment(info.start).format('YYYY-MM-DD')
-      let temp = moment.duration(moment(info.endStr).diff(moment(info.startStr))).asHours()
+      this.formData.resourceId = info.resource.id
+      this.setAssignmentDateAndDuration(info.start, info.end)
+    },
+    setAssignmentDateAndDuration (start, end) {
+      this.formData.date = moment(start).format('YYYY-MM-DD')
+      let temp = moment.duration(moment(end).diff(moment(start))).asHours()
       let hourseAndMinutes = this.getHoursAndMinutes(temp)
       this.formData.hours = hourseAndMinutes.hours
       this.formData.minutes = hourseAndMinutes.minutes
-      this.formData.start = info.startStr
-      this.formData.end = info.endStr
-      this.formData.resourceId = info.resource.id
+      this.formData.start = start
+      this.formData.end = end
     },
     getHoursAndMinutes (hours) {
       if (hours === 24) {
