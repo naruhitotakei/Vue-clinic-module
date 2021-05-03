@@ -98,32 +98,32 @@ export default {
         {
           label: 'Default',
           color: 'default',
-          value: 'default'
+          value: '#64D6E8'
         },
         {
           label: 'Label 1',
           color: 'label1',
-          value: 'label1'
+          value: '#F54E65'
         },
         {
           label: 'Label 2',
           color: 'label2',
-          value: 'label2'
+          value: '#9E1729'
         },
         {
           label: 'Label 3',
           color: 'label3',
-          value: 'label3'
+          value: '#148A9C'
         },
         {
           label: 'Label 4',
           color: 'label4',
-          value: 'label4'
+          value: '#E8C007'
         },
         {
           label: 'Label 5',
           color: 'label5',
-          value: 'label5'
+          value: '#9E8205'
         }
       ],
       formData: {
@@ -210,6 +210,7 @@ export default {
           minutes: this.formData.minutes,
           notes: this.formData.notes,
           assignmentColor: this.formData.assignmentColor,
+          color: this.formData.assignmentColor,
           resourceId: this.formData.resourceId
         })
       this.formData = this.defaultAppointment()
