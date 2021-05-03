@@ -23,7 +23,7 @@
   <!-- Event description modal -->
   <b-modal v-model="modalShow" size="lg" title="Event Details" ok-title="Save Changes" @ok="saveAppointment" cancel-title="Close">
     <form @submit="saveAppointment">
-      <h3 v-if="formData.title" style="text-align: center;">{{formData.title}}</h3>
+      <h3 v-if="modalTitle" style="text-align: center;">{{modalTitle}}</h3>
       <div class="form-row">
         <div class="col-md-12 mb-3">
           <label for="validationDefault01">Title</label>
@@ -148,6 +148,7 @@ export default {
           center: 'title',
           right: 'dayGridMonth,resourceTimeGridWeek,resourceTimeGridDay'
         },
+        modalTitle: '',
         timeZone: 'UTC',
         defaultView: 'dayGridMonth',
         resources: this.resourcesOuter,
@@ -217,6 +218,7 @@ export default {
     },
     createAppointment (info) {
       this.formData = this.defaultAppointment()
+      this.modalTitle = ''
       this.modalShow = true
       this.formData.resourceId = info.resource.id
       this.setAssignmentDateAndDuration(info.start, info.end)
@@ -248,6 +250,7 @@ export default {
     updateAppointment (info) {
       this.modalShow = true
       this.formData = this.calendarOptions.events.find(event => event.id === +info.event.id)
+      this.modalTitle = this.formData.title
       console.log(JSON.stringify(this.formData))
     }
   }
