@@ -19,7 +19,6 @@
   @eventResize="eventResize"
   id="calendar"
   ref="calendar"
-  class="scrollbar-hidden"
   />
   <!-- Event description modal -->
   <b-modal v-model="modalShow" size="lg" title="Event Details" ok-title="Save Changes" @ok="saveAppointment" cancel-title="Close">
