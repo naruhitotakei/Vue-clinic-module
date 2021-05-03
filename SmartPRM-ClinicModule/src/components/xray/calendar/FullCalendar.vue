@@ -19,6 +19,7 @@
   @eventResize="eventResize"
   id="calendar"
   ref="calendar"
+  class="scrollbar-hidden"
   />
   <!-- Event description modal -->
   <b-modal v-model="modalShow" size="lg" title="Event Details" ok-title="Save Changes" @ok="saveAppointment" cancel-title="Close">
@@ -263,6 +264,11 @@ export default {
 .fc-license-message{
   display:none;
 }
+
+::-webkit-scrollbar {
+    display: none;
+}
+
   @import '~@fullcalendar/core/main.css';
   @import '~@fullcalendar/daygrid/main.css';
   @import '~@fullcalendar/timegrid/main.css';
