@@ -26,30 +26,30 @@
       <h3 v-if="modalTitle" style="text-align: center;">{{modalTitle}}</h3>
       <div class="form-row">
         <div class="col-md-12 mb-3">
-          <label for="validationDefault01">Title</label>
+          <label for="title">Title</label>
           <div style="display: flex;">
-            <input type="text" v-model="formData.title" class="form-control col-md-6" placeholder="Title" id="validationDefault01" required>
+            <input type="text" v-model="formData.title" class="form-control col-md-6" placeholder="Title" id="title" required>
           </div>
         </div>
         <div class="col-md-12 mb-3">
-          <label for="validationDefault01">{{ $t('calendarEvent.start') }}</label>
-          <input type="date" v-model="formData.date" class="form-control" id="validationDefault01" required style="max-width: 200px;">
+          <label for="start">{{ $t('calendarEvent.start') }}</label>
+          <input type="datetime-local" v-model="formData.assignmentDate" class="form-control" id="start" required style="max-width: 220px;">
         </div>
         <div class="col-md-12 mb-3">
-          <label for="validationDefault01">{{ $t('calendarEvent.duration') }}</label>
+          <label for="duration">{{ $t('calendarEvent.duration') }}</label>
           <div style="display: flex;">
-            <input type="number" v-model="formData.hours" class="form-control col-md-6" min="0" max="9" placeholder="Hours" id="validationDefault01" required style="max-width: 150px;">
-            <input type="number" v-model="formData.minutes" min="0" max="59" class="form-control col-md-6 offset-1" step="15" placeholder="Minutes" id="validationDefault01" required style="max-width: 150px;">
+            <input type="number" v-model="formData.hours" class="form-control col-md-6" min="0" max="9" placeholder="Hours" required style="max-width: 150px;">
+            <input type="number" v-model="formData.minutes" min="0" max="59" class="form-control col-md-6 offset-1" step="5" placeholder="Minutes" required style="max-width: 150px;">
           </div>
         </div>
         <div class="col-md-12 mb-3">
-          <label for="validationDefault01">{{ $t('calendarEvent.notes') }}</label>
-          <textarea row="2" v-model="formData.notes" class="form-control" placeholder="Add your notes here for event!" id="validationDefault01" required></textarea>
+          <label for="notes">{{ $t('calendarEvent.notes') }}</label>
+          <textarea row="2" v-model="formData.notes" class="form-control" placeholder="Add your notes here for event!" id="notes" required></textarea>
         </div>
         <div class="col-md-12 mb-3">
-          <label for="validationDefault01">{{ $t('calendarEvent.changeColor') }}</label><br>
+          <label for="color">{{ $t('calendarEvent.changeColor') }}</label><br>
           <template v-for="(item,index) in color">
-            <b-form-radio class="custom-radio-color" inline v-model="formData.assignmentColor" :color="item.color" :value="item.value" :key="index">{{ item.label }}</b-form-radio>
+            <b-form-radio class="custom-radio-color" inline v-model="formData.backgroundColor" :color="item.color" :value="item.value" :key="index">{{ item.label }}</b-form-radio>
           </template>
         </div>
       </div>
@@ -128,14 +128,16 @@ export default {
       ],
       formData: {
         title: '',
-        date: '',
+        assignmentDate: '',
         start: '',
         end: '',
         hours: '',
         minutes: '',
         notes: '',
-        assignmentColor: '',
-        resourceId: ''
+        backgroundColor: '',
+        resourceId: '',
+        eventResourceId: ''
+
       },
       calendarApi: null,
       modalTitle: '',
@@ -158,20 +160,13 @@ export default {
         allDaySlot: false,
         editable: true,
         selectable: true,
-        events: [
-          { id: '1', title: 'Appointment 1', start: '2021-04-22T16:30:00', end: '2021-04-22T18:00:00', resourceId: 'a' },
-          { id: '2', title: 'Appointment 1.1', start: '2021-04-22T09:00:00', end: '2021-04-22T10:00:00', resourceId: 'a' },
-          { id: '3', title: 'Appointment 2', start: '2021-04-22T12:00:00', end: '2021-04-22T13:00:00', resourceId: 'b' },
-          { id: '4', title: 'Appointment 6', start: '2021-04-22T14:30:00', end: '2021-04-22T15:00:00', resourceId: 'b' },
-          { id: '5', title: 'Appointment 5', start: '2021-04-22T11:30:00', end: '2021-04-22T11:45:00', resourceId: 'c' },
-          { id: '6', title: 'Appointment 3', start: '2021-04-23T12:00:00', end: '2021-04-23T01:00:00', resourceId: 'c' },
-          { id: '7', title: 'Appointment 4', start: '2021-04-23T10:00:00', end: '2021-04-23T11:00:00', resourceId: 'b' }
-        ]
+        events: []
       }
     }
   },
   mounted () {
     console.log('this.resourcesOuter', this.resourcesOuter)
+    this.calendarApi = this.$refs.calendar.getApi()
     xray.index()
   },
   methods: {
@@ -179,55 +174,69 @@ export default {
       this.viewName = info.view.type
     },
     eventResize (info) {
-      let resizedIndex = this.calendarOptions.events.findIndex(obj => obj.id === +info.event.id)
+      let event = this.calendarApi.getEventById(info.event.id)
       this.setAssignmentDateAndDuration(info.event.start, info.event.end)
-      this.calendarOptions.events[resizedIndex].hours = this.formData.hours
-      this.calendarOptions.events[resizedIndex].minutes = this.formData.minutes
-      this.calendarOptions.events[resizedIndex].start = this.formData.start
-      this.calendarOptions.events[resizedIndex].end = this.formData.end
+      event.setStart(this.formData.start)
+      event.setEnd(this.formData.end)
+      event.setExtendedProp('hours', this.formData.hours)
+      event.setExtendedProp('minutes', this.formData.minutes)
     },
     defaultAppointment () {
       return {
         title: '',
-        date: '',
+        assignmentDate: '',
         start: '',
         end: '',
         hours: '',
         minutes: '',
         notes: '',
         assignmentColor: '',
-        resourceId: ''
+        resourceId: '',
+        eventResourceId: ''
       }
     },
     saveAppointment () {
-      console.log('id: ' + this.formData.id)
-      let id = this.calendarOptions.events.length + 1
+      let id = this.calendarApi.getEvents().length + 1
+      console.log('id je: ' + id)
       if (!this.formData.id) {
-        this.calendarOptions.events.push(
-          { id: id,
-            title: this.formData.title,
-            date: this.formData.date,
-            start: this.formData.start,
-            end: this.formData.end,
-            hours: this.formData.hours,
-            minutes: this.formData.minutes,
-            notes: this.formData.notes,
-            assignmentColor: this.formData.assignmentColor,
-            color: this.formData.assignmentColor,
-            resourceId: this.formData.resourceId
-          })
+        this.calendarApi.addEvent({
+          id: id,
+          title: this.formData.title,
+          assignmentDate: this.formData.assignmentDate,
+          start: this.formData.start,
+          end: this.formData.end,
+          hours: this.formData.hours,
+          minutes: this.formData.minutes,
+          notes: this.formData.notes,
+          backgroundColor: this.formData.backgroundColor,
+          resourceId: this.formData.resourceId,
+          eventResourceId: this.formData.resourceId
+        })
+      } else {
+        let event = this.calendarApi.getEventById(this.formData.id)
+        event.setProp('title', this.formData.title)
+        event.setProp('backgroundColor', this.formData.backgroundColor)
+        event.setProp('resourceId', this.formData.resourceId)
+        event.setStart(this.formData.start)
+        event.setEnd(this.formData.end)
+        event.setExtendedProp('assignmentDate', this.formData.assignmentDate)
+        event.setExtendedProp('hours', this.formData.hours)
+        event.setExtendedProp('minutes', this.formData.minutes)
+        event.setExtendedProp('notes', this.formData.notes)
+        event.setExtendedProp('eventResourceId', this.formData.resourceId)
       }
       this.formData = this.defaultAppointment()
     },
-    openCreateModal (info) {
+    openCreateModal (selectionInfo) {
       this.formData = this.defaultAppointment()
       this.modalTitle = ''
       this.modalShow = true
-      this.formData.resourceId = info.resource.id
-      this.setAssignmentDateAndDuration(info.start, info.end)
+      this.formData.resourceId = selectionInfo.resource.id
+      this.formData.eventResourceId = selectionInfo.resource.id
+      this.setAssignmentDateAndDuration(selectionInfo.start, selectionInfo.end)
     },
     setAssignmentDateAndDuration (start, end) {
-      this.formData.date = moment(start).format('YYYY-MM-DD')
+      this.formData.assignmentDate = moment(start).format('YYYY-MM-DDTHH:mm')
       let temp = moment.duration(moment(end).diff(moment(start))).asHours()
       let hourseAndMinutes = this.getHoursAndMinutes(temp)
       this.formData.hours = hourseAndMinutes.hours
@@ -250,11 +259,19 @@ export default {
         return { hours: 0, minutes: 60 * hours }
       }
     },
-    openUpdateModal (info) {
+    openUpdateModal (selectionInfo) {
       this.modalShow = true
-      this.formData = this.calendarOptions.events.find(event => event.id === +info.event.id)
+      let event = this.calendarApi.getEventById(selectionInfo.event.id)
+      this.formData = {
+        id: event.id,
+        title: event.title,
+        start: event.start,
+        end: event.end,
+        backgroundColor: event.backgroundColor,
+        resourceId: event.extendedProps.eventResourceId,
+        ...event.extendedProps
+      }
       this.modalTitle = this.formData.title
-      console.log(JSON.stringify(this.formData))
     }
   }
 }
