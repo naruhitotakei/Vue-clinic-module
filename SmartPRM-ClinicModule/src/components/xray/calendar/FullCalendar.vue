@@ -13,8 +13,8 @@
   :selectable="isSelectable"
   editable="true"
   :header="calendarOptions.header"
-  @select="createAppointment"
-  @eventClick="updateAppointment"
+  @select="openCreateModal"
+  @eventClick="openUpdateModal"
   @datesRender="onViewChange"
   @eventResize="eventResize"
   id="calendar"
@@ -22,7 +22,7 @@
   />
   <!-- Event description modal -->
   <b-modal v-model="modalShow" size="lg" title="Event Details" ok-title="Save Changes" @ok="saveAppointment" cancel-title="Close">
-    <form @submit="saveAppointment">
+    <form>
       <h3 v-if="modalTitle" style="text-align: center;">{{modalTitle}}</h3>
       <div class="form-row">
         <div class="col-md-12 mb-3">
@@ -138,6 +138,7 @@ export default {
         resourceId: ''
       },
       calendarApi: null,
+      modalTitle: '',
       modalShow: false,
       viewName: 'dayGridMonth',
       event: {},
@@ -148,7 +149,6 @@ export default {
           center: 'title',
           right: 'dayGridMonth,resourceTimeGridWeek,resourceTimeGridDay'
         },
-        modalTitle: '',
         timeZone: 'UTC',
         defaultView: 'dayGridMonth',
         resources: this.resourcesOuter,
@@ -200,23 +200,26 @@ export default {
       }
     },
     saveAppointment () {
+      console.log('id: ' + this.formData.id)
       let id = this.calendarOptions.events.length + 1
-      this.calendarOptions.events.push(
-        { id: id,
-          title: this.formData.title,
-          date: this.formData.date,
-          start: this.formData.start,
-          end: this.formData.end,
-          hours: this.formData.hours,
-          minutes: this.formData.minutes,
-          notes: this.formData.notes,
-          assignmentColor: this.formData.assignmentColor,
-          color: this.formData.assignmentColor,
-          resourceId: this.formData.resourceId
-        })
+      if (!this.formData.id) {
+        this.calendarOptions.events.push(
+          { id: id,
+            title: this.formData.title,
+            date: this.formData.date,
+            start: this.formData.start,
+            end: this.formData.end,
+            hours: this.formData.hours,
+            minutes: this.formData.minutes,
+            notes: this.formData.notes,
+            assignmentColor: this.formData.assignmentColor,
+            color: this.formData.assignmentColor,
+            resourceId: this.formData.resourceId
+          })
+      }
       this.formData = this.defaultAppointment()
     },
-    createAppointment (info) {
+    openCreateModal (info) {
       this.formData = this.defaultAppointment()
       this.modalTitle = ''
       this.modalShow = true
@@ -247,7 +250,7 @@ export default {
         return { hours: 0, minutes: 60 * hours }
       }
     },
-    updateAppointment (info) {
+    openUpdateModal (info) {
       this.modalShow = true
       this.formData = this.calendarOptions.events.find(event => event.id === +info.event.id)
       this.modalTitle = this.formData.title
