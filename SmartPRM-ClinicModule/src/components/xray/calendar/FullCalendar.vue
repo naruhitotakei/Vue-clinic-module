@@ -286,6 +286,11 @@ export default {
 .fc-license-message{
   display:none;
 }
+
+::-webkit-scrollbar {
+    display: none;
+}
+
   @import '~@fullcalendar/core/main.css';
   @import '~@fullcalendar/daygrid/main.css';
   @import '~@fullcalendar/timegrid/main.css';

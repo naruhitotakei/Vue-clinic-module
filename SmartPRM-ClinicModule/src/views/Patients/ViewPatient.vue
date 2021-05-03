@@ -418,6 +418,27 @@
                               </template>
                           </template>
                       </iq-card>
+                      <iq-card>
+                          <template v-slot:body>
+                              <h5 class="card-title">{{ $t('EPR.invoices.servicesSummary') }}</h5>
+                              <b-table small
+                                       id="patient-services"
+                                       :items="servicesItems"
+                                       :fields="servicesSummaryColumns"
+                                       :per-page="servicesPerPage"
+                                       :current-page="currentServicesPage"
+                                       class="mb-0"></b-table>
+                          </template>
+                          <template>
+                              <b-collapse id="collapse-6" class="mb-2"> </b-collapse>
+                              <div class="mt-4 ml-3">
+                                  <b-pagination v-model="currentServicesPage"
+                                                :total-rows="servicesItems.length"
+                                                :per-page="servicesPerPage"
+                                                aria-controls="patient-services"></b-pagination>
+                              </div>
+                          </template>
+                      </iq-card>
                   </tab-content-item>
                   <tab-content-item :active="false" id="offers">
                       <iq-card>
@@ -488,6 +509,29 @@ var rowsOffers = [
     amount: '300 EUR'
   }
 ]
+var rowsServices = [
+  {
+    service_title: 'Puljenje zoba',
+    service_date: '11.04.2021',
+    done_by: 'Dr. Bojan Jernejc',
+    service_count: '1',
+    service_price: '100 EUR'
+  },
+  {
+    service_title: 'Beljenje zob',
+    service_date: '25.04.2021',
+    done_by: 'Dr. Bojan Jernejc',
+    service_count: '1',
+    service_price: '400 EUR'
+  },
+  {
+    service_title: 'Zalivka',
+    service_date: '05.05.2021',
+    done_by: 'Dr. Bojan Jernejc',
+    service_count: '2',
+    service_price: '200 EUR'
+  }
+]
 export default {
   name: 'ViewPatient',
   mounted () {
@@ -556,11 +600,14 @@ export default {
       filter: '',
       filterOn: [],
       invoiceItems: [],
+      servicesItems: rowsServices,
       offerItems: rowsOffers,
       currentInvoicePage: 1,
       invoicesPerPage: 10,
       currentOfferPage: 1,
       offersPerPage: 10,
+      currentServicesPage: 1,
+      servicesPerPage: 10,
       dropDownText: '',
       selected: this.value,
       searchOptions: [
@@ -610,7 +657,7 @@ export default {
             return moment(value).format('YYYY-MM-DD')
           }
         },
-        { label: this.$t('EPR.invoicesColumn.issuedBy'), key: 'company_name', class: 'text-left' },
+        { label: this.$t('EPR.invoicesColumn.issuedBy'), key: 'operator_name', class: 'text-left' },
         { label: this.$t('EPR.invoicesColumn.amount'), key: 'total_with_vat', class: 'text-left' },
         { label: this.$t('EPR.invoicesColumn.status'),
           key: 'status',
@@ -622,6 +669,13 @@ export default {
             return item.total_with_vat === item.paid_amount ? 'Paid' : 'Partialy Paid'
           }
         }
+      ],
+      servicesSummaryColumns: [
+        { label: this.$t('EPR.servicesSummaryColumn.serviceTitle'), key: 'service_title', class: 'text-left' },
+        { label: this.$t('EPR.servicesSummaryColumn.serviceDate'), key: 'service_date', class: 'text-left' },
+        { label: this.$t('EPR.servicesSummaryColumn.doneBy'), key: 'done_by', class: 'text-left' },
+        { label: this.$t('EPR.servicesSummaryColumn.serviceCount'), key: 'service_count', class: 'text-left' },
+        { label: this.$t('EPR.servicesSummaryColumn.servicePrice'), key: 'service_price', class: 'text-left' }
       ],
       columnsOffers: [
         { label: this.$t('EPR.offersColumn.no'), key: 'offer_no', class: 'text-left' },

@@ -177,7 +177,8 @@
     "invoicesTab": "Računi",
     "invoices": {
       "invoicesHeader": "Računi",
-      "addInvoice": "Nov račun"
+      "addInvoice": "Nov račun",
+      "servicesSummary": "Povzetek storitev"
     },
     "invoicesColumn": {
       "no": "Številka",
@@ -185,6 +186,13 @@
       "issuedBy": "Izdal",
       "amount": "Znesek",
       "status": "Status"
+    },
+    "servicesSummaryColumn": {
+      "serviceTitle": "Storitev",
+      "serviceDate": "Datum",
+      "doneBy": "Opravil",
+      "serviceCount": "Število storitev",
+      "servicePrice": "Cena"
     },
     "offersTab": "Ponudbe",
     "offers": {

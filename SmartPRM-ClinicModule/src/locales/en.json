@@ -177,7 +177,8 @@
     "invoicesTab": "Invoices",
     "invoices": {
       "invoicesHeader": "Invoices",
-      "addInvoice": "New invoice"
+      "addInvoice": "New invoice",
+      "servicesSummary": "Services Summary"
     },
     "invoicesColumn": {
       "no": "Number",
@@ -185,6 +186,13 @@
       "issuedBy": "Issued by",
       "amount": "Amount",
       "status": "Status"
+    },
+    "servicesSummaryColumn": {
+      "serviceTitle": "Service",
+      "serviceDate": "Date",
+      "doneBy": "Done by",
+      "serviceCount": "Service count",
+      "servicePrice": "Price"
     },
     "offersTab": "Offers",
     "offers": {
