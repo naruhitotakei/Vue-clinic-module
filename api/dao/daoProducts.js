@@ -19,7 +19,7 @@ const getProducts = (request, response) =>  {
 }
 
 const getProductCategories = (request, response) =>  {
-    pool.query("SELECT category_id, category_name FROM prm_product_category", (error, results) => {
+    pool.query("SELECT category_id, category_name FROM prm_product_category ORDER BY created_at DESC", (error, results) => {
         if (error) {
             throw error
         }
@@ -137,6 +137,49 @@ const deleteProductGroup = (request, response, id) => {
     })
 }
 
+const createProductCategory = (req, res, productCategory) => {
+    var statement = "INSERT INTO prm_product_category ("
+    if (productCategory.category_name) statement += "category_name,"
+    statement += "category_deleted,"
+    statement += "created_at"
+    statement += ") VALUES ("
+    if (productCategory.category_name) statement += "'" + productCategory.category_name + "',"
+    statement += "false," 
+    statement += "NOW()" 
+    statement +=")"
+    console.log(statement)
+    pool.query(statement , (error, results) => {
+        if (error) {
+            throw error
+        }
+        res.status(200).json("OK")
+    })    
+}
+
+const updateProductCategory = (req, res, id, productCategory) => {
+    var statement = "UPDATE prm_product_category SET "
+    if (productCategory.category_name) {
+        statement += "category_name='" + productCategory.category_name + "', updated_at= NOW()"
+    }
+    statement +=" WHERE category_id=" + id
+    console.log(statement)
+    pool.query(statement , (error, results) => {
+        if (error) {
+            throw error
+        }
+    }) 
+    res.status(200).json(productCategory)
+}
+
+const deleteProductCategory = (request, response, id) => {
+    pool.query('DELETE FROM prm_product_category WHERE category_id = $1', [id], (error, results) => {
+      if (error) {
+        throw error
+      }
+      response.status(200).json("OK")
+    })
+}
+
 module.exports = {
   getProducts,
   getProductCategories,
@@ -147,5 +190,8 @@ module.exports = {
   deleteProduct,
   createProductGroup,
   updateProductGroup,
-  deleteProductGroup
+  deleteProductGroup,
+  createProductCategory,
+  updateProductCategory,
+  deleteProductCategory
 }

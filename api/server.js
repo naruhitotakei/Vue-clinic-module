@@ -116,13 +116,6 @@ app.get('/api/products', (req, res) => {
         res.status(401).json("OK: user unauthorized")
 });
 
-app.get('/api/productCategories', (req, res) => {
-    if(req.session.prm_user && req.session.prm_user.permissions && checkPermission(req.session.prm_user.permissions, productsPermission))
-        daoProducts.getProductCategories(req, res)
-    else
-        res.status(401).json("OK: user unauthorized")
-});
-
 app.get('/api/productGroups', (req, res) => {
     if(req.session.prm_user && req.session.prm_user.permissions && checkPermission(req.session.prm_user.permissions, productsPermission))
         daoProducts.getProductGroups(req, res)
@@ -137,15 +130,17 @@ app.get('/api/productTypes', (req, res) => {
         res.status(401).json("OK: user unauthorized")
 });
 
-app.post('/api/products', (req, res, product) => {
+app.post('/api/products', (req, res) => {
+    const product = req.body
     if(req.session.prm_user && req.session.prm_user.permissions && checkPermission(req.session.prm_user.permissions, productsPermission))
         daoProducts.createProduct(req, res, product)
     else
         res.status(401).json("OK: user unauthorized")
 });
 
-app.put('/api/products/:id', (req, res, product) => {
+app.put('/api/products/:id', (req, res) => {
     const id = req.params.id
+    const product = req.body
     if(req.session.prm_user && req.session.prm_user.permissions && checkPermission(req.session.prm_user.permissions, productsPermission))
         daoProducts.updateProduct(req, res, id, product)
     else
@@ -160,15 +155,17 @@ app.delete('/api/products/:id', (req, res) => {
         res.status(401).json("OK: user unauthorized")
 });
 
-app.post('/api/productGroups', (req, res, productGroup) => {
+app.post('/api/productGroups', (req, res) => {
+    const productGroup = req.body
     if(req.session.prm_user && req.session.prm_user.permissions && checkPermission(req.session.prm_user.permissions, productsPermission))
         daoProducts.createProductGroup(req, res, productGroup)
     else
         res.status(401).json("OK: user unauthorized")
 });
 
-app.put('/api/productGroups/:id', (req, res, productGroup) => {
+app.put('/api/productGroups/:id', (req, res) => {
     const id = req.params.id
+    const productGroup = req.body
     if(req.session.prm_user && req.session.prm_user.permissions && checkPermission(req.session.prm_user.permissions, productsPermission))
         daoProducts.updateProductGroup(req, res, id, productGroup)
     else
@@ -179,6 +176,38 @@ app.delete('/api/productGroups/:id', (req, res) => {
     const id = req.params.id
     if(req.session.prm_user && req.session.prm_user.permissions && checkPermission(req.session.prm_user.permissions, productsPermission))
         daoProducts.deleteProductGroup(req, res, id)
+    else
+        res.status(401).json("OK: user unauthorized")
+});
+
+app.get('/api/productCategories', (req, res) => {
+    if(req.session.prm_user && req.session.prm_user.permissions && checkPermission(req.session.prm_user.permissions, productsPermission))
+        daoProducts.getProductCategories(req, res)
+    else
+        res.status(401).json("OK: user unauthorized")
+});
+
+app.post('/api/productCategories', (req, res) => {
+    const productCategory = req.body
+    if(req.session.prm_user && req.session.prm_user.permissions && checkPermission(req.session.prm_user.permissions, productsPermission))
+        daoProducts.createProductCategory(req, res, productCategory)
+    else
+        res.status(401).json("OK: user unauthorized")
+});
+
+app.put('/api/productCategories/:id', (req, res) => {
+    const id = req.params.id
+    const productCategory = req.body
+    if(req.session.prm_user && req.session.prm_user.permissions && checkPermission(req.session.prm_user.permissions, productsPermission))
+        daoProducts.updateProductCategory(req, res, id, productCategory)
+    else
+        res.status(401).json("OK: user unauthorized")
+});
+
+app.delete('/api/productCategories/:id', (req, res) => {
+    const id = req.params.id
+    if(req.session.prm_user && req.session.prm_user.permissions && checkPermission(req.session.prm_user.permissions, productsPermission))
+        daoProducts.deleteProductCategory(req, res, id)
     else
         res.status(401).json("OK: user unauthorized")
 });
