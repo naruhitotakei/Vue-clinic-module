@@ -17,6 +17,7 @@
   @eventClick="openUpdateModal"
   @datesRender="onViewChange"
   @eventResize="eventResize"
+  @eventDrop="eventDrop"
   id="calendar"
   ref="calendar"
   />
@@ -180,6 +181,13 @@ export default {
       event.setEnd(this.formData.end)
       event.setExtendedProp('hours', this.formData.hours)
       event.setExtendedProp('minutes', this.formData.minutes)
+    },
+    eventDrop (info) {
+      let event = this.calendarApi.getEventById(info.event.id)
+      this.setAssignmentDateAndDuration(info.event.start, info.event.end)
+      event.setExtendedProp('assignmentDate', this.formData.assignmentDate)
+      event.setStart(this.formData.start)
+      event.setEnd(this.formData.end)
     },
     defaultAppointment () {
       return {
