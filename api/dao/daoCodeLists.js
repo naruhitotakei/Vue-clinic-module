@@ -26,7 +26,17 @@ const getRegionsList = (request, response) => {
     })
 }
 
+const getLocationsList = (request, response) => {
+    pool.query("SELECT id, city FROM locations", (error, results) => {
+        if (error) {
+            throw error
+        }
+        response.status(200).json(results.rows)
+    })
+}
+
 module.exports = {
   getCountriesList,
-  getRegionsList
+  getRegionsList,
+  getLocationsList
 }
