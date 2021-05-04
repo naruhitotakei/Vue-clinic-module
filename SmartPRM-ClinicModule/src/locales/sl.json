@@ -96,7 +96,10 @@
     "changeColor": "Spremeni barvo",
     "viewPatient": "Ogled pacienta",
     "changeDisplayColor": "Spremeni barvo termina",
-    "appointmentCancelled": "Pacient je odpovedal termin"
+    "appointmentCancelled": "Pacient je odpovedal termin",
+    "patient": "Pacient",
+    "doctor": "Zdravnik",
+    "location": "Lokacije"
   },
   "patients": {
     "patientsHeader": "Pacienti",
