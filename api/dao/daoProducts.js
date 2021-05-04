@@ -28,7 +28,7 @@ const getProductCategories = (request, response) =>  {
 }
 
 const getProductGroups = (request, response) =>  {
-    pool.query("SELECT ppg.product_group_id, ppg.product_group_name, ppg.category_id, ppc.category_name as category_name FROM prm_product_group ppg JOIN prm_product_category ppc ON ppg.category_id = ppc.category_id", (error, results) => {
+    pool.query("SELECT ppg.product_group_id, ppg.product_group_name, ppg.category_id, ppc.category_name as category_name FROM prm_product_group ppg JOIN prm_product_category ppc ON ppg.category_id = ppc.category_id ORDER BY ppg.created_date DESC ", (error, results) => {
         if (error) {
             throw error
         }
@@ -116,7 +116,7 @@ const createProductGroup = (req, res, productGroup) => {
 const updateProductGroup = (req, res, id, productGroup) => {
     var statement = "UPDATE prm_product_group SET "
     if (productGroup.product_group_name) statement += "product_group_name='" + productGroup.product_group_name + "',"
-    if (productGroup.category_id) statement += "product_price='" + productGroup.category_id + "',"
+    if (productGroup.category_id) statement += "category_id='" + productGroup.category_id + "',"
     statement = statement.slice(0, -1)
     statement +=" WHERE product_group_id=" + id
     console.log(statement)
@@ -125,7 +125,7 @@ const updateProductGroup = (req, res, id, productGroup) => {
             throw error
         }
     }) 
-    res.status(200).json(product)
+    res.status(200).json(productGroup)
 }
 
 const deleteProductGroup = (request, response, id) => {
