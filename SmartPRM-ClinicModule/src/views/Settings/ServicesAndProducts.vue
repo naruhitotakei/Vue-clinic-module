@@ -164,19 +164,20 @@
                                   :fields="productCategoryColumns"
                                   :per-page="productCategoriesPerPage"
                                   :current-page="currentProductCategoryPage">
-                                    <template v-slot:cell(name)="data">
+                                    <template v-slot:cell(category_name)="data">
                                         <span v-if="!data.item.editable">
-                                            {{ data.item.name }}
+                                            {{ data.item.category_name }}
                                         </span>
                                         <input type="text"
-                                               v-model="data.item.name"
+                                               v-model="data.item.category_name"
+                                               required
                                                v-else
                                                class="form-control" />
                                     </template>
                                     <template v-slot:cell(action)="data">
                                       <b-button variant=" iq-bg-success mr-1 mb-1" size="sm" @click="editProductCategory(data.item)" v-if="!data.item.editable"><i class="ri-ball-pen-fill m-0"></i></b-button>
                                       <b-button variant=" iq-bg-danger mr-1 mb-1" size="sm" v-if="!data.item.editable" @click="removeProductCategory(data.item)"><i class="ri-delete-bin-line m-0"></i></b-button>
-                                      <b-button variant=" iq-bg-success mr-1 mb-1" size="sm" @click="submitProductCategory(data.item)" v-if="data.item.editable"><i class="ri-checkbox-circle-fill m-0"></i></b-button>
+                                      <b-button variant=" iq-bg-success mr-1 mb-1" :disabled="!data.item.category_name" size="sm" @click="submitProductCategory(data.item)" v-if="data.item.editable"><i class="ri-checkbox-circle-fill m-0"></i></b-button>
                                       <b-button variant=" iq-bg-danger mr-1 mb-1" size="sm" @click="cancelProductCategory(data.item)" v-if="data.item.editable"><i class="ri-close-circle-fill m-0"></i></b-button>
                                     </template>
                                 </b-table>
@@ -201,7 +202,7 @@
 
 <script>
 import { xray } from '../../config/pluginInit'
-import { getProducts, getProductGroups, getProductCategories, getProductTypes } from '../../services/products'
+import { getProducts, getProductGroups, getProductCategories, getProductTypes, createProductCategory, updateProductCategory } from '../../services/products'
 
 export default {
   components: {
@@ -234,6 +235,7 @@ export default {
       productGroups: [],
       productCategories: [],
       productTypes: [],
+      isProductCategoryEdit: false,
       currentProductPage: 1,
       productsPerPage: 4,
       productGroupsHeader: 'Product Groups',
@@ -306,7 +308,7 @@ export default {
     },
     cancelProduct (item) {
       let index = this.products.indexOf(item)
-      this.products.splice(index, 1, this.tempProduct)
+      this.tempProduct ? this.products.splice(index, 1, this.tempProduct) : this.products.shift()
     },
     setCurrentProductPage () {
       this.currentProductPage = 1
@@ -340,7 +342,7 @@ export default {
     },
     cancelProductGroup (item) {
       let index = this.productGroups.indexOf(item)
-      this.productGroups.splice(index, 1, this.tempProductGroup)
+      this.tempProductGroup ? this.productGroups.splice(index, 1, this.tempProduct) : this.productGroups.shift()
     },
     setCurrentProductGroupPage () {
       this.currentProductGroupPage = 1
@@ -361,9 +363,7 @@ export default {
     editProductCategory (item) {
       this.tempProductCategory = Object.assign({}, item)
       item.editable = true
-    },
-    submitProductCategory (item) {
-      item.editable = false
+      this.isProductCategoryEdit = true
     },
     removeProductCategory (item) {
       let index = this.productCategories.indexOf(item)
@@ -371,7 +371,7 @@ export default {
     },
     cancelProductCategory (item) {
       let index = this.productCategories.indexOf(item)
-      this.productCategories.splice(index, 1, this.tempProductCategory)
+      this.tempProductCategory ? this.productCategories.splice(index, 1, this.tempProductCategory) : this.productCategories.shift()
     },
     setCurrentProductCategoryPage () {
       this.currentProductCategoryPage = 1
@@ -380,10 +380,22 @@ export default {
       this.setCurrentProductCategoryPage()
       let obj = this.defaultProductCategory()
       this.productCategories.unshift(obj)
+      this.tempProductCategory = null
+      this.isProductCategoryEdit = false
+    },
+    submitProductCategory (item) {
+      item.editable = false
+      if (this.isProductCategoryEdit) {
+        updateProductCategory(item.category_id, item)
+      } else {
+        createProductCategory(item).then(() => {
+          this.getProductCategories()
+        })
+      }
     },
     defaultProductCategory () {
       return {
-        name: '',
+        category_name: '',
         editable: true
       }
     }
