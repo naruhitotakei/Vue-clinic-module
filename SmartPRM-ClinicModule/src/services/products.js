@@ -109,3 +109,53 @@ export async function updateProductGroup (id, productGroup) {
   })
   return rawResponse.json()
 }
+
+export async function deleteProductGroup (id) {
+  const rawResponse = await fetch('/api/productGroups/' + id, {
+    method: 'DELETE',
+    credentials: 'same-origin',
+    headers: {
+      'Accept': 'application/json',
+      'Content-Type': 'application/json'
+    }
+  })
+  return rawResponse.json()
+}
+
+export async function createProductCategory (productCategory) {
+  const rawResponse = await fetch('/api/productCategories', {
+    method: 'POST',
+    credentials: 'same-origin',
+    headers: {
+      'Accept': 'application/json',
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify(productCategory)
+  })
+  return rawResponse.json()
+}
+
+export async function updateProductCategory (id, productCategory) {
+  const rawResponse = await fetch('/api/productCategories/' + id, {
+    method: 'PUT',
+    credentials: 'same-origin',
+    headers: {
+      'Accept': 'application/json',
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify(productCategory)
+  })
+  return rawResponse.json()
+}
+
+export async function deleteProductCategory (id) {
+  const rawResponse = await fetch('/api/productCategories/' + id, {
+    method: 'DELETE',
+    credentials: 'same-origin',
+    headers: {
+      'Accept': 'application/json',
+      'Content-Type': 'application/json'
+    }
+  })
+  return rawResponse.json()
+}
