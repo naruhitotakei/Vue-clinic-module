@@ -22,15 +22,23 @@
   ref="calendar"
   />
   <!-- Event description modal -->
-  <b-modal v-model="modalShow" size="lg" title="Event Details" ok-title="Save Changes" @ok="saveAppointment" cancel-title="Close">
+  <b-modal v-model="modalShow" no-close-on-backdrop size="lg" title="Event Details" ok-title="Save Changes" @ok="saveAppointment" cancel-title="Close">
     <form>
       <h3 v-if="modalTitle" style="text-align: center;">{{modalTitle}}</h3>
       <div class="form-row">
         <div class="col-md-12 mb-3">
           <label for="title">Title</label>
           <div style="display: flex;">
-            <input type="text" v-model="formData.title" class="form-control col-md-6" placeholder="Title" id="title" required>
+            <input type="text" v-model="formData.title" class="form-control" placeholder="Title" id="title" required>
           </div>
+        </div>
+        <div class="col-md-5 mb-3">
+          <label for="patient">{{ $t('calendarEvent.patient') }}</label>
+          <v-select :clearable="false" label="full_name" :reduce="patient => patient.id" class="style-chooser" v-model="formData.patientId" :options="patients"></v-select>
+        </div>
+        <div class="col-md-5 offset-md-1 mb-3">
+          <label for="doctor">{{ $t('calendarEvent.doctor') }}</label>
+          <v-select :clearable="false" :reduce="doctor => doctor.code" class="style-chooser" v-model="formData.doctorId" :options="doctors"></v-select>
         </div>
         <div class="col-md-12 mb-3">
           <label for="start">{{ $t('calendarEvent.start') }}</label>
@@ -46,6 +54,10 @@
         <div class="col-md-12 mb-3">
           <label for="notes">{{ $t('calendarEvent.notes') }}</label>
           <textarea row="2" v-model="formData.notes" class="form-control" placeholder="Add your notes here for event!" id="notes" required></textarea>
+        </div>
+        <div class="col-md-12 mb-3">
+          <label for="location">{{ $t('calendarEvent.location') }}</label>
+          <v-select :clearable="false" label="city" :reduce="location => location.id" class="style-chooser" v-model="formData.locationId" :options="locations"></v-select>
         </div>
         <div class="col-md-12 mb-3">
           <label for="color">{{ $t('calendarEvent.changeColor') }}</label><br>
@@ -67,6 +79,9 @@ import interactionPlugin from '@fullcalendar/interaction'
 import listPlugin from '@fullcalendar/list'
 import moment from 'moment'
 import { xray } from '../../../config/pluginInit'
+import { getPatients } from '../../../services/enquiry'
+import { getDentists } from '../../../services/userService'
+import { getLocationsList } from '../../../services/commonCodeLists'
 
 export default {
   components: {
@@ -85,6 +100,9 @@ export default {
       eventInfo: '',
       eventResourceId: '',
       patientData: '',
+      patients: [],
+      locations: [],
+      doctors: [],
       state: [
         {
           label: 'Attended',
@@ -137,8 +155,10 @@ export default {
         notes: '',
         backgroundColor: '',
         resourceId: '',
-        eventResourceId: ''
-
+        eventResourceId: '',
+        patientId: '',
+        doctorId: '',
+        locationId: ''
       },
       calendarApi: null,
       modalTitle: '',
@@ -168,9 +188,27 @@ export default {
   mounted () {
     console.log('this.resourcesOuter', this.resourcesOuter)
     this.calendarApi = this.$refs.calendar.getApi()
+    this.getPatients()
+    this.getDoctors()
+    this.getLocations()
     xray.index()
   },
   methods: {
+    getPatients () {
+      getPatients().then(response => {
+        this.patients = response
+      })
+    },
+    getLocations () {
+      getLocationsList().then(response => {
+        this.locations = response
+      })
+    },
+    getDoctors () {
+      getDentists().then(response => {
+        this.doctors = response
+      })
+    },
     onViewChange (info) {
       this.viewName = info.view.type
     },
@@ -200,7 +238,10 @@ export default {
         notes: '',
         assignmentColor: '',
         resourceId: '',
-        eventResourceId: ''
+        eventResourceId: '',
+        patientId: '',
+        doctorId: '',
+        locationId: ''
       }
     },
     saveAppointment () {
@@ -218,7 +259,10 @@ export default {
           notes: this.formData.notes,
           backgroundColor: this.formData.backgroundColor,
           resourceId: this.formData.resourceId,
-          eventResourceId: this.formData.resourceId
+          eventResourceId: this.formData.resourceId,
+          patientId: this.formData.patientId,
+          doctorId: this.formData.doctorId,
+          locationId: this.formData.locationId
         })
       } else {
         let event = this.calendarApi.getEventById(this.formData.id)
@@ -232,6 +276,9 @@ export default {
         event.setExtendedProp('minutes', this.formData.minutes)
         event.setExtendedProp('notes', this.formData.notes)
         event.setExtendedProp('eventResourceId', this.formData.resourceId)
+        event.setExtendedProp('patientId', this.formData.patientId)
+        event.setExtendedProp('doctorId', this.formData.doctorId)
+        event.setExtendedProp('locationId', this.formData.locationId)
       }
       this.formData = this.defaultAppointment()
     },
