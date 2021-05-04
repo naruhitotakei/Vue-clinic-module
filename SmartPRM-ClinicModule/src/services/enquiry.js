@@ -97,3 +97,15 @@ export async function deleteEnquiry (id) {
   })
   return rawResponse.json()
 }
+
+export async function getPatients () {
+  const rawResponse = await fetch('/api/patients', {
+    method: 'GET',
+    credentials: 'same-origin',
+    headers: {
+      'Accept': 'application/json',
+      'Content-Type': 'application/json'
+    }
+  })
+  return rawResponse.json()
+}

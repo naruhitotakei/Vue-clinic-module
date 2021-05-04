@@ -21,3 +21,15 @@ export async function getRegionsList () {
   })
   return rawResponse.json()
 }
+
+export async function getLocationsList () {
+  const rawResponse = await fetch('/api/codelist/locations', {
+    method: 'GET',
+    credentials: 'same-origin',
+    headers: {
+      'Accept': 'application/json',
+      'Content-Type': 'application/json'
+    }
+  })
+  return rawResponse.json()
+}
