@@ -20,6 +20,12 @@
                                          :fields="productColumns"
                                          :per-page="productsPerPage"
                                          :current-page="currentProductPage">
+                                    <template #table-busy>
+                                      <div class="text-center text-primary my-2">
+                                        <b-spinner class="align-middle"></b-spinner>
+                                        <strong class="loading">Loading...</strong>
+                                      </div>
+                                    </template>
                                     <template v-slot:cell(product_name)="data">
                                         <span v-if="!data.item.editable">
                                             {{ data.item.product_name }}
@@ -61,7 +67,7 @@
                                     <template v-slot:cell(action)="data">
                                       <b-button variant=" iq-bg-success mr-1 mb-1" size="sm" @click="editProduct(data.item)" v-if="!data.item.editable"><i class="ri-ball-pen-fill m-0"></i></b-button>
                                       <b-button variant=" iq-bg-danger mr-1 mb-1" size="sm" v-if="!data.item.editable" @click="removeProduct(data.item)"><i class="ri-delete-bin-line m-0"></i></b-button>
-                                      <b-button variant=" iq-bg-success mr-1 mb-1" size="sm" @click="submitProduct(data.item)" v-if="data.item.editable"><i class="ri-checkbox-circle-fill m-0"></i></b-button>
+                                      <b-button variant=" iq-bg-success mr-1 mb-1" :disabled="!data.item.product_name || !data.item.product_group_id || !data.item.product_type_id || !data.item.product_price" size="sm" @click="submitProduct(data.item)" v-if="data.item.editable"><i class="ri-checkbox-circle-fill m-0"></i></b-button>
                                       <b-button variant=" iq-bg-danger mr-1 mb-1" size="sm" @click="cancelProduct(data.item)" v-if="data.item.editable"><i class="ri-close-circle-fill m-0"></i></b-button>
                                     </template>
                                 </b-table>
@@ -99,6 +105,12 @@
                                   :fields="productGroupColumns"
                                   :per-page="productGroupsPerPage"
                                   :current-page="currentProductGroupPage">
+                                    <template #table-busy>
+                                      <div class="text-center text-primary my-2">
+                                        <b-spinner class="align-middle"></b-spinner>
+                                        <strong class="loading">Loading...</strong>
+                                      </div>
+                                    </template>
                                     <template v-slot:cell(product_group_name)="data">
                                         <span v-if="!data.item.editable">
                                             {{ data.item.product_group_name }}
@@ -130,7 +142,7 @@
                                     <template v-slot:cell(action)="data">
                                       <b-button variant=" iq-bg-success mr-1 mb-1" size="sm" @click="editProductGroup(data.item)" v-if="!data.item.editable"><i class="ri-ball-pen-fill m-0"></i></b-button>
                                       <b-button variant=" iq-bg-danger mr-1 mb-1" size="sm" v-if="!data.item.editable" @click="removeProductGroup(data.item)"><i class="ri-delete-bin-line m-0"></i></b-button>
-                                      <b-button variant=" iq-bg-success mr-1 mb-1" :disabled="!data.item.name && !data.item.category_id" size="sm" @click="submitProductGroup(data.item)" v-if="data.item.editable"><i class="ri-checkbox-circle-fill m-0"></i></b-button>
+                                      <b-button variant=" iq-bg-success mr-1 mb-1" :disabled="!data.item.product_group_name || !data.item.category_id" size="sm" @click="submitProductGroup(data.item)" v-if="data.item.editable"><i class="ri-checkbox-circle-fill m-0"></i></b-button>
                                       <b-button variant=" iq-bg-danger mr-1 mb-1" size="sm" @click="cancelProductGroup(data.item)" v-if="data.item.editable"><i class="ri-close-circle-fill m-0"></i></b-button>
                                     </template>
                                 </b-table>
@@ -167,6 +179,12 @@
                                   :fields="productCategoryColumns"
                                   :per-page="productCategoriesPerPage"
                                   :current-page="currentProductCategoryPage">
+                                    <template #table-busy>
+                                      <div class="text-center text-primary my-2">
+                                        <b-spinner class="align-middle"></b-spinner>
+                                        <strong class="loading">Loading...</strong>
+                                      </div>
+                                    </template>
                                     <template v-slot:cell(category_name)="data">
                                         <span v-if="!data.item.editable">
                                             {{ data.item.category_name }}
@@ -205,7 +223,7 @@
 
 <script>
 import { xray } from '../../config/pluginInit'
-import { getProducts, getProductGroups, getProductCategories, getProductTypes, createProductCategory, updateProductCategory, deleteProductCategory, createProductGroup, updateProductGroup, deleteProductGroup } from '../../services/products'
+import { getProducts, getProductGroups, getProductCategories, getProductTypes, createProductCategory, updateProductCategory, deleteProductCategory, createProductGroup, updateProductGroup, deleteProductGroup, createProduct, deleteProduct, updateProduct } from '../../services/products'
 
 export default {
   components: {
@@ -241,6 +259,7 @@ export default {
       isProductDataLoaded: false,
       isProductCategoryDataLoaded: false,
       isProductGroupDataLoaded: false,
+      isProductEdit: false,
       isProductCategoryEdit: false,
       isProductGroupEdit: false,
       currentProductPage: 1,
@@ -308,13 +327,24 @@ export default {
     editProduct (item) {
       this.tempProduct = Object.assign({}, item)
       item.editable = true
+      this.isProductEdit = true
     },
     submitProduct (item) {
+      if (this.isProductEdit) {
+        updateProduct(item.product_id, item).then(() => {
+          this.getProducts()
+        })
+      } else {
+        createProduct(item).then(() => {
+          this.getProducts()
+        })
+      }
       item.editable = false
     },
     removeProduct (item) {
       let index = this.products.indexOf(item)
       this.products.splice(index, 1)
+      deleteProduct(item.product_id)
     },
     cancelProduct (item) {
       let index = this.products.indexOf(item)
@@ -327,15 +357,16 @@ export default {
       this.setCurrentProductPage()
       let obj = this.defaultProduct()
       this.products.unshift(obj)
+      this.isProductEdit = false
+      this.tempProduct = null
     },
     defaultProduct () {
       return {
-        code: this.products.length + 1,
-        name: '',
-        price: '0 €',
-        group: '',
-        type: '',
-        category: '',
+        product_id: '',
+        product_name: '',
+        product_price: 0,
+        product_group_id: '',
+        product_type_id: '',
         editable: true
       }
     },
@@ -429,5 +460,8 @@ export default {
 <style lang="scss">
 .category-column {
   min-width: 200px !important;
+}
+.loading {
+  padding-left: 10px;
 }
 </style>
