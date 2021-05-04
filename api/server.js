@@ -193,6 +193,13 @@ app.get('/api/enquiries', (req, res) => {
       res.status(401).json("OK: user unauthorized")
 });
 
+app.get('/api/patients', (req, res) => {
+    if(req.session.prm_user && req.session.prm_user.permissions && checkPermission(req.session.prm_user.permissions, enquiriesPermission))
+        daoEnquiries.getPatients(req, res)
+    else
+        res.status(401).json("OK: user unauthorized")
+  });
+
 app.get('/api/enquiries/:id', (req, res) => {
   const id = req.params.id
   if(req.session.prm_user && req.session.prm_user.permissions && checkPermission(req.session.prm_user.permissions, enquiriesPermission))

@@ -144,6 +144,15 @@ const getEnquiryAppointments = (request, response, enquiryId) => {
     })
 }
 
+const getPatients = (request, response) => {
+    pool.query("SELECT enquiries.id, CONCAT_WS(' ', enquiries.name, enquiries.last_name) AS full_name FROM enquiries JOIN clients ON enquiries.client_id = clients.id WHERE enquiries.trashed IS FALSE AND clients.slug = 'primadent_si'", (error, results) => {
+        if (error) {
+            throw error
+        }
+        response.status(200).json(results.rows)
+    })
+}
+
 module.exports = {
   getEnquiries,
   getEnquiriesById,
@@ -151,5 +160,6 @@ module.exports = {
   updateEnquiry,
   deleteEnquiries,
   getEnquiryNotes,
-  getEnquiryAppointments
+  getEnquiryAppointments,
+  getPatients
 }
