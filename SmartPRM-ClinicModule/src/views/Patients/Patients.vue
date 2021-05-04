@@ -179,7 +179,7 @@ export default {
     },
     async getPatients () {
       getEnquires().then(response => {
-        this.toggleDataLoaded()
+        this.isDataLoaded = true
         this.patients = response.map(obj => (
           { ...obj,
             editable: false,
@@ -199,9 +199,6 @@ export default {
     },
     setTotalRows (number) {
       this.totalRows = number
-    },
-    toggleDataLoaded () {
-      this.isDataLoaded = !this.isDataLoaded
     },
     filterSelected (value) {
       let array = [value]
