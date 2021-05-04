@@ -15,6 +15,7 @@
                                 <b-table id="my-table"
                                          bordered
                                          hover
+                                         :busy="!isProductDataLoaded"
                                          :items="products"
                                          :fields="productColumns"
                                          :per-page="productsPerPage"
@@ -93,16 +94,17 @@
                                 <b-table id="my-table"
                                   bordered
                                   hover
+                                  :busy="!isProductGroupDataLoaded"
                                   :items="productGroups"
                                   :fields="productGroupColumns"
                                   :per-page="productGroupsPerPage"
                                   :current-page="currentProductGroupPage">
-                                    <template v-slot:cell(name)="data">
+                                    <template v-slot:cell(product_group_name)="data">
                                         <span v-if="!data.item.editable">
-                                            {{ data.item.name }}
+                                            {{ data.item.product_group_name }}
                                         </span>
                                         <input type="text"
-                                               v-model="data.item.name"
+                                               v-model="data.item.product_group_name"
                                                v-else
                                                class="form-control" />
                                     </template>
@@ -128,7 +130,7 @@
                                     <template v-slot:cell(action)="data">
                                       <b-button variant=" iq-bg-success mr-1 mb-1" size="sm" @click="editProductGroup(data.item)" v-if="!data.item.editable"><i class="ri-ball-pen-fill m-0"></i></b-button>
                                       <b-button variant=" iq-bg-danger mr-1 mb-1" size="sm" v-if="!data.item.editable" @click="removeProductGroup(data.item)"><i class="ri-delete-bin-line m-0"></i></b-button>
-                                      <b-button variant=" iq-bg-success mr-1 mb-1" size="sm" @click="submitProductGroup(data.item)" v-if="data.item.editable"><i class="ri-checkbox-circle-fill m-0"></i></b-button>
+                                      <b-button variant=" iq-bg-success mr-1 mb-1" :disabled="!data.item.name && !data.item.category_id" size="sm" @click="submitProductGroup(data.item)" v-if="data.item.editable"><i class="ri-checkbox-circle-fill m-0"></i></b-button>
                                       <b-button variant=" iq-bg-danger mr-1 mb-1" size="sm" @click="cancelProductGroup(data.item)" v-if="data.item.editable"><i class="ri-close-circle-fill m-0"></i></b-button>
                                     </template>
                                 </b-table>
@@ -160,6 +162,7 @@
                                 <b-table id="my-table"
                                   bordered
                                   hover
+                                  :busy="!isProductCategoryDataLoaded"
                                   :items="productCategories"
                                   :fields="productCategoryColumns"
                                   :per-page="productCategoriesPerPage"
@@ -202,7 +205,7 @@
 
 <script>
 import { xray } from '../../config/pluginInit'
-import { getProducts, getProductGroups, getProductCategories, getProductTypes, createProductCategory, updateProductCategory } from '../../services/products'
+import { getProducts, getProductGroups, getProductCategories, getProductTypes, createProductCategory, updateProductCategory, deleteProductCategory, createProductGroup, updateProductGroup, deleteProductGroup } from '../../services/products'
 
 export default {
   components: {
@@ -235,7 +238,11 @@ export default {
       productGroups: [],
       productCategories: [],
       productTypes: [],
+      isProductDataLoaded: false,
+      isProductCategoryDataLoaded: false,
+      isProductGroupDataLoaded: false,
       isProductCategoryEdit: false,
+      isProductGroupEdit: false,
       currentProductPage: 1,
       productsPerPage: 4,
       productGroupsHeader: 'Product Groups',
@@ -264,6 +271,7 @@ export default {
   methods: {
     getProducts () {
       getProducts().then(response => {
+        this.isProductDataLoaded = true
         this.products = response.map(obj => (
           { ...obj,
             editable: false
@@ -273,6 +281,7 @@ export default {
     },
     getProductCategories () {
       getProductCategories().then(response => {
+        this.isProductCategoryDataLoaded = true
         this.productCategories = response.map(obj => (
           { ...obj,
             editable: false
@@ -282,6 +291,7 @@ export default {
     },
     getProductGroups () {
       getProductGroups().then(response => {
+        this.isProductGroupDataLoaded = true
         this.productGroups = response.map(obj => (
           { ...obj,
             editable: false,
@@ -332,17 +342,28 @@ export default {
     editProductGroup (item) {
       this.tempProductGroup = Object.assign({}, item)
       item.editable = true
+      this.isProductGroupEdit = true
     },
     submitProductGroup (item) {
+      if (this.isProductGroupEdit) {
+        updateProductGroup(item.product_group_id, item).then(() => {
+          this.getProductGroups()
+        })
+      } else {
+        createProductGroup(item).then(() => {
+          this.getProductGroups()
+        })
+      }
       item.editable = false
     },
     removeProductGroup (item) {
       let index = this.productGroups.indexOf(item)
       this.productGroups.splice(index, 1)
+      deleteProductGroup(item.product_group_id)
     },
     cancelProductGroup (item) {
       let index = this.productGroups.indexOf(item)
-      this.tempProductGroup ? this.productGroups.splice(index, 1, this.tempProduct) : this.productGroups.shift()
+      this.tempProductGroup ? this.productGroups.splice(index, 1, this.tempProductGroup) : this.productGroups.shift()
     },
     setCurrentProductGroupPage () {
       this.currentProductGroupPage = 1
@@ -351,11 +372,13 @@ export default {
       this.setCurrentProductGroupPage()
       let obj = this.defaultProductGroup()
       this.productGroups.unshift(obj)
+      this.tempProductGroup = null
+      this.isProductGroupEdit = false
     },
     defaultProductGroup () {
       return {
-        name: '',
-        category: '',
+        product_group_name: '',
+        category_id: '',
         emazingFee: '0 €',
         editable: true
       }
@@ -367,6 +390,7 @@ export default {
     },
     removeProductCategory (item) {
       let index = this.productCategories.indexOf(item)
+      deleteProductCategory(item.category_id)
       this.productCategories.splice(index, 1)
     },
     cancelProductCategory (item) {
