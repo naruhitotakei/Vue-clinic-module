@@ -497,18 +497,19 @@
 import { xray } from '../../config/pluginInit'
 import { getEnquiryById, updateEnquiry, getEnquiryNotes, getEnquiryAppointments } from '../../services/enquiry'
 import { getInvoices } from '../../services/invoice'
+import { getOffersByPatient } from '../../services/offers'
 import { getDentists } from '../../services/userService'
 import { getCountriesList, getRegionsList } from '../../services/commonCodeLists'
 import moment from 'moment'
 
-var rowsOffers = [
+/* var rowsOffers = [
   {
     offer_no: 'offer112',
     date: '28.03.2021-12:00',
     issued_by: 'Dr. Bojan Jernejc',
     amount: '300 EUR'
   }
-]
+] */
 var rowsServices = [
   {
     service_title: 'Puljenje zoba',
@@ -543,6 +544,7 @@ export default {
     this.getCountries()
     this.getRegions()
     this.getDentists()
+    this.getOffersByPatient(this.patientId)
   },
   computed: {
     fullName () {
@@ -601,7 +603,7 @@ export default {
       filterOn: [],
       invoiceItems: [],
       servicesItems: rowsServices,
-      offerItems: rowsOffers,
+      offerItems: [],
       currentInvoicePage: 1,
       invoicesPerPage: 10,
       currentOfferPage: 1,
@@ -678,10 +680,17 @@ export default {
         { label: this.$t('EPR.servicesSummaryColumn.servicePrice'), key: 'service_price', class: 'text-left' }
       ],
       columnsOffers: [
-        { label: this.$t('EPR.offersColumn.no'), key: 'offer_no', class: 'text-left' },
-        { label: this.$t('EPR.offersColumn.date'), key: 'date', class: 'text-left' },
-        { label: this.$t('EPR.offersColumn.issuedBy'), key: 'issued_by', class: 'text-left' },
-        { label: this.$t('EPR.offersColumn.amount'), key: 'amount', class: 'text-left' }
+        { label: this.$t('EPR.offersColumn.no'), key: 'invoice_number', class: 'text-left' },
+        {
+          label: this.$t('EPR.offersColumn.date'),
+          key: 'invoice_time',
+          class: 'text-left',
+          formatter: value => {
+            return moment(value).format('DD/MM/YYYY')
+          }
+        },
+        { label: this.$t('EPR.offersColumn.issuedBy'), key: 'operator_name', class: 'text-left' },
+        { label: this.$t('EPR.offersColumn.amount'), key: 'total_with_vat', class: 'text-left' }
       ]
     }
   },
@@ -719,6 +728,11 @@ export default {
     getInvoices () {
       getInvoices().then(response => {
         this.invoiceItems = response
+      })
+    },
+    getOffersByPatient (id) {
+      getOffersByPatient(id).then(response => {
+        this.getOffersByPatient = response
       })
     },
     getDentists () {
