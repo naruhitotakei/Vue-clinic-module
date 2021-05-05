@@ -11,7 +11,7 @@ export async function getOffers () {
 }
 
 export async function getOffersByPatient (id) {
-  const rawResponse = await fetch('/api/offers' + id, {
+  const rawResponse = await fetch('/api/offers/' + id, {
     method: 'GET',
     headers: {
       'Accept': 'application/json',
