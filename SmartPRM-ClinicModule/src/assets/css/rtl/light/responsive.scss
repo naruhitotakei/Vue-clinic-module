@@ -4,6 +4,10 @@ Author: iqonicthemes.in
 Design and Developed by: iqonicthemes.in
 NOTE: This file contains the styling for responsive Template.
 */
+@media(min-width:1699px) {
+	.sign-in-detail{height: 591px;}
+}
+
 @media(max-width:1699px) {
 	.email-form .select2-container { width: 100% !important; }
 	.sign-in-page {height: 100%;}
