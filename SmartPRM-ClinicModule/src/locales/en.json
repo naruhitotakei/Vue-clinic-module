@@ -194,8 +194,8 @@
       "serviceTitle": "Service",
       "serviceDate": "Date",
       "doneBy": "Done by",
-      "serviceCount": "Service count",
-      "servicePrice": "Price"
+      "servicePrice": "Price",
+      "paymentMethod": "Payment method"
     },
     "offersTab": "Offers",
     "offers": {

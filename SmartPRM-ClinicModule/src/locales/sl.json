@@ -194,8 +194,8 @@
       "serviceTitle": "Storitev",
       "serviceDate": "Datum",
       "doneBy": "Opravil",
-      "serviceCount": "Število storitev",
-      "servicePrice": "Cena"
+      "servicePrice": "Znesek",
+      "paymentMethod": "Način plačila"
     },
     "offersTab": "Ponudbe",
     "offers": {

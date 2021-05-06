@@ -426,12 +426,11 @@
                                        :items="servicesItems"
                                        :fields="servicesSummaryColumns"
                                        :per-page="servicesPerPage"
-                                       :current-page="currentServicesPage"
-                                       class="mb-0"></b-table>
+                                       :current-page="currentServicesPage"></b-table>
                           </template>
                           <template>
                               <b-collapse id="collapse-6" class="mb-2"> </b-collapse>
-                              <div class="mt-4 ml-3">
+                              <div class="ml-4 pb-2">
                                   <b-pagination v-model="currentServicesPage"
                                                 :total-rows="servicesItems.length"
                                                 :per-page="servicesPerPage"
@@ -515,22 +514,22 @@ var rowsServices = [
     service_title: 'Puljenje zoba',
     service_date: '11.04.2021',
     done_by: 'Dr. Bojan Jernejc',
-    service_count: '1',
-    service_price: '100 EUR'
+    service_price: '100 EUR',
+    payment_method: 'Gotovina'
   },
   {
     service_title: 'Beljenje zob',
     service_date: '25.04.2021',
     done_by: 'Dr. Bojan Jernejc',
-    service_count: '1',
-    service_price: '400 EUR'
+    service_price: '400 EUR',
+    payment_method: 'Gotovina'
   },
   {
     service_title: 'Zalivka',
     service_date: '05.05.2021',
     done_by: 'Dr. Bojan Jernejc',
-    service_count: '2',
-    service_price: '200 EUR'
+    service_price: '200 EUR',
+    payment_method: 'Gotovina'
   }
 ]
 export default {
@@ -676,8 +675,8 @@ export default {
         { label: this.$t('EPR.servicesSummaryColumn.serviceTitle'), key: 'service_title', class: 'text-left' },
         { label: this.$t('EPR.servicesSummaryColumn.serviceDate'), key: 'service_date', class: 'text-left' },
         { label: this.$t('EPR.servicesSummaryColumn.doneBy'), key: 'done_by', class: 'text-left' },
-        { label: this.$t('EPR.servicesSummaryColumn.serviceCount'), key: 'service_count', class: 'text-left' },
-        { label: this.$t('EPR.servicesSummaryColumn.servicePrice'), key: 'service_price', class: 'text-left' }
+        { label: this.$t('EPR.servicesSummaryColumn.servicePrice'), key: 'service_price', class: 'text-left' },
+        { label: this.$t('EPR.servicesSummaryColumn.paymentMethod'), key: 'payment_method', class: 'text-left' }
       ],
       columnsOffers: [
         { label: this.$t('EPR.offersColumn.no'), key: 'invoice_number', class: 'text-left' },
