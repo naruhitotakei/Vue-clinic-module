@@ -66,6 +66,22 @@ CONSTRAINT invoice_prm_company_premise_fk REFERENCES prm_company_premise (premis
 ALTER TABLE prm_product_group
 ADD COLUMN fee NUMERIC;
 
+--############################################################
+--# Create vat_tax_amount table and fill it with values
+--############################################################
+
+CREATE TABLE IF NOT EXISTS vat_tax_amount (
+	vat_tax_amount_id SERIAL,
+	vat_tax_amount NUMERIC,
+	country_id INT NOT NULL CONSTRAINT vat_tax_amount_countries_fk REFERENCES countries (id),
+	active BOOLEAN DEFAULT 't',
+	created_date DATE NOT NULL DEFAULT CURRENT_DATE
+);
+
+INSERT INTO vat_tax_amount (vat_tax_amount, country_id) VALUES 
+(NULL, 1), (0, 1), (9.5, 1), (22,1);
+
+
 UPDATE db_version SET version ='01.12', version_date=CURRENT_DATE WHERE resource='Tables';
 
 
