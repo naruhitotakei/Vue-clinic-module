@@ -266,7 +266,7 @@ export default {
       isProductCategoryEdit: false,
       isProductGroupEdit: false,
       currentProductPage: 1,
-      productsPerPage: 4,
+      productsPerPage: 20,
       productGroupsHeader: 'Product Groups',
       productGroupsButtonLabel: 'Add product group',
       productGroupColumns: [
@@ -276,7 +276,7 @@ export default {
         { label: 'Action', key: 'action', class: 'text-center' }
       ],
       currentProductGroupPage: 1,
-      productGroupsPerPage: 4,
+      productGroupsPerPage: 20,
       productCategoriesHeader: 'Product Categories',
       productCategoriesButtonLabel: 'Add product category',
       productCategoryColumns: [
@@ -284,7 +284,7 @@ export default {
         { label: 'Action', key: 'action', class: 'text-center' }
       ],
       currentProductCategoryPage: 1,
-      productCategoriesPerPage: 4,
+      productCategoriesPerPage: 20,
       tempProduct: null,
       tempProductGroup: null,
       tempProductCategory: null
