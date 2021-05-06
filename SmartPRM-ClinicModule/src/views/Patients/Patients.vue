@@ -5,7 +5,7 @@
                 <iq-card>
                     <template v-slot:headerTitle>
                         <h3 class="card-title" style="margin-top: 10px;">{{ $t('patients.patientsHeader') }}</h3>
-                        <div class="btn-add-patient col-12 col-sm-3 col-md-2 mb-4 mb-sm-0 aki">
+                        <div class="btn-add-patient col-12 col-sm-3 col-md-2 mb-4 mb-sm-0 patient">
                             <b-button variant="primary" @click="add"><i class="ri-add-line mr-2"></i>{{ $t('patients.addPatient') }}</b-button>
                         </div>
                         <div class="iq-card-header-toolbar d-sm-flex align-items-center col-12 col-sm-9 col-md-10" style="margin-top: -10px;">
@@ -270,13 +270,13 @@ export default {
 }
 
 @media (min-width: 479px) and (max-width: 1400px) {
-.aki {
+.patient {
   margin-right: -28px !important;
 }
 }
 
 @media (min-width: 1401px) {
-.aki {
+.patient {
   margin-right: -71px !important;
 }
 }
