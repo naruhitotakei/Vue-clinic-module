@@ -132,7 +132,7 @@
                                     </template>
                                     <template v-slot:cell(emazingFee)="data">
                                         <span v-if="!data.item.editable">
-                                            {{ data.item.emazingFee | euro }}
+                                            {{ data.item.emazingFee | percentage }}
                                         </span>
                                         <input type="text"
                                                v-model="data.item.emazingFee"
@@ -239,6 +239,9 @@ export default {
   filters: {
     euro (val) {
       return val + ' €'
+    },
+    percentage (val) {
+      return val + '%'
     }
   },
   data: function () {
@@ -314,7 +317,7 @@ export default {
         this.productGroups = response.map(obj => (
           { ...obj,
             editable: false,
-            emazingFee: 30
+            emazingFee: 15
           }
         ))
       })
@@ -410,7 +413,7 @@ export default {
       return {
         product_group_name: '',
         category_id: '',
-        emazingFee: '0 €',
+        emazingFee: '0',
         editable: true
       }
     },
@@ -459,7 +462,7 @@ export default {
 </script>
 <style lang="scss">
 .category-column {
-  min-width: 200px !important;
+  min-width: 210px !important;
 }
 .loading {
   padding-left: 10px;
