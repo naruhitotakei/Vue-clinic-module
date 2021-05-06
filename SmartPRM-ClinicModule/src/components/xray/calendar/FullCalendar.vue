@@ -27,14 +27,18 @@
       <h3 v-if="modalTitle" style="text-align: center;">{{modalTitle}}</h3>
       <div class="form-row">
         <div class="col-md-12 mb-3">
+          <label for="patient">{{ $t('calendarEvent.patient') }}</label>
+          <v-select :clearable="false" label="full_name" :reduce="patient => patient.id" class="style-chooser" v-model="formData.patientId" :options="patients"></v-select>
+        </div>
+        <div class="col-md-12 mb-3">
           <label for="title">Title</label>
           <div style="display: flex;">
             <input type="text" v-model="formData.title" class="form-control" placeholder="Title" id="title" required>
           </div>
         </div>
         <div class="col-md-5 mb-3">
-          <label for="patient">{{ $t('calendarEvent.patient') }}</label>
-          <v-select :clearable="false" label="full_name" :reduce="patient => patient.id" class="style-chooser" v-model="formData.patientId" :options="patients"></v-select>
+          <label for="location">{{ $t('calendarEvent.location') }}</label>
+          <v-select :clearable="false" label="city" :reduce="location => location.id" class="style-chooser" v-model="formData.locationId" :options="locations"></v-select>
         </div>
         <div class="col-md-5 offset-md-1 mb-3">
           <label for="doctor">{{ $t('calendarEvent.doctor') }}</label>
@@ -54,10 +58,6 @@
         <div class="col-md-12 mb-3">
           <label for="notes">{{ $t('calendarEvent.notes') }}</label>
           <textarea row="2" v-model="formData.notes" class="form-control" placeholder="Add your notes here for event!" id="notes" required></textarea>
-        </div>
-        <div class="col-md-12 mb-3">
-          <label for="location">{{ $t('calendarEvent.location') }}</label>
-          <v-select :clearable="false" label="city" :reduce="location => location.id" class="style-chooser" v-model="formData.locationId" :options="locations"></v-select>
         </div>
         <div class="col-md-12 mb-3">
           <label for="color">{{ $t('calendarEvent.changeColor') }}</label><br>
@@ -236,7 +236,7 @@ export default {
         hours: '',
         minutes: '',
         notes: '',
-        assignmentColor: '',
+        backgroundColor: '#64D6E8',
         resourceId: '',
         eventResourceId: '',
         patientId: '',
