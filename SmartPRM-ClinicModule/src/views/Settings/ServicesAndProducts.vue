@@ -130,12 +130,12 @@
                                           :options="productCategories">
                                         </v-select>
                                     </template>
-                                    <template v-slot:cell(emazingFee)="data">
+                                    <template v-slot:cell(fee)="data">
                                         <span v-if="!data.item.editable">
-                                            {{ data.item.emazingFee | percentage }}
+                                            {{ data.item.fee | percentage }}
                                         </span>
                                         <input type="text"
-                                               v-model="data.item.emazingFee"
+                                               v-model="data.item.fee"
                                                v-else
                                                class="form-control" />
                                     </template>
@@ -272,7 +272,7 @@ export default {
       productGroupColumns: [
         { label: 'Name', key: 'product_group_name', class: 'text-left' },
         { label: 'Category', key: 'category_id', class: 'text-left category-column' },
-        { label: 'Emazing Fee', key: 'emazingFee', class: 'text-left' },
+        { label: 'Emazing Fee', key: 'fee', class: 'text-left' },
         { label: 'Action', key: 'action', class: 'text-center' }
       ],
       currentProductGroupPage: 1,
@@ -316,8 +316,7 @@ export default {
         this.isProductGroupDataLoaded = true
         this.productGroups = response.map(obj => (
           { ...obj,
-            editable: false,
-            emazingFee: 15
+            editable: false
           }
         ))
       })
@@ -413,7 +412,7 @@ export default {
       return {
         product_group_name: '',
         category_id: '',
-        emazingFee: '0',
+        fee: '0',
         editable: true
       }
     },
