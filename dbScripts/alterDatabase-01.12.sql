@@ -59,6 +59,12 @@ ALTER TABLE prm_company_premise ADD CONSTRAINT prm_company_premise_pk PRIMARY KE
 ALTER TABLE invoice ADD COLUMN premise_id INT
 CONSTRAINT invoice_prm_company_premise_fk REFERENCES prm_company_premise (premise_id);
 
+--############################################################
+--# Add fee column into prm_product_group
+--############################################################
+
+ALTER TABLE prm_product_group
+ADD COLUMN fee NUMERIC;
 
 UPDATE db_version SET version ='01.12', version_date=CURRENT_DATE WHERE resource='Tables';
 
