@@ -5,17 +5,17 @@
         <iq-card>
           <template v-slot:headerTitle>
               <h3 class="card-title" style="margin-top: 10px;">{{ $t('invoices.invoicesHeader') }}</h3>
-                        <div class="btn-add-patient">
+                        <div class="btn-add-patient col-12 col-sm-3 col-md-3 col-lg-2 mb-4 mb-sm-0 invoice">
                             <b-button variant="primary" @click="add_invoice"><i class="ri-add-line mr-2"></i>{{ $t('invoices.invoicesBtn') }}</b-button>
                         </div>
-                        <div class="iq-card-header-toolbar d-flex align-items-center" style="margin-top: -10px;">
+                        <div class="iq-card-header-toolbar d-sm-flex align-items-center col-12 col-sm-9 col-md-9 col-lg-10" style="margin-top: -10px;">
                             <div class="iq-search-bar">
                                 <form action="#" class="searchbox">
                                     <input type="search" v-model="filter" class="text search-input" placeholder="Search">
                                     <a class="search-link" href="#"><i class="ri-search-line"></i></a>
                                 </form>
                             </div>
-                            <iq-card>
+                            <iq-card class="mt-4 mt-sm-0">
                               <b-form-group label-for="searchOptions" label="Search By:">
                               <v-select class="patients" label="text"
                                 :clearable="false" :reduce="filter => filter.value"
@@ -167,3 +167,31 @@ export default {
   }
 }
 </script>
+
+<style lang="scss">
+@media (max-width: 479px) {
+.iq-search-bar {
+  padding: 0 15px 0 0 !important;
+  margin: 0 !important;
+}
+.search-link {
+  right: -4px !important;
+  top: 94px !important;
+}
+.search-input {
+  width: 105% !important;
+}
+}
+
+@media (min-width: 479px) and (max-width: 1400px) {
+.invoice {
+  margin-right: -40px !important;
+}
+}
+
+@media (min-width: 1401px) {
+.invoice {
+  margin-right: -71px !important;
+}
+}
+</style>
