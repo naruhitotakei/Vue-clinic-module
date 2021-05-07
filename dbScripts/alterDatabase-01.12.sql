@@ -43,6 +43,17 @@ ALTER TABLE prm_company_premise
 DROP COLUMN premise_business_premise_id,
 DROP COLUMN premise_electronic_device_id;
 
+ALTER TABLE prm_company_premise RENAME COLUMN company_name TO premise_name;
+
+ALTER TABLE prm_company_premise ADD COLUMN company_id INT
+CONSTRAINT prm_company_premise_prm_company_fk REFERENCES prm_company (company_id);
+
+ALTER TABLE prm_company_premise DROP COLUMN software_supplier_tax_number;
+
+ALTER TABLE prm_company_premise DROP COLUMN company_tax_number;
+
+ALTER TABLE prm_company_premise RENAME COLUMN premises_validity_date TO validity_date;
+
 --############################################################
 --# Alter prm_invoice_item table
 --############################################################
