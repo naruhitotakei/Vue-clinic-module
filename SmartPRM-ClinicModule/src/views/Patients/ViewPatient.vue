@@ -423,7 +423,7 @@
                               <h5 class="card-title">{{ $t('EPR.invoices.servicesSummary') }}</h5>
                               <b-table small
                                        id="patient-services"
-                                       :items="servicesItems"
+                                       :items="services"
                                        :fields="servicesSummaryColumns"
                                        :per-page="servicesPerPage"
                                        :current-page="currentServicesPage"></b-table>
@@ -432,7 +432,7 @@
                               <b-collapse id="collapse-6" class="mb-2"> </b-collapse>
                               <div class="ml-4 pb-2">
                                   <b-pagination v-model="currentServicesPage"
-                                                :total-rows="servicesItems.length"
+                                                :total-rows="services.length"
                                                 :per-page="servicesPerPage"
                                                 aria-controls="patient-services"></b-pagination>
                               </div>
@@ -494,34 +494,11 @@
 </template>
 <script>
 import { xray } from '../../config/pluginInit'
-import { getEnquiryById, updateEnquiry, getEnquiryNotes, getEnquiryAppointments, getEnquiryInvoices, getEnquiryOffers } from '../../services/enquiry'
+import { getEnquiryById, updateEnquiry, getEnquiryNotes, getEnquiryAppointments, getEnquiryInvoices, getEnquiryOffers, getEnquiryServices } from '../../services/enquiry'
 import { getDentists } from '../../services/userService'
 import { getCountriesList, getRegionsList } from '../../services/commonCodeLists'
 import moment from 'moment'
 
-var rowsServices = [
-  {
-    service_title: 'Puljenje zoba',
-    service_date: '11.04.2021',
-    done_by: 'Dr. Bojan Jernejc',
-    service_price: '100 EUR',
-    payment_method: 'Gotovina'
-  },
-  {
-    service_title: 'Beljenje zob',
-    service_date: '25.04.2021',
-    done_by: 'Dr. Bojan Jernejc',
-    service_price: '400 EUR',
-    payment_method: 'Gotovina'
-  },
-  {
-    service_title: 'Zalivka',
-    service_date: '05.05.2021',
-    done_by: 'Dr. Bojan Jernejc',
-    service_price: '200 EUR',
-    payment_method: 'Gotovina'
-  }
-]
 export default {
   name: 'ViewPatient',
   mounted () {
@@ -534,6 +511,7 @@ export default {
     this.getDentists()
     this.getPatientInvoices(this.patientId)
     this.getPatientOffers(this.patientId)
+    this.getPatientServices(this.patientId)
   },
   computed: {
     fullName () {
@@ -591,7 +569,7 @@ export default {
       filter: '',
       filterOn: [],
       invoices: [],
-      servicesItems: rowsServices,
+      services: [],
       offers: [],
       currentInvoicePage: 1,
       invoicesPerPage: 10,
@@ -662,10 +640,23 @@ export default {
         }
       ],
       servicesSummaryColumns: [
-        { label: this.$t('EPR.servicesSummaryColumn.serviceTitle'), key: 'service_title', class: 'text-left' },
-        { label: this.$t('EPR.servicesSummaryColumn.serviceDate'), key: 'service_date', class: 'text-left' },
-        { label: this.$t('EPR.servicesSummaryColumn.doneBy'), key: 'done_by', class: 'text-left' },
-        { label: this.$t('EPR.servicesSummaryColumn.servicePrice'), key: 'service_price', class: 'text-left' },
+        { label: this.$t('EPR.servicesSummaryColumn.serviceTitle'), key: 'name', class: 'text-left' },
+        {
+          label: this.$t('EPR.servicesSummaryColumn.serviceDate'),
+          key: 'done_at',
+          class: 'text-left',
+          formatter: value => {
+            return moment(value).format('DD.MM.YYYY')
+          }
+        },
+        {
+          label: this.$t('EPR.servicesSummaryColumn.servicePrice'),
+          key: 'price',
+          class: 'text-left',
+          formatter: value => {
+            return value + '0 EUR'
+          }
+        },
         { label: this.$t('EPR.servicesSummaryColumn.paymentMethod'), key: 'payment_method', class: 'text-left' }
       ],
       columnsOffers: [
@@ -722,6 +713,11 @@ export default {
     getPatientOffers (id) {
       getEnquiryOffers(id).then(response => {
         this.offers = response
+      })
+    },
+    getPatientServices (id) {
+      getEnquiryServices(id).then(response => {
+        this.services = response
       })
     },
     getDentists () {

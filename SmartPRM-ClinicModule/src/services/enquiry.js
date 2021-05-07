@@ -70,6 +70,18 @@ export async function getEnquiryOffers (id) {
   return rawResponse.json()
 }
 
+export async function getEnquiryServices (id) {
+  const rawResponse = await fetch(`/api/enquiries/${id}/services`, {
+    method: 'GET',
+    credentials: 'same-origin',
+    headers: {
+      'Accept': 'application/json',
+      'Content-Type': 'application/json'
+    }
+  })
+  return rawResponse.json()
+}
+
 // enquiry syntax
 // all elements are optionall
 // {

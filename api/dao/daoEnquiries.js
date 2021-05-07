@@ -162,6 +162,15 @@ const getEnquiryOffers = (request, response, enquiryId) => {
     })
 }
 
+const getEnquiryServices = (request, response, enquiryId) => {
+    pool.query("SELECT *, services.created_at AS done_at FROM services JOIN products ON services.product_id = products.id WHERE enquiry_id = $1", [enquiryId], (error, results) => {
+        if (error) {
+            throw error
+        }
+        response.status(200).json(results.rows)
+    })
+}
+
 const getPatients = (request, response) => {
     pool.query("SELECT enquiries.id, CONCAT_WS(' ', enquiries.name, enquiries.last_name) AS full_name FROM enquiries JOIN clients ON enquiries.client_id = clients.id WHERE enquiries.trashed IS FALSE AND clients.slug = 'primadent_si'", (error, results) => {
         if (error) {
@@ -181,5 +190,6 @@ module.exports = {
   getEnquiryAppointments,
   getEnquiryInvoices,
   getEnquiryOffers,
+  getEnquiryServices,
   getPatients
 }
