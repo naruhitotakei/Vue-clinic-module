@@ -400,7 +400,7 @@
                                                hover
                                                @row-clicked="invoiceSelected"
                                                style="cursor: pointer;"
-                                               :items="invoiceItems"
+                                               :items="invoices"
                                                :fields="columnsInvoices"
                                                :per-page="invoicesPerPage"
                                                :current-page="currentInvoicePage">
@@ -411,7 +411,7 @@
                                   <b-collapse id="collapse-6" class="mb-2"> </b-collapse>
                                   <div class="mt-3">
                                       <b-pagination v-model="currentInvoicePage"
-                                                    :total-rows="invoiceItems.length"
+                                                    :total-rows="invoices.length"
                                                     :per-page="invoicesPerPage"
                                                     aria-controls="patient-invoices"></b-pagination>
                                   </div>
@@ -456,7 +456,7 @@
                                                hover
                                                @row-clicked="$router.push('/extra-pages/invoice-example')"
                                                style="cursor: pointer;"
-                                               :items="offerItems"
+                                               :items="offers"
                                                :fields="columnsOffers"
                                                :per-page="offersPerPage"
                                                :current-page="currentOfferPage">
@@ -467,7 +467,7 @@
                                   <b-collapse id="collapse-6" class="mb-2"> </b-collapse>
                                   <div class="mt-3">
                                       <b-pagination v-model="currentOfferPage"
-                                                    :total-rows="offerItems.length"
+                                                    :total-rows="offers.length"
                                                     :per-page="offersPerPage"
                                                     aria-controls="patient-offers"></b-pagination>
                                   </div>
@@ -494,21 +494,11 @@
 </template>
 <script>
 import { xray } from '../../config/pluginInit'
-import { getEnquiryById, updateEnquiry, getEnquiryNotes, getEnquiryAppointments } from '../../services/enquiry'
-import { getInvoices } from '../../services/invoice'
-import { getOffersByPatient } from '../../services/offers'
+import { getEnquiryById, updateEnquiry, getEnquiryNotes, getEnquiryAppointments, getEnquiryInvoices, getEnquiryOffers } from '../../services/enquiry'
 import { getDentists } from '../../services/userService'
 import { getCountriesList, getRegionsList } from '../../services/commonCodeLists'
 import moment from 'moment'
 
-/* var rowsOffers = [
-  {
-    offer_no: 'offer112',
-    date: '28.03.2021-12:00',
-    issued_by: 'Dr. Bojan Jernejc',
-    amount: '300 EUR'
-  }
-] */
 var rowsServices = [
   {
     service_title: 'Puljenje zoba',
@@ -539,11 +529,11 @@ export default {
     this.getPatient(this.patientId)
     this.getPatientNotes(this.patientId)
     this.getPatientAppointments(this.patientId)
-    this.getInvoices()
     this.getCountries()
     this.getRegions()
     this.getDentists()
-    this.getOffersByPatient(this.patientId)
+    this.getPatientInvoices(this.patientId)
+    this.getPatientOffers(this.patientId)
   },
   computed: {
     fullName () {
@@ -600,9 +590,9 @@ export default {
       dentists: [],
       filter: '',
       filterOn: [],
-      invoiceItems: [],
+      invoices: [],
       servicesItems: rowsServices,
-      offerItems: [],
+      offers: [],
       currentInvoicePage: 1,
       invoicesPerPage: 10,
       currentOfferPage: 1,
@@ -724,14 +714,14 @@ export default {
       }
       )
     },
-    getInvoices () {
-      getInvoices().then(response => {
-        this.invoiceItems = response
+    getPatientInvoices (id) {
+      getEnquiryInvoices(id).then(response => {
+        this.invoices = response
       })
     },
-    getOffersByPatient (id) {
-      getOffersByPatient(id).then(response => {
-        this.getOffersByPatient = response
+    getPatientOffers (id) {
+      getEnquiryOffers(id).then(response => {
+        this.offers = response
       })
     },
     getDentists () {
