@@ -5,7 +5,7 @@
                 <iq-card>
                     <template v-slot:headerTitle>
                         <h3 class="card-title" style="margin-top: 10px;">{{ $t('patients.patientsHeader') }}</h3>
-                        <div class="btn-add-patient col-12 col-sm-3 col-md-2 mb-4 mb-sm-0 patient">
+                        <div class="btn-add-patient col-12 col-sm-3 col-md-2 mb-4 mb-sm-0 patient" style="z-index:1">
                             <b-button variant="primary" @click="add"><i class="ri-add-line mr-2"></i>{{ $t('patients.addPatient') }}</b-button>
                         </div>
                         <div class="iq-card-header-toolbar d-sm-flex align-items-center col-12 col-sm-9 col-md-10" style="margin-top: -10px;">
@@ -172,7 +172,7 @@ export default {
     },
     cancel (item) {
       let index = this.patients.indexOf(item)
-      this.patients.splice(index, 1, this.tempPatient)
+      this.tempPatient ? this.patients.splice(index, 1, this.tempPatient) : this.patients.shift()
     },
     emailPatient (item) {
       console.log('Email sent to patients address: ' + item.email)
