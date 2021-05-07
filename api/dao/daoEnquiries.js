@@ -144,6 +144,24 @@ const getEnquiryAppointments = (request, response, enquiryId) => {
     })
 }
 
+const getEnquiryInvoices = (request, response, enquiryId) => {
+    pool.query("SELECT * FROM invoice WHERE invoice_type = 'Invoice' AND enquiries_id = $1", [enquiryId], (error, results) => {
+        if (error) {
+            throw error
+        }
+        response.status(200).json(results.rows)
+    })
+}
+
+const getEnquiryOffers = (request, response, enquiryId) => {
+    pool.query("SELECT * FROM invoice WHERE invoice_type = 'Offer' AND enquiries_id = $1", [enquiryId], (error, results) => {
+        if (error) {
+            throw error
+        }
+        response.status(200).json(results.rows)
+    })
+}
+
 const getPatients = (request, response) => {
     pool.query("SELECT enquiries.id, CONCAT_WS(' ', enquiries.name, enquiries.last_name) AS full_name FROM enquiries JOIN clients ON enquiries.client_id = clients.id WHERE enquiries.trashed IS FALSE AND clients.slug = 'primadent_si'", (error, results) => {
         if (error) {
@@ -161,5 +179,7 @@ module.exports = {
   deleteEnquiries,
   getEnquiryNotes,
   getEnquiryAppointments,
+  getEnquiryInvoices,
+  getEnquiryOffers,
   getPatients
 }

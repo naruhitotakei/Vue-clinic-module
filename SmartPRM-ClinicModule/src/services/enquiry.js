@@ -46,6 +46,30 @@ export async function getEnquiryAppointments (id) {
   return rawResponse.json()
 }
 
+export async function getEnquiryInvoices (id) {
+  const rawResponse = await fetch(`/api/enquiries/${id}/invoices`, {
+    method: 'GET',
+    credentials: 'same-origin',
+    headers: {
+      'Accept': 'application/json',
+      'Content-Type': 'application/json'
+    }
+  })
+  return rawResponse.json()
+}
+
+export async function getEnquiryOffers (id) {
+  const rawResponse = await fetch(`/api/enquiries/${id}/offers`, {
+    method: 'GET',
+    credentials: 'same-origin',
+    headers: {
+      'Accept': 'application/json',
+      'Content-Type': 'application/json'
+    }
+  })
+  return rawResponse.json()
+}
+
 // enquiry syntax
 // all elements are optionall
 // {

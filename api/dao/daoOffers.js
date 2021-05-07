@@ -18,16 +18,6 @@ const getOffers = (request, response) => {
     })
 }
 
-const getOffersByPatient = (request, response, id) => {
-    pool.query("SELECT * FROM invoice JOIN enquiries ON invoice.enquiries_id = enquiries.id WHERE invoice_type = 'Offer' AND enquiries_id = $1", [id], (error, results) => {
-        if (error) {
-            throw error
-        }
-        response.status(200).json(results.rows)    
-    })
-}
-
 module.exports = {
-    getOffers,
-    getOffersByPatient
+    getOffers
 }
