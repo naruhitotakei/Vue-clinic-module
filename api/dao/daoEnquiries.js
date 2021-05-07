@@ -145,7 +145,7 @@ const getEnquiryAppointments = (request, response, enquiryId) => {
 }
 
 const getEnquiryInvoices = (request, response, enquiryId) => {
-    pool.query("SELECT * FROM invoice WHERE invoice_type = 'Invoice' AND enquiries_id = $1", [enquiryId], (error, results) => {
+    pool.query("SELECT * FROM invoice WHERE invoice_type != 'Offer' AND enquiries_id = $1", [enquiryId], (error, results) => {
         if (error) {
             throw error
         }
