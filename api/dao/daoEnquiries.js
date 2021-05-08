@@ -19,7 +19,7 @@ const getEnquiries = (request, response) => {
 }
 
 const getEnquiriesById = (request, response, id) => {
-    pool.query("SELECT enquiries.*, c.name as country FROM enquiries JOIN clients ON enquiries.client_id = clients.id JOIN countries c ON enquiries.country_id = c.id WHERE enquiries.trashed IS FALSE AND clients.slug = 'primadent_si' AND enquiries.id = $1", [id] , (error, results) => {
+    pool.query("SELECT enquiries.*, c.name as country FROM enquiries LEFT JOIN clients ON enquiries.client_id = clients.id LEFT JOIN countries c ON enquiries.country_id = c.id WHERE enquiries.trashed IS FALSE AND clients.slug = 'primadent_si' AND enquiries.id = $1", [id] , (error, results) => {
         if (error) {
             throw error
         }
