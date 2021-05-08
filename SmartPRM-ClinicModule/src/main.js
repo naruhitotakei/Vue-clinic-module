@@ -29,6 +29,15 @@ Vue.config.errorHandler = (err, vm, info) => {
   throw err // rethrow
 }
 
+Vue.filter('euro', function (value) {
+  if (!value) return '0 €'
+  return value + ' €'
+})
+
+Vue.filter('percentage', function (value) {
+  if (!value) return '0%'
+  return value + '%'
+})
 let vm = new Vue({
   router,
   store,
