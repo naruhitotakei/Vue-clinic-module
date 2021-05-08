@@ -244,16 +244,19 @@ export default {
         locationId: ''
       }
     },
+    calculateEndDate (startDate, hours, minutes) {
+      return moment(startDate).add(hours, 'hours').add(minutes, 'minutes').format('YYYY-MM-DDTHH:mm')
+    },
     saveAppointment () {
       let id = this.calendarApi.getEvents().length + 1
-      console.log('id je: ' + id)
+      let endDate = this.calculateEndDate(this.formData.assignmentDate, this.formData.hours, this.formData.minutes)
       if (!this.formData.id) {
         this.calendarApi.addEvent({
           id: id,
           title: this.formData.title,
           assignmentDate: this.formData.assignmentDate,
-          start: this.formData.start,
-          end: this.formData.end,
+          start: this.formData.assignmentDate,
+          end: endDate,
           hours: this.formData.hours,
           minutes: this.formData.minutes,
           notes: this.formData.notes,
@@ -269,8 +272,8 @@ export default {
         event.setProp('title', this.formData.title)
         event.setProp('backgroundColor', this.formData.backgroundColor)
         event.setProp('resourceId', this.formData.resourceId)
-        event.setStart(this.formData.start)
-        event.setEnd(this.formData.end)
+        event.setStart(this.formData.assignmentDate)
+        event.setEnd(endDate)
         event.setExtendedProp('assignmentDate', this.formData.assignmentDate)
         event.setExtendedProp('hours', this.formData.hours)
         event.setExtendedProp('minutes', this.formData.minutes)
