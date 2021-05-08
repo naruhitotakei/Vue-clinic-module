@@ -675,6 +675,20 @@ export default {
     }
   },
   methods: {
+    createBillingDetails () {
+      let details = ''
+      if (this.patient.name) details += this.patient.name
+      if (this.patient.last_name) details += ' ' + this.patient.name
+      details += '<br>'
+      if (this.patient.address_line_1) details += this.patient.address_line_1 + '<br>'
+      if (this.patient.post_code) details += this.patient.post_code
+      if (this.patient.city) details += ' ' + this.patient.city
+      if (this.patient.country) details += ', ' + this.patient.country
+      details += '<br>'
+      if (this.patient.phone) details += 'Telefon: ' + this.patient.phone + '<br>'
+      if (this.patient.email) details += 'Email: ' + this.patient.email
+      return details
+    },
     filterAppointments (appointment) {
       let currentDate = moment()
       let date = moment(appointment.date).format('YYYY-MM-DD')
@@ -739,7 +753,7 @@ export default {
       this.$router.push({ path: `/documents/invoices/${item.invoice_number}` })
     },
     addInvoice () {
-      this.$router.push('/extra-pages/new-invoice')
+      this.$router.push({ name: 'extra-pages.new-invoice', params: { billingDetails: this.createBillingDetails() } })
     },
     editPatient () {
       this.disabled = !this.disabled
