@@ -236,14 +236,6 @@ export default {
     this.getProductTypes()
   },
   name: 'ServicesAndProducts',
-  filters: {
-    euro (val) {
-      return val + ' €'
-    },
-    percentage (val) {
-      return val + '%'
-    }
-  },
   data: function () {
     return {
       productsHeader: 'Products',
