@@ -287,6 +287,7 @@ export default {
       this.modalTitle = ''
       this.modalShow = true
       this.formData.resourceId = selectionInfo.resource.id
+      this.formData.doctorId = +this.formData.resourceId
       this.formData.eventResourceId = selectionInfo.resource.id
       this.setAssignmentDateAndDuration(selectionInfo.start, selectionInfo.end)
     },

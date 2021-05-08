@@ -109,9 +109,9 @@ export default {
       allDoctorCheck: true,
       checkedListArray: [],
       resources: [
-        { id: 'a', title: 'Doctor 1', eventColor: 'sandybrown' },
-        { id: 'b', title: 'Doctor 2', eventColor: 'blue' },
-        { id: 'c', title: 'Doctor 3', eventColor: 'red' }
+        { id: 2, title: 'Dr. Katic' },
+        { id: 7, title: 'Dr. Fabjan' },
+        { id: 24, title: 'Dr. Kržič' }
       ],
       clonedResources: [
         { id: 'a', title: 'Doctor 1', eventColor: 'sandybrown' },
