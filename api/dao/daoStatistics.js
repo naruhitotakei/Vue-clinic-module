@@ -10,9 +10,7 @@ const pool = new Pool({
 })
 
 const getClinicStatistics = (request, response, clinicId) =>  {
-    var statement = ["SELECT date, SUM(cash_amount) AS cachRevenue, SUM(credit_card_amount) AS cardRevenue, SUM(cash_amount) + SUM(credit_card_amount) AS totalRevenue ",
-                      "FROM services  WHERE date >= date_trunc('month', (now() - 24 * (interval '1 month'))) ",
-                      "GROUP BY DATE ORDER BY date ASC "].join('\n') 
+    var statement = ["SELECT date_trunc('week',date)::date as date, SUM(cash_amount) AS cachRevenue, SUM(credit_card_amount) AS cardRevenue, SUM(cash_amount) + SUM(credit_card_amount) AS totalRevenue FROM services GROUP BY ( date_trunc('week', date)) ORDER BY ( date_trunc('week', date)) ASC "].join('\n') 
     pool.query(statement, (error, results) => {
         if (error) {
             throw error

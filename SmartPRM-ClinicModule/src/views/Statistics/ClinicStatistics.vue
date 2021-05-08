@@ -195,8 +195,10 @@ export default {
         if (typeof response !== 'string') {
           this.statistics = response
           this.statistics.forEach(function (item) {
-            dates.push(moment(item.date).format('YYYY-MM-DD'))
-            totalRevenue.push(parseFloat(item.totalrevenue))
+            if (item.date !== null) {
+              dates.push(moment(item.date).format('YYYY-MM-DD'))
+              totalRevenue.push(parseFloat(item.totalrevenue))
+            }
           })
         } else {
           console.error(response)
