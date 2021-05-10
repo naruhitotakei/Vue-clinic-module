@@ -49,10 +49,10 @@
                                     <template v-slot:cell(id)="data">
                                       <span>{{ rows.indexOf(data.item) + 1 }}</span>
                                     </template>
-                                    <template v-slot:cell(title)="data">
-                                      <span v-if="!data.item.editable">{{ data.item.item.title }}</span>
+                                    <template v-slot:cell(name)="data">
+                                      <span v-if="!data.item.editable">{{ data.item.item.name }}</span>
                                       <div v-else>
-                                      <v-select :clearable="false" label="name" :reduce="opt => opt.name" class="style-chooser" v-model="data.item.item.title" :options="options"></v-select>
+                                      <v-select :clearable="false" label="name" class="style-chooser" v-model="data.item.item" :options="options" @input="getPrice"></v-select>
                                       </div>
                                     </template>
                                     <template v-slot:cell(quantity)="data">
@@ -60,17 +60,12 @@
                                       <input type="number" min="1" v-model="data.item.quantity" v-else class="form-control">
                                     </template>
                                     <template v-slot:cell(price)="data">
-                                      <span v-if="!data.item.editable">{{ data.item.price }}</span>
-                                      <input type="number" v-model="data.item.price" v-else class="form-control">
+                                      <span>{{ data.item.item.price }}</span>
                                     </template>
                                     <template v-slot:cell(discount)="data">
                                       <span v-if="!data.item.editable">{{ data.item.discount | percentage }}</span>
                                       <input type="number" min="0" max="100" v-model="data.item.discount" v-else class="form-control">
                                     </template>
-                                    <!-- <template v-slot:cell(total)="data">
-                                      <span v-if="!data.item.editable">{{ data.item.total }}</span>
-                                      <input type="text" disabled v-model="data.item.total" v-else class="form-control">
-                                    </template> -->
                                     <template v-slot:cell(action)="data">
                                         <b-button variant=" iq-bg-success mr-1 mb-1" size="sm" @click="edit(data.item)" v-if="!data.item.editable"><i class="ri-ball-pen-fill m-0"></i></b-button>
                                         <b-button variant=" iq-bg-danger mr-1 mb-1" size="sm" v-if="!data.item.editable" @click="remove(data.item)"><i class="ri-delete-bin-line m-0"></i></b-button>
@@ -85,9 +80,6 @@
                           <iq-card>
                             <template v-slot:headerTitle>
                               <h5 style="margin-bottom: 15px;">{{ summary }}</h5>
-                            </template>
-                            <template v-slot:headerAction>
-                              <b-button variant="primary" style="white-space:nowrap" @click="completInvoice"><i class="ri-save-3-line mr-2"></i>Save Invoice</b-button>
                             </template>
                             <template v-slot:body>
                                <b-row>
@@ -113,8 +105,8 @@
                                       <span>{{ data.item.total | euro }}</span>
                                     </template>
                                     <template v-slot:cell(action)="data">
-                                        <b-button variant=" iq-bg-success mr-1 mb-1" size="sm" @click="submitSummary(data.item)" v-if="data.item.editable"><i class="ri-checkbox-circle-fill m-0"></i></b-button>
-                                        <b-button variant=" iq-bg-danger mr-1 mb-1" size="sm" @click="cancelSummary(data.item)" v-if="data.item.editable"><i class="ri-close-circle-fill m-0"></i></b-button>
+                                        <b-button variant=" iq-bg-success mr-1 mb-1" size="sm" :disabled="!data.item.paymentMethod" @click="submitSummary(data.item)" v-if="data.item.editable"><i class="ri-checkbox-circle-fill m-0"></i></b-button>
+                                        <b-button variant=" iq-bg-primary mr-1 mb-1" size="sm" @click="editSummary(data.item)" v-if="!data.item.editable"><i class="ri-ball-pen-fill m-0"></i></b-button>
                                     </template>
                                   </b-table>
                                 </b-col>
@@ -122,15 +114,18 @@
                             </template>
                           </iq-card>
                         </b-col>
-                        <!--<b-col offset="6" cols="6" class="text-right">
+                        <b-col offset="6" cols="6" class="text-right">
                             <b-button variant="link mr-3">
                                 <i class="ri-printer-line"></i>
                                 Download Print
                             </b-button>
-                            <b-button variant="primary">
-                                Submit
+                            <b-button variant="primary mr-4">
+                                <i class="ri-bookmark-3-fill mr-2"></i>Save Invoice as Draft
                             </b-button>
-                        </b-col>-->
+                            <b-button variant="primary mr-3">
+                                <i class="ri-save-3-line mr-2"></i>Save Invoice
+                            </b-button>
+                        </b-col>
                     </b-row>
                 </template>
             </iq-card>
@@ -148,55 +143,45 @@ export default {
   mounted () {
     xray.index()
     this.getLoggedInUser()
-  },
-  computed: {
-    invoiceTotal: function () {
-      let totalCount = 0
-      if (this.rows.length === 0) {
-        return 0
-      } else {
-        this.rows.forEach(element => {
-          totalCount += this.calculatePrice(element)
-        })
-        return totalCount
-      }
-    },
-    invoiceSubTotal: function () {
-      let totalCount = 0
-      if (this.rows.length === 0) {
-        return 0
-      } else {
-        this.rows.forEach(element => {
-          totalCount += this.calculatePriceBeforeDiscount(element)
-        })
-        return totalCount
-      }
-    }
+    this.summaryRows.push(this.defaultSummary())
   },
   data () {
     return {
       columns: [
         { label: '#', key: 'id', class: 'text-left' },
-        { label: 'Item', key: 'title', class: 'text-left item-name' },
-        { label: 'Quantity', key: 'quantity', class: 'text-left' },
+        { label: 'Item', key: 'name', class: 'text-left item-name' },
+        { label: 'Quantity', key: 'quantity', class: 'text-left narrow-column' },
         { label: 'Price', key: 'price', class: 'text-left' },
-        { label: 'Discount', key: 'discount', class: 'text-left' },
+        { label: 'Discount', key: 'discount', class: 'text-left narrow-column' },
         { label: 'Total', key: 'total', class: 'text-left' },
         { label: 'Action', key: 'action', class: 'text-center action-column' }
       ],
-      rows: [],
+      rows: [
+        {
+          id: 1,
+          item: {
+            name: ''
+          },
+          quantity: '1',
+          price: '0',
+          discount: '',
+          total: '0 ',
+          editable: true
+        }
+      ],
       summaryRows: [],
       options: [
-        { id: 1, name: 'Odstranitev zobnega kamna' },
-        { id: 2, name: 'Beljenje zob' },
-        { id: 3, name: 'Zobni implantat' },
-        { id: 4, name: 'Odstranitev kamna' }
+        { id: 1, name: 'Odstranitev zobnega kamna', price: 300 },
+        { id: 2, name: 'Beljenje zob', price: 50 },
+        { id: 3, name: 'Zobni implantat', price: 100 },
+        { id: 4, name: 'Odstranitev kamna', price: 200 }
       ],
       paymentMethods: [
         { id: null, name: 'Select method' },
         { id: 1, name: 'Cash' },
         { id: 2, name: 'Credit card' }
       ],
+      selectedItemName: '',
       text: 'New Invoice',
       summary: 'Invoice Summary',
       detail: 'Invoice Detail',
@@ -221,45 +206,53 @@ export default {
           key: 'total',
           label: 'Total'
         },
-        { label: '', key: 'action', class: 'text-center action-column' }
-      ],
-      invoiceSummary: [
         {
-          dueDate: '',
-          subTotal: '',
-          paymentMethod: '',
-          discount: '',
-          total: ''
+          label: 'Action',
+          key: 'action',
+          class: 'text-center action-column'
         }
       ],
       invoiceDate: moment().format('DD MMM, YYYY'),
       billingDetails: this.$route.params.billingDetails,
       issuedIn: 'Ljubljana',
       tempInvoice: null,
-      logedInUser: {}
+      logedInUser: {},
+      invoiceTotal: 0
     }
   },
   methods: {
-    completInvoice () {
-      if (this.summaryRows.length === 0) {
-        let obj = this.defaultSummary()
-        this.summaryRows.push(obj)
+    getInvoiceTotal () {
+      let totalCount = 0
+      let totalSubCount = 0
+      if (this.rows.length === 0) {
+        this.invoiceTotal = 0
+        this.summaryRows[0].invoiceSubTotal = 0
       } else {
-        this.summaryRows[0].editable = true
+        this.rows.forEach(element => {
+          totalCount += this.calculatePrice(element)
+          totalSubCount += this.calculatePriceBeforeDiscount(element)
+        })
+        this.invoiceTotal = totalCount.toFixed(2)
+        this.summaryRows[0].total = this.invoiceTotal
+        this.summaryRows[0].subTotal = totalSubCount.toFixed(2)
+        this.summaryRows[0].discount = (this.summaryRows[0].subTotal - this.summaryRows[0].total).toFixed(2)
       }
     },
     submitSummary (item) {
       item.editable = false
       item.dueDate = moment(item.dueDate).add(item.dueDateNumber, 'days').format('DD MMM, YYYY')
     },
-    cancelSummary (item) {
-      item.editable = false
+    editSummary (item) {
+      item.editable = true
+    },
+    getPrice (item) {
+      this.selectedItemName = item.name
     },
     calculatePrice (item) {
-      return item.quantity * (item.price - (item.price * item.discount / 100))
+      return item.item.price ? item.quantity * (item.item.price - (item.item.price * item.discount / 100)) : 0
     },
     calculatePriceBeforeDiscount (item) {
-      return item.quantity * item.price
+      return item.item.price ? item.quantity * item.item.price : 0
     },
     getLoggedInUser () {
       sso().then(response => {
@@ -273,6 +266,8 @@ export default {
     submit (item) {
       item.total = this.calculatePrice(item)
       item.editable = false
+      this.getInvoiceTotal()
+      this.rows.push(this.default())
     },
     cancel (item) {
       let index = this.rows.indexOf(item)
@@ -281,16 +276,16 @@ export default {
     remove (item) {
       let index = this.rows.indexOf(item)
       this.rows.splice(index, 1)
+      this.getInvoiceTotal()
     },
     add () {
-      let obj = this.default()
-      this.rows.push(obj)
+      this.rows.push(this.default())
     },
     default () {
       return {
         id: this.rows.length + 1,
         item: {
-          title: ''
+          name: ''
         },
         quantity: '1',
         price: '0',
@@ -304,8 +299,8 @@ export default {
         dueDate: this.invoiceDate,
         dueDateNumber: 0,
         paymentMethod: null,
-        subTotal: this.invoiceSubTotal,
-        discount: this.invoiceSubTotal - this.invoiceTotal,
+        subTotal: 0,
+        discount: 0,
         total: this.invoiceTotal,
         editable: true
       }
@@ -317,6 +312,10 @@ export default {
 <style lang="scss">
 .action-column {
   width: 120px !important;
+}
+
+.narrow-column {
+  width: 100px !important;
 }
 .item-name {
   min-width: 240px !important;
