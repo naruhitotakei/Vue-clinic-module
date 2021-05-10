@@ -188,7 +188,8 @@ export default {
       invoiceSummaryFields: [
         {
           key: 'dueDate',
-          label: 'Due Date'
+          label: 'Due Date',
+          class: 'narrow-column'
         },
         {
           key: 'paymentMethod',
