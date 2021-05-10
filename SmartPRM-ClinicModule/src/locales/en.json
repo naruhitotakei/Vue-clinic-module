@@ -127,6 +127,7 @@
       "address": "Address",
       "addressUnknown": "Unknown",
       "addAppointment": "Add appointment",
+      "addInvoice": "Add invoice",
       "addAssignment": "Add assignment",
       "deletePatient": "Delete patient",
       "personalDoctors": "Personal doctors",
