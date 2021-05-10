@@ -60,11 +60,12 @@
                                       </template>
                                       <div class="bg-primary pb-2 p-1" style="border-radius: 0 0 25px 25px;">
                                           <b-col md="14" class="d-flex justify-content-center">
-                                              <button type="" class="btn btn-light m-2">{{ $t('EPR.overview.addAppointment') }}</button>&nbsp;
-                                              <button type="" class="btn btn-light m-2">{{ $t('EPR.overview.addAssignment') }}</button>&nbsp;
+                                              <button type="" class="btn btn-light m-1 ">{{ $t('EPR.overview.addAppointment') }}</button>&nbsp;
+                                              <button type="" class="btn btn-light m-1">{{ $t('EPR.overview.addAssignment') }}</button>&nbsp;
+                                              <button type="button" @click="addInvoice" class="btn btn-light m-1">{{ $t('EPR.overview.addInvoice') }}</button>
                                           </b-col>
                                           <b-col class="text-center">
-                                              <button type="" class="btn btn-danger">{{ $t('EPR.overview.deletePatient') }}</button>
+                                              <button type="" class="btn btn-danger mt-3">{{ $t('EPR.overview.deletePatient') }}</button>
                                           </b-col>
                                       </div>
                                   </iq-card>
