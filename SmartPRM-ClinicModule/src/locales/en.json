@@ -387,6 +387,7 @@
       "nameItalian": "Name (Italian)",
       "nameGerman": "Name (German)",
       "nameEnglish": "Name (English)",
+      "taxRate": "Tax rate",
       "price": "Price",
       "group": "Group",
       "type": "Type",
