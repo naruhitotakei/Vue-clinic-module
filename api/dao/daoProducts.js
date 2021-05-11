@@ -46,24 +46,43 @@ const getProductTypes = (request, response) =>  {
 }
 
 const createProduct = (req, res, products) => {
-    var statement = "INSERT INTO prm_product ("
-    if (products.product_name) statement += "product_name,"
-    if (products.product_price) statement += "product_price,"
-    if (products.product_group_id) statement += "product_group_id,"
-    if (products.product_type_id) statement += "product_type_id,"
-    statement += "created_date"
-    statement += ") VALUES ("
-    if (products.product_name) statement += "'" + products.product_name + "',"
-    if (products.product_price) statement += "'" + products.product_price + "',"
-    if (products.product_group_id) statement += "'" + products.product_group_id + "',"
-    if (products.product_type_id) statement += products.product_type_id + ","
-    statement += "NOW()" 
-    statement +=")"
-    console.log(statement)
-    pool.query(statement , (error, results) => {
+    var productStatement = "INSERT INTO prm_product ("
+    if (products.product_name) productStatement += "product_name,"
+    if (products.product_price) productStatement += "product_price,"
+    if (products.product_group_id) productStatement += "product_group_id,"
+    if (products.product_type_id) productStatement += "product_type_id,"
+    productStatement += "created_date"
+    productStatement += ") VALUES ("
+    if (products.product_name) productStatement += "'" + products.product_name + "',"
+    if (products.product_price) productStatement += "'" + products.product_price + "',"
+    if (products.product_group_id) productStatement += "'" + products.product_group_id + "',"
+    if (products.product_type_id) productStatement += products.product_type_id + ","
+    productStatement += "NOW()" 
+    productStatement +=") RETURNING product_id"
+    console.log(productStatement)
+
+    pool.query(productStatement , (error, results) => {
         if (error) {
             throw error
-        }
+        } 
+        var productId = results.rows[0].product_id;
+        var translationStatement = "INSERT INTO prm_product_translation (product_id,"
+        if (products.english) translationStatement += "english,"
+        if (products.italian) translationStatement += "italian,"
+        if (products.german) translationStatement += "german,"
+        translationStatement += "created_date"
+        translationStatement += ") VALUES (" + productId + "," 
+        if (products.english) translationStatement += "'" + products.english + "',"
+        if (products.italian) translationStatement += "'" + products.italian + "',"
+        if (products.german) translationStatement += "'" + products.german + "',"
+        translationStatement += "NOW())" 
+        console.log(translationStatement)
+        
+        pool.query(translationStatement, (error, results) => {
+            if (error) {
+                throw error
+            } 
+        })
         res.status(200).json("OK")
     })    
 }
@@ -155,6 +174,7 @@ const createProductCategory = (req, res, productCategory) => {
         if (error) {
             throw error
         }
+
         res.status(200).json("OK")
     })    
 }
