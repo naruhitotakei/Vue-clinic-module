@@ -303,7 +303,7 @@
     "advPaymentInfo": {
       "advPaymentDate": "Date",
       "advPaymentTotal": "Total",
-      "advPaymentStatus":  "Status",
+      "advPaymentStatus": "Status",
       "advPaymentDetails": "Billing Details",
       "advPaymentIssuedIn": "Issued In",
       "advPaymentIssuedBy": "Issued By"
@@ -343,9 +343,6 @@
     "monthsIncome": "This Month's Income",
     "yearsIncome": "This Year's Income"
   },
-  "settingsUsers": {
-    "viewProfile": "View Profile"
-  },
   "reportingEmazing": {
     "servicesSummary": "Services Summary",
     "periodSelect": "Select Period",
@@ -369,6 +366,46 @@
       "serviceLocation": "Location",
       "serviceDoctor": "Doctor",
       "serviceLastConsult": "Last Consult Location"
+    }
+  },
+  "settingsUsers": {
+    "viewProfile": "View Profile"
+  },
+  "servicesAndProducts": {
+    "headerProducts": "Products",
+    "addProduct": "Add product",
+    "productColumn": {
+      "productName": "Name",
+      "productPrice": "Price",
+      "productGroup": "Group",
+      "productType": "Type",
+      "productAction": "Action"
+    },
+    "addProductModal": {
+      "addProduct": "Add product",
+      "nameSlovenian": "Name (Slovenian)",
+      "nameItalian": "Name (Italian)",
+      "nameGerman": "Name (German)",
+      "nameEnglish": "Name (English)",
+      "price": "Price",
+      "group": "Group",
+      "type": "Type",
+      "close": "Close",
+      "save": "Save"
+    },
+    "headerProductGroup": "Product groups",
+    "addProductGroup": "Add product group",
+    "productGroupColumn": {
+      "productGroupName": "Name",
+      "productGroupCategory": "Category",
+      "productGroupFee": "Emazing fee",
+      "productGroupAction": "Action"
+    },
+    "headerProductCategories": "Product categories",
+    "addProductCategory": "Add product category",
+    "productCategoryColumn": {
+      "productCategoryName": "Name",
+      "productCategoryAction": "Action"
     }
   },
   "dashboard2": {
