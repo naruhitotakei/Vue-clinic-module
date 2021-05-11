@@ -10,7 +10,7 @@ const pool = new Pool({
 })
 
 const getProducts = (request, response) =>  {
-    pool.query("SELECT p.product_id, p.product_name, p.product_price, p.product_group_id, p.product_type_id, ppg.product_group_name as group_name, ppt.product_type_name as type_name, pptr.english, pptr.italian, pptr.german FROM prm_product p JOIN prm_product_group ppg ON p.product_group_id = ppg.product_group_id JOIN prm_product_type ppt ON p.product_type_id = ppt.product_type_id JOIN prm_product_translation pptr ON p.product_id = pptr.product_id ORDER BY p.created_date DESC", (error, results) => {
+    pool.query("SELECT p.product_id, p.product_name, p.product_price, p.tax_amount, p.product_group_id, p.product_type_id, ppg.product_group_name as group_name, ppt.product_type_name as type_name, pptr.english, pptr.italian, pptr.german FROM prm_product p JOIN prm_product_group ppg ON p.product_group_id = ppg.product_group_id JOIN prm_product_type ppt ON p.product_type_id = ppt.product_type_id JOIN prm_product_translation pptr ON p.product_id = pptr.product_id ORDER BY p.created_date DESC", (error, results) => {
         if (error) {
             throw error
         }
@@ -51,12 +51,14 @@ const createProduct = (req, res, products) => {
     if (products.product_price) productStatement += "product_price,"
     if (products.product_group_id) productStatement += "product_group_id,"
     if (products.product_type_id) productStatement += "product_type_id,"
+    if (products.vat_tax_amount) productStatement += "tax_amount,"
     productStatement += "created_date"
     productStatement += ") VALUES ("
     if (products.product_name) productStatement += "'" + products.product_name + "',"
     if (products.product_price) productStatement += "'" + products.product_price + "',"
     if (products.product_group_id) productStatement += "'" + products.product_group_id + "',"
     if (products.product_type_id) productStatement += products.product_type_id + ","
+    if (products.vat_tax_amount) productStatement += products.vat_tax_amount + ","
     productStatement += "NOW()" 
     productStatement +=") RETURNING product_id"
     console.log(productStatement)
@@ -93,6 +95,7 @@ const updateProduct = (req, res, id, product) => {
         if (product.product_price) statement += "product_price='" + product.product_price + "',"
         if (product.product_group_id) statement += "product_group_id='"+ product.product_group_id + "',"
         if (product.product_type_id) statement += "product_type_id='"+ product.product_type_id + "',"
+        if (product.vat_tax_amount) statement += "tax_amount='"+ product.vat_tax_amount + "',"
         statement = statement.slice(0, -1)
         statement +=" WHERE product_id=" + id
         console.log(statement)
