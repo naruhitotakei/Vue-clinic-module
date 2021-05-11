@@ -35,8 +35,18 @@ const getLocationsList = (request, response) => {
     })
 }
 
+const getTaxRateList = (request, response, id) => {
+    pool.query("SELECT vat_tax_amount as tax_amount FROM vat_tax_amount WHERE country_id = $1", [id], (error, results) => {
+        if (error) {
+            throw error
+        }
+        response.status(200).json(results.rows)
+    })
+}
+
 module.exports = {
   getCountriesList,
   getRegionsList,
-  getLocationsList
+  getLocationsList,
+  getTaxRateList
 }

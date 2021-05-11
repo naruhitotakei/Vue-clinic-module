@@ -472,6 +472,11 @@ app.get('/api/codelist/locations', (req, res) => {
     daoCodeLists.getLocationsList(req, res)
 });
 
+app.get('/api/codelist/country/:id/tax-rate', (req, res) => {
+    const id = req.params.id
+    daoCodeLists.getTaxRateList(req, res, id)
+});
+
 ///////////////////////////////////
 // common methodes
 ///////////////////////////////////
