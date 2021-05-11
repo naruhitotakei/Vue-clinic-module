@@ -10,7 +10,7 @@ const pool = new Pool({
 })
 
 const getProducts = (request, response) =>  {
-    pool.query("SELECT p.product_id, p.product_name, p.product_price, p.product_group_id, p.product_type_id, ppg.product_group_name as group_name, ppt.product_type_name as type_name FROM prm_product p JOIN prm_product_group ppg ON p.product_group_id = ppg.product_group_id JOIN prm_product_type ppt ON p.product_type_id = ppt.product_type_id ORDER BY p.created_date DESC", (error, results) => {
+    pool.query("SELECT p.product_id, p.product_name, p.product_price, p.product_group_id, p.product_type_id, ppg.product_group_name as group_name, ppt.product_type_name as type_name, pptr.english, pptr.italian, pptr.german FROM prm_product p JOIN prm_product_group ppg ON p.product_group_id = ppg.product_group_id JOIN prm_product_type ppt ON p.product_type_id = ppt.product_type_id JOIN prm_product_translation pptr ON p.product_id = pptr.product_id ORDER BY p.created_date DESC", (error, results) => {
         if (error) {
             throw error
         }
@@ -100,17 +100,33 @@ const updateProduct = (req, res, id, product) => {
             if (error) {
                 throw error
             }
+            var translationStatement = "UPDATE prm_product_translation SET "
+            if (product.english) translationStatement += "english='" + product.english + "',"
+            if (product.italian) translationStatement += "italian='" + product.italian + "',"
+            if (product.german) translationStatement += "german='"+ product.german + "',"
+            translationStatement = translationStatement.slice(0, -1)
+            translationStatement +=" WHERE product_id=" + id
+            pool.query(translationStatement, (error, results) => {
+                if (error) {
+                    throw error
+                } 
+            })
         }) 
         res.status(200).json(product)
 }
 
 const deleteProduct = (request, response, id) => {
-    pool.query('DELETE FROM prm_product WHERE product_id = $1', [id], (error, results) => {
-      if (error) {
-        throw error
-      }
-      response.status(200).json("OK")
-    })
+    pool.query('DELETE FROM prm_product_translation WHERE product_id = $1', [id], (error, results) => {
+        if (error) {
+          throw error
+        }
+        pool.query('DELETE FROM prm_product WHERE product_id = $1', [id], (error, results) => {
+            if (error) {
+              throw error
+            }
+        })
+        response.status(200).json("OK")
+      })
 }
 
 const createProductGroup = (req, res, productGroup) => {
