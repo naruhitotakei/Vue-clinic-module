@@ -92,7 +92,7 @@
                         <label for="patient">{{ $t('servicesAndProducts.addProductModal.price') }} *</label>
                       <input type="number" v-model="formData.product_price" class="form-control" placeholder="Price" required>
                     </div>
-                    <div class="col-md-7 mb-3">
+                    <div class="col-md-4 mb-3">
                         <label for="title">{{ $t('servicesAndProducts.addProductModal.group') }} *</label>
                       <v-select class="drop-down" label="product_group_name"
                         :clearable="false" v-model="formData.product_group_id"
@@ -102,6 +102,22 @@
                           <input
                               class="vs__search"
                               :required="!formData.product_group_id"
+                              v-bind="attributes"
+                              v-on="events"
+                            />
+                        </template>
+                      </v-select>
+                    </div>
+                    <div class="col-md-3 mb-3">
+                        <label for="title">{{ $t('servicesAndProducts.addProductModal.taxRate') }} *</label>
+                      <v-select class="drop-down" label="tax_amount"
+                        :clearable="false" v-model="formData.tax_amount"
+                        :reduce="filter => filter.tax_amount"
+                        :options="taxRates">
+                        <template #search="{attributes, events}">
+                          <input
+                              class="vs__search"
+                              :required="!formData.tax_amount"
                               v-bind="attributes"
                               v-on="events"
                             />
@@ -265,6 +281,7 @@
 <script>
 import { xray } from '../../config/pluginInit'
 import { getProducts, getProductGroups, getProductCategories, getProductTypes, createProductCategory, updateProductCategory, deleteProductCategory, createProductGroup, updateProductGroup, deleteProductGroup, createProduct, deleteProduct, updateProduct } from '../../services/products'
+import { getTaxRateList } from '../../services/commonCodeLists'
 
 export default {
   components: {
@@ -275,10 +292,11 @@ export default {
     this.getProductCategories()
     this.getProductGroups()
     this.getProductTypes()
+    this.getTaxRates()
   },
   computed: {
     aki () {
-      return !this.formData.product_name || !this.formData.product_price || !this.formData.product_group_id || !this.formData.product_type_id
+      return !this.formData.product_name || !this.formData.tax_amount || !this.formData.product_price || !this.formData.product_group_id || !this.formData.product_type_id
     }
   },
   name: 'ServicesAndProducts',
@@ -298,13 +316,15 @@ export default {
         english: '',
         product_price: '',
         product_group_id: '',
-        product_type_id: ''
+        product_type_id: '',
+        tax_amount: ''
       },
       modalShow: false,
       products: [],
       productGroups: [],
       productCategories: [],
       productTypes: [],
+      taxRates: [],
       isProductDataLoaded: false,
       isProductCategoryDataLoaded: false,
       isProductGroupDataLoaded: false,
@@ -371,7 +391,8 @@ export default {
         english: '',
         product_price: '',
         product_group_id: '',
-        product_type_id: ''
+        product_type_id: '',
+        tax_amount: ''
       }
     },
     editProduct (item) {
@@ -493,6 +514,12 @@ export default {
         category_name: '',
         editable: true
       }
+    },
+    getTaxRates () {
+      let id = 1
+      getTaxRateList(id).then(response => {
+        this.taxRates = response
+      })
     }
   }
 }
