@@ -371,6 +371,43 @@
   "settingsUsers": {
     "viewProfile": "Ogled profila"
   },
+  "servicesAndProducts": {
+    "headerProducts": "Produkti",
+    "addProduct": "Dodaj produkt",
+    "productColumn": {
+      "productName": "Opis",
+      "productPrice": "Cena",
+      "productGroup": "Skupina",
+      "productType": "Vrsta",
+      "productAction": "Urejaj"
+    },
+    "addProductModal": {
+      "addProduct": "Dodaj produkt",
+      "nameSlovenian": "Opis (slovenščina)",
+      "nameItalian": "Opis (italijanščina)",
+      "nameGerman": "Opis (nemščina)",
+      "nameEnglish": "Opis (angleščina)",
+      "price": "Cena",
+      "group": "Skupina",
+      "type": "Vrsta",
+      "close": "Zapri",
+      "save": "Shrani"
+    },
+    "headerProductGroup": "Skupine produktov",
+    "addProductGroup": "Dodaj skupino",
+    "productGroupColumn": {
+      "productGroupName": "Opis",
+      "productGroupCategory": "Kategorija",
+      "productGroupFee": "Emazing provizija",
+      "productGroupAction": "Urejaj"
+    },
+    "headerProductCategories": "Kategorije produktov",
+    "addProductCategory": "Dodaj kategorijo",
+    "productCategoryColumn": {
+      "productCategoryName": "Opis",
+      "productCategoryAction": "Urejaj"
+    }
+  },
   "dashboard2": {
     "card1": "AVG Impressions",
     "card2": "AVG Engagements Rate",
