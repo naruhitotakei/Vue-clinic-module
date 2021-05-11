@@ -26,49 +26,24 @@
                                         <strong class="loading">Loading...</strong>
                                       </div>
                                     </template>
-                                    <template v-slot:cell(product_name)="data">
-                                        <span v-if="!data.item.editable">
-                                            {{ data.item.product_name }}
-                                        </span>
-                                        <input type="text"
-                                               v-model="data.item.product_name"
-                                               v-else
-                                               class="form-control" />
-                                    </template>
                                     <template v-slot:cell(product_price)="data">
-                                        <span v-if="!data.item.editable">
+                                        <span>
                                             {{ data.item.product_price | euro }}
                                         </span>
-                                        <input type="text"
-                                               v-model="data.item.product_price"
-                                               v-else
-                                               class="form-control" />
                                     </template>
                                     <template v-slot:cell(product_group_id)="data">
-                                        <span v-if="!data.item.editable">
+                                        <span>
                                             {{ data.item.group_name }}
                                         </span>
-                                        <v-select v-else class="drop-down" label="product_group_name"
-                                          :clearable="false" v-model="data.item.product_group_id"
-                                          :reduce="filter => filter.product_group_id"
-                                          :options="productGroups">
-                                        </v-select>
                                     </template>
                                     <template v-slot:cell(product_type_id)="data">
-                                        <span v-if="!data.item.editable">
+                                        <span>
                                             {{ data.item.type_name }}
                                         </span>
-                                        <v-select v-else class="drop-down" label="product_type_name"
-                                          :clearable="false" v-model="data.item.product_type_id"
-                                          :reduce="filter => filter.product_type_id"
-                                          :options="productTypes">
-                                        </v-select>
                                     </template>
                                     <template v-slot:cell(action)="data">
-                                      <b-button variant=" iq-bg-success mr-1 mb-1" size="sm" @click="editProduct(data.item)" v-if="!data.item.editable"><i class="ri-ball-pen-fill m-0"></i></b-button>
-                                      <b-button variant=" iq-bg-danger mr-1 mb-1" size="sm" v-if="!data.item.editable" @click="removeProduct(data.item)"><i class="ri-delete-bin-line m-0"></i></b-button>
-                                      <b-button variant=" iq-bg-success mr-1 mb-1" :disabled="!data.item.product_name || !data.item.product_group_id || !data.item.product_type_id || !data.item.product_price" size="sm" @click="submitProduct(data.item)" v-if="data.item.editable"><i class="ri-checkbox-circle-fill m-0"></i></b-button>
-                                      <b-button variant=" iq-bg-danger mr-1 mb-1" size="sm" @click="cancelProduct(data.item)" v-if="data.item.editable"><i class="ri-close-circle-fill m-0"></i></b-button>
+                                      <b-button variant=" iq-bg-success mr-1 mb-1" size="sm" @click="editProduct(data.item)"><i class="ri-ball-pen-fill m-0"></i></b-button>
+                                      <b-button variant=" iq-bg-danger mr-1 mb-1" size="sm" @click="removeProduct(data.item)"><i class="ri-delete-bin-line m-0"></i></b-button>
                                     </template>
                                 </b-table>
                             </b-col>
@@ -86,7 +61,7 @@
                     </template>
                 </iq-card>
             </b-col>
-              <b-modal v-model="modalShow" no-close-on-backdrop size="lg" :title="$t('servicesAndProducts.addProductModal.addProduct')" :ok-disabled="aki" :ok-title="$t('servicesAndProducts.addProductModal.save')" @ok="addProduct" :cancel-title="$t('servicesAndProducts.addProductModal.close')">
+              <b-modal v-model="modalShow" no-close-on-backdrop size="lg" :title="$t('servicesAndProducts.addProductModal.addProduct')" :ok-disabled="aki"  @cancel="cancel" :ok-title="$t('servicesAndProducts.addProductModal.save')" @ok="addProduct" :cancel-title="$t('servicesAndProducts.addProductModal.close')">
                 <form>
                   <div class="form-row">
                     <div class="col-md-12 mb-3">
@@ -360,11 +335,7 @@ export default {
     getProducts () {
       getProducts().then(response => {
         this.isProductDataLoaded = true
-        this.products = response.map(obj => (
-          { ...obj,
-            editable: false
-          }
-        ))
+        this.products = response
       })
     },
     getProductCategories () {
@@ -404,32 +375,30 @@ export default {
       }
     },
     editProduct (item) {
-      this.tempProduct = Object.assign({}, item)
-      item.editable = true
-    },
-    submitProduct (item) {
-      updateProduct(item.product_id, item).then(() => {
-        this.getProducts()
-      })
-      item.editable = false
+      this.formData = Object.assign({}, item)
+      this.modalShow = true
     },
     removeProduct (item) {
       let index = this.products.indexOf(item)
       this.products.splice(index, 1)
       deleteProduct(item.product_id)
     },
-    cancelProduct (item) {
-      let index = this.products.indexOf(item)
-      this.tempProduct ? this.products.splice(index, 1, this.tempProduct) : this.products.shift()
-    },
     setCurrentProductPage () {
       this.currentProductPage = 1
     },
     addProduct () {
-      createProduct(this.formData).then(() => {
-        this.getProducts()
-      })
-      this.tempProduct = null
+      if (this.formData.product_id) {
+        updateProduct(this.formData.product_id, this.formData).then(() => {
+          this.getProducts()
+        })
+      } else {
+        createProduct(this.formData).then(() => {
+          this.getProducts()
+        })
+      }
+      this.formData = this.defaultFormData()
+    },
+    cancel () {
       this.formData = this.defaultFormData()
     },
     defaultProduct () {
@@ -438,8 +407,7 @@ export default {
         product_name: '',
         product_price: 0,
         product_group_id: '',
-        product_type_id: '',
-        editable: true
+        product_type_id: ''
       }
     },
     editProductGroup (item) {
