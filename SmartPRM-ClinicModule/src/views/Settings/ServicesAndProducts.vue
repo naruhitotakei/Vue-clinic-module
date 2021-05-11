@@ -4,9 +4,9 @@
             <b-col md="12">
                 <iq-card>
                     <template v-slot:headerTitle>
-                        <h3 class="card-title" style="margin-top: 10px;">{{ productsHeader }}</h3>
+                        <h3 class="card-title" style="margin-top: 10px;">{{ $t('servicesAndProducts.headerProducts') }}</h3>
                         <div class="btn-add-patient mb-4 mt-0">
-                            <b-button variant="primary" @click="modalShow = true"><i class="ri-add-line mr-2"></i>{{ productsButtonLabel }}</b-button>
+                            <b-button variant="primary" @click="modalShow = true"><i class="ri-add-line mr-2"></i>{{ $t('servicesAndProducts.addProduct') }}</b-button>
                         </div>
                     </template>
                     <template v-slot:body>
@@ -86,51 +86,67 @@
                     </template>
                 </iq-card>
             </b-col>
-              <b-modal v-model="modalShow" no-close-on-backdrop size="lg" title="Add product" ok-title="Save Changes" @ok="addProduct" cancel-title="Close">
+              <b-modal v-model="modalShow" no-close-on-backdrop size="lg" :title="$t('servicesAndProducts.addProductModal.addProduct')" :ok-disabled="aki" :ok-title="$t('servicesAndProducts.addProductModal.save')" @ok="addProduct" :cancel-title="$t('servicesAndProducts.addProductModal.close')">
                 <form>
                   <div class="form-row">
                     <div class="col-md-12 mb-3">
-                      <label for="title">Name (Slovenian) *</label>
+                        <label for="title">{{ $t('servicesAndProducts.addProductModal.nameSlovenian') }} *</label>
                       <div style="display: flex;">
                         <input type="text" v-model="formData.product_name" class="form-control" placeholder="Slovenian" required>
                       </div>
                     </div>
                     <div class="col-md-12 mb-3">
-                      <label for="title">Name (Italian)</label>
+                        <label for="title">{{ $t('servicesAndProducts.addProductModal.nameItalian') }}</label>
                       <div style="display: flex;">
                         <input type="text" v-model="formData.italian" class="form-control" placeholder="Italian">
                       </div>
                     </div>
                     <div class="col-md-12 mb-3">
-                      <label for="title">Name (German)</label>
+                        <label for="title">{{ $t('servicesAndProducts.addProductModal.nameGerman') }}</label>
                       <div style="display: flex;">
                         <input type="text" v-model="formData.german" class="form-control" placeholder="German">
                       </div>
                     </div>
                     <div class="col-md-12 mb-3">
-                      <label for="title">Name (English)</label>
+                        <label for="title">{{ $t('servicesAndProducts.addProductModal.nameEnglish') }}</label>
                       <div style="display: flex;">
                         <input type="text" v-model="formData.english" class="form-control" placeholder="English">
                       </div>
                     </div>
                     <div class="col-md-2 mb-3">
-                      <label for="patient">Price *</label>
+                        <label for="patient">{{ $t('servicesAndProducts.addProductModal.price') }} *</label>
                       <input type="number" v-model="formData.product_price" class="form-control" placeholder="Price" required>
                     </div>
                     <div class="col-md-7 mb-3">
-                      <label for="title">Group *</label>
+                        <label for="title">{{ $t('servicesAndProducts.addProductModal.group') }} *</label>
                       <v-select class="drop-down" label="product_group_name"
                         :clearable="false" v-model="formData.product_group_id"
                         :reduce="filter => filter.product_group_id"
                         :options="productGroups">
+                        <template #search="{attributes, events}">
+                          <input
+                              class="vs__search"
+                              :required="!formData.product_group_id"
+                              v-bind="attributes"
+                              v-on="events"
+                            />
+                        </template>
                       </v-select>
                     </div>
                     <div class="col-md-3 mb-3">
-                      <label for="title">Type *</label>
+                        <label for="title">{{ $t('servicesAndProducts.addProductModal.type') }} *</label>
                       <v-select class="drop-down" label="product_type_name"
                         :clearable="false" v-model="formData.product_type_id"
                         :reduce="filter => filter.product_type_id"
                         :options="productTypes">
+                        <template #search="{attributes, events}">
+                          <input
+                              class="vs__search"
+                              :required="!formData.product_type_id"
+                              v-bind="attributes"
+                              v-on="events"
+                            />
+                        </template>
                       </v-select>
                     </div>
                   </div>
@@ -139,9 +155,9 @@
              <b-col md="7">
                 <iq-card>
                     <template v-slot:headerTitle>
-                        <h3 class="card-title" style="margin-top: 10px;">{{ productGroupsHeader }}</h3>
+                        <h3 class="card-title" style="margin-top: 10px;">{{ $t('servicesAndProducts.headerProductGroup') }}</h3>
                         <div class="btn-add-patient mb-4 mt-0">
-                            <b-button variant="primary" @click="addProductGroup"><i class="ri-add-line mr-2"></i>{{ productGroupsButtonLabel }}</b-button>
+                            <b-button variant="primary" @click="addProductGroup"><i class="ri-add-line mr-2"></i>{{ $t('servicesAndProducts.addProductGroup') }}</b-button>
                         </div>
                     </template>
                     <template v-slot:body>
@@ -213,9 +229,9 @@
              <b-col md="5">
                 <iq-card>
                     <template v-slot:headerTitle>
-                        <h3 class="card-title" style="margin-top: 10px;">{{ productCategoriesHeader }}</h3>
+                        <h3 class="card-title" style="margin-top: 10px;">{{ $t('servicesAndProducts.headerProductCategories') }}</h3>
                         <div class="btn-add-patient mb-4 mt-0">
-                            <b-button variant="primary" @click="addProductCategory"><i class="ri-add-line mr-2"></i>{{ productCategoriesButtonLabel }}</b-button>
+                            <b-button variant="primary" @click="addProductCategory"><i class="ri-add-line mr-2"></i>{{ $t('servicesAndProducts.addProductCategory') }}</b-button>
                         </div>
                     </template>
                     <template v-slot:body>
@@ -285,17 +301,20 @@ export default {
     this.getProductGroups()
     this.getProductTypes()
   },
+  computed: {
+    aki () {
+      return !this.formData.product_name || !this.formData.product_price || !this.formData.product_group_id || !this.formData.product_type_id
+    }
+  },
   name: 'ServicesAndProducts',
   data: function () {
     return {
-      productsHeader: 'Products',
-      productsButtonLabel: 'Add product',
       productColumns: [
-        { label: 'Name', key: 'product_name', class: 'text-left' },
-        { label: 'Price', key: 'product_price', class: 'text-left' },
-        { label: 'Group', key: 'product_group_id', class: 'text-left' },
-        { label: 'Type', key: 'product_type_id', class: 'text-left' },
-        { label: 'Action', key: 'action', class: 'text-center' }
+        { label: this.$t('servicesAndProducts.productColumn.productName'), key: 'product_name', class: 'text-left' },
+        { label: this.$t('servicesAndProducts.productColumn.productPrice'), key: 'product_price', class: 'text-left' },
+        { label: this.$t('servicesAndProducts.productColumn.productGroup'), key: 'product_group_id', class: 'text-left' },
+        { label: this.$t('servicesAndProducts.productColumn.productType'), key: 'product_type_id', class: 'text-left' },
+        { label: this.$t('servicesAndProducts.productColumn.productAction'), key: 'action', class: 'text-center' }
       ],
       formData: {
         product_name: '',
@@ -318,21 +337,17 @@ export default {
       isProductGroupEdit: false,
       currentProductPage: 1,
       productsPerPage: 20,
-      productGroupsHeader: 'Product Groups',
-      productGroupsButtonLabel: 'Add product group',
       productGroupColumns: [
-        { label: 'Name', key: 'product_group_name', class: 'text-left' },
-        { label: 'Category', key: 'category_id', class: 'text-left category-column' },
-        { label: 'Emazing Fee', key: 'fee', class: 'text-left' },
-        { label: 'Action', key: 'action', class: 'text-center' }
+        { label: this.$t('servicesAndProducts.productGroupColumn.productGroupName'), key: 'product_group_name', class: 'text-left' },
+        { label: this.$t('servicesAndProducts.productGroupColumn.productGroupCategory'), key: 'category_id', class: 'text-left category-column' },
+        { label: this.$t('servicesAndProducts.productGroupColumn.productGroupFee'), key: 'fee', class: 'text-left' },
+        { label: this.$t('servicesAndProducts.productGroupColumn.productGroupAction'), key: 'action', class: 'text-center' }
       ],
       currentProductGroupPage: 1,
       productGroupsPerPage: 20,
-      productCategoriesHeader: 'Product Categories',
-      productCategoriesButtonLabel: 'Add product category',
       productCategoryColumns: [
-        { label: 'Name', key: 'category_name', class: 'text-left' },
-        { label: 'Action', key: 'action', class: 'text-center' }
+        { label: this.$t('servicesAndProducts.productCategoryColumn.productCategoryName'), key: 'category_name', class: 'text-left' },
+        { label: this.$t('servicesAndProducts.productCategoryColumn.productCategoryAction'), key: 'action', class: 'text-center' }
       ],
       currentProductCategoryPage: 1,
       productCategoriesPerPage: 20,
