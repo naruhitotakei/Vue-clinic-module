@@ -86,7 +86,7 @@
                     </template>
                 </iq-card>
             </b-col>
-              <b-modal v-model="modalShow" no-close-on-backdrop size="lg" title="Add product" ok-title="Save Changes" @ok="addProduct" cancel-title="Close">
+              <b-modal v-model="modalShow" no-close-on-backdrop size="lg" title="Add product" :ok-disabled="aki" ok-title="Save Changes" @ok="addProduct" cancel-title="Close">
                 <form>
                   <div class="form-row">
                     <div class="col-md-12 mb-3">
@@ -123,6 +123,14 @@
                         :clearable="false" v-model="formData.product_group_id"
                         :reduce="filter => filter.product_group_id"
                         :options="productGroups">
+                        <template #search="{attributes, events}">
+                          <input
+                              class="vs__search"
+                              :required="!formData.product_group_id"
+                              v-bind="attributes"
+                              v-on="events"
+                            />
+                        </template>
                       </v-select>
                     </div>
                     <div class="col-md-3 mb-3">
@@ -131,6 +139,14 @@
                         :clearable="false" v-model="formData.product_type_id"
                         :reduce="filter => filter.product_type_id"
                         :options="productTypes">
+                        <template #search="{attributes, events}">
+                          <input
+                              class="vs__search"
+                              :required="!formData.product_type_id"
+                              v-bind="attributes"
+                              v-on="events"
+                            />
+                        </template>
                       </v-select>
                     </div>
                   </div>
@@ -284,6 +300,11 @@ export default {
     this.getProductCategories()
     this.getProductGroups()
     this.getProductTypes()
+  },
+  computed: {
+    aki () {
+      return !this.formData.product_name || !this.formData.product_price || !this.formData.product_group_id || !this.formData.product_type_id
+    }
   },
   name: 'ServicesAndProducts',
   data: function () {
