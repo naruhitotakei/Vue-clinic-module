@@ -90,37 +90,43 @@
                 <form>
                   <div class="form-row">
                     <div class="col-md-12 mb-3">
-                      <label for="title">Name (English)</label>
+                      <label for="title">Name (Slovenian) *</label>
                       <div style="display: flex;">
-                        <input type="text" v-model="formData.product_name" class="form-control" placeholder="English">
-                      </div>
-                    </div>
-                    <div class="col-md-12 mb-3">
-                      <label for="title">Name (Slovenian)</label>
-                      <div style="display: flex;">
-                        <input type="text" v-model="formData.product_name_slovenian" class="form-control" placeholder="Slovenian">
+                        <input type="text" v-model="formData.product_name" class="form-control" placeholder="Slovenian" required>
                       </div>
                     </div>
                     <div class="col-md-12 mb-3">
                       <label for="title">Name (Italian)</label>
                       <div style="display: flex;">
-                        <input type="text" v-model="formData.product_name_italian" class="form-control" placeholder="Italian">
+                        <input type="text" v-model="formData.italian" class="form-control" placeholder="Italian">
+                      </div>
+                    </div>
+                    <div class="col-md-12 mb-3">
+                      <label for="title">Name (German)</label>
+                      <div style="display: flex;">
+                        <input type="text" v-model="formData.german" class="form-control" placeholder="German">
+                      </div>
+                    </div>
+                    <div class="col-md-12 mb-3">
+                      <label for="title">Name (English)</label>
+                      <div style="display: flex;">
+                        <input type="text" v-model="formData.english" class="form-control" placeholder="English">
                       </div>
                     </div>
                     <div class="col-md-2 mb-3">
-                      <label for="patient">Price</label>
-                      <input type="number" v-model="formData.product_price" class="form-control" placeholder="Price">
+                      <label for="patient">Price *</label>
+                      <input type="number" v-model="formData.product_price" class="form-control" placeholder="Price" required>
                     </div>
-                    <div class="col-md-5 mb-3">
-                      <label for="title">Group</label>
+                    <div class="col-md-7 mb-3">
+                      <label for="title">Group *</label>
                       <v-select class="drop-down" label="product_group_name"
                         :clearable="false" v-model="formData.product_group_id"
                         :reduce="filter => filter.product_group_id"
                         :options="productGroups">
                       </v-select>
                     </div>
-                    <div class="col-md-5 mb-3">
-                      <label for="title">Type</label>
+                    <div class="col-md-3 mb-3">
+                      <label for="title">Type *</label>
                       <v-select class="drop-down" label="product_type_name"
                         :clearable="false" v-model="formData.product_type_id"
                         :reduce="filter => filter.product_type_id"
@@ -293,8 +299,9 @@ export default {
       ],
       formData: {
         product_name: '',
-        product_name_italian: '',
-        product_name_slovenian: '',
+        italian: '',
+        german: '',
+        english: '',
         product_price: '',
         product_group_id: '',
         product_type_id: ''
@@ -373,8 +380,9 @@ export default {
     defaultFormData () {
       return {
         product_name: '',
-        product_name_italian: '',
-        product_name_slovenian: '',
+        italian: '',
+        german: '',
+        english: '',
         product_price: '',
         product_group_id: '',
         product_type_id: ''
