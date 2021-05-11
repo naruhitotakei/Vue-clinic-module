@@ -6,7 +6,7 @@
                     <template v-slot:headerTitle>
                         <h3 class="card-title" style="margin-top: 10px;">{{ productsHeader }}</h3>
                         <div class="btn-add-patient mb-4 mt-0">
-                            <b-button variant="primary" @click="addProduct"><i class="ri-add-line mr-2"></i>{{ productsButtonLabel }}</b-button>
+                            <b-button variant="primary" @click="modalShow = true"><i class="ri-add-line mr-2"></i>{{ productsButtonLabel }}</b-button>
                         </div>
                     </template>
                     <template v-slot:body>
@@ -48,7 +48,7 @@
                                         <span v-if="!data.item.editable">
                                             {{ data.item.group_name }}
                                         </span>
-                                        <v-select v-else class="patients" label="product_group_name"
+                                        <v-select v-else class="drop-down" label="product_group_name"
                                           :clearable="false" v-model="data.item.product_group_id"
                                           :reduce="filter => filter.product_group_id"
                                           :options="productGroups">
@@ -58,7 +58,7 @@
                                         <span v-if="!data.item.editable">
                                             {{ data.item.type_name }}
                                         </span>
-                                        <v-select v-else class="patients" label="product_type_name"
+                                        <v-select v-else class="drop-down" label="product_type_name"
                                           :clearable="false" v-model="data.item.product_type_id"
                                           :reduce="filter => filter.product_type_id"
                                           :options="productTypes">
@@ -86,6 +86,50 @@
                     </template>
                 </iq-card>
             </b-col>
+              <b-modal v-model="modalShow" no-close-on-backdrop size="lg" title="Add product" ok-title="Save Changes" @ok="addProduct" cancel-title="Close">
+                <form>
+                  <div class="form-row">
+                    <div class="col-md-12 mb-3">
+                      <label for="title">Name (English)</label>
+                      <div style="display: flex;">
+                        <input type="text" v-model="formData.product_name" class="form-control" placeholder="English">
+                      </div>
+                    </div>
+                    <div class="col-md-12 mb-3">
+                      <label for="title">Name (Slovenian)</label>
+                      <div style="display: flex;">
+                        <input type="text" v-model="formData.product_name_slovenian" class="form-control" placeholder="Slovenian">
+                      </div>
+                    </div>
+                    <div class="col-md-12 mb-3">
+                      <label for="title">Name (Italian)</label>
+                      <div style="display: flex;">
+                        <input type="text" v-model="formData.product_name_italian" class="form-control" placeholder="Italian">
+                      </div>
+                    </div>
+                    <div class="col-md-2 mb-3">
+                      <label for="patient">Price</label>
+                      <input type="number" v-model="formData.product_price" class="form-control" placeholder="Price">
+                    </div>
+                    <div class="col-md-5 mb-3">
+                      <label for="title">Group</label>
+                      <v-select class="drop-down" label="product_group_name"
+                        :clearable="false" v-model="formData.product_group_id"
+                        :reduce="filter => filter.product_group_id"
+                        :options="productGroups">
+                      </v-select>
+                    </div>
+                    <div class="col-md-5 mb-3">
+                      <label for="title">Type</label>
+                      <v-select class="drop-down" label="product_type_name"
+                        :clearable="false" v-model="formData.product_type_id"
+                        :reduce="filter => filter.product_type_id"
+                        :options="productTypes">
+                      </v-select>
+                    </div>
+                  </div>
+                </form>
+              </b-modal>
              <b-col md="7">
                 <iq-card>
                     <template v-slot:headerTitle>
@@ -124,7 +168,7 @@
                                         <span v-if="!data.item.editable">
                                             {{ data.item.category_name }}
                                         </span>
-                                        <v-select v-else class="patients" label="category_name"
+                                        <v-select v-else class="drop-down" label="category_name"
                                           :clearable="false" v-model="data.item.category_id"
                                           :reduce="filter => filter.category_id"
                                           :options="productCategories">
@@ -247,6 +291,15 @@ export default {
         { label: 'Type', key: 'product_type_id', class: 'text-left' },
         { label: 'Action', key: 'action', class: 'text-center' }
       ],
+      formData: {
+        product_name: '',
+        product_name_italian: '',
+        product_name_slovenian: '',
+        product_price: '',
+        product_group_id: '',
+        product_type_id: ''
+      },
+      modalShow: false,
       products: [],
       productGroups: [],
       productCategories: [],
@@ -254,7 +307,6 @@ export default {
       isProductDataLoaded: false,
       isProductCategoryDataLoaded: false,
       isProductGroupDataLoaded: false,
-      isProductEdit: false,
       isProductCategoryEdit: false,
       isProductGroupEdit: false,
       currentProductPage: 1,
@@ -318,21 +370,24 @@ export default {
         this.productTypes = response
       })
     },
+    defaultFormData () {
+      return {
+        product_name: '',
+        product_name_italian: '',
+        product_name_slovenian: '',
+        product_price: '',
+        product_group_id: '',
+        product_type_id: ''
+      }
+    },
     editProduct (item) {
       this.tempProduct = Object.assign({}, item)
       item.editable = true
-      this.isProductEdit = true
     },
     submitProduct (item) {
-      if (this.isProductEdit) {
-        updateProduct(item.product_id, item).then(() => {
-          this.getProducts()
-        })
-      } else {
-        createProduct(item).then(() => {
-          this.getProducts()
-        })
-      }
+      updateProduct(item.product_id, item).then(() => {
+        this.getProducts()
+      })
       item.editable = false
     },
     removeProduct (item) {
@@ -348,11 +403,11 @@ export default {
       this.currentProductPage = 1
     },
     addProduct () {
-      this.setCurrentProductPage()
-      let obj = this.defaultProduct()
-      this.products.unshift(obj)
-      this.isProductEdit = false
+      createProduct(this.formData).then(() => {
+        this.getProducts()
+      })
       this.tempProduct = null
+      this.formData = this.defaultFormData()
     },
     defaultProduct () {
       return {
@@ -457,5 +512,13 @@ export default {
 }
 .loading {
   padding-left: 10px;
+}
+
+.drop-down .vs__search::placeholder,
+.drop-down .vs__dropdown-toggle,
+.drop-down .vs__dropdown-menu {
+    border-radius: 10px;
+    min-height: 45px;
+    min-width: 150px;
 }
 </style>
