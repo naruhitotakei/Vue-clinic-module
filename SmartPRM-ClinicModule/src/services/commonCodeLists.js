@@ -33,3 +33,15 @@ export async function getLocationsList () {
   })
   return rawResponse.json()
 }
+
+export async function getTaxRateList (id) {
+  const rawResponse = await fetch('/api/codelist/country/' + id + '/tax-rate', {
+    method: 'GET',
+    credentials: 'same-origin',
+    headers: {
+      'Accept': 'application/json',
+      'Content-Type': 'application/json'
+    }
+  })
+  return rawResponse.json()
+}
