@@ -23,6 +23,7 @@ const daoAdvPayments = require('./dao/daoAdvPayments')
 const daoOffers = require('./dao/daoOffers')
 const daoCodeLists = require('./dao/daoCodeLists')
 const daoProducts = require('./dao/daoProducts')
+const daoCalendar = require('./dao/daoCalendar')
 
 app.use(cors({
     origin: process.env.APP_URL || 'http://localhost:8080',
@@ -46,6 +47,7 @@ const invoicesPermission = "Invoices"
 const advPaymentsPermission = "Advance Payments"
 const offersPermission = "Offers"
 const productsPermission = "Services and Products"
+const calendarPermission = "Calendar"
 
 ///////////////////////////////////
 // user login, logout, ...
@@ -104,6 +106,18 @@ app.get('/api/dentists', async function(req, res) {
     } else {
        res.status(200).json("NOK: user not logged in")
     }    
+});
+
+///////////////////////////////////
+// calendar
+///////////////////////////////////
+app.get('/api/calendar/:statrtdate/:enddate', (req, res) => {
+    const statrtdate = req.params.statrtdate
+    const enddate = req.params.enddate
+    if(req.session.prm_user && req.session.prm_user.permissions && checkPermission(req.session.prm_user.permissions, calendarPermission))
+        daoCalendar.getApontments(req, res, statrtdate, enddate, -1)
+    else
+        res.status(401).json("OK: user unauthorized")
 });
 
 ///////////////////////////////////
