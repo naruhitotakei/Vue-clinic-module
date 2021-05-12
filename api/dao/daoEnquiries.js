@@ -163,7 +163,7 @@ const getEnquiryOffers = (request, response, enquiryId) => {
 }
 
 const getEnquiryServices = (request, response, enquiryId) => {
-    pool.query("SELECT *, services.created_at AS done_at FROM services JOIN products ON services.product_id = products.id WHERE enquiry_id = $1", [enquiryId], (error, results) => {
+    pool.query("SELECT *, services.created_at AS done_at FROM services JOIN products ON services.product_id = products.id WHERE enquiry_id = $1 ORDER BY done_at DESC", [enquiryId], (error, results) => {
         if (error) {
             throw error
         }
