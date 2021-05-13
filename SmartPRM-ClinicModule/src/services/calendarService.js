@@ -10,5 +10,11 @@ export async function getApontments (startdate, endate, doctorUserIdList) {
 }
 
 export async function getDoctorList () {
-  return ["Doctor 1", "Doctor 2"]
+  const rawResponse = await fetch('/api/calendar/doctors', {
+    credentials: 'same-origin',
+    headers: {
+      'Accept': 'application/json'
+    }
+  })
+  return rawResponse.json()
 }

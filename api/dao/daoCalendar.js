@@ -36,6 +36,11 @@ const getApontments = (request, response, from, to, client_id, user_id, scope, d
         })
 }
 
+const getDoctors = (request, response, client_id, user_id, scope ) => {
+    response.status(200).json(["Doctor 1", "Doctor 2"])
+}
+
 module.exports = {
-  getApontments
+  getApontments,
+  getDoctors
 }
