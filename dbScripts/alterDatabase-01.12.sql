@@ -89,8 +89,10 @@ CREATE TABLE IF NOT EXISTS vat_tax_amount (
 	created_date DATE NOT NULL DEFAULT CURRENT_DATE
 );
 
-INSERT INTO vat_tax_amount (vat_tax_amount, country_id) VALUES 
-(NULL, 1), (0, 1), (9.5, 1), (22,1);
+
+--############################################################
+--# Altering prm_invoice_item table
+--############################################################
 
 DROP TABLE prm_invoice_item CASCADE;
 
@@ -117,7 +119,6 @@ ALTER TABLE prm_invoice_item ADD CONSTRAINT prm_invoice_item_id PRIMARY KEY (id)
 
 ALTER TABLE invoice ADD COLUMN item_id INT
 CONSTRAINT invoice_prm_invoice_item_fk REFERENCES prm_invoice_item (id);
-
 
 
 UPDATE db_version SET version ='01.12', version_date=CURRENT_DATE WHERE resource='Tables';
