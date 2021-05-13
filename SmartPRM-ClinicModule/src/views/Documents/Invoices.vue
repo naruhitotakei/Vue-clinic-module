@@ -2,11 +2,21 @@
     <b-container fluid>
     <b-row>
       <b-col md="12">
+          <b-modal v-model="modalShow" no-close-on-backdrop size="md" title="Select Patient" :ok-disabled="!selectedPatient" ok-title="Create Invoice" @ok="addInvoice" @close="selectedPatient = null"  @cancel="selectedPatient = null" cancel-title="Close">
+            <form>
+              <div class="form-row">
+                <div class="col-md-12 mb-3">
+                  <label for="patient">{{ $t('calendarEvent.patient') }} *</label>
+                  <v-select :clearable="false" label="full_name" class="style-chooser" v-model="selectedPatient" :options="patients"></v-select>
+                </div>
+              </div>
+            </form>
+          </b-modal>
         <iq-card>
           <template v-slot:headerTitle>
               <h3 class="card-title" style="margin-top: 10px;">{{ $t('invoices.invoicesHeader') }}</h3>
                         <div class="btn-add-patient col-12 col-sm-3 col-md-3 col-lg-2 mb-4 mb-sm-0 invoice">
-                            <b-button variant="primary" @click="add_invoice"><i class="ri-add-line mr-2"></i>{{ $t('invoices.invoicesBtn') }}</b-button>
+                            <b-button variant="primary" @click="modalShow = true"><i class="ri-add-line mr-2"></i>{{ $t('invoices.invoicesBtn') }}</b-button>
                         </div>
                         <div class="iq-card-header-toolbar d-sm-flex align-items-center col-12 col-sm-9 col-md-9 col-lg-10" style="margin-top: -10px;">
                             <div class="iq-search-bar">
@@ -74,6 +84,7 @@
 <script>
 import { xray } from '../../config/pluginInit'
 import { getInvoices } from '../../services/invoice'
+import { getPatients } from '../../services/enquiry'
 import moment from 'moment'
 
 export default {
@@ -89,6 +100,9 @@ export default {
     return {
       dropDownText: '',
       selected: this.value,
+      modalShow: false,
+      selectedPatient: null,
+      patients: [],
       searchOptions: [
         { value: 'invoice_number', text: 'Number' },
         { value: 'patient_name', text: 'Patient Name' },
@@ -139,11 +153,30 @@ export default {
     }
   },
   methods: {
+    getPatients () {
+      getPatients().then(response => {
+        this.patients = response
+      })
+    },
     invoiceSelected (item) {
       this.$router.push({ path: `/documents/invoices/${item.invoice_number}` })
     },
-    add_invoice () {
-      this.$router.push('/extra-pages/new-invoice')
+    addInvoice () {
+      this.$router.push({ name: 'extra-pages.new-invoice', params: { billingDetails: this.createBillingDetails() } })
+    },
+    createBillingDetails () {
+      let details = ''
+      if (this.selectedPatient.name) details += this.selectedPatient.name
+      if (this.selectedPatient.last_name) details += ' ' + this.selectedPatient.name
+      details += '<br>'
+      if (this.selectedPatient.address_line_1) details += this.selectedPatient.address_line_1 + '<br>'
+      if (this.selectedPatient.post_code) details += this.selectedPatient.post_code
+      if (this.selectedPatient.city) details += ' ' + this.selectedPatient.city
+      if (this.selectedPatient.country) details += ', ' + this.selectedPatient.country
+      details += '<br>'
+      if (this.selectedPatient.phone) details += 'Telefon: ' + this.selectedPatient.phone + '<br>'
+      if (this.selectedPatient.email) details += 'Email: ' + this.selectedPatient.email
+      return details
     },
     getInvoices () {
       getInvoices().then(response => {
@@ -170,6 +203,7 @@ export default {
   mounted () {
     xray.index()
     this.getInvoices()
+    this.getPatients()
   }
 }
 </script>
