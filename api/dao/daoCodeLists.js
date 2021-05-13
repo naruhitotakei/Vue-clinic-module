@@ -36,7 +36,7 @@ const getLocationsList = (request, response) => {
 }
 
 const getTaxRateList = (request, response, id) => {
-    pool.query("SELECT vat_tax_amount as tax_amount FROM vat_tax_amount WHERE country_id = $1", [id], (error, results) => {
+    pool.query("SELECT tax_rate, tax_rate_label FROM vat_tax_rate WHERE country_id = $1", [id], (error, results) => {
         if (error) {
             throw error
         }
