@@ -6,7 +6,7 @@
                     <template v-slot:headerTitle>
                         <h3 class="card-title" style="margin-top: 10px;">{{ $t('servicesAndProducts.headerProducts') }}</h3>
                         <div class="btn-add-patient mb-4 mt-0">
-                            <b-button variant="primary" @click="modalShow = true"><i class="ri-add-line mr-2"></i>{{ $t('servicesAndProducts.addProduct') }}</b-button>
+                            <b-button variant="primary" @click="modalProductShow = true"><i class="ri-add-line mr-2"></i>{{ $t('servicesAndProducts.addProduct') }}</b-button>
                         </div>
                     </template>
                     <template v-slot:body>
@@ -61,7 +61,7 @@
                     </template>
                 </iq-card>
             </b-col>
-              <b-modal v-model="modalShow" no-close-on-backdrop size="lg" :title="$t('servicesAndProducts.addProductModal.addProduct')" :ok-disabled="aki"  @cancel="cancel" :ok-title="$t('servicesAndProducts.addProductModal.save')" @ok="addProduct" :cancel-title="$t('servicesAndProducts.addProductModal.close')">
+              <b-modal v-model="modalProductShow" no-close-on-backdrop size="lg" :title="$t('servicesAndProducts.addProductModal.addProduct')" :ok-disabled="isProductDisabled"  @cancel="cancelProduct" :ok-title="$t('servicesAndProducts.addProductModal.save')" @ok="addProduct" :cancel-title="$t('servicesAndProducts.addProductModal.close')">
                 <form>
                   <div class="form-row">
                     <div class="col-md-12 mb-3">
@@ -110,14 +110,14 @@
                     </div>
                     <div class="col-md-3 mb-3">
                         <label for="title">{{ $t('servicesAndProducts.addProductModal.taxRate') }} *</label>
-                      <v-select class="drop-down" label="tax_amount"
-                        :clearable="false" v-model="formData.tax_amount"
-                        :reduce="filter => filter.tax_amount"
+                      <v-select class="drop-down" label="tax_rate_label"
+                        :clearable="false" v-model="formData.tax_rate"
+                        :reduce="filter => filter.tax_rate"
                         :options="taxRates">
                         <template #search="{attributes, events}">
                           <input
                               class="vs__search"
-                              :required="!formData.tax_amount"
+                              :required="!formData.tax_rate"
                               v-bind="attributes"
                               v-on="events"
                             />
@@ -148,7 +148,7 @@
                     <template v-slot:headerTitle>
                         <h3 class="card-title" style="margin-top: 10px;">{{ $t('servicesAndProducts.headerProductGroup') }}</h3>
                         <div class="btn-add-patient mb-4 mt-0">
-                            <b-button variant="primary" @click="addProductGroup"><i class="ri-add-line mr-2"></i>{{ $t('servicesAndProducts.addProductGroup') }}</b-button>
+                            <b-button variant="primary" @click="modalGroupShow = true"><i class="ri-add-line mr-2"></i>{{ $t('servicesAndProducts.addProductGroup') }}</b-button>
                         </div>
                     </template>
                     <template v-slot:body>
@@ -168,39 +168,19 @@
                                         <strong class="loading">Loading...</strong>
                                       </div>
                                     </template>
-                                    <template v-slot:cell(product_group_name)="data">
-                                        <span v-if="!data.item.editable">
-                                            {{ data.item.product_group_name }}
-                                        </span>
-                                        <input type="text"
-                                               v-model="data.item.product_group_name"
-                                               v-else
-                                               class="form-control" />
-                                    </template>
                                     <template v-slot:cell(category_id)="data">
-                                        <span v-if="!data.item.editable">
+                                        <span>
                                             {{ data.item.category_name }}
                                         </span>
-                                        <v-select v-else class="drop-down" label="category_name"
-                                          :clearable="false" v-model="data.item.category_id"
-                                          :reduce="filter => filter.category_id"
-                                          :options="productCategories">
-                                        </v-select>
                                     </template>
                                     <template v-slot:cell(fee)="data">
-                                        <span v-if="!data.item.editable">
+                                        <span>
                                             {{ data.item.fee | percentage }}
                                         </span>
-                                        <input type="text"
-                                               v-model="data.item.fee"
-                                               v-else
-                                               class="form-control" />
                                     </template>
                                     <template v-slot:cell(action)="data">
-                                      <b-button variant=" iq-bg-success mr-1 mb-1" size="sm" @click="editProductGroup(data.item)" v-if="!data.item.editable"><i class="ri-ball-pen-fill m-0"></i></b-button>
-                                      <b-button variant=" iq-bg-danger mr-1 mb-1" size="sm" v-if="!data.item.editable" @click="removeProductGroup(data.item)"><i class="ri-delete-bin-line m-0"></i></b-button>
-                                      <b-button variant=" iq-bg-success mr-1 mb-1" :disabled="!data.item.product_group_name || !data.item.category_id" size="sm" @click="submitProductGroup(data.item)" v-if="data.item.editable"><i class="ri-checkbox-circle-fill m-0"></i></b-button>
-                                      <b-button variant=" iq-bg-danger mr-1 mb-1" size="sm" @click="cancelProductGroup(data.item)" v-if="data.item.editable"><i class="ri-close-circle-fill m-0"></i></b-button>
+                                      <b-button variant=" iq-bg-success mr-1 mb-1" size="sm" @click="editProductGroup(data.item)"><i class="ri-ball-pen-fill m-0"></i></b-button>
+                                      <b-button variant=" iq-bg-danger mr-1 mb-1" size="sm" @click="removeProductGroup(data.item)"><i class="ri-delete-bin-line m-0"></i></b-button>
                                     </template>
                                 </b-table>
                             </b-col>
@@ -216,13 +196,63 @@
                         </template>
                     </template>
                 </iq-card>
+                <b-modal v-model="modalGroupShow" no-close-on-backdrop size="lg" :title="$t('servicesAndProducts.addProductGroup')" :ok-disabled="isGroupDisabled"  @cancel="cancelGroup" :ok-title="$t('servicesAndProducts.addProductModal.save')" @ok="addProductGroup" :cancel-title="$t('servicesAndProducts.addProductModal.close')">
+                  <form>
+                    <div class="form-row">
+                      <div class="col-md-12 mb-3">
+                          <label for="title">{{ $t('servicesAndProducts.addProductModal.nameSlovenian') }} *</label>
+                        <div style="display: flex;">
+                          <input type="text" v-model="formGroupData.product_group_name" class="form-control" placeholder="Slovenian" required>
+                        </div>
+                      </div>
+                      <div class="col-md-12 mb-3">
+                          <label for="title">{{ $t('servicesAndProducts.addProductModal.nameItalian') }}</label>
+                        <div style="display: flex;">
+                          <input type="text" v-model="formGroupData.italian" class="form-control" placeholder="Italian">
+                        </div>
+                      </div>
+                      <div class="col-md-12 mb-3">
+                          <label for="title">{{ $t('servicesAndProducts.addProductModal.nameGerman') }}</label>
+                        <div style="display: flex;">
+                          <input type="text" v-model="formGroupData.german" class="form-control" placeholder="German">
+                        </div>
+                      </div>
+                      <div class="col-md-12 mb-3">
+                          <label for="title">{{ $t('servicesAndProducts.addProductModal.nameEnglish') }}</label>
+                        <div style="display: flex;">
+                          <input type="text" v-model="formGroupData.english" class="form-control" placeholder="English">
+                        </div>
+                      </div>
+                      <div class="col-md-7 mb-3">
+                        <label for="title">{{ $t('servicesAndProducts.productGroupColumn.productGroupCategory') }} *</label>
+                        <v-select class="drop-down" label="category_name"
+                          :clearable="false" v-model="formGroupData.category_id"
+                          :reduce="filter => filter.category_id"
+                          :options="productCategories">
+                          <template #search="{attributes, events}">
+                            <input
+                                class="vs__search"
+                                :required="!formGroupData.category_id"
+                                v-bind="attributes"
+                                v-on="events"
+                              />
+                          </template>
+                        </v-select>
+                      </div>
+                      <div class="col-md-3 mb-3">
+                          <label for="patient">{{ $t('servicesAndProducts.productGroupColumn.productGroupFee') }} *</label>
+                        <input type="number" v-model="formGroupData.fee" class="form-control" placeholder="Emazing fee" required>
+                      </div>
+                    </div>
+                  </form>
+                </b-modal>
             </b-col>
              <b-col md="5">
                 <iq-card>
                     <template v-slot:headerTitle>
                         <h3 class="card-title" style="margin-top: 10px;">{{ $t('servicesAndProducts.headerProductCategories') }}</h3>
                         <div class="btn-add-patient mb-4 mt-0">
-                            <b-button variant="primary" @click="addProductCategory"><i class="ri-add-line mr-2"></i>{{ $t('servicesAndProducts.addProductCategory') }}</b-button>
+                            <b-button variant="primary" @click="modalCategoryShow = true"><i class="ri-add-line mr-2"></i>{{ $t('servicesAndProducts.addProductCategory') }}</b-button>
                         </div>
                     </template>
                     <template v-slot:body>
@@ -253,10 +283,8 @@
                                                class="form-control" />
                                     </template>
                                     <template v-slot:cell(action)="data">
-                                      <b-button variant=" iq-bg-success mr-1 mb-1" size="sm" @click="editProductCategory(data.item)" v-if="!data.item.editable"><i class="ri-ball-pen-fill m-0"></i></b-button>
-                                      <b-button variant=" iq-bg-danger mr-1 mb-1" size="sm" v-if="!data.item.editable" @click="removeProductCategory(data.item)"><i class="ri-delete-bin-line m-0"></i></b-button>
-                                      <b-button variant=" iq-bg-success mr-1 mb-1" :disabled="!data.item.category_name" size="sm" @click="submitProductCategory(data.item)" v-if="data.item.editable"><i class="ri-checkbox-circle-fill m-0"></i></b-button>
-                                      <b-button variant=" iq-bg-danger mr-1 mb-1" size="sm" @click="cancelProductCategory(data.item)" v-if="data.item.editable"><i class="ri-close-circle-fill m-0"></i></b-button>
+                                      <b-button variant=" iq-bg-success mr-1 mb-1" size="sm" @click="editProductCategory(data.item)"><i class="ri-ball-pen-fill m-0"></i></b-button>
+                                      <b-button variant=" iq-bg-danger mr-1 mb-1" size="sm" @click="removeProductCategory(data.item)"><i class="ri-delete-bin-line m-0"></i></b-button>
                                     </template>
                                 </b-table>
                             </b-col>
@@ -273,6 +301,36 @@
                         </template>
                     </template>
                 </iq-card>
+                <b-modal v-model="modalCategoryShow" no-close-on-backdrop size="lg" :title="$t('servicesAndProducts.addProductCategory')" :ok-disabled="isCategoryDisabled"  @cancel="cancelCategory" :ok-title="$t('servicesAndProducts.addProductModal.save')" @ok="addProductGroup" :cancel-title="$t('servicesAndProducts.addProductModal.close')">
+                  <form>
+                    <div class="form-row">
+                      <div class="col-md-12 mb-3">
+                          <label for="title">{{ $t('servicesAndProducts.addProductModal.nameSlovenian') }} *</label>
+                        <div style="display: flex;">
+                          <input type="text" v-model="formCategoryData.category_name" class="form-control" placeholder="Slovenian" required>
+                        </div>
+                      </div>
+                      <div class="col-md-12 mb-3">
+                          <label for="title">{{ $t('servicesAndProducts.addProductModal.nameItalian') }}</label>
+                        <div style="display: flex;">
+                          <input type="text" v-model="formCategoryData.italian" class="form-control" placeholder="Italian">
+                        </div>
+                      </div>
+                      <div class="col-md-12 mb-3">
+                          <label for="title">{{ $t('servicesAndProducts.addProductModal.nameGerman') }}</label>
+                        <div style="display: flex;">
+                          <input type="text" v-model="formCategoryData.german" class="form-control" placeholder="German">
+                        </div>
+                      </div>
+                      <div class="col-md-12 mb-3">
+                          <label for="title">{{ $t('servicesAndProducts.addProductModal.nameEnglish') }}</label>
+                        <div style="display: flex;">
+                          <input type="text" v-model="formCategoryData.english" class="form-control" placeholder="English">
+                        </div>
+                      </div>
+                    </div>
+                  </form>
+                </b-modal>
             </b-col>
         </b-row>
     </b-container>
@@ -295,8 +353,14 @@ export default {
     this.getTaxRates()
   },
   computed: {
-    aki () {
-      return !this.formData.product_name || !this.formData.tax_amount || !this.formData.product_price || !this.formData.product_group_id || !this.formData.product_type_id
+    isProductDisabled () {
+      return !this.formData.product_name || !this.formData.tax_rate || !this.formData.product_price || !this.formData.product_group_id || !this.formData.product_type_id
+    },
+    isGroupDisabled () {
+      return !this.formGroupData.product_group_name || !this.formGroupData.category_id || !this.formGroupData.fee
+    },
+    isCategoryDisabled () {
+      return !this.formCategoryData.category_name
     }
   },
   name: 'ServicesAndProducts',
@@ -317,9 +381,25 @@ export default {
         product_price: '',
         product_group_id: '',
         product_type_id: '',
-        tax_amount: ''
+        tax_rate: ''
       },
-      modalShow: false,
+      formGroupData: {
+        product_group_name: '',
+        italian: '',
+        german: '',
+        english: '',
+        category_id: '',
+        fee: ''
+      },
+      formCategoryData: {
+        category_name: '',
+        italian: '',
+        german: '',
+        english: ''
+      },
+      modalProductShow: false,
+      modalGroupShow: false,
+      modalCategoryShow: false,
       products: [],
       productGroups: [],
       productCategories: [],
@@ -346,8 +426,6 @@ export default {
       ],
       currentProductCategoryPage: 1,
       productCategoriesPerPage: 20,
-      tempProduct: null,
-      tempProductGroup: null,
       tempProductCategory: null
     }
   },
@@ -361,21 +439,13 @@ export default {
     getProductCategories () {
       getProductCategories().then(response => {
         this.isProductCategoryDataLoaded = true
-        this.productCategories = response.map(obj => (
-          { ...obj,
-            editable: false
-          }
-        ))
+        this.productCategories = response
       })
     },
     getProductGroups () {
       getProductGroups().then(response => {
         this.isProductGroupDataLoaded = true
-        this.productGroups = response.map(obj => (
-          { ...obj,
-            editable: false
-          }
-        ))
+        this.productGroups = response
       })
     },
     getProductTypes () {
@@ -392,12 +462,30 @@ export default {
         product_price: '',
         product_group_id: '',
         product_type_id: '',
-        tax_amount: ''
+        tax_rate: ''
+      }
+    },
+    defaultFormGroupData () {
+      return {
+        product_group_name: '',
+        italian: '',
+        german: '',
+        english: '',
+        category_id: '',
+        fee: ''
+      }
+    },
+    defaultFormCategoryData () {
+      return {
+        category_name: '',
+        italian: '',
+        german: '',
+        english: ''
       }
     },
     editProduct (item) {
       this.formData = Object.assign({}, item)
-      this.modalShow = true
+      this.modalProductShow = true
     },
     removeProduct (item) {
       let index = this.products.indexOf(item)
@@ -408,6 +496,7 @@ export default {
       this.currentProductPage = 1
     },
     addProduct () {
+      this.setCurrentProductPage()
       if (this.formData.product_id) {
         updateProduct(this.formData.product_id, this.formData).then(() => {
           this.getProducts()
@@ -419,8 +508,14 @@ export default {
       }
       this.formData = this.defaultFormData()
     },
-    cancel () {
+    cancelProduct () {
       this.formData = this.defaultFormData()
+    },
+    cancelCategory () {
+      this.formCategoryData = this.defaultFormCategoryData()
+    },
+    cancelGroup () {
+      this.formGroupData = this.defaultFormGroupData()
     },
     defaultProduct () {
       return {
@@ -432,88 +527,54 @@ export default {
       }
     },
     editProductGroup (item) {
-      this.tempProductGroup = Object.assign({}, item)
-      item.editable = true
-      this.isProductGroupEdit = true
-    },
-    submitProductGroup (item) {
-      if (this.isProductGroupEdit) {
-        updateProductGroup(item.product_group_id, item).then(() => {
-          this.getProductGroups()
-        })
-      } else {
-        createProductGroup(item).then(() => {
-          this.getProductGroups()
-        })
-      }
-      item.editable = false
+      this.formGroupData = Object.assign({}, item)
+      this.modalGroupShow = true
     },
     removeProductGroup (item) {
       let index = this.productGroups.indexOf(item)
       this.productGroups.splice(index, 1)
       deleteProductGroup(item.product_group_id)
     },
-    cancelProductGroup (item) {
-      let index = this.productGroups.indexOf(item)
-      this.tempProductGroup ? this.productGroups.splice(index, 1, this.tempProductGroup) : this.productGroups.shift()
-    },
     setCurrentProductGroupPage () {
       this.currentProductGroupPage = 1
     },
     addProductGroup () {
       this.setCurrentProductGroupPage()
-      let obj = this.defaultProductGroup()
-      this.productGroups.unshift(obj)
-      this.tempProductGroup = null
-      this.isProductGroupEdit = false
-    },
-    defaultProductGroup () {
-      return {
-        product_group_name: '',
-        category_id: '',
-        fee: '0',
-        editable: true
+      if (this.formGroupData.product_group_id) {
+        updateProductGroup(this.formGroupData.product_group_id, this.formGroupData).then(() => {
+          this.getProductGroups()
+        })
+      } else {
+        createProductGroup(this.formGroupData).then(() => {
+          this.getProductGroups()
+        })
       }
+      this.formGroupData = this.defaultFormGroupData()
     },
     editProductCategory (item) {
-      this.tempProductCategory = Object.assign({}, item)
-      item.editable = true
-      this.isProductCategoryEdit = true
+      this.formCategoryData = Object.assign({}, item)
+      this.modalCategoryShow = true
     },
     removeProductCategory (item) {
       let index = this.productCategories.indexOf(item)
       deleteProductCategory(item.category_id)
       this.productCategories.splice(index, 1)
     },
-    cancelProductCategory (item) {
-      let index = this.productCategories.indexOf(item)
-      this.tempProductCategory ? this.productCategories.splice(index, 1, this.tempProductCategory) : this.productCategories.shift()
-    },
     setCurrentProductCategoryPage () {
       this.currentProductCategoryPage = 1
     },
     addProductCategory () {
       this.setCurrentProductCategoryPage()
-      let obj = this.defaultProductCategory()
-      this.productCategories.unshift(obj)
-      this.tempProductCategory = null
-      this.isProductCategoryEdit = false
-    },
-    submitProductCategory (item) {
-      item.editable = false
-      if (this.isProductCategoryEdit) {
-        updateProductCategory(item.category_id, item)
+      if (this.formCategoryData.category_id) {
+        updateProductCategory(this.formCategoryData.category_id, this.formCategoryData).then(() => {
+          this.getProductCategories()
+        })
       } else {
-        createProductCategory(item).then(() => {
+        createProductCategory(this.formCategoryData).then(() => {
           this.getProductCategories()
         })
       }
-    },
-    defaultProductCategory () {
-      return {
-        category_name: '',
-        editable: true
-      }
+      this.formCategoryData = this.defaultFormCategoryData()
     },
     getTaxRates () {
       let id = 1
