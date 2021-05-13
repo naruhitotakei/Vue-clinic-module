@@ -56,6 +56,7 @@
               <b-collapse id="collapse-6" class="mb-2"> </b-collapse>
               <div class="mt-3">
                 <b-pagination
+                  v-if="hidePagination"
                   v-model="currentPage"
                   :total-rows="totalRows"
                   :per-page="perPage"
@@ -77,6 +78,11 @@ import moment from 'moment'
 
 export default {
   components: {
+  },
+  computed: {
+    hidePagination () {
+      return Math.floor(this.totalRows / this.perPage) !== 0
+    }
   },
   name: 'Invoices',
   data: function () {
