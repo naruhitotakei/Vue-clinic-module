@@ -411,10 +411,13 @@
                               <template>
                                   <b-collapse id="collapse-6" class="mb-2"> </b-collapse>
                                   <div class="mt-3">
-                                      <b-pagination v-model="currentInvoicePage"
-                                                    :total-rows="invoices.length"
-                                                    :per-page="invoicesPerPage"
-                                                    aria-controls="patient-invoices"></b-pagination>
+                                      <b-pagination
+                                        v-if="hideInvoicesPagination"
+                                        v-model="currentInvoicePage"
+                                        :total-rows="invoices.length"
+                                        :per-page="invoicesPerPage"
+                                        aria-controls="patient-invoices">
+                                      </b-pagination>
                                   </div>
                               </template>
                           </template>
@@ -432,10 +435,13 @@
                           <template>
                               <b-collapse id="collapse-6" class="mb-2"> </b-collapse>
                               <div class="ml-4 pb-2">
-                                  <b-pagination v-model="currentServicesPage"
-                                                :total-rows="services.length"
-                                                :per-page="servicesPerPage"
-                                                aria-controls="patient-services"></b-pagination>
+                                  <b-pagination
+                                    v-if="hideSummaryPagination"
+                                    v-model="currentServicesPage"
+                                    :total-rows="services.length"
+                                    :per-page="servicesPerPage"
+                                    aria-controls="patient-services">
+                                    </b-pagination>
                               </div>
                           </template>
                       </iq-card>
@@ -467,10 +473,12 @@
                               <template>
                                   <b-collapse id="collapse-6" class="mb-2"> </b-collapse>
                                   <div class="mt-3">
-                                      <b-pagination v-model="currentOfferPage"
-                                                    :total-rows="offers.length"
-                                                    :per-page="offersPerPage"
-                                                    aria-controls="patient-offers"></b-pagination>
+                                      <b-pagination
+                                        v-if="hideOffersPagination"
+                                        v-model="currentOfferPage"
+                                        :total-rows="offers.length"
+                                        :per-page="offersPerPage"
+                                        aria-controls="patient-offers"></b-pagination>
                                   </div>
                               </template>
                           </template>
@@ -542,6 +550,15 @@ export default {
       return this.appointments.filter((item) => {
         return !this.filterAppointments(item)
       })
+    },
+    hideInvoicesPagination () {
+      return Math.floor(this.invoices.length / this.invoicesPerPage) !== 0
+    },
+    hideOffersPagination () {
+      return Math.floor(this.offers.length / this.offersPerPage) !== 0
+    },
+    hideSummaryPagination () {
+      return Math.floor(this.services.length / this.servicesPerPage) !== 0
     }
   },
   filters: {
