@@ -114,8 +114,9 @@ app.get('/api/dentists', async function(req, res) {
 app.get('/api/calendar/:statrtdate/:enddate', (req, res) => {
     const statrtdate = req.params.statrtdate
     const enddate = req.params.enddate
+    const doctorUserIdList = req.query.doc;
     if(req.session.prm_user && req.session.prm_user.permissions && checkPermission(req.session.prm_user.permissions, calendarPermission))
-        daoCalendar.getApontments(req, res, statrtdate, enddate, -1)
+        daoCalendar.getApontments(req, res, statrtdate, enddate, req.session.prm_user.prm_company_id, req.session.prm_user.id, getScope(req.session.prm_user.permissions, calendarPermission, doctorUserIdList))
     else
         res.status(401).json("OK: user unauthorized")
 });
