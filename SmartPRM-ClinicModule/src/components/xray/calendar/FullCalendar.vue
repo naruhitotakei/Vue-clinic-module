@@ -222,10 +222,16 @@ export default {
     },
     eventDrop (info) {
       let event = this.calendarApi.getEventById(info.event.id)
+      console.log('res pre: ' + JSON.stringify(event.extendedProps.eventResourceId))
+      console.log('doc pre: ' + JSON.stringify(event.extendedProps.doctorId))
+      console.log('novi res id je: ' + JSON.stringify(info.event.extendedProps.eventResourceId))
+      console.log('novi doctor id je: ' + JSON.stringify(info.event.extendedProps.doctorId))
       this.setAssignmentDateAndDuration(info.event.start, info.event.end)
       event.setExtendedProp('assignmentDate', this.formData.assignmentDate)
       event.setStart(this.formData.start)
       event.setEnd(this.formData.end)
+      event.setExtendedProp('eventResourceId', +info.newResource.id)
+      event.setExtendedProp('doctorId', +info.newResource.id)
     },
     defaultAppointment () {
       return {
