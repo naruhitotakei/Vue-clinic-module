@@ -7,7 +7,11 @@
               <div class="form-row">
                 <div class="col-md-12 mb-3">
                   <label for="patient">{{ $t('calendarEvent.patient') }} *</label>
-                  <v-select :clearable="false" label="full_name" class="style-chooser" v-model="selectedPatient" :options="patients"></v-select>
+                  <v-select :clearable="false" label="full_name" class="style-chooser" v-model="selectedPatient" :options="patients">
+                    <template v-slot:option="option">
+                      {{ option.full_name }} <span v-if="option.city" style="float:right"> {{option.city}} </span>
+                    </template>
+                  </v-select>
                 </div>
               </div>
             </form>
