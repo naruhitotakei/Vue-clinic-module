@@ -1,5 +1,5 @@
-export async function getProducts () {
-  const rawResponse = await fetch('/api/products', {
+export async function getProducts (locale) {
+  const rawResponse = await fetch('/api/products/' + locale, {
     method: 'GET',
     credentials: 'same-origin',
     headers: {
@@ -10,8 +10,8 @@ export async function getProducts () {
   return rawResponse.json()
 }
 
-export async function getProductGroups () {
-  const rawResponse = await fetch('/api/productGroups', {
+export async function getProductGroups (locale) {
+  const rawResponse = await fetch('/api/productGroups/' + locale, {
     method: 'GET',
     credentials: 'same-origin',
     headers: {
@@ -22,8 +22,8 @@ export async function getProductGroups () {
   return rawResponse.json()
 }
 
-export async function getProductCategories () {
-  const rawResponse = await fetch('/api/productCategories', {
+export async function getProductCategories (locale) {
+  const rawResponse = await fetch('/api/productCategories/' + locale, {
     method: 'GET',
     credentials: 'same-origin',
     headers: {

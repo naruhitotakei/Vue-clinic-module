@@ -131,16 +131,18 @@ app.get('/api/calendar/doctors', (req, res) => {
 ///////////////////////////////////
 // products
 ///////////////////////////////////
-app.get('/api/products', (req, res) => {
+app.get('/api/products/:locale', (req, res) => {
+    const locale = req.params.locale
     if(req.session.prm_user && req.session.prm_user.permissions && checkPermission(req.session.prm_user.permissions, productsPermission))
-        daoProducts.getProducts(req, res)
+        daoProducts.getProducts(req, res, locale)
     else
         res.status(401).json("OK: user unauthorized")
 });
 
-app.get('/api/productGroups', (req, res) => {
+app.get('/api/productGroups/:locale', (req, res) => {
+    const locale = req.params.locale
     if(req.session.prm_user && req.session.prm_user.permissions && checkPermission(req.session.prm_user.permissions, productsPermission))
-        daoProducts.getProductGroups(req, res)
+        daoProducts.getProductGroups(req, res, locale)
     else
         res.status(401).json("OK: user unauthorized")
 });
@@ -202,9 +204,10 @@ app.delete('/api/productGroups/:id', (req, res) => {
         res.status(401).json("OK: user unauthorized")
 });
 
-app.get('/api/productCategories', (req, res) => {
+app.get('/api/productCategories/:locale', (req, res) => {
+    const locale = req.params.locale
     if(req.session.prm_user && req.session.prm_user.permissions && checkPermission(req.session.prm_user.permissions, productsPermission))
-        daoProducts.getProductCategories(req, res)
+        daoProducts.getProductCategories(req, res, locale)
     else
         res.status(401).json("OK: user unauthorized")
 });

@@ -340,6 +340,7 @@
 import { xray } from '../../config/pluginInit'
 import { getProducts, getProductGroups, getProductCategories, getProductTypes, createProductCategory, updateProductCategory, deleteProductCategory, createProductGroup, updateProductGroup, deleteProductGroup, createProduct, deleteProduct, updateProduct } from '../../services/products'
 import { getTaxRateList } from '../../services/commonCodeLists'
+import { mapGetters } from 'vuex'
 
 export default {
   components: {
@@ -351,6 +352,7 @@ export default {
     this.getProductGroups()
     this.getProductTypes()
     this.getTaxRates()
+    console.log('lang: ' + this.selectedLang.value)
   },
   computed: {
     isProductDisabled () {
@@ -361,7 +363,10 @@ export default {
     },
     isCategoryDisabled () {
       return !this.formCategoryData.category_name
-    }
+    },
+    ...mapGetters({
+      selectedLang: 'Setting/langState'
+    })
   },
   name: 'ServicesAndProducts',
   data: function () {
@@ -431,19 +436,25 @@ export default {
   },
   methods: {
     getProducts () {
-      getProducts().then(response => {
+      let locale = this.getLocale()
+      getProducts(locale).then(response => {
         this.isProductDataLoaded = true
         this.products = response
       })
     },
+    getLocale () {
+      return this.selectedLang.value ? this.selectedLang.value : this.selectedLang
+    },
     getProductCategories () {
-      getProductCategories().then(response => {
+      let locale = this.getLocale()
+      getProductCategories(locale).then(response => {
         this.isProductCategoryDataLoaded = true
         this.productCategories = response
       })
     },
     getProductGroups () {
-      getProductGroups().then(response => {
+      let locale = this.getLocale()
+      getProductGroups(locale).then(response => {
         this.isProductGroupDataLoaded = true
         this.productGroups = response
       })
