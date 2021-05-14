@@ -255,9 +255,47 @@
       "no": "Št.",
       "patientName": "Ime pacienta",
       "date": "Datum",
-      "issuedBy": "Izdan s strani",
+      "issuedBy": "Izdal",
       "amount": "Znesek",
       "status": "Status"
+    },
+    "addNewInvoice": {
+      "selectPatient": "Izberi pacienta",
+      "patient": "Pacient",
+      "close": "Zapri",
+      "create": "Ustvari račun"
+    },
+    "newInvoice": {
+      "newInvoiceHeader": "Nov račun",
+      "newInvoiceColumn": {
+        "invoiceDate": "Datum izdaje",
+        "invoiceTotal": "Znesek",
+        "billingDetails": "Podatki prejemnika",
+        "issuedIn": "Izdano v",
+        "issuedBy": "Izdal"
+      },
+      "newInvoiceDetails": {
+        "header": "Podatki o računu",
+        "addNewItem": "Dodaj artikel",
+        "item": "Opis",
+        "quantity": "Količina",
+        "price": "Cena",
+        "discount": "Popust",
+        "total": "Znesek",
+        "action": "Urejaj"
+      },
+      "newInvoiceSummary": {
+        "header": "Povzetek računa",
+        "dueDate": "Rok",
+        "paymentMethod": "Način plačila",
+        "subTotal": "Cena",
+        "discount": "Popust",
+        "total": "Znesek",
+        "action": "Urejaj"
+      },
+      "downloadPrint": "Prenesi tiskano verzijo",
+      "saveAsDraft": "Shrani kot osnutek",
+      "saveInvoice": "Shrani račun"
     }
   },
   "invoice": {

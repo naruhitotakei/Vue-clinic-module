@@ -258,6 +258,44 @@
       "issuedBy": "Issued By",
       "amount": "Amount",
       "status": "Status"
+    },
+    "addNewInvoice": {
+      "selectPatient": "Select patient",
+      "patient": "Patient",
+      "close": "Close",
+      "create": "Create invoice"
+    },
+    "newInvoice": {
+      "newInvoiceHeader": "New invoice",
+      "newInvoiceColumn": {
+        "invoiceDate": "Date",
+        "invoiceTotal": "Total",
+        "billingDetails": "Billing details",
+        "issuedIn": "Issued in",
+        "issuedBy": "Issued by"
+      },
+      "newInvoiceDetails": {
+        "header": "Invoice detail",
+        "addNewItem": "Add new item",
+        "item": "Item",
+        "quantity": "Quantity",
+        "price": "Price",
+        "discount": "Discount",
+        "total": "Total",
+        "action": "Action"
+      },
+      "newInvoiceSummary": {
+        "header": "Invoice summary",
+        "dueDate": "Due date",
+        "paymentMethod": "Payment method",
+        "subTotal": "Sub-total",
+        "discount": "Discount",
+        "total": "Total",
+        "action": "Action"
+      },
+      "downloadPrint": "Download print",
+      "saveAsDraft": "Save invoice as draft",
+      "saveInvoice": "Save invoice"
     }
   },
   "invoice": {

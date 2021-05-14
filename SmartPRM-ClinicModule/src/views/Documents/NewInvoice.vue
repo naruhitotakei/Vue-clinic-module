@@ -6,7 +6,7 @@
                 <template v-slot:body>
                     <b-row>
                         <b-col cols="4" align-self="center" style="margin-bottom: 25px;">
-                            <h4 class="mb-0">{{ text }}</h4>
+                            <h4 class="mb-0">{{ $t('invoices.newInvoice.newInvoiceHeader') }}</h4>
                         </b-col>
                     </b-row>
                     <b-row>
@@ -14,11 +14,11 @@
                             <div class="table-responsive-sm">
                               <b-table-simple>
                                 <b-thead>
-                                  <b-th>Invoice Date</b-th>
-                                  <b-th>Invoice Total</b-th>
-                                  <b-th>Billing Details</b-th>
-                                  <b-th>Issued In</b-th>
-                                  <b-th>Issued By</b-th>
+                                  <b-th>{{ $t('invoices.newInvoice.newInvoiceColumn.invoiceDate') }}</b-th>
+                                  <b-th>{{ $t('invoices.newInvoice.newInvoiceColumn.invoiceTotal') }}</b-th>
+                                  <b-th>{{ $t('invoices.newInvoice.newInvoiceColumn.billingDetails') }}</b-th>
+                                  <b-th>{{ $t('invoices.newInvoice.newInvoiceColumn.issuedIn') }}</b-th>
+                                  <b-th>{{ $t('invoices.newInvoice.newInvoiceColumn.issuedBy') }}</b-th>
                                 </b-thead>
                                 <b-tbody>
                                   <b-tr>
@@ -26,7 +26,7 @@
                                     <b-td><strong>{{invoiceTotal | euro}}</strong></b-td>
                                     <b-td v-html="billingDetails"></b-td>
                                     <b-td>{{issuedIn}}</b-td>
-                                    <b-td>{{logedInUser.name}}</b-td>
+                                    <b-td>{{operator_name}}</b-td>
                                   </b-tr>
                                 </b-tbody>
                               </b-table-simple>
@@ -37,15 +37,15 @@
                         <b-col lg="12">
                           <iq-card>
                             <template v-slot:headerTitle>
-                              <h5 style="margin-bottom: 15px;">{{ detail }}</h5>
+                                <h5 style="margin-bottom: 15px;">{{ $t('invoices.newInvoice.newInvoiceDetails.header') }}</h5>
                             </template>
                             <template v-slot:headerAction>
-                              <b-button variant="primary" style="white-space:nowrap" @click="add"><i class="ri-add-line mr-2"></i>Add New Item</b-button>
+                                <b-button variant="primary" style="white-space:nowrap" @click="add"><i class="ri-add-line mr-2"></i>{{ $t('invoices.newInvoice.newInvoiceDetails.addNewItem') }}</b-button>
                             </template>
                             <template v-slot:body>
                               <b-row>
                                 <b-col md="12" class="table-responsive" style="min-height:250px">
-                                  <b-table bordered hover :items="rows" :fields="columns">
+                                  <b-table bordered hover :items="rows" :fields="detailColumns">
                                     <template v-slot:cell(id)="data">
                                       <span>{{ rows.indexOf(data.item) + 1 }}</span>
                                     </template>
@@ -79,12 +79,12 @@
                           </iq-card>
                           <iq-card>
                             <template v-slot:headerTitle>
-                              <h5 style="margin-bottom: 15px;">{{ summary }}</h5>
+                                <h5 style="margin-bottom: 15px;">{{ $t('invoices.newInvoice.newInvoiceSummary.header') }}</h5>
                             </template>
                             <template v-slot:body>
                                <b-row>
                                 <b-col md="12" class="table-responsive" style="min-height:200px">
-                                  <b-table striped :items="summaryRows" :fields="invoiceSummaryFields">
+                                  <b-table striped :items="summaryRows" :fields="summaryColumns">
                                     <template v-slot:cell(dueDate)="data">
                                       <span v-if="!data.item.editable">{{ data.item.dueDate }}</span>
                                       <input type="number" min="0" v-model="data.item.dueDateNumber" v-else class="form-control">
@@ -117,13 +117,13 @@
                         <b-col offset="6" cols="6" class="text-right">
                             <b-button variant="link mr-3">
                                 <i class="ri-printer-line"></i>
-                                Download Print
+                                {{ $t('invoices.newInvoice.downloadPrint') }}
                             </b-button>
                             <b-button variant="primary mr-4">
-                                <i class="ri-bookmark-3-fill mr-2"></i>Save Invoice as Draft
+                                <i class="ri-bookmark-3-fill mr-2"></i>{{ $t('invoices.newInvoice.saveAsDraft') }}
                             </b-button>
                             <b-button variant="primary mr-3">
-                                <i class="ri-save-3-line mr-2"></i>Save Invoice
+                                <i class="ri-save-3-line mr-2"></i>{{ $t('invoices.newInvoice.saveInvoice') }}
                             </b-button>
                         </b-col>
                     </b-row>
@@ -147,14 +147,14 @@ export default {
   },
   data () {
     return {
-      columns: [
+      detailColumns: [
         { label: '#', key: 'id', class: 'text-left' },
-        { label: 'Item', key: 'name', class: 'text-left item-name' },
-        { label: 'Quantity', key: 'quantity', class: 'text-left narrow-column' },
-        { label: 'Price', key: 'price', class: 'text-left' },
-        { label: 'Discount', key: 'discount', class: 'text-left narrow-column' },
-        { label: 'Total', key: 'total', class: 'text-left' },
-        { label: 'Action', key: 'action', class: 'text-center action-column' }
+        { label: this.$t('invoices.newInvoice.newInvoiceDetails.item'), key: 'name', class: 'text-left item-name' },
+        { label: this.$t('invoices.newInvoice.newInvoiceDetails.quantity'), key: 'quantity', class: 'text-left narrow-column' },
+        { label: this.$t('invoices.newInvoice.newInvoiceDetails.price'), key: 'price', class: 'text-left' },
+        { label: this.$t('invoices.newInvoice.newInvoiceDetails.discount'), key: 'discount', class: 'text-left narrow-column' },
+        { label: this.$t('invoices.newInvoice.newInvoiceDetails.total'), key: 'total', class: 'text-left' },
+        { label: this.$t('invoices.newInvoice.newInvoiceDetails.action'), key: 'action', class: 'text-center action-column' }
       ],
       rows: [
         {
@@ -182,33 +182,31 @@ export default {
         { id: 2, name: 'Credit card' }
       ],
       selectedItemName: '',
-      text: 'New Invoice',
       summary: 'Invoice Summary',
-      detail: 'Invoice Detail',
-      invoiceSummaryFields: [
+      summaryColumns: [
         {
           key: 'dueDate',
-          label: 'Due Date',
+          label: this.$t('invoices.newInvoice.newInvoiceSummary.dueDate'),
           class: 'narrow-column'
         },
         {
           key: 'paymentMethod',
-          label: 'Payment Method'
+          label: this.$t('invoices.newInvoice.newInvoiceSummary.paymentMethod')
         },
         {
           key: 'subTotal',
-          label: 'Sub-total'
+          label: this.$t('invoices.newInvoice.newInvoiceSummary.subTotal')
         },
         {
           key: 'discount',
-          label: 'Discount'
+          label: this.$t('invoices.newInvoice.newInvoiceSummary.discount')
         },
         {
           key: 'total',
-          label: 'Total'
+          label: this.$t('invoices.newInvoice.newInvoiceSummary.total')
         },
         {
-          label: 'Action',
+          label: this.$t('invoices.newInvoice.newInvoiceSummary.action'),
           key: 'action',
           class: 'text-center action-column'
         }
