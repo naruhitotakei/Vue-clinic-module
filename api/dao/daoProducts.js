@@ -50,13 +50,13 @@ const createProduct = (req, res, products) => {
     if (products.product_price) productStatement += "product_price,"
     if (products.product_group_id) productStatement += "product_group_id,"
     if (products.product_type_id) productStatement += "product_type_id,"
-    if (products.tax_rate) productStatement += "vat_tax_rate,tax_amount,"
+    productStatement += "vat_tax_rate,tax_amount,"
     productStatement += "created_date"
     productStatement += ") VALUES ("
     if (products.product_price) productStatement += "'" + products.product_price + "',"
     if (products.product_group_id) productStatement += "'" + products.product_group_id + "',"
     if (products.product_type_id) productStatement += "'" + products.product_type_id + "',"
-    if (products.tax_rate) productStatement += "'" + products.tax_rate + "','" + products.price * products.tax_rate / 100 + "',"
+    productStatement += "'" + products.tax_rate + "'," + calculateTaxAmount(products.product_price, products.tax_rate) + ","
     productStatement += "NOW()" 
     productStatement +=") RETURNING product_id"
     console.log(productStatement)
@@ -67,17 +67,17 @@ const createProduct = (req, res, products) => {
         } 
         var productId = results.rows[0].product_id;
         
-        if (products.slovenian) createProductNameStatement(productId, 'sl', products.slovenian)
-        if (products.english) createProductNameStatement(productId, 'en', products.english)
-        if (products.italian) createProductNameStatement(productId, 'it', products.italian)
-        if (products.german) createProductNameStatement(productId, 'ge', products.german)
+        if (products.slovenian) createNameStatement('prm_product_name', 'product_id', productId, 'sl', products.slovenian)
+        if (products.english) createNameStatement('prm_product_name', 'product_id', productId, 'en', products.english)
+        if (products.italian) createNameStatement('prm_product_name', 'product_id', productId, 'it', products.italian)
+        if (products.german) createNameStatement('prm_product_name', 'product_id', productId, 'ge', products.german)
         
         res.status(200).json("OK")
     })    
 }
 
-createProductNameStatement = (productId, language, text) => {
-    let statement = "INSERT INTO prm_product_name (product_id,language, text, created_date) VALUES (" + productId + ",'" + language + "','" + text + "',NOW())"
+createNameStatement = (table, idName, id, language, text) => {
+    let statement = "INSERT INTO " + table + " (" + idName + ",language, text, created_date) VALUES (" + id + ",'" + language + "','" + text + "',NOW())"
     console.log(statement)
     pool.query(statement, (error, results) => {
         if (error) {
@@ -86,8 +86,8 @@ createProductNameStatement = (productId, language, text) => {
     })
 }
 
-updateProductNameStatement = (productId, language, text) => {
-    let statement = "UPDATE prm_product_name SET text='" + text + "' WHERE product_id=" + productId + "AND language ='" + language + "'"
+updateNameStatement = (table, idName, id, language, text) => {
+    let statement = "UPDATE " + table + " SET text='" + text + "' WHERE " + idName + "=" + id + "AND language ='" + language + "'"
     console.log(statement)
     pool.query(statement, (error, results) => {
         if (error) {
@@ -105,10 +105,10 @@ const updateProduct = (req, res, id, product) => {
         statement = statement.slice(0, -1)
         statement +=" WHERE product_id=" + id
         console.log(statement)
-        if (product.slovenian) updateProductNameStatement(id, 'sl', product.slovenian)
-        if (product.english) updateProductNameStatement(id, 'en', product.english)
-        if (product.italian) updateProductNameStatement(id, 'it', product.italian)
-        if (product.german) updateProductNameStatement(id, 'ge', product.german)
+        if (product.slovenian) updateNameStatement('prm_product_name', 'product_id', id, 'sl', product.slovenian)
+        if (product.english) updateNameStatement('prm_product_name', 'product_id', id, 'en', product.english)
+        if (product.italian) updateNameStatement('prm_product_name', 'product_id', id, 'it', product.italian)
+        if (product.german) updateNameStatement('prm_product_name', 'product_id', id, 'ge', product.german)
         pool.query(statement , (error, results) => {
             if (error) {
                 throw error
@@ -143,12 +143,10 @@ const deleteProduct = (request, response, id) => {
 
 const createProductGroup = (req, res, productGroup) => {
     var statement = "INSERT INTO prm_product_group ("
-    if (productGroup.product_group_name) statement += "product_group_name,"
     if (productGroup.category_id) statement += "category_id,"
     if (productGroup.fee) statement += "fee,"
     statement += "created_date"
     statement += ") VALUES ("
-    if (productGroup.product_group_name) statement += "'" + productGroup.product_group_name + "',"
     if (productGroup.category_id) statement += "'" + productGroup.category_id + "',"
     if (productGroup.fee) statement += "'" + productGroup.fee + "',"
     statement += "NOW()" 

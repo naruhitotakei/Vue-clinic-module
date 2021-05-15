@@ -293,6 +293,7 @@
                             <b-collapse id="collapse-6" class="mb-2"> </b-collapse>
                             <div class="mt-3">
                                 <b-pagination v-model="currentProductCategoryPage"
+                                  v-if="hideCategoryPagination"
                                   :total-rows="productCategories.length"
                                   :per-page="productCategoriesPerPage"
                                   aria-controls="my-table">
@@ -355,17 +356,20 @@ export default {
   },
   computed: {
     isProductDisabled () {
-      return !this.formData.product_name || !this.formData.product_price || !this.formData.product_group_id || !this.formData.product_type_id
+      return !this.formData.slovenian || !this.formData.product_price || !this.formData.product_group_id || !this.formData.product_type_id
     },
     isGroupDisabled () {
-      return !this.formGroupData.product_group_name || !this.formGroupData.category_id || !this.formGroupData.fee
+      return !this.formGroupData.slovenian || !this.formGroupData.category_id || !this.formGroupData.fee
     },
     isCategoryDisabled () {
-      return !this.formCategoryData.category_name
+      return !this.formCategoryData.slovenian
     },
     ...mapGetters({
       selectedLang: 'Setting/langState'
-    })
+    }),
+    hideCategoryPagination () {
+      return Math.floor(this.productCategories.length / this.productCategoriesPerPage) !== 0
+    }
   },
   name: 'ServicesAndProducts',
   data: function () {
@@ -465,7 +469,7 @@ export default {
     },
     defaultFormData () {
       return {
-        product_name: '',
+        slovenian: '',
         italian: '',
         german: '',
         english: '',
@@ -539,15 +543,6 @@ export default {
     },
     cancelGroup () {
       this.formGroupData = this.defaultFormGroupData()
-    },
-    defaultProduct () {
-      return {
-        product_id: '',
-        product_name: '',
-        product_price: 0,
-        product_group_id: '',
-        product_type_id: ''
-      }
     },
     editProductGroup (item) {
       this.formGroupData = Object.assign({}, item)
