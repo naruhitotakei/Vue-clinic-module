@@ -439,8 +439,8 @@ export default {
   },
   methods: {
     getProducts () {
-      let locale = this.getLocale()
-      getProducts(locale).then(response => {
+      // let locale = this.getLocale()
+      getProducts('sl').then(response => {
         this.isProductDataLoaded = true
         this.products = response
       })
@@ -469,6 +469,7 @@ export default {
     },
     defaultFormData () {
       return {
+        product_name: '',
         slovenian: '',
         italian: '',
         german: '',

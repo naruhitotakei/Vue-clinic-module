@@ -56,7 +56,7 @@ const createProduct = (req, res, products) => {
     if (products.product_price) productStatement += "'" + products.product_price + "',"
     if (products.product_group_id) productStatement += "'" + products.product_group_id + "',"
     if (products.product_type_id) productStatement += "'" + products.product_type_id + "',"
-    productStatement += "'" + products.tax_rate + "'," + calculateTaxAmount(products.product_price, products.tax_rate) + ","
+    productStatement += "" + products.tax_rate + "," + calculateTaxAmount(products.product_price, products.tax_rate) + ","
     productStatement += "NOW()" 
     productStatement +=") RETURNING product_id"
     console.log(productStatement)
