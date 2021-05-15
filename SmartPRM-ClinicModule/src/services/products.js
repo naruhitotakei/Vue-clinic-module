@@ -96,6 +96,30 @@ export async function getProductNaming (id) {
   return rawResponse.json()
 }
 
+export async function getProductGroupNaming (id) {
+  const rawResponse = await fetch('/api/productGroups/' + id + '/product-naming', {
+    method: 'get',
+    credentials: 'same-origin',
+    headers: {
+      'Accept': 'application/json',
+      'Content-Type': 'application/json'
+    }
+  })
+  return rawResponse.json()
+}
+
+export async function getProductCategoryNaming (id) {
+  const rawResponse = await fetch('/api/productCategories/' + id + '/product-naming', {
+    method: 'get',
+    credentials: 'same-origin',
+    headers: {
+      'Accept': 'application/json',
+      'Content-Type': 'application/json'
+    }
+  })
+  return rawResponse.json()
+}
+
 export async function createProductGroup (productGroup) {
   const rawResponse = await fetch('/api/productGroups', {
     method: 'POST',

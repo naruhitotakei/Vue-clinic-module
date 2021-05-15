@@ -149,13 +149,18 @@ const createProductGroup = (req, res, productGroup) => {
     statement += ") VALUES ("
     if (productGroup.category_id) statement += "'" + productGroup.category_id + "',"
     if (productGroup.fee) statement += "'" + productGroup.fee + "',"
-    statement += "NOW()" 
-    statement +=")"
+    statement += "NOW()) RETURNING product_group_id" 
     console.log(statement)
     pool.query(statement , (error, results) => {
         if (error) {
             throw error
         }
+        var productGroupId = results.rows[0].product_group_id;
+        
+        if (products.slovenian) createNameStatement('prm_product_group_name', 'product_group_id', productGroupId, 'sl', products.slovenian)
+        if (products.english) createNameStatement('prm_product_group_name', 'product_group_id', productGroupId, 'en', products.english)
+        if (products.italian) createNameStatement('prm_product_group_name', 'product_group_id', productGroupId, 'it', products.italian)
+        if (products.german) createNameStatement('prm_product_group_name', 'product_group_id', productGroupId, 'ge', products.german)
         res.status(200).json("OK")
     })    
 }
@@ -168,6 +173,10 @@ const updateProductGroup = (req, res, id, productGroup) => {
     statement = statement.slice(0, -1)
     statement +=" WHERE product_group_id=" + id
     console.log(statement)
+    if (product.slovenian) updateNameStatement('prm_product_group_name', 'product_group_id', id, 'sl', product.slovenian)
+    if (product.english) updateNameStatement('prm_product_group_name', 'product_group_id', id, 'en', product.english)
+    if (product.italian) updateNameStatement('prm_product_group_name', 'product_group_id', id, 'it', product.italian)
+    if (product.german) updateNameStatement('prm_product_group_name', 'product_group_id', id, 'ge', product.german)
     pool.query(statement , (error, results) => {
         if (error) {
             throw error
@@ -187,19 +196,22 @@ const deleteProductGroup = (request, response, id) => {
 
 const createProductCategory = (req, res, productCategory) => {
     var statement = "INSERT INTO prm_product_category ("
-    if (productCategory.category_name) statement += "category_name,"
     statement += "category_deleted,"
     statement += "created_at"
     statement += ") VALUES ("
-    if (productCategory.category_name) statement += "'" + productCategory.category_name + "',"
     statement += "false," 
-    statement += "NOW()" 
-    statement +=")"
+    statement += "NOW()) RETURNING category_id" 
     console.log(statement)
     pool.query(statement , (error, results) => {
         if (error) {
             throw error
         }
+        var categoryId = results.rows[0].category_id;
+
+        if (productCategory.slovenian) createNameStatement('prm_product_category_name', 'category_id', categoryId, 'sl', productCategory.slovenian)
+        if (productCategory.english) createNameStatement('prm_product_category_name', 'category_id', categoryId, 'en', productCategory.english)
+        if (productCategory.italian) createNameStatement('prm_product_category_name', 'category_id', categoryId, 'it', productCategory.italian)
+        if (productCategory.german) createNameStatement('prm_product_category_name', 'category_id', categoryId, 'ge', productCategory.german)
 
         res.status(200).json("OK")
     })    
@@ -207,8 +219,8 @@ const createProductCategory = (req, res, productCategory) => {
 
 const updateProductCategory = (req, res, id, productCategory) => {
     var statement = "UPDATE prm_product_category SET "
-    if (productCategory.category_name) {
-        statement += "category_name='" + productCategory.category_name + "', updated_at= NOW()"
+    if (productCategory.slovenian || productCategory.english || productCategory.italian || productCategory.german) {
+        statement +=  "' updated_at= NOW()"
     }
     statement +=" WHERE category_id=" + id
     console.log(statement)
@@ -216,6 +228,10 @@ const updateProductCategory = (req, res, id, productCategory) => {
         if (error) {
             throw error
         }
+        if (product.slovenian) updateNameStatement('prm_product_category_name', 'category_id', id, 'sl', product.slovenian)
+        if (product.english) updateNameStatement('prm_product_category_name', 'category_id', id, 'en', product.english)
+        if (product.italian) updateNameStatement('prm_product_category_name', 'category_id', id, 'it', product.italian)
+        if (product.german) updateNameStatement('prm_product_category_name', 'category_id', id, 'ge', product.german)
     }) 
     res.status(200).json(productCategory)
 }
@@ -238,6 +254,24 @@ const getProductNaming = (request, response, id) => {
     })
 }
 
+const getProductGroupNaming = (request, response, id) => {
+    pool.query('SELECT language, text FROM prm_product_group_name ppn WHERE  product_group_id = $1', [id], (error, results) => {
+      if (error) {
+        throw error
+      }
+      response.status(200).json(results.rows)
+    })
+}
+
+const getProductCategoryNaming = (request, response, id) => {
+    pool.query('SELECT language, text FROM prm_product_category_name ppn WHERE  category_id = $1', [id], (error, results) => {
+      if (error) {
+        throw error
+      }
+      response.status(200).json(results.rows)
+    })
+}
+
 module.exports = {
   getProducts,
   getProductCategories,
@@ -252,5 +286,7 @@ module.exports = {
   createProductCategory,
   updateProductCategory,
   deleteProductCategory,
-  getProductNaming
+  getProductNaming,
+  getProductGroupNaming,
+  getProductCategoryNaming
 }

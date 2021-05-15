@@ -202,7 +202,7 @@
                       <div class="col-md-12 mb-3">
                           <label for="title">{{ $t('servicesAndProducts.addProductModal.nameSlovenian') }} *</label>
                         <div style="display: flex;">
-                          <input type="text" v-model="formGroupData.product_group_name" class="form-control" placeholder="Slovenian" required>
+                          <input type="text" v-model="formGroupData.slovenian" class="form-control" placeholder="Slovenian" required>
                         </div>
                       </div>
                       <div class="col-md-12 mb-3">
@@ -302,13 +302,13 @@
                         </template>
                     </template>
                 </iq-card>
-                <b-modal v-model="modalCategoryShow" no-close-on-backdrop size="lg" :title="$t('servicesAndProducts.addProductCategory')" :ok-disabled="isCategoryDisabled"  @cancel="cancelCategory" :ok-title="$t('servicesAndProducts.addProductModal.save')" @ok="addProductGroup" :cancel-title="$t('servicesAndProducts.addProductModal.close')">
+                <b-modal v-model="modalCategoryShow" no-close-on-backdrop size="lg" :title="$t('servicesAndProducts.addProductCategory')" :ok-disabled="isCategoryDisabled"  @cancel="cancelCategory" :ok-title="$t('servicesAndProducts.addProductModal.save')" @ok="addProductCategory" :cancel-title="$t('servicesAndProducts.addProductModal.close')">
                   <form>
                     <div class="form-row">
                       <div class="col-md-12 mb-3">
                           <label for="title">{{ $t('servicesAndProducts.addProductModal.nameSlovenian') }} *</label>
                         <div style="display: flex;">
-                          <input type="text" v-model="formCategoryData.category_name" class="form-control" placeholder="Slovenian" required>
+                          <input type="text" v-model="formCategoryData.slovenian" class="form-control" placeholder="Slovenian" required>
                         </div>
                       </div>
                       <div class="col-md-12 mb-3">
@@ -339,7 +339,7 @@
 
 <script>
 import { xray } from '../../config/pluginInit'
-import { getProducts, getProductNaming, getProductGroups, getProductCategories, getProductTypes, createProductCategory, updateProductCategory, deleteProductCategory, createProductGroup, updateProductGroup, deleteProductGroup, createProduct, deleteProduct, updateProduct } from '../../services/products'
+import { getProducts, getProductNaming, getProductGroupNaming, getProductCategoryNaming, getProductGroups, getProductCategories, getProductTypes, createProductCategory, updateProductCategory, deleteProductCategory, createProductGroup, updateProductGroup, deleteProductGroup, createProduct, deleteProduct, updateProduct } from '../../services/products'
 import { getTaxRateList } from '../../services/commonCodeLists'
 import { mapGetters } from 'vuex'
 
@@ -392,7 +392,7 @@ export default {
         tax_rate: ''
       },
       formGroupData: {
-        product_group_name: '',
+        slovenian: '',
         italian: '',
         german: '',
         english: '',
@@ -400,7 +400,7 @@ export default {
         fee: ''
       },
       formCategoryData: {
-        category_name: '',
+        slovenian: '',
         italian: '',
         german: '',
         english: ''
@@ -416,8 +416,6 @@ export default {
       isProductDataLoaded: false,
       isProductCategoryDataLoaded: false,
       isProductGroupDataLoaded: false,
-      isProductCategoryEdit: false,
-      isProductGroupEdit: false,
       currentProductPage: 1,
       productsPerPage: 20,
       productGroupColumns: [
@@ -449,15 +447,15 @@ export default {
       return this.selectedLang.value ? this.selectedLang.value : this.selectedLang
     },
     getProductCategories () {
-      let locale = this.getLocale()
-      getProductCategories(locale).then(response => {
+      // let locale = this.getLocale()
+      getProductCategories('sl').then(response => {
         this.isProductCategoryDataLoaded = true
         this.productCategories = response
       })
     },
     getProductGroups () {
-      let locale = this.getLocale()
-      getProductGroups(locale).then(response => {
+      // let locale = this.getLocale()
+      getProductGroups('sl').then(response => {
         this.isProductGroupDataLoaded = true
         this.productGroups = response
       })
@@ -482,7 +480,7 @@ export default {
     },
     defaultFormGroupData () {
       return {
-        product_group_name: '',
+        slovenian: '',
         italian: '',
         german: '',
         english: '',
@@ -492,7 +490,7 @@ export default {
     },
     defaultFormCategoryData () {
       return {
-        category_name: '',
+        slovenian: '',
         italian: '',
         german: '',
         english: ''
@@ -500,18 +498,7 @@ export default {
     },
     editProduct (item) {
       getProductNaming(item.product_id).then(response => {
-        this.formData = Object.assign({}, item)
-        response.forEach(naming => {
-          if (naming.language === 'sl') {
-            this.formData.slovenian = naming.text
-          } else if (naming.language === 'en') {
-            this.formData.english = naming.text
-          } else if (naming.language === 'it') {
-            this.formData.italian = naming.text
-          } else if (naming.language === 'ge') {
-            this.formData.german = naming.text
-          }
-        })
+        this.formData = this.populateNaming(response, Object.assign({}, item))
       })
       this.modalProductShow = true
     },
@@ -546,7 +533,9 @@ export default {
       this.formGroupData = this.defaultFormGroupData()
     },
     editProductGroup (item) {
-      this.formGroupData = Object.assign({}, item)
+      getProductGroupNaming(item.product_group_id).then(response => {
+        this.formGroupData = this.populateNaming(response, Object.assign({}, item))
+      })
       this.modalGroupShow = true
     },
     removeProductGroup (item) {
@@ -571,8 +560,24 @@ export default {
       this.formGroupData = this.defaultFormGroupData()
     },
     editProductCategory (item) {
-      this.formCategoryData = Object.assign({}, item)
+      getProductCategoryNaming(item.category_id).then(response => {
+        this.formCategoryData = this.populateNaming(response, Object.assign({}, item))
+      })
       this.modalCategoryShow = true
+    },
+    populateNaming (namingArray, object) {
+      namingArray.forEach(naming => {
+        if (naming.language === 'sl') {
+          object.slovenian = naming.text
+        } else if (naming.language === 'en') {
+          object.english = naming.text
+        } else if (naming.language === 'it') {
+          object.italian = naming.text
+        } else if (naming.language === 'ge') {
+          object.german = naming.text
+        }
+      })
+      return object
     },
     removeProductCategory (item) {
       let index = this.productCategories.indexOf(item)
