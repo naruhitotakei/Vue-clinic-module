@@ -84,6 +84,18 @@ export async function deleteProduct (id) {
   return rawResponse.json()
 }
 
+export async function getProductNaming (id) {
+  const rawResponse = await fetch('/api/products/' + id + '/product-naming', {
+    method: 'get',
+    credentials: 'same-origin',
+    headers: {
+      'Accept': 'application/json',
+      'Content-Type': 'application/json'
+    }
+  })
+  return rawResponse.json()
+}
+
 export async function createProductGroup (productGroup) {
   const rawResponse = await fetch('/api/productGroups', {
     method: 'POST',

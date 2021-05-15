@@ -61,13 +61,13 @@
                     </template>
                 </iq-card>
             </b-col>
-              <b-modal v-model="modalProductShow" no-close-on-backdrop size="lg" :title="$t('servicesAndProducts.addProductModal.addProduct')" :ok-disabled="isProductDisabled"  @cancel="cancelProduct" :ok-title="$t('servicesAndProducts.addProductModal.save')" @ok="addProduct" :cancel-title="$t('servicesAndProducts.addProductModal.close')">
+              <b-modal v-model="modalProductShow" no-close-on-backdrop size="lg" :title="$t('servicesAndProducts.addProductModal.addProduct')" :ok-disabled="isProductDisabled" @close="cancelProduct"  @cancel="cancelProduct" :ok-title="$t('servicesAndProducts.addProductModal.save')" @ok="addProduct" :cancel-title="$t('servicesAndProducts.addProductModal.close')">
                 <form>
                   <div class="form-row">
                     <div class="col-md-12 mb-3">
                         <label for="title">{{ $t('servicesAndProducts.addProductModal.nameSlovenian') }} *</label>
                       <div style="display: flex;">
-                        <input type="text" v-model="formData.product_name" class="form-control" placeholder="Slovenian" required>
+                        <input type="text" v-model="formData.slovenian" class="form-control" placeholder="Slovenian" required>
                       </div>
                     </div>
                     <div class="col-md-12 mb-3">
@@ -338,7 +338,7 @@
 
 <script>
 import { xray } from '../../config/pluginInit'
-import { getProducts, getProductGroups, getProductCategories, getProductTypes, createProductCategory, updateProductCategory, deleteProductCategory, createProductGroup, updateProductGroup, deleteProductGroup, createProduct, deleteProduct, updateProduct } from '../../services/products'
+import { getProducts, getProductNaming, getProductGroups, getProductCategories, getProductTypes, createProductCategory, updateProductCategory, deleteProductCategory, createProductGroup, updateProductGroup, deleteProductGroup, createProduct, deleteProduct, updateProduct } from '../../services/products'
 import { getTaxRateList } from '../../services/commonCodeLists'
 import { mapGetters } from 'vuex'
 
@@ -352,11 +352,10 @@ export default {
     this.getProductGroups()
     this.getProductTypes()
     this.getTaxRates()
-    console.log('lang: ' + this.selectedLang.value)
   },
   computed: {
     isProductDisabled () {
-      return !this.formData.product_name || !this.formData.tax_rate || !this.formData.product_price || !this.formData.product_group_id || !this.formData.product_type_id
+      return !this.formData.product_name || !this.formData.product_price || !this.formData.product_group_id || !this.formData.product_type_id
     },
     isGroupDisabled () {
       return !this.formGroupData.product_group_name || !this.formGroupData.category_id || !this.formGroupData.fee
@@ -379,7 +378,7 @@ export default {
         { label: this.$t('servicesAndProducts.productColumn.productAction'), key: 'action', class: 'text-center' }
       ],
       formData: {
-        product_name: '',
+        slovenian: '',
         italian: '',
         german: '',
         english: '',
@@ -495,7 +494,20 @@ export default {
       }
     },
     editProduct (item) {
-      this.formData = Object.assign({}, item)
+      getProductNaming(item.product_id).then(response => {
+        this.formData = Object.assign({}, item)
+        response.forEach(naming => {
+          if (naming.language === 'sl') {
+            this.formData.slovenian = naming.text
+          } else if (naming.language === 'en') {
+            this.formData.english = naming.text
+          } else if (naming.language === 'it') {
+            this.formData.italian = naming.text
+          } else if (naming.language === 'ge') {
+            this.formData.german = naming.text
+          }
+        })
+      })
       this.modalProductShow = true
     },
     removeProduct (item) {
