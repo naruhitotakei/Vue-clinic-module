@@ -1,5 +1,5 @@
 <template>
-<b-container fluid>
+<b-container ref="invoice" fluid>
     <b-row>
         <b-col lg="12">
             <iq-card>
@@ -26,7 +26,7 @@
                                     <b-td><strong>{{invoiceTotal | euro}}</strong></b-td>
                                     <b-td v-html="billingDetails"></b-td>
                                     <b-td>{{issuedIn}}</b-td>
-                                    <b-td>{{operator_name}}</b-td>
+                                    <b-td>{{logedInUser.name}}</b-td>
                                   </b-tr>
                                 </b-tbody>
                               </b-table-simple>
@@ -40,7 +40,7 @@
                                 <h5 style="margin-bottom: 15px;">{{ $t('invoices.newInvoice.newInvoiceDetails.header') }}</h5>
                             </template>
                             <template v-slot:headerAction>
-                                <b-button variant="primary" style="white-space:nowrap" @click="add"><i class="ri-add-line mr-2"></i>{{ $t('invoices.newInvoice.newInvoiceDetails.addNewItem') }}</b-button>
+                                <b-button variant="primary" data-html2canvas-ignore="true" style="white-space:nowrap" @click="add"><i class="ri-add-line mr-2"></i>{{ $t('invoices.newInvoice.newInvoiceDetails.addNewItem') }}</b-button>
                             </template>
                             <template v-slot:body>
                               <b-row>
@@ -69,8 +69,7 @@
                                     <template v-slot:cell(action)="data">
                                         <b-button variant=" iq-bg-success mr-1 mb-1" size="sm" @click="edit(data.item)" v-if="!data.item.editable"><i class="ri-ball-pen-fill m-0"></i></b-button>
                                         <b-button variant=" iq-bg-danger mr-1 mb-1" size="sm" v-if="!data.item.editable" @click="remove(data.item)"><i class="ri-delete-bin-line m-0"></i></b-button>
-                                        <b-button variant=" iq-bg-success mr-1 mb-1" size="sm" @click="submit(data.item)" v-if="data.item.editable"><i class="ri-checkbox-circle-fill m-0"></i></b-button>
-                                        <b-button variant=" iq-bg-danger mr-1 mb-1" size="sm" @click="cancel(data.item)" v-if="data.item.editable"><i class="ri-close-circle-fill m-0"></i></b-button>
+                                        <b-button :disabled="!data.item.item.name" variant=" iq-bg-success mr-1 mb-1" size="sm" @click="submit(data.item)" v-if="data.item.editable"><i class="ri-checkbox-circle-fill m-0"></i></b-button>
                                     </template>
                                   </b-table>
                                 </b-col>
@@ -114,8 +113,8 @@
                             </template>
                           </iq-card>
                         </b-col>
-                        <b-col offset="6" cols="6" class="text-right">
-                            <b-button variant="link mr-3">
+                        <b-col offset="6" cols="6" class="text-right" data-html2canvas-ignore="true">
+                            <b-button variant="link mr-3" @click="exportToPDF">
                                 <i class="ri-printer-line"></i>
                                 {{ $t('invoices.newInvoice.downloadPrint') }}
                             </b-button>
@@ -137,6 +136,7 @@
 import { xray } from '../../config/pluginInit'
 import moment from 'moment'
 import { sso } from '../../services/userService'
+import html2pdf from 'html2pdf.js'
 
 export default {
   name: 'NewInvoice',
@@ -154,7 +154,7 @@ export default {
         { label: this.$t('invoices.newInvoice.newInvoiceDetails.price'), key: 'price', class: 'text-left' },
         { label: this.$t('invoices.newInvoice.newInvoiceDetails.discount'), key: 'discount', class: 'text-left narrow-column' },
         { label: this.$t('invoices.newInvoice.newInvoiceDetails.total'), key: 'total', class: 'text-left' },
-        { label: this.$t('invoices.newInvoice.newInvoiceDetails.action'), key: 'action', class: 'text-center action-column' }
+        { label: this.$t('invoices.newInvoice.newInvoiceDetails.action'), key: 'action', class: 'text-center action-column', thAttr: { 'data-html2canvas-ignore': true }, tdAttr: { 'data-html2canvas-ignore': true } }
       ],
       rows: [
         {
@@ -187,7 +187,7 @@ export default {
         {
           key: 'dueDate',
           label: this.$t('invoices.newInvoice.newInvoiceSummary.dueDate'),
-          class: 'narrow-column'
+          class: 'action-column'
         },
         {
           key: 'paymentMethod',
@@ -208,18 +208,30 @@ export default {
         {
           label: this.$t('invoices.newInvoice.newInvoiceSummary.action'),
           key: 'action',
-          class: 'text-center action-column'
+          class: 'text-center action-column',
+          thAttr: { 'data-html2canvas-ignore': true },
+          tdAttr: { 'data-html2canvas-ignore': true }
         }
       ],
       invoiceDate: moment().format('DD MMM, YYYY'),
       billingDetails: this.$route.params.billingDetails,
       issuedIn: 'Ljubljana',
-      tempInvoice: null,
+      isEditMode: false,
       logedInUser: {},
       invoiceTotal: 0
     }
   },
   methods: {
+    exportToPDF () {
+      this.rows.pop()
+      let options = {
+        filename: 'invoice.pdf',
+        image: { type: 'jpeg', quality: 0.98 },
+        html2canvas: { y: 350 },
+        jsPDF: { unit: 'mm', format: 'legal', orientation: 'landscape' }
+      }
+      html2pdf().set(options).from(this.$refs.invoice).save()
+    },
     getInvoiceTotal () {
       let totalCount = 0
       let totalSubCount = 0
@@ -259,18 +271,17 @@ export default {
       })
     },
     edit (item) {
-      this.tempInvoice = Object.assign({}, item)
       item.editable = true
+      this.isEditMode = true
     },
     submit (item) {
       item.total = this.calculatePrice(item)
       item.editable = false
       this.getInvoiceTotal()
-      this.rows.push(this.default())
-    },
-    cancel (item) {
-      let index = this.rows.indexOf(item)
-      this.tempInvoice ? this.rows.splice(index, 1, this.tempInvoice) : this.rows.shift()
+      if (!this.isEditMode) {
+        this.rows.push(this.default())
+      }
+      this.isEditMode = false
     },
     remove (item) {
       let index = this.rows.indexOf(item)
