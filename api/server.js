@@ -50,6 +50,7 @@ const offersPermission = "Offers"
 const productsPermission = "Services and Products"
 const calendarPermission = "Calendar"
 const premisesPermission = "Locations"
+const usersPermission = "Users"
 
 ///////////////////////////////////
 // user login, logout, ...
@@ -263,6 +264,14 @@ app.delete('/api/productCategories/:id', (req, res) => {
         res.status(401).json("OK: user unauthorized")
 });
 
+app.get('/api/productGroups/:id/product-naming', (req, res) => {
+    const id = req.params.id
+    if (req.session.prm_user && req.session.prm_user.permissions && checkPermission(req.session.prm_user.permissions, productsPermission))
+        daoProducts.getProductGroupNaming(req, res, id)
+    else
+        res.status(401).json("OK: user unauthorized")
+});
+
 ///////////////////////////////////
 // premises
 ///////////////////////////////////
@@ -274,12 +283,16 @@ app.get('/api/premises', (req, res) => {
         res.status(401).json("OK: user unauthorized")
 });
 
-app.get('/api/productGroups/:id/product-naming', (req, res) => {
-    const id = req.params.id
-    if (req.session.prm_user && req.session.prm_user.permissions && checkPermission(req.session.prm_user.permissions, productsPermission))
-        daoProducts.getProductGroupNaming(req, res, id)
-    else
+///////////////////////////////////
+// settings -> users
+///////////////////////////////////
+
+app.get('/api/users', async function (req, res) {
+    if (req.session.prm_user) {
+        daoUser.getUsers(req, res)
+    } else {
         res.status(401).json("OK: user unauthorized")
+    }
 });
 
 ///////////////////////////////////

@@ -145,6 +145,15 @@ const getDentists = (request, response) => {
     })
 }
 
+const getUsers = (request, response) => {
+    pool.query("SELECT id, name, email AS mail, phone_number AS phone FROM users WHERE roles::text LIKE '%doctor%'", (error, results) => {
+        if (error) {
+            throw error
+        }
+        response.status(200).json(results.rows)
+    })
+}
+
 module.exports = {
   loginUser,
   getUserById,
@@ -152,4 +161,5 @@ module.exports = {
   changePassword,
   editProfile,
   getDentists,
+  getUsers
 }
