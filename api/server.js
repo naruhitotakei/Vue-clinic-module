@@ -24,6 +24,7 @@ const daoOffers = require('./dao/daoOffers')
 const daoCodeLists = require('./dao/daoCodeLists')
 const daoProducts = require('./dao/daoProducts')
 const daoCalendar = require('./dao/daoCalendar')
+const daoPremises = require('./dao/daoPremises')
 
 app.use(cors({
     origin: process.env.APP_URL || 'http://localhost:8080',
@@ -48,6 +49,7 @@ const advPaymentsPermission = "Advance Payments"
 const offersPermission = "Offers"
 const productsPermission = "Services and Products"
 const calendarPermission = "Calendar"
+const premisesPermission = "Locations"
 
 ///////////////////////////////////
 // user login, logout, ...
@@ -257,6 +259,25 @@ app.delete('/api/productCategories/:id', (req, res) => {
     const id = req.params.id
     if(req.session.prm_user && req.session.prm_user.permissions && checkPermission(req.session.prm_user.permissions, productsPermission))
         daoProducts.deleteProductCategory(req, res, id)
+    else
+        res.status(401).json("OK: user unauthorized")
+});
+
+///////////////////////////////////
+// premises
+///////////////////////////////////
+
+app.get('/api/premises', (req, res) => {
+    if (req.session.prm_user && req.session.prm_user.permissions && checkPermission(req.session.prm_user.permissions, premisesPermission))
+        daoPremises.getPremisesList(req, res)
+    else
+        res.status(401).json("OK: user unauthorized")
+});
+
+app.get('/api/productGroups/:id/product-naming', (req, res) => {
+    const id = req.params.id
+    if (req.session.prm_user && req.session.prm_user.permissions && checkPermission(req.session.prm_user.permissions, productsPermission))
+        daoProducts.getProductGroupNaming(req, res, id)
     else
         res.status(401).json("OK: user unauthorized")
 });
@@ -511,6 +532,7 @@ app.get('/api/codelist/country/:id/tax-rate', (req, res) => {
     const id = req.params.id
     daoCodeLists.getTaxRateList(req, res, id)
 });
+
 
 ///////////////////////////////////
 // common methodes

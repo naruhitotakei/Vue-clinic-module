@@ -409,6 +409,14 @@
   "settingsUsers": {
     "viewProfile": "View Profile"
   },
+  "settingsLocations": {
+    "headerLocations": "Locations",
+    "locationsColumn": {
+      "name": "Name",
+      "address": "Address",
+      "city": "City"
+    }
+  },
   "servicesAndProducts": {
     "headerProducts": "Products",
     "addProduct": "Add product",
