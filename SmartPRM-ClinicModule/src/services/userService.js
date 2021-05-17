@@ -67,3 +67,15 @@ export async function getDentists () {
   })
   return rawResponse.json()
 }
+
+export async function getUsers () {
+  const rawResponse = await fetch('/api/users', {
+    method: 'GET',
+    credentials: 'same-origin',
+    headers: {
+      'Accept': 'application/json',
+      'Content-Type': 'application/json'
+    }
+  })
+  return rawResponse.json()
+}

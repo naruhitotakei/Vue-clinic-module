@@ -409,6 +409,14 @@
   "settingsUsers": {
     "viewProfile": "Ogled profila"
   },
+  "settingsLocations": {
+    "headerLocations": "Lokacije",
+    "locationsColumn": {
+      "name": "Ime",
+      "address": "Naslov",
+      "city": "Kraj"
+    }
+  },
   "servicesAndProducts": {
     "headerProducts": "Produkti",
     "addProduct": "Dodaj produkt",
