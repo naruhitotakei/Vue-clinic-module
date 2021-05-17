@@ -26,7 +26,7 @@
                                     <b-td><strong>{{invoiceTotal | euro}}</strong></b-td>
                                     <b-td v-html="billingDetails"></b-td>
                                     <b-td>{{issuedIn}}</b-td>
-                                    <b-td>{{operator_name}}</b-td>
+                                    <b-td>{{logedInUser.name}}</b-td>
                                   </b-tr>
                                 </b-tbody>
                               </b-table-simple>
