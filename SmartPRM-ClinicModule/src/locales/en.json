@@ -407,7 +407,14 @@
     }
   },
   "settingsUsers": {
-    "viewProfile": "View Profile"
+    "editProfile": "Edit profile",
+    "editProfileModal": {
+      "name": "Name",
+      "mail": "Mail",
+      "phone": "Phone",
+      "close": "Close",
+      "save": "Save"
+    }
   },
   "settingsLocations": {
     "headerLocations": "Locations",

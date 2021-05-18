@@ -79,3 +79,16 @@ export async function getUsers () {
   })
   return rawResponse.json()
 }
+
+export async function updateUser (id, user) {
+  const rawResponse = await fetch('/api/users/' + id, {
+    method: 'PUT',
+    credentials: 'same-origin',
+    headers: {
+      'Accept': 'application/json',
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify(user)
+  })
+  return rawResponse.json()
+}
