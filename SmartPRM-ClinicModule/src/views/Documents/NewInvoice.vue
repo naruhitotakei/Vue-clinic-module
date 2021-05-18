@@ -136,6 +136,8 @@
 import { xray } from '../../config/pluginInit'
 import moment from 'moment'
 import { sso } from '../../services/userService'
+import { getCompanyById } from '../../services/companies'
+import { getEnquiryById } from '../../services/enquiry'
 import html2pdf from 'html2pdf.js'
 
 export default {
@@ -143,6 +145,7 @@ export default {
   mounted () {
     xray.index()
     this.getLoggedInUser()
+    this.getPatient()
     this.summaryRows.push(this.defaultSummary())
   },
   data () {
@@ -215,9 +218,12 @@ export default {
       ],
       invoiceDate: moment().format('DD MMM, YYYY'),
       billingDetails: this.$route.params.billingDetails,
+      enquireId: this.$route.params.enquireId,
       issuedIn: 'Ljubljana',
       isEditMode: false,
       logedInUser: {},
+      patient: {},
+      usersCompany: {},
       invoiceTotal: 0
     }
   },
@@ -268,6 +274,14 @@ export default {
     getLoggedInUser () {
       sso().then(response => {
         this.logedInUser = response
+        getCompanyById(this.logedInUser.prm_company_id).then(response => {
+          this.usersCompany = response
+        })
+      })
+    },
+    getPatient () {
+      getEnquiryById(this.enquireId).then(response => {
+        this.patient = response
       })
     },
     edit (item) {

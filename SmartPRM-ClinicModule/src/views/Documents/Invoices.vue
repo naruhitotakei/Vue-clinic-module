@@ -166,7 +166,7 @@ export default {
       this.$router.push({ path: `/documents/invoices/${item.invoice_number}` })
     },
     addInvoice () {
-      this.$router.push({ name: 'extra-pages.new-invoice', params: { billingDetails: this.createBillingDetails() } })
+      this.$router.push({ name: 'extra-pages.new-invoice', params: { enquireId: this.selectedPatient.id, billingDetails: this.createBillingDetails() } })
     },
     createBillingDetails () {
       let details = ''
