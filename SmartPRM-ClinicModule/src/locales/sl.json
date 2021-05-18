@@ -407,7 +407,14 @@
     }
   },
   "settingsUsers": {
-    "viewProfile": "Ogled profila"
+    "editProfile": "Uredi profil",
+    "editProfileModal": {
+      "name": "Ime",
+      "mail": "Mail",
+      "phone": "Telefon",
+      "close": "Zapri",
+      "save": "Shrani"
+    }
   },
   "settingsLocations": {
     "headerLocations": "Lokacije",
