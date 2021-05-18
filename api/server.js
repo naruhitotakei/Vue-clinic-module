@@ -25,6 +25,7 @@ const daoCodeLists = require('./dao/daoCodeLists')
 const daoProducts = require('./dao/daoProducts')
 const daoCalendar = require('./dao/daoCalendar')
 const daoPremises = require('./dao/daoPremises')
+const daoCompanies = require('./dao/daoCompanies')
 
 app.use(cors({
     origin: process.env.APP_URL || 'http://localhost:8080',
@@ -435,6 +436,25 @@ app.post('/api/assignments', (req, res) => {
   else
       res.status(401).json("OK: user unauthorized")
 });
+
+///////////////////////////////////
+// companies TODO: Check permissions for accessing companies
+///////////////////////////////////
+app.get('/api/companies', (req, res) => {
+  if(req.session.prm_user && req.session.prm_user.permissions && checkPermission(req.session.prm_user.permissions, assignmentsPermission))
+  daoCompanies.getCompanies(req, res)
+  else
+      res.status(401).json("OK: user unauthorized")
+});
+
+app.get('/api/companies/:id', (req, res) => {
+    const id = req.params.id
+
+    if(req.session.prm_user && req.session.prm_user.permissions && checkPermission(req.session.prm_user.permissions, assignmentsPermission))
+    daoCompanies.getCompanyById(req, res, id)
+    else
+        res.status(401).json("OK: user unauthorized")
+  });
 
 ///////////////////////////////////
 // invoices, fiscal verification
