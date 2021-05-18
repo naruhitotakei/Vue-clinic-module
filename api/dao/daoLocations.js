@@ -9,8 +9,8 @@ const pool = new Pool({
     port: process.env.POSTGRES_PORT || 5432,
 })
 
-const getPremisesList = (request, response) => {
-    pool.query("SELECT premise_name AS name, CONCAT(premise_street, ' ', premise_house_number, premise_house_number_additional) AS address, CONCAT(premise_post_code, ' ', premise_city) AS city FROM prm_company_premise WHERE company_id = 1", (error, results) => {
+const getLocationsList = (request, response) => {
+    pool.query("SELECT name, address, city FROM locations JOIN clients ON locations.client_id = clients.id WHERE blueprint = 'primadent'", (error, results) => {
         if (error) {
             throw error
         }
@@ -19,5 +19,5 @@ const getPremisesList = (request, response) => {
 }
 
 module.exports = {
-    getPremisesList
+    getLocationsList
 }

@@ -1,5 +1,5 @@
-export async function getPremisesList () {
-  const rawResponse = await fetch('/api/premises', {
+export async function getLocationsList () {
+  const rawResponse = await fetch('/api/locations', {
     method: 'GET',
     credentials: 'same-origin',
     headers: {

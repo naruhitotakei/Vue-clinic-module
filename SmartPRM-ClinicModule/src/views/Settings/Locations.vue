@@ -53,7 +53,7 @@
 
 <script>
 import { xray } from '../../config/pluginInit'
-import { getPremisesList } from '../../services/premises'
+import { getLocationsList } from '../../services/locations'
 export default {
   components: {
   },
@@ -64,14 +64,14 @@ export default {
       locations: [],
       columns: [
         { label: this.$t('settingsLocations.locationsColumn.name'), key: 'name', class: 'text-left' },
-        { label: this.$t('settingsLocations.locationsColumn.address'), key: 'address', class: 'text-left' },
-        { label: this.$t('settingsLocations.locationsColumn.city'), key: 'city', class: 'text-left' }
+        { label: this.$t('settingsLocations.locationsColumn.city'), key: 'city', class: 'text-left' },
+        { label: this.$t('settingsLocations.locationsColumn.address'), key: 'address', class: 'text-left' }
       ]
     }
   },
   methods: {
     getLocations () {
-      getPremisesList().then(response => {
+      getLocationsList().then(response => {
         this.locations = response
         this.toggleDataLoaded()
       })

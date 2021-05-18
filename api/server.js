@@ -24,7 +24,7 @@ const daoOffers = require('./dao/daoOffers')
 const daoCodeLists = require('./dao/daoCodeLists')
 const daoProducts = require('./dao/daoProducts')
 const daoCalendar = require('./dao/daoCalendar')
-const daoPremises = require('./dao/daoPremises')
+const daoLocations = require('./dao/daoLocations')
 
 app.use(cors({
     origin: process.env.APP_URL || 'http://localhost:8080',
@@ -49,7 +49,7 @@ const advPaymentsPermission = "Advance Payments"
 const offersPermission = "Offers"
 const productsPermission = "Services and Products"
 const calendarPermission = "Calendar"
-const premisesPermission = "Locations"
+const locationsPermission = "Locations"
 const usersPermission = "Users"
 
 ///////////////////////////////////
@@ -273,12 +273,12 @@ app.get('/api/productGroups/:id/product-naming', (req, res) => {
 });
 
 ///////////////////////////////////
-// premises
+// locations
 ///////////////////////////////////
 
-app.get('/api/premises', (req, res) => {
-    if (req.session.prm_user && req.session.prm_user.permissions && checkPermission(req.session.prm_user.permissions, premisesPermission))
-        daoPremises.getPremisesList(req, res)
+app.get('/api/locations', (req, res) => {
+    if (req.session.prm_user && req.session.prm_user.permissions && checkPermission(req.session.prm_user.permissions, locationsPermission))
+        daoLocations.getLocationsList(req, res)
     else
         res.status(401).json("OK: user unauthorized")
 });
@@ -288,7 +288,7 @@ app.get('/api/premises', (req, res) => {
 ///////////////////////////////////
 
 app.get('/api/users', async function (req, res) {
-    if (req.session.prm_user) {
+    if (req.session.prm_user && req.session.prm_user.permissions && checkPermission(req.session.prm_user.permissions, usersPermission)) {
         daoUser.getUsers(req, res)
     } else {
         res.status(401).json("OK: user unauthorized")
