@@ -287,9 +287,19 @@ app.get('/api/locations', (req, res) => {
 // settings -> users
 ///////////////////////////////////
 
-app.get('/api/users', async function (req, res) {
+app.get('/api/users', (req, res) => {
     if (req.session.prm_user && req.session.prm_user.permissions && checkPermission(req.session.prm_user.permissions, usersPermission)) {
         daoUser.getUsers(req, res)
+    } else {
+        res.status(401).json("OK: user unauthorized")
+    }
+});
+
+app.put('/api/users/:id', (req, res) => {
+    const id = req.params.id
+    const user = req.body
+    if (req.session.prm_user && req.session.prm_user.permissions && checkPermission(req.session.prm_user.permissions, usersPermission)) {
+        daoUser.updateUser(req, res, id, user)
     } else {
         res.status(401).json("OK: user unauthorized")
     }
@@ -298,6 +308,7 @@ app.get('/api/users', async function (req, res) {
 ///////////////////////////////////
 // enquiries, patients
 ///////////////////////////////////
+
 app.get('/api/enquiries', (req, res) => {
   if(req.session.prm_user && req.session.prm_user.permissions && checkPermission(req.session.prm_user.permissions, enquiriesPermission))
       daoEnquiries.getEnquiries(req, res)

@@ -154,6 +154,20 @@ const getUsers = (request, response) => {
     })
 }
 
+const updateUser = (req, res, id, user) => {
+    var statement = "UPDATE users SET "
+    if (user.name) statement += "name='" + user.name + "',"
+    if (user.mail) statement += "email='" + user.mail + "',"
+    if (user.phone) statement += "phone_number='" + user.phone + "',"
+    statement += "WHERE id = " + id
+    pool.query(statement, (error, results) => {
+        if (error) {
+            throw error
+        }
+    })
+    res.status(200).json(user)
+}
+
 module.exports = {
   loginUser,
   getUserById,
@@ -161,5 +175,6 @@ module.exports = {
   changePassword,
   editProfile,
   getDentists,
-  getUsers
+  getUsers,
+  updateUser
 }

@@ -11,6 +11,12 @@ building_section_number) VALUES
 (4, 1, 'Zobna ambulanta Primadent Šenčur', 'Poslovna cona A', '32', '/', '4208', 'Šenčur', 'SI', '2119', '1575', '1'),
 (5, 1, 'Zobna ambulanta Primadent Škofije', 'Spodnje Škofije', '147', '/', '6281', 'Škofije', 'SI', '2595', '142', '1');
 
+--############################################################
+--# Small alteration to invoice table
+--############################################################
+
+ALTER TABLE invoice DROP COLUMN premises_business_premise_id;
+
 
 UPDATE db_version SET version ='01.14', version_date=CURRENT_DATE WHERE resource='Tables';
 
