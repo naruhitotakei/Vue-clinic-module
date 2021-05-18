@@ -18,7 +18,7 @@ const getInvoices = (request, response) => {
     })
 }
 
-const getInvoicesById = (request, response, id) => {
+const getInvoiceById = (request, response, id) => {
     pool.query("SELECT invoice.*,enquiries.email,enquiries.phone, countries.name as country FROM invoice left join enquiries on invoice.enquiries_id = enquiries.id left join countries on invoice.enquiries_country_code = countries.code WHERE invoice.invoice_number = $1", [id] , (error, results) => {
         if (error) {
             throw error
@@ -29,5 +29,5 @@ const getInvoicesById = (request, response, id) => {
 
 module.exports = {
     getInvoices,
-    getInvoicesById
+    getInvoiceById
 }
