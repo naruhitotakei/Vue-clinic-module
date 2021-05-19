@@ -24,7 +24,6 @@ const daoOffers = require('./dao/daoOffers')
 const daoCodeLists = require('./dao/daoCodeLists')
 const daoProducts = require('./dao/daoProducts')
 const daoCalendar = require('./dao/daoCalendar')
-const daoPremises = require('./dao/daoPremises')
 const daoCompanies = require('./dao/daoCompanies')
 const daoLocations = require('./dao/daoLocations')
 
