@@ -17,6 +17,37 @@ building_section_number) VALUES
 
 ALTER TABLE invoice DROP COLUMN premises_business_premise_id;
 
+--############################################################
+--# Adding tax_number column to users table
+--############################################################
+
+ALTER TABLE users ADD COLUMN tax_number VARCHAR(32);
+
+--############################################################
+--# Inserting "SuperCaller" role into prm_role and 
+--# entering key relations between users
+--############################################################
+
+INSERT INTO prm_role (role_id, role_name) VALUES (9, 'SuperCaller');
+
+UPDATE users SET prm_role_id = 9 WHERE id = 130;
+UPDATE users SET prm_role_id = 5 WHERE id = 39;
+UPDATE users SET prm_role_id = 3 WHERE id = 140;
+
+INSERT INTO users (name, email, prm_role_id) VALUES
+('Uroš Krmac', 'uros.krmac@gmail.com', 1),
+('Gaja Bužan', 'gaja.buzan@gmail.com', 4),
+('Lea Žgur', 'lea.zgur@gmail.com', 4),
+('Sestra Primadent', 'NursePrimadent@gmail.com', 7),
+('SuperSestra Primadent', 'SuperNursePrimadent@gmail.com', 8);
+
+UPDATE users SET roles = '{doctor}' WHERE id = 148;
+UPDATE users SET roles = '{doctor}' WHERE id = 149;
+
+UPDATE users SET accessible_user_ids = '{38, 148, 149}' WHERE id = 39;
+UPDATE users SET accessible_user_ids = '{38}' WHERE id = 150;
+UPDATE users SET accessible_user_ids = '{17,27,28,29,30,51,62,98,103,104,105,106,107,108,110,119,120,121,125,126,129,136,137,148,149}' WHERE id = 151;
+
 
 UPDATE db_version SET version ='01.14', version_date=CURRENT_DATE WHERE resource='Tables';
 
