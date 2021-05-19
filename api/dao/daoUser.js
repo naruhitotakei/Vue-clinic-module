@@ -146,7 +146,7 @@ const getDentists = (request, response) => {
 }
 
 const getUsers = (request, response) => {
-    pool.query("SELECT id, name, email AS mail, phone_number AS phone FROM users WHERE roles::text LIKE '%doctor%'", (error, results) => {
+    pool.query("SELECT id, name, email AS mail, phone_number AS phone FROM users WHERE roles::text LIKE '%doctor%' AND active = true", (error, results) => {
         if (error) {
             throw error
         }
