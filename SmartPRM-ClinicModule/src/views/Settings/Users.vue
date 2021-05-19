@@ -36,7 +36,7 @@
                         </div>
                     </div>
                     <div class="col-md-12 mb-3">
-                        <label for="title">{{ $t('settingsUsers.editProfileModal.mail') }}</label>
+                        <label for="title">{{ $t('settingsUsers.editProfileModal.mail') }} *</label>
                         <div style="display: flex;">
                             <input type="text" v-model="formData.mail" class="form-control" :placeholder="$t('settingsUsers.editProfileModal.mail')">
                         </div>
@@ -101,7 +101,7 @@ export default {
   },
   computed: {
     isEditDisabled () {
-      return !this.formData.name
+      return !this.formData.name || !this.formData.mail
     }
   }
 }

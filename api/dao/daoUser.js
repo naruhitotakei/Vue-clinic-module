@@ -155,9 +155,11 @@ const getUsers = (request, response) => {
 }
 
 const updateUser = (req, res, id, user) => {
-    let statement = "UPDATE users SET " + "name='" + user.name + "'," + "email='" + user.mail + "'," + "phone_number='" + user.number + "',"
+    let statement = "UPDATE users SET " + "name='" + user.name + "', " + "email='" + user.mail + "',"
+    if (user.phone) statement += "phone_number='" + user.phone + "',"
     statement = statement.slice(0, -1)
-    statement += "WHERE id = " + id
+    statement += " WHERE id = " + id
+    console.log(statement)
     pool.query(statement, (error, results) => {
         if (error) {
             throw error
