@@ -137,7 +137,7 @@ const editProfile = ((request, response, profile) => {
 })
 
 const getDentists = (request, response) => {
-    pool.query("SELECT u.id as code, u.name as label FROM users u", (error, results) => {
+    pool.query("SELECT u.id as code, u.name as label FROM users u WHERE roles::text LIKE '%doctor%' AND active = true", (error, results) => {
         if (error) {
             throw error
         }
