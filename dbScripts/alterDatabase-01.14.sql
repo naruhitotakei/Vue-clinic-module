@@ -48,6 +48,32 @@ UPDATE users SET accessible_user_ids = '{38, 148, 149}' WHERE id = 39;
 UPDATE users SET accessible_user_ids = '{38}' WHERE id = 150;
 UPDATE users SET accessible_user_ids = '{17,27,28,29,30,51,62,98,103,104,105,106,107,108,110,119,120,121,125,126,129,136,137,148,149}' WHERE id = 151;
 
+ALTER TABLE users DROP COLUMN prm_company_id;
+
+ALTER TABLE users ADD COLUMN prm_client_id INT 
+CONSTRAINT users_prm_client_fk REFERENCES prm_client (id);
+
+CREATE TABLE IF NOT EXISTS users_prm_client (
+	id					SERIAL PRIMARY KEY,
+	user_id				INT CONSTRAINT users_prm_client_users_pk REFERENCES users (id),
+	prm_client_id		INT CONSTRAINT users_prm_client_prm_client_pk REFERENCES prm_client (id),
+	name				VARCHAR(128) NOT NULL,
+	email				VARCHAR(128),
+	phone				VARCHAR(128),
+	title				VARCHAR(64),
+	specialization		VARCHAR(256),
+	role				TEXT[],
+	active				BOOLEAN DEFAULT 't',
+	created_at			DATE NOT NULL DEFAULT CURRENT_DATE,
+	updated_at			DATE
+);
+
+ALTER TABLE enquiries DROP COLUMN prm_dentist_user_id;
+ALTER TABLE enquiries DROP COLUMN prm_surgeon_user_id;
+
+ALTER TABLE enquiries ADD COLUMN prm_dentist_user_id INT references users_prm_client (id) on delete set null;
+ALTER TABLE enquiries ADD COLUMN prm_surgeon_user_id INT references users_prm_client (id) on delete set null;
+
 
 UPDATE db_version SET version ='01.14', version_date=CURRENT_DATE WHERE resource='Tables';
 

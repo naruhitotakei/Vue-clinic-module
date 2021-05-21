@@ -316,7 +316,7 @@
                                                   <template slot="label">
                                                       {{ $t('EPR.personalInfo.personalSurgeon') }}:
                                                   </template>
-                                                <v-select :disabled="disabled" :clearable="false" :reduce="dentist => dentist.code" class="style-chooser" v-model="patient.prm_surgeon_user_id" :options="dentists"></v-select>
+                                                <v-select :disabled="disabled" :clearable="false" :reduce="dentist => dentist.code" class="style-chooser" v-model="patient.prm_surgeon_user_id" :options="surgeons"></v-select>
                                                 </b-form-group>
                                               </div>
                                           </div>
@@ -504,7 +504,7 @@
 <script>
 import { xray } from '../../config/pluginInit'
 import { getEnquiryById, updateEnquiry, getEnquiryNotes, getEnquiryAppointments, getEnquiryInvoices, getEnquiryOffers, getEnquiryServices } from '../../services/enquiry'
-import { getDentists } from '../../services/userService'
+import { getDentists, getSurgeons } from '../../services/userService'
 import { getCountriesList, getRegionsList } from '../../services/commonCodeLists'
 import moment from 'moment'
 
@@ -518,6 +518,7 @@ export default {
     this.getCountries()
     this.getRegions()
     this.getDentists()
+    this.getSurgeons()
     this.getPatientInvoices(this.patientId)
     this.getPatientOffers(this.patientId)
     this.getPatientServices(this.patientId)
@@ -537,8 +538,8 @@ export default {
       })
     },
     patientsSurgeon: function () {
-      return this.dentists.find((item) => {
-        return item.code === this.patient.prm_dentist_user_id
+      return this.surgeons.find((item) => {
+        return item.code === this.patient.prm_surgeon_user_id
       })
     },
     futureAppointments: function () {
@@ -584,6 +585,7 @@ export default {
       appointments: [],
       timeSinceFirstVisit: '',
       dentists: [],
+      surgeons: [],
       filter: '',
       filterOn: [],
       invoices: [],
@@ -755,6 +757,11 @@ export default {
     getDentists () {
       getDentists().then(response => {
         this.dentists = response
+      })
+    },
+    getSurgeons () {
+      getSurgeons().then(response => {
+        this.surgeons = response
       })
     },
     getCountries () {

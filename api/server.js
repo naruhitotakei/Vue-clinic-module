@@ -112,6 +112,14 @@ app.get('/api/dentists', async function(req, res) {
     }    
 });
 
+app.get('/api/surgeons', async function (req, res) {
+    if (req.session.prm_user) {
+        daoUser.getSurgeons(req, res)
+    } else {
+        res.status(200).json("NOK: user not logged in")
+    }
+});
+
 ///////////////////////////////////
 // calendar
 ///////////////////////////////////
