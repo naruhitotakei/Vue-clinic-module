@@ -9,12 +9,7 @@
                         </div>
                         <div class="iq-doc-info mt-3">
                             <h4> {{user.name}}</h4>
-                         <!-- <p class="mb-0">{{doctor.specialist}}</p>
-                              <a href="javascript:void(0);">{{doctor.website}}</a> -->
                         </div>
-                     <!--<div class="iq-doc-description mt-2">
-                          <p class="mb-0">{{doctor.description}}</p>
-                         </div>-->
                         <div class="iq-doc-description mt-2">
                             <p class="mb-0">{{user.mail}}</p>
                         </div>

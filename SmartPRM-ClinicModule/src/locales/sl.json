@@ -418,10 +418,20 @@
   },
   "settingsLocations": {
     "headerLocations": "Lokacije",
+    "addLocation": "Dodaj lokacijo",
     "locationsColumn": {
       "name": "Ime",
       "address": "Naslov",
-      "city": "Kraj"
+      "city": "Kraj",
+      "action": "Urejaj"
+    },
+    "editLocationModal": {
+      "header": "Dodaj lokacijo",
+      "name": "Ime",
+      "city": "Address",
+      "address": "Naslov",
+      "save": "Shrani",
+      "close": "Zapri"
     }
   },
   "servicesAndProducts": {

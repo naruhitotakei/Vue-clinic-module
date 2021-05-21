@@ -418,10 +418,20 @@
   },
   "settingsLocations": {
     "headerLocations": "Locations",
+    "addLocation": "Add location",
     "locationsColumn": {
       "name": "Name",
       "address": "Address",
-      "city": "City"
+      "city": "City",
+      "action": "Action"
+    },
+    "editLocationModal": {
+      "header": "Add location",
+      "name": "Name",
+      "city": "City",
+      "address": "Address",
+      "save": "Save",
+      "close":  "Close"
     }
   },
   "servicesAndProducts": {
