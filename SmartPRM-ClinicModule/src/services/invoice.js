@@ -22,19 +22,8 @@ export async function getInvoiceById (id) {
   return rawResponse.json()
 }
 
-// invoice syntax
-// all elements are optionall
-// {
-//   name: 'ime',
-//   phone, 'tel',
-//   email, 'email',
-//   client_id: 23,
-//   gender: 'female',
-//   last_name: 'priimek',
-//   lead_owner_id: 0
-// }
 export async function createInvoice (invoice) {
-  const rawResponse = await fetch('/api/invoices/', {
+  const rawResponse = await fetch('/api/invoices', {
     method: 'POST',
     credentials: 'same-origin',
     headers: {

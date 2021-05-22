@@ -50,9 +50,9 @@
                                       <span>{{ rows.indexOf(data.item) + 1 }}</span>
                                     </template>
                                     <template v-slot:cell(name)="data">
-                                      <span v-if="!data.item.editable">{{ data.item.item.name }}</span>
+                                      <span v-if="!data.item.editable">{{ data.item.item.product_name }}</span>
                                       <div v-else>
-                                      <v-select :clearable="false" label="name" class="style-chooser" v-model="data.item.item" :options="options" @input="getPrice"></v-select>
+                                      <v-select :clearable="false" label="product_name" class="style-chooser" v-model="data.item.item" :options="products" @input="getPrice"></v-select>
                                       </div>
                                     </template>
                                     <template v-slot:cell(quantity)="data">
@@ -60,7 +60,7 @@
                                       <input type="number" min="1" v-model="data.item.quantity" v-else class="form-control">
                                     </template>
                                     <template v-slot:cell(price)="data">
-                                      <span>{{ data.item.item.price }}</span>
+                                      <span>{{ data.item.item.product_price }}</span>
                                     </template>
                                     <template v-slot:cell(discount)="data">
                                       <span v-if="!data.item.editable">{{ data.item.discount | percentage }}</span>
@@ -69,7 +69,7 @@
                                     <template v-slot:cell(action)="data">
                                         <b-button variant=" iq-bg-success mr-1 mb-1" size="sm" @click="edit(data.item)" v-if="!data.item.editable"><i class="ri-ball-pen-fill m-0"></i></b-button>
                                         <b-button variant=" iq-bg-danger mr-1 mb-1" size="sm" v-if="!data.item.editable" @click="remove(data.item)"><i class="ri-delete-bin-line m-0"></i></b-button>
-                                        <b-button :disabled="!data.item.item.name" variant=" iq-bg-success mr-1 mb-1" size="sm" @click="submit(data.item)" v-if="data.item.editable"><i class="ri-checkbox-circle-fill m-0"></i></b-button>
+                                        <b-button :disabled="!data.item.item.product_name" variant=" iq-bg-success mr-1 mb-1" size="sm" @click="submit(data.item)" v-if="data.item.editable"><i class="ri-checkbox-circle-fill m-0"></i></b-button>
                                     </template>
                                   </b-table>
                                 </b-col>
@@ -118,10 +118,10 @@
                                 <i class="ri-printer-line"></i>
                                 {{ $t('invoices.newInvoice.downloadPrint') }}
                             </b-button>
-                            <b-button variant="primary mr-4">
+                            <b-button variant="primary mr-4" @click="saveAsDraft">
                                 <i class="ri-bookmark-3-fill mr-2"></i>{{ $t('invoices.newInvoice.saveAsDraft') }}
                             </b-button>
-                            <b-button variant="primary mr-3">
+                            <b-button variant="primary mr-3" @click="saveInvoice">
                                 <i class="ri-save-3-line mr-2"></i>{{ $t('invoices.newInvoice.saveInvoice') }}
                             </b-button>
                         </b-col>
@@ -138,7 +138,10 @@ import moment from 'moment'
 import { sso } from '../../services/userService'
 import { getCompanyById } from '../../services/companies'
 import { getEnquiryById } from '../../services/enquiry'
+import { createInvoice } from '../../services/invoice'
+import { getProducts } from '../../services/products'
 import html2pdf from 'html2pdf.js'
+import _ from 'lodash'
 
 export default {
   name: 'NewInvoice',
@@ -146,6 +149,7 @@ export default {
     xray.index()
     this.getLoggedInUser()
     this.getPatient()
+    this.getProducts()
     this.summaryRows.push(this.defaultSummary())
   },
   data () {
@@ -173,12 +177,7 @@ export default {
         }
       ],
       summaryRows: [],
-      options: [
-        { id: 1, name: 'Odstranitev zobnega kamna', price: 300 },
-        { id: 2, name: 'Beljenje zob', price: 50 },
-        { id: 3, name: 'Zobni implantat', price: 100 },
-        { id: 4, name: 'Odstranitev kamna', price: 200 }
-      ],
+      products: [],
       paymentMethods: [
         { id: null, name: 'Select method' },
         { id: 1, name: 'Cash' },
@@ -224,7 +223,8 @@ export default {
       logedInUser: {},
       patient: {},
       usersCompany: {},
-      invoiceTotal: 0
+      invoiceTotal: 0,
+      invoice: {}
     }
   },
   methods: {
@@ -266,22 +266,27 @@ export default {
       this.selectedItemName = item.name
     },
     calculatePrice (item) {
-      return item.item.price ? item.quantity * (item.item.price - (item.item.price * item.discount / 100)) : 0
+      return item.item.product_price ? item.quantity * (item.item.product_price - (item.item.product_price * item.discount / 100)) : 0
     },
     calculatePriceBeforeDiscount (item) {
-      return item.item.price ? item.quantity * item.item.price : 0
+      return item.item.product_price ? item.quantity * item.item.product_price : 0
     },
     getLoggedInUser () {
       sso().then(response => {
         this.logedInUser = response
         getCompanyById(this.logedInUser.prm_company_id).then(response => {
-          this.usersCompany = response
+          this.usersCompany = response[0]
         })
       })
     },
     getPatient () {
       getEnquiryById(this.enquireId).then(response => {
-        this.patient = response
+        this.patient = response[0]
+      })
+    },
+    getProducts () {
+      getProducts('sl').then(response => {
+        this.products = response
       })
     },
     edit (item) {
@@ -308,9 +313,7 @@ export default {
     default () {
       return {
         id: this.rows.length + 1,
-        item: {
-          name: ''
-        },
+        item: {},
         quantity: '1',
         price: '0',
         discount: '',
@@ -328,6 +331,52 @@ export default {
         total: this.invoiceTotal,
         editable: true
       }
+    },
+    saveAsDraft () {
+      this.prepareInvoice('draft')
+      this.createInvoice()
+    },
+    saveInvoice () {
+      this.prepareInvoice()
+      this.createInvoice()
+    },
+    createInvoice () {
+      this.rows.pop()
+      createInvoice(this.invoice).then(response => {
+        console.log('Saved')
+      })
+    },
+    prepareInvoice (status) {
+      let temp = {
+        invoice_type: 'Invoice',
+        invoice_time: moment(this.invoiceDate).format('YYYY MM DD HH:MM:SS'),
+        invoice_number: '02-blagajna1-21aleksa',
+        invoice_numbering_structure: '{c}',
+        issued_in: this.issuedIn,
+        lines_sum: this.summaryRows[0].subTotal,
+        discount_sum: this.summaryRows[0].subTotal - this.invoiceTotal,
+        charges_sum: this.invoiceTotal,
+        total_without_vat: 0,
+        total_vat_amount: 0,
+        total_with_vat: 0,
+        paid_amount: 0,
+        amount_due_for_payment: 0,
+        payment_method: this.summaryRows[0].paymentMethod,
+        warranty: true,
+        vat_exemption_reason: 'test',
+        operator_name: this.logedInUser.name,
+        operator_tax_number: this.logedInUser.tax_number,
+        zoi: 'test',
+        eor: 'test',
+        invoice_special_notes: 'test',
+        reverted: false,
+        device_id: 0,
+        premise_id: 0,
+        item_id: 0,
+        business_customer_id: 0,
+        invoice_status: status
+      }
+      this.invoice = _.assignIn(this.invoice, this.patient, this.usersCompany, temp)
     }
   }
 }
