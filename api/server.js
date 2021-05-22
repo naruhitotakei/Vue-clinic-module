@@ -26,6 +26,7 @@ const daoProducts = require('./dao/daoProducts')
 const daoCalendar = require('./dao/daoCalendar')
 const daoCompanies = require('./dao/daoCompanies')
 const daoLocations = require('./dao/daoLocations')
+const daoCompanyPremises = require('./dao/daoCompanyPremises')
 
 app.use(cors({
     origin: process.env.APP_URL || 'http://localhost:8080',
@@ -583,6 +584,13 @@ app.get('/api/codelist/locations', (req, res) => {
 app.get('/api/codelist/country/:id/tax-rate', (req, res) => {
     const id = req.params.id
     daoCodeLists.getTaxRateList(req, res, id)
+});
+
+///////////////////////////////////
+// company premises
+///////////////////////////////////
+app.get('/api/comapny-premises', (req, res) => {
+    daoCompanyPremises.getCompanyPremises(req, res)
 });
 
 
