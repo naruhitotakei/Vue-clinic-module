@@ -10,7 +10,7 @@ const pool = new Pool({
 })
 
 const getCompanyPremises = (request, response) => {
-    pool.query("SELECT * FROM prm_company_premise", (error, results) => {
+    pool.query("SELECT pcp.premise_name, pcp.premise_street, pcp.premise_house_number,pc.company_name FROM prm_company_premise pcp JOIN prm_company pc ON pcp.company_id = pc.company_id", (error, results) => {
         if (error) {
             throw error
         }
