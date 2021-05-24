@@ -86,25 +86,31 @@ ALTER TABLE prm_company_premise_device ADD COLUMN device_name VARCHAR(128);
 ALTER TABLE users ADD COLUMN prm_company_id INT 
 CONSTRAINT users_prm_company_fk REFERENCES prm_company (company_id);
 
-ALTER TABLE locations ADD COLUMN name VARCHAR(256);
+--############################################################
+--# Adding name column in locations table and updating values
+--############################################################
 
-UPDATE locations SET name = 'Klinika Primadent Šenčur' WHERE id = 64;
-UPDATE locations SET name = 'Klinika Primadent Šenčur' WHERE id = 65;
-UPDATE locations SET name = 'Klinika Primadent Šenčur' WHERE id = 66;
-UPDATE locations SET name = 'Maribor' WHERE id = 67;
-UPDATE locations SET name = 'Klinika Primadent Celje' WHERE id = 68;
-UPDATE locations SET name = 'Klinika Primadent Ljubljana' WHERE id = 69;
-UPDATE locations SET name = 'Klinika Primadent Ljubljana' WHERE id = 71;
-UPDATE locations SET name = 'Klinika Primadent Šenčur' WHERE id = 72;
-UPDATE locations SET name = 'Klinika Primadent Šenčur' WHERE id = 73;
-UPDATE locations SET name = 'Klinika Primadent Šenčur' WHERE id = 74;
-UPDATE locations SET name = 'Maribor' WHERE id = 75;
-UPDATE locations SET name = 'Klinika Primadent Škofije' WHERE id = 77;
-UPDATE locations SET name = 'Klinika Primadent Škofije' WHERE id = 78;
-UPDATE locations SET name = 'Celje' WHERE id = 100;
-UPDATE locations SET name = 'Ljubljana' WHERE id = 101;
-UPDATE locations SET name = 'Klinika Primadent Celje' WHERE id = 103;
-UPDATE locations SET name = 'Ljubljana (Tina)' WHERE id = 107;
+ALTER TABLE locations ADD COLUMN name VARCHAR(256);
+ALTER TABLE locations ADD COLUMN prm_client_id INT
+CONSTRAINT locations_prm_client_fk REFERENCES prm_client (id);
+
+UPDATE locations SET name = 'Klinika Primadent Šenčur', prm_client_id = 1 WHERE id = 64;
+UPDATE locations SET name = 'Klinika Primadent Šenčur', prm_client_id = 1 WHERE id = 65;
+UPDATE locations SET name = 'Klinika Primadent Šenčur', prm_client_id = 1 WHERE id = 66;
+UPDATE locations SET name = 'Maribor', prm_client_id = 1 WHERE id = 67;
+UPDATE locations SET name = 'Klinika Primadent Celje', prm_client_id = 1 WHERE id = 68;
+UPDATE locations SET name = 'Klinika Primadent Ljubljana', prm_client_id = 1 WHERE id = 69;
+UPDATE locations SET name = 'Klinika Primadent Ljubljana', prm_client_id = 1 WHERE id = 71;
+UPDATE locations SET name = 'Klinika Primadent Šenčur', prm_client_id = 1 WHERE id = 72;
+UPDATE locations SET name = 'Klinika Primadent Šenčur', prm_client_id = 1 WHERE id = 73;
+UPDATE locations SET name = 'Klinika Primadent Šenčur', prm_client_id = 1 WHERE id = 74;
+UPDATE locations SET name = 'Maribor', prm_client_id = 1 WHERE id = 75;
+UPDATE locations SET name = 'Klinika Primadent Škofije', prm_client_id = 1 WHERE id = 77;
+UPDATE locations SET name = 'Klinika Primadent Škofije', prm_client_id = 1 WHERE id = 78;
+UPDATE locations SET name = 'Celje', prm_client_id = 1 WHERE id = 100;
+UPDATE locations SET name = 'Ljubljana', prm_client_id = 1 WHERE id = 101;
+UPDATE locations SET name = 'Klinika Primadent Celje', prm_client_id = 1 WHERE id = 103;
+UPDATE locations SET name = 'Ljubljana (Tina)', prm_client_id = 1 WHERE id = 107;
 
 UPDATE db_version SET version ='01.14', version_date=CURRENT_DATE WHERE resource='Tables';
 
