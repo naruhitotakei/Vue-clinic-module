@@ -23,7 +23,7 @@ export async function getInactiveLocationsList () {
 }
 
 export async function createLocation (location) {
-  const rawResponse = await fetch('/api/locations', {
+  const rawResponse = await fetch('/api/locations/', {
     method: 'POST',
     credentials: 'same-origin',
     headers: {
@@ -48,7 +48,7 @@ export async function updateLocation (id, location) {
   return rawResponse.json()
 }
 
-export async function deactiveLocation (id, location) {
+export async function deactivateLocation (id, location) {
   const rawResponse = await fetch('api/locations/' + id, {
     method: 'PUT',
     credentials: 'same-origin',
@@ -61,7 +61,7 @@ export async function deactiveLocation (id, location) {
   return rawResponse.json()
 }
 
-export async function reactiveLocation (id, location) {
+export async function reactivateLocation (id, location) {
   const rawResponse = await fetch('api/locations/' + id, {
     method: 'PUT',
     credentials: 'same-origin',

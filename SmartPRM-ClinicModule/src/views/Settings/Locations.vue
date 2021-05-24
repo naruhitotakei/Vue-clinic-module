@@ -6,7 +6,7 @@
                     <template v-slot:headerTitle>
                         <h3 class="card-title" style="margin-top: 10px;">{{ $t('settingsLocations.headerLocations') }}</h3>
                         <div class="btn-add-patient mb-4 mt-0">
-                            <b-button variant="primary" @click="addLocation"><i class="ri-add-line mr-2"></i>{{ $t('settingsLocations.addLocation') }}</b-button>
+                            <b-button variant="primary" @click="editLocationModal = true"><i class="ri-add-line mr-2"></i>{{ $t('settingsLocations.addLocation') }}</b-button>
                         </div>
                     </template>
                     <template v-slot:body>
@@ -36,7 +36,7 @@
                 </iq-card>
             </b-col>
         </b-row>
-        <b-modal v-model="editLocationModal" no-close-on-backdrop size="lg" :title="$t('settingsLocations.editLocationModal.header')" @close="editLocationModal = false" @cancel="editLocationModal = false" :ok-title="$t('settingsUsers.editProfileModal.save')" :cancel-title="$t('settingsUsers.editProfileModal.close')">
+        <b-modal v-model="editLocationModal" no-close-on-backdrop size="lg" :title="$t('settingsLocations.editLocationModal.header')" @close="editLocationModal = false" @cancel="editLocationModal = false" @ok="addLocation" :ok-title="$t('settingsUsers.editProfileModal.save')" :cancel-title="$t('settingsUsers.editProfileModal.close')">
             <form>
                 <div class="form-row">
                     <div class="col-md-12 mb-3">
@@ -65,7 +65,7 @@
 
 <script>
 import { xray } from '../../config/pluginInit'
-import { getLocationsList } from '../../services/locations'
+import { getLocationsList, createLocation } from '../../services/locations'
 export default {
   components: {
   },
@@ -109,8 +109,9 @@ export default {
       this.formData = item
     },
     addLocation () {
-      this.editLocationModal = true
-      this.formData = this.defaultFormData
+      createLocation(this.formData).then(() => {
+        this.getLocations()
+      })
     }
   },
   mounted () {

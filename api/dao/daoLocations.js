@@ -10,7 +10,7 @@ const pool = new Pool({
 })
 
 const getLocationsList = (request, response) => {
-    pool.query("SELECT l.name AS name, l.address AS address, l.city AS city FROM locations l JOIN clients ON l.client_id = clients.id WHERE blueprint = 'primadent' AND clients.name NOT LIKE '%vidim%' AND active = true", (error, results) => {
+    pool.query("SELECT name, address, city FROM locations WHERE prm_client_id = 1 AND active = true", (error, results) => {
         if (error) {
             throw error
         }
@@ -28,13 +28,13 @@ const getInactiveLocationsList = (request, response) => {
 }
 
 const createLocation = (req, res, location) => {
-    var statement = "INSERT INTO locations (name, city, address, created_at, active, prm_client_id) VALUES ('" + location.name + "', " + "'" + location.city + "', " + "'" + location.address + "', " + "true, NOW(), 1" + ") RETURNING id"
+    var statement = "INSERT INTO locations (name, city, address, created_at, active, prm_client_id) VALUES ('" + location.name + "', " + "'" + location.city + "', " + "'" + location.address + "', " + "true, NOW(), 1" + ");"
     console.log(statement)
     pool.query(statement, (error, results) => {
         if (error) {
             throw error
         }
-        res.status.json("OK")
+        res.status(200).json("OK")
     })
 
 }
