@@ -1,5 +1,6 @@
 const path = require('path');
 const express = require('express');
+const fileUpload = require('express-fileupload');
 var Rollbar = require('rollbar');
 var rollbar = new Rollbar({
   accessToken: '1922e9135f0a45a292341f0137316fc7',
@@ -26,7 +27,11 @@ const daoProducts = require('./dao/daoProducts')
 const daoCalendar = require('./dao/daoCalendar')
 const daoCompanies = require('./dao/daoCompanies')
 const daoLocations = require('./dao/daoLocations')
+const awsS3 = require('./services/awsS3')
 
+app.use(fileUpload({
+    createParentPath: true
+}));
 app.use(cors({
     origin: process.env.APP_URL || 'http://localhost:8080',
     credentials: true
@@ -583,6 +588,19 @@ app.get('/api/codelist/locations', (req, res) => {
 app.get('/api/codelist/country/:id/tax-rate', (req, res) => {
     const id = req.params.id
     daoCodeLists.getTaxRateList(req, res, id)
+});
+
+///////////////////////////////////
+// Files
+///////////////////////////////////
+app.post('/api/files/avatar', async function(req, res) {
+  let files = req.files
+  if(req.session.prm_user) {
+      const rv = await awsS3.upload('avatar-' + req.session.prm_user.id, req.files.file.data, req.files.file.mimetype)
+      res.status(200).json(rv.status)
+  }
+  else
+      res.status(401).json("OK: user unauthorized")
 });
 
 
