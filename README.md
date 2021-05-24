@@ -3,13 +3,16 @@ Development of the patient relationship management system for a dental clinic
 
 ## API ENV Variables
 
-| Name              |       Description       | Default value |
-|-------------------|:-----------------------:|--------------:|
-| POSTGRES_HOST     | Database IP or hostname |             - |
-| POSTGRES_USER     |      Database user      |             - |
-| POSTGRES_DB       |      Database name      |             - |
-| POSTGRES_PASSWORD |    Database password    |             - |
-| POSTGRES_PORT     |      Database port      |          5432 |
+| Name                  |       Description       | Default value |
+|-----------------------|:-----------------------:|--------------:|
+| POSTGRES_HOST         | Database IP or hostname |             - |
+| POSTGRES_USER         |      Database user      |             - |
+| POSTGRES_DB           |      Database name      |             - |
+| POSTGRES_PASSWORD     |    Database password    |             - |
+| POSTGRES_PORT         |      Database port      |          5432 |
+| AWS_ACCESS_KEY_ID     |    AWS S3 Access Key    |             - |
+| AWS_SECRET_ACCESS_KEY |     AWS S3 Secret Key   |             - |
+| AWS_BUCKET_NAME       |   AWS S3 bucket name    |             - |
 
 ## Frontend ENV variables
 | Name              |       Description       |     Default value     |
