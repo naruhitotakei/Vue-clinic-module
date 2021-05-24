@@ -262,7 +262,7 @@ export default {
         address1: '',
         address2: '',
         company_name: '',
-        profile_image: require('../assets/images/user/11.png'),
+        profile_image: '/api/files/avatar?' + Math.random(),
         mobile_no: '',
         country: '',
         state: '',

@@ -603,6 +603,24 @@ app.post('/api/files/avatar', async function(req, res) {
       res.status(401).json("OK: user unauthorized")
 });
 
+app.get('/api/files/avatar', async function(req, res) {
+  if(req.session.prm_user) {  
+      const rv = await awsS3.download('avatar-' + req.session.prm_user.id)
+      if (rv.status=='OK') {
+          res.writeHead(200, {
+              'Content-Disposition': `attachment; filename=` + 'avatar-' + req.session.prm_user.id,
+              'Content-Type': rv.data.ContentType,
+          })
+          const download = Buffer.from(rv.data.Body)
+          res.end(download)
+      } else {
+          res.download('./resources/avatar-default.png', 'avatar-default.png'); 
+      }
+  }
+  else
+      res.status(401).json("OK: user unauthorized")
+});
+
 
 ///////////////////////////////////
 // common methodes

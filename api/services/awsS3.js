@@ -49,6 +49,30 @@ const listBucketObjects = async () => {
     })
 }
 
+const listBucketObjectsWithPrefix = async (prefix) => {    
+    return new Promise((resolve, reject) => {
+        var params = {
+            Bucket : defaultBucketName,
+            Prefix: prefix
+        }
+        s3.listObjects(params, function(err, data) {
+            if (err) {
+                let rv = {
+                    status: "NOK",
+                    error: err
+                }            
+                resolve(rv);
+            } else {
+                let rv = {
+                    status: "OK",
+                    data: data
+                }
+                resolve(rv);
+            }
+        })
+    })
+}
+
 const upload = async (fileName, fileContent, mimeType) => {    
     return new Promise((resolve, reject) => {
         var params = {
@@ -126,6 +150,7 @@ const remove = async (fileName) => {
 module.exports = {
   listBuckets,
   listBucketObjects,
+  listBucketObjectsWithPrefix,
   upload,
   download,
   remove
