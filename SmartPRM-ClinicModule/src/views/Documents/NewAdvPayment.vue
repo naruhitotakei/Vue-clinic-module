@@ -86,19 +86,13 @@
                                   <b-table striped :items="summaryRows" :fields="summaryColumns">
                                     <template v-slot:cell(dueDate)="data">
                                       <span v-if="!data.item.editable">{{ data.item.dueDate }}</span>
-                                      <input type="number" min="0" v-model="data.item.dueDateNumber" v-else class="form-control">
+                                      <input type="date"  v-model="data.item.dueDate" v-else class="form-control">
                                     </template>
                                     <template v-slot:cell(paymentMethod)="data">
                                       <span v-if="!data.item.editable">{{ data.item.paymentMethod }}</span>
                                       <div v-else>
                                         <v-select :clearable="false" label="name" :reduce="opt => opt.name" class="style-chooser" v-model="data.item.paymentMethod" :options="paymentMethods"></v-select>
                                       </div>
-                                    </template>
-                                    <template v-slot:cell(subTotal)="data">
-                                      <span>{{ data.item.subTotal | euro }}</span>
-                                    </template>
-                                    <template v-slot:cell(discount)="data">
-                                      <span >{{ data.item.discount | euro }}</span>
                                     </template>
                                     <template v-slot:cell(total)="data">
                                       <span>{{ data.item.total | euro }}</span>
@@ -144,7 +138,7 @@ import html2pdf from 'html2pdf.js'
 import _ from 'lodash'
 
 export default {
-  name: 'NewInvoice',
+  name: 'NewAdvPayment',
   mounted () {
     xray.index()
     this.getLoggedInUser()
@@ -166,9 +160,7 @@ export default {
       items: [
         {
           id: 1,
-          item: {
-            name: ''
-          },
+          item: {},
           quantity: '1',
           price: '0',
           discount: '',
@@ -187,20 +179,11 @@ export default {
       summaryColumns: [
         {
           key: 'dueDate',
-          label: this.$t('invoices.newInvoice.newInvoiceSummary.dueDate'),
-          class: 'action-column'
+          label: this.$t('invoices.newInvoice.newInvoiceSummary.dueDate')
         },
         {
           key: 'paymentMethod',
           label: this.$t('invoices.newInvoice.newInvoiceSummary.paymentMethod')
-        },
-        {
-          key: 'subTotal',
-          label: this.$t('invoices.newInvoice.newInvoiceSummary.subTotal')
-        },
-        {
-          key: 'discount',
-          label: this.$t('invoices.newInvoice.newInvoiceSummary.discount')
         },
         {
           key: 'total',
@@ -293,7 +276,7 @@ export default {
       this.isEditMode = true
     },
     submit (item) {
-      item.total = this.calculatePrice(item).toFixed(2)
+      item.total = this.calculatePrice(item)
       item.editable = false
       this.getInvoiceTotal()
       if (!this.isEditMode) {
@@ -322,11 +305,8 @@ export default {
     },
     defaultSummary () {
       return {
-        dueDate: this.invoiceDate,
-        dueDateNumber: 0,
+        dueDate: moment().format('YYYY-MM-DD'),
         paymentMethod: null,
-        subTotal: 0,
-        discount: 0,
         total: this.invoiceTotal,
         editable: true
       }
@@ -347,7 +327,7 @@ export default {
     },
     prepareInvoice (status) {
       let temp = {
-        invoice_type: 'Invoice',
+        invoice_type: 'Advance payment',
         invoice_time: moment(this.invoiceDate).format('YYYY MM DD HH:MM:SS'),
         invoice_number: '02-blagajna1-21aleksa',
         invoice_numbering_structure: '{c}',
@@ -372,8 +352,8 @@ export default {
         device_id: 1,
         premise_id: 1,
         business_customer_id: 1,
-        invoice_status: status,
-        invoiceItems: this.items
+        invoiceItems: this.items,
+        invoice_status: status
       }
       this.invoice = _.assignIn(this.invoice, this.patient, this.usersCompany, temp)
     }

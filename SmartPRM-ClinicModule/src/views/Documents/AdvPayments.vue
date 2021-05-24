@@ -2,11 +2,25 @@
     <b-container fluid>
         <b-row>
             <b-col md="12">
+              <b-modal v-model="modalShow" no-close-on-backdrop size="md" :title="$t('invoices.addNewInvoice.selectPatient')" :ok-disabled="!selectedPatient" :ok-title="$t('invoices.addNewInvoice.create')" @ok="addAdvPayment" @close="selectedPatient = null"  @cancel="selectedPatient = null" :cancel-title="$t('invoices.addNewInvoice.close')">
+                <form>
+                  <div class="form-row">
+                    <div class="col-md-12 mb-3">
+                      <label for="patient">{{ $t('invoices.addNewInvoice.patient') }} *</label>
+                      <v-select :clearable="false" label="full_name" class="style-chooser" v-model="selectedPatient" :options="patients">
+                        <template v-slot:option="option">
+                          {{ option.full_name }} <span v-if="option.city" style="float:right"> {{option.city}} </span>
+                        </template>
+                      </v-select>
+                    </div>
+                  </div>
+                </form>
+              </b-modal>
                 <iq-card>
                     <template v-slot:headerTitle>
                         <h3 class="card-title" style="margin-top: 10px;">{{ $t('advPayments.advPaymentsHeader') }}</h3>
                         <div class="btn-add-patient col-12 col-sm-3 col-md-4 col-lg-3 mb-4 mb-sm-0 adv-payment">
-                            <b-button variant="primary" @click="add_invoice"><i class="ri-add-line mr-2"></i>{{ $t('advPayments.advPaymentsBtn') }}</b-button>
+                            <b-button variant="primary" @click="modalShow = true"><i class="ri-add-line mr-2"></i>{{ $t('advPayments.advPaymentsBtn') }}</b-button>
                         </div>
                         <div class="iq-card-header-toolbar d-sm-flex align-items-center col-12 col-sm-9 col-md-8 col-lg-9" style="margin-top: -10px;">
                             <div class="iq-search-bar">
@@ -32,7 +46,7 @@
                                   bordered
                                   hover
                                   :busy="!isDataLoaded"
-                                  @row-clicked="$router.push('/extra-pages/advance-payment-example')"
+                                  @row-clicked="paymentSelected"
                                   style="cursor: pointer;"
                                   :items="advPayments"
                                   :fields="columns"
@@ -69,6 +83,7 @@
 <script>
 import { xray } from '../../config/pluginInit'
 import { getAdvPayments } from '../../services/advPayments'
+import { getPatients } from '../../services/enquiry'
 import moment from 'moment'
 export default {
   components: {
@@ -85,7 +100,10 @@ export default {
         { value: 'issued_by', text: 'Issued by' },
         { value: 'amount', text: 'Invoice amount' }
       ],
+      modalShow: false,
       advPayments: [],
+      selectedPatient: {},
+      patients: [],
       currentPage: 1,
       perPage: 10,
       totalRows: 1,
@@ -118,21 +136,34 @@ export default {
     }
   },
   methods: {
-    default () {
-      return {
-        invoice_no: this.rows.length,
-        patient_name: '',
-        amount: '',
-        issued_by: '',
-        date: ''
-      }
+    getPatients () {
+      getPatients().then(response => {
+        this.patients = response
+      })
+    },
+    paymentSelected (item) {
+      this.$router.push({ path: `/documents/advance-payments/${item.invoice_number}` })
     },
     filterSelected (value) {
       let array = [value]
       this.filterOn = array
     },
-    add_invoice () {
-      console.log('ADD NEW ADVANCE PAYMENT CLICKED')
+    addAdvPayment () {
+      this.$router.push({ name: 'extra-pages.new-adv-payment', params: { enquireId: this.selectedPatient.id, billingDetails: this.createBillingDetails() } })
+    },
+    createBillingDetails () {
+      let details = ''
+      if (this.selectedPatient.name) details += this.selectedPatient.name
+      if (this.selectedPatient.last_name) details += ' ' + this.selectedPatient.name
+      details += '<br>'
+      if (this.selectedPatient.address_line_1) details += this.selectedPatient.address_line_1 + '<br>'
+      if (this.selectedPatient.post_code) details += this.selectedPatient.post_code
+      if (this.selectedPatient.city) details += ' ' + this.selectedPatient.city
+      if (this.selectedPatient.country) details += ', ' + this.selectedPatient.country
+      details += '<br>'
+      if (this.selectedPatient.phone) details += 'Telefon: ' + this.selectedPatient.phone + '<br>'
+      if (this.selectedPatient.email) details += 'Email: ' + this.selectedPatient.email
+      return details
     },
     getAdvPayments () {
       getAdvPayments().then(response => {
@@ -155,6 +186,7 @@ export default {
   mounted () {
     xray.index()
     this.getAdvPayments()
+    this.getPatients()
   }
 }
 </script>

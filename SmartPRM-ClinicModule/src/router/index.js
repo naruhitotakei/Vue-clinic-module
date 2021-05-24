@@ -9,10 +9,12 @@ import Calendar from '../views/Calendars/Calendar'
 import Home from '../views/Home/Home'
 /* Assignments */
 import Assignments from '../views/Assignments/Assignments'
-import AdvInvoices from '../views/Documents/AdvPayments'
+import AdvPayments from '../views/Documents/AdvPayments'
 import Invoice from '../views/Documents/Invoice'
+import AdvPayment from '../views/Documents/AdvPayment'
 import Invoices from '../views/Documents/Invoices'
 import NewInvoice from '../views/Documents/NewInvoice'
+import NewAdvPayment from '../views/Documents/NewAdvPayment'
 import Offers from '../views/Documents/Offers'
 /* Documents */
 import Patients from '../views/Patients/Patients'
@@ -116,7 +118,13 @@ const documentChildRoute = (prop, mode) => [
     path: 'advance-payments',
     name: prop + '.advance-payments',
     meta: { dark: mode, auth: true, name: 'Advance Payments' },
-    component: AdvInvoices
+    component: AdvPayments
+  },
+  {
+    path: 'advance-payments/:advPaymentId',
+    name: prop + '.advance-payments',
+    meta: { dark: mode, auth: true, name: 'Advance Payments' },
+    component: AdvPayment
   },
   {
     path: 'offers',
@@ -201,8 +209,14 @@ const defaultlayout = (prop, mode = false) => [
   {
     path: 'new-invoice',
     name: prop + '.new-invoice',
-    meta: { dark: mode, auth: true, name: 'New Invoices' },
+    meta: { dark: mode, auth: true, name: 'New Invoice' },
     component: NewInvoice
+  },
+  {
+    path: 'new-adv-payment',
+    name: prop + '.new-adv-payment',
+    meta: { dark: mode, auth: true, name: 'New Adv Payment' },
+    component: NewAdvPayment
   }
 ]
 
