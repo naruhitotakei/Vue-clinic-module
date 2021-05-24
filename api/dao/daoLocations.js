@@ -10,7 +10,7 @@ const pool = new Pool({
 })
 
 const getLocationsList = (request, response) => {
-    pool.query("SELECT name, address, city FROM locations JOIN clients ON locations.client_id = clients.id WHERE blueprint = 'primadent'", (error, results) => {
+    pool.query("SELECT l.name AS name, l.address AS address, l.city AS city FROM locations l JOIN clients ON l.client_id = clients.id WHERE blueprint = 'primadent' AND clients.name NOT LIKE '%vidim%' AND active = true", (error, results) => {
         if (error) {
             throw error
         }
