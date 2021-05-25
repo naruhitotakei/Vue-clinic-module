@@ -168,7 +168,6 @@ const updateUser = (req, res, id, user) => {
     if (user.phone) statement += "phone_number='" + user.phone + "',"
     statement = statement.slice(0, -1)
     statement += " WHERE id = " + id
-    console.log(statement)
     pool.query(statement, (error, results) => {
         if (error) {
             throw error

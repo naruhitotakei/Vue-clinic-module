@@ -297,6 +297,23 @@ app.get('/api/locations', (req, res) => {
         res.status(401).json("OK: user unauthorized")
 });
 
+app.post('/api/locations', (req, res) => {
+    const location = req.body
+    if (req.session.prm_user && req.session.prm_user.permissions && checkPermission(req.session.prm_user.permissions, locationsPermission))
+        daoLocations.createLocation(req, res, location)
+    else
+        res.status(401).json("OK: user unauthorized")
+});
+
+app.put('/api/locations/:id', (req, res) => {
+    const id = req.params.id
+    const location = req.body
+    if (req.session.prm_user && req.session.prm_user.permissions && checkPermission(req.session.prm_user.permissions, locationsPermission))
+        daoLocations.updateLocation(req, res, id, location)
+    else
+        res.status(401).json("OK: user unauthorized")
+});
+
 ///////////////////////////////////
 // settings -> users
 ///////////////////////////////////

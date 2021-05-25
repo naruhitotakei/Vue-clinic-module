@@ -425,8 +425,9 @@
       "city": "City",
       "action": "Action"
     },
-    "editLocationModal": {
-      "header": "Add location",
+    "addLocationModalHeader": "Add location",
+    "editLocationModalHeader": "Edit location",
+    "locationModal": {
       "name": "Name",
       "city": "City",
       "address": "Address",

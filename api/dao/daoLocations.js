@@ -10,7 +10,7 @@ const pool = new Pool({
 })
 
 const getLocationsList = (request, response) => {
-    pool.query("SELECT name, address, city FROM locations WHERE prm_client_id = 1 AND active = true", (error, results) => {
+    pool.query("SELECT id, name, address, city FROM locations WHERE prm_client_id = 1 AND active = true", (error, results) => {
         if (error) {
             throw error
         }
@@ -19,7 +19,7 @@ const getLocationsList = (request, response) => {
 }
 
 const getInactiveLocationsList = (request, response) => {
-    pool.query("SELECT name, address, city FROM locations WHERE prm_client_id = 1 AND active = false", (error, results) => {
+    pool.query("SELECT id, name, address, city FROM locations WHERE prm_client_id = 1 AND active = false", (error, results) => {
         if (error) {
             throw error
         }
@@ -28,8 +28,7 @@ const getInactiveLocationsList = (request, response) => {
 }
 
 const createLocation = (req, res, location) => {
-    var statement = "INSERT INTO locations (name, city, address, created_at, active, prm_client_id) VALUES ('" + location.name + "', " + "'" + location.city + "', " + "'" + location.address + "', " + "true, NOW(), 1" + ");"
-    console.log(statement)
+    var statement = "INSERT INTO locations (name, city, address, active, created_at, prm_client_id) VALUES ('" + location.name + "', " + "'" + location.city + "', " + "'" + location.address + "', " + "true, NOW(), 1" + ");"
     pool.query(statement, (error, results) => {
         if (error) {
             throw error
@@ -40,7 +39,7 @@ const createLocation = (req, res, location) => {
 }
 
 const updateLocation = (req, res, id, location) => {
-    let statement = "UPDATE locations SET " + "name='" + location.name + "', " + "city='" + location.city + "', " + location.address + "',"
+    let statement = "UPDATE locations SET " + "name='" + location.name + "', " + "city='" + location.city + "', " + "address='" + location.address + "',"
     statement = statement.slice(0, -1)
     statement += " WHERE id = " + id
     pool.query(statement, (error, results) => {
