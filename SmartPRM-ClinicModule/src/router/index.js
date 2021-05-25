@@ -28,6 +28,7 @@ import TaxAuthority from '../views/Reporting/TaxAuthority'
 import Invoicing from '../views/Settings/Invoicing'
 import Locations from '../views/Settings/Locations'
 import ServicesAndProducts from '../views/Settings/ServicesAndProducts'
+import BusinessCustomers from '../views/Settings/BusinessCustomers'
 /* Settings */
 import Users from '../views/Settings/Users'
 /* Statistics */
@@ -202,6 +203,12 @@ const settingsChildRoute = (prop, mode = false) => [
     name: prop + '.invoicing',
     meta: { darke: mode, auth: true, name: 'Invoicing' },
     component: Invoicing
+  },
+  {
+    path: 'business-customers',
+    name: prop + '.business-customers',
+    meta: { darke: mode, auth: true, name: 'Business Customers' },
+    component: BusinessCustomers
   }
 ]
 

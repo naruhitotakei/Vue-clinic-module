@@ -1,5 +1,6 @@
 const path = require('path');
 const express = require('express');
+const fileUpload = require('express-fileupload');
 var Rollbar = require('rollbar');
 var rollbar = new Rollbar({
   accessToken: '1922e9135f0a45a292341f0137316fc7',
@@ -27,7 +28,11 @@ const daoCalendar = require('./dao/daoCalendar')
 const daoCompanies = require('./dao/daoCompanies')
 const daoLocations = require('./dao/daoLocations')
 const daoCompanyPremises = require('./dao/daoCompanyPremises')
+const awsS3 = require('./services/awsS3')
 
+app.use(fileUpload({
+    createParentPath: true
+}));
 app.use(cors({
     origin: process.env.APP_URL || 'http://localhost:8080',
     credentials: true
@@ -111,6 +116,14 @@ app.get('/api/dentists', async function(req, res) {
     } else {
        res.status(200).json("NOK: user not logged in")
     }    
+});
+
+app.get('/api/surgeons', async function (req, res) {
+    if (req.session.prm_user) {
+        daoUser.getSurgeons(req, res)
+    } else {
+        res.status(200).json("NOK: user not logged in")
+    }
 });
 
 ///////////////////////////////////
@@ -591,6 +604,37 @@ app.get('/api/codelist/country/:id/tax-rate', (req, res) => {
 ///////////////////////////////////
 app.get('/api/comapny-premises', (req, res) => {
     daoCompanyPremises.getCompanyPremises(req, res)
+});
+
+////////////////////////////////////
+// Files
+///////////////////////////////////
+app.post('/api/files/avatar', async function(req, res) {
+  let files = req.files
+  if(req.session.prm_user) {
+      const rv = await awsS3.upload('avatar-' + req.session.prm_user.id, req.files.file.data, req.files.file.mimetype)
+      res.status(200).json(rv.status)
+  }
+  else
+      res.status(401).json("OK: user unauthorized")
+});
+
+app.get('/api/files/avatar', async function(req, res) {
+  if(req.session.prm_user) {  
+      const rv = await awsS3.download('avatar-' + req.session.prm_user.id)
+      if (rv.status=='OK') {
+          res.writeHead(200, {
+              'Content-Disposition': `attachment; filename=` + 'avatar-' + req.session.prm_user.id,
+              'Content-Type': rv.data.ContentType,
+          })
+          const download = Buffer.from(rv.data.Body)
+          res.end(download)
+      } else {
+          res.download('./resources/avatar-default.png', 'avatar-default.png'); 
+      }
+  }
+  else
+      res.status(401).json("OK: user unauthorized")
 });
 
 

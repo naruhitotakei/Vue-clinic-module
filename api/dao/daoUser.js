@@ -137,7 +137,16 @@ const editProfile = ((request, response, profile) => {
 })
 
 const getDentists = (request, response) => {
-    pool.query("SELECT u.id as code, u.name as label FROM users u", (error, results) => {
+    pool.query("SELECT u.id as code, concat(u.title, ' ', u.name) as label FROM users_prm_client u WHERE role::text LIKE '%dentist%' AND active = true", (error, results) => {
+        if (error) {
+            throw error
+        }
+        response.status(200).json(results.rows)
+    })
+}
+
+const getSurgeons = (request, response) => {
+    pool.query("SELECT u.id as code, concat(u.title, ' ', u.name) as label FROM users_prm_client u WHERE role::text LIKE '%surgeon%' AND active = true", (error, results) => {
         if (error) {
             throw error
         }
@@ -175,6 +184,7 @@ module.exports = {
   changePassword,
   editProfile,
   getDentists,
+  getSurgeons,
   getUsers,
   updateUser
 }

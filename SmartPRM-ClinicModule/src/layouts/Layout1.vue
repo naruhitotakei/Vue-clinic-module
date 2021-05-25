@@ -124,10 +124,10 @@
                     <b-img class="profile-pic height-150 width-150" fluid :src="user.profile_image" alt="profile-pic" />
                     <input type="hidden" v-model="user.profile_image">
                     <div class="p-image">
-                      <b-button variant="none" class="upload-button iq-bg-primary position-relative" style="left: 12px;">
-                        <input type="file" @change="previewImage" class="h-100 position-absolute" accept="image/*" style="opacity: 0" />
+                      <b-button variant="none" class="upload-button iq-bg-primary position-relative" style="left: 12px;" @click="onButtonClick">
                         File Upload
                       </b-button>
+                      <input ref="uploader" class="d-none" type="file" accept="image/*" @change="onFileChanged">
                     </div>
                   </div>
                   <div class="img-extension mt-3">
@@ -227,6 +227,7 @@ import { xray } from '../config/pluginInit'
 import { Users } from '../FackApi/api/chat'
 import { mapGetters, mapActions } from 'vuex'
 import { sso, logout, editProfile } from '../services/userService'
+import { uploadAvatar } from '../services/upDownLoad'
 
 export default {
   name: 'Layout1',
@@ -261,7 +262,7 @@ export default {
         address1: '',
         address2: '',
         company_name: '',
-        profile_image: require('../assets/images/user/11.png'),
+        profile_image: '/api/files/avatar?' + Math.random(),
         mobile_no: '',
         country: '',
         state: '',
@@ -313,18 +314,18 @@ export default {
     }
   },
   methods: {
-    previewImage: function (event) {
-      const input = event.target
-
-      if (input.files && input.files[0]) {
-        const reader = new FileReader()
-
-        reader.onload = (e) => {
-          this.user.profile_image = e.target.result
-        }
-
-        reader.readAsDataURL(input.files[0])
-      }
+    onButtonClick () {
+      this.isSelecting = true
+      window.addEventListener('focus', () => {
+        this.isSelecting = false
+      }, { once: true })
+      this.$refs.uploader.click()
+    },
+    onFileChanged (e) {
+      this.selectedFile = e.target.files[0]
+      console.log(this.selectedFile.size)
+      // todo check size
+      uploadAvatar(this.selectedFile)
     },
     callModal (args) {
       if (args === 'edit') {

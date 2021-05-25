@@ -223,6 +223,17 @@
         "class_name": "",
         "is_icon_class": true,
         "icon": "ri-file-list-fill"
+      },
+      {
+        "title": "Business Customers",
+        "name": "settings.business-customers",
+        "is_active": false,
+        "link": {
+          "name": "settings.business-customers"
+        },
+        "class_name": "",
+        "is_icon_class": true,
+        "icon": "ri-briefcase-3-line"
       }
     ]
   }
