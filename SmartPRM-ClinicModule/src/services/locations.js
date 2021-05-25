@@ -36,7 +36,7 @@ export async function createLocation (location) {
 }
 
 export async function updateLocation (id, location) {
-  const rawResponse = await fetch('api/locations/' + id, {
+  const rawResponse = await fetch('/api/locations/' + id, {
     method: 'PUT',
     credentials: 'same-origin',
     headers: {

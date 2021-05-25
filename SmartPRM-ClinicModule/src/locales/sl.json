@@ -425,8 +425,9 @@
       "city": "Kraj",
       "action": "Urejaj"
     },
-    "editLocationModal": {
-      "header": "Dodaj lokacijo",
+    "addLocationModalHeader": "Dodaj lokacijo",
+    "editLocationModalHeader": "Uredi lokacijo",
+    "locationModal": {
       "name": "Ime",
       "city": "Address",
       "address": "Naslov",
