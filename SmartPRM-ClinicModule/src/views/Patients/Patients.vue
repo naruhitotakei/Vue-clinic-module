@@ -255,6 +255,11 @@ export default {
   width: 120px !important;
 }
 
+.patient {
+  display: flex;
+  justify-content: flex-end;
+}
+
 @media (max-width: 479px) {
 .iq-search-bar {
   padding: 0 15px 0 0 !important;
@@ -269,16 +274,10 @@ export default {
 }
 }
 
-@media (min-width: 479px) and (max-width: 1400px) {
-.patient {
-  margin-right: -28px !important;
-}
-}
-
-@media (min-width: 1401px) {
-.patient {
-  margin-right: -71px !important;
-}
+@media (min-width: 320px) and (max-width: 575px) {
+  .patient {
+   justify-content: flex-start;
+  }
 }
 
 .patients .vs__search::placeholder,
