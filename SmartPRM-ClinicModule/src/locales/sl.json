@@ -433,7 +433,8 @@
       "address": "Naslov",
       "save": "Shrani",
       "close": "Zapri"
-    }
+    },
+    "headerInactiveLocations": "Neaktivne lokacije"
   },
   "servicesAndProducts": {
     "headerProducts": "Produkti",

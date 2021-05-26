@@ -49,7 +49,7 @@
                                     </template>
                                     <template v-slot:cell(action)="data">
                                         <b-button variant=" iq-bg-success mr-1 mb-1" size="sm" @click="openEditModal(data.item)"><i class="ri-ball-pen-fill m-0"></i></b-button>
-                                        <!-- <b-button variant=" iq-bg-danger mr-1 mb-1" size="sm" @click="removeProductCategory(data.item)"><i class="ri-delete-bin-line m-0"></i></b-button> -->
+                                        <b-button variant=" iq-bg-danger mr-1 mb-1" size="sm"><i class="ri-shut-down-line m-0"></i></b-button>
                                     </template>
                                 </b-table>
                             </b-col>
@@ -80,6 +80,32 @@
                         </div>
                     </form>
                 </b-modal>
+                <iq-card>
+                    <template v-slot:headerTitle>
+                        <h4 class="card-title" style="margin-top: 10px;">{{ $t('settingsLocations.headerInactiveLocations') }}</h4>
+                    </template>
+                    <template v-slot:body>
+                        <b-row>
+                            <b-col md="12" class="table-responsive">
+                                <b-table id="my-inactive-table"
+                                         bordered
+                                         :busy="!isInactiveDataLoaded"
+                                         :items="inactiveLocations"
+                                         :fields="inactiveColumns">
+                                    <template #table-busy>
+                                        <div class="text-center text-primary my-2">
+                                            <b-spinner class="align-middle"></b-spinner>
+                                            <strong class="loading">Loading...</strong>
+                                        </div>
+                                    </template>
+                                    <template v-slot:cell(i_action)="data">
+                                        <b-button variant=" iq-bg-info mr-1 mb-1" size="sm"><i class="ri-refresh-line m-0"></i></b-button>
+                                    </template>
+                                </b-table>
+                            </b-col>
+                        </b-row>
+                    </template>
+                </iq-card>
             </b-col>
         </b-row>
     </b-container>
@@ -87,7 +113,7 @@
 
 <script>
 import { xray } from '../../config/pluginInit'
-import { getLocationsList, createLocation, updateLocation } from '../../services/locations'
+import { getLocationsList, getInactiveLocationsList, createLocation, updateLocation } from '../../services/locations'
 export default {
   components: {
   },
@@ -95,7 +121,9 @@ export default {
   data: function () {
     return {
       isDataLoaded: false,
+      isInactiveDataLoaded: false,
       locations: [],
+      inactiveLocations: [],
       addLocationModal: false,
       editLocationModal: false,
       item: [],
@@ -110,6 +138,12 @@ export default {
         { label: this.$t('settingsLocations.locationsColumn.city'), key: 'city', class: 'text-left' },
         { label: this.$t('settingsLocations.locationsColumn.address'), key: 'address', class: 'text-left' },
         { label: this.$t('settingsLocations.locationsColumn.action'), key: 'action', class: 'text-center' }
+      ],
+      inactiveColumns: [
+        { label: this.$t('settingsLocations.locationsColumn.name'), key: 'i_name', class: 'text-left' },
+        { label: this.$t('settingsLocations.locationsColumn.city'), key: 'i_city', class: 'text-left' },
+        { label: this.$t('settingsLocations.locationsColumn.address'), key: 'i_address', class: 'text-left' },
+        { label: this.$t('settingsLocations.locationsColumn.action'), key: 'i_action', class: 'text-center' }
       ]
     }
   },
@@ -127,8 +161,17 @@ export default {
         this.toggleDataLoaded()
       })
     },
+    getInactiveLocations () {
+      getInactiveLocationsList().then(response => {
+        this.inactiveLocations = response
+        this.toggleInactiveDataLoaded()
+      })
+    },
     toggleDataLoaded () {
       this.isDataLoaded = !this.isDataLoaded
+    },
+    toggleInactiveDataLoaded () {
+      this.isInactiveDataLoaded = !this.isInactiveDataLoaded
     },
     openEditModal (item) {
       this.editLocationModal = true
@@ -154,6 +197,7 @@ export default {
   mounted () {
     xray.index()
     this.getLocations()
+    this.getInactiveLocations()
   }
 }
 </script>

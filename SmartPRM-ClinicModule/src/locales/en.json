@@ -432,8 +432,9 @@
       "city": "City",
       "address": "Address",
       "save": "Save",
-      "close":  "Close"
-    }
+      "close": "Close"
+    },
+    "headerInactiveLocations": "Inactive locations"
   },
   "servicesAndProducts": {
     "headerProducts": "Products",

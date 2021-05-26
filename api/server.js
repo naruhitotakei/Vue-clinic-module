@@ -291,9 +291,11 @@ app.get('/api/productGroups/:id/product-naming', (req, res) => {
 // locations
 ///////////////////////////////////
 
-app.get('/api/locations', (req, res) => {
-    if (req.session.prm_user && req.session.prm_user.permissions && checkPermission(req.session.prm_user.permissions, locationsPermission))
+app.get('/api/locations/', (req, res) => {
+    if (req.session.prm_user && req.session.prm_user.permissions && checkPermission(req.session.prm_user.permissions, locationsPermission)) {
         daoLocations.getLocationsList(req, res)
+        daoLocations.getInactiveLocationsList(req, res)
+    }
     else
         res.status(401).json("OK: user unauthorized")
 });
@@ -311,6 +313,14 @@ app.put('/api/locations/:id', (req, res) => {
     const location = req.body
     if (req.session.prm_user && req.session.prm_user.permissions && checkPermission(req.session.prm_user.permissions, locationsPermission))
         daoLocations.updateLocation(req, res, id, location)
+    else
+        res.status(401).json("OK: user unauthorized")
+});
+
+app.put('/api/locations:id', (req, res) => {
+    const id = req.params.id
+    if (req.session.prm_user && req.session.prm_user.permissions && checkPermission(req.session.prm_user.permissions, locationsPermission))
+        daoLocations.toggleActivity(req, res, id)
     else
         res.status(401).json("OK: user unauthorized")
 });
