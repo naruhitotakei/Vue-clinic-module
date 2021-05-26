@@ -363,7 +363,8 @@
                                       <li class="col-md-4 col-6 pb-3" v-for="(file, id) in files" :key="id">
                                           <img :src="file.image" alt="gallary-image" class="img-fluid">
                                           <div class="text-center">
-                                              <p class="mb-0">{{ $t('EPR.files.fileName') }}: {{file.file_name}}</p>
+                                              <p class="mb-0">{{ $t('EPR.files.fileName') }}: {{file.name}}</p>
+                                              <p class="mb-0">{{ $t('EPR.files.fileType') }}: {{file.type}}</p>
                                               <p>{{ $t('EPR.files.fileCreatedAt') }}: {{file.created_at}}</p>
                                           </div>
                                       </li>
@@ -588,19 +589,20 @@ export default {
       dropDownText: '',
       selected: this.value,
       sortOptions: [
-        { value: 'file_name', text: this.$t('EPR.files.fileName') },
+        { value: 'name', text: this.$t('EPR.files.fileName') },
+        { value: 'type', text: this.$t('EPR.files.fileType') },
         { value: 'created_at', text: this.$t('EPR.files.fileCreatedAt') }
       ],
       files: [
-        { id: 1, image: require('../../assets/images/login/1.png'), file_name: 'File 1', created_at: '04.03.2021' },
-        { id: 2, image: require('../../assets/images/login/2.png'), file_name: 'File 2', created_at: '07.03.2021' },
-        { id: 3, image: require('../../assets/images/login/3.png'), file_name: 'File 3', created_at: '11.03.2021' },
-        { id: 4, image: require('../../assets/images/login/1.png'), file_name: 'File 4', created_at: '14.03.2021' },
-        { id: 5, image: require('../../assets/images/login/2.png'), file_name: 'File 5', created_at: '17.03.2021' },
-        { id: 6, image: require('../../assets/images/login/3.png'), file_name: 'File 6', created_at: '21.03.2021' },
-        { id: 7, image: require('../../assets/images/login/1.png'), file_name: 'File 7', created_at: '25.03.2021' },
-        { id: 8, image: require('../../assets/images/login/2.png'), file_name: 'File 8', created_at: '28.03.2021' },
-        { id: 9, image: require('../../assets/images/login/3.png'), file_name: 'File 9', created_at: '30.03.2021' }
+        { id: 1, image: require('../../assets/images/login/1.png'), name: 'File 2', type: 'Rentgen', created_at: '04.03.2021' },
+        { id: 2, image: require('../../assets/images/login/2.png'), name: 'File 4', type: 'Krvna slika', created_at: '07.04.2021' },
+        { id: 3, image: require('../../assets/images/login/3.png'), name: 'File 5', type: 'Rentgen', created_at: '11.03.2021' },
+        { id: 4, image: require('../../assets/images/login/1.png'), name: 'File 1', type: 'Anamneza', created_at: '14.04.2021' },
+        { id: 5, image: require('../../assets/images/login/2.png'), name: 'File 9', type: 'Rentgen', created_at: '17.04.2021' },
+        { id: 6, image: require('../../assets/images/login/3.png'), name: 'File 7', type: 'Krvna Slika', created_at: '21.03.2021' },
+        { id: 7, image: require('../../assets/images/login/1.png'), name: 'File 6', type: 'Rentgen', created_at: '02.04.2021' },
+        { id: 8, image: require('../../assets/images/login/2.png'), name: 'File 3', type: 'Anamneza', created_at: '28.03.2021' },
+        { id: 9, image: require('../../assets/images/login/3.png'), name: 'File 8', type: 'Rentgen', created_at: '30.03.2021' }
       ],
       disabled: true,
       doctor: {
@@ -823,6 +825,10 @@ export default {
         }
         reader.readAsDataURL(input.files[0])
       }
+    },
+    sortSelected (value) {
+      let array = [value]
+      this.sortOn = array
     }
   }
 }

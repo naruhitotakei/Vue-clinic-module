@@ -175,6 +175,7 @@
       "sortBy": "Razvrsti po",
       "addFile": "Dodaj datoteko",
       "fileName": "Ime datoteke",
+      "fileType": "Vrsta datoteke",
       "fileCreatedAt": "Ustvarjeno"
     },
     "invoicesTab": "Računi",

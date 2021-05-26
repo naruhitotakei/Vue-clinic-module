@@ -175,6 +175,7 @@
       "sortBy": "Sort by",
       "addFile": "Add file",
       "fileName": "File name",
+      "fileType": "File type",
       "fileCreatedAt": "Created at"
     },
     "invoicesTab": "Invoices",
