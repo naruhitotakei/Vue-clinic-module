@@ -27,7 +27,7 @@ npm run serve
 To configure database credentials using ENV variables (recomended) follow next step. Copy example file api/.env.example to new file called api/.env and change database setting in the api/.env file with the following values:
 
 | Name                  |       Description       | Value									  |
-|-----------------------|:-----------------------:|------------------------------------------:|
+|-----------------------|:-----------------------:|-------------------------------------------|
 | POSTGRES_HOST         | Database IP or hostname | '136.243.204.82'						  |
 | POSTGRES_USER         |      Database user      |  emazing							      |
 | POSTGRES_DB           |      Database name      |  emazing							      |
