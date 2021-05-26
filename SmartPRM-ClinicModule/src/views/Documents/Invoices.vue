@@ -213,6 +213,10 @@ export default {
 </script>
 
 <style lang="scss">
+.invoice {
+  display: flex;
+  justify-content: flex-end;
+}
 @media (max-width: 479px) {
 .iq-search-bar {
   padding: 0 15px 0 0 !important;
@@ -227,15 +231,9 @@ export default {
 }
 }
 
-@media (min-width: 479px) and (max-width: 1400px) {
-.invoice {
-  margin-right: -40px !important;
-}
-}
-
-@media (min-width: 1401px) {
-.invoice {
-  margin-right: -71px !important;
-}
+@media (min-width: 320px) and (max-width: 575px) {
+  .invoice {
+    justify-content: flex-start;
+  }
 }
 </style>

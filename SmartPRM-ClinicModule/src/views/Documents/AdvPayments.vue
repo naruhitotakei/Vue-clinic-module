@@ -192,6 +192,10 @@ export default {
 </script>
 
 <style lang="scss">
+.adv-payment {
+  display: flex;
+  justify-content: flex-end;
+}
 @media (max-width: 479px) {
 .iq-search-bar {
   padding: 0 15px 0 0 !important;
@@ -206,15 +210,9 @@ export default {
 }
 }
 
-@media (min-width: 479px) and (max-width: 1400px) {
-.adv-payment {
-  margin-right: -22px !important;
-}
-}
-
-@media (min-width: 1401px) {
-.adv-payment {
-  margin-right: -105px !important;
-}
+@media (min-width: 320px) and (max-width: 575px) {
+  .adv-payment {
+    justify-content: flex-start;
+  }
 }
 </style>
