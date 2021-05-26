@@ -49,7 +49,7 @@ export async function updateLocation (id, location) {
 }
 
 export async function toggleActivity (id) {
-  const rawResponse = await fetch('api/locations/' + id, {
+  const rawResponse = await fetch('/api/locations/' + id, {
     method: 'PUT',
     credentials: 'same-origin',
     headers: {
