@@ -300,6 +300,8 @@
   },
   "invoice": {
     "invoiceHeader": "Račun",
+    "saved": "Račun shranjen",
+    "notSaved": "Greska, obratite se adminu",
     "invoiceInfo": {
       "invoiceDate": "Datum",
       "invoiceTotal": "Znesek",

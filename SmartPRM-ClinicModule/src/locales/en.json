@@ -300,6 +300,8 @@
   },
   "invoice": {
     "invoiceHeader": "Invoice",
+    "saved": "Invoice saved",
+    "notSaved": "Somethings wrong contact admin",
     "invoiceInfo": {
       "invoiceDate": "Date",
       "invoiceTotal": "Total",

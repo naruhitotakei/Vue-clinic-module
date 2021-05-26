@@ -108,7 +108,7 @@
                           </iq-card>
                         </b-col>
                         <b-col offset="6" cols="6" class="text-right" data-html2canvas-ignore="true">
-                            <b-button variant="link mr-3" @click="exportToPDF">
+                            <b-button v-if="showPdf" variant="link mr-3" @click="exportToPDF">
                                 <i class="ri-printer-line"></i>
                                 {{ $t('invoices.newInvoice.downloadPrint') }}
                             </b-button>
@@ -124,6 +124,27 @@
             </iq-card>
         </b-col>
     </b-row>
+    <b-toast id="b-toaster-bottom-right" variant="primary" solid>
+      <template #toast-title>
+        <div class="d-flex flex-grow-1 align-items-baseline">
+            <strong class="mr-auto">{{ $t('EPR.notification') }}</strong>
+        </div>
+      </template>
+      <template #default>
+          <span><i class="ri-checkbox-circle-line"></i>  {{ $t('invoice.saved') }}</span>
+      </template>
+    </b-toast>
+
+    <b-toast id="bottom-right-danger" variant="danger" solid>
+      <template #toast-title>
+        <div class="d-flex flex-grow-1 align-items-baseline">
+            <strong class="mr-auto">{{ $t('EPR.notification') }}</strong>
+        </div>
+      </template>
+      <template #default>
+          <span><i class="ri-error-warning-fill"></i>  {{ $t('invoice.notSaved') }}</span>
+      </template>
+    </b-toast>
 </b-container>
 </template>
 <script>
@@ -206,7 +227,8 @@ export default {
       patient: {},
       usersCompany: {},
       invoiceTotal: 0,
-      invoice: {}
+      invoice: {},
+      showPdf: false
     }
   },
   methods: {
@@ -316,13 +338,17 @@ export default {
       this.createInvoice()
     },
     saveInvoice () {
-      this.prepareInvoice()
+      this.prepareInvoice('issued')
       this.createInvoice()
     },
     createInvoice () {
       this.items.pop()
       createInvoice(this.invoice).then(response => {
-        console.log('Saved')
+        this.showPdf = true
+        this.$bvToast.show('b-toaster-bottom-right')
+      }).catch(errorMsg => {
+        console.log('Error: ' + errorMsg)
+        this.$bvToast.show('bottom-right-danger')
       })
     },
     prepareInvoice (status) {
