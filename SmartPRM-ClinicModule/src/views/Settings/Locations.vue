@@ -28,8 +28,8 @@
                                     <label for="title">{{ $t('settingsLocations.locationModal.address') }} *</label>
                                     <div style="display: flex;">
                                         <input type="text" v-model="formData.address" class="form-control" :placeholder="$t('settingsLocations.locationModal.address')" required>
-                                    </div>
                                 </div>
+                            </div>
                             </div>
                         </form>
                     </b-modal>
@@ -40,7 +40,9 @@
                                          bordered
                                          :busy="!isDataLoaded"
                                          :items="locations"
-                                         :fields="columns">
+                                         :fields="columns"
+                                         :per-page="locationsPerPage"
+                                         :current-page="currentLocationsPage">
                                     <template #table-busy>
                                         <div class="text-center text-primary my-2">
                                             <b-spinner class="align-middle"></b-spinner>
@@ -54,6 +56,16 @@
                                 </b-table>
                             </b-col>
                         </b-row>
+                        <template>
+                            <b-collapse id="collapse-6" class="mb-2"> </b-collapse>
+                            <div class="mt-3">
+                                <b-pagination v-model="currentLocationsPage"
+                                              :total-rows="locations.length"
+                                              :per-page="locationsPerPage"
+                                              aria-controls="my-table">
+                                </b-pagination>
+                            </div>
+                        </template>
                     </template>
                 </iq-card>
                 <b-modal v-model="editLocationModal" no-close-on-backdrop size="lg" :title="$t('settingsLocations.editLocationModalHeader')" @close="editLocationModal = false" @cancel="editLocationModal = false" @ok="editLocation" :ok-title="$t('settingsLocations.locationModal.save')" :cancel-title="$t('settingsLocations.locationModal.close')">
@@ -127,6 +139,8 @@ export default {
       addLocationModal: false,
       editLocationModal: false,
       item: [],
+      currentLocationsPage: 1,
+      locationsPerPage: 10,
       formData: {
         id: '',
         name: '',
