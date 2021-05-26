@@ -26,14 +26,16 @@ npm run serve
 
 To configure database credentials using ENV variables (recomended) follow next step. Copy example file api/.env.example to new file called api/.env and change database setting in the api/.env file with the following values:
 
-POSTGRES_HOST='136.243.204.82'
-POSTGRES_USER=emazing
-POSTGRES_DB=emazing
-POSTGRES_PASSWORD='XkRCDHZ6RpkqRTBe'
-POSTGRES_PORT=27032
-AWS_ACCESS_KEY_ID=AKIAVZFMD5UJZZ6QM322
-AWS_SECRET_ACCESS_KEY=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
-AWS_BUCKET_NAME=smartprmstorage-dev 
+| Name                  |       Description       | Value									  |
+|-----------------------|:-----------------------:|------------------------------------------:|
+| POSTGRES_HOST         | Database IP or hostname | '136.243.204.82'						  |
+| POSTGRES_USER         |      Database user      |  emazing							      |
+| POSTGRES_DB           |      Database name      |  emazing							      |
+| POSTGRES_PASSWORD     |    Database password    | 'XkRCDHZ6RpkqRTBe'					      |
+| POSTGRES_PORT         |      Database port      |  27032									  |
+| AWS_ACCESS_KEY_ID     |    AWS S3 Access Key    |  AKIAVZFMD5UJZZ6QM322					  |
+| AWS_SECRET_ACCESS_KEY |     AWS S3 Secret Key   |  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 |
+| AWS_BUCKET_NAME       |   AWS S3 bucket name    |  smartprmstorage-dev					  |
 
 this file is gitignored and never comes to the repository.
 
