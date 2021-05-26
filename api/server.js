@@ -619,7 +619,7 @@ app.get('/api/codelist/country/:id/tax-rate', (req, res) => {
 ///////////////////////////////////
 // company premises
 ///////////////////////////////////
-app.get('/api/comapny-premises', (req, res) => {
+app.get('/api/company-premises', (req, res) => {
     daoCompanyPremises.getCompanyPremises(req, res)
 });
 
