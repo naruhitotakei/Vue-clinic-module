@@ -861,6 +861,16 @@ export default {
     margin-top: 4px;
 }
 
+@media (max-width: 992px) {
+  .iq-card {
+    .row {
+      .pr-0 {
+        padding-right: 15px !important;
+      }
+    }
+  }
+}
+
 @media (max-width: 576px) {
   .mobile-border a {
     border-radius: 0 0 15px 15px !important;

@@ -2,7 +2,7 @@
     <b-container fluid>
         <b-row style="justify-content: center;">
             <b-col lg="12">
-                <iq-card class-name="iq-card-block iq-card-stretch iq-card-height">
+                <iq-card class-name="iq-card-block iq-card-stretch iq-card-height todaysAssignments-body">
                     <template v-slot:headerTitle>
                         <h4 class="card-title">{{ $t('assignments.assignmentsHeader') }}</h4>
                     </template>
@@ -13,7 +13,7 @@
                         <template v-slot:body>
                             <b-list-group class="list-group-flush" id="todaysAssignments">
                                 <b-list-group-item v-for="(item, index) in todaysAssigments" :key="index">
-                                    <div class="assignments-container" :class="{ 'taskIsActive' : !item.completed}">
+                                    <div class="assignments-container row align-items-center flex-nowrap" :class="{ 'taskIsActive' : !item.completed}">
                                         <b-checkbox v-model="item.completed" :disabled="item.disabled" name="check-button" inline :key="index" class="completed-assignment" @change="finishAssignment(item.id, $event)"></b-checkbox>
                                         <span>{{ item.description }}</span>
                                         <span class="pl-5">{{ item.patientname }} {{ item.patientlastname }}</span>
@@ -24,11 +24,13 @@
                             </b-list-group>
                             <template>
                                 <div class="mt-4 ml-2">
-                                    <p v-if="todaysTotalRows===0"> You have no assignment today.</p>
-                                     <b-pagination v-else v-model="todayCurrentPage"
-                                              :total-rows="todaysTotalRows"
-                                              :per-page="todayPerPage"
-                                              aria-controls="overdueAssignments"></b-pagination>
+                                    <p v-if="todaysTotalRows === 0"> You have no assignment today.</p>
+                                     <b-pagination
+                                         v-else-if="todaysTotalRows > 20"
+                                         v-model="todayCurrentPage"
+                                        :total-rows="todaysTotalRows"
+                                        :per-page="todayPerPage"
+                                        aria-controls="todaysAssignments"></b-pagination>
                                 </div>
                             </template>
                         </template>
@@ -38,14 +40,14 @@
         </b-row>
         <b-row style="justify-content: center;">
             <b-col lg="12">
-                <iq-card class-name="iq-card-block iq-card-stretch iq-card-height">
+                <iq-card class-name="iq-card-block iq-card-stretch iq-card-height overdueAssignments-body">
                     <template v-slot:headerTitle>
                         <h5>{{ $t('assignments.overdueAssignments') }}</h5>
                     </template>
                     <template v-slot:body>
                         <b-list-group class="list-group-flush" id="overdueAssignments">
-                            <b-list-group-item v-for="(item, index) in overdueAssignments" :key="index">
-                                <div class="assignments-container" :class="{ 'taskIsActive' : !item.completed}">
+                            <b-list-group-item v-for="(item, index) in overdueAssignments[overdueCurrentPage]" :key="index">
+                                <div class="assignments-container row align-items-center flex-nowrap" :class="{ 'taskIsActive' : !item.completed}">
                                     <b-checkbox v-model="item.completed" :disabled="item.disabled" name="check-button" inline :key="index" class="completed-assignment" @change="finishAssignment(item.id, $event)"></b-checkbox>
                                     <span>{{ item.description }}</span>
                                     <span class="pl-5">{{ item.patientname }} {{ item.patientlastname }}</span>
@@ -56,11 +58,13 @@
                         </b-list-group>
                         <template>
                             <div class="mt-4 ml-2">
-                                <p v-if="overdueTotalRows===0"> You have no overdue assignments.</p>
-                                <b-pagination v-else v-model="overdueCurrentPage"
-                                              :total-rows="overdueTotalRows"
-                                              :per-page="overduePerPage"
-                                              aria-controls="overdueAssignments"></b-pagination>
+                              <p v-if="overdueTotalRows===0"> You have no overdue assignments.</p>
+                                <b-pagination
+                                    v-else-if="overdueTotalRows > 20"
+                                    v-model="overdueCurrentPage"
+                                    :total-rows="overdueTotalRows"
+                                    :per-page="overduePerPage"
+                                    aria-controls="overdueAssignments"></b-pagination>
                             </div>
                         </template>
                     </template>
@@ -69,13 +73,13 @@
         </b-row>
         <b-row style="justify-content: center;">
             <b-col lg="12">
-                <iq-card class-name="iq-card-block iq-card-stretch iq-card-height">
+                <iq-card class-name="iq-card-block iq-card-stretch iq-card-height futureAssignments-body">
                     <template v-slot:headerTitle>
                         <h5>{{ $t('assignments.futureAssignments') }}</h5>
                     </template>
                     <template v-slot:body>
                         <b-list-group class="list-group-flush" id="futureAssignments" :per-page="futurePerPage" :current-page="futureCurrentPage">
-                            <b-list-group-item v-for="(item, index) in futureAssigments" :key="index">
+                            <b-list-group-item v-for="(item, index) in futureAssigments[futureCurrentPage]" :key="index">
                                 <div class="assignments-container" :class="{ 'taskIsActive' : !item.completed}">
                                     <b-checkbox v-model="item.completed" :disabled="item.disabled" name="check-button" inline :key="index" class="completed-assignment" @change="finishAssignment(item.id, $event)"></b-checkbox>
                                     <span>{{ item.description }}</span>
@@ -100,13 +104,13 @@
         </b-row>
         <b-row style="justify-content: center;">
             <b-col lg="12">
-                <iq-card class-name="iq-card-block iq-card-stretch iq-card-height">
+                <iq-card class-name="iq-card-block iq-card-stretch iq-card-height completedAssignments-body">
                     <template v-slot:headerTitle>
                         <h5>{{ $t('assignments.completedAssignments') }}</h5>
                     </template>
                     <template v-slot:body>
                         <b-list-group class="list-group-flush" id="completedAssignments" :per-page="completedPerPage" :current-page="completedCurrentPage">
-                            <b-list-group-item v-for="(item, index) in completedAssigments" :key="index">
+                            <b-list-group-item v-for="(item, index) in completedAssigments[completedCurrentPage]" :key="index">
                                 <div class="assignments-container" :class="{ 'taskIsActive' : !item.completed}">
                                     <b-checkbox v-model="item.completed" :disabled="item.disabled" name="check-button" inline :key="index" class="completed-assignment" @change="finishAssignment(item.id, $event)"></b-checkbox>
                                     <span>{{ item.description }}</span>
@@ -119,10 +123,12 @@
                         <template>
                             <div class="mt-4 ml-2">
                                 <p v-if="completedTotalRows===0"> You have no completed assignments.</p>
-                                <b-pagination v-else v-model="completedCurrentPage"
-                                              :total-rows="completedTotalRows"
-                                              :per-page="completedPerPage"
-                                              aria-controls="completedAssignments"></b-pagination>
+                                <b-pagination
+                                    v-else-if="completedTotalRows > 20"
+                                    v-model="completedCurrentPage"
+                                    :total-rows="completedTotalRows"
+                                    :per-page="completedPerPage"
+                                    aria-controls="completedAssignments"></b-pagination>
                             </div>
                         </template>
                     </template>
@@ -131,7 +137,7 @@
         </b-row>
     </b-container>
 </template>
-<style>
+<style lang="scss" >
 [dir=ltr] .iq-sidebar .iq-menu li.active {
     background-color: #ffffff;
     border-radius: 15px;
@@ -139,6 +145,32 @@
 .taskIsActive {
     color: black;
 }
+
+.custom-control-label {
+  &:before,
+  &:after{
+    top: 50%;
+    transform: translateY(-50%);
+  }
+}
+
+@media(max-width: 1000px) {
+  #todaysAssignments,
+  #overdueAssignments,
+  #futureAssignments,
+  #completedAssignments{
+    width: 900px;
+  }
+
+  .todaysAssignments-body,
+  .overdueAssignments-body,
+  .futureAssignments-body,
+  .completedAssignments-body{
+    overflow-y: scroll;
+  }
+
+}
+
 </style>
 <script>
 import { xray } from '../../config/pluginInit'
@@ -157,17 +189,30 @@ export default {
       getAssignments('today').then(response => {
         this.todaysAssigments = response
         this.todaysTotalRows = response.length
+        console.log(this.todaysTotalRows)
       })
       getAssignments('future').then(response => {
-        this.futureAssigments = response
-        this.todaysTotalRows = response.length
+        let res = []
+        for (let i = 0; i < response.length; i += 3) {
+          res = [...res, response.slice(i, i + 20)]
+        }
+        this.futureAssigments = res
+        this.futureTotalRows = response.length
       })
       getAssignments('past').then(response => {
-        this.overdueAssignments = response
+        let res = []
+        for (let i = 0; i < response.length; i += 3) {
+          res = [...res, response.slice(i, i + 20)]
+        }
+        this.overdueAssignments = res
         this.overdueTotalRows = response.length
       })
       getAssignments('finished').then(response => {
-        this.completedAssigments = response
+        let res = []
+        for (let i = 0; i < response.length; i += 3) {
+          res = [...res, response.slice(i, i + 20)]
+        }
+        this.completedAssigments = res
         this.completedTotalRows = response.length
       })
     },
@@ -191,10 +236,10 @@ export default {
       todayCurrentPage: 1,
       todayPerPage: 10,
       overdueCurrentPage: 1,
-      overduePerPage: 10,
+      overduePerPage: 20,
       futureCurrentPage: 1,
       futurePerPage: 10,
-      completedCurrentPage: 1,
+      completedCurrentPage: 0,
       completedPerPage: 10,
       bool: [
         { label: 'Completed', checked: true },

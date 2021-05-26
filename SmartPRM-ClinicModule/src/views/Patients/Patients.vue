@@ -29,7 +29,7 @@
                         <b-row>
                             <b-col md="12" class="table-responsive">
                                 <b-table
-                                  id="my-table"
+                                  id="patients-table"
                                   bordered
                                   hover
                                   :busy="!isDataLoaded"
@@ -121,7 +121,7 @@
                                   v-model="currentPage"
                                   :total-rows="totalRows"
                                   :per-page="perPage"
-                                  aria-controls="my-table"></b-pagination>
+                                  aria-controls="patients-table"></b-pagination>
                             </div>
                         </template>
                     </template>
@@ -277,6 +277,27 @@ export default {
 @media (min-width: 320px) and (max-width: 575px) {
   .patient {
    justify-content: flex-start;
+  }
+}
+
+@media (max-width: 1460px) {
+  #patients-table {
+    th{
+      &:nth-child(5),
+      &:nth-child(6)
+      {
+        display: none;
+      }
+    }
+    tr {
+      td{
+        &:nth-child(5),
+        &:nth-child(6)
+        {
+          display: none;
+        }
+      }
+    }
   }
 }
 
