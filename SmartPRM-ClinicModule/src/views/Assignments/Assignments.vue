@@ -80,7 +80,7 @@
                     <template v-slot:body>
                         <b-list-group class="list-group-flush" id="futureAssignments" :per-page="futurePerPage" :current-page="futureCurrentPage">
                             <b-list-group-item v-for="(item, index) in futureAssigments[futureCurrentPage]" :key="index">
-                                <div class="assignments-container" :class="{ 'taskIsActive' : !item.completed}">
+                                <div class="assignments-container row align-items-center flex-nowrap" :class="{ 'taskIsActive' : !item.completed}">
                                     <b-checkbox v-model="item.completed" :disabled="item.disabled" name="check-button" inline :key="index" class="completed-assignment" @change="finishAssignment(item.id, $event)"></b-checkbox>
                                     <span>{{ item.description }}</span>
                                     <span class="pl-5">{{ item.patientname }} {{ item.patientlastname }}</span>
@@ -111,7 +111,7 @@
                     <template v-slot:body>
                         <b-list-group class="list-group-flush" id="completedAssignments" :per-page="completedPerPage" :current-page="completedCurrentPage">
                             <b-list-group-item v-for="(item, index) in completedAssigments[completedCurrentPage]" :key="index">
-                                <div class="assignments-container" :class="{ 'taskIsActive' : !item.completed}">
+                                <div class="assignments-container row align-items-center flex-nowrap" :class="{ 'taskIsActive' : !item.completed}">
                                     <b-checkbox v-model="item.completed" :disabled="item.disabled" name="check-button" inline :key="index" class="completed-assignment" @change="finishAssignment(item.id, $event)"></b-checkbox>
                                     <span>{{ item.description }}</span>
                                     <span class="pl-5">{{ item.patientname }} {{ item.patientlastname }}</span>
