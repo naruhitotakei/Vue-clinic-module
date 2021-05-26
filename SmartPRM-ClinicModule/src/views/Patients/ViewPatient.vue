@@ -342,43 +342,31 @@
                   <tab-content-item :active="false" id="files">
                       <iq-card body-class="iq-card-body">
                           <template v-slot:headerTitle>
-                              <h3 class="card-title" style="margin-top: 10px;">{{ $t('EPR.filesHeader') }}</h3>
-                              <div class="btn-add-patient">
+                              <h3 class="card-title mt-3 mb-2">{{ $t('EPR.filesHeader') }}</h3>
+                              <div class="btn-add-patient mt-2">
                                   <b-button variant="primary" @click="add_file"><i class="ri-add-line mr-2"></i>{{ $t('EPR.files.addFile') }}</b-button>
                               </div>
                               <div class="iq-card-header-toolbar d-flex align-items-center" style="margin-top: -10px;">
-                                  <div class="iq-search-bar">
-                                      <form action="#" class="searchbox">
-                                          <input type="text" class="text search-input" v-model="filter" placeholder="Search">
-                                          <a class="search-link" href="#"><i class="ri-search-line"></i></a>
-                                      </form>
-                                  </div>
-                                  <iq-card>
-                                      <b-form-group label-for="searchOptions">
-                                          <template slot="label">
-                                              {{ $t('EPR.files.searchBy') }}:
-                                          </template>
-                                          <v-select class="patients" label="text"
-                                            :clearable="false" :reduce="filter => filter.value"
-                                            :options="searchOptions" @input="filterSelected">
+                                  <h5 class="mt-2">{{ $t('EPR.files.sortBy') }}</h5>
+                                  <div class="mt-4 ml-3">
+                                      <b-form-group label-for="sortOptions">
+                                          <v-select class="patients" label="text" :clearable="false"
+                                                    :options="sortOptions" @input="sortSelected">
                                           </v-select>
                                       </b-form-group>
-                                  </iq-card>
+                                  </div>
                               </div>
                           </template>
                           <template v-slot:body>
                               <div class="iq-card-body">
                                   <ul class="profile-img-gallary d-flex flex-wrap p-0 m-0">
-                                      <li class="col-md-4 col-6 pb-3"><a href="javascript:void(0);"><img src="../../assets/images/login/1.png" alt="gallary-image" class="img-fluid"></a><div class="text-center"><p class="mb-0">{{ $t('EPR.files.fileName') }}: File 1</p><p>{{ $t('EPR.files.fileCreatedAt') }}: 03-03-2021</p></div></li>
-                                      <li class="col-md-4 col-6 pb-3"><a href="javascript:void(0);"><img src="../../assets/images/login/2.png" alt="gallary-image" class="img-fluid"></a><div class="text-center"><p class="mb-0">{{ $t('EPR.files.fileName') }}: File 2</p><p>{{ $t('EPR.files.fileCreatedAt') }}: 03-03-2021</p></div></li>
-                                      <li class="col-md-4 col-6 pb-3"><a href="javascript:void(0);"><img src="../../assets/images/login/3.png" alt="gallary-image" class="img-fluid"></a><div class="text-center"><p class="mb-0">{{ $t('EPR.files.fileName') }}: File 3</p><p>{{ $t('EPR.files.fileCreatedAt') }}: 03-03-2021</p></div></li>
-                                      <li class="col-md-4 col-6 pb-3"><a href="javascript:void(0);"><img src="../../assets/images/login/1.png" alt="gallary-image" class="img-fluid"></a><div class="text-center"><p class="mb-0">{{ $t('EPR.files.fileName') }}: File 4</p><p>{{ $t('EPR.files.fileCreatedAt') }}: 03-03-2021</p></div></li>
-                                      <li class="col-md-4 col-6 pb-3"><a href="javascript:void(0);"><img src="../../assets/images/login/2.png" alt="gallary-image" class="img-fluid"></a><div class="text-center"><p class="mb-0">{{ $t('EPR.files.fileName') }}: File 5</p><p>{{ $t('EPR.files.fileCreatedAt') }}: 03-03-2021</p></div></li>
-                                      <li class="col-md-4 col-6 pb-3"><a href="javascript:void(0);"><img src="../../assets/images/login/3.png" alt="gallary-image" class="img-fluid"></a><div class="text-center"><p class="mb-0">{{ $t('EPR.files.fileName') }}: File 6</p><p>{{ $t('EPR.files.fileCreatedAt') }}: 03-03-2021</p></div></li>
-                                      <li class="col-md-4 col-6 pb-0"><a href="javascript:void(0);"><img src="../../assets/images/login/1.png" alt="gallary-image" class="img-fluid"></a><div class="text-center"><p class="mb-0">{{ $t('EPR.files.fileName') }}: File 7</p><p>{{ $t('EPR.files.fileCreatedAt') }}: 03-03-2021</p></div></li>
-                                      <li class="col-md-4 col-6 pb-0"><a href="javascript:void(0);"><img src="../../assets/images/login/2.png" alt="gallary-image" class="img-fluid"></a><div class="text-center"><p class="mb-0">{{ $t('EPR.files.fileName') }}: File 8</p><p>{{ $t('EPR.files.fileCreatedAt') }}: 03-03-2021</p></div></li>
-                                      <li class="col-md-4 col-6 pb-0"><a href="javascript:void(0);"><img src="../../assets/images/login/3.png" alt="gallary-image" class="img-fluid"></a><div class="text-center"><p class="mb-0">{{ $t('EPR.files.fileName') }}: File 9</p><p>{{ $t('EPR.files.fileCreatedAt') }}: 03-03-2021</p></div></li>
-                                      <li class="col-md-4 col-6 pb-0"><a href="javascript:void(0);"><img src="../../assets/images/login/3.png" alt="gallary-image" class="img-fluid"></a><div class="text-center"><p class="mb-0">{{ $t('EPR.files.fileName') }}: File 9</p><p>{{ $t('EPR.files.fileCreatedAt') }}: 03-03-2021</p></div></li>
+                                      <li class="col-md-4 col-6 pb-3" v-for="(file, id) in files" :key="id">
+                                          <img :src="file.image" alt="gallary-image" class="img-fluid">
+                                          <div class="text-center">
+                                              <p class="mb-0">{{ $t('EPR.files.fileName') }}: {{file.file_name}}</p>
+                                              <p>{{ $t('EPR.files.fileCreatedAt') }}: {{file.created_at}}</p>
+                                          </div>
+                                      </li>
                                   </ul>
                               </div>
                           </template>
@@ -587,7 +575,7 @@ export default {
       dentists: [],
       surgeons: [],
       filter: '',
-      filterOn: [],
+      sortOn: [],
       invoices: [],
       services: [],
       offers: [],
@@ -599,9 +587,20 @@ export default {
       servicesPerPage: 10,
       dropDownText: '',
       selected: this.value,
-      searchOptions: [
+      sortOptions: [
         { value: 'file_name', text: this.$t('EPR.files.fileName') },
         { value: 'created_at', text: this.$t('EPR.files.fileCreatedAt') }
+      ],
+      files: [
+        { id: 1, image: require('../../assets/images/login/1.png'), file_name: 'File 1', created_at: '04.03.2021' },
+        { id: 2, image: require('../../assets/images/login/2.png'), file_name: 'File 2', created_at: '07.03.2021' },
+        { id: 3, image: require('../../assets/images/login/3.png'), file_name: 'File 3', created_at: '11.03.2021' },
+        { id: 4, image: require('../../assets/images/login/1.png'), file_name: 'File 4', created_at: '14.03.2021' },
+        { id: 5, image: require('../../assets/images/login/2.png'), file_name: 'File 5', created_at: '17.03.2021' },
+        { id: 6, image: require('../../assets/images/login/3.png'), file_name: 'File 6', created_at: '21.03.2021' },
+        { id: 7, image: require('../../assets/images/login/1.png'), file_name: 'File 7', created_at: '25.03.2021' },
+        { id: 8, image: require('../../assets/images/login/2.png'), file_name: 'File 8', created_at: '28.03.2021' },
+        { id: 9, image: require('../../assets/images/login/3.png'), file_name: 'File 9', created_at: '30.03.2021' }
       ],
       disabled: true,
       doctor: {
@@ -824,10 +823,6 @@ export default {
         }
         reader.readAsDataURL(input.files[0])
       }
-    },
-    filterSelected (value) {
-      let array = [value]
-      this.filterOn = array
     }
   }
 }

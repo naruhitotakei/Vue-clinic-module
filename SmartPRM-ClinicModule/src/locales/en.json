@@ -172,8 +172,7 @@
     "filesTab": "Files",
     "filesHeader": "Files",
     "files": {
-      "search": "Search",
-      "searchBy": "Search by",
+      "sortBy": "Sort by",
       "addFile": "Add file",
       "fileName": "File name",
       "fileCreatedAt": "Created at"

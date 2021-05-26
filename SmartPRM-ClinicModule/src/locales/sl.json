@@ -172,8 +172,7 @@
     "filesTab": "Datoteke",
     "filesHeader": "Datoteke",
     "files": {
-      "search": "Išči",
-      "searchBy": "Išči glede na",
+      "sortBy": "Razvrsti po",
       "addFile": "Dodaj datoteko",
       "fileName": "Ime datoteke",
       "fileCreatedAt": "Ustvarjeno"
