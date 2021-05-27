@@ -339,40 +339,46 @@
                           </div>
                       </iq-card>
                   </tab-content-item>
-                  <tab-content-item :active="false" id="files">
-                      <iq-card body-class="iq-card-body">
-                          <template v-slot:headerTitle>
-                              <h3 class="card-title mt-3 mb-2">{{ $t('EPR.filesHeader') }}</h3>
-                              <div class="btn-add-patient mt-2">
-                                  <b-button variant="primary" @click="add_file"><i class="ri-add-line mr-2"></i>{{ $t('EPR.files.addFile') }}</b-button>
-                              </div>
-                              <div class="iq-card-header-toolbar d-flex align-items-center" style="margin-top: -10px;">
-                                  <h5 class="mt-2">{{ $t('EPR.files.sortBy') }}</h5>
-                                  <div class="mt-4 ml-3">
-                                      <b-form-group label-for="sortOptions">
-                                          <v-select class="patients" label="text" :clearable="false"
-                                                    :options="sortOptions" @input="sortSelected">
-                                          </v-select>
-                                      </b-form-group>
+                      <tab-content-item :active="false" id="files">
+                          <iq-card body-class="iq-card-body">
+                              <template v-slot:headerTitle>
+                                  <h3 class="card-title mt-3 mb-2">{{ $t('EPR.filesHeader') }}</h3>
+                                  <div class="btn-add-patient mt-2">
+                                      <b-button variant="primary" @click="add_file"><i class="ri-add-line mr-2"></i>{{ $t('EPR.files.addFile') }}</b-button>
                                   </div>
-                              </div>
-                          </template>
-                          <template v-slot:body>
-                              <div class="iq-card-body">
-                                  <ul class="profile-img-gallary d-flex flex-wrap p-0 m-0">
-                                      <li class="col-md-4 col-6 pb-3" v-for="(file, id) in files" :key="id">
-                                          <img :src="file.image" alt="gallary-image" class="img-fluid">
-                                          <div class="text-center">
-                                              <p class="mb-0">{{ $t('EPR.files.fileName') }}: {{file.name}}</p>
-                                              <p class="mb-0">{{ $t('EPR.files.fileType') }}: {{file.type}}</p>
-                                              <p>{{ $t('EPR.files.fileCreatedAt') }}: {{file.created_at}}</p>
-                                          </div>
-                                      </li>
-                                  </ul>
-                              </div>
-                          </template>
-                      </iq-card>
-                  </tab-content-item>
+                                  <div class="iq-card-header-toolbar d-flex align-items-center" style="margin-top: -10px;">
+                                      <h5 class="mt-2">{{ $t('EPR.files.sortBy') }}</h5>
+                                      <div class="mt-4 ml-3">
+                                          <b-form-group label-for="sortOptions">
+                                              <v-select class="patients" label="text" :clearable="false" id="select"
+                                                        :options="sortOptions" v-model="sortBy">
+                                              </v-select>
+                                          </b-form-group>
+                                      </div>
+                                      <span class="ml-2 mt-3">
+                                          <button @click="ascending = !ascending" class="sort-button">
+                                              <i v-if="ascending" class="fa fa-sort-desc fa-lg" aria-hidden="true"></i>
+                                              <i v-else class="fa fa-sort-asc fa-lg" aria-hidden="true"></i>
+                                          </button>
+                                      </span>
+                                  </div>
+                              </template>
+                              <template v-slot:body>
+                                  <div class="iq-card-body">
+                                      <ul class="profile-img-gallary d-flex flex-wrap p-0 m-0">
+                                          <li class="col-md-4 col-6 pb-3" v-for="file in filteredFiles" :key="file.created_at">
+                                              <img :src="file.image" alt="gallary-image" class="img-fluid">
+                                              <div class="text-center">
+                                                  <p class="mb-0">{{ $t('EPR.files.fileName') }}: {{file.name}}</p>
+                                                  <p class="mb-0">{{ $t('EPR.files.fileType') }}: {{file.type}}</p>
+                                                  <p>{{ $t('EPR.files.fileCreatedAt') }}: {{file.created_at}}</p>
+                                              </div>
+                                          </li>
+                                      </ul>
+                                  </div>
+                              </template>
+                          </iq-card>
+                      </tab-content-item>
                   <tab-content-item :active="false" id="invoices">
                       <iq-card>
                           <template v-slot:headerTitle>
@@ -549,7 +555,41 @@ export default {
     },
     hideSummaryPagination () {
       return Math.floor(this.services.length / this.servicesPerPage) !== 0
+    },
+    /* Sort files in under files tab functionality */
+    filteredFiles () {
+      let tempFiles = this.files
+      tempFiles = tempFiles.sort((a, b) => {
+        if (this.sortBy === 'name') {
+          let fa = a.name.toLowerCase()
+          let fb = b.name.toLowerCase()
+          if (fa < fb) {
+            return -1
+          }
+          if (fa > fb) {
+            return 1
+          }
+          return 0
+        } else if (this.sortBy === 'type') {
+          let fa = a.type.toLowerCase()
+          let fb = b.type.toLowerCase()
+          if (fa < fb) {
+            return -1
+          }
+          if (fa > fb) {
+            return 1
+          }
+          return 0
+        } else if (this.sortBy === 'created_at') {
+          return new Date(a.created_at) - new Date(b.created_at)
+        }
+      })
+      if (!this.ascending) {
+        tempFiles.reverse()
+      }
+      return tempFiles
     }
+    /* END OF Sort files in under files tab functionality */
   },
   filters: {
     fromNowDate (val) {
@@ -576,7 +616,6 @@ export default {
       dentists: [],
       surgeons: [],
       filter: '',
-      sortOn: [],
       invoices: [],
       services: [],
       offers: [],
@@ -588,21 +627,23 @@ export default {
       servicesPerPage: 10,
       dropDownText: '',
       selected: this.value,
+      ascending: true,
+      sortBy: '',
       sortOptions: [
         { value: 'name', text: this.$t('EPR.files.fileName') },
         { value: 'type', text: this.$t('EPR.files.fileType') },
         { value: 'created_at', text: this.$t('EPR.files.fileCreatedAt') }
       ],
       files: [
-        { id: 1, image: require('../../assets/images/login/1.png'), name: 'File 2', type: 'Rentgen', created_at: '04.03.2021' },
-        { id: 2, image: require('../../assets/images/login/2.png'), name: 'File 4', type: 'Krvna slika', created_at: '07.04.2021' },
-        { id: 3, image: require('../../assets/images/login/3.png'), name: 'File 5', type: 'Rentgen', created_at: '11.03.2021' },
-        { id: 4, image: require('../../assets/images/login/1.png'), name: 'File 1', type: 'Anamneza', created_at: '14.04.2021' },
-        { id: 5, image: require('../../assets/images/login/2.png'), name: 'File 9', type: 'Rentgen', created_at: '17.04.2021' },
-        { id: 6, image: require('../../assets/images/login/3.png'), name: 'File 7', type: 'Krvna Slika', created_at: '21.03.2021' },
-        { id: 7, image: require('../../assets/images/login/1.png'), name: 'File 6', type: 'Rentgen', created_at: '02.04.2021' },
-        { id: 8, image: require('../../assets/images/login/2.png'), name: 'File 3', type: 'Anamneza', created_at: '28.03.2021' },
-        { id: 9, image: require('../../assets/images/login/3.png'), name: 'File 8', type: 'Rentgen', created_at: '30.03.2021' }
+        { image: require('../../assets/images/login/1.png'), name: 'File 2', type: 'Rentgen', created_at: '04.03.2021' },
+        { image: require('../../assets/images/login/2.png'), name: 'File 4', type: 'Krvna slika', created_at: '07.04.2021' },
+        { image: require('../../assets/images/login/3.png'), name: 'File 5', type: 'Rentgen', created_at: '11.03.2021' },
+        { image: require('../../assets/images/login/1.png'), name: 'File 1', type: 'Anamneza', created_at: '14.04.2021' },
+        { image: require('../../assets/images/login/2.png'), name: 'File 9', type: 'Rentgen', created_at: '17.04.2021' },
+        { image: require('../../assets/images/login/3.png'), name: 'File 7', type: 'Krvna Slika', created_at: '21.03.2021' },
+        { image: require('../../assets/images/login/1.png'), name: 'File 6', type: 'Rentgen', created_at: '02.04.2021' },
+        { image: require('../../assets/images/login/2.png'), name: 'File 3', type: 'Anamneza', created_at: '28.03.2021' },
+        { image: require('../../assets/images/login/3.png'), name: 'File 8', type: 'Rentgen', created_at: '30.03.2021' }
       ],
       disabled: true,
       doctor: {
@@ -859,6 +900,15 @@ export default {
 .vs--disabled .vs__dropdown-toggle, .vs--disabled .vs__clear, .vs--disabled .vs__search, .vs--disabled .vs__selected, .vs--disabled .vs__open-indicator {
     background-color: #e9ecef !important;
     margin-top: 4px;
+}
+
+.sort-button {
+    background-color: Transparent;
+    background-repeat: no-repeat;
+    border: none;
+    cursor: pointer;
+    overflow: hidden;
+    outline: none;
 }
 
 @media (max-width: 992px) {
