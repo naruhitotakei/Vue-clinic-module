@@ -67,15 +67,21 @@
                         </b-col>
                     </b-row>
                     <b-row>
-                      <b-col lg="5" offset-lg="7">
+                      <b-col lg="6" offset-lg="6">
                           <h2 class="text-center">Total: {{advPayments[0].amount | euro}}</h2>
                       </b-col>
-                      <b-col lg="5" offset-lg="7">
+                      <b-col lg="6" offset-lg="6">
                           <b-alert :show="!canBeSaved" variant="danger">
                             <div class="iq-alert-icon">
                               <i class="ri-alert-line"></i>
                             </div>
-                            <div class="iq-alert-text">Payment method amount must be the same as advance payment amount and can't be 0!</div>
+                            <div class="iq-alert-text">
+                              <ul style="list-style:inherit">
+                                <li>Amounts of payment method and advance payment must be the same</li>
+                                <li>Advance payment amount can't be 0</li>
+                                <li>Payment method must be selected</li>
+                              </ul>
+                            </div>
                           </b-alert>
                       </b-col>
                     </b-row>
@@ -171,7 +177,7 @@ export default {
   },
   computed: {
     canBeSaved () {
-      return this.advPayments[0].amount === this.paymentMethods[0].amount && this.advPayments[0].amount !== 0
+      return this.advPayments[0].amount === this.paymentMethods[0].amount && this.advPayments[0].amount !== 0 && this.paymentMethods[0].paymentMethod
     }
   },
   data () {
@@ -325,11 +331,11 @@ export default {
         lines_sum: this.advPayments[0].amount,
         discount_sum: 0,
         charges_sum: this.advPayments[0].amount,
-        total_without_vat: 0,
-        total_vat_amount: 0,
-        total_with_vat: 0,
+        total_without_vat: this.advPayments[0].amount,
+        total_vat_amount: null,
+        total_with_vat: this.advPayments[0].amount,
         paid_amount: 0,
-        amount_due_for_payment: 0,
+        amount_due_for_payment: 1,
         payment_method: this.paymentMethods[0].paymentMethod,
         warranty: true,
         vat_exemption_reason: 'test',
