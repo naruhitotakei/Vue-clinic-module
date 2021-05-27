@@ -3,13 +3,8 @@
         <iq-card>
           <template v-slot:headerTitle>
             <div class="row pt-3">
-          <b-form-group class="pl-3 mr-3 w-25 sm-w-100">
-              <v-select class="patients" v-model="countrySelect" label="text"
-                :clearable="false" :reduce="period => period.value"
-                :options="countrySelectOptions" @input="onCountryChange">
-              </v-select>
-            </b-form-group>
-            <b-form-group class="mr-3 sm-w-100">
+
+            <b-form-group class="ml-3 mr-3 sm-w-100">
               <v-select class="patients" v-model="periodSelect" label="text"
                 :clearable="false" :reduce="period => period.value"
                 :options="periodSelectOptions" @input="onPeriodChange">
@@ -24,6 +19,12 @@
               <label style="padding-top: 8px;">To:</label>
               <b-form-input class="date" id="exampleInputdate" type="date" v-model="todate" @change="onToChange"></b-form-input>
             </b-form-group>
+              <b-form-group class="mr-3  sm-w-100" style="width: 15%">
+                <v-select class="patients" v-model="countrySelect" label="text"
+                          :clearable="false" :reduce="period => period.value"
+                          :options="countrySelectOptions" @input="onCountryChange">
+                </v-select>
+              </b-form-group>
             </div>
           </template>
         </iq-card>
