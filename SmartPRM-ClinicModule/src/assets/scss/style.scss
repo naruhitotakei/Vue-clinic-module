@@ -30,6 +30,10 @@
   }
 }
 
+.page-link {
+  color: #000 !important;
+}
+
 [dir="rtl"]{
   @import "../css/rtl/bootstrap";
   @import "../css/rtl/light/typography";
