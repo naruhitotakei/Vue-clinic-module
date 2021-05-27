@@ -247,7 +247,7 @@ export default {
       colors: 'Setting/colorState'
     }),
     getAvatarUrl: function () {
-      return '/api/files/avatar?' + Math.random() + this.avatar_version
+      return '/api/files/avatar?' + this.avatar_version
     }
   },
   watch: {
