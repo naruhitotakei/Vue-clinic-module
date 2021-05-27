@@ -9,7 +9,7 @@
                             <b-button variant="primary" @click="openAddLocation"><i class="ri-add-line mr-2"></i>{{ $t('settingsLocations.addLocation') }}</b-button>
                         </div>
                     </template>
-                    <b-modal v-model="addLocationModal" no-close-on-backdrop size="lg" :title="$t('settingsLocations.addLocationModalHeader')" @close="addLocationModal = false" @cancel="addLocationModal = false" @ok="addLocation" :ok-title="$t('settingsLocations.locationModal.save')" :cancel-title="$t('settingsLocations.locationModal.close')">
+                    <b-modal v-model="addLocationModal" no-close-on-backdrop size="lg" :title="$t('settingsLocations.addLocationModalHeader')" @close="addLocationModal = false" @cancel="addLocationModal = false" @ok="addLocation" :ok-title="$t('settingsLocations.locationModal.save')" :cancel-title="$t('settingsLocations.locationModal.close')" :ok-disabled="isOkDisabled">
                         <form>
                             <div class="form-row">
                                 <div class="col-md-12 mb-3">
@@ -69,7 +69,7 @@
                         </template>
                     </template>
                 </iq-card>
-                <b-modal v-model="editLocationModal" no-close-on-backdrop size="lg" :title="$t('settingsLocations.editLocationModalHeader')" @close="editLocationModal = false" @cancel="editLocationModal = false" @ok="editLocation" :ok-title="$t('settingsLocations.locationModal.save')" :cancel-title="$t('settingsLocations.locationModal.close')">
+                <b-modal v-model="editLocationModal" no-close-on-backdrop size="lg" :title="$t('settingsLocations.editLocationModalHeader')" @close="editLocationModal = false" @cancel="editLocationModal = false" @ok="editLocation" :ok-title="$t('settingsLocations.locationModal.save')" :cancel-title="$t('settingsLocations.locationModal.close')" :ok-disabled="isOkDisabled">
                     <form>
                         <div class="form-row">
                             <div class="col-md-12 mb-3">
@@ -93,7 +93,7 @@
                         </div>
                     </form>
                 </b-modal>
-                <iq-card>
+                <iq-card v-if="inactiveLocations.length >= 1">
                     <template v-slot:headerTitle>
                         <h4 class="card-title" style="margin-top: 10px;">{{ $t('settingsLocations.headerInactiveLocations') }}</h4>
                     </template>
@@ -138,6 +138,9 @@ export default {
   computed: {
     hideLocationsPagination () {
       return Math.floor(this.locations.length / this.locationsPerPage) !== 0
+    },
+    isOkDisabled () {
+      return !this.formData.name || !this.formData.city || !this.formData.address
     }
   },
   name: 'Locations',
