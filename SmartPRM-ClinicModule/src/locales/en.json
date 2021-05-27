@@ -267,10 +267,13 @@
     },
     "newInvoice": {
       "newInvoiceHeader": "New invoice",
+      "dateOfInvoice": "Date of invoice",
+      "paymentMethodSummary": "Payment Method Summary",
+      "addPaymentMethod": "Add new payment method",
       "newInvoiceColumn": {
         "invoiceDate": "Date",
         "invoiceTotal": "Total",
-        "billingDetails": "Billing details",
+        "customer": "Customer",
         "issuedIn": "Issued in",
         "issuedBy": "Issued by"
       },
@@ -281,7 +284,7 @@
         "quantity": "Quantity",
         "price": "Price",
         "discount": "Discount",
-        "total": "Total",
+        "amount": "Amount",
         "action": "Action"
       },
       "newInvoiceSummary": {

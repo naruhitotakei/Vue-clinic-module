@@ -16,7 +16,7 @@
                                 <b-thead>
                                   <b-th>{{ $t('invoices.newInvoice.newInvoiceColumn.invoiceDate') }}</b-th>
                                   <b-th>{{ $t('invoices.newInvoice.newInvoiceColumn.invoiceTotal') }}</b-th>
-                                  <b-th>{{ $t('invoices.newInvoice.newInvoiceColumn.billingDetails') }}</b-th>
+                                  <b-th>{{ $t('invoices.newInvoice.newInvoiceColumn.customer') }}</b-th>
                                   <b-th>{{ $t('invoices.newInvoice.newInvoiceColumn.issuedIn') }}</b-th>
                                   <b-th>{{ $t('invoices.newInvoice.newInvoiceColumn.issuedBy') }}</b-th>
                                 </b-thead>
@@ -237,15 +237,15 @@ export default {
         }
       ],
       invoiceDate: moment().format('DD MMM, YYYY'),
-      billingDetails: this.$route.params.billingDetails,
-      enquireId: this.$route.params.enquireId,
+      patientId: this.$route.params.patientId,
       issuedIn: 'Ljubljana',
       isEditMode: false,
       logedInUser: {},
       patient: {},
       usersCompany: {},
       invoiceTotal: 0,
-      invoice: {}
+      invoice: {},
+      billingDetails: ''
     }
   },
   methods: {
@@ -301,9 +301,24 @@ export default {
       })
     },
     getPatient () {
-      getEnquiryById(this.enquireId).then(response => {
+      getEnquiryById(this.patientId).then(response => {
         this.patient = response[0]
+        this.createBillingDetails(this.patient)
       })
+    },
+    createBillingDetails (selectedPatient) {
+      let details = ''
+      if (selectedPatient.name) details += selectedPatient.name
+      if (selectedPatient.last_name) details += ' ' + selectedPatient.last_name
+      details += '<br>'
+      if (selectedPatient.address_line_1) details += selectedPatient.address_line_1 + '<br>'
+      if (selectedPatient.post_code) details += selectedPatient.post_code
+      if (selectedPatient.city) details += ' ' + selectedPatient.city
+      if (selectedPatient.country) details += ', ' + selectedPatient.country
+      details += '<br>'
+      if (selectedPatient.phone) details += 'Telefon: ' + selectedPatient.phone + '<br>'
+      if (selectedPatient.email) details += 'Email: ' + selectedPatient.email
+      this.billingDetails = details
     },
     getProducts () {
       getProducts('sl').then(response => {

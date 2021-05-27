@@ -116,6 +116,12 @@ const documentChildRoute = (prop, mode) => [
     component: Invoice
   },
   {
+    path: 'invoices/:patientId/new-invoice',
+    name: prop + '.invoiceId',
+    meta: { dark: mode, auth: true, name: 'Invoice' },
+    component: NewInvoice
+  },
+  {
     path: 'advance-payments',
     name: prop + '.advance-payments',
     meta: { dark: mode, auth: true, name: 'Advance Payments' },
@@ -126,6 +132,12 @@ const documentChildRoute = (prop, mode) => [
     name: prop + '.advance-payments',
     meta: { dark: mode, auth: true, name: 'Advance Payments' },
     component: AdvPayment
+  },
+  {
+    path: 'advance-payments/:patientId/new-adv-payment',
+    name: prop + '.new-adv-payment',
+    meta: { dark: mode, auth: true, name: 'Advance Payments' },
+    component: NewAdvPayment
   },
   {
     path: 'offers',
@@ -212,21 +224,6 @@ const settingsChildRoute = (prop, mode = false) => [
   }
 ]
 
-const defaultlayout = (prop, mode = false) => [
-  {
-    path: 'new-invoice',
-    name: prop + '.new-invoice',
-    meta: { dark: mode, auth: true, name: 'New Invoice' },
-    component: NewInvoice
-  },
-  {
-    path: 'new-adv-payment',
-    name: prop + '.new-adv-payment',
-    meta: { dark: mode, auth: true, name: 'New Adv Payment' },
-    component: NewAdvPayment
-  }
-]
-
 const routes = [
   {
     path: '/',
@@ -269,13 +266,6 @@ const routes = [
     component: Layout1,
     meta: { auth: true },
     children: settingsChildRoute('settings')
-  },
-  {
-    path: '/extra-pages',
-    name: 'extra-pages',
-    component: Layout1,
-    meta: { auth: true },
-    children: defaultlayout('extra-pages')
   },
   {
     path: '/auth',

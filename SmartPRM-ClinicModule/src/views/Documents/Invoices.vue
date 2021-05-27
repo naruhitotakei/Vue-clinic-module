@@ -166,21 +166,7 @@ export default {
       this.$router.push({ path: `/documents/invoices/${item.invoice_number}` })
     },
     addInvoice () {
-      this.$router.push({ name: 'extra-pages.new-invoice', params: { enquireId: this.selectedPatient.id, billingDetails: this.createBillingDetails() } })
-    },
-    createBillingDetails () {
-      let details = ''
-      if (this.selectedPatient.name) details += this.selectedPatient.name
-      if (this.selectedPatient.last_name) details += ' ' + this.selectedPatient.name
-      details += '<br>'
-      if (this.selectedPatient.address_line_1) details += this.selectedPatient.address_line_1 + '<br>'
-      if (this.selectedPatient.post_code) details += this.selectedPatient.post_code
-      if (this.selectedPatient.city) details += ' ' + this.selectedPatient.city
-      if (this.selectedPatient.country) details += ', ' + this.selectedPatient.country
-      details += '<br>'
-      if (this.selectedPatient.phone) details += 'Telefon: ' + this.selectedPatient.phone + '<br>'
-      if (this.selectedPatient.email) details += 'Email: ' + this.selectedPatient.email
-      return details
+      this.$router.push({ path: `/documents/invoices/${this.selectedPatient.id}/new-invoice` })
     },
     getInvoices () {
       getInvoices().then(response => {

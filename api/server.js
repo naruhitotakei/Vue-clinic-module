@@ -623,6 +623,11 @@ app.get('/api/company-premises', (req, res) => {
     daoCompanyPremises.getCompanyPremises(req, res)
 });
 
+app.get('/api/:companyId/company-premises', (req, res) => {
+    const companyId = req.params.companyId
+    daoCompanyPremises.getPremisesForCompany(req, res, companyId)
+});
+
 ////////////////////////////////////
 // Files
 ///////////////////////////////////

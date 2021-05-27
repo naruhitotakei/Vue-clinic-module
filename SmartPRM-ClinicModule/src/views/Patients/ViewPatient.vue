@@ -698,7 +698,7 @@ export default {
     createBillingDetails () {
       let details = ''
       if (this.patient.name) details += this.patient.name
-      if (this.patient.last_name) details += ' ' + this.patient.name
+      if (this.patient.last_name) details += ' ' + this.patient.last_name
       details += '<br>'
       if (this.patient.address_line_1) details += this.patient.address_line_1 + '<br>'
       if (this.patient.post_code) details += this.patient.post_code

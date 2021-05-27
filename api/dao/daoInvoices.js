@@ -26,9 +26,11 @@ const createInvoices = (request, response, invoice) => {
             throw error
         }
         var invoiceId = results.rows[0].invoice_id;
-        invoice.invoiceItems.forEach(item => {
-            createInoviceItem(item, invoiceId)
-        });
+        if (invoice.invoiceItems.length > 0) {
+            invoice.invoiceItems.forEach(item => {
+                createInoviceItem(item, invoiceId)
+            });
+        }
         response.status(200).json("OK")
     })
 }

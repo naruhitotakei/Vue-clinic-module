@@ -267,10 +267,13 @@
     },
     "newInvoice": {
       "newInvoiceHeader": "Nov račun",
+      "dateOfInvoice": "Datum izdaje",
+      "paymentMethodSummary": "",
+      "addPaymentMethod": "Dodaj nov način plačila",
       "newInvoiceColumn": {
         "invoiceDate": "Datum izdaje",
         "invoiceTotal": "Znesek",
-        "billingDetails": "Podatki prejemnika",
+        "customer": "Stranka",
         "issuedIn": "Izdano v",
         "issuedBy": "Izdal"
       },
@@ -281,7 +284,7 @@
         "quantity": "Količina",
         "price": "Cena",
         "discount": "Popust",
-        "total": "Znesek",
+        "amount": "Znesek",
         "action": "Urejaj"
       },
       "newInvoiceSummary": {
