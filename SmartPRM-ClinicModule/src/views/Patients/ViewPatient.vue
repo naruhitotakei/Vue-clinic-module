@@ -545,7 +545,7 @@ export default {
     pastAppointments: function () {
       return this.appointments.filter((item) => {
         return !this.filterAppointments(item)
-      })
+      }).reverse()
     },
     hideInvoicesPagination () {
       return Math.floor(this.invoices.length / this.invoicesPerPage) !== 0
@@ -770,7 +770,7 @@ export default {
     },
     getPatientNotes (id) {
       getEnquiryNotes(id).then(response => {
-        this.notes = response
+        this.notes = response.reverse()
       }
       )
     },
