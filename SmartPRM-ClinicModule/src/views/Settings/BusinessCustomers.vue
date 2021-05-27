@@ -27,23 +27,23 @@
                 </div>
               </template>
               <template v-slot:cell(product_price)="data">
-                                        <span>
-                                            {{ data.item.product_price | euro }}
-                                        </span>
+                  <span>
+                      {{ data.item.product_price | euro }}
+                  </span>
               </template>
               <template v-slot:cell(product_group_id)="data">
-                                        <span>
-                                            {{ data.item.group_name }}
-                                        </span>
-              </template>
+                  <span>
+                      {{ data.item.group_name }}
+                  </span>
+               </template>
               <template v-slot:cell(product_type_id)="data">
-                                        <span>
-                                            {{ data.item.type_name }}
-                                        </span>
+                <span>
+                    {{ data.item.type_name }}
+                </span>
               </template>
               <template v-slot:cell(action)="data">
-                <b-button variant=" iq-bg-success mr-1 mb-1" size="sm" @click="editProduct(data.item)"><i class="ri-ball-pen-fill m-0"></i></b-button>
-                <b-button variant=" iq-bg-danger mr-1 mb-1" size="sm" @click="removeProduct(data.item)"><i class="ri-delete-bin-line m-0"></i></b-button>
+                <b-button variant=" iq-bg-success mr-1 mb-1" size="sm" @click="editBusiness(data.item)"><i class="ri-ball-pen-fill m-0"></i></b-button>
+                <b-button variant=" iq-bg-danger mr-1 mb-1" size="sm" @click="removeBusiness(data.item)"><i class="ri-delete-bin-line m-0"></i></b-button>
               </template>
             </b-table>
           </b-col>
@@ -63,48 +63,30 @@
       </template>
     </iq-card>
   </b-col>
-  <b-modal v-model="modalBusinessShow" no-close-on-backdrop size="lg" :title="$t('business.addBusinessModal.addBusiness')" :ok-disabled="isProductDisabled" @close="cancelProduct"  @cancel="cancelProduct" :ok-title="$t('business.addBusinessModal.save')" @ok="addProduct" :cancel-title="$t('business.addBusinessModal.close')">
+  <b-modal v-model="modalBusinessShow" no-close-on-backdrop size="lg" :title="$t('business.addBusinessModal.addBusiness')" @close="cancelBusiness"  @cancel="cancelBusiness"  :ok-title="$t('business.addBusinessModal.save')" @ok="addBusiness" :cancel-title="$t('business.addBusinessModal.close')">
     <form>
       <div class="form-row">
         <div class="col-md-12 mb-3">
-          <label for="title">{{ $t('business.addBusinessModal.nameSlovenian') }} *</label>
-          <div style="display: flex;">
-            <input type="text" v-model="formData.slovenian" class="form-control" placeholder="Slovenian" required>
-          </div>
-        </div>
-        <div class="col-md-12 mb-3">
-          <label for="title">{{ $t('business.addBusinessModal.nameItalian') }}</label>
-          <div style="display: flex;">
-            <input type="text" v-model="formData.italian" class="form-control" placeholder="Italian">
-          </div>
-        </div>
-        <div class="col-md-12 mb-3">
-          <label for="title">{{ $t('business.addBusinessModal.nameGerman') }}</label>
-          <div style="display: flex;">
-            <input type="text" v-model="formData.german" class="form-control" placeholder="German">
-          </div>
-        </div>
-        <div class="col-md-12 mb-3">
           <label for="title">{{ $t('business.addBusinessModal.nameEnglish') }}</label>
           <div style="display: flex;">
-            <input type="text" v-model="formData.english" class="form-control" placeholder="English">
+            <input type="text" v-model="formData.name" class="form-control" placeholder="English">
           </div>
         </div>
         <div class="col-md-6 mb-3">
-          <label for="patient">{{ $t('business.addBusinessModal.email') }} *</label>
-          <input type="number" v-model="formData.email" class="form-control" placeholder="Email" required>
+          <label for="title">{{ $t('business.addBusinessModal.email') }} *</label>
+          <input type="text" v-model="formData.email" class="form-control" placeholder="Email" required>
         </div>
         <div class="col-md-6 mb-3">
-          <label for="patient">{{ $t('business.addBusinessModal.address') }} *</label>
-          <input type="number" v-model="formData.email" class="form-control" placeholder="Adress" required>
+          <label for="title">{{ $t('business.addBusinessModal.address') }} *</label>
+          <input type="text" v-model="formData.address" class="form-control" placeholder="Address" required>
         </div>
         <div class="col-md-6 mb-3">
-          <label for="patient">{{ $t('business.addBusinessModal.city') }} *</label>
-          <input type="number" v-model="formData.email" class="form-control" placeholder="City" required>
+          <label for="title">{{ $t('business.addBusinessModal.city') }} *</label>
+          <input type="text" v-model="formData.city" class="form-control" placeholder="City" required>
         </div>
         <div class="col-md-6 mb-3">
-          <label for="patient">{{ $t('business.addBusinessModal.taxNumber') }} *</label>
-          <input type="number" v-model="formData.email" class="form-control" placeholder="Tax Number" required>
+          <label for="title">{{ $t('business.addBusinessModal.taxNumber') }} *</label>
+          <input type="text" v-model="formData.tax_number" class="form-control" placeholder="Tax Number" required>
         </div>
       </div>
     </form>
@@ -115,7 +97,7 @@
 
 <script>
 import { xray } from '../../config/pluginInit'
-import { getBusiness } from '@/services/business'
+import { createBusiness, deleteBusiness, getBusiness, getBusinessByID, updateBusiness } from '@/services/business'
 export default {
   components: {
   },
@@ -137,10 +119,7 @@ export default {
         { label: this.$t('business.businessColumn.businessAction'), key: 'action', class: 'text-center' }
       ],
       formData: {
-        slovenian: '',
-        italian: '',
-        german: '',
-        english: '',
+        id: null,
         name: '',
         email: '',
         address: '',
@@ -157,6 +136,47 @@ export default {
         this.businessTotalRows = response.length
         console.log(response)
       })
+    },
+    editBusiness (item) {
+      getBusinessByID(item.id)
+      this.formData = {
+        id: item.id,
+        name: item.name,
+        email: item.email,
+        address: item.address_line_1,
+        city: item.city,
+        tax_number: item.tax_number
+      }
+      this.modalBusinessShow = true
+    },
+    addBusiness () {
+      if (this.formData.id) {
+        updateBusiness(this.formData.id, this.formData).then(() => {
+          this.getBusiness()
+        })
+      } else {
+        createBusiness(this.formData).then(() => {
+          this.getBusiness()
+        })
+      }
+      this.formData = this.defaultFormData()
+    },
+    removeBusiness (item) {
+      let index = this.business.indexOf(item)
+      this.business.splice(index, 1)
+      deleteBusiness(item.id)
+    },
+    defaultFormData () {
+      return {
+        name: '',
+        email: '',
+        address: '',
+        city: '',
+        tax_number: ''
+      }
+    },
+    cancelBusiness () {
+      this.formData = this.defaultFormData()
     }
   },
   mounted () {

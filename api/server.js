@@ -300,6 +300,39 @@ app.get('/api/business/:locale', (req, res) => {
         res.status(401).json("OK: user unauthorized")
 });
 
+app.get('/api/business/:id', (req, res) => {
+  const id = req.params.id
+  if (req.session.prm_user && req.session.prm_user.permissions && checkPermission(req.session.prm_user.permissions, productsPermission))
+    daoBusiness.getBusinessByID(req, res, id)
+  else
+    res.status(401).json("OK: user unauthorized")
+});
+
+app.put('/api/business/:id', (req, res) => {
+  const id = req.params.id
+  const business = req.body
+  if (req.session.prm_user && req.session.prm_user.permissions && checkPermission(req.session.prm_user.permissions, productsPermission))
+    daoBusiness.updateBusiness(req, res, id, business)
+  else
+    res.status(401).json("OK: user unauthorized")
+});
+
+app.post('/api/business', (req, res) => {
+  const business = req.body
+  if(req.session.prm_user && req.session.prm_user.permissions && checkPermission(req.session.prm_user.permissions, productsPermission))
+    daoBusiness.createBusiness(req, res, business)
+  else
+    res.status(401).json("OK: user unauthorized")
+});
+
+app.delete('/api/business/:id', (req, res) => {
+  const id = req.params.id
+  if(req.session.prm_user && req.session.prm_user.permissions && checkPermission(req.session.prm_user.permissions, enquiriesPermission))
+    daoBusiness.deleteBusiness(req, res, id)
+  else
+    res.status(401).json("OK: user unauthorized")
+});
+
 ///////////////////////////////////
 // locations
 ///////////////////////////////////
