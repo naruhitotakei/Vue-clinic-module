@@ -1,5 +1,5 @@
-export async function getLocationsList () {
-  const rawResponse = await fetch('/api/locations/', {
+export async function getBusiness (locale) {
+  const rawResponse = await fetch('/api/business/' + locale, {
     method: 'GET',
     credentials: 'same-origin',
     headers: {
@@ -10,8 +10,8 @@ export async function getLocationsList () {
   return rawResponse.json()
 }
 
-export async function getInactiveLocationsList () {
-  const rawResponse = await fetch('/api/inactive-locations/', {
+export async function getBusinessByID (id) {
+  const rawResponse = await fetch('/api/business/' + id, {
     method: 'GET',
     credentials: 'same-origin',
     headers: {
@@ -22,35 +22,35 @@ export async function getInactiveLocationsList () {
   return rawResponse.json()
 }
 
-export async function createLocation (location) {
-  const rawResponse = await fetch('/api/locations/', {
+export async function createBusiness (business) {
+  const rawResponse = await fetch('/api/business/', {
     method: 'POST',
     credentials: 'same-origin',
     headers: {
       'Accept': 'application/json',
       'Content-Type': 'application/json'
     },
-    body: JSON.stringify(location)
+    body: JSON.stringify(business)
   })
   return rawResponse.json()
 }
 
-export async function updateLocation (id, location) {
-  const rawResponse = await fetch('/api/locations/' + id, {
+export async function updateBusiness (id, business) {
+  const rawResponse = await fetch('/api/business/' + id, {
     method: 'PUT',
     credentials: 'same-origin',
     headers: {
       'Accept': 'application/json',
       'Content-Type': 'application/json'
     },
-    body: JSON.stringify(location)
+    body: JSON.stringify(business)
   })
   return rawResponse.json()
 }
 
-export async function toggleActivity (id) {
-  const rawResponse = await fetch('/api/locations/' + id + '/activation', {
-    method: 'PUT',
+export async function deleteBusiness (id) {
+  const rawResponse = await fetch('/api/business/' + id, {
+    method: 'DELETE',
     credentials: 'same-origin',
     headers: {
       'Accept': 'application/json',

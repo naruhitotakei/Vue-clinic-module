@@ -121,8 +121,8 @@
       <div class="form-row">
         <div style="margin: auto; text-align: center;">
                   <div class="add-img-user profile-img-edit">
-                    <b-img class="profile-pic height-150 width-150" fluid :src="user.profile_image" alt="profile-pic" />
-                    <input type="hidden" v-model="user.profile_image">
+                    <b-img class="profile-pic height-150 width-150" fluid :src="getAvatarUrl" alt="profile-pic" />
+                    <input type="hidden" v-model="getAvatarUrl">
                     <div class="p-image">
                       <b-button variant="none" class="upload-button iq-bg-primary position-relative" style="left: 12px;" @click="onButtonClick">
                         File Upload
@@ -245,7 +245,10 @@ export default {
       selectedLang: 'Setting/langState',
       langsOptions: 'Setting/langOptionState',
       colors: 'Setting/colorState'
-    })
+    }),
+    getAvatarUrl: function () {
+      return '/api/files/avatar?' + this.avatar_version
+    }
   },
   watch: {
   },
@@ -262,7 +265,6 @@ export default {
         address1: '',
         address2: '',
         company_name: '',
-        profile_image: '/api/files/avatar?' + Math.random(),
         mobile_no: '',
         country: '',
         state: '',
@@ -273,6 +275,7 @@ export default {
         dob: '',
         url: ''
       },
+      avatar_version: Math.random(),
       formData: {
         old_password: '',
         new_password: '',
@@ -321,11 +324,19 @@ export default {
       }, { once: true })
       this.$refs.uploader.click()
     },
-    onFileChanged (e) {
+    async onFileChanged (e) {
       this.selectedFile = e.target.files[0]
       console.log(this.selectedFile.size)
       // todo check size
       uploadAvatar(this.selectedFile)
+      await this.sleep(1000)
+      // this will couse avatar to be dowloaded again
+      this.avatar_version = Math.random()
+    },
+    sleep (ms) {
+      return new Promise((resolve) => {
+        setTimeout(resolve, ms)
+      })
     },
     callModal (args) {
       if (args === 'edit') {

@@ -339,51 +339,40 @@
                           </div>
                       </iq-card>
                   </tab-content-item>
-                  <tab-content-item :active="false" id="files">
-                      <iq-card body-class="iq-card-body">
-                          <template v-slot:headerTitle>
-                              <h3 class="card-title" style="margin-top: 10px;">{{ $t('EPR.filesHeader') }}</h3>
-                              <div class="btn-add-patient">
-                                  <b-button variant="primary" @click="add_file"><i class="ri-add-line mr-2"></i>{{ $t('EPR.files.addFile') }}</b-button>
-                              </div>
-                              <div class="iq-card-header-toolbar d-flex align-items-center" style="margin-top: -10px;">
-                                  <div class="iq-search-bar">
-                                      <form action="#" class="searchbox">
-                                          <input type="text" class="text search-input" v-model="filter" placeholder="Search">
-                                          <a class="search-link" href="#"><i class="ri-search-line"></i></a>
-                                      </form>
+                      <tab-content-item :active="false" id="files">
+                          <iq-card body-class="iq-card-body">
+                              <template v-slot:headerTitle>
+                                  <h3 class="card-title mt-3 mb-2">{{ $t('EPR.filesHeader') }}</h3>
+                                  <div class="btn-add-patient mt-2">
+                                      <b-button variant="primary" @click="add_file"><i class="ri-add-line mr-2"></i>{{ $t('EPR.files.addFile') }}</b-button>
                                   </div>
-                                  <iq-card>
-                                      <b-form-group label-for="searchOptions">
-                                          <template slot="label">
-                                              {{ $t('EPR.files.searchBy') }}:
-                                          </template>
-                                          <v-select class="patients" label="text"
-                                            :clearable="false" :reduce="filter => filter.value"
-                                            :options="searchOptions" @input="filterSelected">
-                                          </v-select>
-                                      </b-form-group>
-                                  </iq-card>
-                              </div>
-                          </template>
-                          <template v-slot:body>
-                              <div class="iq-card-body">
-                                  <ul class="profile-img-gallary d-flex flex-wrap p-0 m-0">
-                                      <li class="col-md-4 col-6 pb-3"><a href="javascript:void(0);"><img src="../../assets/images/login/1.png" alt="gallary-image" class="img-fluid"></a><div class="text-center"><p class="mb-0">{{ $t('EPR.files.fileName') }}: File 1</p><p>{{ $t('EPR.files.fileCreatedAt') }}: 03-03-2021</p></div></li>
-                                      <li class="col-md-4 col-6 pb-3"><a href="javascript:void(0);"><img src="../../assets/images/login/2.png" alt="gallary-image" class="img-fluid"></a><div class="text-center"><p class="mb-0">{{ $t('EPR.files.fileName') }}: File 2</p><p>{{ $t('EPR.files.fileCreatedAt') }}: 03-03-2021</p></div></li>
-                                      <li class="col-md-4 col-6 pb-3"><a href="javascript:void(0);"><img src="../../assets/images/login/3.png" alt="gallary-image" class="img-fluid"></a><div class="text-center"><p class="mb-0">{{ $t('EPR.files.fileName') }}: File 3</p><p>{{ $t('EPR.files.fileCreatedAt') }}: 03-03-2021</p></div></li>
-                                      <li class="col-md-4 col-6 pb-3"><a href="javascript:void(0);"><img src="../../assets/images/login/1.png" alt="gallary-image" class="img-fluid"></a><div class="text-center"><p class="mb-0">{{ $t('EPR.files.fileName') }}: File 4</p><p>{{ $t('EPR.files.fileCreatedAt') }}: 03-03-2021</p></div></li>
-                                      <li class="col-md-4 col-6 pb-3"><a href="javascript:void(0);"><img src="../../assets/images/login/2.png" alt="gallary-image" class="img-fluid"></a><div class="text-center"><p class="mb-0">{{ $t('EPR.files.fileName') }}: File 5</p><p>{{ $t('EPR.files.fileCreatedAt') }}: 03-03-2021</p></div></li>
-                                      <li class="col-md-4 col-6 pb-3"><a href="javascript:void(0);"><img src="../../assets/images/login/3.png" alt="gallary-image" class="img-fluid"></a><div class="text-center"><p class="mb-0">{{ $t('EPR.files.fileName') }}: File 6</p><p>{{ $t('EPR.files.fileCreatedAt') }}: 03-03-2021</p></div></li>
-                                      <li class="col-md-4 col-6 pb-0"><a href="javascript:void(0);"><img src="../../assets/images/login/1.png" alt="gallary-image" class="img-fluid"></a><div class="text-center"><p class="mb-0">{{ $t('EPR.files.fileName') }}: File 7</p><p>{{ $t('EPR.files.fileCreatedAt') }}: 03-03-2021</p></div></li>
-                                      <li class="col-md-4 col-6 pb-0"><a href="javascript:void(0);"><img src="../../assets/images/login/2.png" alt="gallary-image" class="img-fluid"></a><div class="text-center"><p class="mb-0">{{ $t('EPR.files.fileName') }}: File 8</p><p>{{ $t('EPR.files.fileCreatedAt') }}: 03-03-2021</p></div></li>
-                                      <li class="col-md-4 col-6 pb-0"><a href="javascript:void(0);"><img src="../../assets/images/login/3.png" alt="gallary-image" class="img-fluid"></a><div class="text-center"><p class="mb-0">{{ $t('EPR.files.fileName') }}: File 9</p><p>{{ $t('EPR.files.fileCreatedAt') }}: 03-03-2021</p></div></li>
-                                      <li class="col-md-4 col-6 pb-0"><a href="javascript:void(0);"><img src="../../assets/images/login/3.png" alt="gallary-image" class="img-fluid"></a><div class="text-center"><p class="mb-0">{{ $t('EPR.files.fileName') }}: File 9</p><p>{{ $t('EPR.files.fileCreatedAt') }}: 03-03-2021</p></div></li>
-                                  </ul>
-                              </div>
-                          </template>
-                      </iq-card>
-                  </tab-content-item>
+                                  <div class="iq-card-header-toolbar d-flex align-items-center" style="margin-top: -10px;">
+                                      <h5 class="mt-2">{{ $t('EPR.files.sortBy') }}</h5>
+                                      <div class="mt-4 ml-3">
+                                          <b-form-group label-for="sortOptions">
+                                              <v-select class="patients" label="text" :clearable="false" id="select"
+                                                        :options="sortOptions" v-model="sortBy">
+                                              </v-select>
+                                          </b-form-group>
+                                      </div>
+                                  </div>
+                              </template>
+                              <template v-slot:body>
+                                  <div class="iq-card-body">
+                                      <ul class="profile-img-gallary d-flex flex-wrap p-0 m-0">
+                                          <li class="col-md-4 col-6 pb-3" v-for="file in files" :key="file">
+                                              <img :src="file.image" alt="gallary-image" class="img-fluid">
+                                              <div class="text-center">
+                                                  <p class="mb-0">{{ $t('EPR.files.fileName') }}: {{file.name}}</p>
+                                                  <p class="mb-0">{{ $t('EPR.files.fileType') }}: {{file.type}}</p>
+                                                  <p>{{ $t('EPR.files.fileCreatedAt') }}: {{file.created_at}}</p>
+                                              </div>
+                                          </li>
+                                      </ul>
+                                  </div>
+                              </template>
+                          </iq-card>
+                      </tab-content-item>
                   <tab-content-item :active="false" id="invoices">
                       <iq-card>
                           <template v-slot:headerTitle>
@@ -550,7 +539,7 @@ export default {
     pastAppointments: function () {
       return this.appointments.filter((item) => {
         return !this.filterAppointments(item)
-      })
+      }).reverse()
     },
     hideInvoicesPagination () {
       return Math.floor(this.invoices.length / this.invoicesPerPage) !== 0
@@ -587,7 +576,6 @@ export default {
       dentists: [],
       surgeons: [],
       filter: '',
-      filterOn: [],
       invoices: [],
       services: [],
       offers: [],
@@ -599,9 +587,22 @@ export default {
       servicesPerPage: 10,
       dropDownText: '',
       selected: this.value,
-      searchOptions: [
-        { value: 'file_name', text: this.$t('EPR.files.fileName') },
+      sortBy: '',
+      sortOptions: [
+        { value: 'name', text: this.$t('EPR.files.fileName') },
+        { value: 'type', text: this.$t('EPR.files.fileType') },
         { value: 'created_at', text: this.$t('EPR.files.fileCreatedAt') }
+      ],
+      files: [
+        { image: require('../../assets/images/login/1.png'), name: 'File 2', type: 'Rentgen', created_at: '21.04.2021' },
+        { image: require('../../assets/images/login/2.png'), name: 'File 4', type: 'Krvna slika', created_at: '17.04.2021' },
+        { image: require('../../assets/images/login/3.png'), name: 'File 5', type: 'Rentgen', created_at: '11.04.2021' },
+        { image: require('../../assets/images/login/1.png'), name: 'File 1', type: 'Anamneza', created_at: '10.04.2021' },
+        { image: require('../../assets/images/login/2.png'), name: 'File 9', type: 'Rentgen', created_at: '03.04.2021' },
+        { image: require('../../assets/images/login/3.png'), name: 'File 7', type: 'Krvna Slika', created_at: '21.03.2021' },
+        { image: require('../../assets/images/login/1.png'), name: 'File 6', type: 'Rentgen', created_at: '17.03.2021' },
+        { image: require('../../assets/images/login/2.png'), name: 'File 3', type: 'Anamneza', created_at: '12.03.2021' },
+        { image: require('../../assets/images/login/3.png'), name: 'File 8', type: 'Rentgen', created_at: '08.03.2021' }
       ],
       disabled: true,
       doctor: {
@@ -728,7 +729,7 @@ export default {
     },
     getPatientNotes (id) {
       getEnquiryNotes(id).then(response => {
-        this.notes = response
+        this.notes = response.reverse()
       }
       )
     },
@@ -825,9 +826,9 @@ export default {
         reader.readAsDataURL(input.files[0])
       }
     },
-    filterSelected (value) {
+    sortSelected (value) {
       let array = [value]
-      this.filterOn = array
+      this.sortOn = array
     }
   }
 }
@@ -858,6 +859,16 @@ export default {
 .vs--disabled .vs__dropdown-toggle, .vs--disabled .vs__clear, .vs--disabled .vs__search, .vs--disabled .vs__selected, .vs--disabled .vs__open-indicator {
     background-color: #e9ecef !important;
     margin-top: 4px;
+}
+
+@media (max-width: 992px) {
+  .iq-card {
+    .row {
+      .pr-0 {
+        padding-right: 15px !important;
+      }
+    }
+  }
 }
 
 @media (max-width: 576px) {

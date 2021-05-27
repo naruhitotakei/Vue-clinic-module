@@ -3,26 +3,28 @@
         <iq-card>
           <template v-slot:headerTitle>
             <div class="row pt-3">
-          <b-form-group class="col-md-3">
-              <v-select class="patients" v-model="countrySelect" label="text"
-                :clearable="false" :reduce="period => period.value"
-                :options="countrySelectOptions" @input="onCountryChange">
-              </v-select>
-            </b-form-group>
-            <b-form-group class="col-md-2">
+
+            <b-form-group class="ml-3 mr-3 sm-w-100">
               <v-select class="patients" v-model="periodSelect" label="text"
                 :clearable="false" :reduce="period => period.value"
                 :options="periodSelectOptions" @input="onPeriodChange">
               </v-select>
             </b-form-group>
+
+            <b-form-group label-for="exampleInputdate" class="mr-3 date-group">
               <label style="padding-top: 8px;">From:</label>
-            <b-form-group label-for="exampleInputdate" class="col-md-2">
                 <b-form-input class="date" id="exampleInputdate" type="date" v-model="fromdate" @change="onFromChange"></b-form-input>
               </b-form-group>
+            <b-form-group label-for="exampleInputdate" class="mr-3  date-group">
               <label style="padding-top: 8px;">To:</label>
-            <b-form-group label-for="exampleInputdate" class="col-md-2">
-                <b-form-input class="date" id="exampleInputdate" type="date" v-model="todate" @change="onToChange"></b-form-input>
+              <b-form-input class="date" id="exampleInputdate" type="date" v-model="todate" @change="onToChange"></b-form-input>
             </b-form-group>
+              <b-form-group class="mr-3  sm-w-100" style="width: 15%">
+                <v-select class="patients" v-model="countrySelect" label="text"
+                          :clearable="false" :reduce="period => period.value"
+                          :options="countrySelectOptions" @input="onCountryChange">
+                </v-select>
+              </b-form-group>
             </div>
           </template>
         </iq-card>
@@ -206,11 +208,31 @@ export default {
   }
 }
 </script>
-<style>
+<style lang="scss">
+.date-group {
+  margin-right:20px;
+
+  &:nth-child(1){
+    margin-right: 30px;
+  }
+  div {
+    display: flex;
+    label {
+      margin-right: 15px;
+    }
+  }
+}
 .hidden_header {
   display: none;
 }
 .date {
   height: 35px !important;
+}
+
+@media(max-width: 701px) {
+ .iq-card  .row .sm-w-100 {
+    width: 100% !important;
+   padding-left: 0 !important;
+  }
 }
 </style>

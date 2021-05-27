@@ -172,10 +172,10 @@
     "filesTab": "Files",
     "filesHeader": "Files",
     "files": {
-      "search": "Search",
-      "searchBy": "Search by",
+      "sortBy": "Sort by",
       "addFile": "Add file",
       "fileName": "File name",
+      "fileType": "File type",
       "fileCreatedAt": "Created at"
     },
     "invoicesTab": "Invoices",
@@ -437,8 +437,9 @@
       "city": "City",
       "address": "Address",
       "save": "Save",
-      "close":  "Close"
-    }
+      "close": "Close"
+    },
+    "headerInactiveLocations": "Inactive locations"
   },
   "servicesAndProducts": {
     "headerProducts": "Products",
@@ -476,6 +477,31 @@
     "productCategoryColumn": {
       "productCategoryName": "Name",
       "productCategoryAction": "Action"
+    }
+  },
+  "business": {
+    "headerBusiness": "Business",
+    "addBusiness": "Add business",
+    "businessColumn": {
+      "businessName": "Name",
+      "businessEmail": "Email",
+      "businessAddress": "Address",
+      "businessCity": "City",
+      "businessTaxNumber": "Tax Number",
+      "businessAction": "Action"
+    },
+    "addBusinessModal": {
+      "addBusiness": "Add business",
+      "nameSlovenian": "Name (Slovenian)",
+      "nameItalian": "Name (Italian)",
+      "nameGerman": "Name (German)",
+      "nameEnglish": "Name (English)",
+      "email": "Email",
+      "address": "Address",
+      "city": "City",
+      "taxNumber": "Tax Number",
+      "close": "Close",
+      "save": "Save"
     }
   },
   "dashboard2": {
