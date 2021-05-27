@@ -11,7 +11,7 @@ export async function getLocationsList () {
 }
 
 export async function getInactiveLocationsList () {
-  const rawResponse = await fetch('/api/locations/', {
+  const rawResponse = await fetch('/api/inactive-locations/', {
     method: 'GET',
     credentials: 'same-origin',
     headers: {
@@ -49,7 +49,7 @@ export async function updateLocation (id, location) {
 }
 
 export async function toggleActivity (id) {
-  const rawResponse = await fetch('/api/locations/' + id, {
+  const rawResponse = await fetch('/api/locations/' + id + '/activation', {
     method: 'PUT',
     credentials: 'same-origin',
     headers: {

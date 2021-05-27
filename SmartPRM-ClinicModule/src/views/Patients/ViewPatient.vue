@@ -355,18 +355,12 @@
                                               </v-select>
                                           </b-form-group>
                                       </div>
-                                      <span class="ml-2 mt-3">
-                                          <button @click="ascending = !ascending" class="sort-button">
-                                              <i v-if="ascending" class="fa fa-sort-desc fa-lg" aria-hidden="true"></i>
-                                              <i v-else class="fa fa-sort-asc fa-lg" aria-hidden="true"></i>
-                                          </button>
-                                      </span>
                                   </div>
                               </template>
                               <template v-slot:body>
                                   <div class="iq-card-body">
                                       <ul class="profile-img-gallary d-flex flex-wrap p-0 m-0">
-                                          <li class="col-md-4 col-6 pb-3" v-for="file in filteredFiles" :key="file.created_at">
+                                          <li class="col-md-4 col-6 pb-3" v-for="file in files" :key="file">
                                               <img :src="file.image" alt="gallary-image" class="img-fluid">
                                               <div class="text-center">
                                                   <p class="mb-0">{{ $t('EPR.files.fileName') }}: {{file.name}}</p>
@@ -555,41 +549,7 @@ export default {
     },
     hideSummaryPagination () {
       return Math.floor(this.services.length / this.servicesPerPage) !== 0
-    },
-    /* Sort files in under files tab functionality */
-    filteredFiles () {
-      let tempFiles = this.files
-      tempFiles = tempFiles.sort((a, b) => {
-        if (this.sortBy === 'name') {
-          let fa = a.name.toLowerCase()
-          let fb = b.name.toLowerCase()
-          if (fa < fb) {
-            return -1
-          }
-          if (fa > fb) {
-            return 1
-          }
-          return 0
-        } else if (this.sortBy === 'type') {
-          let fa = a.type.toLowerCase()
-          let fb = b.type.toLowerCase()
-          if (fa < fb) {
-            return -1
-          }
-          if (fa > fb) {
-            return 1
-          }
-          return 0
-        } else if (this.sortBy === 'created_at') {
-          return new Date(a.created_at) - new Date(b.created_at)
-        }
-      })
-      if (!this.ascending) {
-        tempFiles.reverse()
-      }
-      return tempFiles
     }
-    /* END OF Sort files in under files tab functionality */
   },
   filters: {
     fromNowDate (val) {
@@ -627,7 +587,6 @@ export default {
       servicesPerPage: 10,
       dropDownText: '',
       selected: this.value,
-      ascending: true,
       sortBy: '',
       sortOptions: [
         { value: 'name', text: this.$t('EPR.files.fileName') },
@@ -635,15 +594,15 @@ export default {
         { value: 'created_at', text: this.$t('EPR.files.fileCreatedAt') }
       ],
       files: [
-        { image: require('../../assets/images/login/1.png'), name: 'File 2', type: 'Rentgen', created_at: '04.03.2021' },
-        { image: require('../../assets/images/login/2.png'), name: 'File 4', type: 'Krvna slika', created_at: '07.04.2021' },
-        { image: require('../../assets/images/login/3.png'), name: 'File 5', type: 'Rentgen', created_at: '11.03.2021' },
-        { image: require('../../assets/images/login/1.png'), name: 'File 1', type: 'Anamneza', created_at: '14.04.2021' },
-        { image: require('../../assets/images/login/2.png'), name: 'File 9', type: 'Rentgen', created_at: '17.04.2021' },
+        { image: require('../../assets/images/login/1.png'), name: 'File 2', type: 'Rentgen', created_at: '21.04.2021' },
+        { image: require('../../assets/images/login/2.png'), name: 'File 4', type: 'Krvna slika', created_at: '17.04.2021' },
+        { image: require('../../assets/images/login/3.png'), name: 'File 5', type: 'Rentgen', created_at: '11.04.2021' },
+        { image: require('../../assets/images/login/1.png'), name: 'File 1', type: 'Anamneza', created_at: '10.04.2021' },
+        { image: require('../../assets/images/login/2.png'), name: 'File 9', type: 'Rentgen', created_at: '03.04.2021' },
         { image: require('../../assets/images/login/3.png'), name: 'File 7', type: 'Krvna Slika', created_at: '21.03.2021' },
-        { image: require('../../assets/images/login/1.png'), name: 'File 6', type: 'Rentgen', created_at: '02.04.2021' },
-        { image: require('../../assets/images/login/2.png'), name: 'File 3', type: 'Anamneza', created_at: '28.03.2021' },
-        { image: require('../../assets/images/login/3.png'), name: 'File 8', type: 'Rentgen', created_at: '30.03.2021' }
+        { image: require('../../assets/images/login/1.png'), name: 'File 6', type: 'Rentgen', created_at: '17.03.2021' },
+        { image: require('../../assets/images/login/2.png'), name: 'File 3', type: 'Anamneza', created_at: '12.03.2021' },
+        { image: require('../../assets/images/login/3.png'), name: 'File 8', type: 'Rentgen', created_at: '08.03.2021' }
       ],
       disabled: true,
       doctor: {
@@ -900,15 +859,6 @@ export default {
 .vs--disabled .vs__dropdown-toggle, .vs--disabled .vs__clear, .vs--disabled .vs__search, .vs--disabled .vs__selected, .vs--disabled .vs__open-indicator {
     background-color: #e9ecef !important;
     margin-top: 4px;
-}
-
-.sort-button {
-    background-color: Transparent;
-    background-repeat: no-repeat;
-    border: none;
-    cursor: pointer;
-    overflow: hidden;
-    outline: none;
 }
 
 @media (max-width: 992px) {

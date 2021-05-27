@@ -6,7 +6,7 @@
                     <template v-slot:headerTitle>
                         <h3 class="card-title" style="margin-top: 10px;">{{ $t('settingsLocations.headerLocations') }}</h3>
                         <div class="btn-add-patient mb-4 mt-0">
-                            <b-button variant="primary" @click="OpenAddLocation"><i class="ri-add-line mr-2"></i>{{ $t('settingsLocations.addLocation') }}</b-button>
+                            <b-button variant="primary" @click="openAddLocation"><i class="ri-add-line mr-2"></i>{{ $t('settingsLocations.addLocation') }}</b-button>
                         </div>
                     </template>
                     <b-modal v-model="addLocationModal" no-close-on-backdrop size="lg" :title="$t('settingsLocations.addLocationModalHeader')" @close="addLocationModal = false" @cancel="addLocationModal = false" @ok="addLocation" :ok-title="$t('settingsLocations.locationModal.save')" :cancel-title="$t('settingsLocations.locationModal.close')">
@@ -51,7 +51,7 @@
                                     </template>
                                     <template v-slot:cell(action)="data">
                                         <b-button variant=" iq-bg-success mr-1 mb-1" size="sm" @click="openEditModal(data.item)"><i class="ri-ball-pen-fill m-0"></i></b-button>
-                                        <b-button variant=" iq-bg-danger mr-1 mb-1" size="sm"><i class="ri-shut-down-line m-0"></i></b-button>
+                                        <b-button variant=" iq-bg-danger mr-1 mb-1" size="sm" @click="setActivity(data.item)"><i class="ri-shut-down-line m-0"></i></b-button>
                                     </template>
                                 </b-table>
                             </b-col>
@@ -60,6 +60,7 @@
                             <b-collapse id="collapse-6" class="mb-2"> </b-collapse>
                             <div class="mt-3">
                                 <b-pagination v-model="currentLocationsPage"
+                                              v-if="hideLocationsPagination"
                                               :total-rows="locations.length"
                                               :per-page="locationsPerPage"
                                               aria-controls="my-table">
@@ -111,7 +112,7 @@
                                         </div>
                                     </template>
                                     <template v-slot:cell(i_action)="data">
-                                        <b-button variant=" iq-bg-info mr-1 mb-1" size="sm"><i class="ri-refresh-line m-0"></i></b-button>
+                                        <b-button variant=" iq-bg-info mr-1 mb-1" size="sm" @click="setActivity(data.item)"><i class="ri-refresh-line m-0"></i></b-button>
                                     </template>
                                 </b-table>
                             </b-col>
@@ -125,9 +126,19 @@
 
 <script>
 import { xray } from '../../config/pluginInit'
-import { getLocationsList, getInactiveLocationsList, createLocation, updateLocation } from '../../services/locations'
+import { getLocationsList, getInactiveLocationsList, createLocation, updateLocation, toggleActivity } from '../../services/locations'
 export default {
+  mounted () {
+    xray.index()
+    this.getLocations()
+    this.getInactiveLocations()
+  },
   components: {
+  },
+  computed: {
+    hideLocationsPagination () {
+      return Math.floor(this.locations.length / this.locationsPerPage) !== 0
+    }
   },
   name: 'Locations',
   data: function () {
@@ -172,46 +183,39 @@ export default {
     getLocations () {
       getLocationsList().then(response => {
         this.locations = response
-        this.toggleDataLoaded()
+        this.isDataLoaded = true
       })
     },
     getInactiveLocations () {
       getInactiveLocationsList().then(response => {
         this.inactiveLocations = response
-        this.toggleInactiveDataLoaded()
+        this.isInactiveDataLoaded = true
       })
-    },
-    toggleDataLoaded () {
-      this.isDataLoaded = !this.isDataLoaded
-    },
-    toggleInactiveDataLoaded () {
-      this.isInactiveDataLoaded = !this.isInactiveDataLoaded
     },
     openEditModal (item) {
       this.editLocationModal = true
       this.formData = item
     },
-    OpenAddLocation () {
+    openAddLocation () {
       this.addLocationModal = true
       this.formData = this.defaultFormData()
     },
     addLocation () {
       createLocation(this.formData).then(() => {
         this.getLocations()
-        this.toggleDataLoaded()
       })
     },
     editLocation () {
       updateLocation(this.formData.id, this.formData).then(() => {
         this.getLocations()
-        this.toggleDataLoaded()
+      })
+    },
+    setActivity (item) {
+      toggleActivity(item.id).then(() => {
+        this.getLocations()
+        this.getInactiveLocations()
       })
     }
-  },
-  mounted () {
-    xray.index()
-    this.getLocations()
-    this.getInactiveLocations()
   }
 }
 </script>
