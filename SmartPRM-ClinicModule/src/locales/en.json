@@ -474,6 +474,31 @@
       "productCategoryAction": "Action"
     }
   },
+  "business": {
+    "headerBusiness": "Business",
+    "addBusiness": "Add business",
+    "businessColumn": {
+      "businessName": "Name",
+      "businessEmail": "Email",
+      "businessAddress": "Address",
+      "businessCity": "City",
+      "businessTaxNumber": "Tax Number",
+      "businessAction": "Action"
+    },
+    "addBusinessModal": {
+      "addBusiness": "Add business",
+      "nameSlovenian": "Name (Slovenian)",
+      "nameItalian": "Name (Italian)",
+      "nameGerman": "Name (German)",
+      "nameEnglish": "Name (English)",
+      "email": "Email",
+      "address": "Address",
+      "city": "City",
+      "taxNumber": "Tax Number",
+      "close": "Close",
+      "save": "Save"
+    }
+  },
   "dashboard2": {
     "card1": "AVG Impressions",
     "card2": "AVG Engagements Rate",

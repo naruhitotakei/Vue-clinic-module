@@ -24,6 +24,7 @@ const daoAdvPayments = require('./dao/daoAdvPayments')
 const daoOffers = require('./dao/daoOffers')
 const daoCodeLists = require('./dao/daoCodeLists')
 const daoProducts = require('./dao/daoProducts')
+const daoBusiness = require('./dao/daoBusiness')
 const daoCalendar = require('./dao/daoCalendar')
 const daoCompanies = require('./dao/daoCompanies')
 const daoLocations = require('./dao/daoLocations')
@@ -283,6 +284,18 @@ app.get('/api/productGroups/:id/product-naming', (req, res) => {
     const id = req.params.id
     if (req.session.prm_user && req.session.prm_user.permissions && checkPermission(req.session.prm_user.permissions, productsPermission))
         daoProducts.getProductGroupNaming(req, res, id)
+    else
+        res.status(401).json("OK: user unauthorized")
+});
+
+///////////////////////////////////
+// business
+///////////////////////////////////
+
+app.get('/api/business/:locale', (req, res) => {
+    const locale = req.params.locale
+    if (req.session.prm_user && req.session.prm_user.permissions && checkPermission(req.session.prm_user.permissions, productsPermission))
+        daoBusiness.getBusiness(req, res, locale)
     else
         res.status(401).json("OK: user unauthorized")
 });
