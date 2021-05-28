@@ -155,7 +155,13 @@ const getSurgeons = (request, response) => {
 }
 
 const getUsers = (request, response) => {
-    pool.query("SELECT id, name, email AS mail, phone_number AS phone FROM users WHERE roles::text LIKE '%doctor%' AND active = true", (error, results) => {
+    pool.query("SELECT users.id, users.prm_role_id, users.prm_client_id, users.prm_company_id, users.name, users.email AS mail, users.phone_number AS phone, prm_role.role_name, prm_client.*, prm_company.* " +
+        "FROM users " +
+        "LEFT JOIN prm_role ON users.prm_role_id = prm_role.role_id " +
+        "LEFT JOIN prm_client ON users.prm_client_id = prm_client.id " +
+        "LEFT JOIN prm_company ON users.prm_company_id = prm_company.company_id " +
+        "WHERE users.roles::text LIKE '%doctor%' AND users.active = true" , (error, results) => {
+        console.log(error)
         if (error) {
             throw error
         }

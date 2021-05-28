@@ -10,7 +10,9 @@ const pool = new Pool({
 })
 
 const getBusiness = (request, response, locale) =>  {
-  pool.query("SELECT business_customer.*, countries.name as countries_name, countries.code, countries.id as countries_id FROM business_customer LEFT JOIN countries ON business_customer.country_id = countries.id", (error, results) => {
+  pool.query("SELECT business_customer.*, countries.name as countries_name, countries.code, countries.id as countries_id " +
+      "FROM business_customer" +
+      " LEFT JOIN countries ON business_customer.country_id = countries.id", (error, results) => {
     if (error) {
       throw error
     }
