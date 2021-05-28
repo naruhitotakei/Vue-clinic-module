@@ -21,3 +21,15 @@ export async function getPremisesForCompany (companyId) {
   })
   return rawResponse.json()
 }
+
+export async function getDevicesForPremise (companyPremisesId) {
+  const rawResponse = await fetch('/api/company-premises/' + companyPremisesId + '/devices', {
+    method: 'GET',
+    credentials: 'same-origin',
+    headers: {
+      'Accept': 'application/json',
+      'Content-Type': 'application/json'
+    }
+  })
+  return rawResponse.json()
+}
