@@ -2,11 +2,11 @@
     <b-container fluid>
         <b-row>
             <b-col md="12">
-              <b-modal v-model="modalShow" no-close-on-backdrop size="md" :title="$t('invoices.addNewInvoice.selectPatient')" :ok-disabled="!selectedPatient" :ok-title="$t('invoices.addNewInvoice.create')" @ok="addAdvPayment" @close="selectedPatient = null"  @cancel="selectedPatient = null" :cancel-title="$t('invoices.addNewInvoice.close')">
+              <b-modal v-model="modalShow" no-close-on-backdrop size="md" :title="$t('invoices.addNewInvoice.selectPatient')" :ok-disabled="!selectedPatient" :ok-title="$t('advPayments.addNewAdvPayment.create')" @ok="addAdvPayment" @close="selectedPatient = null"  @cancel="selectedPatient = null" :cancel-title="$t('advPayments.addNewAdvPayment.close')">
                 <form>
                   <div class="form-row">
                     <div class="col-md-12 mb-3">
-                      <label for="patient">{{ $t('invoices.addNewInvoice.patient') }} *</label>
+                      <label for="patient">{{ $t('advPayments.addNewAdvPayment.patient') }} *</label>
                       <v-select :clearable="false" label="full_name" class="style-chooser" v-model="selectedPatient" :options="patients">
                         <template v-slot:option="option">
                           {{ option.full_name }} <span v-if="option.city" style="float:right"> {{option.city}} </span>

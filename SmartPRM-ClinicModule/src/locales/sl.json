@@ -304,7 +304,7 @@
   "invoice": {
     "invoiceHeader": "Račun",
     "saved": "Račun shranjen",
-    "notSaved": "Greska, obratite se adminu",
+    "notSaved": "Napaka, kontaktirajte administratorja",
     "invoiceInfo": {
       "invoiceDate": "Datum",
       "invoiceTotal": "Znesek",
@@ -339,6 +339,32 @@
       "date": "Datum",
       "issuedBy": "Izdal",
       "amount": "Znesek"
+    },
+    "addNewAdvPayment": {
+      "selectPatient": "Izberi pacienta",
+      "patient": "Pacient",
+      "close": "Zapri",
+      "create": "Ustvari račun"
+    },
+    "newAdvPayment": {
+      "newAdvPaymentHeader": "Nov avansni račun",
+      "alert": "Znesek načina plačila mora biti enak znesku avansnega računa in ne more biti 0!",
+      "paymentMethodSummary": "Povzetek načina plačila",
+      "downloadPrint": "Prenesi tiskano verzijo",
+      "saveDraft": "Shrani kot osnutek",
+      "save": "Shrani",
+      "dateOfAdvPayment": "Datum izdaje",
+      "details": {
+        "header": "Podatki o avansnem računu",
+        "item": "Opis",
+        "amount": "Znesek",
+        "action": "Urejaj"
+      }
+    },
+    "newAdvPaymentColumn": {
+      "issuedBy": "Izdal",
+      "customer": "Stranka",
+      "issuedIn": "Kraj izdaje"
     }
   },
   "advPayment": {
@@ -367,6 +393,16 @@
       "discount": "Popust",
       "total": "Znesek"
     }
+  },
+  "paymentMethod": "Način plačila",
+  "paymentMethods": {
+    "cash": "Gotovina",
+    "creditCard": "Kreditna kartica",
+    "bankAccount": "Nakazilo na TRR"
+  },
+  "paymentMethodsColumn": {
+    "amount": "Znesek",
+    "action": "Urejaj"
   },
   "assignments": {
     "assignmentsHeader": "Moje Naloge",

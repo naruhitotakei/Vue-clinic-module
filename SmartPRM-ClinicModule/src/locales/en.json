@@ -304,7 +304,7 @@
   "invoice": {
     "invoiceHeader": "Invoice",
     "saved": "Invoice saved",
-    "notSaved": "Somethings wrong contact admin",
+    "notSaved": "Something is wrong, contact admin",
     "invoiceInfo": {
       "invoiceDate": "Date",
       "invoiceTotal": "Total",
@@ -335,10 +335,36 @@
     "advPaymentsBtn": "Add Advance Payment",
     "advPaymentsColumn": {
       "no": "Number",
-      "patientName": "Patient Name",
+      "patientName": "Patient name",
       "date": "Date",
-      "issuedBy": "Issued By",
+      "issuedBy": "Issued by",
       "amount": "Amount"
+    },
+    "addNewAdvPayment": {
+      "selectPatient": "Select patient",
+      "patient": "Patient",
+      "close": "Close",
+      "create": "Create invoice"
+    },
+    "newAdvPayment": {
+      "newAdvPaymentHeader": "New advance payment",
+      "alert": "Payment method amount must be the same as advance payment amount and can't be 0!",
+      "paymentMethodSummary": "Payment method summary",
+      "downloadPrint": "Download print",
+      "saveDraft": "Save advance payment as draft",
+      "save": "Save",
+      "dateOfAdvPayment": "Issue date",
+      "details": {
+        "header": "Advance payment details",
+        "item": "Item",
+        "amount": "Amount",
+        "action": "Action"
+      }
+    },
+    "newAdvPaymentColumn": {
+      "issuedBy": "Issued by",
+      "customer": "Customer",
+      "issuedIn": "Issued in"
     }
   },
   "advPayment": {
@@ -367,6 +393,16 @@
       "discount": "Discount",
       "total": "Total"
     }
+  },
+  "paymentMethod": "Payment method",
+  "paymentMethods": {
+    "cash": "Cash",
+    "creditCard": "Credit card",
+    "bankAccount": "Bank account"
+  },
+  "paymentMethodsColumn": {
+    "amount": "Amount",
+    "action": "Action"
   },
   "assignments": {
     "assignmentsHeader": "My Assignments",
