@@ -435,7 +435,9 @@ export default {
     langChange (lang) {
       this.langChangeState(lang)
       this.$i18n.locale = lang
-      document.getElementsByClassName('iq-show')[0].classList.remove('iq-show')
+      if (document.getElementsByClassName('iq-show').length) {
+        document.getElementsByClassName('iq-show')[0].classList.remove('iq-show')
+      }
       if (lang === 'ar') {
         this.rtlAdd(lang)
       } else {

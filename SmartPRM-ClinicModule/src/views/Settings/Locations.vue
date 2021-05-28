@@ -93,7 +93,7 @@
                         </div>
                     </form>
                 </b-modal>
-                <iq-card v-if="inactiveLocations.length >= 1">
+                <iq-card v-if="inactiveLocations.length > 0">
                     <template v-slot:headerTitle>
                         <h4 class="card-title" style="margin-top: 10px;">{{ $t('settingsLocations.headerInactiveLocations') }}</h4>
                     </template>

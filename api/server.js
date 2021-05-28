@@ -25,6 +25,7 @@ const daoOffers = require('./dao/daoOffers')
 const daoCodeLists = require('./dao/daoCodeLists')
 const daoProducts = require('./dao/daoProducts')
 const daoBusiness = require('./dao/daoBusiness')
+const daoCountries = require('./dao/daoCountries')
 const daoCalendar = require('./dao/daoCalendar')
 const daoCompanies = require('./dao/daoCompanies')
 const daoLocations = require('./dao/daoLocations')
@@ -332,6 +333,17 @@ app.delete('/api/business/:id', (req, res) => {
   else
     res.status(401).json("OK: user unauthorized")
 });
+
+///////////////////////////////////
+// countries
+///////////////////////////////////
+app.get('/api/countries/', (req, res) => {
+  if (req.session.prm_user && req.session.prm_user.permissions && checkPermission(req.session.prm_user.permissions, productsPermission))
+    daoCountries.getCountries(req, res)
+  else
+    res.status(401).json("OK: user unauthorized")
+});
+
 
 ///////////////////////////////////
 // locations

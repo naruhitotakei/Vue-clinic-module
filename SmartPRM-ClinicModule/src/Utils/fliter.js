@@ -17,3 +17,17 @@ Vue.filter('formatDate', function (value) {
     return moment(String(value)).format('ddd, D MMM')
   }
 })
+
+Vue.filter('formatDateAssignments', function (value, lang) {
+  if (value) {
+    switch (lang) {
+      case 'en' :
+        moment.locale('en')
+        break
+      case 'sl':
+        moment.locale('sl')
+        break
+    }
+    return moment(String(value)).format('ddd, D MMM')
+  }
+})

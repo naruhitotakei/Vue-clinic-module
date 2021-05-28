@@ -6,7 +6,7 @@
                 <template v-slot:body>
                     <b-row>
                         <b-col cols="4" align-self="center" style="margin-bottom: 25px;">
-                            <h4 class="mb-0">{{ $t('invoices.newInvoice.newInvoiceHeader') }}</h4>
+                            <h4 class="mb-0">{{ $t('advPayments.newAdvPayment.newAdvPaymentHeader') }}</h4>
                         </b-col>
                     </b-row>
                     <b-row>
@@ -14,9 +14,9 @@
                             <div class="table-responsive-sm">
                               <b-table-simple>
                                 <b-thead>
-                                  <b-th colspan="2">{{ $t('invoices.newInvoice.newInvoiceColumn.issuedBy') }}</b-th>
-                                  <b-th colspan="3">{{ $t('invoices.newInvoice.newInvoiceColumn.customer') }}</b-th>
-                                  <b-th colspan="4">{{ $t('invoices.newInvoice.newInvoiceColumn.issuedIn') }}</b-th>
+                                  <b-th colspan="2">{{ $t('advPayments.newAdvPaymentColumn.issuedBy') }}</b-th>
+                                  <b-th colspan="3">{{ $t('advPayments.newAdvPaymentColumn.customer') }}</b-th>
+                                  <b-th colspan="4">{{ $t('advPayments.newAdvPaymentColumn.issuedIn') }}</b-th>
                                   <b-th colspan="3">{{ $t('invoices.newInvoice.newInvoiceColumn.device') }}</b-th>
                                 </b-thead>
                                 <b-tbody>
@@ -38,7 +38,7 @@
                     </b-row>
                     <b-row>
                       <b-col>
-                        <b-form-group class="col-md-4" :label="$t('invoices.newInvoice.dateOfInvoice')" style="color:black">
+                        <b-form-group class="col-md-4" :label="$t('advPayments.newAdvPayment.dateOfAdvPayment')" style="color:black">
                           <b-form-input v-model="dateOfInvoice" type="date"></b-form-input>
                         </b-form-group>
                       </b-col>
@@ -47,7 +47,7 @@
                         <b-col lg="12">
                           <iq-card>
                             <template v-slot:headerTitle>
-                                <h5 style="margin-bottom: 15px;">{{ $t('invoices.newInvoice.newInvoiceDetails.header') }}</h5>
+                                <h5 style="margin-bottom: 15px;">{{ $t('advPayments.newAdvPayment.details.header') }}</h5>
                             </template>
                             <template v-slot:body>
                               <b-row>
@@ -68,7 +68,7 @@
                     </b-row>
                     <b-row>
                       <b-col lg="6" offset-lg="6">
-                          <h2 class="text-center">Total: {{advPayments[0].amount | euro}}</h2>
+                          <h2 class="text-center">{{ $t('advPayment.advPaymentInfo.advPaymentTotal')}}: {{advPayments[0].amount | euro}}</h2>
                       </b-col>
                       <b-col lg="6" offset-lg="6">
                           <b-alert :show="!canBeSaved" variant="danger">
@@ -89,7 +89,7 @@
                         <b-col lg="8">
                           <iq-card>
                             <template v-slot:headerTitle>
-                                <h5 style="margin-bottom: 15px;">{{ $t('invoices.newInvoice.paymentMethodSummary') }}</h5>
+                                <h5 style="margin-bottom: 15px;">{{ $t('advPayments.newAdvPayment.paymentMethodSummary') }}</h5>
                             </template>
                             <template v-slot:body>
                                <b-row>
@@ -114,13 +114,13 @@
                         <b-col offset="6" cols="6" class="text-right" data-html2canvas-ignore="true">
                             <b-button :disabled="!canPrintPdf" variant="primary mr-3" @click="exportToPDF">
                                 <i class="ri-printer-line"></i>
-                                {{ $t('invoices.newInvoice.downloadPrint') }}
+                                {{ $t('advPayments.newAdvPayment.downloadPrint') }}
                             </b-button>
                             <b-button :disabled="!canBeSaved" variant="primary mr-4" @click="saveAsDraft">
-                                <i class="ri-bookmark-3-fill mr-2"></i>{{ $t('invoices.newInvoice.saveAsDraft') }}
+                                <i class="ri-bookmark-3-fill mr-2"></i>{{ $t('advPayments.newAdvPayment.saveDraft') }}
                             </b-button>
                             <b-button :disabled="!canBeSaved" variant="warning mr-3" @click="saveInvoice">
-                                <i class="ri-save-3-line mr-2"></i>Confirm and Save
+                                <i class="ri-save-3-line mr-2"></i>{{ $t('advPayments.newAdvPayment.save') }}
                             </b-button>
                         </b-col>
                     </b-row>
@@ -177,8 +177,8 @@ export default {
   data () {
     return {
       detailColumns: [
-        { label: this.$t('invoices.newInvoice.newInvoiceDetails.item'), key: 'name', class: 'text-left item-name' },
-        { label: this.$t('invoices.newInvoice.newInvoiceDetails.amount'), key: 'amount', class: 'text-left' }
+        { label: this.$t('advPayments.newAdvPayment.details.item'), key: 'name', class: 'text-left item-name' },
+        { label: this.$t('advPayments.newAdvPayment.details.amount'), key: 'amount', class: 'text-left' }
       ],
       advPayments: [
         {
@@ -197,20 +197,20 @@ export default {
       ],
       products: [],
       paymentMethodOptions: [
-        { id: 1, name: 'Cash' },
-        { id: 2, name: 'Credit card' },
-        { id: 3, name: 'Bank Account' }
+        { id: 1, name: 'Cash', label: this.$t('paymentMethods.cash') },
+        { id: 2, name: 'Credit card', label: this.$t('paymentMethods.creditCard') },
+        { id: 3, name: 'Bank Account', label: this.$t('paymentMethods.bankAccount') }
       ],
       selectedItemName: '',
-      summary: 'Invoice Summary',
+      summary: this.$t('advPayment.advPaymentSummary'),
       paymentMethodColumns: [
         {
           key: 'paymentMethod',
-          label: this.$t('invoices.newInvoice.newInvoiceSummary.paymentMethod')
+          label: this.$t('paymentMethod')
         },
         {
           key: 'amount',
-          label: this.$t('invoices.newInvoice.newInvoiceDetails.amount'),
+          label: this.$t('paymentMethodsColumn.amount'),
           class: 'action-column'
         }
       ],
