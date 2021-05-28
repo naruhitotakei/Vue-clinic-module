@@ -19,7 +19,7 @@
                                     <div class="assignments-container row align-items-center flex-nowrap" :class="{ 'taskIsActive' : !item.completed}">
                                         <b-checkbox v-model="item.completed" :disabled="item.disabled" name="check-button" inline :key="index" class="completed-assignment" @change="finishAssignment(item.id, $event)"></b-checkbox>
                                         <span>{{ item.description }}</span>
-                                        <span class="pl-5">{{ item.patientname }} {{ item.patientlastname }}</span>
+                                        <router-link tag="span" :to="'/patients/'+ item.enquiry_id" class="pl-5" style="cursor:pointer;">{{ item.patientname }} {{ item.patientlastname }}</router-link>
                                         <span class="pl-5">Dr. Zobo Zdravnik</span>
                                         <span class="text-right">{{ item.due_at | formatDate }}</span>
                                     </div>
@@ -56,7 +56,7 @@
                                 <div class="assignments-container row align-items-center flex-nowrap" :class="{ 'taskIsActive' : !item.completed}">
                                     <b-checkbox v-model="item.completed" :disabled="item.disabled" name="check-button" inline :key="index" class="completed-assignment" @change="finishAssignment(item.id, $event)"></b-checkbox>
                                     <span>{{ item.description }}</span>
-                                    <span class="pl-5">{{ item.patientname }} {{ item.patientlastname }}</span>
+                                    <router-link tag="span" :to="'/patients/'+ item.enquiry_id" class="pl-5" style="cursor:pointer;">{{ item.patientname }} {{ item.patientlastname }}</router-link>
                                     <span class="pl-5">Dr. Zobo Zdravnik</span>
                                     <span class="text-right">{{ item.due_at | formatDate }}</span>
                                 </div>
@@ -92,7 +92,7 @@
                                 <div class="assignments-container row align-items-center flex-nowrap" :class="{ 'taskIsActive' : !item.completed}">
                                     <b-checkbox v-model="item.completed" :disabled="item.disabled" name="check-button" inline :key="index" class="completed-assignment" @change="finishAssignment(item.id, $event)"></b-checkbox>
                                     <span>{{ item.description }}</span>
-                                    <span class="pl-5">{{ item.patientname }} {{ item.patientlastname }}</span>
+                                    <router-link tag="span" :to="'/patients/'+ item.enquiry_id" class="pl-5" style="cursor:pointer;">{{ item.patientname }} {{ item.patientlastname }}</router-link>
                                     <span class="pl-5">Dr. Zobo Zdravnik</span>
                                     <span class="text-right">{{ item.due_at | formatDate }}</span>
                                 </div>
@@ -123,7 +123,7 @@
                                 <div class="assignments-container row align-items-center flex-nowrap" :class="{ 'taskIsActive' : !item.completed}">
                                     <b-checkbox v-model="item.completed" :disabled="item.disabled" name="check-button" inline :key="index" class="completed-assignment" @change="finishAssignment(item.id, $event)"></b-checkbox>
                                     <span>{{ item.description }}</span>
-                                    <span class="pl-5">{{ item.patientname }} {{ item.patientlastname }}</span>
+                                    <router-link tag="span" :to="'/patients/'+ item.enquiry_id" class="pl-5" style="cursor:pointer;">{{ item.patientname }} {{ item.patientlastname }}</router-link>
                                     <span class="pl-5">Dr. Zobo Zdravnik</span>
                                     <span class="text-right">{{ item.due_at | formatDateAssignments(getLocale) }}</span>
                                 </div>
