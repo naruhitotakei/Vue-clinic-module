@@ -21,7 +21,7 @@
                                         <span>{{ item.description }}</span>
                                         <router-link tag="span" :to="'/patients/'+ item.enquiry_id" class="pl-5" style="cursor:pointer;">{{ item.patientname }} {{ item.patientlastname }}</router-link>
                                         <span class="pl-5">Dr. Zobo Zdravnik</span>
-                                        <span class="text-right">{{ item.due_at | formatDate }}</span>
+                                        <span class="text-right">{{ item.due_at | formatDateAssignments(getLocale) }}</span>
                                     </div>
                                 </b-list-group-item>
                             </b-list-group>
@@ -59,7 +59,7 @@
                                     <span class="pl-5">Dr. Zobo Zdravnik</span>
                                     <span class="iq-alert-text">
                                         <b-alert :show="true" class="text-white bg-danger iq-alert-icon float-right styling">
-                                                <i class="ri-alert-line mr-3 bg"></i>{{ item.due_at | formatDate }}
+                                                <i class="ri-alert-line mr-3 bg"></i>{{ item.due_at | formatDateAssignments(getLocale) }}
                                         </b-alert>
                                     </span>
                                 </div>
@@ -97,7 +97,7 @@
                                     <span>{{ item.description }}</span>
                                     <router-link tag="span" :to="'/patients/'+ item.enquiry_id" class="pl-5" style="cursor:pointer;">{{ item.patientname }} {{ item.patientlastname }}</router-link>
                                     <span class="pl-5">Dr. Zobo Zdravnik</span>
-                                    <span class="text-right">{{ item.due_at | formatDate }}</span>
+                                    <span class="text-right">{{ item.due_at | formatDateAssignments(getLocale) }}</span>
                                 </div>
                             </b-list-group-item>
                         </b-list-group>
