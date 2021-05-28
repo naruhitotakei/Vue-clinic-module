@@ -20,12 +20,13 @@ Vue.filter('formatDate', function (value) {
 
 Vue.filter('formatDateAssignments', function (value, lang) {
   if (value) {
-    console.log(lang)
     switch (lang) {
-      case 'sl' :
-        return moment.locale('en')
-      case 'en':
-        return moment.locale('sl')
+      case 'en' :
+        moment.locale('en')
+        break
+      case 'sl':
+        moment.locale('sl')
+        break
     }
 
     return moment(String(value)).format('ddd, D MMM')
