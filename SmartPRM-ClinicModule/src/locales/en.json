@@ -488,18 +488,17 @@
       "businessAddress": "Address",
       "businessCity": "City",
       "businessTaxNumber": "Tax Number",
+      "businessZIPCode": "ZIP code",
       "businessAction": "Action"
     },
     "addBusinessModal": {
       "addBusiness": "Add business",
-      "nameSlovenian": "Name (Slovenian)",
-      "nameItalian": "Name (Italian)",
-      "nameGerman": "Name (German)",
-      "nameEnglish": "Name (English)",
+      "name": "Name",
       "email": "Email",
       "address": "Address",
       "city": "City",
       "taxNumber": "Tax Number",
+      "zipCode": "ZIP code",
       "close": "Close",
       "save": "Save"
     }

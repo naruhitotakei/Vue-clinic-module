@@ -26,21 +26,12 @@
                   <strong class="loading">Loading...</strong>
                 </div>
               </template>
-              <template v-slot:cell(product_price)="data">
-                  <span>
-                      {{ data.item.product_price | euro }}
-                  </span>
-              </template>
-              <template v-slot:cell(product_group_id)="data">
-                  <span>
-                      {{ data.item.group_name }}
-                  </span>
-               </template>
-              <template v-slot:cell(product_type_id)="data">
+              <template v-slot:cell(zip_code)="data">
                 <span>
-                    {{ data.item.type_name }}
+                    {{ data.item.post_code }}
                 </span>
               </template>
+
               <template v-slot:cell(action)="data">
                 <b-button variant=" iq-bg-success mr-1 mb-1" size="sm" @click="editBusiness(data.item)"><i class="ri-ball-pen-fill m-0"></i></b-button>
                 <b-button variant=" iq-bg-danger mr-1 mb-1" size="sm" @click="removeBusiness(data.item)"><i class="ri-delete-bin-line m-0"></i></b-button>
@@ -67,14 +58,14 @@
     <form>
       <div class="form-row">
         <div class="col-md-12 mb-3">
-          <label for="title">{{ $t('business.addBusinessModal.nameEnglish') }}</label>
+          <label for="title">{{ $t('business.addBusinessModal.name') }}</label>
           <div style="display: flex;">
-            <input type="text" v-model="formData.name" class="form-control" placeholder="English">
+            <input type="text" v-model="formData.name" class="form-control" placeholder="Name">
           </div>
         </div>
         <div class="col-md-6 mb-3">
-          <label for="title">{{ $t('business.addBusinessModal.email') }} *</label>
-          <input type="text" v-model="formData.email" class="form-control" placeholder="Email" required>
+          <label for="title">{{ $t('business.addBusinessModal.email') }} </label>
+          <input type="email" v-model="formData.email" class="form-control" placeholder="Email" >
         </div>
         <div class="col-md-6 mb-3">
           <label for="title">{{ $t('business.addBusinessModal.address') }} *</label>
@@ -87,6 +78,10 @@
         <div class="col-md-6 mb-3">
           <label for="title">{{ $t('business.addBusinessModal.taxNumber') }} *</label>
           <input type="text" v-model="formData.tax_number" class="form-control" placeholder="Tax Number" required>
+        </div>
+        <div class="col-md-6 mb-3">
+          <label for="title">{{ $t('business.addBusinessModal.zipCode') }} *</label>
+          <input type="text" v-model="formData.zip_code" class="form-control" placeholder="ZIP code" required>
         </div>
       </div>
     </form>
@@ -116,6 +111,7 @@ export default {
         { label: this.$t('business.businessColumn.businessAddress'), key: 'address_line_1', class: 'text-left' },
         { label: this.$t('business.businessColumn.businessCity'), key: 'city', class: 'text-left' },
         { label: this.$t('business.businessColumn.businessTaxNumber'), key: 'tax_number', class: 'text-left' },
+        { label: this.$t('business.businessColumn.businessZIPCode'), key: 'zip_code', class: 'text-left' },
         { label: this.$t('business.businessColumn.businessAction'), key: 'action', class: 'text-center' }
       ],
       formData: {
@@ -124,7 +120,8 @@ export default {
         email: '',
         address: '',
         city: '',
-        tax_number: ''
+        tax_number: '',
+        zip_code: ''
       }
     }
   },
@@ -145,7 +142,8 @@ export default {
         email: item.email,
         address: item.address_line_1,
         city: item.city,
-        tax_number: item.tax_number
+        tax_number: item.tax_number,
+        zip_code: item.post_code
       }
       this.modalBusinessShow = true
     },
@@ -155,6 +153,7 @@ export default {
           this.getBusiness()
         })
       } else {
+        console.log(this.formData)
         createBusiness(this.formData).then(() => {
           this.getBusiness()
         })

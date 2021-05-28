@@ -10,7 +10,11 @@ const pool = new Pool({
 })
 
 const getBusiness = (request, response, locale) =>  {
-  pool.query("SELECT  b.id, b.name, b.address_line_1, b.email, b.post_code, b.city, b.country_code, b.tax_number, b.vat_number, b.created_date FROM business_customer b ORDER BY b.id ", (error, results) => {
+  pool.query("SELECT  " +
+      "b.id, b.name, b.address_line_1, b.email, b.post_code, b.city, b.country_code, b.post_code, b.tax_number, b.vat_number, b.created_date " +
+      "FROM business_customer b " +
+      "INNER JOIN Countries ON b.country_code = Countries.id  ", (error, results) => {
+    console.log(error)
     if (error) {
       throw error
     }
@@ -57,6 +61,7 @@ const updateBusiness = (req, res, id, business) => {
   if (business.email) businessStatement += "email='" + business.email + "',"
   if (business.address) businessStatement += "address_line_1='" + business.address + "',"
   if (business.city) businessStatement += "city='" + business.city + "',"
+  if (business.zip_code) businessStatement += "post_code='" + business.zip_code + "',"
   if (business.tax_number) businessStatement += "tax_number='" + business.tax_number + "'"
   businessStatement +=" WHERE business_customer.id=" + id
   console.log(businessStatement)
