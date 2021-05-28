@@ -38,6 +38,8 @@ import SignUp from '../views/Auth/Pages/SignUp'
 import RecoverPassword from '../views/Auth/Pages/RecoverPassword'
 import LockScreen from '../views/Auth/Pages/LockScreen'
 import ConfirmMail from '../views/Auth/Pages/ConfirmMail'
+/* Booking */
+import OnlineBooking from '../views/Booking/OnlineBooking'
 
 Vue.use(VueRouter)
 
@@ -98,6 +100,12 @@ const childRoutes = (prop, mode) => [
     name: prop + '.assignments',
     meta: { dark: mode, auth: true, name: 'assignments' },
     component: Assignments
+  },
+  {
+    path: 'online-booking/:clientId/:locationId',
+    name: prop + '.online-booking',
+    meta: { dark: mode, auth: true, name: 'online-booking' },
+    component: OnlineBooking
   }
 ]
 const documentChildRoute = (prop, mode) => [
