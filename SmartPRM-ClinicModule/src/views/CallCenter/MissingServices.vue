@@ -1,6 +1,6 @@
 <template>
     <div class="container">
-        <h1>Invoicing</h1>
+        <h1>Missing Services</h1>
     </div>
 </template>
 
@@ -9,7 +9,7 @@ import { xray } from '../../config/pluginInit'
 export default {
   components: {
   },
-  name: 'Invoicing',
+  name: 'MissingServices',
   mounted () {
     xray.index()
   },
