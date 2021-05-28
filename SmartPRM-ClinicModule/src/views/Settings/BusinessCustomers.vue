@@ -31,7 +31,11 @@
                     {{ data.item.post_code }}
                 </span>
               </template>
-
+              <template v-slot:cell(countries_name)="data">
+                <span>
+                    {{ data.item.countries_name }}
+                </span>
+              </template>
               <template v-slot:cell(action)="data">
                 <b-button variant=" iq-bg-success mr-1 mb-1" size="sm" @click="editBusiness(data.item)"><i class="ri-ball-pen-fill m-0"></i></b-button>
                 <b-button variant=" iq-bg-danger mr-1 mb-1" size="sm" @click="removeBusiness(data.item)"><i class="ri-delete-bin-line m-0"></i></b-button>
@@ -76,12 +80,21 @@
           <input type="text" v-model="formData.city" class="form-control" placeholder="City" required>
         </div>
         <div class="col-md-6 mb-3">
-          <label for="title">{{ $t('business.addBusinessModal.taxNumber') }} *</label>
-          <input type="text" v-model="formData.tax_number" class="form-control" placeholder="Tax Number" required>
-        </div>
-        <div class="col-md-6 mb-3">
           <label for="title">{{ $t('business.addBusinessModal.zipCode') }} *</label>
           <input type="text" v-model="formData.zip_code" class="form-control" placeholder="ZIP code" required>
+        </div>
+        <div class="col-md-6 mb-3" v-if="countries">
+          <label for="title">{{ $t('business.addBusinessModal.countries') }} *</label>
+          <v-select
+              taggable
+              :clearable="false"
+              label="name"
+              v-model="formData.country_code"
+              :options="countries">
+            <template v-slot:option="option">
+              {{ option.name }}
+            </template>
+          </v-select>
         </div>
       </div>
     </form>
@@ -93,13 +106,21 @@
 <script>
 import { xray } from '../../config/pluginInit'
 import { createBusiness, deleteBusiness, getBusiness, getBusinessByID, updateBusiness } from '@/services/business'
+import { getCountries } from '@/services/countries'
 export default {
   components: {
   },
   name: 'BusinessCustomers',
   data: function () {
     return {
+      options: [
+        {
+          title: 'tete'
+        }
+      ],
       business: [],
+      countries: [],
+      selectCountries: {},
       isBusinessDataLoaded: false,
       currentBusinessPage: 1,
       businessPerPage: 20,
@@ -110,8 +131,8 @@ export default {
         { label: this.$t('business.businessColumn.businessEmail'), key: 'email', class: 'text-left' },
         { label: this.$t('business.businessColumn.businessAddress'), key: 'address_line_1', class: 'text-left' },
         { label: this.$t('business.businessColumn.businessCity'), key: 'city', class: 'text-left' },
-        { label: this.$t('business.businessColumn.businessTaxNumber'), key: 'tax_number', class: 'text-left' },
         { label: this.$t('business.businessColumn.businessZIPCode'), key: 'zip_code', class: 'text-left' },
+        { label: this.$t('business.businessColumn.businessCountry'), key: 'countries_name', class: 'text-left' },
         { label: this.$t('business.businessColumn.businessAction'), key: 'action', class: 'text-center' }
       ],
       formData: {
@@ -120,18 +141,22 @@ export default {
         email: '',
         address: '',
         city: '',
-        tax_number: '',
-        zip_code: ''
+        zip_code: '',
+        country_code: ''
       }
     }
   },
   methods: {
+    getCountries () {
+      getCountries().then(response => {
+        this.countries = response
+      })
+    },
     getBusiness () {
       getBusiness('en').then(response => {
         this.isBusinessDataLoaded = true
         this.business = response
         this.businessTotalRows = response.length
-        console.log(response)
       })
     },
     editBusiness (item) {
@@ -142,8 +167,8 @@ export default {
         email: item.email,
         address: item.address_line_1,
         city: item.city,
-        tax_number: item.tax_number,
-        zip_code: item.post_code
+        zip_code: item.post_code,
+        country_code: item.countries_name
       }
       this.modalBusinessShow = true
     },
@@ -153,7 +178,6 @@ export default {
           this.getBusiness()
         })
       } else {
-        console.log(this.formData)
         createBusiness(this.formData).then(() => {
           this.getBusiness()
         })
@@ -181,6 +205,7 @@ export default {
   mounted () {
     xray.index()
     this.getBusiness()
+    this.getCountries()
   }
 }
 </script>

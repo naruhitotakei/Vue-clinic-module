@@ -525,6 +525,7 @@
       "businessCity": "City",
       "businessTaxNumber": "Tax Number",
       "businessZIPCode": "ZIP code",
+      "businessCountry": "Country",
       "businessAction": "Action"
     },
     "addBusinessModal": {
@@ -535,6 +536,7 @@
       "city": "City",
       "taxNumber": "Tax Number",
       "zipCode": "ZIP code",
+      "countries": "Countries",
       "close": "Close",
       "save": "Save"
     }

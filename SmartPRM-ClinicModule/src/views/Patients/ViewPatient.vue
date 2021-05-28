@@ -535,7 +535,7 @@ export default {
     },
     futureAppointments: function () {
       return this.appointments.filter((item) => {
-        return this.filterAppointments(item).reverse()
+        return this.filterAppointments(item)
       })
     },
     pastAppointments: function () {

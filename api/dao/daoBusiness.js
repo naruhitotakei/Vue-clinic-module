@@ -10,11 +10,7 @@ const pool = new Pool({
 })
 
 const getBusiness = (request, response, locale) =>  {
-  pool.query("SELECT  " +
-      "b.id, b.name, b.address_line_1, b.email, b.post_code, b.city, b.country_code, b.post_code, b.tax_number, b.vat_number, b.created_date " +
-      "FROM business_customer b ",
-      (error, results) => {
-    console.log(error)
+  pool.query("SELECT business_customer.*, countries.name as countries_name, countries.code, countries.id as countries_id FROM business_customer LEFT JOIN countries ON business_customer.country_id = countries.id", (error, results) => {
     if (error) {
       throw error
     }
@@ -36,17 +32,20 @@ const createBusiness = (req, res, business) => {
   if (business.name) businessStatement += "name,"
   if (business.email) businessStatement += "email,"
   if (business.address) businessStatement += "address_line_1,"
+  if (business.zip_code) businessStatement += "post_code,"
   if (business.city) businessStatement += "city,"
-  if (business.tax_number) businessStatement += "tax_number"
+  if (business.country_code) businessStatement += "country_id "
   businessStatement += ") VALUES ("
   if (business.name) businessStatement += "'" + business.name + "',"
   if (business.email) businessStatement += "'" + business.email + "',"
   if (business.address) businessStatement += "'" + business.address + "',"
+  if (business.zip_code) businessStatement += "'" + business.zip_code + "',"
   if (business.city) businessStatement += "'" + business.city + "',"
-  if (business.tax_number) businessStatement += "'" + business.tax_number + "'"
+  if (business.country_code) businessStatement += "'" + business.country_code.id  + "'"
   businessStatement += ")";
-
+  console.log(businessStatement)
   pool.query(businessStatement , (error, results) => {
+    console.log(error)
     if (error) {
       throw error
     }
@@ -56,16 +55,18 @@ const createBusiness = (req, res, business) => {
 }
 
 const updateBusiness = (req, res, id, business) => {
+  console.log(id)
+  console.log(business)
   var businessStatement = "UPDATE business_customer SET "
   if (business.name) businessStatement += "name='" + business.name + "',"
   if (business.email) businessStatement += "email='" + business.email + "',"
   if (business.address) businessStatement += "address_line_1='" + business.address + "',"
   if (business.city) businessStatement += "city='" + business.city + "',"
-  if (business.zip_code) businessStatement += "post_code='" + business.zip_code + "',"
-  if (business.tax_number) businessStatement += "tax_number='" + business.tax_number + "'"
+  if (business.country_code) businessStatement += "country_id='" + business.country_code.id  + "',"
+  if (business.zip_code) businessStatement += "post_code='" + business.zip_code + "'"
   businessStatement +=" WHERE business_customer.id=" + id
-  console.log(businessStatement)
   pool.query(businessStatement , (error, results) => {
+    console.log(error)
     if (error) {
       throw error
     }
