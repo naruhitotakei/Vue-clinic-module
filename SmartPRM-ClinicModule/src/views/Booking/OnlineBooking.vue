@@ -21,7 +21,7 @@
 
 <script>
 import { xray } from '../../config/pluginInit'
-import Order from './components/Order'
+import Order from './components/Order/Order'
 import Map from './components/Map'
 import Team from './components/Team'
 
