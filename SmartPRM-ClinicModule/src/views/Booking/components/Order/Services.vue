@@ -7,8 +7,7 @@
       responsive="sm"
       ref="selectableTable"
       selectable
-      @row-selected="onRowSelected"
-      selectedItems(selected)
+      @row-selected="$emit('row-selected', $event)"
     >
       <template #cell(selected)="{ rowSelected }">
         <template v-if="rowSelected">
@@ -21,26 +20,29 @@
 
 <script>
 export default {
+  props: {
+    selectedIndexes: {
+      type: Array,
+      default: () => []
+    },
+    items: {
+      type: Array,
+      default: () => []
+    },
+  },
   data () {
     return {
       fields: [ { key: 'serviceName', label: 'Consultation Name' }, 'time', 'price', { key: 'selected', label: ' ' } ],
-      items: [
-        { serviceName: 'consultation 1', time: '10 minutes', price: '$30' },
-        { serviceName: 'consultation 2', time: '20 minutes', price: '$50' },
-        { serviceName: 'consultation 3', time: '30 minutes', price: '$70' },
-        { serviceName: 'consultation 4', time: '40 minutes', price: '$100' }
-      ],
       selectMode: 'multi',
       selected: []
     }
   },
   methods: {
-    onRowSelected (items) {
-      this.selected = items
-    },
-    selection (items) {
-      this.$emit('selectedItems', items)
-    }
+  },
+  mounted () {
+    this.selectedIndexes.forEach(itemIndex => {
+      this.$refs.selectableTable.selectRow(itemIndex)
+    })
   }
 }
 </script>
