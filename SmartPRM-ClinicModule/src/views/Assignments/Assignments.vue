@@ -12,7 +12,10 @@
                         </template>
                         <template v-slot:body>
                             <b-list-group class="list-group-flush" id="todaysAssignments">
-                                <b-list-group-item v-for="(item, index) in todaysAssigments" :key="index">
+                                <b-list-group-item
+                                    v-for="(item, index) in todaysAssigments"
+                                    :key="index"
+                                    :style="{'background': getDifferenceDate(item.due_at) === 1 && '#ffeeba' || getDifferenceDate(item.due_at) > 1 && '#f5c6cb'}">
                                     <div class="assignments-container row align-items-center flex-nowrap" :class="{ 'taskIsActive' : !item.completed}">
                                         <b-checkbox v-model="item.completed" :disabled="item.disabled" name="check-button" inline :key="index" class="completed-assignment" @change="finishAssignment(item.id, $event)"></b-checkbox>
                                         <span>{{ item.description }}</span>
@@ -46,7 +49,10 @@
                     </template>
                     <template v-slot:body>
                         <b-list-group class="list-group-flush" id="overdueAssignments">
-                            <b-list-group-item v-for="(item, index) in overdueAssignments[overdueCurrentPage]" :key="index">
+                            <b-list-group-item
+                                v-for="(item, index) in overdueAssignments[overdueCurrentPage]"
+                                :key="index"
+                                :style="{'background': getDifferenceDate(item.due_at) === 1 && '#ffeeba' || getDifferenceDate(item.due_at) > 1 && '#f5c6cb'}">
                                 <div class="assignments-container row align-items-center flex-nowrap" :class="{ 'taskIsActive' : !item.completed}">
                                     <b-checkbox v-model="item.completed" :disabled="item.disabled" name="check-button" inline :key="index" class="completed-assignment" @change="finishAssignment(item.id, $event)"></b-checkbox>
                                     <span>{{ item.description }}</span>
@@ -79,7 +85,10 @@
                     </template>
                     <template v-slot:body>
                         <b-list-group class="list-group-flush" id="futureAssignments" :per-page="futurePerPage" :current-page="futureCurrentPage">
-                            <b-list-group-item v-for="(item, index) in futureAssigments[futureCurrentPage]" :key="index">
+                            <b-list-group-item
+                                v-for="(item, index) in futureAssigments[futureCurrentPage]"
+                                :key="index"
+                                :style="{'background': getDifferenceDate(item.due_at) === 1 && '#ffeeba' || getDifferenceDate(item.due_at) > 1 && '#f5c6cb'}">
                                 <div class="assignments-container row align-items-center flex-nowrap" :class="{ 'taskIsActive' : !item.completed}">
                                     <b-checkbox v-model="item.completed" :disabled="item.disabled" name="check-button" inline :key="index" class="completed-assignment" @change="finishAssignment(item.id, $event)"></b-checkbox>
                                     <span>{{ item.description }}</span>
@@ -224,6 +233,9 @@ export default {
     finishAssignment (id, finished) {
       finishAssignment(id, finished).then(response => {
       })
+    },
+    getDifferenceDate (date) {
+      return Math.floor((Date.parse(new Date(Date.now())) - Date.parse(date)) / 86400000)
     }
   },
   data () {
