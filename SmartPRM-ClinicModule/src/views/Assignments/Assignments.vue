@@ -49,16 +49,19 @@
                     </template>
                     <template v-slot:body>
                         <b-list-group class="list-group-flush" id="overdueAssignments">
-                            <b-list-group-item
-                                v-for="(item, index) in overdueAssignments[overdueCurrentPage]"
-                                :key="index"
-                                :style="{'background': getDifferenceDate(item.due_at) === 1 && '#ffeeba' || getDifferenceDate(item.due_at) > 1 && '#f5c6cb'}">
+                            <b-list-group-item v-for="(item, index) in overdueAssignments[overdueCurrentPage]"
+                                               :key="index"
+                                               >
                                 <div class="assignments-container row align-items-center flex-nowrap" :class="{ 'taskIsActive' : !item.completed}">
                                     <b-checkbox v-model="item.completed" :disabled="item.disabled" name="check-button" inline :key="index" class="completed-assignment" @change="finishAssignment(item.id, $event)"></b-checkbox>
                                     <span>{{ item.description }}</span>
                                     <router-link tag="span" :to="'/patients/'+ item.enquiry_id" class="pl-5" style="cursor:pointer;">{{ item.patientname }} {{ item.patientlastname }}</router-link>
                                     <span class="pl-5">Dr. Zobo Zdravnik</span>
-                                    <span class="text-right">{{ item.due_at | formatDate }}</span>
+                                    <span class="iq-alert-text">
+                                        <b-alert :show="true" class="text-white bg-danger iq-alert-icon float-right styling">
+                                                <i class="ri-alert-line mr-3 bg"></i>{{ item.due_at | formatDate }}
+                                        </b-alert>
+                                    </span>
                                 </div>
                             </b-list-group-item>
                         </b-list-group>
@@ -151,6 +154,17 @@
     background-color: #ffffff;
     border-radius: 15px;
 }
+
+.bg {
+    font-size : 1.5rem;
+    line-height: normal;
+}
+
+.styling {
+    margin: 0 !important;
+    padding: 0.375rem 0.75rem !important;
+}
+
 .taskIsActive {
     color: black;
 }
@@ -233,10 +247,10 @@ export default {
     finishAssignment (id, finished) {
       finishAssignment(id, finished).then(response => {
       })
-    },
-    getDifferenceDate (date) {
-      return Math.floor((Date.parse(new Date(Date.now())) - Date.parse(date)) / 86400000)
     }
+  /* getDifferenceDate (date) {
+      return Math.floor((Date.parse(new Date(Date.now())) - Date.parse(date)) / 86400000)
+    } */
   },
   data () {
     return {
