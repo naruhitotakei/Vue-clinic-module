@@ -275,7 +275,8 @@
         "invoiceTotal": "Znesek",
         "customer": "Stranka",
         "issuedIn": "Izdano v",
-        "issuedBy": "Izdal"
+        "issuedBy": "Izdal",
+        "device": "Naprava"
       },
       "newInvoiceDetails": {
         "header": "Podatki o računu",

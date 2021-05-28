@@ -275,7 +275,8 @@
         "invoiceTotal": "Total",
         "customer": "Customer",
         "issuedIn": "Issued in",
-        "issuedBy": "Issued by"
+        "issuedBy": "Issued by",
+        "device": "Device"
       },
       "newInvoiceDetails": {
         "header": "Invoice detail",

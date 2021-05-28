@@ -16,14 +16,19 @@
                                 <b-thead>
                                   <b-th colspan="2">{{ $t('invoices.newInvoice.newInvoiceColumn.issuedBy') }}</b-th>
                                   <b-th colspan="3">{{ $t('invoices.newInvoice.newInvoiceColumn.customer') }}</b-th>
-                                  <b-th colspan="5">{{ $t('invoices.newInvoice.newInvoiceColumn.issuedIn') }}</b-th>
+                                  <b-th colspan="4">{{ $t('invoices.newInvoice.newInvoiceColumn.issuedIn') }}</b-th>
+                                  <b-th colspan="3">{{ $t('invoices.newInvoice.newInvoiceColumn.device') }}</b-th>
                                 </b-thead>
                                 <b-tbody>
                                   <b-tr>
                                     <b-td colspan="2">{{usersCompany.company_name}}</b-td>
                                     <b-td colspan="3" v-html="billingDetails"></b-td>
-                                    <b-td colspan="5">
-                                      <v-select :clearable="false" label="premise_name" :reduce="opt => opt.premise_name" class="premises" v-model="issuedIn" :options="companyPremises"></v-select>
+                                    <b-td colspan="4">
+                                      <v-select :clearable="false" label="premise_name" class="premises" v-model="issuedIn" @input="findDevicesForPremise" :options="companyPremises"></v-select>
+                                    </b-td>
+                                    <b-td colspan="3">
+                                      <span v-if="devices.length == 1">{{device.device_name}}</span>
+                                      <v-select v-else :clearable="false" label="device_name" class="premises" v-model="device" :options="devices"></v-select>
                                     </b-td>
                                   </b-tr>
                                 </b-tbody>
@@ -52,12 +57,7 @@
                                       <span>{{ data.item.name }}</span>
                                     </template>
                                     <template v-slot:cell(amount)="data">
-                                      <span v-if="!data.item.editable">{{ data.item.amount }}</span>
-                                      <input type="number"  v-model="data.item.amount" v-else class="form-control">
-                                    </template>
-                                    <template v-slot:cell(action)="data">
-                                        <b-button variant=" iq-bg-success mr-1 mb-1" size="sm" @click="submitPayment(data.item)" v-if="data.item.editable"><i class="ri-checkbox-circle-fill m-0"></i></b-button>
-                                        <b-button variant=" iq-bg-primary mr-1 mb-1" size="sm" @click="editPayment(data.item)" v-if="!data.item.editable"><i class="ri-ball-pen-fill m-0"></i></b-button>
+                                      <input type="number"  v-model="data.item.amount" class="form-control">
                                     </template>
                                   </b-table>
                                 </b-col>
@@ -85,7 +85,7 @@
                           </b-alert>
                       </b-col>
                     </b-row>
-                     <b-row>
+                    <b-row>
                         <b-col lg="8">
                           <iq-card>
                             <template v-slot:headerTitle>
@@ -96,18 +96,12 @@
                                 <b-col md="12" class="table-responsive" style="min-height:200px">
                                   <b-table striped :items="paymentMethods" :fields="paymentMethodColumns">
                                     <template v-slot:cell(paymentMethod)="data">
-                                      <span v-if="!data.item.editable">{{ data.item.paymentMethod }}</span>
-                                      <div v-else>
+                                      <div>
                                         <v-select :clearable="false" label="name" :reduce="opt => opt.name" class="style-chooser" v-model="data.item.paymentMethod" :options="paymentMethodOptions"></v-select>
                                       </div>
                                     </template>
                                     <template v-slot:cell(amount)="data">
-                                      <span v-if="!data.item.editable">{{ data.item.amount }}</span>
-                                      <input type="number"  v-model="data.item.amount" v-else class="form-control">
-                                    </template>
-                                    <template v-slot:cell(action)="data">
-                                        <b-button variant=" iq-bg-success mr-1 mb-1" size="sm" :disabled="!data.item.paymentMethod" @click="submitPaymentMethod(data.item)" v-if="data.item.editable"><i class="ri-checkbox-circle-fill m-0"></i></b-button>
-                                        <b-button variant=" iq-bg-primary mr-1 mb-1" size="sm" @click="editPaymentMethod(data.item)" v-if="!data.item.editable"><i class="ri-ball-pen-fill m-0"></i></b-button>
+                                      <input type="number"  v-model="data.item.amount" class="form-control">
                                     </template>
                                   </b-table>
                                 </b-col>
@@ -164,7 +158,7 @@ import { sso } from '../../services/userService'
 import { getCompanyById } from '../../services/companies'
 import { getEnquiryById } from '../../services/enquiry'
 import { createInvoice } from '../../services/invoice'
-import { getPremisesForCompany } from '../../services/companyPremises'
+import { getPremisesForCompany, getDevicesForPremise } from '../../services/companyPremises'
 import html2pdf from 'html2pdf.js'
 import _ from 'lodash'
 
@@ -184,8 +178,7 @@ export default {
     return {
       detailColumns: [
         { label: this.$t('invoices.newInvoice.newInvoiceDetails.item'), key: 'name', class: 'text-left item-name' },
-        { label: this.$t('invoices.newInvoice.newInvoiceDetails.amount'), key: 'amount', class: 'text-left' },
-        { label: this.$t('invoices.newInvoice.newInvoiceDetails.action'), key: 'action', class: 'text-center action-column' }
+        { label: this.$t('invoices.newInvoice.newInvoiceDetails.amount'), key: 'amount', class: 'text-left' }
       ],
       advPayments: [
         {
@@ -219,19 +212,12 @@ export default {
           key: 'amount',
           label: this.$t('invoices.newInvoice.newInvoiceDetails.amount'),
           class: 'action-column'
-        },
-        {
-          label: this.$t('invoices.newInvoice.newInvoiceSummary.action'),
-          key: 'action',
-          class: 'text-center action-column',
-          thAttr: { 'data-html2canvas-ignore': true },
-          tdAttr: { 'data-html2canvas-ignore': true }
         }
       ],
       invoiceDate: moment().format('DD MMM, YYYY'),
       patientId: this.$route.params.patientId,
       billingDetails: '',
-      issuedIn: '',
+      issuedIn: {},
       isEditMode: false,
       logedInUser: {},
       patient: {},
@@ -239,7 +225,9 @@ export default {
       invoice: {},
       canPrintPdf: false,
       companyPremises: [],
-      dateOfInvoice: moment().format('YYYY-MM-DD')
+      dateOfInvoice: moment().format('YYYY-MM-DD'),
+      device: null,
+      devices: []
     }
   },
   methods: {
@@ -249,6 +237,12 @@ export default {
         amount: 0,
         editable: true
       }
+    },
+    findDevicesForPremise (value) {
+      getDevicesForPremise(value.premise_id).then(response => {
+        this.devices = response
+        this.device = this.devices[0]
+      })
     },
     exportToPDF () {
       this.items.pop()
@@ -291,7 +285,8 @@ export default {
         })
         getPremisesForCompany(this.logedInUser.prm_company_id).then(response => {
           this.companyPremises = response
-          this.issuedIn = this.companyPremises[0].premise_name
+          this.issuedIn = this.companyPremises[0]
+          this.findDevicesForPremise(this.issuedIn)
         })
       })
     },
@@ -327,7 +322,7 @@ export default {
         invoice_time: this.dateOfInvoice,
         invoice_number: '02-blagajna1-21aleksa',
         invoice_numbering_structure: '{c}',
-        issued_in: this.issuedIn,
+        issued_in: this.issuedIn.premise_name,
         lines_sum: this.advPayments[0].amount,
         discount_sum: 0,
         charges_sum: this.advPayments[0].amount,
