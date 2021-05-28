@@ -12,8 +12,8 @@ const pool = new Pool({
 const getBusiness = (request, response, locale) =>  {
   pool.query("SELECT  " +
       "b.id, b.name, b.address_line_1, b.email, b.post_code, b.city, b.country_code, b.post_code, b.tax_number, b.vat_number, b.created_date " +
-      "FROM business_customer b " +
-      "INNER JOIN Countries ON b.country_code = Countries.id  ", (error, results) => {
+      "FROM business_customer b ",
+      (error, results) => {
     console.log(error)
     if (error) {
       throw error
