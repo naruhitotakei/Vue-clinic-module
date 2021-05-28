@@ -15,7 +15,7 @@
                                 <b-list-group-item
                                     v-for="(item, index) in todaysAssigments"
                                     :key="index"
-                                    :style="{'background': getDifferenceDate(item.due_at) === 1 && '#ffeeba' || getDifferenceDate(item.due_at) > 1 && '#f5c6cb'}">
+                                >
                                     <div class="assignments-container row align-items-center flex-nowrap" :class="{ 'taskIsActive' : !item.completed}">
                                         <b-checkbox v-model="item.completed" :disabled="item.disabled" name="check-button" inline :key="index" class="completed-assignment" @change="finishAssignment(item.id, $event)"></b-checkbox>
                                         <span>{{ item.description }}</span>
@@ -91,7 +91,7 @@
                             <b-list-group-item
                                 v-for="(item, index) in futureAssigments[futureCurrentPage]"
                                 :key="index"
-                                :style="{'background': getDifferenceDate(item.due_at) === 1 && '#ffeeba' || getDifferenceDate(item.due_at) > 1 && '#f5c6cb'}">
+                            >
                                 <div class="assignments-container row align-items-center flex-nowrap" :class="{ 'taskIsActive' : !item.completed}">
                                     <b-checkbox v-model="item.completed" :disabled="item.disabled" name="check-button" inline :key="index" class="completed-assignment" @change="finishAssignment(item.id, $event)"></b-checkbox>
                                     <span>{{ item.description }}</span>

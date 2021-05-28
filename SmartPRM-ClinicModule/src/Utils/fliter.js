@@ -28,7 +28,7 @@ Vue.filter('formatDateAssignments', function (value, lang) {
         moment.locale('sl')
         break
     }
-
+    console.log(lang, moment.locale())
     return moment(String(value)).format('ddd, D MMM')
   }
 })
