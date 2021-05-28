@@ -116,7 +116,7 @@
                                     <span>{{ item.description }}</span>
                                     <span class="pl-5">{{ item.patientname }} {{ item.patientlastname }}</span>
                                     <span class="pl-5">Dr. Zobo Zdravnik</span>
-                                    <span class="text-right">{{ item.due_at | formatDate }}</span>
+                                    <span class="text-right">{{ item.due_at | formatDateAssignments(getLocale) }}</span>
                                 </div>
                             </b-list-group-item>
                         </b-list-group>
@@ -183,6 +183,11 @@ export default {
     this.getAssignments()
   },
   watch: {
+  },
+  computed: {
+    getLocale () {
+      return this.$store.getters['Setting/langState'].value ? this.$store.getters['Setting/langState'].value : this.$store.getters['Setting/langState']
+    }
   },
   methods: {
     getAssignments () {
