@@ -20,6 +20,7 @@ Vue.filter('formatDate', function (value) {
 
 Vue.filter('formatDateAssignments', function (value, lang) {
   if (value) {
+    console.log(lang)
     switch (lang) {
       case 'en' :
         return moment.locale('en')
