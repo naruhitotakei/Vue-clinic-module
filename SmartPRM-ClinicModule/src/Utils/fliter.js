@@ -22,9 +22,9 @@ Vue.filter('formatDateAssignments', function (value, lang) {
   if (value) {
     console.log(lang)
     switch (lang) {
-      case 'en' :
+      case 'sl' :
         return moment.locale('en')
-      case 'sl':
+      case 'en':
         return moment.locale('sl')
     }
 
