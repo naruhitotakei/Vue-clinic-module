@@ -2,9 +2,9 @@
   <div>
     <div class="text-center">
       <b-button-group class="mt-2">
-        <b-button variant="warning" @click="tabIndex = 0">Pick service</b-button>
-        <b-button @click="tabIndex = 1" :disabled="!serviceChoosed">Choose time</b-button>
-        <b-button @click="tabIndex = 2" :disabled="!timeChoosed">Review</b-button>
+        <b-button :variant="activeBtnVariant(0)" @click="tabIndex = 0">Pick service</b-button>
+        <b-button :variant="activeBtnVariant(1)" @click="tabIndex = 1" :disabled="!serviceChoosed">Choose time</b-button>
+        <b-button :variant="activeBtnVariant(2)" @click="tabIndex = 2" :disabled="!timeChoosed">Review</b-button>
       </b-button-group>
 
       <!-- <Consultations/> -->
@@ -16,7 +16,7 @@
       <b-button
         v-if="tabIndex === 0"
         align-self="end"
-        variant="dark"
+        variant="primary"
         :disabled="!serviceChoosed"
         @click="tabIndex++">
         Choose Time
@@ -40,7 +40,7 @@ export default {
   name: 'Order',
   data: function () {
     return {
-      tabIndex: 0,
+      tabIndex: 1,
       timeChoosed: false,
       selectedServices: [],
       servicesList: [
@@ -54,6 +54,9 @@ export default {
   methods: {
     selectServiceHandler (data) {
       this.selectedServices = data
+    },
+    activeBtnVariant: function (tabIindex) {
+      return tabIindex === this.tabIndex ? 'primary' : null
     }
   },
   computed: {
