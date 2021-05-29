@@ -3,12 +3,11 @@
     <b-table
       :items="items"
       :fields="fields"
-      select-mode="multi"
       responsive="sm"
-      ref="selectableTable"
-      selectable
-      @row-selected="$emit('row-selected', $event)"
     >
+      <template #cell(doctors)="data">
+        <time-selection-table-row :doctors="data.value"/>
+      </template>
       <template #cell(selected)="{ rowSelected }">
         <template v-if="rowSelected">
           <span aria-hidden="true">&check;</span>
@@ -19,8 +18,13 @@
 </template>
 
 <script>
+import TimeSelectionTableRow from './TimeSelectionTableRow.vue'
 export default {
+  components: {
+    TimeSelectionTableRow
+  },
   props: {
+    title: String,
     selectedIndex: {
       type: Array,
       default: () => []
@@ -32,7 +36,7 @@ export default {
   },
   data () {
     return {
-      fields: [ { key: 'time', label: 'Consultation Time' }, { key: 'selected', label: ' ' } ],
+      fields: [ { key: 'time', label: 'Time' }, { key: 'doctors', label: 'Available Doctors' }, { key: 'totalPrice', label: ' ' } ],
       selected: []
     }
   },
