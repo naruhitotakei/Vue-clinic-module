@@ -15,7 +15,7 @@
     <b-container>
       <b-row>
         <b-col md="9">
-          <time-selection-table :items="scedule" />
+          <time-selection-table :items="scedule" @select-doctor="$emit('select-doctor', $event)"/>
         </b-col>
         <b-col md="3"></b-col>
       </b-row>
@@ -36,12 +36,16 @@ export default {
     DateCard,
     TimeSelectionTable
   },
+  props: {
+    selectedDate: Date
+  },
   data: function () {
     return {
       datesList: [],
-      selectedDate: null,
       scedule: [],
-      selectedDateScedule: []
+      selectedDateScedule: [],
+      selectedDoctor: null,
+      selectedTime: ''
     }
   },
   watch: {
@@ -75,10 +79,10 @@ export default {
       return resArray
     },
     isActiveDate: function (date) {
-      return date.getDate() === this.selectedDate
+      return date === this.selectedDate
     },
     dateSelectionHandler: function (date) {
-      this.selectedDate = date.getDate()
+      this.$emit('select-date', date)
     },
     sceduleFormation: function (scedule, template) {
       const resScedule = []
