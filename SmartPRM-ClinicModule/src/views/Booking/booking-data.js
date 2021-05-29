@@ -77,3 +77,58 @@ export const serviceData = [
     itemName: 'Services'
   }
 ]
+
+export const dailySchedule = [
+  '7:00',
+  '7:30',
+  '8:00',
+  '8:30',
+  '9:00',
+  '9:30',
+  '10:00',
+  '10:30',
+  '11:00',
+  '11:30',
+  '12:00',
+  '12:30',
+  '13:00',
+  '13:30',
+  '14:00',
+  '14:30',
+  '15:00',
+  '15:30',
+  '16:00',
+  '16:30',
+  '17:00',
+  '17:30',
+  '18:00',
+  '18:30',
+  '19:00',
+  '19:30'
+]
+
+export const allDoctors = [
+  { name: 'Dr. Bojan Jernejc', img: require('../../assets/images/user/01.jpg'), degree: 'MBBS, MD' },
+  { name: 'Dr. Silvija Lenart', img: require('../../assets/images/user/02.jpg'), degree: 'MD' },
+  { name: 'Dr. Irma Medved', img: require('../../assets/images/user/03.jpg'), degree: 'MBBS' },
+  { name: 'Dr. Petra Maver', img: require('../../assets/images/user/04.jpg'), degree: 'MBBS, MD' },
+  { name: 'Dr. Damjan Ahlin', img: require('../../assets/images/user/05.jpg'), degree: 'BAMS' },
+  { name: 'Dr. Martin Sever', img: require('../../assets/images/user/06.jpg'), degree: 'MS, MD' },
+  { name: 'Dr. Tanja Perme', img: require('../../assets/images/user/07.jpg'), degree: 'MBBS, MD' },
+  { name: 'Dr. Matic Erjavec', img: require('../../assets/images/user/08.jpg'), degree: 'MD' },
+  { name: 'Dr. Peter Berlot', img: require('../../assets/images/user/09.jpg'), degree: 'MBBS' },
+  { name: 'Dr. Sebastjan Bras', img: require('../../assets/images/user/10.jpg'), degree: 'MBBS, MD' }
+]
+
+export const daysScedule = [
+  { name: 'Dr. Bojan Jernejc', img: require('../../assets/images/user/01.jpg'), degree: 'MBBS, MD', busyTimes: ['7:30', '10:30', '11:00'] },
+  { name: 'Dr. Silvija Lenart', img: require('../../assets/images/user/02.jpg'), degree: 'MD', busyTimes: ['10:30', '17:30', '18:00'] },
+  { name: 'Dr. Irma Medved', img: require('../../assets/images/user/03.jpg'), degree: 'MBBS', busyTimes: [] }
+  // { name: 'Dr. Petra Maver', img: require('../../assets/images/user/04.jpg'), degree: 'MBBS, MD', busyTimes: [] },
+  // { name: 'Dr. Damjan Ahlin', img: require('../../assets/images/user/05.jpg'), degree: 'BAMS', busyTimes: [] },
+  // { name: 'Dr. Martin Sever', img: require('../../assets/images/user/06.jpg'), degree: 'MS, MD', busyTimes: [] },
+  // { name: 'Dr. Tanja Perme', img: require('../../assets/images/user/07.jpg'), degree: 'MBBS, MD', busyTimes: [] },
+  // { name: 'Dr. Matic Erjavec', img: require('../../assets/images/user/08.jpg'), degree: 'MD', busyTimes: [] },
+  // { name: 'Dr. Peter Berlot', img: require('../../assets/images/user/09.jpg'), degree: 'MBBS', busyTimes: [] },
+  // { name: 'Dr. Sebastjan Bras', img: require('../../assets/images/user/10.jpg'), degree: 'MBBS, MD', busyTimes: [] }
+]
