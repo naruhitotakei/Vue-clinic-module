@@ -6,7 +6,7 @@
       responsive="sm"
     >
       <template #cell(doctors)="data">
-        <time-selection-table-row :doctors="data.value" @select-doctor="$emit('select-doctor', $event)" />
+        <time-selection-table-row :doctors="data.value" @select-doctor="$emit('select-doctor', {doctor: $event, time: data.item.time})" />
       </template>
       <template #cell(selected)="{ rowSelected }">
         <template v-if="rowSelected">
