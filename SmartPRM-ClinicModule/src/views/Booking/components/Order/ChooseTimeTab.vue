@@ -1,8 +1,11 @@
 <template>
   <div class="mt-5" v-if="datesList.length > 0">
     <slick :option="{
+      infinite: false,
       slidesToShow: 9,
-      leftArrow: ''
+      slidesToScroll: 9,
+      arrows: false,
+      dots: true
     }">
     <date-card v-for="(dateItem, index) in datesList" :key="`date_${index}`"
     :date="dateItem.date"
