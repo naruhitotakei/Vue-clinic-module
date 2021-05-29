@@ -9,7 +9,11 @@
 
       <!-- <Consultations/> -->
       <Services v-if="tabIndex === 0" @row-selected="selectServiceHandler" :items="servicesList" :selectedIndexes="selectedIndexes"/>
-      <ChooseTimeTab v-else-if="tabIndex === 1" />
+      <ChooseTimeTab v-else-if="tabIndex === 1"
+      :selectedDate="selectedDate"
+      @select-date="dateSelectionHandler"
+      @select-doctor="doctorSelectionHandler"
+      />
       <ChooseTimeTab v-else-if="tabIndex === 2" />
     </div>
     <div class="text-right">
@@ -49,7 +53,10 @@ export default {
         { id: 4, serviceName: 'consultation 4', time: '40 minutes', price: '$100' }
       ],
       selectedServices: [],
-      totalPrice: 0
+      totalPrice: 0,
+      selectedDate: null,
+      selectedDoctor: null,
+      selectedTime: ''
     }
   },
   computed: {
@@ -85,6 +92,13 @@ export default {
     },
     activeBtnVariant: function (tabIindex) {
       return tabIindex === this.tabIndex ? 'primary' : null
+    },
+    dateSelectionHandler: function (date) {
+      this.selectedDate = date
+    },
+    doctorSelectionHandler: function (data) {
+      this.selectedDoctor = data.doctor
+      this.selectedTime = data.time
     }
   }
 }
