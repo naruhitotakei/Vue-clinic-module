@@ -42,21 +42,14 @@ export default {
     return {
       tabIndex: 1,
       timeChoosed: false,
-      selectedServices: [],
       servicesList: [
         { id: 1, serviceName: 'consultation 1', time: '10 minutes', price: '$30' },
         { id: 2, serviceName: 'consultation 2', time: '20 minutes', price: '$50' },
         { id: 3, serviceName: 'consultation 3', time: '30 minutes', price: '$70' },
         { id: 4, serviceName: 'consultation 4', time: '40 minutes', price: '$100' }
-      ]
-    }
-  },
-  methods: {
-    selectServiceHandler (data) {
-      this.selectedServices = data
-    },
-    activeBtnVariant: function (tabIindex) {
-      return tabIindex === this.tabIndex ? 'primary' : null
+      ],
+      selectedServices: [],
+      totalPrice: 0
     }
   },
   computed: {
@@ -73,9 +66,26 @@ export default {
       })
       return indexes
     }
+  },
+  watch: {
+    selectedServices: {
+      immediate: true,
+      handler: function (value) {
+        let price = 0
+        if (value.length) {
+          price = value.reduce((prev, curr) => prev.price + curr.price)
+        }
+        this.totalPrice = price
+      }
+    }
+  },
+  methods: {
+    selectServiceHandler (data) {
+      this.selectedServices = data
+    },
+    activeBtnVariant: function (tabIindex) {
+      return tabIindex === this.tabIndex ? 'primary' : null
+    }
   }
-  // mounted () {
-  //   xray.index()
-  // }
 }
 </script>
