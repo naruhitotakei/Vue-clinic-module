@@ -17,7 +17,15 @@
         <b-col md="9">
           <time-selection-table :items="scedule" @select-doctor="$emit('select-doctor', $event)"/>
         </b-col>
-        <b-col md="3"></b-col>
+        <b-col md="3">
+          <total-order-info
+          :services="services"
+          :totalPrice="totalPrice"
+          :date="selectedDate"
+          :doctor="doctor"
+          :time="time"
+          />
+        </b-col>
       </b-row>
     </b-container>
   </div>
@@ -29,23 +37,27 @@ import DateCard from './DateCard.vue'
 import { getDayOfWeek } from '@/Utils/appDate'
 import TimeSelectionTable from './TimeSelectionTable.vue'
 import { dailySchedule, daysScedule } from '../../booking-data'
+import TotalOrderInfo from './TotalOrderInfo.vue'
 
 export default {
   components: {
     Slick,
     DateCard,
-    TimeSelectionTable
+    TimeSelectionTable,
+    TotalOrderInfo
   },
   props: {
-    selectedDate: Date
+    services: Array,
+    totalPrice: Number,
+    selectedDate: Date,
+    time: String,
+    doctor: Object
   },
   data: function () {
     return {
       datesList: [],
       scedule: [],
-      selectedDateScedule: [],
-      selectedDoctor: null,
-      selectedTime: ''
+      selectedDateScedule: []
     }
   },
   watch: {
