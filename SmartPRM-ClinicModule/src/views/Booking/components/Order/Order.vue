@@ -10,7 +10,11 @@
       <!-- <Consultations/> -->
       <Services v-if="tabIndex === 0" @row-selected="selectServiceHandler" :items="servicesList" :selectedIndexes="selectedIndexes"/>
       <ChooseTimeTab v-else-if="tabIndex === 1"
+      :services="selectedServices"
+      :totalPrice="totalPrice"
       :selectedDate="selectedDate"
+      :doctor="selectedDoctor"
+      :time="selectedTime"
       @select-date="dateSelectionHandler"
       @select-doctor="doctorSelectionHandler"
       />
@@ -47,10 +51,10 @@ export default {
       tabIndex: 1,
       timeChoosed: false,
       servicesList: [
-        { id: 1, serviceName: 'consultation 1', time: '10 minutes', price: '$30' },
-        { id: 2, serviceName: 'consultation 2', time: '20 minutes', price: '$50' },
-        { id: 3, serviceName: 'consultation 3', time: '30 minutes', price: '$70' },
-        { id: 4, serviceName: 'consultation 4', time: '40 minutes', price: '$100' }
+        { id: 1, serviceName: 'consultation 1', time: '10 minutes', price: 30 },
+        { id: 2, serviceName: 'consultation 2', time: '20 minutes', price: 50 },
+        { id: 3, serviceName: 'consultation 3', time: '30 minutes', price: 70 },
+        { id: 4, serviceName: 'consultation 4', time: '40 minutes', price: 100 }
       ],
       selectedServices: [],
       totalPrice: 0,
@@ -80,7 +84,7 @@ export default {
       handler: function (value) {
         let price = 0
         if (value.length) {
-          price = value.reduce((prev, curr) => prev.price + curr.price)
+          value.forEach(item => { price = price + item.price })
         }
         this.totalPrice = price
       }
