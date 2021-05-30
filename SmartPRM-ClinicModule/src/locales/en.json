@@ -345,7 +345,7 @@
       "selectPatient": "Select patient",
       "patient": "Patient",
       "close": "Close",
-      "create": "Create invoice"
+      "create": "Create advance payment"
     },
     "newAdvPayment": {
       "newAdvPaymentHeader": "New advance payment",

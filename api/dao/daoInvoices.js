@@ -43,7 +43,6 @@ const createInvoices = (request, response, invoice) => {
     if (invoice.total_with_vat) statement += "total_with_vat,"
     if (invoice.paid_amount) statement += "paid_amount,"
     if (invoice.amount_due_for_payment) statement += "amount_due_for_payment,"
-    if (invoice.payment_method) statement += "payment_method,"
     if (invoice.warranty) statement += "warranty,"
     if (invoice.vat_exemption_reason) statement += "vat_exemption_reason,"
     if (invoice.operator_name) statement += "operator_name,"
@@ -90,7 +89,6 @@ const createInvoices = (request, response, invoice) => {
     if (invoice.total_with_vat) statement += "'" + invoice.total_with_vat + "',"
     if (invoice.paid_amount) statement += "'" + invoice.paid_amount + "',"
     if (invoice.amount_due_for_payment) statement += "'" + invoice.amount_due_for_payment + "',"
-    if (invoice.payment_method) statement += "'" + invoice.payment_method + "',"
     if (invoice.warranty) statement += "'" + invoice.warranty + "',"
     if (invoice.vat_exemption_reason) statement += "'" + invoice.vat_exemption_reason + "',"
     if (invoice.operator_name) statement += "'" + invoice.operator_name + "',"
@@ -118,7 +116,23 @@ const createInvoices = (request, response, invoice) => {
                 createInoviceItem(item, invoiceId)
             });
         }
+        let isAdvPayment = invoice.invoice_type === 'Advance payment'
+        createPaymentMethod(invoiceId, invoice.payment_method, invoice.lines_sum, isAdvPayment)
         response.status(200).json("OK")
+    })
+}
+
+const createPaymentMethod = (invoiceId, paymentMethod, amount, isAdvPayment) => {
+    let statement = "INSERT INTO payment_method(invoice_id, amount, type, created_at"
+    if (isAdvPayment) statement+= ",adv_payment_id"
+    statement+= ") VALUES (" + invoiceId + "," + amount + ",'" + paymentMethod + "',NOW()"
+    if (isAdvPayment) statement+= "," + invoiceId
+    statement+= ")"
+    console.log(statement)
+    pool.query(statement, (error, results) => {
+        if (error) {
+            throw error
+        } 
     })
 }
 

@@ -44,7 +44,7 @@
                       </b-col>
                     </b-row>
                     <b-row>
-                        <b-col lg="12">
+                        <b-col lg="8">
                           <iq-card>
                             <template v-slot:headerTitle>
                                 <h5 style="margin-bottom: 15px;">{{ $t('advPayments.newAdvPayment.details.header') }}</h5>
@@ -52,7 +52,7 @@
                             <template v-slot:body>
                               <b-row>
                                 <b-col md="12" class="table-responsive">
-                                  <b-table bordered hover :items="advPayments" :fields="detailColumns">
+                                  <b-table bordered :items="advPayments" :fields="detailColumns">
                                     <template v-slot:cell(name)="data">
                                       <span>{{ data.item.name }}</span>
                                     </template>
@@ -70,20 +70,6 @@
                       <b-col lg="6" offset-lg="6">
                           <h2 class="text-center">{{ $t('advPayment.advPaymentInfo.advPaymentTotal')}}: {{advPayments[0].amount | euro}}</h2>
                       </b-col>
-                      <b-col lg="6" offset-lg="6">
-                          <b-alert :show="!canBeSaved" variant="danger">
-                            <div class="iq-alert-icon">
-                              <i class="ri-alert-line"></i>
-                            </div>
-                            <div class="iq-alert-text">
-                              <ul style="list-style:inherit">
-                                <li>Amounts of payment method and advance payment must be the same</li>
-                                <li>Advance payment amount can't be 0</li>
-                                <li>Payment method must be selected</li>
-                              </ul>
-                            </div>
-                          </b-alert>
-                      </b-col>
                     </b-row>
                     <b-row>
                         <b-col lg="8">
@@ -94,7 +80,7 @@
                             <template v-slot:body>
                                <b-row>
                                 <b-col md="12" class="table-responsive" style="min-height:200px">
-                                  <b-table striped :items="paymentMethods" :fields="paymentMethodColumns">
+                                  <b-table bordered :items="paymentMethods" :fields="paymentMethodColumns">
                                     <template v-slot:cell(paymentMethod)="data">
                                       <div>
                                         <v-select :clearable="false" label="name" :reduce="opt => opt.name" class="style-chooser" v-model="data.item.paymentMethod" :options="paymentMethodOptions"></v-select>
@@ -116,10 +102,10 @@
                                 <i class="ri-printer-line"></i>
                                 {{ $t('advPayments.newAdvPayment.downloadPrint') }}
                             </b-button>
-                            <b-button :disabled="!canBeSaved" variant="primary mr-4" @click="saveAsDraft">
+                            <b-button variant="primary mr-4" @click="saveAsDraft">
                                 <i class="ri-bookmark-3-fill mr-2"></i>{{ $t('advPayments.newAdvPayment.saveDraft') }}
                             </b-button>
-                            <b-button :disabled="!canBeSaved" variant="warning mr-3" @click="saveInvoice">
+                            <b-button variant="warning mr-3" @click="saveInvoice">
                                 <i class="ri-save-3-line mr-2"></i>{{ $t('advPayments.newAdvPayment.save') }}
                             </b-button>
                         </b-col>
@@ -149,6 +135,39 @@
           <span><i class="ri-error-warning-fill"></i>  {{ $t('invoice.notSaved') }}</span>
       </template>
     </b-toast>
+
+    <b-toast id="amount-zero" variant="danger" solid>
+      <template #toast-title>
+        <div class="d-flex flex-grow-1 align-items-baseline">
+            <strong class="mr-auto">{{ $t('EPR.notification') }}</strong>
+        </div>
+      </template>
+      <template #default>
+          <span><i class="ri-error-warning-fill"></i> Advance payment amount can't be 0 </span>
+      </template>
+    </b-toast>
+
+    <b-toast id="different-amount" variant="danger" solid>
+      <template #toast-title>
+        <div class="d-flex flex-grow-1 align-items-baseline">
+            <strong class="mr-auto">{{ $t('EPR.notification') }}</strong>
+        </div>
+      </template>
+      <template #default>
+          <span><i class="ri-error-warning-fill"></i> Amounts of payment method and advance payment must be the same </span>
+      </template>
+    </b-toast>
+
+    <b-toast id="mandatory-payment-method" variant="danger" solid>
+      <template #toast-title>
+        <div class="d-flex flex-grow-1 align-items-baseline">
+            <strong class="mr-auto">{{ $t('EPR.notification') }}</strong>
+        </div>
+      </template>
+      <template #default>
+          <span><i class="ri-error-warning-fill"></i> Payment method must be selected </span>
+      </template>
+    </b-toast>
 </b-container>
 </template>
 <script>
@@ -169,16 +188,11 @@ export default {
     this.getLoggedInUser()
     this.getPatient()
   },
-  computed: {
-    canBeSaved () {
-      return this.advPayments[0].amount === this.paymentMethods[0].amount && this.advPayments[0].amount !== 0 && this.paymentMethods[0].paymentMethod
-    }
-  },
   data () {
     return {
       detailColumns: [
         { label: this.$t('advPayments.newAdvPayment.details.item'), key: 'name', class: 'text-left item-name' },
-        { label: this.$t('advPayments.newAdvPayment.details.amount'), key: 'amount', class: 'text-left' }
+        { label: this.$t('advPayments.newAdvPayment.details.amount'), key: 'amount', class: 'text-left action-column' }
       ],
       advPayments: [
         {
@@ -301,11 +315,27 @@ export default {
     },
     saveAsDraft () {
       this.prepareInvoice('draft')
-      this.createInvoice()
+      if (this.isInoiceValid()) this.createInvoice()
     },
     saveInvoice () {
       this.prepareInvoice('issued')
-      this.createInvoice()
+      if (this.isInoiceValid()) this.createInvoice()
+    },
+    isInoiceValid () {
+      let valid = true
+      if (this.advPayments[0].amount !== this.paymentMethods[0].amount) {
+        this.$bvToast.show('different-amount')
+        valid = false
+      }
+      if (this.advPayments[0].amount === 0) {
+        this.$bvToast.show('amount-zero')
+        valid = false
+      }
+      if (!this.paymentMethods[0].paymentMethod) {
+        this.$bvToast.show('mandatory-payment-method')
+        valid = false
+      }
+      return valid
     },
     createInvoice () {
       createInvoice(this.invoice).then(response => {
@@ -340,7 +370,7 @@ export default {
         eor: 'test',
         invoice_special_notes: 'test',
         reverted: false,
-        device_id: 1,
+        device_id: this.device.device_id,
         premise_id: 1,
         business_customer_id: 1,
         invoiceItems: [],
