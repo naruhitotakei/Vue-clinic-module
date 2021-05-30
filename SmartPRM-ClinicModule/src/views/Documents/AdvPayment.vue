@@ -19,7 +19,7 @@
                                         <span class="badge badge-success" v-if="data.value == 'Paid'">Paid</span>
                                     </template>
                                     <template v-slot:cell(total_with_vat)="data">
-                                        <span class="font-weight-bold" v-html="data.value"></span>
+                                        <span class="font-weight-bold">{{data.value | euro}}</span>
                                     </template>
                                     <template v-slot:cell(billingDetails)="data">
                                         <p v-html="data.value"></p>
@@ -35,12 +35,12 @@
                                 <b-table-simple striped class="text-center">
                                     <thead>
                                         <tr>
-                                            <th v-for="(item,index) in InvoiceDetailField" :key="index" :class="item.key === 'item' ? 'text-left' : ''">{{ item.label }}</th>
+                                            <th v-for="(item,index) in invoiceDetailField" :key="index" :class="item.key === 'item' ? 'text-left' : ''">{{ item.label }}</th>
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        <tr v-for="(body, bodyKey) in InvoiceDetails" :key="bodyKey">
-                                            <template v-for="(item,index) in InvoiceDetailField">
+                                        <tr v-for="(body, bodyKey) in invoiceDetails" :key="bodyKey">
+                                            <template v-for="(item,index) in invoiceDetailField">
                                                 <th v-if="item.key === 'id'" :key="item.key+index">{{ body[item.key] }}</th>
                                                 <td v-else-if="item.key === 'item'" :key="item.key+index" class="text-left">
                                                     <h6 class="mb-0">{{ body[item.key].title }}</h6>
@@ -57,7 +57,7 @@
                             <div class="table-responsive-sm">
                                 <b-table striped :items="invoice" :fields="invoiceSummaryFields">
                                     <template v-slot:cell(total_with_vat)="data">
-                                        <span class="font-weight-bold" v-html="data.value"></span>
+                                        <span class="font-weight-bold">{{data.value | euro}}</span>
                                     </template>
                                 </b-table>
                             </div>
@@ -80,14 +80,14 @@
 </template>
 <script>
 import { xray } from '../../config/pluginInit'
-import { getInvoiceById } from '../../services/invoice'
+import { getInvoiceById, getItemsOfInvoiceById } from '../../services/invoice'
 import moment from 'moment'
 
 export default {
   name: 'AdvPayment',
   mounted () {
     xray.index()
-    this.getInvoice(this.invoiceId)
+    this.getInvoice(this.advPaymentId)
   },
   computed: {
     title () {
@@ -99,83 +99,38 @@ export default {
       getInvoiceById(id).then(response => {
         this.invoice = response
         this.invoiceNumber = this.invoice[0].invoice_number
+        this.getItems(this.invoice.invoice_id)
+        this.invoiceDetails[0].total = this.invoice[0].charges_sum
       }
       )
+    },
+    getItems (id) {
+      getItemsOfInvoiceById(id).then(response => {
+        this.items = response
+      })
     }
   },
   data () {
     return {
-      invoiceId: this.$route.params.invoiceId,
+      advPaymentId: this.$route.params.advPaymentId,
       invoiceNumber: '',
       text: this.$t('invoice.invoiceHeader') + ' N° : ',
       summary: this.$t('invoice.invoiceSummary'),
       detail: this.$t('invoice.invoiceDetail'),
-      InvoiceDetailField: [
+      invoiceDetailField: [
         {
-          key: 'id',
-          label: '#'
-        },
-        {
-          key: 'item',
+          key: 'name',
           label: this.$t('invoice.invoiceDetailColumn.item')
-        },
-        {
-          key: 'quantity',
-          label: this.$t('invoice.invoiceDetailColumn.quantity')
-        },
-        {
-          key: 'price',
-          label: this.$t('invoice.invoiceDetailColumn.price')
-        },
-        {
-          key: 'discount',
-          label: this.$t('invoice.invoiceDetailColumn.discount')
         },
         {
           key: 'total',
           label: this.$t('invoice.invoiceDetailColumn.total')
         }
       ],
-      InvoiceDetails: [
+      invoiceDetails: [
         {
-          id: 1,
-          item: {
-            title: 'Odstranitev zobnega kamna'
-          },
-          quantity: '1',
-          price: '100 EUR',
-          discount: '20%',
-          total: '80 EUR'
-        },
-        {
-          id: 2,
-          item: {
-            title: 'Zobna krona'
-          },
-          quantity: '1',
-          price: '350 EUR',
-          discount: '/',
-          total: '350 EUR'
-        },
-        {
-          id: 3,
-          item: {
-            title: 'Beljenje zob'
-          },
-          quantity: '1',
-          price: '350 EUR',
-          discount: '/',
-          total: '350 EUR'
-        },
-        {
-          id: 4,
-          item: {
-            title: 'Zobni implantat'
-          },
-          quantity: '1',
-          price: '800 EUR',
-          discount: '10%',
-          total: '720 EUR'
+          name: this.$t('advPayment.advPaymentHeader'),
+          total: ''
         }
       ],
       invoiceSummaryFields: [
@@ -192,14 +147,6 @@ export default {
         },
         {
           key: 'total_with_vat',
-          label: this.$t('invoice.invoiceSummaryColumn.subTotal')
-        },
-        {
-          key: 'discount',
-          label: this.$t('invoice.invoiceSummaryColumn.discount')
-        },
-        {
-          key: 'with_discount',
           label: this.$t('invoice.invoiceSummaryColumn.total')
         }
       ],
@@ -234,7 +181,8 @@ export default {
         { label: this.$t('invoice.invoiceInfo.invoiceIssuedIn'), key: 'company_name', class: 'text-left' },
         { label: this.$t('invoice.invoiceInfo.invoiceIssuedBy'), key: 'operator_name', class: 'text-left' }
       ],
-      invoice: null
+      invoice: null,
+      items: []
     }
   }
 }
