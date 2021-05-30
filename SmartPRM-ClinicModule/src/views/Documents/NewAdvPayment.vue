@@ -1,7 +1,7 @@
 <template>
 <b-container fluid>
   <div  style="display: none">
-      <div id="printInvoice" style="color:black;margin-left:40px;">
+      <div id="printInvoice" style="color:black;margin-left:40px;height:900px">
         <b-row>
             <b-col lg="12">
               <p>{{usersCompany.company_name}}</p>
@@ -20,7 +20,7 @@
           </b-col>
           <b-col lg="6">
             <p>AVANSNI RAČUN št.: {{invoice_number}}</p>
-            <p>Izvod:     Original</p>
+            <p>Izvod:<span style="margin-left:20px">Original</span></p>
             <p>Kraj izdaje:<span style="margin-left:20px">{{issuedIn.premise_name}}</span></p>
             <p>Datum izdaje:<span style="margin-left:20px">{{dateOfAdvPaymentPdf}}</span></p>
           </b-col>
@@ -134,7 +134,7 @@
                                       <span>{{ data.item.name }}</span>
                                     </template>
                                     <template v-slot:cell(amount)="data">
-                                      <input type="number"  v-model="data.item.amount" class="form-control">
+                                      <input type="number" :disabled="isInvoiceStatusIssued" min="0" v-model="data.item.amount" class="form-control">
                                     </template>
                                   </b-table>
                                 </b-col>
@@ -160,11 +160,11 @@
                                   <b-table bordered :items="paymentMethods" :fields="paymentMethodColumns">
                                     <template v-slot:cell(paymentMethod)="data">
                                       <div>
-                                        <v-select :clearable="false" label="name" :reduce="opt => opt.name" class="style-chooser" v-model="data.item.paymentMethod" :options="paymentMethodOptions"></v-select>
+                                        <v-select :disabled="isInvoiceStatusIssued" :clearable="false" label="name" :reduce="opt => opt.name" class="style-chooser" v-model="data.item.paymentMethod" :options="paymentMethodOptions"></v-select>
                                       </div>
                                     </template>
                                     <template v-slot:cell(amount)="data">
-                                      <input type="number"  v-model="data.item.amount" class="form-control">
+                                      <input type="number" :disabled="isInvoiceStatusIssued" min="0"  v-model="data.item.amount" class="form-control">
                                     </template>
                                   </b-table>
                                 </b-col>
@@ -179,7 +179,7 @@
                                 <i class="ri-printer-line"></i>
                                 {{ $t('advPayments.newAdvPayment.downloadPrint') }}
                             </b-button>
-                            <b-button variant="primary mr-4" @click="saveAsDraft">
+                            <b-button variant="primary mr-4" :disabled="isInvoiceStatusIssued" @click="saveAsDraft">
                                 <i class="ri-bookmark-3-fill mr-2"></i>{{ $t('advPayments.newAdvPayment.saveDraft') }}
                             </b-button>
                             <b-button variant="warning mr-3" @click="saveInvoice">
@@ -322,7 +322,13 @@ export default {
       devices: [],
       invoice_number: '02-blagajna1-21aleksa',
       zoi: '24as211d4232as1124',
-      eor: '24as211d4232as1124'
+      eor: '24as211d4232as1124',
+      status: ''
+    }
+  },
+  computed: {
+    isInvoiceStatusIssued () {
+      return this.status === 'issued'
     }
   },
   methods: {
@@ -395,11 +401,13 @@ export default {
       item.editable = false
     },
     saveAsDraft () {
-      this.prepareInvoice('draft')
+      this.status = 'draft'
+      this.prepareInvoice()
       if (this.isInoiceValid()) this.createInvoice()
     },
     saveInvoice () {
-      this.prepareInvoice('issued')
+      this.status = 'issued'
+      this.prepareInvoice()
       if (this.isInoiceValid()) this.createInvoice()
     },
     isInoiceValid () {
@@ -427,7 +435,7 @@ export default {
         this.$bvToast.show('bottom-right-danger')
       })
     },
-    prepareInvoice (status) {
+    prepareInvoice () {
       let temp = {
         invoice_type: 'Advance payment',
         invoice_time: this.dateOfAdvPayment,
@@ -455,7 +463,7 @@ export default {
         premise_id: 1,
         business_customer_id: 1,
         invoiceItems: [],
-        invoice_status: status
+        invoice_status: this.status
       }
       this.invoice = _.assignIn(this.invoice, this.patient, this.usersCompany, temp)
     },
