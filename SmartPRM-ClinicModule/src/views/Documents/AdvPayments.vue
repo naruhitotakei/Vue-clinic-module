@@ -131,7 +131,7 @@ export default {
           filterByFormatted: true
         },
         { label: this.$t('advPayments.advPaymentsColumn.issuedBy'), key: 'operator_name', class: 'text-left' },
-        { label: this.$t('advPayments.advPaymentsColumn.amount'), key: 'paid_amount', class: 'text-left' }
+        { label: this.$t('advPayments.advPaymentsColumn.amount'), key: 'lines_sum', class: 'text-left' }
       ]
     }
   },
