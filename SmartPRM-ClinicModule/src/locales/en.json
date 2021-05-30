@@ -353,7 +353,7 @@
       "paymentMethodSummary": "Payment method summary",
       "downloadPrint": "Download print",
       "saveDraft": "Save advance payment as draft",
-      "save": "Save",
+      "save": "Save and confirm",
       "dateOfAdvPayment": "Issue date",
       "details": {
         "header": "Advance payment details",

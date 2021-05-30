@@ -1,5 +1,82 @@
 <template>
-<b-container ref="invoice" fluid>
+<b-container fluid>
+  <div  style="display: none">
+      <div id="printInvoice" style="color:black;margin-left:40px;">
+        <b-row>
+            <b-col lg="12">
+              <p>{{usersCompany.company_name}}</p>
+              <p>{{usersCompany.company_address_line_1}}</p>
+              <p>{{usersCompany.company_post_code}} {{usersCompany.company_city}}</p>
+              <p> IBAN: {{usersCompany.company_iban}}</p>
+              <p>ID.štev za DDV: {{usersCompany.company_tax_registration_number}}</p>
+              <p>Matična št.: {{usersCompany.company_legal_registration_identifier}}</p>
+            </b-col>
+        </b-row>
+        <b-row>
+          <b-col lg="6">
+            <p>{{patient.name}} {{patient.last_name}}</p>
+            <p>{{patient.address_line_1}}</p>
+            <p>{{patient.post_code}} {{patient.city}}</p>
+          </b-col>
+          <b-col lg="6">
+            <p>AVANSNI RAČUN št.: {{invoice_number}}</p>
+            <p>Izvod:     Original</p>
+            <p>Kraj izdaje:<span style="margin-left:20px">{{issuedIn.premise_name}}</span></p>
+            <p>Datum izdaje:<span style="margin-left:20px">{{dateOfAdvPaymentPdf}}</span></p>
+          </b-col>
+        </b-row>
+        <b-row>
+          <b-table-simple small responsive>
+            <b-thead>
+              <b-tr>
+                <b-th colspan="1">Šifra</b-th>
+                <b-th colspan="4">Opis</b-th>
+                <b-th colspan="1">Kol/g</b-th>
+                <b-th colspan="2">Cena/EM</b-th>
+                <b-th colspan="2">Vrednost</b-th>
+                <b-th colspan="2">Znesek</b-th>
+              </b-tr>
+            </b-thead>
+            <b-tbody>
+              <b-tr>
+                <b-td colspan="1"></b-td>
+                <b-td colspan="4">{{ $t('advPayment.advPaymentHeader') }}</b-td>
+                <b-td colspan="1">1</b-td>
+                <b-td colspan="2">{{advPayments[0].amount}}</b-td>
+                <b-td colspan="2">{{advPayments[0].amount}}</b-td>
+                <b-td colspan="2">{{advPayments[0].amount}}</b-td>
+              </b-tr>
+              <b-tr>
+                <b-td colspan="8"></b-td>
+                <b-td colspan="2"><strong>Skupaj: </strong></b-td>
+                <b-td colspan="2">{{advPayments[0].amount}}</b-td>
+              </b-tr>
+              <b-tr>
+                <b-td colspan="8" class="hidden-row"></b-td>
+                <b-td colspan="2"><strong>Vplačilo: </strong></b-td>
+                <b-td colspan="2">{{advPayments[0].amount | euro}}</b-td>
+              </b-tr>
+            </b-tbody>
+          </b-table-simple>
+        </b-row>
+        <b-row>
+          <b-col lg="3">
+            <p>Način plačila:</p>
+            <p style="border-bottom: solid;">{{paymentMethods[0].paymentMethod}}<span style="margin-left:20px">{{advPayments[0].amount | euro}}</span></p>
+          </b-col>
+        </b-row>
+        <b-row>
+          <b-col>
+            <p>Zdravstvene storitive in oskrba so v skladu z 2. in 4. točko, prvega odstavka, 42 člena ZDDV-1, oproščene plačila DDV, zato DDV ni nil obračunan</p>
+            <br>
+            <p>Račun izdal: {{logedInUser.name}}</p>
+            <br>
+            <p>ZOI: {{zoi}}</p>
+            <p>EOR: {{eor}}</p>
+          </b-col>
+        </b-row>
+      </div>
+    </div>
     <b-row>
         <b-col lg="12">
             <iq-card>
@@ -39,7 +116,7 @@
                     <b-row>
                       <b-col>
                         <b-form-group class="col-md-4" :label="$t('advPayments.newAdvPayment.dateOfAdvPayment')" style="color:black">
-                          <b-form-input v-model="dateOfInvoice" type="date"></b-form-input>
+                          <b-form-input v-model="dateOfAdvPayment" type="date"></b-form-input>
                         </b-form-group>
                       </b-col>
                     </b-row>
@@ -97,7 +174,7 @@
                         </b-col>
                     </b-row>
                     <b-row>
-                        <b-col offset="6" cols="6" class="text-right" data-html2canvas-ignore="true">
+                        <b-col offset-md="4" cols="12" md="8" class="text-right" data-html2canvas-ignore="true">
                             <b-button :disabled="!canPrintPdf" variant="primary mr-3" @click="exportToPDF">
                                 <i class="ri-printer-line"></i>
                                 {{ $t('advPayments.newAdvPayment.downloadPrint') }}
@@ -169,6 +246,7 @@
       </template>
     </b-toast>
 </b-container>
+
 </template>
 <script>
 import { xray } from '../../config/pluginInit'
@@ -228,7 +306,6 @@ export default {
           class: 'action-column'
         }
       ],
-      invoiceDate: moment().format('DD MMM, YYYY'),
       patientId: this.$route.params.patientId,
       billingDetails: '',
       issuedIn: {},
@@ -239,9 +316,13 @@ export default {
       invoice: {},
       canPrintPdf: false,
       companyPremises: [],
-      dateOfInvoice: moment().format('YYYY-MM-DD'),
+      dateOfAdvPayment: moment().format('YYYY-MM-DD'),
+      dateOfAdvPaymentPdf: moment().format('YYYY-MM-DD HH:MM'),
       device: null,
-      devices: []
+      devices: [],
+      invoice_number: '02-blagajna1-21aleksa',
+      zoi: '24as211d4232as1124',
+      eor: '24as211d4232as1124'
     }
   },
   methods: {
@@ -259,14 +340,14 @@ export default {
       })
     },
     exportToPDF () {
-      this.items.pop()
       let options = {
         filename: 'invoice.pdf',
         image: { type: 'jpeg', quality: 0.98 },
-        html2canvas: { y: 350 },
-        jsPDF: { unit: 'mm', format: 'legal', orientation: 'landscape' }
+        html2canvas: { y: 300 },
+        jsPDF: { unit: 'pt', format: 'a3' }
       }
-      html2pdf().set(options).from(this.$refs.invoice).save()
+      var source = window.document.getElementById('printInvoice')
+      html2pdf().set(options).from(source).save()
     },
     createBillingDetails (selectedPatient) {
       let details = ''
@@ -349,8 +430,8 @@ export default {
     prepareInvoice (status) {
       let temp = {
         invoice_type: 'Advance payment',
-        invoice_time: this.dateOfInvoice,
-        invoice_number: '02-blagajna1-21aleksa',
+        invoice_time: this.dateOfAdvPayment,
+        invoice_number: this.invoice_number,
         invoice_numbering_structure: '{c}',
         issued_in: this.issuedIn.premise_name,
         lines_sum: this.advPayments[0].amount,
@@ -366,8 +447,8 @@ export default {
         vat_exemption_reason: 'test',
         operator_name: this.logedInUser.name,
         operator_tax_number: this.logedInUser.tax_number,
-        zoi: 'test',
-        eor: 'test',
+        zoi: this.zoi,
+        eor: this.eor,
         invoice_special_notes: 'test',
         reverted: false,
         device_id: this.device.device_id,
@@ -407,6 +488,10 @@ export default {
     border-radius: 10px;
     min-height: 45px;
     min-width: 300px;
+}
+
+.hidden-row {
+  border: none !important;
 }
 
 </style>

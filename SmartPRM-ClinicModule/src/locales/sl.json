@@ -353,7 +353,7 @@
       "paymentMethodSummary": "Povzetek načina plačila",
       "downloadPrint": "Prenesi tiskano verzijo",
       "saveDraft": "Shrani kot osnutek",
-      "save": "Shrani",
+      "save": "Shrani i potvrdi",
       "dateOfAdvPayment": "Datum izdaje",
       "details": {
         "header": "Podatki o avansnem računu",
