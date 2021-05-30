@@ -1,7 +1,7 @@
 <template>
 <b-container fluid>
   <div  style="display: none">
-      <div id="printInvoice" style="color:black;margin-left:40px;height:900px">
+      <div id="printInvoice" style="color:black;margin-left:40px;height:1200px">
         <b-row>
             <b-col lg="12">
               <p>{{usersCompany.company_name}}</p>
@@ -349,8 +349,8 @@ export default {
       let options = {
         filename: 'invoice.pdf',
         image: { type: 'jpeg', quality: 0.98 },
-        html2canvas: { y: 300 },
-        jsPDF: { unit: 'pt', format: 'a3' }
+        html2canvas: { y: 250 },
+        jsPDF: { unit: 'mm', format: 'a3' }
       }
       var source = window.document.getElementById('printInvoice')
       html2pdf().set(options).from(source).save()
