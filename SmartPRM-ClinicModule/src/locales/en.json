@@ -439,6 +439,7 @@
       "enquiry": "Enquiry",
       "description": "Description",
       "due_at": "Date",
+      "users": "Users",
       "close": "Close",
       "save": "Save"
     }

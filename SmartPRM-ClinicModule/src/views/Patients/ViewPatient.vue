@@ -61,7 +61,7 @@
                                       <div class="bg-primary pb-2 p-1" style="border-radius: 0 0 25px 25px;">
                                           <b-col md="14" class="d-flex justify-content-center">
                                               <button type="" class="btn btn-light m-1 ">{{ $t('EPR.overview.addAppointment') }}</button>&nbsp;
-                                              <button type="" class="btn btn-light m-1">{{ $t('EPR.overview.addAssignment') }}</button>&nbsp;
+                                              <button type="" class="btn btn-light m-1" @click.prevent="modalAssigmentShow = true">{{ $t('EPR.overview.addAssignment') }}</button>&nbsp;
                                               <button type="button" @click="addInvoice" class="btn btn-light m-1">{{ $t('EPR.overview.addInvoice') }}</button>
                                           </b-col>
                                           <b-col class="text-center">
@@ -507,6 +507,45 @@
           <span><i class="ri-checkbox-circle-line"></i>  {{ $t('EPR.changesSaved') }}</span>
       </template>
     </b-toast>
+    <b-modal
+        v-model="modalAssigmentShow"
+        no-close-on-backdrop
+        size="md"
+        :ok-disabled="isOkDisabled"
+        :title="$t('assignments.addAssignmentsModal.addAssignments')"
+        :ok-title="$t('assignments.addAssignmentsModal.save')"
+        :cancel-title="$t('assignments.addAssignmentsModal.close')"
+        @ok="addAssignments"
+        @close="cancelAssignments"
+        @cancel="cancelAssignments"
+    >
+      <form>
+        <div class="form-row">
+          <div class="col-md-12 mb-3">
+            <label for="title">{{ $t('assignments.addAssignmentsModal.users') }} *</label>
+            {{formData.user}}
+            <v-select
+                taggable
+                :clearable="false"
+                label="name"
+                :options="users"
+                v-model="formData.user"
+            >
+            </v-select>
+          </div>
+          <div class="col-md-12 mb-3">
+            <label for="title">{{ $t('assignments.addAssignmentsModal.description') }} *</label>
+            <div style="display: flex;">
+              <textarea type="text" v-model="formData.description" class="form-control" placeholder="Description"/>
+            </div>
+          </div>
+          <div class="col-md-12 mb-3">
+            <label for="title">{{ $t('assignments.addAssignmentsModal.due_at') }} </label>
+            <b-form-input class="date" id="exampleInputdate" type="date" v-model="formData.due_at" ></b-form-input>
+          </div>
+        </div>
+      </form>
+    </b-modal>
   </b-container>
 </template>
 <script>
@@ -536,6 +575,9 @@ export default {
     this.getAssignments()
   },
   computed: {
+    isOkDisabled () {
+      return !this.formData.due_at || !this.formData.description
+    },
     fullName () {
       return this.patient.name + ' ' + this.patient.last_name
     },
@@ -594,6 +636,8 @@ export default {
   data () {
     return {
       patientId: this.$route.params.patientId,
+      modalAssigmentShow: false,
+      users: [],
       patient: {},
       tempPatient: {},
       notes: [],
@@ -606,6 +650,14 @@ export default {
       invoices: [],
       services: [],
       offers: [],
+      formData: {
+        enquiry: {
+          id: +this.$route.params.patientId
+        },
+        description: '',
+        due_at: null,
+        user: {}
+      },
       currentInvoicePage: 1,
       invoicesPerPage: 10,
       currentOfferPage: 1,
@@ -859,12 +911,30 @@ export default {
     },
     getUsers () {
       getUsers().then(response => {
+        this.users = response.filter(item => item.prm_role_id === 4)
       })
     },
     getAssignments () {
       getAssignments('all').then(response => {
         this.assignments = response.filter(item => item.enquiry_id === +this.$route.params.patientId)
       })
+    },
+    defaultFormData () {
+      return {
+        enquiry: {
+          id: +this.patientId
+        },
+        description: '',
+        due_at: null,
+        user: {}
+      }
+    },
+    cancelAssignments () {
+      this.formData = this.defaultFormData()
+    },
+    addAssignments () {
+      console.log(this.formData)
+      return null
     }
   }
 }

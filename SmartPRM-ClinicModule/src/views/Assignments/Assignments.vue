@@ -172,6 +172,9 @@
                   :options="enquires"
                   v-model="formData.enquiry"
               >
+                <template v-slot:option="option">
+                  {{ option.name }} {{option.last_name}}
+                </template>
               </v-select>
             </div>
             <div class="col-md-12 mb-3">
@@ -293,7 +296,6 @@ export default {
       return Math.floor((Date.parse(new Date(Date.now())) - Date.parse(date)) / 86400000)
     },
     addAssignments () {
-      console.log(this.formData)
       createAssignments(this.formData).then(() => {
         this.getAssignments()
         this.formData = this.defaultFormData()
