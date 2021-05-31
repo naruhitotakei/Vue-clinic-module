@@ -9,9 +9,9 @@
     }">
     <date-card v-for="(dateItem, index) in datesList" :key="`date_${index}`"
     :date="dateItem.date"
-    :priceField="dateItem.priceField"
     :aviability="dateItem.aviability"
     :active="isActiveDate(dateItem.date)"
+    :totalPrice="totalPrice"
     @date-selected="dateSelectionHandler"
     />
     </slick>
@@ -73,7 +73,7 @@ export default {
   },
   created () {
     this.datesList = this.getDatesArr()
-    this.selectedDateScedule = daysScedule
+    this.selectedDateScedule = this.getsDayScedule()
   },
   methods: {
     getDatesArr: function () {
@@ -93,6 +93,14 @@ export default {
       }
       return resArray
     },
+    getsDayScedule: function (date) {
+      const set = new Set()
+      const itemsCount = Math.floor(Math.random() * 6) + 1
+      while (set.size < itemsCount) {
+        set.add(daysScedule[(Math.floor(Math.random() * daysScedule.length))])
+      }
+      return Array.from(set)
+    },
     isActiveDate: function (date) {
       return date === this.selectedDate
     },
@@ -106,7 +114,7 @@ export default {
         resScedule.push({
           time,
           doctors,
-          totalPrice: '35$'
+          totalPrice: '$' + this.totalPrice
         })
       })
       return resScedule
