@@ -116,18 +116,14 @@ const createInvoices = (request, response, invoice) => {
                 createInoviceItem(item, invoiceId)
             });
         }
-        let isAdvPayment = invoice.invoice_type === 'Advance payment'
-        createPaymentMethod(invoiceId, invoice.payment_method, invoice.lines_sum, isAdvPayment)
+        createPaymentMethod(invoiceId, invoice.payment_method, invoice.lines_sum)
         response.status(200).json("OK")
     })
 }
 
-const createPaymentMethod = (invoiceId, paymentMethod, amount, isAdvPayment) => {
+const createPaymentMethod = (invoiceId, paymentMethod, amount) => {
     let statement = "INSERT INTO payment_method(invoice_id, amount, type, created_at"
-    if (isAdvPayment) statement+= ",adv_payment_id"
-    statement+= ") VALUES (" + invoiceId + "," + amount + ",'" + paymentMethod + "',NOW()"
-    if (isAdvPayment) statement+= "," + invoiceId
-    statement+= ")"
+    statement+= ") VALUES (" + invoiceId + "," + amount + ",'" + paymentMethod + "',NOW())"
     console.log(statement)
     pool.query(statement, (error, results) => {
         if (error) {
