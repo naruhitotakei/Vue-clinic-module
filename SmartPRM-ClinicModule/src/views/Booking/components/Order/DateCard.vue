@@ -12,7 +12,7 @@
         <p class="app-font-small mb-0">{{month}}</p>
       </div>
       <div class="price-field">
-        {{(!aviability) ? priceField : aviability}}
+        {{(!aviability) ? `$${totalPrice}`: aviability}}
       </div>
     </div>
   </div>
@@ -24,9 +24,9 @@ import { getDayOfWeek, getMonthName } from '@/Utils/appDate'
 export default {
   props: {
     date: Date,
-    priceField: String,
     aviability: [String, Boolean],
-    active: Boolean
+    active: Boolean,
+    totalPrice: Number
   },
   computed: {
     day: function () {
