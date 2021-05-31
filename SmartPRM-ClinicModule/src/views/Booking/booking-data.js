@@ -144,12 +144,12 @@ export const allDoctors = [
 export const daysScedule = [
   { name: 'Dr. Bojan Jernejc', img: require('../../assets/images/user/01.jpg'), degree: 'MBBS, MD', busyTimes: ['7:30', '10:30', '11:00'] },
   { name: 'Dr. Silvija Lenart', img: require('../../assets/images/user/02.jpg'), degree: 'MD', busyTimes: ['10:30', '17:30', '18:00'] },
-  { name: 'Dr. Irma Medved', img: require('../../assets/images/user/03.jpg'), degree: 'MBBS', busyTimes: [] },
-  { name: 'Dr. Petra Maver', img: require('../../assets/images/user/04.jpg'), degree: 'MBBS, MD', busyTimes: [] },
+  { name: 'Dr. Irma Medved', img: require('../../assets/images/user/03.jpg'), degree: 'MBBS', busyTimes: ['12:00', '15:30', '16:00', '20:00'] },
+  { name: 'Dr. Petra Maver', img: require('../../assets/images/user/04.jpg'), degree: 'MBBS, MD', busyTimes: ['8:00', '8:30', '9:00', '9:30, 11:00'] },
   { name: 'Dr. Damjan Ahlin', img: require('../../assets/images/user/05.jpg'), degree: 'BAMS', busyTimes: [] },
-  { name: 'Dr. Martin Sever', img: require('../../assets/images/user/06.jpg'), degree: 'MS, MD', busyTimes: [] },
-  { name: 'Dr. Tanja Perme', img: require('../../assets/images/user/07.jpg'), degree: 'MBBS, MD', busyTimes: [] },
-  { name: 'Dr. Matic Erjavec', img: require('../../assets/images/user/08.jpg'), degree: 'MD', busyTimes: [] },
-  { name: 'Dr. Peter Berlot', img: require('../../assets/images/user/09.jpg'), degree: 'MBBS', busyTimes: [] },
-  { name: 'Dr. Sebastjan Bras', img: require('../../assets/images/user/10.jpg'), degree: 'MBBS, MD', busyTimes: [] }
+  { name: 'Dr. Martin Sever', img: require('../../assets/images/user/06.jpg'), degree: 'MS, MD', busyTimes: ['11:30', '12:30', '13:00', '14:30, 15:00'] },
+  { name: 'Dr. Tanja Perme', img: require('../../assets/images/user/07.jpg'), degree: 'MBBS, MD', busyTimes: ['8:00', '12:30', '17:00', '18:30, 19:00'] },
+  { name: 'Dr. Matic Erjavec', img: require('../../assets/images/user/08.jpg'), degree: 'MD', busyTimes: ['7:00', '7:30', '8:00', '8:30, 9:00'] },
+  { name: 'Dr. Peter Berlot', img: require('../../assets/images/user/09.jpg'), degree: 'MBBS', busyTimes: ['10:00', '12:30', '13:00', '13:30, 14:00'] },
+  { name: 'Dr. Sebastjan Bras', img: require('../../assets/images/user/10.jpg'), degree: 'MBBS, MD', busyTimes: ['15:00', '15:30', '16:00', '16:30, 17:00'] }
 ]
