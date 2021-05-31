@@ -58,11 +58,11 @@
       </template>
     </iq-card>
   </b-col>
-  <b-modal v-model="modalBusinessShow" no-close-on-backdrop size="lg" :title="$t('business.addBusinessModal.addBusiness')" @close="cancelBusiness"  @cancel="cancelBusiness"  :ok-title="$t('business.addBusinessModal.save')" @ok="addBusiness" :cancel-title="$t('business.addBusinessModal.close')">
+  <b-modal v-model="modalBusinessShow" no-close-on-backdrop size="lg" :ok-disabled="isOkDisabled" :title="$t('business.addBusinessModal.addBusiness')" @close="cancelBusiness"  @cancel="cancelBusiness"  :ok-title="$t('business.addBusinessModal.save')" @ok="addBusiness" :cancel-title="$t('business.addBusinessModal.close')">
     <form>
       <div class="form-row">
         <div class="col-md-12 mb-3">
-          <label for="title">{{ $t('business.addBusinessModal.name') }}</label>
+          <label for="title">{{ $t('business.addBusinessModal.name') }} *</label>
           <div style="display: flex;">
             <input type="text" v-model="formData.name" class="form-control" placeholder="Name">
           </div>
@@ -144,6 +144,11 @@ export default {
         zip_code: '',
         country_code: ''
       }
+    }
+  },
+  computed: {
+    isOkDisabled () {
+      return !this.formData.name || !this.formData.address || !this.formData.city || !this.formData.zip_code || !this.formData.country_code
     }
   },
   methods: {
