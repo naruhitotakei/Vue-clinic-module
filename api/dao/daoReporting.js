@@ -11,11 +11,12 @@ const pool = new Pool({
 
 const getEmazingServicesReport = (request, response, startdate, endate, countrie) =>  {
     if (!countrie || countrie.toLowerCase() == 'all' || countrie.toLowerCase() == 'null') {
-        var statement = ["SELECT pr.name as service_title, COUNT(se.id), SUM(se.price) FROM services se ",
+        var statement = ["SELECT pr.name as service_title, pr.group, COUNT(se.id), SUM(se.price) FROM services se ",
                      "LEFT JOIN products pr ON se.product_id = pr.id ",                    
                      "WHERE date_trunc('day', se.date) >= $1 AND (date_trunc('day', se.date) - INTERVAL '1 DAY' ) <= $2 ",
                      "GROUP BY pr.id "].join('\n')
         pool.query(statement, [startdate, endate], (error, results) => {
+          console.log(error)
             if (error) {
                 throw error
             }

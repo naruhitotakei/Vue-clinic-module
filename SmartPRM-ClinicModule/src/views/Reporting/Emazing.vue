@@ -31,7 +31,35 @@
         <iq-card>
           <template v-slot:body>
               <h5 class="card-title">{{ $t('reportingEmazing.servicesSummary') }}</h5>
-            <b-table small :items="servicesSummaryItems" :fields="servicesSummaryColumns" class="mb-0"></b-table>
+<!--            <b-table small :items="servicesSummaryItems" :fields="servicesSummaryColumns" class="mb-0"></b-table>-->
+            <b-table-simple>
+              <thead>
+              <tr>
+                <th v-for="(item,index) in servicesSummaryColumns" :key="index" :class="item.key === 'item' ? 'text-left' : ''">{{ item.label }}</th>
+              </tr>
+              </thead>
+              <tbody>
+              <template v-for="(body,bodyKey ) in getServicesSummary" >
+                <tr :key="bodyKey">
+                  <td style="max-width: 200px"><span class="font-italic">{{ bodyKey }}</span></td>
+                  <td><span class="font-italic">{{ body.group_count }}</span></td>
+                  <td><span class="font-italic">{{ Math.trunc(body.group_amount) }}</span></td>
+                </tr>
+                  <template v-for="(item, index) in body" >
+                   <tr :key="item.service_title + index">
+                     <td  style="max-width: 200px">{{ item.service_title }}</td>
+                     <td>{{ item.count }}</td>
+                     <td>{{ Math.trunc(item.sum) }}</td>
+                   </tr>
+                  </template>
+              </template>
+              <tr v-if="servicesSummaryTotalCount">
+                <td><span style="font-weight: bold"> Total: </span></td>
+                <td>  </td>
+                <td> <span style="font-weight: bold">{{Math.trunc(servicesSummaryTotalCount)}}</span></td>
+              </tr>
+              </tbody>
+            </b-table-simple>
           </template>
         </iq-card>
         <iq-card>
@@ -47,6 +75,7 @@
 import IqCard from '../../components/xray/cards/iq-card.vue'
 import { xray } from '../../config/pluginInit'
 import { getEmazingServicesReport, getServiceList, getCountryList } from '../../services/reporting'
+import _ from 'lodash'
 export default {
   components: {
     IqCard
@@ -56,6 +85,7 @@ export default {
     return {
       fromdate: null,
       todate: null,
+      servicesSummaryTotalCount: 0,
       countrySelectOptions: [
         { value: null, text: this.$t('reportingEmazing.countrySelect') }
       ],
@@ -145,7 +175,21 @@ export default {
     getServicesReport () {
       getEmazingServicesReport(this.fromdate, this.todate, this.countrySelect).then(response => {
         if (typeof response !== 'string') {
-          this.servicesSummaryItems = response
+          this.servicesSummaryItems = []
+          let res = _.groupBy(response, 'group')
+          let totalCount = 0
+          for (let group in res) {
+            res[`${group}`].group_count = 0
+            res[`${group}`].group_amount = 0
+            res[group].map(item => {
+              res[`${group}`].group_count = res[`${group}`].group_count + Number(item.count)
+              res[`${group}`].group_amount = res[`${group}`].group_amount + Number(item.sum)
+              totalCount += Number(item.sum)
+            })
+          }
+          this.servicesSummaryItems = res
+          this.servicesSummaryTotalCount = totalCount
+          console.log(totalCount)
         } else {
           console.error(response)
         }
@@ -193,6 +237,16 @@ export default {
       var mo = new Intl.DateTimeFormat('en', { month: 'numeric' }).format(date)
       var da = new Intl.DateTimeFormat('en', { day: 'numeric' }).format(date)
       return (`${da}. ${mo}. ${ye}`)
+    }
+  },
+  computed: {
+    getServicesSummary () {
+      return this.servicesSummaryItems
+    }
+  },
+  watch: {
+    'servicesSummaryItems' () {
+      console.log('watch', this.servicesSummaryItems)
     }
   },
   mounted () {
