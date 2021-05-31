@@ -73,7 +73,7 @@ export default {
   },
   created () {
     this.datesList = this.getDatesArr()
-    this.selectedDateScedule = this.getsDayScedule()
+    !this.selectedDate ? this.initialDate() : this.getsDayScedule(this.selectedDate)
   },
   methods: {
     getDatesArr: function () {
@@ -93,30 +93,46 @@ export default {
       }
       return resArray
     },
+    initialDate: function () {
+      const selectedDateItem = this.datesList.find(date => !date.aviability)
+      !!selectedDateItem && this.dateSelectionHandler(selectedDateItem.date)
+    },
     getsDayScedule: function (date) {
-      const set = new Set()
-      const itemsCount = Math.floor(Math.random() * 6) + 1
-      while (set.size < itemsCount) {
-        set.add(daysScedule[(Math.floor(Math.random() * daysScedule.length))])
+      let dayScedule = []
+      const dateFromList = this.datesList.find(searchedDate => searchedDate.date.getDate() === date.getDate())
+      if (!!dateFromList && !dateFromList.aviability) {
+        const set = new Set()
+        const itemsCount = Math.floor(Math.random() * 6) + 1
+        while (set.size < itemsCount) {
+          set.add(daysScedule[(Math.floor(Math.random() * daysScedule.length))])
+        }
+        dayScedule = Array.from(set)
       }
-      return Array.from(set)
+      this.selectedDateScedule = dayScedule
     },
     isActiveDate: function (date) {
-      return date === this.selectedDate
+      let active = false
+      if (!!date && !!this.selectedDate) {
+        active = date.getDate() === this.selectedDate.getDate()
+      }
+      return active
     },
     dateSelectionHandler: function (date) {
+      this.getsDayScedule(date)
       this.$emit('select-date', date)
     },
     sceduleFormation: function (scedule, template) {
       const resScedule = []
-      template.forEach(time => {
-        const doctors = scedule.filter(doctor => !doctor.busyTimes.some(busyTime => busyTime === time))
-        resScedule.push({
-          time,
-          doctors,
-          totalPrice: '$' + this.totalPrice
+      if (scedule.length > 0) {
+        template.forEach(time => {
+          const doctors = scedule.filter(doctor => !doctor.busyTimes.some(busyTime => busyTime === time))
+          resScedule.push({
+            time,
+            doctors,
+            totalPrice: '$' + this.totalPrice
+          })
         })
-      })
+      }
       return resScedule
     }
   }
