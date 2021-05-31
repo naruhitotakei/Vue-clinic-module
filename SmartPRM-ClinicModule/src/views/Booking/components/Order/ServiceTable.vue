@@ -1,20 +1,25 @@
 <template>
   <div class="mt-5">
-      <b-table
-        :items="list"
-        :fields="fields"
-        :select-mode="selectMode"
-        responsive="sm"
-        ref="selectableTable"
-        selectable
-        @row-selected="selectedRowHandler"
-      >
-        <template #cell(selected)="{ rowSelected }">
-          <template v-if="rowSelected">
-            <span aria-hidden="true">&check;</span>
-          </template>
-        </template>
-      </b-table>
+      <div class="mb-3">
+        <b-button block v-b-toggle="tabId" variant="primary">{{title}}</b-button>
+        <b-collapse :id="tabId" visible appear>
+          <b-table
+          :items="list"
+          :fields="fields"
+          :select-mode="selectMode"
+          responsive="sm"
+          ref="selectableTable"
+          selectable
+          @row-selected="selectedRowHandler"
+          >
+            <template #cell(selected)="{ rowSelected }">
+              <template v-if="rowSelected">
+                <span aria-hidden="true">&check;</span>
+              </template>
+            </template>
+          </b-table>
+        </b-collapse>
+      </div>
     </div>
 </template>
 
@@ -31,7 +36,8 @@ export default {
       type: Array,
       default: () => []
     },
-    title: String
+    title: String,
+    tabId: String
   },
   data () {
     return {
