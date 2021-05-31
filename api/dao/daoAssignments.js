@@ -79,12 +79,12 @@ const createAssignment = (req, res, assignment) => {
   if (assignment.enquiry) assignmentStatement += "enquiry_id,"
   if (assignment.description) assignmentStatement += "description,"
   if (assignment.due_at) assignmentStatement += "due_at,"
-  if (assignment.user_id) assignmentStatement += "user_id"
+  if (assignment.user) assignmentStatement += "user_id"
   assignmentStatement += ") VALUES ("
   if (assignment.enquiry) assignmentStatement += "'" + assignment.enquiry.id + "',"
   if (assignment.description) assignmentStatement += "'" + assignment.description + "',"
   if (assignment.due_at) assignmentStatement += "'" + assignment.due_at + "',"
-  if (assignment.user_id) assignmentStatement += "'" + assignment.user_id + "'"
+  if (assignment.user) assignmentStatement += "'" + assignment.user.userid + "'"
   assignmentStatement += ")";
   console.log(assignmentStatement)
   pool.query(assignmentStatement , (error, results) => {

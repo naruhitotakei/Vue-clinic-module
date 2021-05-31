@@ -155,7 +155,7 @@ const getSurgeons = (request, response) => {
 }
 
 const getUsers = (request, response) => {
-    pool.query("SELECT users.id, users.prm_role_id, users.prm_client_id, users.prm_company_id, users.name, users.email AS mail, users.phone_number AS phone, prm_role.role_name, prm_client.*, prm_company.* " +
+    pool.query("SELECT users.id AS userID, users.prm_role_id, users.prm_client_id, users.prm_company_id, users.name, users.email AS mail, users.phone_number AS phone, prm_role.role_name, prm_client.*, prm_company.* " +
         "FROM users " +
         "LEFT JOIN prm_role ON users.prm_role_id = prm_role.role_id " +
         "LEFT JOIN prm_client ON users.prm_client_id = prm_client.id " +

@@ -69,7 +69,7 @@
                         </b-list-group>
                         <template>
                             <div class="mt-4 ml-2">
-                              <p v-if="overdueTotalRows===0"> You have no overdue assignments.</p>
+                              <p v-if="overdueTotalRows === 0"> You have no overdue assignments.</p>
                                 <b-pagination
                                     v-else-if="overdueTotalRows > 20"
                                     v-model="overdueCurrentPage"
@@ -106,10 +106,13 @@
                         <template>
                             <div class="mt-4 ml-2">
                                 <p v-if="futureTotalRows===0"> You have no future assignments.</p>
-                                <b-pagination v-else v-model="futureCurrentPage"
-                                              :total-rows="futureTotalRows"
-                                              :per-page="futurePerPage"
-                                              aria-controls="futureAssignments"></b-pagination>
+                                <b-pagination
+                                    v-else
+                                    v-model="futureCurrentPage"
+                                    :total-rows="futureTotalRows"
+                                    :per-page="futurePerPage"
+                                    aria-controls="futureAssignments"
+                                ></b-pagination>
                             </div>
                         </template>
                     </template>
@@ -271,6 +274,7 @@ export default {
         for (let i = 0; i < response.length; i += 3) {
           res = [...res, response.slice(i, i + 20)]
         }
+        console.log(res)
         this.overdueAssignments = res
         this.overdueTotalRows = response.length
       })

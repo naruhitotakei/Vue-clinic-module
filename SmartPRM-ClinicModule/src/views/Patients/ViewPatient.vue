@@ -523,7 +523,6 @@
         <div class="form-row">
           <div class="col-md-12 mb-3">
             <label for="title">{{ $t('assignments.addAssignmentsModal.users') }} *</label>
-            {{formData.user}}
             <v-select
                 taggable
                 :clearable="false"
@@ -555,7 +554,7 @@ import { getDentists, getSurgeons } from '../../services/userService'
 import { getCountriesList, getRegionsList } from '../../services/commonCodeLists'
 import { getUsers } from '@/services/userService'
 import moment from 'moment'
-import { getAssignments } from '@/services/assignmentsService'
+import { createAssignments, getAssignments } from '@/services/assignmentsService'
 
 export default {
   name: 'ViewPatient',
@@ -933,8 +932,10 @@ export default {
       this.formData = this.defaultFormData()
     },
     addAssignments () {
-      console.log(this.formData)
-      return null
+      createAssignments(this.formData).then(() => {
+        this.getAssignments()
+        this.formData = this.defaultFormData()
+      })
     }
   }
 }
