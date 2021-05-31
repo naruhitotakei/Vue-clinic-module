@@ -42,9 +42,8 @@ export default {
 <style lang="scss" scoped>
 @import "~@/assets/scss/app-vars.scss";
 .date-card{
-  margin-top: 1px;
   color: $black;
-  border-color: $primary;
+  border-color: $gray-800;
   transition: background-color 0.35s linear;
   &.disabled{
     color: unset;
@@ -56,14 +55,14 @@ export default {
       color: $gray-600;
     }
   }
-  &.active{
-    margin-top: 0px;
-    border-width: 2px;
-  }
   &.active:not(.disabled){
     background-color: $primary-10;
+    border-color: $primary;
     h1{
       color: $primary;
+    }
+    .price-field{
+      background-color: $primary;
     }
   }
   &.active.disabled{
@@ -72,9 +71,12 @@ export default {
       color: $gray-700;
     }
   }
+  h1{
+    line-height: 3rem;
+  }
   .price-field{
     color: $white;
-    background-color: $primary;
+    background-color: $gray-800;
   }
 }
 </style>
