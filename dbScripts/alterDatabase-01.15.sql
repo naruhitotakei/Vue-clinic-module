@@ -96,42 +96,12 @@ ALTER TABLE invoice DROP COLUMN payment_method;
 ALTER TABLE invoice DROP COLUMN item_id;
 
 --############################################################
---# creatomg advance_payment and payment_method tables
+--# create payment_method table
 --############################################################
-
-
-CREATE TABLE IF NOT EXISTS advance_payment (
-	id							SERIAL PRIMARY KEY,
-	invoice_id					INT CONSTRAINT advance_payment_invoice_fk REFERENCES invoice (invoice_id),
-	company_id					INT CONSTRAINT advance_payment_prm_company_fk REFERENCES prm_company (company_id),
-	enquiry_id					INT CONSTRAINT advance_payment_enquiries_fk REFERENCES enquiries (id),
-	issue_time					TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
-	number						VARCHAR(128),
-	numbering_structure			CHAR[1],
-	lines_sum					NUMERIC(8,2),
-	discount_sum				NUMERIC(8,2),
-	charges_sum					NUMERIC(8,2),
-	total_without_vat			NUMERIC(8,2),
-	total_vat_amount			NUMERIC(8,2),
-	total_with_vat				NUMERIC(8,2),
-	amount_due_for_payment		NUMERIC(8,2),
-	vat_exemption_reason		TEXT,
-	zoi							VARCHAR(64),
-	eor							VARCHAR(64),
-	status						VARCHAR(32),
-	special_notes				TEXT,
-	reverted					BOOLEAN DEFAULT 'f',
-	device_id					VARCHAR(20) CONSTRAINT advance_payment_prm_company_premise_device_fk REFERENCES prm_company_premise_device (device_id),
-	premise_id					INT CONSTRAINT advance_payment_prm_company_premise_fk REFERENCES prm_company_premise (premise_id),
-	business_customer_id		INT CONSTRAINT advance_payment_business_customer_fk REFERENCES business_customer (id),
-	updated_at					DATE,
-	created_at					DATE NOT NULL DEFAULT CURRENT_DATE
-);
 
 CREATE TABLE IF NOT EXISTS payment_method (
 	id				SERIAL PRIMARY KEY,
 	invoice_id		INT CONSTRAINT payment_method_invoice_fk REFERENCES invoice (invoice_id),
-	adv_payment_id	INT CONSTRAINT payment_method_advance_payment_fk REFERENCES advance_payment (id),
 	amount			NUMERIC(8,2),
 	type			VARCHAR(128),
 	created_at		DATE NOT NULL DEFAULT CURRENT_DATE
@@ -149,6 +119,15 @@ ALTER TABLE users ADD COLUMN prm_locale VARCHAR(8) DEFAULT 'sl';
 
 ALTER TABLE users_prm_client_bridge ADD CONSTRAINT users_prm_client_bridge_id PRIMARY KEY (id);
 ALTER TABLE clients_prm_client_bridge ADD CONSTRAINT clients_prm_client_bridge_id PRIMARY KEY (id);
+
+--############################################################
+--# linking prm_premise_company_device to prm_company_premise
+--############################################################
+
+ALTER TABLE prm_company_premise_device ADD COLUMN company_premise_id INT
+CONSTRAINT prm_company_premise_device_prm_company_premise_fk REFERENCES prm_company_premise (premise_id);
+
+ALTER TABLE prm_company_premise DROP COLUMN device_id;
 
 UPDATE db_version SET version ='01.15', version_date=CURRENT_DATE WHERE resource='Tables';
 
