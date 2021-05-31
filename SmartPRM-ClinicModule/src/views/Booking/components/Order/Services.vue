@@ -7,6 +7,7 @@
     :list="service.list"
     :title="service.title"
     :selectedServices="selectedServices"
+    :tabId="`${index}_tab`"
     @row-selected="rowSelectHandler"
     />
   </div>
