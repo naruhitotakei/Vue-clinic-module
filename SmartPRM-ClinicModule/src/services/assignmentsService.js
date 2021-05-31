@@ -24,3 +24,16 @@ export async function finishAssignment (id, finished) {
   })
   return rawResponse.json()
 }
+
+export async function createAssignments (assignments) {
+  const rawResponse = await fetch('/api/assignments-create', {
+    method: 'POST',
+    credentials: 'same-origin',
+    headers: {
+      'Accept': 'application/json',
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify(assignments)
+  })
+  return rawResponse.json()
+}

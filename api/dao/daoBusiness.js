@@ -51,7 +51,6 @@ const createBusiness = (req, res, business) => {
     if (error) {
       throw error
     }
-
     res.status(200).json("OK")
   })
 }

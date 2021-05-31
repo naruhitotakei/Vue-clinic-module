@@ -153,6 +153,22 @@
                                           </iq-card>
                                       </b-col>
                                       <b-col md="6">
+                                        <iq-card>
+                                          <template v-slot:body>
+                                            <div class="iq-card-header d-flex justify-content-between">
+                                              <div class="iq-header-title">
+                                                <h4 class="card-title">{{ $t('EPR.overview.openAppointments') }}</h4><hr />
+                                              </div>
+                                            </div>
+                                            <ul class="iq-timeline">
+                                              <li v-for="(item,index) in openAppointments" :key="index">
+                                                <div class="timeline-dots border-success"></div>
+                                                <h6 class="">{{item.kind}}</h6>
+                                                <small class="mt-1">{{item.date | formatDate}}</small>
+                                              </li>
+                                            </ul>
+                                          </template>
+                                        </iq-card>
                                           <iq-card>
                                               <template v-slot:body>
                                                   <div class="iq-card-header d-flex justify-content-between">
@@ -531,6 +547,12 @@ export default {
     patientsSurgeon: function () {
       return this.surgeons.find((item) => {
         return item.code === this.patient.prm_surgeon_user_id
+      })
+    },
+    openAppointments: function () {
+      return this.appointments.filter((item) => {
+        console.log(item)
+        return item.completed === false
       })
     },
     futureAppointments: function () {

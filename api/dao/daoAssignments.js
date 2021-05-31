@@ -71,7 +71,30 @@ const finishAssignment = (req, res, assignmentDescriptor) =>  {
     res.status(200).json("OK")
 }
 
+const createAssignment = (req, res, assignment) => {
+  let assignmentStatement = "INSERT INTO todos ("
+  if (assignment.enquiry) assignmentStatement += "enquiry_id,"
+  if (assignment.description) assignmentStatement += "description,"
+  if (assignment.due_at) assignmentStatement += "due_at,"
+  if (assignment.user_id) assignmentStatement += "user_id"
+  assignmentStatement += ") VALUES ("
+  if (assignment.enquiry) assignmentStatement += "'" + assignment.enquiry.id + "',"
+  if (assignment.description) assignmentStatement += "'" + assignment.description + "',"
+  if (assignment.due_at) assignmentStatement += "'" + assignment.due_at + "',"
+  if (assignment.user_id) assignmentStatement += "'" + assignment.user_id + "'"
+  assignmentStatement += ")";
+  console.log(assignmentStatement)
+  pool.query(assignmentStatement , (error, results) => {
+    console.log(error)
+    if (error) {
+      throw error
+    }
+    res.status(200).json("OK")
+  })
+}
+
 module.exports = {
   getAssignments,
-  finishAssignment
+  finishAssignment,
+  createAssignment
 }

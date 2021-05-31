@@ -136,7 +136,8 @@ const getEnquiryNotes = (request, response, enquiryId) => {
 }
 
 const getEnquiryAppointments = (request, response, enquiryId) => {
-    pool.query("SELECT date, time, kind FROM appointments WHERE enquiry_id = $1 ORDER BY date ASC", [enquiryId] , (error, results) => {
+    pool.query("SELECT appointments.*, enquiries.*  FROM appointments LEFT JOIN enquiries ON appointments.enquiry_id = enquiries.id  WHERE enquiry_id = $1 ORDER BY date ASC", [enquiryId] , (error, results) => {
+        console.log(error)
         if (error) {
             throw error
         }

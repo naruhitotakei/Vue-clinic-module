@@ -140,6 +140,7 @@
       "allergiesUpdated": "Last updated",
       "patientNotes": "Patient notes",
       "patientNotesOpen": "Open",
+      "openAppointments": "Open appointments",
       "futureAppointments": "Future appointments",
       "pastAppointments": "Past appointments",
       "notSelected": "Not selected"
@@ -428,10 +429,19 @@
   },
   "assignments": {
     "assignmentsHeader": "My Assignments",
+    "addAssignments": "Add Assignments",
     "todaysAssignments": "Today's Assignments",
     "overdueAssignments": "Overdue Assignments",
     "futureAssignments": "Future Assignments",
-    "completedAssignments": "Completed Assignments"
+    "completedAssignments": "Completed Assignments",
+    "addAssignmentsModal" : {
+      "addAssignments": "Add Assignments",
+      "enquiry": "Enquiry",
+      "description": "Description",
+      "due_at": "Date",
+      "close": "Close",
+      "save": "Save"
+    }
   },
   "statisticsForClinic": {
     "attendance": "Number of attended appointments",
