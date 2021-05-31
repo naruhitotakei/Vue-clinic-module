@@ -1,15 +1,15 @@
 <template>
 <b-container fluid>
-  <div  style="display: none">
+  <div style="display: none">
       <div id="printInvoice" style="color:black;margin-left:40px;height:1200px">
         <b-row>
             <b-col lg="12">
               <p>{{usersCompany.company_name}}</p>
               <p>{{usersCompany.company_address_line_1}}</p>
               <p>{{usersCompany.company_post_code}} {{usersCompany.company_city}}</p>
-              <p> IBAN: {{usersCompany.company_iban}}</p>
-              <p>ID.štev za DDV: {{usersCompany.company_tax_registration_number}}</p>
-              <p>Matična št.: {{usersCompany.company_legal_registration_identifier}}</p>
+              <p>{{ $t('advPayments.newAdvPayment.IBAN') }}: {{usersCompany.company_iban}}</p>
+              <p>{{ $t('advPayments.newAdvPayment.vatId') }}: {{usersCompany.company_tax_registration_number}}</p>
+              <p>{{ $t('advPayments.newAdvPayment.regNumber') }}: {{usersCompany.company_legal_registration_identifier}}</p>
             </b-col>
         </b-row>
         <b-row>
@@ -19,22 +19,22 @@
             <p>{{patient.post_code}} {{patient.city}}</p>
           </b-col>
           <b-col lg="6">
-            <p>AVANSNI RAČUN št.: {{invoice_number}}</p>
-            <p>Izvod:<span style="margin-left:20px">Original</span></p>
-            <p>Kraj izdaje:<span style="margin-left:20px">{{issuedIn.premise_name}}</span></p>
-            <p>Datum izdaje:<span style="margin-left:20px">{{dateOfAdvPaymentPdf}}</span></p>
+            <p>{{ $t('advPayments.newAdvPayment.advPaymentNo') }}: {{invoice_number}}</p>
+            <p>{{ $t('advPayments.newAdvPayment.copy') }}:<span style="margin-left:20px">Original</span></p>
+            <p>{{ $t('advPayments.newAdvPayment.IssuedIn') }}:<span style="margin-left:20px">{{issuedIn.premise_name}}</span></p>
+            <p>{{ $t('advPayments.newAdvPayment.dateOfAdvPayment') }}:<span style="margin-left:20px">{{dateOfAdvPaymentPdf}}</span></p>
           </b-col>
         </b-row>
         <b-row>
           <b-table-simple small responsive>
             <b-thead>
               <b-tr>
-                <b-th colspan="1">Šifra</b-th>
-                <b-th colspan="4">Opis</b-th>
-                <b-th colspan="1">Kol/g</b-th>
-                <b-th colspan="2">Cena/EM</b-th>
-                <b-th colspan="2">Vrednost</b-th>
-                <b-th colspan="2">Znesek</b-th>
+                <b-th colspan="1">{{ $t('advPayments.newAdvPayment.code') }}</b-th>
+                <b-th colspan="4">{{ $t('advPayments.newAdvPayment.item') }}</b-th>
+                <b-th colspan="1">{{ $t('advPayments.newAdvPayment.quantity') }}</b-th>
+                <b-th colspan="2">{{ $t('advPayments.newAdvPayment.price') }}</b-th>
+                <b-th colspan="2">{{ $t('advPayments.newAdvPayment.value') }}</b-th>
+                <b-th colspan="2">{{ $t('advPayments.newAdvPayment.amount') }}</b-th>
               </b-tr>
             </b-thead>
             <b-tbody>
@@ -48,12 +48,12 @@
               </b-tr>
               <b-tr>
                 <b-td colspan="8"></b-td>
-                <b-td colspan="2"><strong>Skupaj: </strong></b-td>
+                <b-td colspan="2"><strong>{{ $t('advPayments.newAdvPayment.total') }}: </strong></b-td>
                 <b-td colspan="2">{{advPayments[0].amount}}</b-td>
               </b-tr>
               <b-tr>
                 <b-td colspan="8" class="hidden-row"></b-td>
-                <b-td colspan="2"><strong>Vplačilo: </strong></b-td>
+                <b-td colspan="2"><strong>{{ $t('advPayments.newAdvPayment.payment') }}: </strong></b-td>
                 <b-td colspan="2">{{advPayments[0].amount | euro}}</b-td>
               </b-tr>
             </b-tbody>
@@ -61,18 +61,18 @@
         </b-row>
         <b-row>
           <b-col lg="3">
-            <p>Način plačila:</p>
+              <p>{{ $t('advPayments.newAdvPayment.paymentMethod') }}:</p>
             <p style="border-bottom: solid;">{{paymentMethods[0].paymentMethod}}<span style="margin-left:20px">{{advPayments[0].amount | euro}}</span></p>
           </b-col>
         </b-row>
         <b-row>
           <b-col>
-            <p>Zdravstvene storitive in oskrba so v skladu z 2. in 4. točko, prvega odstavka, 42 člena ZDDV-1, oproščene plačila DDV, zato DDV ni nil obračunan</p>
+              <p>{{ $t('advPayments.newAdvPayment.vatExemptionReason') }}</p>
             <br>
-            <p>Račun izdal: {{logedInUser.name}}</p>
+            <p>{{ $t('advPayments.newAdvPayment.issuedBy') }}: {{logedInUser.name}}</p>
             <br>
-            <p>ZOI: {{zoi}}</p>
-            <p>EOR: {{eor}}</p>
+            <p>{{ $t('advPayments.newAdvPayment.zoi') }}: {{zoi}}</p>
+            <p>{{ $t('advPayments.newAdvPayment.eor') }}: {{eor}}</p>
           </b-col>
         </b-row>
       </div>
@@ -220,7 +220,7 @@
         </div>
       </template>
       <template #default>
-          <span><i class="ri-error-warning-fill"></i> Advance payment amount can't be 0 </span>
+          <span><i class="ri-error-warning-fill"></i>{{ $t('advPayments.newAdvPayment.alert2') }}</span>
       </template>
     </b-toast>
 
@@ -231,7 +231,7 @@
         </div>
       </template>
       <template #default>
-          <span><i class="ri-error-warning-fill"></i> Amounts of payment method and advance payment must be the same </span>
+          <span><i class="ri-error-warning-fill"></i>{{ $t('advPayments.newAdvPayment.alert') }}</span>
       </template>
     </b-toast>
 
@@ -242,7 +242,7 @@
         </div>
       </template>
       <template #default>
-          <span><i class="ri-error-warning-fill"></i> Payment method must be selected </span>
+          <span><i class="ri-error-warning-fill"></i>{{ $t('advPayments.newAdvPayment.alert3') }}</span>
       </template>
     </b-toast>
 </b-container>
