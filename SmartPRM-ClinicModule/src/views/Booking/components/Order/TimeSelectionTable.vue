@@ -1,5 +1,6 @@
 <template>
   <div class="mt-5">
+    <template v-if="items.length > 0">
     <b-table
       :items="items"
       :fields="fields"
@@ -14,6 +15,10 @@
         </template>
       </template>
     </b-table>
+    </template>
+    <template v-else>
+      No available slots on this day
+    </template>
   </div>
 </template>
 
