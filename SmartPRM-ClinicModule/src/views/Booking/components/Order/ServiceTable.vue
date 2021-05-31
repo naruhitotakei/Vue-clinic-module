@@ -1,5 +1,5 @@
 <template>
-  <div class="mt-5">
+  <div>
       <div class="mb-3">
         <b-button block v-b-toggle="tabId" variant="primary">{{title}}</b-button>
         <b-collapse :id="tabId" visible appear>
