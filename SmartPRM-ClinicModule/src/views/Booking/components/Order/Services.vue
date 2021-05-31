@@ -1,48 +1,39 @@
 <template>
   <div class="mt-5">
-    <b-table
-      :items="items"
-      :fields="fields"
-      :select-mode="selectMode"
-      responsive="sm"
-      ref="selectableTable"
-      selectable
-      @row-selected="$emit('row-selected', $event)"
-    >
-      <template #cell(selected)="{ rowSelected }">
-        <template v-if="rowSelected">
-          <span aria-hidden="true">&check;</span>
-        </template>
-      </template>
-    </b-table>
+    <service-table
+    v-for="(service, index) in services"
+    :key="`service_section_${index}`"
+    :ref="`service`"
+    :list="service.list"
+    :title="service.title"
+    :selectedServices="selectedServices"
+    @row-selected="rowSelectHandler"
+    />
   </div>
 </template>
 
 <script>
+import ServiceTable from './ServiceTable.vue'
 export default {
+  components: { ServiceTable },
   props: {
-    selectedIndexes: {
+    services: {
       type: Array,
       default: () => []
     },
-    items: {
+    selectedServices: {
       type: Array,
       default: () => []
-    },
-  },
-  data () {
-    return {
-      fields: [ { key: 'serviceName', label: 'Consultation Name' }, 'time', 'price', { key: 'selected', label: ' ' } ],
-      selectMode: 'multi',
-      selected: []
     }
   },
   methods: {
-  },
-  mounted () {
-    this.selectedIndexes.forEach(itemIndex => {
-      this.$refs.selectableTable.selectRow(itemIndex)
-    })
+    rowSelectHandler: function () {
+      let services = []
+      this.$refs.service.forEach(serv => {
+        services = services.concat(serv.selected)
+      })
+      this.$emit('row-selected', { services })
+    }
   }
 }
 </script>
