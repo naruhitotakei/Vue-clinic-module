@@ -12,11 +12,11 @@
           selectable
           @row-selected="selectedRowHandler"
           >
-            <template #cell(selected)="{ rowSelected }">
-              <template v-if="rowSelected">
-                <span aria-hidden="true">&check;</span>
-              </template>
+          <template #cell(selected)="{ rowSelected }">
+            <template v-if="rowSelected">
+              <span aria-hidden="true">&check;</span>
             </template>
+          </template>
           </b-table>
         </b-collapse>
       </div>
