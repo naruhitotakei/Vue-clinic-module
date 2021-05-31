@@ -8,7 +8,7 @@
       </b-button-group>
 
       <!-- <Consultations/> -->
-      <Services v-if="tabIndex === 0" @row-selected="selectServiceHandler" :items="servicesList" :selectedIndexes="selectedIndexes"/>
+      <Services v-if="tabIndex === 0" @row-selected="selectServiceHandler" :services="servicesList" :selectedServices="selectedServices"/>
       <ChooseTimeTab v-else-if="tabIndex === 1"
       :services="selectedServices"
       :totalPrice="totalPrice"
@@ -38,6 +38,7 @@ import ChooseTimeTab from './ChooseTimeTab'
 // import { xray } from '../../../config/pluginInit'
 import Services from './Services'
 // import Consultations from './Consultations'
+import { servicesList } from '@/views/Booking/booking-data.js'
 
 export default {
   components: {
@@ -48,14 +49,9 @@ export default {
   name: 'Order',
   data: function () {
     return {
-      tabIndex: 1,
+      tabIndex: 0,
       timeChoosed: false,
-      servicesList: [
-        { id: 1, serviceName: 'consultation 1', time: '10 minutes', price: 30 },
-        { id: 2, serviceName: 'consultation 2', time: '20 minutes', price: 50 },
-        { id: 3, serviceName: 'consultation 3', time: '30 minutes', price: 70 },
-        { id: 4, serviceName: 'consultation 4', time: '40 minutes', price: 100 }
-      ],
+      servicesList,
       selectedServices: [],
       totalPrice: 0,
       selectedDate: null,
@@ -66,16 +62,6 @@ export default {
   computed: {
     serviceChoosed: function () {
       return !!this.selectedServices.length
-    },
-    selectedIndexes: function () {
-      const indexes = []
-      this.selectedServices.forEach(service => {
-        const index = this.servicesList.findIndex(searchedService => {
-          return searchedService.id === service.id
-        })
-        index !== -1 && indexes.push(index)
-      })
-      return indexes
     }
   },
   watch: {
@@ -91,8 +77,8 @@ export default {
     }
   },
   methods: {
-    selectServiceHandler (data) {
-      this.selectedServices = data
+    selectServiceHandler ({ services }) {
+      this.selectedServices = services
     },
     activeBtnVariant: function (tabIindex) {
       return tabIindex === this.tabIndex ? 'primary' : null
