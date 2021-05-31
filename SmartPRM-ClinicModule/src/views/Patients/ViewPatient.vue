@@ -157,14 +157,15 @@
                                           <template v-slot:body>
                                             <div class="iq-card-header d-flex justify-content-between">
                                               <div class="iq-header-title">
-                                                <h4 class="card-title">{{ $t('EPR.overview.openAppointments') }}</h4><hr />
+                                                <h4 class="card-title">{{ $t('EPR.overview.openAssignments') }}</h4><hr />
                                               </div>
                                             </div>
-                                            <ul class="iq-timeline">
-                                              <li v-for="(item,index) in openAppointments" :key="index">
-                                                <div class="timeline-dots border-success"></div>
-                                                <h6 class="">{{item.kind}}</h6>
-                                                <small class="mt-1">{{item.date | formatDate}}</small>
+                                            <ul class="list-inline m-0 overflow-y-scroll" style="max-height: 300px;">
+                                              <li v-for="(item,index) in openAssignments" :key="index" class="d-flex align-items-center justify-content-between mb-3">
+                                                <div>
+                                                  <h6>{{item.todoname}}</h6>
+                                                  <p class="mb-0">{{item.due_at | formatDate}}</p>
+                                                </div>
                                               </li>
                                             </ul>
                                           </template>
@@ -513,7 +514,9 @@ import { xray } from '../../config/pluginInit'
 import { getEnquiryById, updateEnquiry, getEnquiryNotes, getEnquiryAppointments, getEnquiryInvoices, getEnquiryOffers, getEnquiryServices } from '../../services/enquiry'
 import { getDentists, getSurgeons } from '../../services/userService'
 import { getCountriesList, getRegionsList } from '../../services/commonCodeLists'
+import { getUsers } from '@/services/userService'
 import moment from 'moment'
+import { getAssignments } from '@/services/assignmentsService'
 
 export default {
   name: 'ViewPatient',
@@ -529,6 +532,8 @@ export default {
     this.getPatientInvoices(this.patientId)
     this.getPatientOffers(this.patientId)
     this.getPatientServices(this.patientId)
+    this.getUsers()
+    this.getAssignments()
   },
   computed: {
     fullName () {
@@ -549,11 +554,8 @@ export default {
         return item.code === this.patient.prm_surgeon_user_id
       })
     },
-    openAppointments: function () {
-      return this.appointments.filter((item) => {
-        console.log(item)
-        return item.completed === false
-      })
+    openAssignments: function () {
+      return this.assignments
     },
     futureAppointments: function () {
       return this.appointments.filter((item) => {
@@ -595,6 +597,7 @@ export default {
       patient: {},
       tempPatient: {},
       notes: [],
+      assignments: [],
       appointments: [],
       timeSinceFirstVisit: '',
       dentists: [],
@@ -853,6 +856,15 @@ export default {
     sortSelected (value) {
       let array = [value]
       this.sortOn = array
+    },
+    getUsers () {
+      getUsers().then(response => {
+      })
+    },
+    getAssignments () {
+      getAssignments('all').then(response => {
+        this.assignments = response.filter(item => item.enquiry_id === +this.$route.params.patientId)
+      })
     }
   }
 }

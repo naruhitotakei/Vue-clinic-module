@@ -17,7 +17,9 @@ const getAssignments = (request, response, scope, userid, due) =>  {
     } else if (due == "past") {
         condition = "WHERE (todos.due_at < now()::date)  AND completed = false"
     } else if (due == "finished") {
-        condition = "WHERE ( (date_trunc('month', todos.updated_at) + INTERVAL '1 MONTH') > now()::date  ) AND completed = true"        
+        condition = "WHERE ( (date_trunc('month', todos.updated_at) + INTERVAL '1 MONTH') > now()::date  ) AND completed = true"
+    } else if (due == "all") {
+      condition = "WHERE completed = false"
     } else {
         response.status(200).json("NOK: Unknown due " + due)
         return
@@ -30,6 +32,7 @@ const getAssignments = (request, response, scope, userid, due) =>  {
                          condition,
                          "ORDER BY todos.due_at ASC"].join('\n') 
         pool.query(statement, (error, results) => {
+          console.log(error)
             if (error) {
                 throw error
             }

@@ -293,6 +293,7 @@ export default {
       return Math.floor((Date.parse(new Date(Date.now())) - Date.parse(date)) / 86400000)
     },
     addAssignments () {
+      console.log(this.formData)
       createAssignments(this.formData).then(() => {
         this.getAssignments()
         this.formData = this.defaultFormData()
