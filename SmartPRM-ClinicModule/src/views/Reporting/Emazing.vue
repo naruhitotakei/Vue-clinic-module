@@ -153,16 +153,13 @@ export default {
   },
   watch: {
     'servicesSummaryItemsJSON' () {
-      console.log('watch', this.servicesSummaryItemsJSON)
     }
   },
   methods: {
     exportReportToExcel (tableName) {
-      console.log(this.$refs)
       let table = this.$refs[tableName]
       let re = /€/gi
       let html = table.$el.outerHTML.replace(re, '')
-      console.log(html)
       window.open('data:application/vnd.ms-excel,' + encodeURIComponent(html))
     },
     onFromChange () {
@@ -247,7 +244,6 @@ export default {
             }
           }
           this.servicesSummaryItemsJSON = arr
-          console.log('servicesSummaryItemsJSON', this.servicesSummaryItemsJSON)
         } else {
           console.error(response)
         }
@@ -271,10 +267,8 @@ export default {
     getCountryList () {
       getCountryList(this.fromdate, this.todate).then(response => {
         if (typeof response !== 'string') {
-          // console.log('RESPONSE', response)
           this.countrySelectOptions = []
           for (var cnt in response) {
-            // console.log('CNT', cnt)
             if (response[cnt].id) {
               var cntEnt = { value: response[cnt].id, text: response[cnt].name }
               this.countrySelectOptions.push(cntEnt)
