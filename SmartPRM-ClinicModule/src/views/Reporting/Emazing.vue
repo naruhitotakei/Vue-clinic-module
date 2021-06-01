@@ -13,11 +13,11 @@
 
             <b-form-group label-for="exampleInputdate" class="mr-3 date-group">
               <label style="padding-top: 8px;">From:</label>
-                <b-form-input class="date" id="exampleInputdate" type="date" v-model="fromdate" @change="onFromChange"></b-form-input>
+                <b-form-input style="line-height: normal" class="date" id="exampleInputdate" type="date" v-model="fromdate" @change="onFromChange"></b-form-input>
               </b-form-group>
             <b-form-group label-for="exampleInputdate" class="mr-3  date-group">
               <label style="padding-top: 8px;">To:</label>
-              <b-form-input class="date" id="exampleInputdate" type="date" v-model="todate" @change="onToChange"></b-form-input>
+              <b-form-input style="line-height: normal" class="date" id="exampleInputdate" type="date" v-model="todate" @change="onToChange"></b-form-input>
             </b-form-group>
               <b-form-group class="mr-3  sm-w-100" style="width: 15%">
                 <v-select class="patients" v-model="countrySelect" label="text"
