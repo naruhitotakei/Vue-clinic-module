@@ -129,6 +129,25 @@ CONSTRAINT prm_company_premise_device_prm_company_premise_fk REFERENCES prm_comp
 
 ALTER TABLE prm_company_premise DROP COLUMN device_id;
 
+--############################################################
+--# deleting users_prm_client table and adding function
+--# column to users table
+--############################################################
+
+DROP TABLE users_prm_client;
+ALTER TABLE users ADD COLUMN function TEXT[];
+
+--############################################################
+--# altering enquiries table
+--############################################################
+
+ALTER TABLE enquiries
+DROP COLUMN prm_dentist_user_id,
+DROP COLUMN prm_surgeon_user_id;
+
+ALTER TABLE enquiries ADD COLUMN prm_dentist_user_id INT references users(id) on delete set null;
+ALTER TABLE enquiries ADD COLUMN prm_surgeon_user_id INT references users(id) on delete set null;
+
 UPDATE db_version SET version ='01.15', version_date=CURRENT_DATE WHERE resource='Tables';
 
 COMMIT;

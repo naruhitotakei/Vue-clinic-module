@@ -165,6 +165,7 @@ export default {
       })
     },
     editBusiness (item) {
+      console.log(item)
       getBusinessByID(item.id)
       this.formData = {
         id: item.id,
@@ -173,16 +174,22 @@ export default {
         address: item.address_line_1,
         city: item.city,
         zip_code: item.post_code,
-        country_code: item.countries_name
+        country_code: {
+          id: item.countries_id,
+          code: item.code,
+          name: item.countries_name
+        }
       }
       this.modalBusinessShow = true
     },
     addBusiness () {
       if (this.formData.id) {
+        console.log(this.formData)
         updateBusiness(this.formData.id, this.formData).then(() => {
           this.getBusiness()
         })
       } else {
+        console.log(this.formData)
         createBusiness(this.formData).then(() => {
           this.getBusiness()
         })

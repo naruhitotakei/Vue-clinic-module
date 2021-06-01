@@ -61,7 +61,7 @@
                                       <div class="bg-primary pb-2 p-1" style="border-radius: 0 0 25px 25px;">
                                           <b-col md="14" class="d-flex justify-content-center">
                                               <button type="" class="btn btn-light m-1 ">{{ $t('EPR.overview.addAppointment') }}</button>&nbsp;
-                                              <button type="" class="btn btn-light m-1">{{ $t('EPR.overview.addAssignment') }}</button>&nbsp;
+                                              <button type="" class="btn btn-light m-1" @click.prevent="modalAssigmentShow = true">{{ $t('EPR.overview.addAssignment') }}</button>&nbsp;
                                               <button type="button" @click="addInvoice" class="btn btn-light m-1">{{ $t('EPR.overview.addInvoice') }}</button>
                                           </b-col>
                                           <b-col class="text-center">
@@ -141,7 +141,7 @@
                                                       </div>
                                                   </div>
                                                   <ul class="list-inline m-0 overflow-y-scroll" style="max-height: 300px;">
-                                                      <li v-for="(note,index) in notes" :key="index" class="d-flex align-items-center justify-content-between mb-3">
+                                                      <li v-for="(note,index) in notes" :key="index + note.created_at" class="d-flex align-items-center justify-content-between mb-3">
                                                           <div>
                                                               <h6>{{note.content}}</h6>
                                                               <p class="mb-0">{{note.created_at | formatDate}}</p>
@@ -153,6 +153,23 @@
                                           </iq-card>
                                       </b-col>
                                       <b-col md="6">
+                                        <iq-card>
+                                          <template v-slot:body>
+                                            <div class="iq-card-header d-flex justify-content-between">
+                                              <div class="iq-header-title">
+                                                <h4 class="card-title">{{ $t('EPR.overview.openAssignments') }}</h4><hr />
+                                              </div>
+                                            </div>
+                                            <ul class="list-inline m-0 overflow-y-scroll" style="max-height: 300px;">
+                                              <li v-for="(item,index) in openAssignments" :key="index + item.due_at" class="d-flex align-items-center justify-content-between mb-3">
+                                                <div>
+                                                  <h6>{{item.todoname}}</h6>
+                                                  <p class="mb-0">{{item.due_at | formatDate}}</p>
+                                                </div>
+                                              </li>
+                                            </ul>
+                                          </template>
+                                        </iq-card>
                                           <iq-card>
                                               <template v-slot:body>
                                                   <div class="iq-card-header d-flex justify-content-between">
@@ -161,7 +178,7 @@
                                                       </div>
                                                   </div>
                                                   <ul class="iq-timeline">
-                                                      <li v-for="(item,index) in futureAppointments" :key="index">
+                                                      <li v-for="(item,index) in futureAppointments" :key="index + item.date">
                                                           <div class="timeline-dots border-success"></div>
                                                           <h6 class="">{{item.kind}}</h6>
                                                           <small class="mt-1">{{item.date | formatDate}}</small>
@@ -362,7 +379,7 @@
                               <template v-slot:body>
                                   <div class="iq-card-body">
                                       <ul class="profile-img-gallary d-flex flex-wrap p-0 m-0">
-                                          <li class="col-md-4 col-6 pb-3" v-for="file in files" :key="file">
+                                          <li class="col-md-4 col-6 pb-3" v-for="(file, index) in files" :key="index + file.created_at">
                                               <img :src="file.image" alt="gallary-image" class="img-fluid">
                                               <div class="text-center">
                                                   <p class="mb-0">{{ $t('EPR.files.fileName') }}: {{file.name}}</p>
@@ -490,6 +507,45 @@
           <span><i class="ri-checkbox-circle-line"></i>  {{ $t('EPR.changesSaved') }}</span>
       </template>
     </b-toast>
+    <b-modal
+        v-model="modalAssigmentShow"
+        no-close-on-backdrop
+        size="md"
+        :ok-disabled="isOkDisabled"
+        :title="$t('assignments.addAssignmentsModal.addAssignments')"
+        :ok-title="$t('assignments.addAssignmentsModal.save')"
+        :cancel-title="$t('assignments.addAssignmentsModal.close')"
+        @ok="addAssignments"
+        @close="cancelAssignments"
+        @cancel="cancelAssignments"
+    >
+      <form>
+        <div class="form-row">
+          <div class="col-md-12 mb-3" v-if="users">
+            <label for="title">{{ $t('assignments.addAssignmentsModal.users') }} *</label>
+            <v-select
+                taggable
+                :clearable="false"
+                :getOptionLabel="getOptionLabel"
+                :options="users || []"
+                v-model="formData.user"
+                @input="selectedUser"
+            >
+            </v-select>
+          </div>
+          <div class="col-md-12 mb-3">
+            <label for="title">{{ $t('assignments.addAssignmentsModal.description') }} *</label>
+            <div style="display: flex;">
+              <textarea type="text" v-model="formData.description" class="form-control" placeholder="Description"/>
+            </div>
+          </div>
+          <div class="col-md-12 mb-3">
+            <label for="title">{{ $t('assignments.addAssignmentsModal.due_at') }} </label>
+            <b-form-input class="date" id="exampleInputdate" type="date" v-model="formData.due_at" ></b-form-input>
+          </div>
+        </div>
+      </form>
+    </b-modal>
   </b-container>
 </template>
 <script>
@@ -497,7 +553,9 @@ import { xray } from '../../config/pluginInit'
 import { getEnquiryById, updateEnquiry, getEnquiryNotes, getEnquiryAppointments, getEnquiryInvoices, getEnquiryOffers, getEnquiryServices } from '../../services/enquiry'
 import { getDentists, getSurgeons } from '../../services/userService'
 import { getCountriesList, getRegionsList } from '../../services/commonCodeLists'
+import { getUsers } from '@/services/userService'
 import moment from 'moment'
+import { createAssignments, getAssignments } from '@/services/assignmentsService'
 
 export default {
   name: 'ViewPatient',
@@ -513,8 +571,13 @@ export default {
     this.getPatientInvoices(this.patientId)
     this.getPatientOffers(this.patientId)
     this.getPatientServices(this.patientId)
+    this.getUsers()
+    this.getAssignments()
   },
   computed: {
+    isOkDisabled () {
+      return !this.formData.due_at || !this.formData.description
+    },
     fullName () {
       return this.patient.name + ' ' + this.patient.last_name
     },
@@ -532,6 +595,9 @@ export default {
       return this.surgeons.find((item) => {
         return item.code === this.patient.prm_surgeon_user_id
       })
+    },
+    openAssignments: function () {
+      return this.assignments
     },
     futureAppointments: function () {
       return this.appointments.filter((item) => {
@@ -570,9 +636,12 @@ export default {
   data () {
     return {
       patientId: this.$route.params.patientId,
+      modalAssigmentShow: false,
+      users: [],
       patient: {},
       tempPatient: {},
       notes: [],
+      assignments: [],
       appointments: [],
       timeSinceFirstVisit: '',
       dentists: [],
@@ -581,6 +650,14 @@ export default {
       invoices: [],
       services: [],
       offers: [],
+      formData: {
+        enquiry: {
+          id: +this.$route.params.patientId
+        },
+        description: '',
+        due_at: null,
+        user: {}
+      },
       currentInvoicePage: 1,
       invoicesPerPage: 10,
       currentOfferPage: 1,
@@ -698,6 +775,12 @@ export default {
     }
   },
   methods: {
+    selectedUser (val) {
+      console.log('selected', val)
+    },
+    getOptionLabel (option) {
+      return (option && option.name) || ''
+    },
     createBillingDetails () {
       let details = ''
       if (this.patient.name) details += this.patient.name
@@ -831,6 +914,35 @@ export default {
     sortSelected (value) {
       let array = [value]
       this.sortOn = array
+    },
+    getUsers () {
+      getUsers().then(response => {
+        this.users = response.filter(item => item.prm_role_id === 4)
+      })
+    },
+    getAssignments () {
+      getAssignments('all').then(response => {
+        this.assignments = response.filter(item => item.enquiry_id === +this.$route.params.patientId)
+      })
+    },
+    defaultFormData () {
+      return {
+        enquiry: {
+          id: +this.patientId
+        },
+        description: '',
+        due_at: null,
+        user: {}
+      }
+    },
+    cancelAssignments () {
+      this.formData = this.defaultFormData()
+    },
+    addAssignments () {
+      createAssignments(this.formData).then(() => {
+        this.getAssignments()
+        this.formData = this.defaultFormData()
+      })
     }
   }
 }

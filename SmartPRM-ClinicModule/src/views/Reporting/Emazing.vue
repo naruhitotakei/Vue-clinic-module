@@ -13,11 +13,11 @@
 
             <b-form-group label-for="exampleInputdate" class="mr-3 date-group">
               <label style="padding-top: 8px;">From:</label>
-                <b-form-input class="date" id="exampleInputdate" type="date" v-model="fromdate" @change="onFromChange"></b-form-input>
+                <b-form-input style="line-height: normal" class="date" id="exampleInputdate" type="date" v-model="fromdate" @change="onFromChange"></b-form-input>
               </b-form-group>
             <b-form-group label-for="exampleInputdate" class="mr-3  date-group">
               <label style="padding-top: 8px;">To:</label>
-              <b-form-input class="date" id="exampleInputdate" type="date" v-model="todate" @change="onToChange"></b-form-input>
+              <b-form-input style="line-height: normal" class="date" id="exampleInputdate" type="date" v-model="todate" @change="onToChange"></b-form-input>
             </b-form-group>
               <b-form-group class="mr-3  sm-w-100" style="width: 15%">
                 <v-select class="patients" v-model="countrySelect" label="text"
@@ -30,14 +30,75 @@
         </iq-card>
         <iq-card>
           <template v-slot:body>
-              <h5 class="card-title">{{ $t('reportingEmazing.servicesSummary') }}</h5>
-            <b-table small :items="servicesSummaryItems" :fields="servicesSummaryColumns" class="mb-0"></b-table>
+           <div class="row justify-content-between mb-2 pl-3 pr-3">
+             <h5 class="card-title">{{ $t('reportingEmazing.servicesSummary') }}</h5>
+             <a href="#" ref="excel-table1" class="btn btn-primary" @click="exportReportToExcel('table1')">Download Excel</a>
+           </div>
+            <b-table-simple ref="table1">
+              <thead>
+              <tr>
+                <th v-for="(item,index) in servicesSummaryColumns" :key="index" :class="item.key === 'item' ? 'text-left' : ''">{{ item.label }}</th>
+              </tr>
+              </thead>
+              <tbody>
+              <template v-for="(body,bodyKey ) in getServicesSummary" >
+                <tr :key="bodyKey">
+                  <td style="max-width: 200px"><span class="font-weight-bold">{{ bodyKey }}</span></td>
+                  <td><span class="font-weight-bold">&nbsp; {{ body.group_count }}&nbsp; </span></td>
+                  <td><span class="font-weight-bold">{{ formatNumber(Math.trunc(body.group_amount)) }}   &#8364;</span></td>
+                </tr>
+                  <template v-for="(item, index) in body" >
+                   <tr :key="Math.random(index + 1000)">
+                     <td  style="max-width: 200px">{{ item.service_title }}</td>
+                     <td class="td-count">&nbsp; {{ item.count }}&nbsp;  </td>
+                     <td>{{ formatNumber(Math.trunc(item.sum)) }} &#8364;</td>
+                   </tr>
+                  </template>
+              </template>
+              <tr v-if="servicesSummaryTotalCount">
+                <td><span class="font-weight-bold"> Total: </span></td>
+                <td><span class="font-weight-bold">{{formatNumber(Math.trunc(servicesSummaryTotalCount))}}</span></td>
+                <td><span class="font-weight-bold">{{formatNumber(Math.trunc(servicesSummaryTotalAmount))}} &#8364;</span></td>
+              </tr>
+              </tbody>
+            </b-table-simple>
           </template>
         </iq-card>
         <iq-card>
           <template v-slot:body>
+            <div class="row justify-content-between mb-2 pl-3 pr-3">
               <h5 class="card-title">{{ $t('reportingEmazing.servicesList') }}</h5>
-            <b-table small :items="servicesListItems" :fields="servicesListColumns" class="mb-0"></b-table>
+              <a href="#" ref="excel-table2" class="btn btn-primary" @click="exportReportToExcel('table2')">Download Excel</a>
+            </div>
+<!--            <b-table small :items="servicesListItems" :fields="servicesListColumns" class="mb-0"></b-table>-->
+            <b-table-simple ref="table2">
+              <thead>
+              <tr>
+                <th v-for="(item,index) in servicesListColumns" :key="index" :class="item.key === 'item' ? 'text-left' : ''">{{ item.label }}</th>
+              </tr>
+              </thead>
+              <tbody>
+              <template v-for="(body,bodyKey ) in servicesListItems" >
+                <tr :key="bodyKey">
+                  <td style="max-width: 200px" colspan="6"><span class="font-weight-bold">{{ bodyKey }}</span></td>
+                </tr>
+                <template v-for="(item, index) in body" >
+                  <tr :key="Math.random(index + 1000)">
+                    <td><span >{{ item.doctor }}</span></td>
+                    <td><span >{{ item.service_title}}  </span></td>
+                    <td><span >{{ item.last_name}}  </span></td>
+                    <td><span>{{ formatNumber(Math.trunc(item.price))}} &#8364;  </span></td>
+                    <td><span>{{ formatNumber(Math.trunc(item.fee))}} &#8364;  </span></td>
+                    <td><span >{{ formatDateString(item.date)}}  </span></td>
+                  </tr>
+                </template>
+              </template>
+              <tr v-if="servicesSummaryTotalCount">
+                <td  colspan="5"><span class="font-weight-bold"> Total: </span></td>
+                <td> <span class="font-weight-bold">{{formatNumber(Math.trunc(servicesListTotalCount))}} &#8364;</span></td>
+              </tr>
+              </tbody>
+            </b-table-simple>
           </template>
         </iq-card>
     </div>
@@ -46,7 +107,10 @@
 <script>
 import IqCard from '../../components/xray/cards/iq-card.vue'
 import { xray } from '../../config/pluginInit'
-import { getEmazingServicesReport, getServiceList, getCountryList } from '../../services/reporting'
+import { getCountryList, getEmazingServicesReport, getServiceList } from '../../services/reporting'
+import _ from 'lodash'
+// import moment from 'moment'
+
 export default {
   components: {
     IqCard
@@ -56,6 +120,9 @@ export default {
     return {
       fromdate: null,
       todate: null,
+      servicesSummaryTotalCount: 0,
+      servicesSummaryTotalAmount: 0,
+      servicesListTotalCount: 0,
       countrySelectOptions: [
         { value: null, text: this.$t('reportingEmazing.countrySelect') }
       ],
@@ -74,18 +141,42 @@ export default {
         { label: this.$t('reportingEmazing.servicesSummaryColumn.serviceAmount'), key: 'sum', class: 'text-left' }
       ],
       servicesSummaryItems: [],
+      servicesSummaryItemsJSON: [],
       servicesListColumns: [
-        { label: this.$t('reportingEmazing.servicesListColumn.serviceDate'), key: 'date', formatter: (value, key, item) => { return this.formatDateString(value) } },
+        { label: this.$t('reportingEmazing.servicesListColumn.serviceDoctor'), key: 'doctor', class: 'text-left' },
         { label: this.$t('reportingEmazing.servicesListColumn.serviceTitle'), key: 'service_title', class: 'text-left' },
         { label: this.$t('reportingEmazing.servicesListColumn.serviceLeadName'), key: 'name', class: 'text-left' },
         { label: this.$t('reportingEmazing.servicesListColumn.serviceAmount'), key: 'price', class: 'text-left' },
         { label: this.$t('reportingEmazing.servicesListColumn.serviceFee'), key: 'fee', class: 'text-left' },
-        { label: this.$t('reportingEmazing.servicesListColumn.serviceDoctor'), key: 'doctor', class: 'text-left' }
+        { label: this.$t('reportingEmazing.servicesListColumn.serviceDate'), key: 'date', formatter: (value, key, item) => { return this.formatDateString(value) } }
       ],
       servicesListItems: []
     }
   },
+  watch: {
+    'servicesSummaryItemsJSON' () {
+    }
+  },
   methods: {
+    formatNumber (num) {
+      return num.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1.')
+    },
+    exportReportToExcel (tableName) {
+      let table = this.$refs[tableName]
+      let euro = /€/gi
+      let html = table.$el.outerHTML.replace(euro, '&nbsp &euro;')
+      console.log(html)
+      this.$refs[`excel-${tableName}`].href = 'data:application/vnd.ms-excel,' + encodeURIComponent(html)
+      let documentName = ''
+      let date = new Date().toLocaleString()
+      if (tableName === 'table1') {
+        documentName = 'Services Summary export'
+      } else {
+        documentName = 'Services List export'
+      }
+      this.$refs[`excel-${tableName}`].download = documentName + ' ' + date
+      return true
+    },
     onFromChange () {
       this.getServicesReport()
       this.getServicesList()
@@ -145,7 +236,32 @@ export default {
     getServicesReport () {
       getEmazingServicesReport(this.fromdate, this.todate, this.countrySelect).then(response => {
         if (typeof response !== 'string') {
-          this.servicesSummaryItems = response
+          let res = _.groupBy(response, 'group')
+          let totalCount = 0
+          let totalAmount = 0
+          for (let group in res) {
+            res[`${group}`].group_count = 0
+            res[`${group}`].group_amount = 0
+            res[group].map(item => {
+              res[`${group}`].group_count = res[`${group}`].group_count + Number(item.count)
+              res[`${group}`].group_amount = res[`${group}`].group_amount + Number(item.sum)
+              totalCount += Number(item.count)
+              totalAmount += Number(item.sum)
+            })
+          }
+          this.servicesSummaryItems = res
+          this.servicesSummaryTotalCount = totalCount
+          this.servicesSummaryTotalAmount = totalAmount
+
+          let arr = []
+          if (this.servicesSummaryItems) {
+            for (let group in this.servicesSummaryItems) {
+              arr[group] = [...this.servicesSummaryItems[group]]
+              arr[group].group_amount = this.servicesSummaryItems[group].group_amount
+              arr[group].group_count = this.servicesSummaryItems[group].group_count
+            }
+          }
+          this.servicesSummaryItemsJSON = arr
         } else {
           console.error(response)
         }
@@ -154,7 +270,13 @@ export default {
     getServicesList () {
       getServiceList(this.fromdate, this.todate, this.countrySelect).then(response => {
         if (typeof response !== 'string') {
-          this.servicesListItems = response
+          let res = _.groupBy(response, 'doctor')
+          for (let doc in res) {
+            res[doc].map(item => {
+              this.servicesListTotalCount += Number(item.price)
+            })
+          }
+          this.servicesListItems = res
         } else {
           console.error(response)
         }
@@ -163,10 +285,8 @@ export default {
     getCountryList () {
       getCountryList(this.fromdate, this.todate).then(response => {
         if (typeof response !== 'string') {
-          // console.log('RESPONSE', response)
           this.countrySelectOptions = []
           for (var cnt in response) {
-            // console.log('CNT', cnt)
             if (response[cnt].id) {
               var cntEnt = { value: response[cnt].id, text: response[cnt].name }
               this.countrySelectOptions.push(cntEnt)
@@ -193,6 +313,14 @@ export default {
       var mo = new Intl.DateTimeFormat('en', { month: 'numeric' }).format(date)
       var da = new Intl.DateTimeFormat('en', { day: 'numeric' }).format(date)
       return (`${da}. ${mo}. ${ye}`)
+    }
+  },
+  computed: {
+    getServicesSummary () {
+      return this.servicesSummaryItems
+    },
+    getServicesSummaryJSON () {
+      return this.servicesSummaryItemsJSON
     }
   },
   mounted () {
