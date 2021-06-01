@@ -30,8 +30,11 @@
         </iq-card>
         <iq-card>
           <template v-slot:body>
-              <h5 class="card-title">{{ $t('reportingEmazing.servicesSummary') }}</h5>
-              <b-table-simple>
+           <div class="row justify-content-between mb-2 pl-3 pr-3">
+             <h5 class="card-title">{{ $t('reportingEmazing.servicesSummary') }}</h5>
+             <button class="btn btn-primary" @click="exportReportToExcel('table1')">Download Excel</button>
+           </div>
+            <b-table-simple ref="table1">
               <thead>
               <tr>
                 <th v-for="(item,index) in servicesSummaryColumns" :key="index" :class="item.key === 'item' ? 'text-left' : ''">{{ item.label }}</th>
@@ -45,7 +48,7 @@
                   <td><span class="font-italic">{{ Math.trunc(body.group_amount) }}   &#8364;</span></td>
                 </tr>
                   <template v-for="(item, index) in body" >
-                   <tr :key="item.service_title + index">
+                   <tr :key="Math.random(index + 1000)">
                      <td  style="max-width: 200px">{{ item.service_title }}</td>
                      <td>{{ item.count }}</td>
                      <td>{{ Math.trunc(item.sum) }} &#8364;</td>
@@ -63,9 +66,12 @@
         </iq-card>
         <iq-card>
           <template v-slot:body>
+            <div class="row justify-content-between mb-2 pl-3 pr-3">
               <h5 class="card-title">{{ $t('reportingEmazing.servicesList') }}</h5>
+              <button class="btn btn-primary" @click="exportReportToExcel('table2')">Download Excel</button>
+            </div>
 <!--            <b-table small :items="servicesListItems" :fields="servicesListColumns" class="mb-0"></b-table>-->
-            <b-table-simple>
+            <b-table-simple ref="table2">
               <thead>
               <tr>
                 <th v-for="(item,index) in servicesListColumns" :key="index" :class="item.key === 'item' ? 'text-left' : ''">{{ item.label }}</th>
@@ -77,7 +83,7 @@
                   <td style="max-width: 200px" colspan="6"><span class="font-italic">{{ bodyKey }}</span></td>
                 </tr>
                 <template v-for="(item, index) in body" >
-                  <tr :key="index">
+                  <tr :key="Math.random(index + 1000)">
                     <td><span >{{ item.doctor }}</span></td>
                     <td><span >{{ item.service_title}}  </span></td>
                     <td><span >{{ item.name}}  </span></td>
@@ -103,6 +109,7 @@ import IqCard from '../../components/xray/cards/iq-card.vue'
 import { xray } from '../../config/pluginInit'
 import { getEmazingServicesReport, getServiceList, getCountryList } from '../../services/reporting'
 import _ from 'lodash'
+
 export default {
   components: {
     IqCard
@@ -132,6 +139,7 @@ export default {
         { label: this.$t('reportingEmazing.servicesSummaryColumn.serviceAmount'), key: 'sum', class: 'text-left' }
       ],
       servicesSummaryItems: [],
+      servicesSummaryItemsJSON: [],
       servicesListColumns: [
         { label: this.$t('reportingEmazing.servicesListColumn.serviceDoctor'), key: 'doctor', class: 'text-left' },
         { label: this.$t('reportingEmazing.servicesListColumn.serviceTitle'), key: 'service_title', class: 'text-left' },
@@ -143,7 +151,20 @@ export default {
       servicesListItems: []
     }
   },
+  watch: {
+    'servicesSummaryItemsJSON' () {
+      console.log('watch', this.servicesSummaryItemsJSON)
+    }
+  },
   methods: {
+    exportReportToExcel (tableName) {
+      console.log(this.$refs)
+      let table = this.$refs[tableName]
+      let re = /€/gi
+      let html = table.$el.outerHTML.replace(re, '')
+      console.log(html)
+      window.open('data:application/vnd.ms-excel,' + encodeURIComponent(html))
+    },
     onFromChange () {
       this.getServicesReport()
       this.getServicesList()
@@ -216,6 +237,17 @@ export default {
           }
           this.servicesSummaryItems = res
           this.servicesSummaryTotalCount = totalCount
+
+          let arr = []
+          if (this.servicesSummaryItems) {
+            for (let group in this.servicesSummaryItems) {
+              arr[group] = [...this.servicesSummaryItems[group]]
+              arr[group].group_amount = this.servicesSummaryItems[group].group_amount
+              arr[group].group_count = this.servicesSummaryItems[group].group_count
+            }
+          }
+          this.servicesSummaryItemsJSON = arr
+          console.log('servicesSummaryItemsJSON', this.servicesSummaryItemsJSON)
         } else {
           console.error(response)
         }
@@ -231,7 +263,6 @@ export default {
             })
           }
           this.servicesListItems = res
-          console.log(res)
         } else {
           console.error(response)
         }
@@ -275,6 +306,9 @@ export default {
   computed: {
     getServicesSummary () {
       return this.servicesSummaryItems
+    },
+    getServicesSummaryJSON () {
+      return this.servicesSummaryItemsJSON
     }
   },
   mounted () {

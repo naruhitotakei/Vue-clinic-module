@@ -25,7 +25,7 @@ const getAssignments = (request, response, scope, userid, due) =>  {
         return
     }
     if (scope == "All") {
-        var statement = ["SELECT todos.*, enquiries.name AS patientname, enquiries.last_name AS patientlastname, users.name AS todoname, dentists.name AS dentistname FROM todos",
+        var statement = ["SELECT todos.*, enquiries.name AS patientname, enquiries.last_name AS patientlastname, users.name AS todoname, dentists.name AS dentistname, dentists.id as dentists_id FROM todos",
                          "LEFT JOIN enquiries ON todos.enquiry_id = enquiries.id",
                          "LEFT JOIN users ON todos.user_id = users.id",
                          "LEFT JOIN users dentists ON enquiries.prm_dentist_user_id = users.id",

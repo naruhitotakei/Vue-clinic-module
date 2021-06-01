@@ -939,7 +939,6 @@ export default {
       this.formData = this.defaultFormData()
     },
     addAssignments () {
-      console.log(this.formData)
       createAssignments(this.formData).then(() => {
         this.getAssignments()
         this.formData = this.defaultFormData()
