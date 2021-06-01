@@ -274,7 +274,6 @@ export default {
         for (let i = 0; i < response.length; i += 3) {
           res = [...res, response.slice(i, i + 20)]
         }
-        console.log(res)
         this.overdueAssignments = res
         this.overdueTotalRows = response.length
       })

@@ -141,7 +141,7 @@
                                                       </div>
                                                   </div>
                                                   <ul class="list-inline m-0 overflow-y-scroll" style="max-height: 300px;">
-                                                      <li v-for="(note,index) in notes" :key="index" class="d-flex align-items-center justify-content-between mb-3">
+                                                      <li v-for="(note,index) in notes" :key="index + note.created_at" class="d-flex align-items-center justify-content-between mb-3">
                                                           <div>
                                                               <h6>{{note.content}}</h6>
                                                               <p class="mb-0">{{note.created_at | formatDate}}</p>
@@ -161,7 +161,7 @@
                                               </div>
                                             </div>
                                             <ul class="list-inline m-0 overflow-y-scroll" style="max-height: 300px;">
-                                              <li v-for="(item,index) in openAssignments" :key="index" class="d-flex align-items-center justify-content-between mb-3">
+                                              <li v-for="(item,index) in openAssignments" :key="index + item.due_at" class="d-flex align-items-center justify-content-between mb-3">
                                                 <div>
                                                   <h6>{{item.todoname}}</h6>
                                                   <p class="mb-0">{{item.due_at | formatDate}}</p>
@@ -178,7 +178,7 @@
                                                       </div>
                                                   </div>
                                                   <ul class="iq-timeline">
-                                                      <li v-for="(item,index) in futureAppointments" :key="index">
+                                                      <li v-for="(item,index) in futureAppointments" :key="index + item.date">
                                                           <div class="timeline-dots border-success"></div>
                                                           <h6 class="">{{item.kind}}</h6>
                                                           <small class="mt-1">{{item.date | formatDate}}</small>
@@ -379,7 +379,7 @@
                               <template v-slot:body>
                                   <div class="iq-card-body">
                                       <ul class="profile-img-gallary d-flex flex-wrap p-0 m-0">
-                                          <li class="col-md-4 col-6 pb-3" v-for="file in files" :key="file">
+                                          <li class="col-md-4 col-6 pb-3" v-for="(file, index) in files" :key="index + file.created_at">
                                               <img :src="file.image" alt="gallary-image" class="img-fluid">
                                               <div class="text-center">
                                                   <p class="mb-0">{{ $t('EPR.files.fileName') }}: {{file.name}}</p>
@@ -521,14 +521,15 @@
     >
       <form>
         <div class="form-row">
-          <div class="col-md-12 mb-3">
+          <div class="col-md-12 mb-3" v-if="users">
             <label for="title">{{ $t('assignments.addAssignmentsModal.users') }} *</label>
             <v-select
                 taggable
                 :clearable="false"
-                label="name"
-                :options="users"
+                :getOptionLabel="getOptionLabel"
+                :options="users || []"
                 v-model="formData.user"
+                @input="selectedUser"
             >
             </v-select>
           </div>
@@ -774,6 +775,12 @@ export default {
     }
   },
   methods: {
+    selectedUser (val) {
+      console.log('selected', val)
+    },
+    getOptionLabel (option) {
+      return (option && option.name) || ''
+    },
     createBillingDetails () {
       let details = ''
       if (this.patient.name) details += this.patient.name
@@ -932,6 +939,7 @@ export default {
       this.formData = this.defaultFormData()
     },
     addAssignments () {
+      console.log(this.formData)
       createAssignments(this.formData).then(() => {
         this.getAssignments()
         this.formData = this.defaultFormData()
