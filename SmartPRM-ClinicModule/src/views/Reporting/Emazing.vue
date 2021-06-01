@@ -31,8 +31,7 @@
         <iq-card>
           <template v-slot:body>
               <h5 class="card-title">{{ $t('reportingEmazing.servicesSummary') }}</h5>
-<!--            <b-table small :items="servicesSummaryItems" :fields="servicesSummaryColumns" class="mb-0"></b-table>-->
-            <b-table-simple>
+              <b-table-simple>
               <thead>
               <tr>
                 <th v-for="(item,index) in servicesSummaryColumns" :key="index" :class="item.key === 'item' ? 'text-left' : ''">{{ item.label }}</th>
@@ -43,20 +42,20 @@
                 <tr :key="bodyKey">
                   <td style="max-width: 200px"><span class="font-italic">{{ bodyKey }}</span></td>
                   <td><span class="font-italic">{{ body.group_count }}</span></td>
-                  <td><span class="font-italic">{{ Math.trunc(body.group_amount) }}</span></td>
+                  <td><span class="font-italic">{{ Math.trunc(body.group_amount) }}   &#8364;</span></td>
                 </tr>
                   <template v-for="(item, index) in body" >
                    <tr :key="item.service_title + index">
                      <td  style="max-width: 200px">{{ item.service_title }}</td>
                      <td>{{ item.count }}</td>
-                     <td>{{ Math.trunc(item.sum) }}</td>
+                     <td>{{ Math.trunc(item.sum) }} &#8364;</td>
                    </tr>
                   </template>
               </template>
               <tr v-if="servicesSummaryTotalCount">
                 <td><span style="font-weight: bold"> Total: </span></td>
                 <td>  </td>
-                <td> <span style="font-weight: bold">{{Math.trunc(servicesSummaryTotalCount)}}</span></td>
+                <td> <span style="font-weight: bold">{{Math.trunc(servicesSummaryTotalCount)}} &#8364;</span></td>
               </tr>
               </tbody>
             </b-table-simple>
@@ -65,7 +64,35 @@
         <iq-card>
           <template v-slot:body>
               <h5 class="card-title">{{ $t('reportingEmazing.servicesList') }}</h5>
-            <b-table small :items="servicesListItems" :fields="servicesListColumns" class="mb-0"></b-table>
+<!--            <b-table small :items="servicesListItems" :fields="servicesListColumns" class="mb-0"></b-table>-->
+            <b-table-simple>
+              <thead>
+              <tr>
+                <th v-for="(item,index) in servicesListColumns" :key="index" :class="item.key === 'item' ? 'text-left' : ''">{{ item.label }}</th>
+              </tr>
+              </thead>
+              <tbody>
+              <template v-for="(body,bodyKey ) in servicesListItems" >
+                <tr :key="bodyKey">
+                  <td style="max-width: 200px" colspan="6"><span class="font-italic">{{ bodyKey }}</span></td>
+                </tr>
+                <template v-for="(item, index) in body" >
+                  <tr :key="index">
+                    <td><span >{{ item.doctor }}</span></td>
+                    <td><span >{{ item.service_title}}  </span></td>
+                    <td><span >{{ item.name}}  </span></td>
+                    <td><span>{{ Math.trunc(item.price)}} &#8364;  </span></td>
+                    <td><span>{{ Math.trunc(item.fee)}} &#8364;  </span></td>
+                    <td><span >{{ formatDateString(item.date)}}  </span></td>
+                  </tr>
+                </template>
+              </template>
+              <tr v-if="servicesSummaryTotalCount">
+                <td  colspan="5"><span style="font-weight: bold"> Total: </span></td>
+                <td> <span style="font-weight: bold">{{Math.trunc(servicesListTotalCount)}} &#8364;</span></td>
+              </tr>
+              </tbody>
+            </b-table-simple>
           </template>
         </iq-card>
     </div>
@@ -86,6 +113,7 @@ export default {
       fromdate: null,
       todate: null,
       servicesSummaryTotalCount: 0,
+      servicesListTotalCount: 0,
       countrySelectOptions: [
         { value: null, text: this.$t('reportingEmazing.countrySelect') }
       ],
@@ -105,12 +133,12 @@ export default {
       ],
       servicesSummaryItems: [],
       servicesListColumns: [
-        { label: this.$t('reportingEmazing.servicesListColumn.serviceDate'), key: 'date', formatter: (value, key, item) => { return this.formatDateString(value) } },
+        { label: this.$t('reportingEmazing.servicesListColumn.serviceDoctor'), key: 'doctor', class: 'text-left' },
         { label: this.$t('reportingEmazing.servicesListColumn.serviceTitle'), key: 'service_title', class: 'text-left' },
         { label: this.$t('reportingEmazing.servicesListColumn.serviceLeadName'), key: 'name', class: 'text-left' },
         { label: this.$t('reportingEmazing.servicesListColumn.serviceAmount'), key: 'price', class: 'text-left' },
         { label: this.$t('reportingEmazing.servicesListColumn.serviceFee'), key: 'fee', class: 'text-left' },
-        { label: this.$t('reportingEmazing.servicesListColumn.serviceDoctor'), key: 'doctor', class: 'text-left' }
+        { label: this.$t('reportingEmazing.servicesListColumn.serviceDate'), key: 'date', formatter: (value, key, item) => { return this.formatDateString(value) } }
       ],
       servicesListItems: []
     }
@@ -175,7 +203,6 @@ export default {
     getServicesReport () {
       getEmazingServicesReport(this.fromdate, this.todate, this.countrySelect).then(response => {
         if (typeof response !== 'string') {
-          this.servicesSummaryItems = []
           let res = _.groupBy(response, 'group')
           let totalCount = 0
           for (let group in res) {
@@ -189,7 +216,6 @@ export default {
           }
           this.servicesSummaryItems = res
           this.servicesSummaryTotalCount = totalCount
-          console.log(totalCount)
         } else {
           console.error(response)
         }
@@ -198,7 +224,14 @@ export default {
     getServicesList () {
       getServiceList(this.fromdate, this.todate, this.countrySelect).then(response => {
         if (typeof response !== 'string') {
-          this.servicesListItems = response
+          let res = _.groupBy(response, 'doctor')
+          for (let doc in res) {
+            res[doc].map(item => {
+              this.servicesListTotalCount += Number(item.price)
+            })
+          }
+          this.servicesListItems = res
+          console.log(res)
         } else {
           console.error(response)
         }
@@ -242,11 +275,6 @@ export default {
   computed: {
     getServicesSummary () {
       return this.servicesSummaryItems
-    }
-  },
-  watch: {
-    'servicesSummaryItems' () {
-      console.log('watch', this.servicesSummaryItems)
     }
   },
   mounted () {
