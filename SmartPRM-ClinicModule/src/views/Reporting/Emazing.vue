@@ -56,9 +56,9 @@
                   </template>
               </template>
               <tr v-if="servicesSummaryTotalCount">
-                <td><span style="font-weight: bold"> Total: </span></td>
-                <td>  </td>
-                <td> <span style="font-weight: bold">{{Math.trunc(servicesSummaryTotalCount)}} &#8364;</span></td>
+                <td><span class="font-italic"> Total: </span></td>
+                <td><span class="font-italic">{{Math.trunc(servicesSummaryTotalCount)}}</span></td>
+                <td> <span class="font-italic">{{Math.trunc(servicesSummaryTotalAmount)}} &#8364;</span></td>
               </tr>
               </tbody>
             </b-table-simple>
@@ -120,6 +120,7 @@ export default {
       fromdate: null,
       todate: null,
       servicesSummaryTotalCount: 0,
+      servicesSummaryTotalAmount: 0,
       servicesListTotalCount: 0,
       countrySelectOptions: [
         { value: null, text: this.$t('reportingEmazing.countrySelect') }
@@ -223,17 +224,20 @@ export default {
         if (typeof response !== 'string') {
           let res = _.groupBy(response, 'group')
           let totalCount = 0
+          let totalAmount = 0
           for (let group in res) {
             res[`${group}`].group_count = 0
             res[`${group}`].group_amount = 0
             res[group].map(item => {
               res[`${group}`].group_count = res[`${group}`].group_count + Number(item.count)
               res[`${group}`].group_amount = res[`${group}`].group_amount + Number(item.sum)
-              totalCount += Number(item.sum)
+              totalCount += Number(item.count)
+              totalAmount += Number(item.sum)
             })
           }
           this.servicesSummaryItems = res
           this.servicesSummaryTotalCount = totalCount
+          this.servicesSummaryTotalAmount = totalAmount
 
           let arr = []
           if (this.servicesSummaryItems) {
