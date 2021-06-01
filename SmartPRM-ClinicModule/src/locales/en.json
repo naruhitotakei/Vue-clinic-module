@@ -472,7 +472,7 @@
     "servicesListColumn": {
       "serviceDate": "Service Date",
       "serviceTitle": "Service Title",
-      "serviceLeadName": "Patient Name",
+      "serviceLeadName": "Patient",
       "serviceAmount": "Amount",
       "serviceFee": "Fee",
       "serviceLocation": "Location",

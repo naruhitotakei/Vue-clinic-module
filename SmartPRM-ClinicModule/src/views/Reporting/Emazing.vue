@@ -32,7 +32,7 @@
           <template v-slot:body>
            <div class="row justify-content-between mb-2 pl-3 pr-3">
              <h5 class="card-title">{{ $t('reportingEmazing.servicesSummary') }}</h5>
-             <button class="btn btn-primary" @click="exportReportToExcel('table1')">Download Excel</button>
+             <a href="#" ref="excel-table1" class="btn btn-primary" @click="exportReportToExcel('table1')">Download Excel</a>
            </div>
             <b-table-simple ref="table1">
               <thead>
@@ -43,22 +43,22 @@
               <tbody>
               <template v-for="(body,bodyKey ) in getServicesSummary" >
                 <tr :key="bodyKey">
-                  <td style="max-width: 200px"><span class="font-italic">{{ bodyKey }}</span></td>
-                  <td><span class="font-italic">{{ body.group_count }}</span></td>
-                  <td><span class="font-italic">{{ Math.trunc(body.group_amount) }}   &#8364;</span></td>
+                  <td style="max-width: 200px"><span class="font-weight-bold">{{ bodyKey }}</span></td>
+                  <td><span class="font-weight-bold">&nbsp; {{ body.group_count }}&nbsp; </span></td>
+                  <td><span class="font-weight-bold">{{ formatNumber(Math.trunc(body.group_amount)) }}   &#8364;</span></td>
                 </tr>
                   <template v-for="(item, index) in body" >
                    <tr :key="Math.random(index + 1000)">
                      <td  style="max-width: 200px">{{ item.service_title }}</td>
-                     <td>{{ item.count }}</td>
-                     <td>{{ Math.trunc(item.sum) }} &#8364;</td>
+                     <td class="td-count">&nbsp; {{ item.count }}&nbsp;  </td>
+                     <td>{{ formatNumber(Math.trunc(item.sum)) }} &#8364;</td>
                    </tr>
                   </template>
               </template>
               <tr v-if="servicesSummaryTotalCount">
-                <td><span class="font-italic"> Total: </span></td>
-                <td><span class="font-italic">{{Math.trunc(servicesSummaryTotalCount)}}</span></td>
-                <td> <span class="font-italic">{{Math.trunc(servicesSummaryTotalAmount)}} &#8364;</span></td>
+                <td><span class="font-weight-bold"> Total: </span></td>
+                <td><span class="font-weight-bold">{{formatNumber(Math.trunc(servicesSummaryTotalCount))}}</span></td>
+                <td><span class="font-weight-bold">{{formatNumber(Math.trunc(servicesSummaryTotalAmount))}} &#8364;</span></td>
               </tr>
               </tbody>
             </b-table-simple>
@@ -68,7 +68,7 @@
           <template v-slot:body>
             <div class="row justify-content-between mb-2 pl-3 pr-3">
               <h5 class="card-title">{{ $t('reportingEmazing.servicesList') }}</h5>
-              <button class="btn btn-primary" @click="exportReportToExcel('table2')">Download Excel</button>
+              <a href="#" ref="excel-table2" class="btn btn-primary" @click="exportReportToExcel('table2')">Download Excel</a>
             </div>
 <!--            <b-table small :items="servicesListItems" :fields="servicesListColumns" class="mb-0"></b-table>-->
             <b-table-simple ref="table2">
@@ -80,22 +80,22 @@
               <tbody>
               <template v-for="(body,bodyKey ) in servicesListItems" >
                 <tr :key="bodyKey">
-                  <td style="max-width: 200px" colspan="6"><span class="font-italic">{{ bodyKey }}</span></td>
+                  <td style="max-width: 200px" colspan="6"><span class="font-weight-bold">{{ bodyKey }}</span></td>
                 </tr>
                 <template v-for="(item, index) in body" >
                   <tr :key="Math.random(index + 1000)">
                     <td><span >{{ item.doctor }}</span></td>
                     <td><span >{{ item.service_title}}  </span></td>
-                    <td><span >{{ item.name}}  </span></td>
-                    <td><span>{{ Math.trunc(item.price)}} &#8364;  </span></td>
-                    <td><span>{{ Math.trunc(item.fee)}} &#8364;  </span></td>
+                    <td><span >{{ item.last_name}}  </span></td>
+                    <td><span>{{ formatNumber(Math.trunc(item.price))}} &#8364;  </span></td>
+                    <td><span>{{ formatNumber(Math.trunc(item.fee))}} &#8364;  </span></td>
                     <td><span >{{ formatDateString(item.date)}}  </span></td>
                   </tr>
                 </template>
               </template>
               <tr v-if="servicesSummaryTotalCount">
-                <td  colspan="5"><span style="font-weight: bold"> Total: </span></td>
-                <td> <span style="font-weight: bold">{{Math.trunc(servicesListTotalCount)}} &#8364;</span></td>
+                <td  colspan="5"><span class="font-weight-bold"> Total: </span></td>
+                <td> <span class="font-weight-bold">{{formatNumber(Math.trunc(servicesListTotalCount))}} &#8364;</span></td>
               </tr>
               </tbody>
             </b-table-simple>
@@ -107,8 +107,9 @@
 <script>
 import IqCard from '../../components/xray/cards/iq-card.vue'
 import { xray } from '../../config/pluginInit'
-import { getEmazingServicesReport, getServiceList, getCountryList } from '../../services/reporting'
+import { getCountryList, getEmazingServicesReport, getServiceList } from '../../services/reporting'
 import _ from 'lodash'
+// import moment from 'moment'
 
 export default {
   components: {
@@ -157,11 +158,24 @@ export default {
     }
   },
   methods: {
+    formatNumber (num) {
+      return num.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1.')
+    },
     exportReportToExcel (tableName) {
       let table = this.$refs[tableName]
-      let re = /€/gi
-      let html = table.$el.outerHTML.replace(re, '')
-      window.open('data:application/vnd.ms-excel,' + encodeURIComponent(html))
+      let euro = /€/gi
+      let html = table.$el.outerHTML.replace(euro, '&nbsp &euro;')
+      console.log(html)
+      this.$refs[`excel-${tableName}`].href = 'data:application/vnd.ms-excel,' + encodeURIComponent(html)
+      let documentName = ''
+      let date = new Date().toLocaleString()
+      if (tableName === 'table1') {
+        documentName = 'Services Summary export'
+      } else {
+        documentName = 'Services List export'
+      }
+      this.$refs[`excel-${tableName}`].download = documentName + ' ' + date
+      return true
     },
     onFromChange () {
       this.getServicesReport()
