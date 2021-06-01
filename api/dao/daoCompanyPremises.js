@@ -10,7 +10,34 @@ const pool = new Pool({
 })
 
 const getCompanyPremises = (request, response) => {
-    pool.query("SELECT pcp.premise_name, pcp.premise_street, pcp.premise_house_number,pc.company_name FROM prm_company_premise pcp JOIN prm_company pc ON pcp.company_id = pc.company_id", (error, results) => {
+    pool.query("SELECT pcp.*, CONCAT_WS(' ', pcp.premise_street, pcp.premise_house_number) AS premise_address, pc.company_name FROM prm_company_premise pcp JOIN prm_company pc ON pcp.company_id = pc.company_id WHERE pcp.premise_deleted = false", (error, results) => {
+        if (error) {
+            throw error
+        }
+        response.status(200).json(results.rows)
+    })
+}
+
+const getCompanyPremiseById = (request, response, id) => {
+    pool.query("SELECT pcp.*, CONCAT_WS(' ', pcp.premise_street, pcp.premise_house_number) AS premise_address, pc.company_name FROM prm_company_premise pcp JOIN prm_company pc ON pcp.company_id = pc.company_id WHERE pcp.premise_deleted = false AND pcp.premise_id = $1", [id], (error, results) => {
+        if (error) {
+            throw error
+        }
+        response.status(200).json(results.rows)
+    })
+}
+
+const getCompanyPremiseDeviceById = (request, response, id) => {
+    pool.query("SELECT pcpd.device_id, pcpd.company_premise_id, pcpd.device_name, pcp.premise_name, pc.company_name FROM prm_company_premise_device pcpd JOIN prm_company_premise pcp ON pcpd.company_premise_id = pcp.premise_id JOIN prm_company pc ON pcp.company_id = pc.company_id WHERE pcpd.device_deleted = false and pcpd.device_id=$1", [id], (error, results) => {
+        if (error) {
+            throw error
+        }
+        response.status(200).json(results.rows)
+    })
+}
+
+const getCompanyPremiseDevices = (request, response) => {
+    pool.query("SELECT pcpd.device_id, pcpd.company_premise_id, pcpd.device_name, pcp.premise_name, pc.company_name FROM prm_company_premise_device pcpd JOIN prm_company_premise pcp ON pcpd.company_premise_id = pcp.premise_id JOIN prm_company pc ON pcp.company_id = pc.company_id WHERE pcpd.device_deleted = false", (error, results) => {
         if (error) {
             throw error
         }
@@ -36,8 +63,147 @@ const getDevicesForCompanyPremise = (request, response,id) => {
     })
 }
 
+const createPremise = (req, res, premise) => {
+    var premiseStatement = "INSERT INTO prm_company_premise("
+    if (premise.premise_name) premiseStatement += "premise_name,"
+    if (premise.premise_street) premiseStatement += "premise_street,"
+    if (premise.premise_house_number) premiseStatement += "premise_house_number,"
+    if (premise.premise_house_number_additional) premiseStatement += "premise_house_number_additional,"
+    if (premise.premise_city) premiseStatement += "premise_city,"
+    if (premise.premise_post_code) premiseStatement += "premise_post_code,"
+    if (premise.premise_country_code) premiseStatement += "premise_country_code,"
+    if (premise.premise_community) premiseStatement += "premise_community,"
+    if (premise.premise_cadastral_number) premiseStatement += "premise_cadastral_number,"
+    if (premise.building_number) premiseStatement += "building_number,"
+    if (premise.building_section_number) premiseStatement += "building_section_number,"
+    if (premise.special_notes) premiseStatement += "special_notes,"
+    if (premise.company_id) premiseStatement += "company_id,"
+    if (premise.validity_date) premiseStatement += "validity_date,"
+    premiseStatement += "created_date"
+    premiseStatement += ") VALUES ("
+    if (premise.premise_name) premiseStatement += "'" + premise.premise_name + "',"
+    if (premise.premise_street) premiseStatement += "'" + premise.premise_street + "',"
+    if (premise.premise_house_number) premiseStatement += "'" + premise.premise_house_number + "',"
+    if (premise.premise_house_number_additional) premiseStatement += "'" + premise.premise_house_number_additional + "',"
+    if (premise.premise_city) premiseStatement += "'" + premise.premise_city + "',"
+    if (premise.premise_post_code) premiseStatement += "'" + premise.premise_post_code + "',"
+    if (premise.premise_country_code) premiseStatement += "'" + premise.premise_country_code + "',"
+    if (premise.premise_community) premiseStatement += "'" + premise.premise_community + "',"
+    if (premise.premise_cadastral_number) premiseStatement += "'" + premise.premise_cadastral_number + "',"
+    if (premise.building_number) premiseStatement += "'" + premise.building_number + "',"
+    if (premise.building_section_number) premiseStatement += "'" + premise.building_section_number + "',"
+    if (premise.special_notes) premiseStatement += "'" + premise.special_notes + "',"
+    if (premise.company_id) premiseStatement += "'" + premise.company_id + "',"
+    if (premise.validity_date) premiseStatement += "'" + premise.validity_date + "',"
+    premiseStatement +="NOW())"
+    console.log(premiseStatement)
+
+    pool.query(premiseStatement , (error, results) => {
+        if (error) {
+            throw error
+        } 
+        res.status(200).json("OK")
+    })    
+}
+
+const updatePremise = (req, res, id, premise) => {
+    var premiseStatement = "UPDATE prm_company_premise SET"
+    if (premise.premise_name) premiseStatement += "premise_name=" + product.premise_name + ","
+    if (premise.premise_street) premiseStatement += "premise_street=" + product.premise_street + ","
+    if (premise.premise_house_number) premiseStatement += "premise_house_number=" + product.premise_house_number + ","
+    if (premise.premise_house_number_additional) premiseStatement += "premise_house_number_additional=" + product.premise_house_number_additional + ","
+    if (premise.premise_city) premiseStatement += "premise_city=" + product.premise_city + ","
+    if (premise.premise_post_code) premiseStatement += "premise_post_code=" + product.premise_post_code + ","
+    if (premise.premise_country_code) premiseStatement += "premise_country_code=" + product.premise_country_code + ","
+    if (premise.premise_community) premiseStatement += "premise_community=" + product.premise_community + ","
+    if (premise.premise_cadastral_number) premiseStatement += "premise_cadastral_number=" + product.premise_cadastral_number + ","
+    if (premise.building_number) premiseStatement += "building_number=" + product.building_number + ","
+    if (premise.building_section_number) premiseStatement += "building_section_number=" + product.building_section_number + ","
+    if (premise.special_notes) premiseStatement += "special_notes=" + product.special_notes + ","
+    if (premise.company_id) premiseStatement += "company_id=" + product.company_id + ","
+    if (premise.validity_date) premiseStatement += "validity_date=" + product.validity_date + ","
+    premiseStatement = premiseStatement.slice(0, -1)
+    premiseStatement +=" WHERE premise_id=" + id
+    console.log(premiseStatement)
+
+    pool.query(premiseStatement , (error, results) => {
+        if (error) {
+            throw error
+        } 
+        res.status(200).json(premise)
+    })    
+}
+
+const deletePremise = (req, res, id) => {
+    var premiseStatement = "UPDATE prm_company_premise SET premise_deleted = true WHERE premise_id=" + id
+    console.log(premiseStatement)
+
+    pool.query(premiseStatement , (error, results) => {
+        if (error) {
+            throw error
+        } 
+        res.status(200).json("OK")
+    })    
+}
+
+const createPremiseDevice = (req, res, premiseDevice) => {
+    var premiseDeviceStatement = "INSERT INTO prm_company_premise_device("
+    if (premiseDevice.device_name) premiseDeviceStatement += "device_name,"
+    if (premiseDevice.company_premise_id) premiseDeviceStatement += "company_premise_id,"
+    premiseDeviceStatement += "created_date"
+    premiseDeviceStatement += ") VALUES ("
+    if (premiseDevice.device_name) premiseDeviceStatement += "'" + premiseDevice.device_name + "',"
+    if (premiseDevice.company_premise_id) premiseDeviceStatement += "'" + premiseDevice.company_premise_id + "',"
+    premiseDeviceStatement +="NOW())"
+    console.log(premiseDeviceStatement)
+
+    pool.query(premiseDeviceStatement , (error, results) => {
+        if (error) {
+            throw error
+        } 
+        res.status(200).json("OK")
+    })    
+}
+
+const updatePremiseDevice = (req, res, id, premiseDevice) => {
+    var premiseDeviceStatement = "UPDATE prm_company_premise_device SET"
+    if (premiseDevice.device_name) premiseDeviceStatement += "device_name=" + product.device_name + ","
+    if (premiseDevice.company_premise_id) premiseDeviceStatement += "company_premise_id=" + product.company_premise_id + ","
+    premiseDeviceStatement = premiseStatement.slice(0, -1)
+    premiseDeviceStatement +=" WHERE device_id=" + id
+    console.log(premiseDeviceStatement)
+
+    pool.query(premiseDeviceStatement , (error, results) => {
+        if (error) {
+            throw error
+        } 
+        res.status(200).json(premiseDevice)
+    })    
+}
+
+const deletePremiseDevice = (req, res, id) => {
+    var premiseStatement = "UPDATE prm_company_premise_device SET device_deleted = true, deleted_at = NOW() WHERE premise_id=" + id
+    console.log(premiseStatement)
+
+    pool.query(premiseStatement , (error, results) => {
+        if (error) {
+            throw error
+        } 
+        res.status(200).json("OK")
+    })    
+}
+
 module.exports = {
     getCompanyPremises,
     getPremisesForCompany,
-    getDevicesForCompanyPremise
+    getDevicesForCompanyPremise,
+    getCompanyPremiseDevices,
+    createPremise,
+    updatePremise,
+    deletePremise,
+    getCompanyPremiseById,
+    createPremiseDevice,
+    updatePremiseDevice,
+    deletePremiseDevice,
+    getCompanyPremiseDeviceById
 }

@@ -706,6 +706,52 @@ app.get('/api/company-premises', (req, res) => {
     daoCompanyPremises.getCompanyPremises(req, res)
 });
 
+app.post('/api/company-premises', (req, res) => {
+    const premise = req.body
+    daoCompanyPremises.createPremise(req, res, premise)
+});
+
+app.put('/api/company-premises/:id', (req, res) => {
+    const id = req.params.id
+    const premise = req.body
+    daoCompanyPremises.updatePremise(req, res, id, premise)
+});
+
+app.get('/api/company-premises/:id', (req, res) => {
+    const id = req.params.id
+    daoCompanyPremises.getCompanyPremiseById(req, res, id)
+});
+
+app.delete('/api/company-premises/:id', (req, res) => {
+    const id = req.params.id
+    daoCompanyPremises.deletePremise(req, res, id)
+});
+
+app.get('/api/company-premise-devices', (req, res) => {
+    daoCompanyPremises.getCompanyPremiseDevices(req, res)
+});
+
+app.post('/api/company-premise-devices', (req, res) => {
+    const premiseDevice = req.body
+    daoCompanyPremises.createPremiseDevice(req, res, premiseDevice)
+});
+
+app.put('/api/company-premise-devices/:id', (req, res) => {
+    const id = req.params.id
+    const premiseDevice = req.body
+    daoCompanyPremises.updatePremiseDevice(req, res, id, premiseDevice)
+});
+
+app.get('/api/company-premise-devices/:id', (req, res) => {
+    const id = req.params.id
+    daoCompanyPremises.getCompanyPremiseDeviceById(req, res, id)
+});
+
+app.delete('/api/company-premise-devices/:id', (req, res) => {
+    const id = req.params.id
+    daoCompanyPremises.deletePremiseDevice(req, res, id)
+});
+
 app.get('/api/:companyId/company-premises', (req, res) => {
     const companyId = req.params.companyId
     daoCompanyPremises.getPremisesForCompany(req, res, companyId)

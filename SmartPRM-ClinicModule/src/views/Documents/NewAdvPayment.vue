@@ -101,11 +101,11 @@
                                     <b-td colspan="2">{{usersCompany.company_name}}</b-td>
                                     <b-td colspan="3" v-html="billingDetails"></b-td>
                                     <b-td colspan="4">
-                                      <v-select :clearable="false" label="premise_name" class="premises" v-model="issuedIn" @input="findDevicesForPremise" :options="companyPremises"></v-select>
+                                      <v-select :disabled="isInvoiceStatusIssued" :clearable="false" label="premise_name" class="premises" v-model="issuedIn" @input="findDevicesForPremise" :options="companyPremises"></v-select>
                                     </b-td>
                                     <b-td colspan="3">
                                       <span v-if="devices.length == 1">{{device.device_name}}</span>
-                                      <v-select v-else :clearable="false" label="device_name" class="premises" v-model="device" :options="devices"></v-select>
+                                      <v-select :disabled="isInvoiceStatusIssued" v-else :clearable="false" label="device_name" class="premises" v-model="device" :options="devices"></v-select>
                                     </b-td>
                                   </b-tr>
                                 </b-tbody>
