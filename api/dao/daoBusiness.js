@@ -66,6 +66,7 @@ const updateBusiness = (req, res, id, business) => {
   if (business.country_code) businessStatement += "country_id='" + business.country_code.id  + "',"
   if (business.zip_code) businessStatement += "post_code='" + business.zip_code + "'"
   businessStatement +=" WHERE business_customer.id=" + id
+  console.log(businessStatement)
   pool.query(businessStatement , (error, results) => {
     console.log(error)
     if (error) {
