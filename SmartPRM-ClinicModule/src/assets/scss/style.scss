@@ -34,6 +34,10 @@
   color: #000 !important;
 }
 
+.object-fit {
+  object-fit: cover;
+}
+
 [dir="rtl"]{
   @import "../css/rtl/bootstrap";
   @import "../css/rtl/light/typography";

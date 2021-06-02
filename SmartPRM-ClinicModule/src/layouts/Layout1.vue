@@ -72,7 +72,7 @@
             <ul class="navbar-list">
               <li>
                 <a href="#" class="search-toggle iq-waves-effect d-flex align-items-center">
-                  <img :src="getAvatarUrl" class="img-fluid rounded mr-3" alt="user">
+                  <img :src="getAvatarUrl" class="img-fluid rounded mr-3 object-fit" alt="user">
                   <div class="caption">
                     <h6 class="mb-0 line-height">{{ logedInUser.name }}</h6>
                     <span class="font-size-12">{{ $t('nav.user.available') }}</span>
