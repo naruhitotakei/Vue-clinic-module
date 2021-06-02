@@ -22,9 +22,9 @@
                                     :key="index"
                                 >
                                     <div class="assignments-container row align-items-center flex-nowrap justify-content-between" :class="{ 'taskIsActive' : !item.completed}">
-                                      <div>
+                                      <div class="row align-items-center justify-content-between">
                                         <b-checkbox v-model="item.completed" :disabled="item.disabled" name="check-button" inline :key="index" class="completed-assignment" @change="finishAssignment(item.id, $event)"></b-checkbox>
-                                        <span>{{ item.description }}</span>
+                                        <span class="assignments-description">{{ item.description }}</span>
                                         <router-link tag="span" :to="'/patients/'+ item.enquiry_id" class="pl-5" style="cursor:pointer;">{{ item.patientname }} {{ item.patientlastname }}</router-link>
                                         <span class="pl-5">{{ patientsDentist(item) }}</span>
                                         <span class="text-right">{{ item.due_at | formatDateAssignments(getLocale) }}</span>
@@ -69,7 +69,7 @@
                             <b-checkbox v-model="item.completed" :disabled="item.disabled" name="check-button" inline
                                         :key="index" class="completed-assignment"
                                         @change="finishAssignment(item.id, $event)"></b-checkbox>
-                            <span>{{ item.description }}</span>
+                            <span class="assignments-description">{{ item.description }}</span>
                             <span class="pl-5">{{ item.patientname }} {{ item.patientlastname }}</span>
                             <span class="pl-5">{{ patientsDentist(item) }}</span>
                             <span class="text-right">{{ item.due_at | formatDate }}</span>
@@ -110,7 +110,7 @@
                                 <div class="assignments-container row align-items-center flex-nowrap justify-content-between" :class="{ 'taskIsActive' : !item.completed}">
                                    <div>
                                      <b-checkbox v-model="item.completed" :disabled="item.disabled" name="check-button" inline :key="index" class="completed-assignment" @change="finishAssignment(item.id, $event)"></b-checkbox>
-                                     <span>{{ item.description }}</span>
+                                     <span class="assignments-description">{{ item.description }}</span>
                                      <router-link tag="span" :to="'/patients/'+ item.enquiry_id" class="pl-5" style="cursor:pointer;">{{ item.patientname }} {{ item.patientlastname }}</router-link>
                                      <span class="pl-5">{{ patientsDentist(item) }}</span>
                                      <span class="text-right">{{ item.due_at | formatDateAssignments(getLocale) }}</span>
@@ -148,7 +148,7 @@
                             <b-list-group-item v-for="(item, index) in completedAssigments[completedCurrentPage]" :key="index">
                                 <div class="assignments-container row align-items-center flex-nowrap" :class="{ 'taskIsActive' : !item.completed}">
                                     <b-checkbox v-model="item.completed" :disabled="item.disabled" name="check-button" inline :key="index" class="completed-assignment" @change="finishAssignment(item.id, $event)"></b-checkbox>
-                                    <span>{{ item.description }}</span>
+                                    <span class="assignments-description">{{ item.description }}</span>
                                     <router-link tag="span" :to="'/patients/'+ item.enquiry_id" class="pl-5" style="cursor:pointer;">{{ item.patientname }} {{ item.patientlastname }}</router-link>
                                   <span class="pl-5">{{ patientsDentist(item) }}</span>
                                     <span class="text-right">{{ item.due_at | formatDateAssignments(getLocale) }}</span>
@@ -228,6 +228,30 @@
   &:after{
     top: 50%;
     transform: translateY(-50%);
+  }
+}
+
+@media (max-width: 1661px) {
+  body .wrapper .assignments-container .assignments-description {
+    width: 384px;
+  }
+  body .wrapper .assignments-container span {
+    width: 265px;
+  }
+}
+
+@media (max-width: 1441px) {
+  body .wrapper .assignments-container .assignments-description {
+    width: 284px;
+  }
+  body .wrapper .assignments-container span {
+    width: 227px;
+  }
+}
+
+@media (max-width: 1361px) {
+  body .wrapper .assignments-container span {
+    width: 189px;
   }
 }
 
