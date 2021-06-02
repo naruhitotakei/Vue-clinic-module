@@ -78,9 +78,11 @@
               </tr>
               </thead>
               <tbody>
-              <template v-for="(body,bodyKey ) in servicesListItems" >
+              <template v-for="(body, bodyKey) in servicesListItems" >
                 <tr :key="bodyKey">
-                  <td style="max-width: 200px" colspan="6"><span class="font-weight-bold">{{ bodyKey }}</span></td>
+                  <td colspan="3"><span class="font-weight-bold">{{ bodyKey }} 1</span></td>
+                  <td ><span class="font-weight-bold">{{formatNumber(Math.trunc(body.group_price))}} &#8364;</span></td>
+                  <td  colspan="2"><span class="font-weight-bold">{{formatNumber(Math.trunc(body.group_fee))}} &#8364;</span></td>
                 </tr>
                 <template v-for="(item, index) in body" >
                   <tr :key="Math.random(index + 1000)">
@@ -272,11 +274,16 @@ export default {
         if (typeof response !== 'string') {
           let res = _.groupBy(response, 'doctor')
           for (let doc in res) {
+            res[doc].group_price = 0
+            res[doc].group_fee = 0
             res[doc].map(item => {
+              res[doc].group_price = res[doc].group_price + Number(item.price)
+              res[doc].group_fee = res[doc].group_fee + Number(item.fee)
               this.servicesListTotalCount += Number(item.price)
               this.servicesListTotalFee += Number(item.fee)
             })
           }
+          console.log(res)
           this.servicesListItems = res
         } else {
           console.error(response)
