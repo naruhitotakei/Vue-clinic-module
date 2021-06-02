@@ -253,6 +253,7 @@
     "invoicesHeader": "Invoices",
     "invoicesBtn": "Add Invoice",
     "invoicesColumn": {
+      "type": "Type",
       "no": "Number",
       "patientName": "Patient Name",
       "date": "Date",
