@@ -12,7 +12,7 @@
                       <tab-nav-items class="col-12 col-sm-4 col-md-2 p-0" :active="false" href="#info" :title="$t('EPR.personalInfoTab')" />
                       <tab-nav-items class="col-12 col-sm-1 col-md-2 p-0" :active="false" href="#files" :title="$t('EPR.filesTab')" />
                       <tab-nav-items class="col-12 col-sm-2 col-md-2 p-0" :active="false" href="#invoices" :title="$t('EPR.invoicesTab')" />
-                      <tab-nav-items class="col-12 col-sm-2 col-md-2 p-0 mobile-border" :active="false" href="#offers" :title="$t('EPR.offersTab')" />
+<!--                      <tab-nav-items class="col-12 col-sm-2 col-md-2 p-0 mobile-border" :active="false" href="#offers" :title="$t('EPR.offersTab')" />-->
                   </tab-nav>
               </div>
             </template>

@@ -1,18 +1,20 @@
 <template>
+  <keep-alive>
     <b-container fluid>
-        <b-row>
+        <b-row v-if="charts.length">
             <b-col lg="6" v-for="(item,index) in charts" :key="index">
                 <iq-card>
                     <template v-slot:headerTitle>
                         <h4>{{ item.title }}</h4>
                     </template>
-                    <template v-slot:body>
+                    <template v-slot:body >
                         <HighChart :ref="item.type" :option="item.bodyData" />
                     </template>
                 </iq-card>
             </b-col>
         </b-row>
     </b-container>
+  </keep-alive>
 </template>
 <script>
 import { xray } from '../../config/pluginInit'
@@ -268,6 +270,7 @@ export default {
         },
         {
           title: 'Dynamic Chart',
+          type: 'spline',
           bodyData: {
             chart: {
               type: 'spline',
@@ -281,7 +284,7 @@ export default {
                     setInterval(function () {
                       let x = (new Date()).getTime() // current time
                       let y = Math.random()
-                      series.addPoint([x, y], true, true)
+                      series.finishedAnimating && series.addPoint([x, y], true, true)
                     }, 1000)
                   }
                 }
@@ -831,8 +834,8 @@ export default {
       ]
     }
   },
-  destroyed () {
-    console.log(1)
+  beforeDestroy () {
+    this.charts = []
   }
 }
 </script>
