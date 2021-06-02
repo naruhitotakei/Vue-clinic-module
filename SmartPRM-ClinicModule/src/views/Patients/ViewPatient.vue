@@ -165,8 +165,12 @@
                                               </div>
                                             </div>
                                             <ul class="list-inline m-0 overflow-y-scroll" style="max-height: 300px;">
-                                              <li v-for="(item,index) in openAssignments" :key="index + item.due_at" class="d-flex align-items-center justify-content-between mb-3">
-                                                <div>
+                                              <li v-for="(item,index) in openAssignments" :key="index + item.due_at" class="d-flex align-items-center justify-content-between mb-3"
+                                                  :style="{
+                                                  'background': index === 0 && '#c3e6cb'
+                                                  }"
+                                              >
+                                                <div class="p-1">
                                                   <h6>{{item.todoname}}</h6>
                                                   <p class="mb-0">{{item.due_at | formatDate}}</p>
                                                 </div>
@@ -607,7 +611,8 @@ export default {
       })
     },
     openAssignments: function () {
-      return this.assignments
+      let assignments = [...this.assignments]
+      return assignments.reverse()
     },
     futureAppointments: function () {
       return this.appointments.filter((item) => {
