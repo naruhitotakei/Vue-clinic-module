@@ -148,6 +148,24 @@ DROP COLUMN prm_surgeon_user_id;
 ALTER TABLE enquiries ADD COLUMN prm_dentist_user_id INT references users(id) on delete set null;
 ALTER TABLE enquiries ADD COLUMN prm_surgeon_user_id INT references users(id) on delete set null;
 
+--############################################################
+--# renaming column in prm_company
+--############################################################
+
+ALTER TABLE prm_company 
+RENAME COLUMN tax_payer TO vat_payer;
+
+--############################################################
+--# altering id types in tables
+--############################################################
+
+ALTER TABLE prm_company_premise DROP COLUMN premise_id CASCADE;
+ALTER TABLE prm_company_premise ADD COLUMN premise_id SERIAL PRIMARY KEY;
+ALTER TABLE prm_company_premise_device ADD COLUMN premise_id INT
+CONSTRAINT prm_company_premise_device_prm_company_premise REFERENCES prm_company_premise (premise_id);
+ALTER TABLE invoice ADD COLUMN premise_id INT
+CONSTRAINT invoice_prm_company_premise REFERENCES prm_company_premise (premise_id);
+
 UPDATE db_version SET version ='01.15', version_date=CURRENT_DATE WHERE resource='Tables';
 
 COMMIT;
