@@ -1,4 +1,4 @@
---############################################################
+﻿--############################################################
 --# Adding bridge tables between users and prm_client
 --# and clients and prm_client
 --############################################################
@@ -159,12 +159,26 @@ RENAME COLUMN tax_payer TO vat_payer;
 --# altering id types in tables
 --############################################################
 
-ALTER TABLE prm_company_premise DROP COLUMN premise_id CASCADE;
-ALTER TABLE prm_company_premise ADD COLUMN premise_id SERIAL PRIMARY KEY;
-ALTER TABLE prm_company_premise_device ADD COLUMN premise_id INT
-CONSTRAINT prm_company_premise_device_prm_company_premise REFERENCES prm_company_premise (premise_id);
-ALTER TABLE invoice ADD COLUMN premise_id INT
-CONSTRAINT invoice_prm_company_premise REFERENCES prm_company_premise (premise_id);
+CREATE SEQUENCE prm_company_premise_premise_id_seq MINVALUE 6;
+ALTER TABLE prm_company_premise ALTER COLUMN premise_id SET DEFAULT nextval('prm_company_premise_premise_id_seq');
+ALTER SEQUENCE prm_company_premise_premise_id_seq OWNED BY prm_company_premise.premise_id;
+
+CREATE SEQUENCE prm_company_premise_device_device_id_seq MINVALUE 5;
+ALTER TABLE prm_company_premise_device ALTER COLUMN device_id SET DEFAULT nextval('prm_company_premise_device_device_id_seq');
+ALTER SEQUENCE prm_company_premise_device_device_id_seq OWNED BY prm_company_premise_device.device_id;
+
+ALTER TABLE prm_company_premise ADD COLUMN premise_label VARCHAR(20);
+
+UPDATE users SET title = 'Dr.', specialization = 'dr. dent. med.', function = '{dentist}' WHERE id = 39; 
+UPDATE users SET title = 'Dr.', specialization = 'dr. dent. med.', function = '{dentist}' WHERE id = 148;
+UPDATE users SET title = 'Dr.', specialization = 'dr. dent. med.', function = '{dentist}' WHERE id = 149;
+UPDATE users SET title = 'Dr.', specialization = 'dr. dent. med.', function = '{dentist}' WHERE id = 102;
+INSERT INTO users (name, email, title, specialization, function) VALUES ('Tomaž Lukanovič', 'tomaz.lukanovic@primadent.si', 'Dr.', 'dr. dent. med.', '{dentist}');
+UPDATE users SET name = 'Tina Fabjan', title = 'Dr.', specialization = 'dr. dent. med.', function = '{dentist}' WHERE id = 78;
+INSERT INTO users (name, email, title, specialization, function) VALUES ('Špela Rangus', 'spela.rangus@primadent.si', 'Dr.', 'dr. dent. med.', '{dentist}');
+INSERT INTO users (name, email, title, specialization, function) VALUES ('Polona Šter', 'polona.ster@primadent.si', 'Dr.', 'dr. dent. med.', '{dentist}');
+INSERT INTO users (name, email, title, specialization, function) VALUES ('Gašper Fortuna', 'gasper.fortuna@primadent.si', 'Dr.', 'dr. dent. med., spec. oralne in maksilofacialne kirurgije', '{dentist,surgeon}');
+INSERT INTO users (name, email, title, specialization, function) VALUES ('Žiga Kovačič', 'ziga.kovacic@primadent.si', 'Dr.', 'dr. dent. med., spec. oralne in maksilofacialne kirurgije', '{dentist,surgeon}');
 
 UPDATE db_version SET version ='01.15', version_date=CURRENT_DATE WHERE resource='Tables';
 
