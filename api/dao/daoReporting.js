@@ -40,15 +40,17 @@ const getEmazingServicesReport = (request, response, startdate, endate, countrie
 
 const getServiceList = (request, response, startdate, endate, countrie) =>  {
     if (!countrie || countrie.toLowerCase() == 'all' || countrie.toLowerCase() == 'null') {
-        var statement = ["SELECT se.date, pr.name as service_title, en.name, en.last_name, se.price, se.fee, us.name as doctor, co.name as country FROM services se ",
-                     "LEFT JOIN products pr ON se.product_id = pr.id ",
-                     "LEFT JOIN enquiries en ON se.enquiry_id = en.id ",
-                     "LEFT JOIN countries co ON en.country_id = co.id ",
-                     "LEFT JOIN client_users cu ON se.doctor_id = cu.id ",
-                     "LEFT JOIN users us ON cu.user_id = us.id ",
-                     "WHERE date_trunc('day', se.date) >= $1 AND (date_trunc('day', se.date) - INTERVAL '1 DAY' ) <= $2 ",
-                     "ORDER BY se.date ASC "].join('\n')
+        var statement = ["SELECT se.date, pr.name as service_title, en.name, en.last_name, se.price, se.fee, us.name as doctor, co.name as country,  en.id AS enquiry_id " +
+         "FROM services se ",
+         "LEFT JOIN products pr ON se.product_id = pr.id ",
+         "LEFT JOIN enquiries en ON se.enquiry_id = en.id ",
+         "LEFT JOIN countries co ON en.country_id = co.id ",
+         "LEFT JOIN client_users cu ON se.doctor_id = cu.id ",
+         "LEFT JOIN users us ON cu.user_id = us.id ",
+         "WHERE date_trunc('day', se.date) >= $1 AND (date_trunc('day', se.date) - INTERVAL '1 DAY' ) <= $2 ",
+         "ORDER BY se.date ASC "].join('\n')
         pool.query(statement, [startdate, endate], (error, results) => {
+          console.log(error)
             if (error) {
                 throw error
             }
