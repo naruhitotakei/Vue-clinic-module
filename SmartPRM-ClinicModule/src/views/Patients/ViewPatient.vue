@@ -112,25 +112,29 @@
                                   </iq-card>
                               </b-col>
                               <b-col lg="8">
-                                  <b-col md="14">
-                                      <b-card class="iq-card" v-if="patient.general_notes">
-                                          <b-card-title>{{ $t('EPR.overview.generalNotes') }}</b-card-title>
-                                          <hr />
-                                          <b-card-text style="color:black;">{{patient.general_notes}}</b-card-text>
-                                          <b-card-text><small class="text-muted">{{ $t('EPR.overview.generalNotesUpdated') }} {{patient.general_notes_updated_at | fromNowDate}}</small></b-card-text>
-                                      </b-card>
-                                  </b-col>
-                                  <b-card
-                                      v-if="patient.allergies"
-                                      text-variant="white"
-                                      bg-variant="danger"
-                                      class="iq-card">
-                                      <b-card-title class="text-white">{{ $t('EPR.overview.allergies') }}</b-card-title>
-                                      <blockquote class="blockquote mb-0">
-                                          <p class="font-size-14">{{patient.allergies}}</p>
-                                          <footer class="blockquote-footer text-white font-size-12">{{ $t('EPR.overview.allergiesUpdated') }} {{patient.allergies_updated_at | fromNowDate}}</footer>
-                                      </blockquote>
-                                  </b-card>
+                                 <div class="row">
+                                   <b-col md="6">
+                                     <b-card class="iq-card" v-if="patient.general_notes">
+                                       <b-card-title>{{ $t('EPR.overview.generalNotes') }}</b-card-title>
+                                       <hr />
+                                       <b-card-text style="color:black;">{{patient.general_notes}}</b-card-text>
+                                       <b-card-text><small class="text-muted">{{ $t('EPR.overview.generalNotesUpdated') }} {{patient.general_notes_updated_at | fromNowDate}}</small></b-card-text>
+                                     </b-card>
+                                   </b-col>
+                                   <b-col md="6" >
+                                     <b-card
+                                         v-if="patient.allergies"
+                                         text-variant="white"
+                                         bg-variant="danger"
+                                         class="iq-card">
+                                       <b-card-title class="text-white">{{ $t('EPR.overview.allergies') }}</b-card-title>
+                                       <blockquote class="blockquote mb-0">
+                                         <p class="font-size-14">{{patient.allergies}}</p>
+                                         <footer class="blockquote-footer text-white font-size-12">{{ $t('EPR.overview.allergiesUpdated') }} {{patient.allergies_updated_at | fromNowDate}}</footer>
+                                       </blockquote>
+                                     </b-card>
+                                   </b-col>
+                                 </div>
                                   <b-row>
                                       <b-col md="6" class="pr-0">
                                           <iq-card>
