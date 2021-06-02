@@ -783,6 +783,7 @@ export default {
       countries: [],
       regions: [],
       columnsInvoices: [
+        { label: this.$t('EPR.invoicesColumn.type'), key: 'invoice_type', class: 'text-left' },
         { label: this.$t('EPR.invoicesColumn.no'), key: 'invoice_number', class: 'text-left' },
         {
           label: this.$t('EPR.invoicesColumn.date'),
