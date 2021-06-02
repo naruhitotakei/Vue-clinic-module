@@ -369,8 +369,14 @@
                                       <h5 class="mt-2">{{ $t('EPR.files.sortBy') }}</h5>
                                       <div class="mt-4 ml-3">
                                           <b-form-group label-for="sortOptions">
-                                              <v-select class="patients" label="text" :clearable="false" id="select"
+                                            <v-select class="patients" label="text" taggable :clearable="false" id="select"
                                                         :options="sortOptions" v-model="sortBy">
+                                                <template v-slot:option="option">
+                                                 <div class="row justify-content-between">
+                                                   {{option.text}}
+                                                   <i :class="{'ri-arrow-up-s-line': option.sort === 'asc', 'ri-arrow-down-s-line': option.sort === 'desc',}"></i>
+                                                 </div>
+                                                </template>
                                               </v-select>
                                           </b-form-group>
                                       </div>
@@ -379,7 +385,7 @@
                               <template v-slot:body>
                                   <div class="iq-card-body">
                                       <ul class="profile-img-gallary d-flex flex-wrap p-0 m-0">
-                                          <li class="col-md-4 col-6 pb-3" v-for="(file, index) in files" :key="index + file.created_at">
+                                          <li class="col-md-4 col-6 pb-3" v-for="(file, index) in filesSortBy" :key="index + file.created_at">
                                               <img :src="file.image" alt="gallary-image" class="img-fluid">
                                               <div class="text-center">
                                                   <p class="mb-0">{{ $t('EPR.files.fileName') }}: {{file.name}}</p>
@@ -617,6 +623,59 @@ export default {
     },
     hideSummaryPagination () {
       return Math.floor(this.services.length / this.servicesPerPage) !== 0
+    },
+    filesSortBy () {
+      if (this.sortBy === '') {
+        let files = [...this.files]
+        return files.sort((a, b) => {
+          if (new Date(a.created_at) < new Date(b.created_at)) return -1
+          if (new Date(a.created_at) > new Date(b.created_at)) return 1
+          return 0
+        })
+      }
+      if (this.sortBy.value === 'name') {
+        let files = [...this.files]
+        return files.sort((a, b) => {
+          let nameA = a.name.toLowerCase()
+          let nameB = b.name.toLowerCase()
+          if (this.sortBy.sort === 'asc') {
+            if (nameA < nameB) return -1
+            if (nameA > nameB) return 1
+            return 0
+          } else {
+            if (nameA > nameB) return -1
+            if (nameA < nameB) return 1
+            return 0
+          }
+        })
+      }
+      if (this.sortBy.value === 'created_at') {
+        let files = [...this.files]
+        return files.sort((a, b) => {
+          if (this.sortBy.sort === 'asc') {
+            return moment(b.created_at, 'DD.MM.YY') - moment(a.created_at, 'DD.MM.YY')
+          } else {
+            return moment(a.created_at, 'DD.MM.YY') - moment(b.created_at, 'DD.MM.YY')
+          }
+        })
+      }
+      if (this.sortBy.value === 'type') {
+        let files = [...this.files]
+        return files.sort((a, b) => {
+          let typeA = a.type.toLowerCase()
+          let typeB = b.type.toLowerCase()
+          if (this.sortBy.sort === 'asc') {
+            if (typeA < typeB) return -1
+            if (typeA > typeB) return 1
+            return 0
+          } else {
+            if (typeA > typeB) return -1
+            if (typeA < typeB) return 1
+            return 0
+          }
+        })
+      }
+      return this.files
     }
   },
   filters: {
@@ -668,9 +727,12 @@ export default {
       selected: this.value,
       sortBy: '',
       sortOptions: [
-        { value: 'name', text: this.$t('EPR.files.fileName') },
-        { value: 'type', text: this.$t('EPR.files.fileType') },
-        { value: 'created_at', text: this.$t('EPR.files.fileCreatedAt') }
+        { value: 'name', text: this.$t('EPR.files.fileName'), sort: 'asc' },
+        { value: 'name', text: this.$t('EPR.files.fileName'), sort: 'desc' },
+        { value: 'type', text: this.$t('EPR.files.fileType'), sort: 'asc' },
+        { value: 'type', text: this.$t('EPR.files.fileType'), sort: 'desc' },
+        { value: 'created_at', text: this.$t('EPR.files.fileCreatedAt'), sort: 'asc' },
+        { value: 'created_at', text: this.$t('EPR.files.fileCreatedAt'), sort: 'desc' }
       ],
       files: [
         { image: require('../../assets/images/login/1.png'), name: 'File 2', type: 'Rentgen', created_at: '21.04.2021' },
