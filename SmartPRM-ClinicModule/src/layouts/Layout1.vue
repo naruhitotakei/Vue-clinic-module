@@ -121,7 +121,7 @@
       <div class="form-row">
         <div style="margin: auto; text-align: center;">
                   <div class="add-img-user profile-img-edit">
-                    <b-img class="profile-pic height-150 width-150 object-fit" fluid :src="getAvatarUrl" alt="profile-pic" />
+                    <b-img class="profile-pic height-150 width-150 object-fit" style="object-fit: cover" fluid :src="getAvatarUrl" alt="profile-pic" />
                     <input type="hidden" v-model="getAvatarUrl">
                     <div class="p-image">
                       <b-button variant="none" class="upload-button iq-bg-primary position-relative" style="left: 12px;" @click="onButtonClick">

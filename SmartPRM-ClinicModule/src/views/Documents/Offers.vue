@@ -145,7 +145,7 @@ export default {
           key: 'invoice_time',
           class: 'text-left',
           formatter: value => {
-            return moment(value).format('YYYY-MM-DD')
+            return moment(value).format('DD-MM-YYYY')
           },
           filterByFormatted: true
         },
