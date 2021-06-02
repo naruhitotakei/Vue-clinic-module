@@ -214,7 +214,7 @@
                           <b-form-group class="row align-items-center /*justify-content-center*/">
                               <b-col md="12">
                                 <div class="profile-img-edit">
-                                    <b-img :src="user.profile_image" class="profile-pic height-150 width-150" alt="profile-pic" />
+                                    <b-img :src="user.profile_image" class="profile-pic height-150 width-150 object-fit" alt="profile-pic" />
                                     <input type="hidden" v-model="user.profile_image">
                                     <div class="p-image">
                                         <div class="position-relative">
