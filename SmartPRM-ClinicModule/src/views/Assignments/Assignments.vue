@@ -189,7 +189,7 @@
               <v-select
                   taggable
                   :clearable="false"
-                  label="name"
+                  label="full_name"
                   :options="enquires"
                   v-model="formData.enquiry"
               >
@@ -325,7 +325,11 @@ export default {
     },
     getEnquires () {
       getEnquires().then(response => {
-        this.enquires = response
+        let enquires = [...response]
+        enquires.map((item, index) => {
+          enquires[index].full_name = item.name + ' ' + item.last_name
+        })
+        this.enquires = enquires
       })
     },
     getDifferenceDate (date) {

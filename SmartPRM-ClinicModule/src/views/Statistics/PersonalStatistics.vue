@@ -276,12 +276,14 @@ export default {
               events: {
                 load: function () {
                   // set up the updating of the chart each second
-                  var series = this.series[0]
-                  setInterval(function () {
-                    var x = (new Date()).getTime() // current time
-                    var y = Math.random()
-                    series.addPoint([x, y], true, true)
-                  }, 1000)
+                  let series = this.series.length && this.series[0]
+                  if (series) {
+                    setInterval(function () {
+                      let x = (new Date()).getTime() // current time
+                      let y = Math.random()
+                      series.addPoint([x, y], true, true)
+                    }, 1000)
+                  }
                 }
               }
             },
@@ -828,6 +830,9 @@ export default {
         }
       ]
     }
+  },
+  destroyed () {
+    console.log(1)
   }
 }
 </script>

@@ -883,7 +883,7 @@ export default {
     getPatientAppointments (id) {
       getEnquiryAppointments(id).then(response => {
         this.appointments = response
-        this.timeSinceFirstVisit = response[0].date
+        this.timeSinceFirstVisit = response.length && response[0].date
       }
       )
     },
