@@ -37,3 +37,16 @@ export async function createAssignments (assignments) {
   })
   return rawResponse.json()
 }
+
+export async function updateAssignments (id, assignments) {
+  const rawResponse = await fetch('/api/assignments/' + id, {
+    method: 'PUT',
+    credentials: 'same-origin',
+    headers: {
+      'Accept': 'application/json',
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify(assignments)
+  })
+  return rawResponse.json()
+}
