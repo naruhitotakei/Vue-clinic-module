@@ -80,7 +80,7 @@
               <tbody>
               <template v-for="(body, bodyKey) in servicesListItems" >
                 <tr :key="bodyKey">
-                  <td colspan="3"><span class="font-weight-bold">{{ bodyKey }} 1</span></td>
+                  <td colspan="3"><span class="font-weight-bold">{{ bodyKey }}</span></td>
                   <td ><span class="font-weight-bold">{{formatNumber(Math.trunc(body.group_price))}} &#8364;</span></td>
                   <td  colspan="2"><span class="font-weight-bold">{{formatNumber(Math.trunc(body.group_fee))}} &#8364;</span></td>
                 </tr>
