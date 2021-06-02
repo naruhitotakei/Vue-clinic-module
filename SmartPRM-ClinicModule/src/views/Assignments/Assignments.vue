@@ -26,7 +26,7 @@
                                         <b-checkbox v-model="item.completed" :disabled="item.disabled" name="check-button" inline :key="index" class="completed-assignment" @change="finishAssignment(item.id, $event)"></b-checkbox>
                                         <span>{{ item.description }}</span>
                                         <router-link tag="span" :to="'/patients/'+ item.enquiry_id" class="pl-5" style="cursor:pointer;">{{ item.patientname }} {{ item.patientlastname }}</router-link>
-                                        <span class="pl-5">{{ item.dentistname }}</span>
+                                        <span class="pl-5">{{ patientsDentist(item) }}</span>
                                         <span class="text-right">{{ item.due_at | formatDateAssignments(getLocale) }}</span>
                                       </div>
                                       <b-button variant=" iq-bg-success mr-1 mb-1" size="sm" @click="editAssignments(item)" >
@@ -71,7 +71,7 @@
                                         @change="finishAssignment(item.id, $event)"></b-checkbox>
                             <span>{{ item.description }}</span>
                             <span class="pl-5">{{ item.patientname }} {{ item.patientlastname }}</span>
-                            <span class="pl-5">{{ item.dentistname }}</span>
+                            <span class="pl-5">{{ patientsDentist(item) }}</span>
                             <span class="text-right">{{ item.due_at | formatDate }}</span>
                           </div>
                           <b-button variant=" iq-bg-success mr-1 mb-1" size="sm" @click="editAssignments(item)">
@@ -112,7 +112,7 @@
                                      <b-checkbox v-model="item.completed" :disabled="item.disabled" name="check-button" inline :key="index" class="completed-assignment" @change="finishAssignment(item.id, $event)"></b-checkbox>
                                      <span>{{ item.description }}</span>
                                      <router-link tag="span" :to="'/patients/'+ item.enquiry_id" class="pl-5" style="cursor:pointer;">{{ item.patientname }} {{ item.patientlastname }}</router-link>
-                                     <span class="pl-5">{{ item.dentistname }}</span>
+                                     <span class="pl-5">{{ patientsDentist(item) }}</span>
                                      <span class="text-right">{{ item.due_at | formatDateAssignments(getLocale) }}</span>
                                    </div>
                                   <b-button variant=" iq-bg-success mr-1 mb-1" size="sm" @click="editAssignments(item)">
@@ -150,7 +150,7 @@
                                     <b-checkbox v-model="item.completed" :disabled="item.disabled" name="check-button" inline :key="index" class="completed-assignment" @change="finishAssignment(item.id, $event)"></b-checkbox>
                                     <span>{{ item.description }}</span>
                                     <router-link tag="span" :to="'/patients/'+ item.enquiry_id" class="pl-5" style="cursor:pointer;">{{ item.patientname }} {{ item.patientlastname }}</router-link>
-                                  <span class="pl-5">{{ item.dentistname }}</span>
+                                  <span class="pl-5">{{ patientsDentist(item) }}</span>
                                     <span class="text-right">{{ item.due_at | formatDateAssignments(getLocale) }}</span>
                                 </div>
                             </b-list-group-item>
@@ -253,7 +253,7 @@
 import { xray } from '../../config/pluginInit'
 import { getAssignments, finishAssignment, createAssignments, updateAssignments } from '../../services/assignmentsService'
 import { getEnquires } from '@/services/enquiry'
-import { sso } from '@/services/userService'
+import { getDentists, sso } from '@/services/userService'
 import moment from 'moment'
 
 export default {
@@ -263,6 +263,7 @@ export default {
     this.getAssignments()
     this.getEnquires()
     this.getUserLogin()
+    this.getDentists()
   },
   watch: {
   },
@@ -368,6 +369,17 @@ export default {
           this.formData.user_id = response.id
         }
       })
+    },
+    getDentists () {
+      getDentists().then(response => {
+        this.dentists = response
+      })
+    },
+    patientsDentist (patient) {
+      let dentist = this.dentists.find((item) => {
+        return item.code === patient.prm_dentist_user_id
+      })
+      return dentist && dentist.label
     }
   },
   data () {
@@ -377,6 +389,7 @@ export default {
       selectEnquires: null,
       logedInUser: {},
       enquires: [],
+      dentists: [],
       index: [],
       todaysAssigments: [],
       overdueAssignments: [],
