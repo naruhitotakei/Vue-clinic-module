@@ -86,7 +86,7 @@
                   <tr :key="Math.random(index + 1000)">
                     <td><span >{{ item.doctor }}</span></td>
                     <td><span >{{ item.service_title}}  </span></td>
-                    <td><span >{{ item.last_name}}  </span></td>
+                    <td><span >{{ item.name }} {{ item.last_name}}  </span></td>
                     <td><span>{{ formatNumber(Math.trunc(item.price))}} &#8364;  </span></td>
                     <td><span>{{ formatNumber(Math.trunc(item.fee))}} &#8364;  </span></td>
                     <td><span >{{ formatDateString(item.date)}}  </span></td>
