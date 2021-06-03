@@ -398,7 +398,7 @@
                                               <div class="text-center">
                                                   <p class="mb-0">{{ $t('EPR.files.fileName') }}: {{file.name}}</p>
                                                   <p class="mb-0">{{ $t('EPR.files.fileType') }}: {{file.type}}</p>
-                                                  <p>{{ $t('EPR.files.fileCreatedAt') }}: {{file.created_at}}</p>
+                                                  <p>{{ $t('EPR.files.fileAddedAt') }}: {{file.created_at}}</p>
                                               </div>
                                           </li>
                                       </ul>
