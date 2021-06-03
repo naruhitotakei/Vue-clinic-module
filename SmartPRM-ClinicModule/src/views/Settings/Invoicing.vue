@@ -271,6 +271,7 @@ export default {
         { label: 'Company name', key: 'company_name', class: 'text-left' },
         { label: 'Premise name', key: 'premise_name', class: 'text-left' },
         { label: 'Address', key: 'premise_address', class: 'text-left' },
+        { label: 'City', key: 'premise_city', class: 'text-left' },
         { label: 'Action', key: 'action', class: 'text-center' }
       ],
       premiseFormData: {
