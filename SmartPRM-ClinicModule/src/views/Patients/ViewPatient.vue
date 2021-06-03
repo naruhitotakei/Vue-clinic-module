@@ -177,14 +177,18 @@
                                               </div>
                                             </div>
                                             <ul class="list-inline m-0 overflow-y-scroll" style="max-height: 300px;">
-                                              <li v-for="(item,index) in openAssignments" :key="index + item.due_at" class="d-flex align-items-center justify-content-between mb-3"
+                                              <li v-for="(item,index) in openAssignments" :key="index + item.due_at"
+                                                  class="d-flex align-items-center justify-content-between mb-3  "
                                                   :style="{
                                                   'background': index === 0 && '#c3e6cb'
                                                   }"
                                               >
-                                                <div class="p-1">
-                                                  <h6>{{item.todoname}}</h6>
-                                                  <p class="mb-0">{{item.due_at | formatDate}}</p>
+                                                <div class="w-100">
+                                                  <div class="row justify-content-between p-1 w-100 ml-0 pl-2 pr-2 line-height">
+                                                    <h6>{{item.todoname}}</h6>
+                                                    <p class="mb-0">{{item.due_at | formatDate}}</p>
+                                                  </div>
+                                                  <p class="pl-2 pr-2 mb-0">{{item.description}}</p>
                                                 </div>
                                               </li>
                                             </ul>
