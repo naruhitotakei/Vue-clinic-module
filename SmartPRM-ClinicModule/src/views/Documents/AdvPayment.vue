@@ -171,11 +171,18 @@ export default {
         { label: this.$t('invoice.invoiceInfo.invoiceDetails'),
           key: 'billingDetails',
           formatter: (value, key, item) => {
-            return item.enquiries_name + ' ' + item.enquiries_last_name + '<br>' +
-            item.enquiries_address_line_1 + '<br>' +
-            item.enquiries_post_code + ' ' + item.enquiries_city + ', ' + item.country + '<br>' +
-            'Telefon: ' + item.phone + '<br>' +
-            'Email: ' + item.email
+            let details = ''
+            if (item.enquiries_name) details += item.enquiries_name
+            if (item.enquiries_last_name) details += ' ' + item.enquiries_last_name
+            details += '<br>'
+            if (item.enquiries_address_line_1) details += item.enquiries_address_line_1 + '<br>'
+            if (item.enquiries_post_code) details += item.enquiries_post_code
+            if (item.enquiries_city) details += ' ' + item.enquiries_city
+            if (item.country) details += ', ' + item.country
+            details += '<br>'
+            if (item.phone) details += 'Telefon: ' + item.phone + '<br>'
+            if (item.email) details += 'Email: ' + item.email
+            return details
           },
           class: 'text-left' },
         { label: this.$t('invoice.invoiceInfo.invoiceIssuedIn'), key: 'company_name', class: 'text-left' },
