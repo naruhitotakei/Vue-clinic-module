@@ -58,10 +58,10 @@
                                               </div>
                                             <hr>
                                             <div class="row ml-1">
-                                              <div class="col-4 pl-lg-3 p-md-0"><h6>{{ $t('EPR.overview.personalDentist') }}:</h6></div>
+                                              <div class="col-4 pl-lg-3 p-md-0"><h6>{{ $t('EPR.overview.Dentist') }}:</h6></div>
                                               <div v-if="patientsDentist" class="col-8 p-md-0 pl-lg-3 text-dark">{{patientsDentist.label}}</div>
                                               <div v-if="!patientsDentist" class="col-8 text-dark">{{ $t('EPR.overview.notSelected') }}</div>
-                                              <div class="col-4 pl-lg-3 p-md-0"><h6>{{ $t('EPR.overview.personalSurgeon') }}:</h6></div>
+                                              <div class="col-4 pl-lg-3 p-md-0"><h6>{{ $t('EPR.overview.Surgeon') }}:</h6></div>
                                               <div v-if="patientsSurgeon" class="col-8 p-md-0 pl-lg-3 text-dark">{{patientsSurgeon.label}}</div>
                                               <div v-if="!patientsSurgeon" class="col-8 pl-lg-3 p-md-0 text-dark">{{ $t('EPR.overview.notSelected') }}</div>
                                             </div>
