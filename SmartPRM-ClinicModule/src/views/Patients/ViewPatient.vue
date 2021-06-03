@@ -47,15 +47,24 @@
                                                   </li>
                                               </ul>
                                               <hr>
-                                              <div class="row ml-1">
-                                                  <div class="col-3">{{ $t('EPR.overview.phone') }}:</div>
-                                                  <div class="col-9">{{patient.phone}}</div>
-                                                  <div class="col-3">{{ $t('EPR.overview.email') }}:</div>
-                                                  <div class="col-9">{{patient.email}}</div>
-                                                  <div class="col-3">{{ $t('EPR.overview.address') }}:</div>
-                                                  <div class="col-9" v-if="patient.address_line_1">{{patient.address_line_1}}</div>
-                                                  <div class="col-9" v-else>{{ $t('EPR.overview.addressUnknown') }}</div>
+                                              <div class="row ml-1 align-items-center">
+                                                  <div class="col-4 pl-lg-3 p-md-0 text-dark">{{ $t('EPR.overview.phone') }}:</div>
+                                                  <div class="col-8 pl-lg-3 p-md-0 text-dark">{{patient.phone}}</div>
+                                                  <div class="col-4 pl-lg-3 p-md-0 text-dark">{{ $t('EPR.overview.email') }}:</div>
+                                                  <div class="col-8 pl-lg-3 p-md-0 text-dark">{{patient.email}}</div>
+                                                  <div class="col-4 pl-lg-3 p-md-0 text-dark">{{ $t('EPR.overview.address') }}:</div>
+                                                  <div class="col-8 pl-lg-3 p-md-0 text-dark" v-if="patient.address_line_1">{{patient.address_line_1}}</div>
+                                                  <div class="col-8 pl-lg-3 p-md-0 text-dark" v-else>{{ $t('EPR.overview.addressUnknown') }}</div>
                                               </div>
+                                            <hr>
+                                            <div class="row ml-1">
+                                              <div class="col-4 pl-lg-3 p-md-0"><h6>{{ $t('EPR.overview.personalDentist') }}:</h6></div>
+                                              <div v-if="patientsDentist" class="col-8 p-md-0 pl-lg-3 text-dark">{{patientsDentist.label}}</div>
+                                              <div v-if="!patientsDentist" class="col-8 text-dark">{{ $t('EPR.overview.notSelected') }}</div>
+                                              <div class="col-4 pl-lg-3 p-md-0"><h6>{{ $t('EPR.overview.personalSurgeon') }}:</h6></div>
+                                              <div v-if="patientsSurgeon" class="col-8 p-md-0 pl-lg-3 text-dark">{{patientsSurgeon.label}}</div>
+                                              <div v-if="!patientsSurgeon" class="col-8 pl-lg-3 p-md-0 text-dark">{{ $t('EPR.overview.notSelected') }}</div>
+                                            </div>
                                           </div>
                                       </template>
                                       <div class="bg-primary pb-2 p-1" style="border-radius: 0 0 25px 25px;">
@@ -69,25 +78,25 @@
                                           </b-col>
                                       </div>
                                   </iq-card>
-                                  <iq-card>
-                                      <template v-slot:body>
-                                          <div class="iq-card-header d-flex justify-content-between">
-                                              <div class="iq-header-title">
-                                                  <h4 class="card-title">{{ $t('EPR.overview.personalDoctors') }}</h4><hr />
-                                              </div>
-                                          </div>
-                                          <div class="iq-card-body">
-                                              <div class="row font-size-16 ">
-                                                  <div class="col-12 col-sm-7"><h6>{{ $t('EPR.overview.personalDentist') }}:</h6></div>
-                                                  <div v-if="patientsDentist" class="col-12 col-sm-5">{{patientsDentist.label}}</div>
-                                                  <div v-if="!patientsDentist" class="col-5">{{ $t('EPR.overview.notSelected') }}</div>
-                                                  <div class="col-7"><h6>{{ $t('EPR.overview.personalSurgeon') }}:</h6></div>
-                                                  <div v-if="patientsSurgeon" class="col-12 col-sm-5">{{patientsSurgeon.label}}</div>
-                                                  <div v-if="!patientsSurgeon" class="col-5">{{ $t('EPR.overview.notSelected') }}</div>
-                                              </div>
-                                          </div>
-                                      </template>
-                                  </iq-card>
+<!--                                  <iq-card>-->
+<!--                                      <template v-slot:body>-->
+<!--                                          <div class="iq-card-header d-flex justify-content-between">-->
+<!--                                              <div class="iq-header-title">-->
+<!--                                                  <h4 class="card-title">{{ $t('EPR.overview.personalDoctors') }}</h4><hr />-->
+<!--                                              </div>-->
+<!--                                          </div>-->
+<!--                                          <div class="iq-card-body">-->
+<!--                                              <div class="row font-size-16 ">-->
+<!--                                                  <div class="col-12 col-sm-7"><h6>{{ $t('EPR.overview.personalDentist') }}:</h6></div>-->
+<!--                                                  <div v-if="patientsDentist" class="col-12 col-sm-5">{{patientsDentist.label}}</div>-->
+<!--                                                  <div v-if="!patientsDentist" class="col-5">{{ $t('EPR.overview.notSelected') }}</div>-->
+<!--                                                  <div class="col-7"><h6>{{ $t('EPR.overview.personalSurgeon') }}:</h6></div>-->
+<!--                                                  <div v-if="patientsSurgeon" class="col-12 col-sm-5">{{patientsSurgeon.label}}</div>-->
+<!--                                                  <div v-if="!patientsSurgeon" class="col-5">{{ $t('EPR.overview.notSelected') }}</div>-->
+<!--                                              </div>-->
+<!--                                          </div>-->
+<!--                                      </template>-->
+<!--                                  </iq-card>-->
                                   <iq-card body-class="iq-card-body">
                                       <template v-slot:body>
                                           <div class="iq-card-header d-flex justify-content-between">
