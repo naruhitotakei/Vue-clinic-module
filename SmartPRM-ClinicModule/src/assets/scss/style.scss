@@ -56,9 +56,14 @@ body .wrapper .form-control-disabled{
 
 body .wrapper .vs--disabled {
   &>div {
-    display: none;
     background-color: transparent !important;
     border:none;
+    .vs__selected {
+      background: transparent !important;
+    }
+    .vs__actions {
+      display: none;
+    }
   }
 }
 
