@@ -122,17 +122,42 @@
                               </b-col>
                               <b-col lg="8">
                                  <div class="row">
-                                   <b-col md="6">
-                                     <b-card class="iq-card" v-if="patient.general_notes">
+                                   <b-col md="6" v-if="patient.general_notes">
+                                     <b-card class="iq-card" >
                                        <b-card-title>{{ $t('EPR.overview.generalNotes') }}</b-card-title>
                                        <hr />
-                                       <b-card-text style="color:black;">{{patient.general_notes}}</b-card-text>
+                                       <b-card-text class="text-black">{{patient.general_notes}}</b-card-text>
                                        <b-card-text><small class="text-muted">{{ $t('EPR.overview.generalNotesUpdated') }} {{patient.general_notes_updated_at | fromNowDate}}</small></b-card-text>
                                      </b-card>
+                                      <!--  TODO make more elegantly -->
+                                     <iq-card  v-if="patient.general_notes && !patient.allergies">
+                                       <template v-slot:body>
+                                         <div class="iq-card-header d-flex justify-content-between">
+                                           <div class="iq-header-title">
+                                             <h4 class="card-title">{{ $t('EPR.overview.openAssignments') }}</h4><hr />
+                                           </div>
+                                         </div>
+                                         <ul class="list-inline m-0 overflow-y-scroll" style="max-height: 300px;">
+                                           <li v-for="(item,index) in openAssignments" :key="index + item.due_at"
+                                               class="d-flex align-items-center justify-content-between mb-3  "
+                                               :style="{
+                                                  'background': index === 0 && '#c3e6cb'
+                                                  }"
+                                           >
+                                             <div class="w-100">
+                                               <div class="row justify-content-between p-1 w-100 ml-0 pl-2 pr-2 line-height">
+                                                 <h6>{{item.todoname}}</h6>
+                                                 <p class="mb-0">{{item.due_at | formatDate}}</p>
+                                               </div>
+                                               <p class="pl-2 pr-2 mb-0">{{item.description}}</p>
+                                             </div>
+                                           </li>
+                                         </ul>
+                                       </template>
+                                     </iq-card>
                                    </b-col>
-                                   <b-col md="6" >
+                                   <b-col md="6" v-if="patient.allergies">
                                      <b-card
-                                         v-if="patient.allergies"
                                          text-variant="white"
                                          bg-variant="danger"
                                          class="iq-card">
@@ -142,92 +167,118 @@
                                          <footer class="blockquote-footer text-white font-size-12">{{ $t('EPR.overview.allergiesUpdated') }} {{patient.allergies_updated_at | fromNowDate}}</footer>
                                        </blockquote>
                                      </b-card>
+                                     <iq-card  v-if="patient.allergies && !patient.general_notes">
+                                       <template v-slot:body>
+                                         <div class="iq-card-header d-flex justify-content-between">
+                                           <div class="iq-header-title">
+                                             <h4 class="card-title">{{ $t('EPR.overview.openAssignments') }}</h4><hr />
+                                           </div>
+                                         </div>
+                                         <ul class="list-inline m-0 overflow-y-scroll" style="max-height: 300px;">
+                                           <li v-for="(item,index) in openAssignments" :key="index + item.due_at"
+                                               class="d-flex align-items-center justify-content-between mb-3  "
+                                               :style="{
+                                                  'background': index === 0 && '#c3e6cb'
+                                                  }"
+                                           >
+                                             <div class="w-100">
+                                               <div class="row justify-content-between p-1 w-100 ml-0 pl-2 pr-2 line-height">
+                                                 <h6>{{item.todoname}}</h6>
+                                                 <p class="mb-0">{{item.due_at | formatDate}}</p>
+                                               </div>
+                                               <p class="pl-2 pr-2 mb-0">{{item.description}}</p>
+                                             </div>
+                                           </li>
+                                         </ul>
+                                       </template>
+                                     </iq-card>
+                                   </b-col>
+                                   <b-col md="6" class="pr-0">
+                                     <iq-card>
+                                       <template v-slot:body>
+                                         <div class="iq-card-header d-flex justify-content-between">
+                                           <div class="iq-header-title">
+                                             <div class="row justify-content-between align-items-center">
+                                               <h4 class="card-title">{{ $t('EPR.overview.patientNotes') }}</h4>
+                                               <button type="button" class="btn btn-primary" @click="modalNotesShow = true">New Note</button>
+                                             </div>
+                                             <hr />
+                                           </div>
+                                         </div>
+                                         <ul class="list-inline m-0 overflow-y-scroll pl-2 pr-2" style="max-height: 300px;">
+                                           <li v-for="(note,index) in notes" :key="index + note.created_at" class="d-flex align-items-center justify-content-between mb-3">
+                                             <div>
+                                               <h6>{{note.content}}</h6>
+                                               <p class="mb-0">{{note.created_at | formatDate}}</p>
+                                             </div>
+                                           </li>
+                                         </ul>
+                                       </template>
+                                     </iq-card>
+                                   </b-col>
+                                   <b-col md="6">
+                                     <iq-card v-if="patient.general_notes && patient.allergies || !patient.general_notes && !patient.allergies">
+                                       <template v-slot:body>
+                                         <div class="iq-card-header d-flex justify-content-between">
+                                           <div class="iq-header-title">
+                                             <h4 class="card-title">{{ $t('EPR.overview.openAssignments') }}</h4><hr />
+                                           </div>
+                                         </div>
+                                         <ul class="list-inline m-0 overflow-y-scroll" style="max-height: 300px;">
+                                           <li v-for="(item,index) in openAssignments" :key="index + item.due_at"
+                                               class="d-flex align-items-center justify-content-between mb-3  "
+                                               :style="{
+                                                  'background': index === 0 && '#c3e6cb'
+                                                  }"
+                                           >
+                                             <div class="w-100">
+                                               <div class="row justify-content-between p-1 w-100 ml-0 pl-2 pr-2 line-height">
+                                                 <h6>{{item.todoname}}</h6>
+                                                 <p class="mb-0">{{item.due_at | formatDate}}</p>
+                                               </div>
+                                               <p class="pl-2 pr-2 mb-0">{{item.description}}</p>
+                                             </div>
+                                           </li>
+                                         </ul>
+                                       </template>
+                                     </iq-card>
+                                     <iq-card>
+                                       <template v-slot:body>
+                                         <div class="iq-card-header d-flex justify-content-between">
+                                           <div class="iq-header-title">
+                                             <h4 class="card-title">{{ $t('EPR.overview.futureAppointments') }}</h4><hr />
+                                           </div>
+                                         </div>
+                                         <ul class="iq-timeline">
+                                           <li v-for="(item,index) in futureAppointments" :key="index + item.date">
+                                             <div class="timeline-dots border-success"></div>
+                                             <h6 class="">{{item.kind}}</h6>
+                                             <small class="mt-1">{{item.date | formatDate}}</small>
+                                           </li>
+                                         </ul>
+                                       </template>
+                                     </iq-card>
+                                     <iq-card>
+                                       <template v-slot:body>
+                                         <div class="iq-card-header d-flex justify-content-between">
+                                           <div class="iq-header-title">
+                                             <h4 class="card-title">{{ $t('EPR.overview.pastAppointments') }}</h4>
+                                             <hr />
+                                           </div>
+                                         </div>
+                                         <ul class="iq-timeline">
+                                           <li v-for="(item,index) in pastAppointments" :key="index">
+                                             <div class="timeline-dots border-success"></div>
+                                             <h6>{{item.kind}}</h6>
+                                             <small class="mt-1">{{item.date | formatDate}}</small>
+                                           </li>
+                                         </ul>
+                                       </template>
+                                     </iq-card>
                                    </b-col>
                                  </div>
                                   <b-row>
-                                      <b-col md="6" class="pr-0">
-                                          <iq-card>
-                                              <template v-slot:body>
-                                                  <div class="iq-card-header d-flex justify-content-between">
-                                                      <div class="iq-header-title">
-                                                          <div class="row justify-content-between align-items-center">
-                                                            <h4 class="card-title">{{ $t('EPR.overview.patientNotes') }}</h4>
-                                                            <button type="button" class="btn btn-primary" @click="modalNotesShow = true">New Note</button>
-                                                          </div>
-                                                        <hr />
-                                                      </div>
-                                                  </div>
-                                                  <ul class="list-inline m-0 overflow-y-scroll pl-2 pr-2" style="max-height: 300px;">
-                                                      <li v-for="(note,index) in notes" :key="index + note.created_at" class="d-flex align-items-center justify-content-between mb-3">
-                                                          <div>
-                                                              <h6>{{note.content}}</h6>
-                                                              <p class="mb-0">{{note.created_at | formatDate}}</p>
-                                                          </div>
-                                                      </li>
-                                                  </ul>
-                                              </template>
-                                          </iq-card>
-                                      </b-col>
-                                      <b-col md="6">
-                                        <iq-card>
-                                          <template v-slot:body>
-                                            <div class="iq-card-header d-flex justify-content-between">
-                                              <div class="iq-header-title">
-                                                <h4 class="card-title">{{ $t('EPR.overview.openAssignments') }}</h4><hr />
-                                              </div>
-                                            </div>
-                                            <ul class="list-inline m-0 overflow-y-scroll" style="max-height: 300px;">
-                                              <li v-for="(item,index) in openAssignments" :key="index + item.due_at"
-                                                  class="d-flex align-items-center justify-content-between mb-3  "
-                                                  :style="{
-                                                  'background': index === 0 && '#c3e6cb'
-                                                  }"
-                                              >
-                                                <div class="w-100">
-                                                  <div class="row justify-content-between p-1 w-100 ml-0 pl-2 pr-2 line-height">
-                                                    <h6>{{item.todoname}}</h6>
-                                                    <p class="mb-0">{{item.due_at | formatDate}}</p>
-                                                  </div>
-                                                  <p class="pl-2 pr-2 mb-0">{{item.description}}</p>
-                                                </div>
-                                              </li>
-                                            </ul>
-                                          </template>
-                                        </iq-card>
-                                          <iq-card>
-                                              <template v-slot:body>
-                                                  <div class="iq-card-header d-flex justify-content-between">
-                                                      <div class="iq-header-title">
-                                                          <h4 class="card-title">{{ $t('EPR.overview.futureAppointments') }}</h4><hr />
-                                                      </div>
-                                                  </div>
-                                                  <ul class="iq-timeline">
-                                                      <li v-for="(item,index) in futureAppointments" :key="index + item.date">
-                                                          <div class="timeline-dots border-success"></div>
-                                                          <h6 class="">{{item.kind}}</h6>
-                                                          <small class="mt-1">{{item.date | formatDate}}</small>
-                                                      </li>
-                                                  </ul>
-                                              </template>
-                                          </iq-card>
-                                          <iq-card>
-                                              <template v-slot:body>
-                                                  <div class="iq-card-header d-flex justify-content-between">
-                                                      <div class="iq-header-title">
-                                                          <h4 class="card-title">{{ $t('EPR.overview.pastAppointments') }}</h4>
-                                                          <hr />
-                                                      </div>
-                                                  </div>
-                                                  <ul class="iq-timeline">
-                                                      <li v-for="(item,index) in pastAppointments" :key="index">
-                                                          <div class="timeline-dots border-success"></div>
-                                                          <h6>{{item.kind}}</h6>
-                                                          <small class="mt-1">{{item.date | formatDate}}</small>
-                                                      </li>
-                                                  </ul>
-                                              </template>
-                                          </iq-card>
-                                      </b-col>
+
                                   </b-row>
                               </b-col>
                           </b-row>
