@@ -193,6 +193,14 @@ INSERT INTO users (name, email, title, specialization, function) VALUES ('Žiga 
 
 ALTER TABLE notes ALTER COLUMN created_at SET DEFAULT CURRENT_TIMESTAMP;
 
+--############################################################
+--# Adding fields to prm_company_premise_device and
+--# prm_company_premise
+--############################################################
+
+ALTER TABLE prm_company_premise_device ADD COLUMN electronic_device_id VARCHAR(20);
+ALTER TABLE prm_company_premise ADD COLUMN business_premise_id VARCHAR(20);
+
 UPDATE db_version SET version ='01.15', version_date=CURRENT_DATE WHERE resource='Tables';
 
 COMMIT;
