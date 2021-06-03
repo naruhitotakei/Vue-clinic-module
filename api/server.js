@@ -644,6 +644,14 @@ app.get('/api/invoices/:id', (req, res) => {
         res.status(401).json("OK: user unauthorized")
 });
 
+app.get('/api/invoices/company/:id/consecutive-number', (req, res) => {
+    const id = req.params.id
+    if (req.session.prm_user && req.session.prm_user.permissions && checkPermission(req.session.prm_user.permissions, invoicesPermission))
+        daoInvoices.getConsecutiveInvoiceNumberForCompany(req, res, id)
+    else
+        res.status(401).json("OK: user unauthorized")
+});
+
 app.get('/api/invoices/:id/items', (req, res) => {
     const id = req.params.id
     if (req.session.prm_user && req.session.prm_user.permissions && checkPermission(req.session.prm_user.permissions, invoicesPermission))
