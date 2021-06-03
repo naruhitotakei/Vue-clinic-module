@@ -107,21 +107,21 @@ const createPremise = (req, res, premise) => {
 }
 
 const updatePremise = (req, res, id, premise) => {
-    var premiseStatement = "UPDATE prm_company_premise SET"
-    if (premise.premise_name) premiseStatement += "premise_name=" + product.premise_name + ","
-    if (premise.premise_street) premiseStatement += "premise_street=" + product.premise_street + ","
-    if (premise.premise_house_number) premiseStatement += "premise_house_number=" + product.premise_house_number + ","
-    if (premise.premise_house_number_additional) premiseStatement += "premise_house_number_additional=" + product.premise_house_number_additional + ","
-    if (premise.premise_city) premiseStatement += "premise_city=" + product.premise_city + ","
-    if (premise.premise_post_code) premiseStatement += "premise_post_code=" + product.premise_post_code + ","
-    if (premise.premise_country_code) premiseStatement += "premise_country_code=" + product.premise_country_code + ","
-    if (premise.premise_community) premiseStatement += "premise_community=" + product.premise_community + ","
-    if (premise.premise_cadastral_number) premiseStatement += "premise_cadastral_number=" + product.premise_cadastral_number + ","
-    if (premise.building_number) premiseStatement += "building_number=" + product.building_number + ","
-    if (premise.building_section_number) premiseStatement += "building_section_number=" + product.building_section_number + ","
-    if (premise.special_notes) premiseStatement += "special_notes=" + product.special_notes + ","
-    if (premise.company_id) premiseStatement += "company_id=" + product.company_id + ","
-    if (premise.validity_date) premiseStatement += "validity_date=" + product.validity_date + ","
+    var premiseStatement = "UPDATE prm_company_premise SET "
+    if (premise.premise_name) premiseStatement += "premise_name='" + premise.premise_name + "',"
+    if (premise.premise_street) premiseStatement += "premise_street='" + premise.premise_street + "',"
+    if (premise.premise_house_number) premiseStatement += "premise_house_number='" + premise.premise_house_number + "',"
+    if (premise.premise_house_number_additional) premiseStatement += "premise_house_number_additional='" + premise.premise_house_number_additional + "',"
+    if (premise.premise_city) premiseStatement += "premise_city='" + premise.premise_city + "',"
+    if (premise.premise_post_code) premiseStatement += "premise_post_code='" + premise.premise_post_code + "',"
+    if (premise.premise_country_code) premiseStatement += "premise_country_code='" + premise.premise_country_code + "',"
+    if (premise.premise_community) premiseStatement += "premise_community='" + premise.premise_community + "',"
+    if (premise.premise_cadastral_number) premiseStatement += "premise_cadastral_number='" + premise.premise_cadastral_number + "',"
+    if (premise.building_number) premiseStatement += "building_number='" + premise.building_number + "',"
+    if (premise.building_section_number) premiseStatement += "building_section_number='" + premise.building_section_number + "',"
+    if (premise.special_notes) premiseStatement += "special_notes='" + premise.special_notes + "',"
+    if (premise.company_id) premiseStatement += "company_id='" + premise.company_id + "',"
+    if (premise.validity_date) premiseStatement += "validity_date='" + premise.validity_date + "',"
     premiseStatement = premiseStatement.slice(0, -1)
     premiseStatement +=" WHERE premise_id=" + id
     console.log(premiseStatement)
@@ -166,11 +166,11 @@ const createPremiseDevice = (req, res, premiseDevice) => {
 }
 
 const updatePremiseDevice = (req, res, id, premiseDevice) => {
-    var premiseDeviceStatement = "UPDATE prm_company_premise_device SET"
-    if (premiseDevice.device_name) premiseDeviceStatement += "device_name=" + product.device_name + ","
-    if (premiseDevice.company_premise_id) premiseDeviceStatement += "company_premise_id=" + product.company_premise_id + ","
-    premiseDeviceStatement = premiseStatement.slice(0, -1)
-    premiseDeviceStatement +=" WHERE device_id=" + id
+    var premiseDeviceStatement = "UPDATE prm_company_premise_device SET "
+    if (premiseDevice.device_name) premiseDeviceStatement += "device_name='" + premiseDevice.device_name + "',"
+    if (premiseDevice.company_premise_id) premiseDeviceStatement += "company_premise_id='" + premiseDevice.company_premise_id + "',"
+    premiseDeviceStatement = premiseDeviceStatement.slice(0, -1)
+    premiseDeviceStatement +=" WHERE device_id='" + id + "'"
     console.log(premiseDeviceStatement)
 
     pool.query(premiseDeviceStatement , (error, results) => {

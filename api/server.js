@@ -609,6 +609,16 @@ app.post('/api/invoices', (req, res) => {
         res.status(401).json("OK: user unauthorized")
 });
 
+app.put('/api/invoices/:id', (req, res) => {
+    const id = req.params.id
+    const invoice = req.body
+
+    if (req.session.prm_user && req.session.prm_user.permissions && checkPermission(req.session.prm_user.permissions, invoicesPermission))
+        daoInvoices.updateInvoices(req, res, id, invoice)
+    else
+        res.status(401).json("OK: user unauthorized")
+});
+
 app.get('/api/invoices/:id', (req, res) => {
     const id = req.params.id
     if (req.session.prm_user && req.session.prm_user.permissions && checkPermission(req.session.prm_user.permissions, invoicesPermission))

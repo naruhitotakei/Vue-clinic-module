@@ -254,7 +254,7 @@ import moment from 'moment'
 import { sso } from '../../services/userService'
 import { getCompanyById } from '../../services/companies'
 import { getEnquiryById } from '../../services/enquiry'
-import { createInvoice } from '../../services/invoice'
+import { createInvoice, updateInvoice, getItemsOfInvoiceById } from '../../services/invoice'
 import { getPremisesForCompany, getDevicesForPremise } from '../../services/companyPremises'
 import html2pdf from 'html2pdf.js'
 import _ from 'lodash'
@@ -323,7 +323,8 @@ export default {
       invoice_number: '02-blagajna1-21aleksa',
       zoi: '24as211d4232as1124',
       eor: '24as211d4232as1124',
-      status: ''
+      status: '',
+      invoiceId: ''
     }
   },
   computed: {
@@ -427,13 +428,26 @@ export default {
       return valid
     },
     createInvoice () {
-      createInvoice(this.invoice).then(response => {
-        this.canPrintPdf = true
-        this.$bvToast.show('b-toaster-bottom-right')
-      }).catch(errorMsg => {
-        console.log('Error: ' + errorMsg)
-        this.$bvToast.show('bottom-right-danger')
-      })
+      if (!this.invoiceId) {
+        console.log('nema id')
+        createInvoice(this.invoice).then(response => {
+          this.invoiceId = response
+          this.canPrintPdf = true
+          this.$bvToast.show('b-toaster-bottom-right')
+          getItemsOfInvoiceById(this.invoiceId).then(response => {
+            this.invoice.invoiceItems = response
+            console.log(JSON.stringify(response))
+          })
+        }).catch(errorMsg => {
+          console.log('Error: ' + errorMsg)
+          this.$bvToast.show('bottom-right-danger')
+        })
+      } else {
+        console.log('ima id')
+        updateInvoice(this.invoiceId, this.invoice).then(response => {
+          if (response.status === 'issued') this.$router.push({ path: `/documents/advance-payments/${this.invoice.invoice_number}` })
+        })
+      }
     },
     prepareInvoice () {
       let temp = {
