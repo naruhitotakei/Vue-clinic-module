@@ -349,7 +349,7 @@
     },
     "newAdvPayment": {
       "newAdvPaymentHeader": "Nov avansni račun",
-      "alert": "Znesek načina plačila mora biti enak znesku avansnega računa in ne more biti 0!",
+      "alert": "Znesek načina plačila mora biti enak znesku avansnega računa",
       "alert2": "Znesek avansnega računa ne sme biti 0",
       "alert3": "Izbrati morate način plačila",
       "paymentMethodSummary": "Povzetek načina plačila",

@@ -101,11 +101,19 @@
                                     <b-td colspan="2">{{usersCompany.company_name}}</b-td>
                                     <b-td colspan="3" v-html="billingDetails"></b-td>
                                     <b-td colspan="4">
-                                      <v-select :disabled="isInvoiceStatusIssued" :clearable="false" label="premise_name" class="premises" v-model="issuedIn" @input="findDevicesForPremise" :options="companyPremises"></v-select>
+                                      <span v-if="isInvoiceStatusIssued">
+                                          {{ issuedIn.premise_name}}
+                                      </span>
+                                      <v-select v-else :clearable="false" label="premise_name" class="premises" v-model="issuedIn" @input="findDevicesForPremise" :options="companyPremises"></v-select>
                                     </b-td>
                                     <b-td colspan="3">
                                       <span v-if="devices.length == 1">{{device.device_name}}</span>
-                                      <v-select :disabled="isInvoiceStatusIssued" v-else :clearable="false" label="device_name" class="premises" v-model="device" :options="devices"></v-select>
+                                      <div v-else>
+                                        <span v-if="isInvoiceStatusIssued">
+                                          {{ device.device_name}}
+                                        </span>
+                                        <v-select v-else :clearable="false" label="device_name" class="premises" v-model="device" :options="devices"></v-select>
+                                      </div>
                                     </b-td>
                                   </b-tr>
                                 </b-tbody>
@@ -159,8 +167,11 @@
                                 <b-col md="12" class="table-responsive" style="min-height:200px">
                                   <b-table bordered :items="paymentMethods" :fields="paymentMethodColumns">
                                     <template v-slot:cell(paymentMethod)="data">
-                                      <div>
-                                        <v-select :disabled="isInvoiceStatusIssued" :clearable="false" label="name" :reduce="opt => opt.name" class="style-chooser" v-model="data.item.paymentMethod" :options="paymentMethodOptions"></v-select>
+                                      <span v-if="isInvoiceStatusIssued">
+                                          {{ data.item.paymentMethod }}
+                                      </span>
+                                      <div v-else>
+                                        <v-select :clearable="false" label="name" :reduce="opt => opt.name" class="style-chooser" v-model="data.item.paymentMethod" :options="paymentMethodOptions"></v-select>
                                       </div>
                                     </template>
                                     <template v-slot:cell(amount)="data">
@@ -254,7 +265,7 @@ import moment from 'moment'
 import { sso } from '../../services/userService'
 import { getCompanyById } from '../../services/companies'
 import { getEnquiryById } from '../../services/enquiry'
-import { createInvoice, updateInvoice, getItemsOfInvoiceById } from '../../services/invoice'
+import { createInvoice, updateInvoice, getItemsOfInvoiceById, getConsecutiveInvoiceNumberForCompany } from '../../services/invoice'
 import { getPremisesForCompany, getDevicesForPremise } from '../../services/companyPremises'
 import html2pdf from 'html2pdf.js'
 import _ from 'lodash'
@@ -320,11 +331,12 @@ export default {
       dateOfAdvPaymentPdf: moment().format('YYYY-MM-DD HH:MM'),
       device: null,
       devices: [],
-      invoice_number: '02-blagajna1-21aleksa',
+      invoice_number: '',
       zoi: '24as211d4232as1124',
       eor: '24as211d4232as1124',
       status: '',
-      invoiceId: ''
+      invoiceId: '',
+      consecutiveInvoiceNumber: null
     }
   },
   computed: {
@@ -403,13 +415,19 @@ export default {
     },
     saveAsDraft () {
       this.status = 'draft'
+      this.invoice_number = 'draft advance payment invoice'
       this.prepareInvoice()
       if (this.isInoiceValid()) this.createInvoice()
     },
     saveInvoice () {
-      this.status = 'issued'
-      this.prepareInvoice()
-      if (this.isInoiceValid()) this.createInvoice()
+      getConsecutiveInvoiceNumberForCompany(this.usersCompany.company_id).then(response => {
+        this.consecutiveInvoiceNumber = parseInt(response[0].count) + 1
+        this.status = 'issued'
+        let year = moment().year()
+        this.invoice_number = this.consecutiveInvoiceNumber.toString() + '-' + year.toString()
+        this.prepareInvoice()
+        if (this.isInoiceValid()) this.createInvoice()
+      })
     },
     isInoiceValid () {
       let valid = true
@@ -429,25 +447,27 @@ export default {
     },
     createInvoice () {
       if (!this.invoiceId) {
-        console.log('nema id')
         createInvoice(this.invoice).then(response => {
           this.invoiceId = response
           this.canPrintPdf = true
           this.$bvToast.show('b-toaster-bottom-right')
           getItemsOfInvoiceById(this.invoiceId).then(response => {
             this.invoice.invoiceItems = response
-            console.log(JSON.stringify(response))
           })
+          if (this.status === 'issued') this.redirectToDetailsPage()
         }).catch(errorMsg => {
           console.log('Error: ' + errorMsg)
           this.$bvToast.show('bottom-right-danger')
         })
       } else {
-        console.log('ima id')
         updateInvoice(this.invoiceId, this.invoice).then(response => {
-          if (response.status === 'issued') this.$router.push({ path: `/documents/advance-payments/${this.invoice.invoice_number}` })
+          this.$bvToast.show('b-toaster-bottom-right')
+          if (response === 'issued') this.redirectToDetailsPage()
         })
       }
+    },
+    redirectToDetailsPage () {
+      this.$router.push({ path: `/documents/advance-payments/${this.invoice.invoice_number}` })
     },
     prepareInvoice () {
       let temp = {

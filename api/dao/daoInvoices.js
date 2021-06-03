@@ -176,23 +176,37 @@ const updateInvoices = (request, response, id, invoice) => {
             throw error
         }
         
-        if (invoice.invoiceItems.length > 0) {
-            invoice.invoiceItems.forEach(item => {
-                if (item.id) {
-                    updateInoviceItem(item, item.id)
-                } else {
-                    createInoviceItem(item, invoiceId)
-                }
-            });
-        }
-        createPaymentMethod(invoiceId, invoice.payment_method, invoice.lines_sum)
-        response.status(200).json(invoiceId)
+        response.status(200).json(invoice.invoice_status)
     })
+    if (invoice.invoiceItems.length > 0) {
+        invoice.invoiceItems.forEach(item => {
+            if (item.id) {
+                updateInoviceItem(item, item.id)
+            } else {
+                createInoviceItem(item, id)
+            }
+        });
+    }
+    updatePaymentMethod(id, invoice.payment_method, invoice.lines_sum)
 }
 
 const createPaymentMethod = (invoiceId, paymentMethod, amount) => {
     let statement = "INSERT INTO payment_method(invoice_id, amount, type, created_at"
     statement+= ") VALUES (" + invoiceId + "," + amount + ",'" + paymentMethod + "',NOW())"
+    console.log(statement)
+    pool.query(statement, (error, results) => {
+        if (error) {
+            throw error
+        } 
+    })
+}
+
+const updatePaymentMethod = (invoiceId, paymentMethod, amount) => {
+    let statement = "UPDATE payment_method SET "
+    if (paymentMethod) statement += "type='" + paymentMethod + "',"
+    if (amount) statement += "amount='" + amount + "',"
+    statement = statement.slice(0, -1)
+    statement += " WHERE invoice_id = " + invoiceId
     console.log(statement)
     pool.query(statement, (error, results) => {
         if (error) {
@@ -259,10 +273,20 @@ const getItemsOfInvoiceById = (request, response, id) => {
     })
 }
 
+const getConsecutiveInvoiceNumberForCompany = (request, response, id) => {
+    pool.query("SELECT COUNT(company_id) FROM invoice WHERE company_id = $1", [id] , (error, results) => {
+        if (error) {
+            throw error
+        }
+        response.status(200).json(results.rows)
+    })
+}
+
 module.exports = {
     createInvoices,
     getInvoices,
     getInvoiceById,
     getItemsOfInvoiceById,
-    updateInvoices
+    updateInvoices,
+    getConsecutiveInvoiceNumberForCompany
 }
