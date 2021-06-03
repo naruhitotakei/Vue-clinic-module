@@ -331,7 +331,6 @@ export default {
       this.modalShow = true
       let event = this.calendarApi.getEventById(selectionInfo.event.id)
       let location = this.locations.find(item => item.city === event.location)
-      console.log(event.extendedProps)
       this.formData = {
         id: event.id,
         title: event.title,

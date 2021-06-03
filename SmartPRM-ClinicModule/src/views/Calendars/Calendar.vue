@@ -183,12 +183,11 @@ export default {
   methods: {
     getApontments () {
       getApontments('2021-03-01', '2021-06-30').then(data => {
-        console.log(data)
         data.map(item => {
           this.events.push({
             id: item.id,
             start: new Date(item.date),
-            title: item.name,
+            title: item.name + ' ' + item.last_name,
             last_name: item.last_name,
             locationId: item.location,
             prm_client_id: item.prm_client_id,
@@ -199,7 +198,6 @@ export default {
             backgroundColor: '#148A9C'
           })
         })
-        console.log(this.events)
       })
     },
     allDoctorFun (value) {
