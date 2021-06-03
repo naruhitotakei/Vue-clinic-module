@@ -126,7 +126,7 @@
                                      <b-card class="iq-card" >
                                        <b-card-title>{{ $t('EPR.overview.generalNotes') }}</b-card-title>
                                        <hr />
-                                       <b-card-text class="text-black">{{patient.general_notes}}</b-card-text>
+                                       <b-card-text class="text-black" v-html="patient.general_notes"></b-card-text>
                                        <b-card-text><small class="text-muted">{{ $t('EPR.overview.generalNotesUpdated') }} {{patient.general_notes_updated_at | fromNowDate}}</small></b-card-text>
                                      </b-card>
                                       <!--  TODO make more elegantly -->
@@ -383,7 +383,17 @@
                                               <h4>{{ $t('EPR.personalInfo.generalNotes') }}</h4>
                                           </div>
                                           <div class="iq-card-body p-0">
-                                              <textarea :disabled="disabled" style="line-height: 30px;" v-model="patient.general_notes" class="textarea form-control form-control-disabled" rows="7"></textarea>
+                                              <textarea
+                                                  :disabled="disabled"
+                                                  style="line-height: 30px;"
+                                                  class="textarea form-control form-control-disabled"
+                                                  rows="7"
+                                                  ref="textareaGeneralNotes"
+                                                  wrap="hard"
+                                                  v-model="patient.general_notes"
+                                                  @input="changeGeneralNotes"
+                                                  v-html="patient.general_notes"
+                                              ></textarea>
                                           </div>
                                       </template>
                                   </iq-card>
@@ -393,7 +403,13 @@
                                       <h4>{{ $t('EPR.personalInfo.allergiesAndSensitivites') }}</h4>
                                     </div>
                                     <div class="iq-card-body p-0">
-                                      <textarea :disabled="disabled" style="line-height: 30px;" v-model="patient.allergies" class="textarea form-control form-control-disabled" rows="3"></textarea>
+                                      <textarea
+                                          :disabled="disabled"
+                                          style="line-height: 30px;"
+                                          v-model="patient.allergies"
+                                          class="textarea form-control form-control-disabled"
+                                          rows="3"
+                                         ></textarea>
                                     </div>
                                   </template>
                                 </iq-card>
@@ -807,6 +823,7 @@ export default {
       patientId: this.$route.params.patientId,
       modalAssigmentShow: false,
       modalNotesShow: false,
+      generalNotes: '',
       users: [],
       patient: {},
       tempPatient: {},
@@ -954,6 +971,10 @@ export default {
     }
   },
   methods: {
+    changeGeneralNotes (e) {
+      let str = e.target.innerHTML
+      this.generalNotes = str.replace(/\n/g, '<br>')
+    },
     selectedUser (val) {
       console.log('selected', val)
     },
@@ -1054,6 +1075,7 @@ export default {
       this.patient = this.tempPatient
     },
     updatePatient () {
+      this.patient.general_notes = this.generalNotes
       updateEnquiry(this.patientId, this.patient).then((response) => {
         console.log('Successful update')
         this.patient = response
