@@ -150,16 +150,19 @@
                                               <template v-slot:body>
                                                   <div class="iq-card-header d-flex justify-content-between">
                                                       <div class="iq-header-title">
-                                                          <h4 class="card-title">{{ $t('EPR.overview.patientNotes') }}</h4><hr />
+                                                          <div class="row justify-content-between align-items-center">
+                                                            <h4 class="card-title">{{ $t('EPR.overview.patientNotes') }}</h4>
+                                                            <button type="button" class="btn btn-primary" @click="modalNotesShow = true">New Note</button>
+                                                          </div>
+                                                        <hr />
                                                       </div>
                                                   </div>
-                                                  <ul class="list-inline m-0 overflow-y-scroll" style="max-height: 300px;">
+                                                  <ul class="list-inline m-0 overflow-y-scroll pl-2 pr-2" style="max-height: 300px;">
                                                       <li v-for="(note,index) in notes" :key="index + note.created_at" class="d-flex align-items-center justify-content-between mb-3">
                                                           <div>
                                                               <h6>{{note.content}}</h6>
                                                               <p class="mb-0">{{note.created_at | formatDate}}</p>
                                                           </div>
-                                                          <div><a href="#" class="btn iq-bg-primary mr-2">{{ $t('EPR.overview.patientNotesOpen') }}</a></div>
                                                       </li>
                                                   </ul>
                                               </template>
@@ -569,11 +572,37 @@
         </div>
       </form>
     </b-modal>
+    <b-modal
+        v-model="modalNotesShow"
+        ok-title="OK"
+        cancel-title="Cancel"
+        :ok-disabled="isOkDisabledNotes"
+        title="Add Notes"
+        @ok="addNotes"
+        @close="cancelNotes"
+        @cancel="cancelNotes"
+    >
+      <div class="col-md-12 mb-3">
+        <label for="title">{{ $t('assignments.addAssignmentsModal.description') }} *</label>
+        <div style="display: flex;">
+          <textarea type="text" v-model="notesFormData.content" class="form-control" placeholder="Description" rows="5"/>
+        </div>
+      </div>
+    </b-modal>
   </b-container>
 </template>
 <script>
 import { xray } from '../../config/pluginInit'
-import { getEnquiryById, updateEnquiry, getEnquiryNotes, getEnquiryAppointments, getEnquiryInvoices, getEnquiryOffers, getEnquiryServices } from '../../services/enquiry'
+import {
+  getEnquiryById,
+  updateEnquiry,
+  getEnquiryNotes,
+  getEnquiryAppointments,
+  getEnquiryInvoices,
+  getEnquiryOffers,
+  getEnquiryServices,
+  createEnquiryNotes
+} from '../../services/enquiry'
 import { getDentists, getSurgeons } from '../../services/userService'
 import { getCountriesList, getRegionsList } from '../../services/commonCodeLists'
 import { getUsers } from '@/services/userService'
@@ -600,6 +629,9 @@ export default {
   computed: {
     isOkDisabled () {
       return !this.formData.due_at || !this.formData.description
+    },
+    isOkDisabledNotes () {
+      return !this.notesFormData.content
     },
     fullName () {
       return this.patient.name + ' ' + this.patient.last_name
@@ -714,6 +746,7 @@ export default {
     return {
       patientId: this.$route.params.patientId,
       modalAssigmentShow: false,
+      modalNotesShow: false,
       users: [],
       patient: {},
       tempPatient: {},
@@ -734,6 +767,11 @@ export default {
         description: '',
         due_at: null,
         user: {}
+      },
+      notesFormData: {
+        enquiry_id: +this.$route.params.patientId,
+        content: '',
+        user_id: null
       },
       currentInvoicePage: 1,
       invoicesPerPage: 10,
@@ -1024,6 +1062,16 @@ export default {
         this.getAssignments()
         this.formData = this.defaultFormData()
       })
+    },
+    addNotes () {
+      this.notesFormData.user_id = this.patient.user_id
+      createEnquiryNotes(this.notesFormData).then(() => {
+        this.getPatientNotes(this.patientId)
+        this.cancelNotes()
+      })
+    },
+    cancelNotes () {
+      this.notesFormData.content = ''
     }
   }
 }

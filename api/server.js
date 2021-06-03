@@ -446,6 +446,14 @@ app.get('/api/enquiries/:id/notes', (req, res) => {
         res.status(401).json("OK: user unauthorized")
 });
 
+app.post('/api/enquiries/notes', (req, res) => {
+  const notes = req.body
+  if(req.session.prm_user && req.session.prm_user.permissions && checkPermission(req.session.prm_user.permissions, enquiriesPermission))
+    daoEnquiries.createEnquiryNotes(req, res, notes)
+  else
+    res.status(401).json("OK: user unauthorized")
+});
+
 app.get('/api/enquiries/:id/appointments', (req, res) => {
     const id = req.params.id
     if(req.session.prm_user && req.session.prm_user.permissions && checkPermission(req.session.prm_user.permissions, enquiriesPermission))
