@@ -308,16 +308,6 @@
                                   <iq-card>
                                       <template v-slot:body>
                                           <div class="pl-0 iq-card-header d-flex justify-content-between">
-                                              <h4>{{ $t('EPR.personalInfo.allergiesAndSensitivites') }}</h4>
-                                          </div>
-                                          <div class="iq-card-body p-0">
-                                              <textarea :disabled="disabled" style="line-height: 30px;" v-model="patient.allergies" class="textarea form-control form-control-disabled" rows="7"></textarea>
-                                          </div>
-                                      </template>
-                                  </iq-card>
-                                  <iq-card>
-                                      <template v-slot:body>
-                                          <div class="pl-0 iq-card-header d-flex justify-content-between">
                                               <h4>{{ $t('EPR.personalInfo.generalNotes') }}</h4>
                                           </div>
                                           <div class="iq-card-body p-0">
@@ -325,6 +315,16 @@
                                           </div>
                                       </template>
                                   </iq-card>
+                                <iq-card>
+                                  <template v-slot:body>
+                                    <div class="pl-0 iq-card-header d-flex justify-content-between">
+                                      <h4>{{ $t('EPR.personalInfo.allergiesAndSensitivites') }}</h4>
+                                    </div>
+                                    <div class="iq-card-body p-0">
+                                      <textarea :disabled="disabled" style="line-height: 30px;" v-model="patient.allergies" class="textarea form-control form-control-disabled" rows="3"></textarea>
+                                    </div>
+                                  </template>
+                                </iq-card>
                                   <iq-card>
                                       <template v-slot:body>
                                           <div class="pl-0 iq-card-header d-flex justify-content-between">
