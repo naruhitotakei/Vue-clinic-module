@@ -352,9 +352,9 @@
                               </b-col>
                           </b-row>
                           <div class="text-center p-1" v-if="!disabled">
-                              <b-button style="padding: 5px 25px;" @click="submitData()" variant="primary" class="mr-2">Submit</b-button>
-                              <b-button style="padding: 5px 25px;" v-b-modal.modal-1 variant="none" class="iq-bg-danger">Cancel</b-button>
-                              <b-modal id="modal-1" ok-title="OK" cancel-title="Cancel" @ok="cancelEditingPatient">
+                              <b-button style="padding: 5px 25px;" v-b-modal.modal-1 variant="none" class="iq-bg-secondary mr-2">Cancel</b-button>
+                            <b-button style="padding: 5px 25px;" @click="submitData()" variant="primary" >Save</b-button>
+                            <b-modal id="modal-1" ok-title="OK" cancel-title="Cancel" @ok="cancelEditingPatient">
                                   <h4 class="my-4 card-title text-center">Are you sure you want to the<br>discard changes?</h4>
                               </b-modal>
                               <b-modal ref="my-modal" ok-only ok-variant="primary" ok-title="OK">
