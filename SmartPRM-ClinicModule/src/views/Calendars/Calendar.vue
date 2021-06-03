@@ -91,7 +91,7 @@
           </form>
           </template>
           <template  v-slot:body>
-            <FullCalendar :resourcesOuter="resources" style="width: 100%; height: 100%;"/>
+            <FullCalendar :resourcesOuter="resources" :events="events" style="width: 100%; height: 100%;"/>
           </template>
         </iq-card>
       </b-col>
@@ -101,6 +101,7 @@
 <script>
 import { xray } from '../../config/pluginInit'
 import appointmentBook from '../../services/appointbook'
+import { getApontments } from '@/services/calendarService'
 export default {
   name: 'GoogleCalendar',
   components: { },
@@ -108,8 +109,25 @@ export default {
     return {
       allDoctorCheck: true,
       checkedListArray: [],
+      events: [
+        {
+          id: 'a',
+          title: 'event1',
+          start: new Date()
+        },
+        {
+          title: 'event2',
+          start: new Date(),
+          end: '2021-06-07'
+        },
+        {
+          title: 'event3',
+          start: '2021-06-09T12:30:00',
+          allDay: false
+        }
+      ],
       resources: [
-        { id: 2, title: 'Dr. Katic' },
+        { id: 2, title: 'Dr. Katic', time: '2021-06-3' },
         { id: 7, title: 'Dr. Fabjan' },
         { id: 24, title: 'Dr. Kržič' }
       ],
@@ -158,10 +176,32 @@ export default {
   },
   mounted () {
     xray.index()
+    this.getApontments()
   },
   computed: {
   },
   methods: {
+    getApontments () {
+      getApontments('2021-03-01', '2021-06-30').then(data => {
+        console.log(data)
+        data.map(item => {
+          this.events.push({
+            id: item.id,
+            start: new Date(item.date),
+            title: item.name,
+            last_name: item.last_name,
+            locationId: item.location,
+            prm_client_id: item.prm_client_id,
+            prm_client_name: item.prm_client_name,
+            time: item.time,
+            doctorId: item.doctor_user_id,
+            enquiry_id: item.enquiry_id,
+            backgroundColor: '#148A9C'
+          })
+        })
+        console.log(this.events)
+      })
+    },
     allDoctorFun (value) {
       // console.log('before THIS.CLONEDRESOURCES:', this.clonedResources)
       // if (value) {
