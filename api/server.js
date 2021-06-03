@@ -503,10 +503,10 @@ app.put('/api/enquiries/:id', (req, res) => {
       res.status(401).json("OK: user unauthorized")
 });
 
-app.delete('/api/enquiries/:id', (req, res) => {
+app.put('/api/enquiries/:id/trashed', (req, res) => {
   const id = req.params.id
   if(req.session.prm_user && req.session.prm_user.permissions && checkPermission(req.session.prm_user.permissions, enquiriesPermission))
-      daoEnquiries.deleteEnquiries(req, res, id)
+      daoEnquiries.trashEnquiry(req, res, id)
   else
       res.status(401).json("OK: user unauthorized")
 });

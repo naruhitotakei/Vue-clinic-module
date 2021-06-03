@@ -135,9 +135,9 @@ export async function updateEnquiry (id, enquiry) {
   return rawResponse.json()
 }
 
-export async function deleteEnquiry (id) {
-  const rawResponse = await fetch('/api/enquiries/' + id, {
-    method: 'DELETE',
+export async function trashEnquiry (id) {
+  const rawResponse = await fetch('/api/enquiries/' + id + '/trashed', {
+    method: 'PUT',
     credentials: 'same-origin',
     headers: {
       'Accept': 'application/json',
