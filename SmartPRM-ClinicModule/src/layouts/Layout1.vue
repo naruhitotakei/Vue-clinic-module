@@ -72,7 +72,7 @@
             <ul class="navbar-list">
               <li>
                 <a href="#" class="search-toggle iq-waves-effect d-flex align-items-center">
-                  <img :src="getAvatarUrl" class="img-fluid rounded mr-3" alt="user">
+                  <img :src="getAvatarUrl" class="img-fluid rounded mr-3 object-fit" alt="user">
                   <div class="caption">
                     <h6 class="mb-0 line-height">{{ logedInUser.name }}</h6>
                     <span class="font-size-12">{{ $t('nav.user.available') }}</span>
@@ -121,7 +121,7 @@
       <div class="form-row">
         <div style="margin: auto; text-align: center;">
                   <div class="add-img-user profile-img-edit">
-                    <b-img class="profile-pic height-150 width-150" fluid :src="getAvatarUrl" alt="profile-pic" />
+                    <b-img class="profile-pic height-150 width-150 object-fit" style="object-fit: cover" fluid :src="getAvatarUrl" alt="profile-pic" />
                     <input type="hidden" v-model="getAvatarUrl">
                     <div class="p-image">
                       <b-button variant="none" class="upload-button iq-bg-primary position-relative" style="left: 12px;" @click="onButtonClick">

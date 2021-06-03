@@ -12,7 +12,7 @@
                       <tab-nav-items class="col-12 col-sm-4 col-md-2 p-0" :active="false" href="#info" :title="$t('EPR.personalInfoTab')" />
                       <tab-nav-items class="col-12 col-sm-1 col-md-2 p-0" :active="false" href="#files" :title="$t('EPR.filesTab')" />
                       <tab-nav-items class="col-12 col-sm-2 col-md-2 p-0" :active="false" href="#invoices" :title="$t('EPR.invoicesTab')" />
-                      <tab-nav-items class="col-12 col-sm-2 col-md-2 p-0 mobile-border" :active="false" href="#offers" :title="$t('EPR.offersTab')" />
+<!--                      <tab-nav-items class="col-12 col-sm-2 col-md-2 p-0 mobile-border" :active="false" href="#offers" :title="$t('EPR.offersTab')" />-->
                   </tab-nav>
               </div>
             </template>
@@ -112,25 +112,29 @@
                                   </iq-card>
                               </b-col>
                               <b-col lg="8">
-                                  <b-col md="14">
-                                      <b-card class="iq-card" v-if="patient.general_notes">
-                                          <b-card-title>{{ $t('EPR.overview.generalNotes') }}</b-card-title>
-                                          <hr />
-                                          <b-card-text style="color:black;">{{patient.general_notes}}</b-card-text>
-                                          <b-card-text><small class="text-muted">{{ $t('EPR.overview.generalNotesUpdated') }} {{patient.general_notes_updated_at | fromNowDate}}</small></b-card-text>
-                                      </b-card>
-                                  </b-col>
-                                  <b-card
-                                      v-if="patient.allergies"
-                                      text-variant="white"
-                                      bg-variant="danger"
-                                      class="iq-card">
-                                      <b-card-title class="text-white">{{ $t('EPR.overview.allergies') }}</b-card-title>
-                                      <blockquote class="blockquote mb-0">
-                                          <p class="font-size-14">{{patient.allergies}}</p>
-                                          <footer class="blockquote-footer text-white font-size-12">{{ $t('EPR.overview.allergiesUpdated') }} {{patient.allergies_updated_at | fromNowDate}}</footer>
-                                      </blockquote>
-                                  </b-card>
+                                 <div class="row">
+                                   <b-col md="6">
+                                     <b-card class="iq-card" v-if="patient.general_notes">
+                                       <b-card-title>{{ $t('EPR.overview.generalNotes') }}</b-card-title>
+                                       <hr />
+                                       <b-card-text style="color:black;">{{patient.general_notes}}</b-card-text>
+                                       <b-card-text><small class="text-muted">{{ $t('EPR.overview.generalNotesUpdated') }} {{patient.general_notes_updated_at | fromNowDate}}</small></b-card-text>
+                                     </b-card>
+                                   </b-col>
+                                   <b-col md="6" >
+                                     <b-card
+                                         v-if="patient.allergies"
+                                         text-variant="white"
+                                         bg-variant="danger"
+                                         class="iq-card">
+                                       <b-card-title class="text-white">{{ $t('EPR.overview.allergies') }}</b-card-title>
+                                       <blockquote class="blockquote mb-0">
+                                         <p class="font-size-14">{{patient.allergies}}</p>
+                                         <footer class="blockquote-footer text-white font-size-12">{{ $t('EPR.overview.allergiesUpdated') }} {{patient.allergies_updated_at | fromNowDate}}</footer>
+                                       </blockquote>
+                                     </b-card>
+                                   </b-col>
+                                 </div>
                                   <b-row>
                                       <b-col md="6" class="pr-0">
                                           <iq-card>
@@ -161,8 +165,12 @@
                                               </div>
                                             </div>
                                             <ul class="list-inline m-0 overflow-y-scroll" style="max-height: 300px;">
-                                              <li v-for="(item,index) in openAssignments" :key="index + item.due_at" class="d-flex align-items-center justify-content-between mb-3">
-                                                <div>
+                                              <li v-for="(item,index) in openAssignments" :key="index + item.due_at" class="d-flex align-items-center justify-content-between mb-3"
+                                                  :style="{
+                                                  'background': index === 0 && '#c3e6cb'
+                                                  }"
+                                              >
+                                                <div class="p-1">
                                                   <h6>{{item.todoname}}</h6>
                                                   <p class="mb-0">{{item.due_at | formatDate}}</p>
                                                 </div>
@@ -214,7 +222,7 @@
                           <b-form-group class="row align-items-center /*justify-content-center*/">
                               <b-col md="12">
                                 <div class="profile-img-edit">
-                                    <b-img :src="user.profile_image" class="profile-pic height-150 width-150" alt="profile-pic" />
+                                    <b-img :src="user.profile_image" class="profile-pic height-150 width-150 object-fit" alt="profile-pic" />
                                     <input type="hidden" v-model="user.profile_image">
                                     <div class="p-image">
                                         <div class="position-relative">
@@ -238,7 +246,7 @@
                                           <b-row align-v="center">
                                               <b-form-group class="col-md-12" label-cols-sm="4" label-for="fname" :label="$t('EPR.personalInfo.firstName')">
                                                   <ValidationProvider name="fname" rules="required" v-slot="{ errors }">
-                                                      <b-form-input :disabled="disabled" v-model="patient.name" type="text" :class="(errors.length > 0 ? ' is-invalid' : '')"></b-form-input>
+                                                      <b-form-input :disabled="disabled" v-model="patient.name" type="text" class="form-control-disabled" :class="(errors.length > 0 ? ' is-invalid' : '')"></b-form-input>
                                                       <div class="invalid-feedback">
                                                           <span>{{ errors[0] }}</span>
                                                       </div>
@@ -246,7 +254,7 @@
                                               </b-form-group>
                                               <b-form-group class="col-md-12" label-cols-sm="4" label-for="lname" :label="$t('EPR.personalInfo.lastName')">
                                                   <ValidationProvider name="lname" rules="required" v-slot="{ errors }">
-                                                      <b-form-input :disabled="disabled" v-model="patient.last_name" type="text" :class="(errors.length > 0 ? ' is-invalid' : '')"></b-form-input>
+                                                      <b-form-input :disabled="disabled" v-model="patient.last_name" type="text" class="form-control-disabled" :class="(errors.length > 0 ? ' is-invalid' : '')"></b-form-input>
                                                       <div class="invalid-feedback">
                                                           <span>{{ errors[0] }}</span>
                                                       </div>
@@ -254,7 +262,7 @@
                                               </b-form-group>
                                               <b-form-group class="col-md-12" label-cols-sm="4" label-for="dob" :label="$t('EPR.personalInfo.dob')">
                                                   <ValidationProvider name="dob" rules="required" v-slot="{ errors }">
-                                                      <b-form-input :disabled="disabled" v-model="patient.date_of_birth" type="date" :class="(errors.length > 0 ? ' is-invalid' : '')"></b-form-input>
+                                                      <b-form-input :disabled="disabled" v-model="patient.date_of_birth" type="date" class="form-control-disabled" :class="(errors.length > 0 ? ' is-invalid' : '')"></b-form-input>
                                                       <div class="invalid-feedback">
                                                           <span>{{ errors[0] }}</span>
                                                       </div>
@@ -266,31 +274,31 @@
                                                   <b-form-radio inline v-model="patient.gender" :disabled="disabled" value="unspecified">{{ $t('EPR.personalInfo.unspecified') }}</b-form-radio>
                                               </b-form-group>
                                               <b-form-group class="col-md-12" label-cols-sm="4" label-for="address" :label="$t('EPR.personalInfo.address')">
-                                                  <b-form-input :disabled="disabled" name="address" v-model="patient.address_line_1" style="line-height: 22px;">
+                                                  <b-form-input :disabled="disabled" name="address" class="form-control-disabled" v-model="patient.address_line_1" style="line-height: 22px;">
                                                   </b-form-input>
                                               </b-form-group>
                                               <b-form-group class="col-md-12" style="justify-content: space-between;" label-cols-sm="4" label-for="city" :label="$t('EPR.personalInfo.postCodeCity')">
-                                                  <b-form-input :disabled="disabled" class="col-md-4" style="float: left;" v-model="patient.post_code" type="text"></b-form-input>
-                                                  <b-form-input :disabled="disabled" class="col-md-6" style="float: right;" v-model="patient.city" type="text"></b-form-input>
+                                                  <b-form-input :disabled="disabled" class="col-md-4 form-control-disabled" style="float: left;" v-model="patient.post_code" type="text"></b-form-input>
+                                                  <b-form-input :disabled="disabled" class="col-md-6 form-control-disabled" style="float: right;" v-model="patient.city" type="text"></b-form-input>
                                               </b-form-group>
                                               <b-form-group class="col-md-12" label-cols-sm="4" label-for="country" :label="$t('EPR.personalInfo.country')">
-                                                  <v-select :disabled="disabled" :clearable="false" :reduce="country => country.code" class="style-chooser" v-model="patient.country_id" :options="countries"></v-select>
+                                                  <v-select :disabled="disabled" :clearable="false" :reduce="country => country.code" class="style-chooser form-control-disabled" v-model="patient.country_id" :options="countries"></v-select>
                                               </b-form-group>
                                               <b-form-group class="col-md-12" label-cols-sm="4" label-for="region" :label="$t('EPR.personalInfo.region')">
-                                                  <v-select class="style-chooser" :clearable="false" :reduce="region => region.code" :disabled="disabled" v-model="patient.region_id" :options="filteredRegions"> </v-select>
+                                                  <v-select class="style-chooser form-control-disabled" :clearable="false" :reduce="region => region.code" :disabled="disabled" v-model="patient.region_id" :options="filteredRegions"> </v-select>
                                               </b-form-group>
                                               <b-form-group class="col-md-12" label-cols-sm="4" label-for="insurance" :label="$t('EPR.personalInfo.insurance')">
-                                                  <b-form-input :disabled="disabled" class="col-md-5" style="float: left;" name="insurance_no" type="text" v-model="patient.insurance_no"></b-form-input>
-                                                  <b-form-input :disabled="disabled" class="col-md-5" style="float: right;" name="insured_at" type="text" v-model="patient.insured_at"></b-form-input>
+                                                  <b-form-input :disabled="disabled" class="col-md-5 form-control-disabled" style="float: left;" name="insurance_no" type="text" v-model="patient.insurance_no"></b-form-input>
+                                                  <b-form-input :disabled="disabled" class="col-md-5 form-control-disabled" style="float: right;" name="insured_at" type="text" v-model="patient.insured_at"></b-form-input>
                                               </b-form-group>
                                               <b-form-group class="col-md-12" label-cols-sm="4" label-for="mobile_no" :label="$t('EPR.personalInfo.phone')">
-                                                  <b-form-input :disabled="disabled" name="mobile_no" type="text" v-model="patient.phone"></b-form-input>
+                                                  <b-form-input :disabled="disabled" name="mobile_no" type="text" class="form-control-disabled" v-model="patient.phone"></b-form-input>
                                               </b-form-group>
                                               <b-form-group class="col-md-12" label-cols-sm="4" label-for="email" :label="$t('EPR.personalInfo.email')">
-                                                  <b-form-input :disabled="disabled" name="email" type="text" v-model="patient.email"></b-form-input>
+                                                  <b-form-input :disabled="disabled" name="email" type="text" class="form-control-disabled" v-model="patient.email"></b-form-input>
                                               </b-form-group>
                                               <b-form-group class="col-md-12" label-cols-sm="4" label-for="tax_no" :label="$t('EPR.personalInfo.taxNumber')">
-                                                  <b-form-input :disabled="disabled" name="tax_no" type="text" v-model="patient.tax_registration_number"></b-form-input>
+                                                  <b-form-input :disabled="disabled" name="tax_no" type="text" class="form-control-disabled" v-model="patient.tax_registration_number"></b-form-input>
                                               </b-form-group>
                                           </b-row>
                                       </template>
@@ -303,7 +311,7 @@
                                               <h4>{{ $t('EPR.personalInfo.allergiesAndSensitivites') }}</h4>
                                           </div>
                                           <div class="iq-card-body p-0">
-                                              <textarea :disabled="disabled" style="line-height: 30px;" v-model="patient.allergies" class="textarea form-control" rows="7"></textarea>
+                                              <textarea :disabled="disabled" style="line-height: 30px;" v-model="patient.allergies" class="textarea form-control form-control-disabled" rows="7"></textarea>
                                           </div>
                                       </template>
                                   </iq-card>
@@ -313,7 +321,7 @@
                                               <h4>{{ $t('EPR.personalInfo.generalNotes') }}</h4>
                                           </div>
                                           <div class="iq-card-body p-0">
-                                              <textarea :disabled="disabled" style="line-height: 30px;" v-model="patient.general_notes" class="textarea form-control" rows="7"></textarea>
+                                              <textarea :disabled="disabled" style="line-height: 30px;" v-model="patient.general_notes" class="textarea form-control form-control-disabled" rows="7"></textarea>
                                           </div>
                                       </template>
                                   </iq-card>
@@ -329,13 +337,13 @@
                                                   <template slot="label">
                                                       {{ $t('EPR.personalInfo.personalDentist') }}:
                                                   </template>
-                                                <v-select :disabled="disabled" :clearable="false" :reduce="dentist => dentist.code" class="style-chooser" v-model="patient.prm_dentist_user_id" :options="dentists"></v-select>
+                                                <v-select :disabled="disabled" :clearable="false" :reduce="dentist => dentist.code" class="style-chooser form-control-disabled" v-model="patient.prm_dentist_user_id" :options="dentists"></v-select>
                                                 </b-form-group>
                                                 <b-form-group class="col-md-12" label-cols-sm="3" label-for="region">
                                                   <template slot="label">
                                                       {{ $t('EPR.personalInfo.personalSurgeon') }}:
                                                   </template>
-                                                <v-select :disabled="disabled" :clearable="false" :reduce="dentist => dentist.code" class="style-chooser" v-model="patient.prm_surgeon_user_id" :options="surgeons"></v-select>
+                                                <v-select :disabled="disabled" :clearable="false" :reduce="dentist => dentist.code" class="style-chooser form-control-disabled" v-model="patient.prm_surgeon_user_id" :options="surgeons"></v-select>
                                                 </b-form-group>
                                               </div>
                                           </div>
@@ -369,8 +377,14 @@
                                       <h5 class="mt-2">{{ $t('EPR.files.sortBy') }}</h5>
                                       <div class="mt-4 ml-3">
                                           <b-form-group label-for="sortOptions">
-                                              <v-select class="patients" label="text" :clearable="false" id="select"
+                                            <v-select class="patients" label="text" taggable :clearable="false" id="select"
                                                         :options="sortOptions" v-model="sortBy">
+                                                <template v-slot:option="option">
+                                                 <div class="row justify-content-between">
+                                                   {{option.text}}
+                                                   <i :class="{'ri-arrow-up-s-line': option.sort === 'asc', 'ri-arrow-down-s-line': option.sort === 'desc',}"></i>
+                                                 </div>
+                                                </template>
                                               </v-select>
                                           </b-form-group>
                                       </div>
@@ -379,7 +393,7 @@
                               <template v-slot:body>
                                   <div class="iq-card-body">
                                       <ul class="profile-img-gallary d-flex flex-wrap p-0 m-0">
-                                          <li class="col-md-4 col-6 pb-3" v-for="(file, index) in files" :key="index + file.created_at">
+                                          <li class="col-md-4 col-6 pb-3" v-for="(file, index) in filesSortBy" :key="index + file.created_at">
                                               <img :src="file.image" alt="gallary-image" class="img-fluid">
                                               <div class="text-center">
                                                   <p class="mb-0">{{ $t('EPR.files.fileName') }}: {{file.name}}</p>
@@ -597,7 +611,8 @@ export default {
       })
     },
     openAssignments: function () {
-      return this.assignments
+      let assignments = [...this.assignments]
+      return assignments.reverse()
     },
     futureAppointments: function () {
       return this.appointments.filter((item) => {
@@ -617,6 +632,59 @@ export default {
     },
     hideSummaryPagination () {
       return Math.floor(this.services.length / this.servicesPerPage) !== 0
+    },
+    filesSortBy () {
+      if (this.sortBy === '') {
+        let files = [...this.files]
+        return files.sort((a, b) => {
+          if (new Date(a.created_at) < new Date(b.created_at)) return -1
+          if (new Date(a.created_at) > new Date(b.created_at)) return 1
+          return 0
+        })
+      }
+      if (this.sortBy.value === 'name') {
+        let files = [...this.files]
+        return files.sort((a, b) => {
+          let nameA = a.name.toLowerCase()
+          let nameB = b.name.toLowerCase()
+          if (this.sortBy.sort === 'asc') {
+            if (nameA < nameB) return -1
+            if (nameA > nameB) return 1
+            return 0
+          } else {
+            if (nameA > nameB) return -1
+            if (nameA < nameB) return 1
+            return 0
+          }
+        })
+      }
+      if (this.sortBy.value === 'created_at') {
+        let files = [...this.files]
+        return files.sort((a, b) => {
+          if (this.sortBy.sort === 'asc') {
+            return moment(b.created_at, 'DD.MM.YY') - moment(a.created_at, 'DD.MM.YY')
+          } else {
+            return moment(a.created_at, 'DD.MM.YY') - moment(b.created_at, 'DD.MM.YY')
+          }
+        })
+      }
+      if (this.sortBy.value === 'type') {
+        let files = [...this.files]
+        return files.sort((a, b) => {
+          let typeA = a.type.toLowerCase()
+          let typeB = b.type.toLowerCase()
+          if (this.sortBy.sort === 'asc') {
+            if (typeA < typeB) return -1
+            if (typeA > typeB) return 1
+            return 0
+          } else {
+            if (typeA > typeB) return -1
+            if (typeA < typeB) return 1
+            return 0
+          }
+        })
+      }
+      return this.files
     }
   },
   filters: {
@@ -630,7 +698,7 @@ export default {
       if (!val) {
         return '-'
       }
-      return moment(val).format('YYYY-MM-DD')
+      return moment(val).format('DD-MM-YYYY')
     }
   },
   data () {
@@ -668,9 +736,12 @@ export default {
       selected: this.value,
       sortBy: '',
       sortOptions: [
-        { value: 'name', text: this.$t('EPR.files.fileName') },
-        { value: 'type', text: this.$t('EPR.files.fileType') },
-        { value: 'created_at', text: this.$t('EPR.files.fileCreatedAt') }
+        { value: 'name', text: this.$t('EPR.files.fileName'), sort: 'asc' },
+        { value: 'name', text: this.$t('EPR.files.fileName'), sort: 'desc' },
+        { value: 'type', text: this.$t('EPR.files.fileType'), sort: 'asc' },
+        { value: 'type', text: this.$t('EPR.files.fileType'), sort: 'desc' },
+        { value: 'created_at', text: this.$t('EPR.files.fileCreatedAt'), sort: 'asc' },
+        { value: 'created_at', text: this.$t('EPR.files.fileCreatedAt'), sort: 'desc' }
       ],
       files: [
         { image: require('../../assets/images/login/1.png'), name: 'File 2', type: 'Rentgen', created_at: '21.04.2021' },
@@ -717,6 +788,7 @@ export default {
       countries: [],
       regions: [],
       columnsInvoices: [
+        { label: this.$t('EPR.invoicesColumn.type'), key: 'invoice_type', class: 'text-left' },
         { label: this.$t('EPR.invoicesColumn.no'), key: 'invoice_number', class: 'text-left' },
         {
           label: this.$t('EPR.invoicesColumn.date'),
@@ -821,7 +893,7 @@ export default {
     getPatientAppointments (id) {
       getEnquiryAppointments(id).then(response => {
         this.appointments = response
-        this.timeSinceFirstVisit = response[0].date
+        this.timeSinceFirstVisit = response.length && response[0].date
       }
       )
     },

@@ -58,7 +58,7 @@ h6 { font-size: 1.0em; }
 Input
 ------------------------------------------------*/
 label { color: #3f414d; }
-.form-control { height: 45px; line-height: 45px; background: transparent; border: 1px solid #d7dbda; font-size: 14px; color: #a09e9e; border-radius: 10px; }
+.form-control { height: 45px; line-height: normal; background: transparent; border: 1px solid #d7dbda; font-size: 14px; color: #a09e9e; border-radius: 10px; }
 .form-control:focus { color: #3f414d; border-color: #089bab; box-shadow: none; }
 
 /* Definition Lists */

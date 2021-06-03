@@ -165,7 +165,6 @@ export default {
       })
     },
     editBusiness (item) {
-      console.log(item)
       getBusinessByID(item.id)
       this.formData = {
         id: item.id,
@@ -184,12 +183,10 @@ export default {
     },
     addBusiness () {
       if (this.formData.id) {
-        console.log(this.formData)
         updateBusiness(this.formData.id, this.formData).then(() => {
           this.getBusiness()
         })
       } else {
-        console.log(this.formData)
         createBusiness(this.formData).then(() => {
           this.getBusiness()
         })

@@ -34,6 +34,34 @@
   color: #000 !important;
 }
 
+.object-fit {
+  object-fit: cover;
+}
+
+body .wrapper .form-control-disabled{
+  &:disabled {
+    background-color: transparent !important;
+    border: none;
+    &>div {
+      background-color: transparent !important;
+      border: none;
+    }
+  }
+
+    input:disabled  {
+    background-color: transparent !important;
+    border:none;
+  }
+}
+
+body .wrapper .vs--disabled {
+  &>div {
+    display: none;
+    background-color: transparent !important;
+    border:none;
+  }
+}
+
 [dir="rtl"]{
   @import "../css/rtl/bootstrap";
   @import "../css/rtl/light/typography";

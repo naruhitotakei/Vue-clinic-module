@@ -78,15 +78,17 @@
               </tr>
               </thead>
               <tbody>
-              <template v-for="(body,bodyKey ) in servicesListItems" >
+              <template v-for="(body, bodyKey) in servicesListItems" >
                 <tr :key="bodyKey">
-                  <td style="max-width: 200px" colspan="6"><span class="font-weight-bold">{{ bodyKey }}</span></td>
+                  <td colspan="3"><span class="font-weight-bold">{{ bodyKey }}</span></td>
+                  <td ><span class="font-weight-bold">{{formatNumber(Math.trunc(body.group_price))}} &#8364;</span></td>
+                  <td  colspan="2"><span class="font-weight-bold">{{formatNumber(Math.trunc(body.group_fee))}} &#8364;</span></td>
                 </tr>
                 <template v-for="(item, index) in body" >
                   <tr :key="Math.random(index + 1000)">
                     <td><span >{{ item.doctor }}</span></td>
                     <td><span >{{ item.service_title}}  </span></td>
-                    <td><span >{{ item.last_name}}  </span></td>
+                    <td><router-link tag="span" :to="'/patients/'+ item.enquiry_id" style="cursor:pointer;">{{ item.name }} {{ item.last_name}}  </router-link></td>
                     <td><span>{{ formatNumber(Math.trunc(item.price))}} &#8364;  </span></td>
                     <td><span>{{ formatNumber(Math.trunc(item.fee))}} &#8364;  </span></td>
                     <td><span >{{ formatDateString(item.date)}}  </span></td>
@@ -94,8 +96,9 @@
                 </template>
               </template>
               <tr v-if="servicesSummaryTotalCount">
-                <td  colspan="5"><span class="font-weight-bold"> Total: </span></td>
+                <td  colspan="3"><span class="font-weight-bold"> Total: </span></td>
                 <td> <span class="font-weight-bold">{{formatNumber(Math.trunc(servicesListTotalCount))}} &#8364;</span></td>
+                <td colspan="2"> <span class="font-weight-bold">{{formatNumber(Math.trunc(servicesListTotalFee))}} &#8364;</span></td>
               </tr>
               </tbody>
             </b-table-simple>
@@ -123,6 +126,7 @@ export default {
       servicesSummaryTotalCount: 0,
       servicesSummaryTotalAmount: 0,
       servicesListTotalCount: 0,
+      servicesListTotalFee: 0,
       countrySelectOptions: [
         { value: null, text: this.$t('reportingEmazing.countrySelect') }
       ],
@@ -141,7 +145,6 @@ export default {
         { label: this.$t('reportingEmazing.servicesSummaryColumn.serviceAmount'), key: 'sum', class: 'text-left' }
       ],
       servicesSummaryItems: [],
-      servicesSummaryItemsJSON: [],
       servicesListColumns: [
         { label: this.$t('reportingEmazing.servicesListColumn.serviceDoctor'), key: 'doctor', class: 'text-left' },
         { label: this.$t('reportingEmazing.servicesListColumn.serviceTitle'), key: 'service_title', class: 'text-left' },
@@ -261,7 +264,6 @@ export default {
               arr[group].group_count = this.servicesSummaryItems[group].group_count
             }
           }
-          this.servicesSummaryItemsJSON = arr
         } else {
           console.error(response)
         }
@@ -272,10 +274,16 @@ export default {
         if (typeof response !== 'string') {
           let res = _.groupBy(response, 'doctor')
           for (let doc in res) {
+            res[doc].group_price = 0
+            res[doc].group_fee = 0
             res[doc].map(item => {
+              res[doc].group_price = res[doc].group_price + Number(item.price)
+              res[doc].group_fee = res[doc].group_fee + Number(item.fee)
               this.servicesListTotalCount += Number(item.price)
+              this.servicesListTotalFee += Number(item.fee)
             })
           }
+          console.log(res)
           this.servicesListItems = res
         } else {
           console.error(response)
