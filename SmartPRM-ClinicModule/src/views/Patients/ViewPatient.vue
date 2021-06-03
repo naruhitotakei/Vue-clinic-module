@@ -47,15 +47,24 @@
                                                   </li>
                                               </ul>
                                               <hr>
-                                              <div class="row ml-1">
-                                                  <div class="col-3">{{ $t('EPR.overview.phone') }}:</div>
-                                                  <div class="col-9">{{patient.phone}}</div>
-                                                  <div class="col-3">{{ $t('EPR.overview.email') }}:</div>
-                                                  <div class="col-9">{{patient.email}}</div>
-                                                  <div class="col-3">{{ $t('EPR.overview.address') }}:</div>
-                                                  <div class="col-9" v-if="patient.address_line_1">{{patient.address_line_1}}</div>
-                                                  <div class="col-9" v-else>{{ $t('EPR.overview.addressUnknown') }}</div>
+                                              <div class="row ml-1 align-items-center">
+                                                  <div class="col-4 pl-lg-3 p-md-0 text-dark">{{ $t('EPR.overview.phone') }}:</div>
+                                                  <div class="col-8 pl-lg-3 p-md-0 text-dark">{{patient.phone}}</div>
+                                                  <div class="col-4 pl-lg-3 p-md-0 text-dark">{{ $t('EPR.overview.email') }}:</div>
+                                                  <div class="col-8 pl-lg-3 p-md-0 text-dark">{{patient.email}}</div>
+                                                  <div class="col-4 pl-lg-3 p-md-0 text-dark">{{ $t('EPR.overview.address') }}:</div>
+                                                  <div class="col-8 pl-lg-3 p-md-0 text-dark" v-if="patient.address_line_1">{{patient.address_line_1}}</div>
+                                                  <div class="col-8 pl-lg-3 p-md-0 text-dark" v-else>{{ $t('EPR.overview.addressUnknown') }}</div>
                                               </div>
+                                            <hr>
+                                            <div class="row ml-1">
+                                              <div class="col-4 pl-lg-3 p-md-0"><h6>{{ $t('EPR.overview.personalDentist') }}:</h6></div>
+                                              <div v-if="patientsDentist" class="col-8 p-md-0 pl-lg-3 text-dark">{{patientsDentist.label}}</div>
+                                              <div v-if="!patientsDentist" class="col-8 text-dark">{{ $t('EPR.overview.notSelected') }}</div>
+                                              <div class="col-4 pl-lg-3 p-md-0"><h6>{{ $t('EPR.overview.personalSurgeon') }}:</h6></div>
+                                              <div v-if="patientsSurgeon" class="col-8 p-md-0 pl-lg-3 text-dark">{{patientsSurgeon.label}}</div>
+                                              <div v-if="!patientsSurgeon" class="col-8 pl-lg-3 p-md-0 text-dark">{{ $t('EPR.overview.notSelected') }}</div>
+                                            </div>
                                           </div>
                                       </template>
                                       <div class="bg-primary pb-2 p-1" style="border-radius: 0 0 25px 25px;">
@@ -69,25 +78,25 @@
                                           </b-col>
                                       </div>
                                   </iq-card>
-                                  <iq-card>
-                                      <template v-slot:body>
-                                          <div class="iq-card-header d-flex justify-content-between">
-                                              <div class="iq-header-title">
-                                                  <h4 class="card-title">{{ $t('EPR.overview.personalDoctors') }}</h4><hr />
-                                              </div>
-                                          </div>
-                                          <div class="iq-card-body">
-                                              <div class="row font-size-16 ">
-                                                  <div class="col-12 col-sm-7"><h6>{{ $t('EPR.overview.personalDentist') }}:</h6></div>
-                                                  <div v-if="patientsDentist" class="col-12 col-sm-5">{{patientsDentist.label}}</div>
-                                                  <div v-if="!patientsDentist" class="col-5">{{ $t('EPR.overview.notSelected') }}</div>
-                                                  <div class="col-7"><h6>{{ $t('EPR.overview.personalSurgeon') }}:</h6></div>
-                                                  <div v-if="patientsSurgeon" class="col-12 col-sm-5">{{patientsSurgeon.label}}</div>
-                                                  <div v-if="!patientsSurgeon" class="col-5">{{ $t('EPR.overview.notSelected') }}</div>
-                                              </div>
-                                          </div>
-                                      </template>
-                                  </iq-card>
+<!--                                  <iq-card>-->
+<!--                                      <template v-slot:body>-->
+<!--                                          <div class="iq-card-header d-flex justify-content-between">-->
+<!--                                              <div class="iq-header-title">-->
+<!--                                                  <h4 class="card-title">{{ $t('EPR.overview.personalDoctors') }}</h4><hr />-->
+<!--                                              </div>-->
+<!--                                          </div>-->
+<!--                                          <div class="iq-card-body">-->
+<!--                                              <div class="row font-size-16 ">-->
+<!--                                                  <div class="col-12 col-sm-7"><h6>{{ $t('EPR.overview.personalDentist') }}:</h6></div>-->
+<!--                                                  <div v-if="patientsDentist" class="col-12 col-sm-5">{{patientsDentist.label}}</div>-->
+<!--                                                  <div v-if="!patientsDentist" class="col-5">{{ $t('EPR.overview.notSelected') }}</div>-->
+<!--                                                  <div class="col-7"><h6>{{ $t('EPR.overview.personalSurgeon') }}:</h6></div>-->
+<!--                                                  <div v-if="patientsSurgeon" class="col-12 col-sm-5">{{patientsSurgeon.label}}</div>-->
+<!--                                                  <div v-if="!patientsSurgeon" class="col-5">{{ $t('EPR.overview.notSelected') }}</div>-->
+<!--                                              </div>-->
+<!--                                          </div>-->
+<!--                                      </template>-->
+<!--                                  </iq-card>-->
                                   <iq-card body-class="iq-card-body">
                                       <template v-slot:body>
                                           <div class="iq-card-header d-flex justify-content-between">
@@ -113,17 +122,42 @@
                               </b-col>
                               <b-col lg="8">
                                  <div class="row">
-                                   <b-col md="6">
-                                     <b-card class="iq-card" v-if="patient.general_notes">
+                                   <b-col md="6" v-if="patient.general_notes">
+                                     <b-card class="iq-card" >
                                        <b-card-title>{{ $t('EPR.overview.generalNotes') }}</b-card-title>
                                        <hr />
-                                       <b-card-text style="color:black;">{{patient.general_notes}}</b-card-text>
+                                       <b-card-text class="text-black">{{patient.general_notes}}</b-card-text>
                                        <b-card-text><small class="text-muted">{{ $t('EPR.overview.generalNotesUpdated') }} {{patient.general_notes_updated_at | fromNowDate}}</small></b-card-text>
                                      </b-card>
+                                      <!--  TODO make more elegantly -->
+                                     <iq-card  v-if="patient.general_notes && !patient.allergies">
+                                       <template v-slot:body>
+                                         <div class="iq-card-header d-flex justify-content-between">
+                                           <div class="iq-header-title">
+                                             <h4 class="card-title">{{ $t('EPR.overview.openAssignments') }}</h4><hr />
+                                           </div>
+                                         </div>
+                                         <ul class="list-inline m-0 overflow-y-scroll" style="max-height: 300px;">
+                                           <li v-for="(item,index) in openAssignments" :key="index + item.due_at"
+                                               class="d-flex align-items-center justify-content-between mb-3  "
+                                               :style="{
+                                                  'background': index === 0 && '#c3e6cb'
+                                                  }"
+                                           >
+                                             <div class="w-100">
+                                               <div class="row justify-content-between p-1 w-100 ml-0 pl-2 pr-2 line-height">
+                                                 <h6>{{item.todoname}}</h6>
+                                                 <p class="mb-0">{{item.due_at | formatDate}}</p>
+                                               </div>
+                                               <p class="pl-2 pr-2 mb-0">{{item.description}}</p>
+                                             </div>
+                                           </li>
+                                         </ul>
+                                       </template>
+                                     </iq-card>
                                    </b-col>
-                                   <b-col md="6" >
+                                   <b-col md="6" v-if="patient.allergies">
                                      <b-card
-                                         v-if="patient.allergies"
                                          text-variant="white"
                                          bg-variant="danger"
                                          class="iq-card">
@@ -133,85 +167,118 @@
                                          <footer class="blockquote-footer text-white font-size-12">{{ $t('EPR.overview.allergiesUpdated') }} {{patient.allergies_updated_at | fromNowDate}}</footer>
                                        </blockquote>
                                      </b-card>
+                                     <iq-card  v-if="patient.allergies && !patient.general_notes">
+                                       <template v-slot:body>
+                                         <div class="iq-card-header d-flex justify-content-between">
+                                           <div class="iq-header-title">
+                                             <h4 class="card-title">{{ $t('EPR.overview.openAssignments') }}</h4><hr />
+                                           </div>
+                                         </div>
+                                         <ul class="list-inline m-0 overflow-y-scroll" style="max-height: 300px;">
+                                           <li v-for="(item,index) in openAssignments" :key="index + item.due_at"
+                                               class="d-flex align-items-center justify-content-between mb-3  "
+                                               :style="{
+                                                  'background': index === 0 && '#c3e6cb'
+                                                  }"
+                                           >
+                                             <div class="w-100">
+                                               <div class="row justify-content-between p-1 w-100 ml-0 pl-2 pr-2 line-height">
+                                                 <h6>{{item.todoname}}</h6>
+                                                 <p class="mb-0">{{item.due_at | formatDate}}</p>
+                                               </div>
+                                               <p class="pl-2 pr-2 mb-0">{{item.description}}</p>
+                                             </div>
+                                           </li>
+                                         </ul>
+                                       </template>
+                                     </iq-card>
+                                   </b-col>
+                                   <b-col md="6" class="pr-0">
+                                     <iq-card>
+                                       <template v-slot:body>
+                                         <div class="iq-card-header d-flex justify-content-between">
+                                           <div class="iq-header-title">
+                                             <div class="row justify-content-between align-items-center">
+                                               <h4 class="card-title">{{ $t('EPR.overview.patientNotes') }}</h4>
+                                               <button type="button" class="btn btn-primary" @click="modalNotesShow = true">New Note</button>
+                                             </div>
+                                             <hr />
+                                           </div>
+                                         </div>
+                                         <ul class="list-inline m-0 overflow-y-scroll pl-2 pr-2" style="max-height: 300px;">
+                                           <li v-for="(note,index) in notes" :key="index + note.created_at" class="d-flex align-items-center justify-content-between mb-3">
+                                             <div>
+                                               <h6>{{note.content}}</h6>
+                                               <p class="mb-0">{{note.created_at | formatDate}}</p>
+                                             </div>
+                                           </li>
+                                         </ul>
+                                       </template>
+                                     </iq-card>
+                                   </b-col>
+                                   <b-col md="6">
+                                     <iq-card v-if="patient.general_notes && patient.allergies || !patient.general_notes && !patient.allergies">
+                                       <template v-slot:body>
+                                         <div class="iq-card-header d-flex justify-content-between">
+                                           <div class="iq-header-title">
+                                             <h4 class="card-title">{{ $t('EPR.overview.openAssignments') }}</h4><hr />
+                                           </div>
+                                         </div>
+                                         <ul class="list-inline m-0 overflow-y-scroll" style="max-height: 300px;">
+                                           <li v-for="(item,index) in openAssignments" :key="index + item.due_at"
+                                               class="d-flex align-items-center justify-content-between mb-3  "
+                                               :style="{
+                                                  'background': index === 0 && '#c3e6cb'
+                                                  }"
+                                           >
+                                             <div class="w-100">
+                                               <div class="row justify-content-between p-1 w-100 ml-0 pl-2 pr-2 line-height">
+                                                 <h6>{{item.todoname}}</h6>
+                                                 <p class="mb-0">{{item.due_at | formatDate}}</p>
+                                               </div>
+                                               <p class="pl-2 pr-2 mb-0">{{item.description}}</p>
+                                             </div>
+                                           </li>
+                                         </ul>
+                                       </template>
+                                     </iq-card>
+                                     <iq-card>
+                                       <template v-slot:body>
+                                         <div class="iq-card-header d-flex justify-content-between">
+                                           <div class="iq-header-title">
+                                             <h4 class="card-title">{{ $t('EPR.overview.futureAppointments') }}</h4><hr />
+                                           </div>
+                                         </div>
+                                         <ul class="iq-timeline">
+                                           <li v-for="(item,index) in futureAppointments" :key="index + item.date">
+                                             <div class="timeline-dots border-success"></div>
+                                             <h6 class="">{{item.kind}}</h6>
+                                             <small class="mt-1">{{item.date | formatDate}}</small>
+                                           </li>
+                                         </ul>
+                                       </template>
+                                     </iq-card>
+                                     <iq-card>
+                                       <template v-slot:body>
+                                         <div class="iq-card-header d-flex justify-content-between">
+                                           <div class="iq-header-title">
+                                             <h4 class="card-title">{{ $t('EPR.overview.pastAppointments') }}</h4>
+                                             <hr />
+                                           </div>
+                                         </div>
+                                         <ul class="iq-timeline">
+                                           <li v-for="(item,index) in pastAppointments" :key="index">
+                                             <div class="timeline-dots border-success"></div>
+                                             <h6>{{item.kind}}</h6>
+                                             <small class="mt-1">{{item.date | formatDate}}</small>
+                                           </li>
+                                         </ul>
+                                       </template>
+                                     </iq-card>
                                    </b-col>
                                  </div>
                                   <b-row>
-                                      <b-col md="6" class="pr-0">
-                                          <iq-card>
-                                              <template v-slot:body>
-                                                  <div class="iq-card-header d-flex justify-content-between">
-                                                      <div class="iq-header-title">
-                                                          <h4 class="card-title">{{ $t('EPR.overview.patientNotes') }}</h4><hr />
-                                                      </div>
-                                                  </div>
-                                                  <ul class="list-inline m-0 overflow-y-scroll" style="max-height: 300px;">
-                                                      <li v-for="(note,index) in notes" :key="index + note.created_at" class="d-flex align-items-center justify-content-between mb-3">
-                                                          <div>
-                                                              <h6>{{note.content}}</h6>
-                                                              <p class="mb-0">{{note.created_at | formatDate}}</p>
-                                                          </div>
-                                                          <div><a href="#" class="btn iq-bg-primary mr-2">{{ $t('EPR.overview.patientNotesOpen') }}</a></div>
-                                                      </li>
-                                                  </ul>
-                                              </template>
-                                          </iq-card>
-                                      </b-col>
-                                      <b-col md="6">
-                                        <iq-card>
-                                          <template v-slot:body>
-                                            <div class="iq-card-header d-flex justify-content-between">
-                                              <div class="iq-header-title">
-                                                <h4 class="card-title">{{ $t('EPR.overview.openAssignments') }}</h4><hr />
-                                              </div>
-                                            </div>
-                                            <ul class="list-inline m-0 overflow-y-scroll" style="max-height: 300px;">
-                                              <li v-for="(item,index) in openAssignments" :key="index + item.due_at" class="d-flex align-items-center justify-content-between mb-3"
-                                                  :style="{
-                                                  'background': index === 0 && '#c3e6cb'
-                                                  }"
-                                              >
-                                                <div class="p-1">
-                                                  <h6>{{item.todoname}}</h6>
-                                                  <p class="mb-0">{{item.due_at | formatDate}}</p>
-                                                </div>
-                                              </li>
-                                            </ul>
-                                          </template>
-                                        </iq-card>
-                                          <iq-card>
-                                              <template v-slot:body>
-                                                  <div class="iq-card-header d-flex justify-content-between">
-                                                      <div class="iq-header-title">
-                                                          <h4 class="card-title">{{ $t('EPR.overview.futureAppointments') }}</h4><hr />
-                                                      </div>
-                                                  </div>
-                                                  <ul class="iq-timeline">
-                                                      <li v-for="(item,index) in futureAppointments" :key="index + item.date">
-                                                          <div class="timeline-dots border-success"></div>
-                                                          <h6 class="">{{item.kind}}</h6>
-                                                          <small class="mt-1">{{item.date | formatDate}}</small>
-                                                      </li>
-                                                  </ul>
-                                              </template>
-                                          </iq-card>
-                                          <iq-card>
-                                              <template v-slot:body>
-                                                  <div class="iq-card-header d-flex justify-content-between">
-                                                      <div class="iq-header-title">
-                                                          <h4 class="card-title">{{ $t('EPR.overview.pastAppointments') }}</h4>
-                                                          <hr />
-                                                      </div>
-                                                  </div>
-                                                  <ul class="iq-timeline">
-                                                      <li v-for="(item,index) in pastAppointments" :key="index">
-                                                          <div class="timeline-dots border-success"></div>
-                                                          <h6>{{item.kind}}</h6>
-                                                          <small class="mt-1">{{item.date | formatDate}}</small>
-                                                      </li>
-                                                  </ul>
-                                              </template>
-                                          </iq-card>
-                                      </b-col>
+
                                   </b-row>
                               </b-col>
                           </b-row>
@@ -244,7 +311,7 @@
                                               </div>
                                           </div>
                                           <b-row align-v="center">
-                                              <b-form-group class="col-md-12" label-cols-sm="4" label-for="fname" :label="$t('EPR.personalInfo.firstName')">
+                                              <b-form-group class="col-md-12" :class="{'mb-0': disabled}" label-cols-sm="4" label-for="fname" :label="$t('EPR.personalInfo.firstName')">
                                                   <ValidationProvider name="fname" rules="required" v-slot="{ errors }">
                                                       <b-form-input :disabled="disabled" v-model="patient.name" type="text" class="form-control-disabled" :class="(errors.length > 0 ? ' is-invalid' : '')"></b-form-input>
                                                       <div class="invalid-feedback">
@@ -252,7 +319,7 @@
                                                       </div>
                                                   </ValidationProvider>
                                               </b-form-group>
-                                              <b-form-group class="col-md-12" label-cols-sm="4" label-for="lname" :label="$t('EPR.personalInfo.lastName')">
+                                              <b-form-group class="col-md-12" :class="{'mb-0': disabled}" label-cols-sm="4" label-for="lname" :label="$t('EPR.personalInfo.lastName')">
                                                   <ValidationProvider name="lname" rules="required" v-slot="{ errors }">
                                                       <b-form-input :disabled="disabled" v-model="patient.last_name" type="text" class="form-control-disabled" :class="(errors.length > 0 ? ' is-invalid' : '')"></b-form-input>
                                                       <div class="invalid-feedback">
@@ -260,44 +327,49 @@
                                                       </div>
                                                   </ValidationProvider>
                                               </b-form-group>
-                                              <b-form-group class="col-md-12" label-cols-sm="4" label-for="dob" :label="$t('EPR.personalInfo.dob')">
-                                                  <ValidationProvider name="dob" rules="required" v-slot="{ errors }">
-                                                      <b-form-input :disabled="disabled" v-model="patient.date_of_birth" type="date" class="form-control-disabled" :class="(errors.length > 0 ? ' is-invalid' : '')"></b-form-input>
+                                              <b-form-group class="col-md-12" :class="{'mb-0': disabled}" label-cols-sm="4" label-for="dob" :label="$t('EPR.personalInfo.dob')">
+<!--                                                  <ValidationProvider name="dob" rules="required" v-slot="{ errors }">-->
+                                                      <b-form-input
+                                                          :disabled="disabled"
+                                                          v-model="patient.date_of_birth"
+                                                          type="date"
+                                                          class="form-control-disabled"
+                                                      ></b-form-input>
                                                       <div class="invalid-feedback">
-                                                          <span>{{ errors[0] }}</span>
+<!--                                                          <span>{{ errors[0] }}</span>-->
                                                       </div>
-                                                  </ValidationProvider>
+<!--                                                  </ValidationProvider>-->
                                               </b-form-group>
-                                              <b-form-group class="col-md-12" label-cols-sm="4" label-for="gender" label-class="d-block" :label="$t('EPR.personalInfo.gender')">
+                                              <b-form-group class="col-md-12  row align-items-center custom-radio-st" :class="{'mb-0': disabled}" label-cols-sm="4" label-for="gender" label-class="d-block" :label="$t('EPR.personalInfo.gender')">
                                                   <b-form-radio inline v-model="patient.gender" :disabled="disabled" value="male">{{ $t('EPR.personalInfo.male') }}</b-form-radio>
                                                   <b-form-radio inline v-model="patient.gender" :disabled="disabled" value="female">{{ $t('EPR.personalInfo.female') }}</b-form-radio>
                                                   <b-form-radio inline v-model="patient.gender" :disabled="disabled" value="unspecified">{{ $t('EPR.personalInfo.unspecified') }}</b-form-radio>
                                               </b-form-group>
-                                              <b-form-group class="col-md-12" label-cols-sm="4" label-for="address" :label="$t('EPR.personalInfo.address')">
+                                              <b-form-group class="col-md-12" :class="{'mb-0': disabled}" label-cols-sm="4" label-for="address" :label="$t('EPR.personalInfo.address')">
                                                   <b-form-input :disabled="disabled" name="address" class="form-control-disabled" v-model="patient.address_line_1" style="line-height: 22px;">
                                                   </b-form-input>
                                               </b-form-group>
-                                              <b-form-group class="col-md-12" style="justify-content: space-between;" label-cols-sm="4" label-for="city" :label="$t('EPR.personalInfo.postCodeCity')">
+                                              <b-form-group class="col-md-12" :class="{'mb-0': disabled}" style="justify-content: space-between;" label-cols-sm="4" label-for="city" :label="$t('EPR.personalInfo.postCodeCity')">
                                                   <b-form-input :disabled="disabled" class="col-md-4 form-control-disabled" style="float: left;" v-model="patient.post_code" type="text"></b-form-input>
                                                   <b-form-input :disabled="disabled" class="col-md-6 form-control-disabled" style="float: right;" v-model="patient.city" type="text"></b-form-input>
                                               </b-form-group>
-                                              <b-form-group class="col-md-12" label-cols-sm="4" label-for="country" :label="$t('EPR.personalInfo.country')">
+                                              <b-form-group class="col-md-12" :class="{'mb-0': disabled}" label-cols-sm="4" label-for="country" :label="$t('EPR.personalInfo.country')">
                                                   <v-select :disabled="disabled" :clearable="false" :reduce="country => country.code" class="style-chooser form-control-disabled" v-model="patient.country_id" :options="countries"></v-select>
                                               </b-form-group>
-                                              <b-form-group class="col-md-12" label-cols-sm="4" label-for="region" :label="$t('EPR.personalInfo.region')">
+                                              <b-form-group class="col-md-12" :class="{'mb-0': disabled}" label-cols-sm="4" label-for="region" :label="$t('EPR.personalInfo.region')">
                                                   <v-select class="style-chooser form-control-disabled" :clearable="false" :reduce="region => region.code" :disabled="disabled" v-model="patient.region_id" :options="filteredRegions"> </v-select>
                                               </b-form-group>
-                                              <b-form-group class="col-md-12" label-cols-sm="4" label-for="insurance" :label="$t('EPR.personalInfo.insurance')">
+                                              <b-form-group class="col-md-12" :class="{'mb-0': disabled}" label-cols-sm="4" label-for="insurance" :label="$t('EPR.personalInfo.insurance')">
                                                   <b-form-input :disabled="disabled" class="col-md-5 form-control-disabled" style="float: left;" name="insurance_no" type="text" v-model="patient.insurance_no"></b-form-input>
                                                   <b-form-input :disabled="disabled" class="col-md-5 form-control-disabled" style="float: right;" name="insured_at" type="text" v-model="patient.insured_at"></b-form-input>
                                               </b-form-group>
-                                              <b-form-group class="col-md-12" label-cols-sm="4" label-for="mobile_no" :label="$t('EPR.personalInfo.phone')">
+                                              <b-form-group class="col-md-12" :class="{'mb-0': disabled}" label-cols-sm="4" label-for="mobile_no" :label="$t('EPR.personalInfo.phone')">
                                                   <b-form-input :disabled="disabled" name="mobile_no" type="text" class="form-control-disabled" v-model="patient.phone"></b-form-input>
                                               </b-form-group>
-                                              <b-form-group class="col-md-12" label-cols-sm="4" label-for="email" :label="$t('EPR.personalInfo.email')">
+                                              <b-form-group class="col-md-12" :class="{'mb-0': disabled}" label-cols-sm="4" label-for="email" :label="$t('EPR.personalInfo.email')">
                                                   <b-form-input :disabled="disabled" name="email" type="text" class="form-control-disabled" v-model="patient.email"></b-form-input>
                                               </b-form-group>
-                                              <b-form-group class="col-md-12" label-cols-sm="4" label-for="tax_no" :label="$t('EPR.personalInfo.taxNumber')">
+                                              <b-form-group class="col-md-12" :class="{'mb-0': disabled}" label-cols-sm="4" label-for="tax_no" :label="$t('EPR.personalInfo.taxNumber')">
                                                   <b-form-input :disabled="disabled" name="tax_no" type="text" class="form-control-disabled" v-model="patient.tax_registration_number"></b-form-input>
                                               </b-form-group>
                                           </b-row>
@@ -308,16 +380,6 @@
                                   <iq-card>
                                       <template v-slot:body>
                                           <div class="pl-0 iq-card-header d-flex justify-content-between">
-                                              <h4>{{ $t('EPR.personalInfo.allergiesAndSensitivites') }}</h4>
-                                          </div>
-                                          <div class="iq-card-body p-0">
-                                              <textarea :disabled="disabled" style="line-height: 30px;" v-model="patient.allergies" class="textarea form-control form-control-disabled" rows="7"></textarea>
-                                          </div>
-                                      </template>
-                                  </iq-card>
-                                  <iq-card>
-                                      <template v-slot:body>
-                                          <div class="pl-0 iq-card-header d-flex justify-content-between">
                                               <h4>{{ $t('EPR.personalInfo.generalNotes') }}</h4>
                                           </div>
                                           <div class="iq-card-body p-0">
@@ -325,6 +387,16 @@
                                           </div>
                                       </template>
                                   </iq-card>
+                                <iq-card>
+                                  <template v-slot:body>
+                                    <div class="pl-0 iq-card-header d-flex justify-content-between">
+                                      <h4>{{ $t('EPR.personalInfo.allergiesAndSensitivites') }}</h4>
+                                    </div>
+                                    <div class="iq-card-body p-0">
+                                      <textarea :disabled="disabled" style="line-height: 30px;" v-model="patient.allergies" class="textarea form-control form-control-disabled" rows="3"></textarea>
+                                    </div>
+                                  </template>
+                                </iq-card>
                                   <iq-card>
                                       <template v-slot:body>
                                           <div class="pl-0 iq-card-header d-flex justify-content-between">
@@ -352,9 +424,9 @@
                               </b-col>
                           </b-row>
                           <div class="text-center p-1" v-if="!disabled">
-                              <b-button style="padding: 5px 25px;" @click="submitData()" variant="primary" class="mr-2">Submit</b-button>
-                              <b-button style="padding: 5px 25px;" v-b-modal.modal-1 variant="none" class="iq-bg-danger">Cancel</b-button>
-                              <b-modal id="modal-1" ok-title="OK" cancel-title="Cancel" @ok="cancelEditingPatient">
+                              <b-button style="padding: 5px 25px;" v-b-modal.modal-1 variant="none" class="iq-bg-secondary mr-2">Cancel</b-button>
+                            <b-button style="padding: 5px 25px;" @click="submitData()" variant="primary" >Save</b-button>
+                            <b-modal id="modal-1" ok-title="OK" cancel-title="Cancel" @ok="cancelEditingPatient">
                                   <h4 class="my-4 card-title text-center">Are you sure you want to the<br>discard changes?</h4>
                               </b-modal>
                               <b-modal ref="my-modal" ok-only ok-variant="primary" ok-title="OK">
@@ -398,7 +470,7 @@
                                               <div class="text-center">
                                                   <p class="mb-0">{{ $t('EPR.files.fileName') }}: {{file.name}}</p>
                                                   <p class="mb-0">{{ $t('EPR.files.fileType') }}: {{file.type}}</p>
-                                                  <p>{{ $t('EPR.files.fileCreatedAt') }}: {{file.created_at}}</p>
+                                                  <p>{{ $t('EPR.files.fileAddedAt') }}: {{file.created_at}}</p>
                                               </div>
                                           </li>
                                       </ul>
@@ -560,11 +632,37 @@
         </div>
       </form>
     </b-modal>
+    <b-modal
+        v-model="modalNotesShow"
+        ok-title="OK"
+        cancel-title="Cancel"
+        :ok-disabled="isOkDisabledNotes"
+        title="Add Notes"
+        @ok="addNotes"
+        @close="cancelNotes"
+        @cancel="cancelNotes"
+    >
+      <div class="col-md-12 mb-3">
+        <label for="title">{{ $t('assignments.addAssignmentsModal.description') }} *</label>
+        <div style="display: flex;">
+          <textarea type="text" v-model="notesFormData.content" class="form-control" placeholder="Description" rows="5"/>
+        </div>
+      </div>
+    </b-modal>
   </b-container>
 </template>
 <script>
 import { xray } from '../../config/pluginInit'
-import { getEnquiryById, updateEnquiry, getEnquiryNotes, getEnquiryAppointments, getEnquiryInvoices, getEnquiryOffers, getEnquiryServices } from '../../services/enquiry'
+import {
+  getEnquiryById,
+  updateEnquiry,
+  getEnquiryNotes,
+  getEnquiryAppointments,
+  getEnquiryInvoices,
+  getEnquiryOffers,
+  getEnquiryServices,
+  createEnquiryNotes
+} from '../../services/enquiry'
 import { getDentists, getSurgeons } from '../../services/userService'
 import { getCountriesList, getRegionsList } from '../../services/commonCodeLists'
 import { getUsers } from '@/services/userService'
@@ -591,6 +689,9 @@ export default {
   computed: {
     isOkDisabled () {
       return !this.formData.due_at || !this.formData.description
+    },
+    isOkDisabledNotes () {
+      return !this.notesFormData.content
     },
     fullName () {
       return this.patient.name + ' ' + this.patient.last_name
@@ -705,6 +806,7 @@ export default {
     return {
       patientId: this.$route.params.patientId,
       modalAssigmentShow: false,
+      modalNotesShow: false,
       users: [],
       patient: {},
       tempPatient: {},
@@ -725,6 +827,11 @@ export default {
         description: '',
         due_at: null,
         user: {}
+      },
+      notesFormData: {
+        enquiry_id: +this.$route.params.patientId,
+        content: '',
+        user_id: null
       },
       currentInvoicePage: 1,
       invoicesPerPage: 10,
@@ -1015,6 +1122,16 @@ export default {
         this.getAssignments()
         this.formData = this.defaultFormData()
       })
+    },
+    addNotes () {
+      this.notesFormData.user_id = this.patient.user_id
+      createEnquiryNotes(this.notesFormData).then(() => {
+        this.getPatientNotes(this.patientId)
+        this.cancelNotes()
+      })
+    },
+    cancelNotes () {
+      this.notesFormData.content = ''
     }
   }
 }

@@ -177,7 +177,8 @@
       "addFile": "Add file",
       "fileName": "File name",
       "fileType": "File type",
-      "fileCreatedAt": "Created at"
+      "fileCreatedAt": "Date",
+      "fileAddedAt": "Added at"
     },
     "invoicesTab": "Invoices",
     "invoices": {

@@ -156,18 +156,25 @@ ALTER TABLE prm_company
 RENAME COLUMN tax_payer TO vat_payer;
 
 --############################################################
---# altering id types in tables
+--# altering id types in tables and adding premise_label to
+--# prm_company_premise
 --############################################################
 
 CREATE SEQUENCE prm_company_premise_premise_id_seq MINVALUE 6;
 ALTER TABLE prm_company_premise ALTER COLUMN premise_id SET DEFAULT nextval('prm_company_premise_premise_id_seq');
 ALTER SEQUENCE prm_company_premise_premise_id_seq OWNED BY prm_company_premise.premise_id;
 
-CREATE SEQUENCE prm_company_premise_device_device_id_seq MINVALUE 5;
-ALTER TABLE prm_company_premise_device ALTER COLUMN device_id SET DEFAULT nextval('prm_company_premise_device_device_id_seq');
-ALTER SEQUENCE prm_company_premise_device_device_id_seq OWNED BY prm_company_premise_device.device_id;
+ALTER TABLE prm_company_premise_device DROP COLUMN device_id CASCADE;
+ALTER TABLE prm_company_premise_device ADD COLUMN device_id SERIAL PRIMARY KEY;
+ALTER TABLE invoice DROP COLUMN device_id;
+ALTER TABLE invoice ADD COLUMN device_id INT 
+CONSTRAINT invoice_prm_company_premise_device_fk REFERENCES prm_company_premise_device (device_id);
 
 ALTER TABLE prm_company_premise ADD COLUMN premise_label VARCHAR(20);
+
+--############################################################
+--# Updating users for SmartPRM
+--############################################################
 
 UPDATE users SET title = 'Dr.', specialization = 'dr. dent. med.', function = '{dentist}' WHERE id = 39; 
 UPDATE users SET title = 'Dr.', specialization = 'dr. dent. med.', function = '{dentist}' WHERE id = 148;
@@ -179,6 +186,20 @@ INSERT INTO users (name, email, title, specialization, function) VALUES ('Špela
 INSERT INTO users (name, email, title, specialization, function) VALUES ('Polona Šter', 'polona.ster@primadent.si', 'Dr.', 'dr. dent. med.', '{dentist}');
 INSERT INTO users (name, email, title, specialization, function) VALUES ('Gašper Fortuna', 'gasper.fortuna@primadent.si', 'Dr.', 'dr. dent. med., spec. oralne in maksilofacialne kirurgije', '{dentist,surgeon}');
 INSERT INTO users (name, email, title, specialization, function) VALUES ('Žiga Kovačič', 'ziga.kovacic@primadent.si', 'Dr.', 'dr. dent. med., spec. oralne in maksilofacialne kirurgije', '{dentist,surgeon}');
+
+--############################################################
+--# Adding default value now() to created_at in notes table
+--############################################################
+
+ALTER TABLE notes ALTER COLUMN created_at SET DEFAULT CURRENT_TIMESTAMP;
+
+--############################################################
+--# Adding fields to prm_company_premise_device and
+--# prm_company_premise
+--############################################################
+
+ALTER TABLE prm_company_premise_device ADD COLUMN electronic_device_id VARCHAR(20);
+ALTER TABLE prm_company_premise ADD COLUMN business_premise_id VARCHAR(20);
 
 UPDATE db_version SET version ='01.15', version_date=CURRENT_DATE WHERE resource='Tables';
 

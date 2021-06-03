@@ -127,11 +127,31 @@ const deleteEnquiries = (request, response, id) => {
 }
 
 const getEnquiryNotes = (request, response, enquiryId) => {
-    pool.query("SELECT content, created_at FROM notes WHERE enquiry_id = $1", [enquiryId] , (error, results) => {
+    pool.query("SELECT content, created_at, user_id FROM notes WHERE enquiry_id = $1 ORDER BY created_at", [enquiryId] , (error, results) => {
         if (error) {
             throw error
         }
         response.status(200).json(results.rows)
+    })
+}
+
+const createEnquiryNotes = (request, response, notes) => {
+    var statement = "INSERT INTO notes ("
+    if (notes.content) statement += "content,"
+    if (notes.enquiry_id) statement += "enquiry_id,"
+    if (notes.user_id) statement += "user_id,"
+    statement += "created_at"
+    statement += ") VALUES ("
+    if (notes.content) statement += "'" + notes.content + "',"
+    if (notes.enquiry_id) statement += "'" + notes.enquiry_id + "',"
+    if (notes.user_id) statement += "'" + notes.user_id + "',"
+    statement +="NOW()"
+    statement +=")"
+    pool.query(statement , (error, results) => {
+        if (error) {
+            throw error
+        }
+        response.status(200).json("OK")
     })
 }
 
@@ -192,5 +212,6 @@ module.exports = {
   getEnquiryInvoices,
   getEnquiryOffers,
   getEnquiryServices,
-  getPatients
+  getPatients,
+  createEnquiryNotes
 }
