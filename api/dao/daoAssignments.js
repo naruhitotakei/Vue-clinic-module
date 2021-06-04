@@ -52,20 +52,20 @@ const getAssignments = (request, response, scope, userid, due) =>  {
             }
             response.status(200).json(results.rows)
         })  
-    } else if (scope == "AllNurses") {
-        var statement = ["SELECT todos.*, enquiries.name AS patientname, enquiries.last_name AS patientlastname, users.name AS todoname, dentists.name AS dentistname FROM todos",
+    } else if (scope == "PrmClient") {
+        var statement = ["SELECT todos.*, enquiries.name AS patientname, enquiries.prm_dentist_user_id, enquiries.last_name AS patientlastname, users.name AS todoname, dentists.name AS dentist_name, dentists.id as dentists_id FROM todos",
                          "LEFT JOIN enquiries ON todos.enquiry_id = enquiries.id",
                          "LEFT JOIN users ON todos.user_id = users.id",
                          "LEFT JOIN users dentists ON enquiries.prm_dentist_user_id = users.id",
                          condition,
-                         "AND ( users.prm_role_id = (SELECT role_id FROM prm_role where role_name = 'Nurse') OR users.prm_role_id = (SELECT role_id FROM prm_role where role_name = 'SuperNurse') )",
                          "ORDER BY todos.due_at ASC"].join('\n') 
-        pool.query(statement, [userid], (error, results) => {
+        pool.query(statement, (error, results) => {
+          console.log(error)
             if (error) {
                 throw error
             }
             response.status(200).json(results.rows)
-        })  
+        }) 
     }
 }
 
