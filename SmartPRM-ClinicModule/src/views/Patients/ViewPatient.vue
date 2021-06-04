@@ -390,8 +390,8 @@
                                                   rows="7"
                                                   ref="textareaGeneralNotes"
                                                   wrap="hard"
-                                                  v-model="patient.general_notes"
-                                                  @input="changeGeneralNotes"
+                                                  v-model="notesGeneral"
+                                                  @change="changeGeneralNotes"
                                                   v-html="patient.general_notes"
                                               ></textarea>
                                           </div>
@@ -825,6 +825,7 @@ export default {
       modalAssigmentShow: false,
       modalNotesShow: false,
       generalNotes: '',
+      notesGeneral: '',
       users: [],
       patient: {},
       tempPatient: {},
@@ -971,10 +972,16 @@ export default {
       ]
     }
   },
+  watch: {
+    'patient.notes_general' () {
+    }
+  },
   methods: {
     changeGeneralNotes (e) {
       let str = e.target.innerHTML
-      this.generalNotes = str.replace(/\n/g, '<br>')
+      console.log(str)
+      console.log('notesGeneral', this.notesGeneral)
+      this.generalNotes = this.notesGeneral.replace(/\n/g, '<br>')
     },
     selectedUser (val) {
       console.log('selected', val)
@@ -1009,6 +1016,9 @@ export default {
         this.patient = response[0]
         if (this.patient.date_of_birth !== null) {
           this.patient.date_of_birth = moment(this.patient.date_of_birth).format('YYYY-MM-DD')
+        }
+        if (this.patient.general_notes.length) {
+          this.notesGeneral = this.patient.general_notes.replace(/<br>/g, '\n')
         }
       }
       )
