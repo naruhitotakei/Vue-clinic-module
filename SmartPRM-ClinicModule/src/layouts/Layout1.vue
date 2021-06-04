@@ -354,17 +354,16 @@ export default {
       })
     },
     settingData () {
-      console.log('setting data submitted')
       let profile = {
         email: this.logedInUser.email,
         prm_locale: this.logedInUser.prm_locale
       }
-      console.log(profile)
       this.changeLang(profile)
     },
     changeLang (profile) {
       changeLang(profile).then(() => {
-
+        console.log('Successful update')
+        this.$bvToast.show('b-toaster-bottom-right')
       })
     },
     updateRadio () {
