@@ -9,7 +9,7 @@ const pool = new Pool({
 })
 
 const getCountriesList = (request, response) => {
-    pool.query("SELECT c.id as code, c.name as label FROM countries c", (error, results) => {
+    pool.query("SELECT * FROM countries c", (error, results) => {
         if (error) {
             throw error
         }
@@ -44,9 +44,19 @@ const getTaxRateList = (request, response, id) => {
     })
 }
 
+const getClients = (request, response) => {
+    pool.query("SELECT * FROM prm_client", (error, results) => {
+        if (error) {
+            throw error
+        }
+        response.status(200).json(results.rows)
+    })
+}
+
 module.exports = {
   getCountriesList,
   getRegionsList,
   getLocationsList,
-  getTaxRateList
+  getTaxRateList,
+  getClients
 }

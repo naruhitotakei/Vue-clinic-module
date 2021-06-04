@@ -604,7 +604,32 @@ app.get('/api/companies/:id', (req, res) => {
     daoCompanies.getCompanyById(req, res, id)
     else
         res.status(401).json("OK: user unauthorized")
-  });
+});
+
+app.post('/api/companies/', (req, res) => {
+    const company = req.body
+    if(req.session.prm_user && req.session.prm_user.permissions && checkPermission(req.session.prm_user.permissions, assignmentsPermission))
+    daoCompanies.createCompany(req, res, company)
+    else
+        res.status(401).json("OK: user unauthorized")
+});
+
+app.put('/api/companies/:id', (req, res) => {
+    const id = req.params.id
+    const company = req.body
+    if(req.session.prm_user && req.session.prm_user.permissions && checkPermission(req.session.prm_user.permissions, assignmentsPermission))
+    daoCompanies.updateCompany(req, res, id, company)
+    else
+        res.status(401).json("OK: user unauthorized")
+});
+
+app.delete('/api/companies/:id', (req, res) => {
+    const id = req.params.id
+    if(req.session.prm_user && req.session.prm_user.permissions && checkPermission(req.session.prm_user.permissions, assignmentsPermission))
+    daoCompanies.deleteCompany(req, res, id)
+    else
+        res.status(401).json("OK: user unauthorized")
+});
 
 ///////////////////////////////////
 // invoices, fiscal verification
@@ -748,6 +773,9 @@ app.get('/api/codelist/locations', (req, res) => {
 app.get('/api/codelist/country/:id/tax-rate', (req, res) => {
     const id = req.params.id
     daoCodeLists.getTaxRateList(req, res, id)
+});
+app.get('/api/codelist/clients', (req, res) => {
+    daoCodeLists.getClients(req, res)
 });
 
 ///////////////////////////////////

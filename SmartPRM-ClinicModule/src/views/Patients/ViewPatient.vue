@@ -354,7 +354,7 @@
                                                   <b-form-input :disabled="disabled" class="col-md-6 form-control-disabled" style="float: right;" v-model="patient.city" type="text"></b-form-input>
                                               </b-form-group>
                                               <b-form-group class="col-md-12" :class="{'mb-0': disabled}" label-cols-sm="4" label-for="country" :label="$t('EPR.personalInfo.country')">
-                                                  <v-select :disabled="disabled" :clearable="false" :reduce="country => country.code" class="style-chooser form-control-disabled" v-model="patient.country_id" :options="countries"></v-select>
+                                                  <v-select :disabled="disabled" label="name" :clearable="false" :reduce="country => country.id" class="style-chooser form-control-disabled" v-model="patient.country_id" :options="countries"></v-select>
                                               </b-form-group>
                                               <b-form-group class="col-md-12" :class="{'mb-0': disabled}" label-cols-sm="4" label-for="region" :label="$t('EPR.personalInfo.region')">
                                                   <v-select class="style-chooser form-control-disabled" :clearable="false" :reduce="region => region.code" :disabled="disabled" v-model="patient.region_id" :options="filteredRegions"> </v-select>
