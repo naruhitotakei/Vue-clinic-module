@@ -70,6 +70,7 @@ const getAssignments = (request, response, scope, userid, prmClientId, due) =>  
                          "AND users.id = $1",
                          "ORDER BY todos.due_at ASC"].join('\n') 
         pool.query(statement, [userid], (error, results) => {
+          console.log(error)
             if (error) {
                 throw error
             }
