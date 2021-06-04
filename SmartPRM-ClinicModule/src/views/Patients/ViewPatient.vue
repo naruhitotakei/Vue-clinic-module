@@ -74,7 +74,7 @@
                                               <button type="button" @click="addInvoice" class="btn btn-light m-1">{{ $t('EPR.overview.addInvoice') }}</button>
                                           </b-col>
                                           <b-col class="text-center">
-                                              <button type="" class="btn btn-danger mt-3">{{ $t('EPR.overview.deletePatient') }}</button>
+                                              <button type="button" class="btn btn-danger mt-3" @click="trashPatient">{{ $t('EPR.overview.deletePatient') }}</button>
                                           </b-col>
                                       </div>
                                   </iq-card>
@@ -677,7 +677,8 @@ import {
   getEnquiryInvoices,
   getEnquiryOffers,
   getEnquiryServices,
-  createEnquiryNotes
+  createEnquiryNotes,
+  trashEnquiry
 } from '../../services/enquiry'
 import { getDentists, getSurgeons } from '../../services/userService'
 import { getCountriesList, getRegionsList } from '../../services/commonCodeLists'
@@ -1082,6 +1083,11 @@ export default {
         this.$bvToast.show('b-toaster-bottom-right')
       }).catch(errorMsg => {
         console.log('Error: ' + errorMsg)
+      })
+    },
+    trashPatient () {
+      trashEnquiry(this.patientId).then(() => {
+        this.$router.push({ path: `/patients` })
       })
     },
     addOffer () {
