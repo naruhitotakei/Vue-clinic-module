@@ -14,7 +14,7 @@ const getApontments = (request, response, from, to, client_id, user_id, scope, d
         statement += "LEFT JOIN appointment_slots app_s ON app.id = app_s.appointment_id "
         statement += "LEFT JOIN users us ON app_s.doctor_name = us.name "
         statement += "LEFT JOIN clients cl ON app_s.client_id = cl.id "
-        statement += "LEFT JOIN prm_client pcl ON cl.id = pcl.clients_id "
+        statement += "LEFT JOIN prm_client pcl ON cl.id = pcl.id "
         statement += "LEFT JOIN enquiries enq ON app.enquiry_id = enq.id "
         statement += "WHERE app.trashed = false "
         statement += "AND pcl.client_deleted = false "
@@ -29,6 +29,7 @@ const getApontments = (request, response, from, to, client_id, user_id, scope, d
         statement = statement.replace(":from",from).replace(":to",to).replace(":client_id",client_id).replace(":client_id",client_id) 
         console.log(statement)
         pool.query(statement , (error, results) => {
+          console.log(error)
             if (error) {
                 throw error
             }

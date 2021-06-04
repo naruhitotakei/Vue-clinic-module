@@ -117,8 +117,8 @@ const updateEnquiry = (req, res, id, enquiry) => {
     });
 }
 
-const deleteEnquiries = (request, response, id) => {
-  pool.query('DELETE FROM enquiries WHERE id = $1', [id], (error, results) => {
+const trashEnquiry = (request, response, id) => {
+  pool.query('UPDATE enquiries SET trashed = true WHERE id = $1', [id], (error, results) => {
     if (error) {
       throw error
     }
@@ -206,7 +206,7 @@ module.exports = {
   getEnquiriesById,
   createEnquiry,
   updateEnquiry,
-  deleteEnquiries,
+  trashEnquiry,
   getEnquiryNotes,
   getEnquiryAppointments,
   getEnquiryInvoices,

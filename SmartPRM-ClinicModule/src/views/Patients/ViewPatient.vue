@@ -58,10 +58,10 @@
                                               </div>
                                             <hr>
                                             <div class="row ml-1">
-                                              <div class="col-4 pl-lg-3 p-md-0"><h6>{{ $t('EPR.overview.personalDentist') }}:</h6></div>
+                                              <div class="col-4 pl-lg-3 p-md-0"><h6>{{ $t('EPR.overview.Dentist') }}:</h6></div>
                                               <div v-if="patientsDentist" class="col-8 p-md-0 pl-lg-3 text-dark">{{patientsDentist.label}}</div>
                                               <div v-if="!patientsDentist" class="col-8 text-dark">{{ $t('EPR.overview.notSelected') }}</div>
-                                              <div class="col-4 pl-lg-3 p-md-0"><h6>{{ $t('EPR.overview.personalSurgeon') }}:</h6></div>
+                                              <div class="col-4 pl-lg-3 p-md-0"><h6>{{ $t('EPR.overview.Surgeon') }}:</h6></div>
                                               <div v-if="patientsSurgeon" class="col-8 p-md-0 pl-lg-3 text-dark">{{patientsSurgeon.label}}</div>
                                               <div v-if="!patientsSurgeon" class="col-8 pl-lg-3 p-md-0 text-dark">{{ $t('EPR.overview.notSelected') }}</div>
                                             </div>
@@ -74,7 +74,7 @@
                                               <button type="button" @click="addInvoice" class="btn btn-light m-1">{{ $t('EPR.overview.addInvoice') }}</button>
                                           </b-col>
                                           <b-col class="text-center">
-                                              <button type="" class="btn btn-danger mt-3">{{ $t('EPR.overview.deletePatient') }}</button>
+                                              <button type="button" class="btn btn-danger mt-3" @click="trashPatient">{{ $t('EPR.overview.deletePatient') }}</button>
                                           </b-col>
                                       </div>
                                   </iq-card>
@@ -126,7 +126,7 @@
                                      <b-card class="iq-card" >
                                        <b-card-title>{{ $t('EPR.overview.generalNotes') }}</b-card-title>
                                        <hr />
-                                       <b-card-text class="text-black">{{patient.general_notes}}</b-card-text>
+                                       <b-card-text class="text-black" v-html="patient.general_notes"></b-card-text>
                                        <b-card-text><small class="text-muted">{{ $t('EPR.overview.generalNotesUpdated') }} {{patient.general_notes_updated_at | fromNowDate}}</small></b-card-text>
                                      </b-card>
                                       <!--  TODO make more elegantly -->
@@ -383,7 +383,17 @@
                                               <h4>{{ $t('EPR.personalInfo.generalNotes') }}</h4>
                                           </div>
                                           <div class="iq-card-body p-0">
-                                              <textarea :disabled="disabled" style="line-height: 30px;" v-model="patient.general_notes" class="textarea form-control form-control-disabled" rows="7"></textarea>
+                                              <textarea
+                                                  :disabled="disabled"
+                                                  style="line-height: 30px;"
+                                                  class="textarea form-control form-control-disabled"
+                                                  rows="7"
+                                                  ref="textareaGeneralNotes"
+                                                  wrap="hard"
+                                                  v-model="notesGeneral"
+                                                  @change="changeGeneralNotes"
+                                                  v-html="patient.general_notes"
+                                              ></textarea>
                                           </div>
                                       </template>
                                   </iq-card>
@@ -393,7 +403,13 @@
                                       <h4>{{ $t('EPR.personalInfo.allergiesAndSensitivites') }}</h4>
                                     </div>
                                     <div class="iq-card-body p-0">
-                                      <textarea :disabled="disabled" style="line-height: 30px;" v-model="patient.allergies" class="textarea form-control form-control-disabled" rows="3"></textarea>
+                                      <textarea
+                                          :disabled="disabled"
+                                          style="line-height: 30px;"
+                                          v-model="patient.allergies"
+                                          class="textarea form-control form-control-disabled"
+                                          rows="3"
+                                         ></textarea>
                                     </div>
                                   </template>
                                 </iq-card>
@@ -661,7 +677,8 @@ import {
   getEnquiryInvoices,
   getEnquiryOffers,
   getEnquiryServices,
-  createEnquiryNotes
+  createEnquiryNotes,
+  trashEnquiry
 } from '../../services/enquiry'
 import { getDentists, getSurgeons } from '../../services/userService'
 import { getCountriesList, getRegionsList } from '../../services/commonCodeLists'
@@ -807,6 +824,8 @@ export default {
       patientId: this.$route.params.patientId,
       modalAssigmentShow: false,
       modalNotesShow: false,
+      generalNotes: '',
+      notesGeneral: '',
       users: [],
       patient: {},
       tempPatient: {},
@@ -953,7 +972,17 @@ export default {
       ]
     }
   },
+  watch: {
+    'patient.notes_general' () {
+    }
+  },
   methods: {
+    changeGeneralNotes (e) {
+      let str = e.target.innerHTML
+      console.log(str)
+      console.log('notesGeneral', this.notesGeneral)
+      this.generalNotes = this.notesGeneral.replace(/\n/g, '<br>')
+    },
     selectedUser (val) {
       console.log('selected', val)
     },
@@ -987,6 +1016,9 @@ export default {
         this.patient = response[0]
         if (this.patient.date_of_birth !== null) {
           this.patient.date_of_birth = moment(this.patient.date_of_birth).format('YYYY-MM-DD')
+        }
+        if (this.patient.general_notes.length) {
+          this.notesGeneral = this.patient.general_notes.replace(/<br>/g, '\n')
         }
       }
       )
@@ -1054,12 +1086,18 @@ export default {
       this.patient = this.tempPatient
     },
     updatePatient () {
+      this.patient.general_notes = this.generalNotes
       updateEnquiry(this.patientId, this.patient).then((response) => {
         console.log('Successful update')
         this.patient = response
         this.$bvToast.show('b-toaster-bottom-right')
       }).catch(errorMsg => {
         console.log('Error: ' + errorMsg)
+      })
+    },
+    trashPatient () {
+      trashEnquiry(this.patientId).then(() => {
+        this.$router.push({ path: `/patients` })
       })
     },
     addOffer () {
