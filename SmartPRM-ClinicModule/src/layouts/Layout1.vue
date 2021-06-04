@@ -156,10 +156,10 @@
     </form>
   </b-modal>
   <!-- Account Setting -->
-  <b-modal v-model="accountModalShow" title="Account Setting" ok-title="Save Changes" @ok="handleSubmit(settingData)" cancel-title="Close">
+  <b-modal v-model="accountModalShow" title="Account Setting" ok-title="Save Changes" @ok="settingData" cancel-title="Close">
     <div class="mb-3">
       <label>Language</label>
-      <v-select :clearable="false" @input="langChange" :reduce="language => language.value" class="style-chooser" label="title" v-model="logedInUser.locale" :options="langsOptions"></v-select>
+      <v-select :clearable="false" @input="langChange" :reduce="language => language.value" class="style-chooser" label="title" v-model="logedInUser.prm_locale" :options="langsOptions"></v-select>
     </div>
     <ValidationObserver ref="form" v-slot="{ handleSubmit }">
     <form novalidate @submit.prevent="handleSubmit(settingData)">
@@ -226,7 +226,7 @@ import loader from '../assets/images/logo.png'
 import { xray } from '../config/pluginInit'
 import { Users } from '../FackApi/api/chat'
 import { mapGetters, mapActions } from 'vuex'
-import { sso, logout, editProfile } from '../services/userService'
+import { sso, logout, editProfile, changeLang } from '../services/userService'
 import { uploadAvatar } from '../services/upDownLoad'
 
 export default {
@@ -355,6 +355,17 @@ export default {
     },
     settingData () {
       console.log('setting data submitted')
+      let profile = {
+        email: this.logedInUser.email,
+        prm_locale: this.logedInUser.prm_locale
+      }
+      console.log(profile)
+      this.changeLang(profile)
+    },
+    changeLang (profile) {
+      changeLang(profile).then(() => {
+
+      })
     },
     updateRadio () {
       this.horizontal = this.$store.getters['Setting/horizontalMenuState']
@@ -394,7 +405,7 @@ export default {
       sso().then(response => {
         if (typeof response !== 'string') {
           this.logedInUser = response
-          this.$i18n.locale = this.logedInUser.locale
+          this.$i18n.locale = this.logedInUser.prm_locale
           this.verticalMenu = this.filterMenu(SideBarItems)
         } else {
           this.$router.push({ name: 'auth1.sign-in' })
@@ -433,6 +444,7 @@ export default {
       return false
     },
     langChange (lang) {
+      console.log('lang', lang)
       this.langChangeState(lang)
       this.$i18n.locale = lang
       if (document.getElementsByClassName('iq-show').length) {

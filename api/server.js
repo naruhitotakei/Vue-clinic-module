@@ -112,6 +112,15 @@ app.post('/api/profile', async function(req, res) {
     }    
 });
 
+app.post('/api/profile/change-lang', async function(req, res) {
+  const data = req.body
+  if (req.session.prm_user) {
+    daoUser.changeLang(req, res, data)
+  } else {
+    res.status(200).json("NOK: user not logged in")
+  }
+});
+
 app.get('/api/dentists', async function(req, res) {
     if (req.session.prm_user) { 
         daoUser.getDentists(req, res)
