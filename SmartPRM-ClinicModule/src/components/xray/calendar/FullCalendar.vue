@@ -4,7 +4,7 @@
   :datesAboveResources="true"
   :defaultView="calendarOptions.defaultView"
   :plugins="calendarOptions.plugins"
-  :events="calendarOptions.events"
+  :events="events"
   :resources="resourcesOuter"
   :minTime="calendarOptions.minTime"
   :maxTime="calendarOptions.maxTime"
@@ -93,7 +93,8 @@ export default {
     }
   },
   props: {
-    resourcesOuter: Array
+    resourcesOuter: Array,
+    events: Array
   },
   data () {
     return {
@@ -188,6 +189,8 @@ export default {
   mounted () {
     console.log('this.resourcesOuter', this.resourcesOuter)
     this.calendarApi = this.$refs.calendar.getApi()
+    console.log(this.events)
+    this.calendarOptions.events = this.events
     this.getPatients()
     this.getDoctors()
     this.getLocations()
@@ -327,6 +330,7 @@ export default {
     openUpdateModal (selectionInfo) {
       this.modalShow = true
       let event = this.calendarApi.getEventById(selectionInfo.event.id)
+      let location = this.locations.find(item => item.city === event.location)
       this.formData = {
         id: event.id,
         title: event.title,
@@ -334,6 +338,7 @@ export default {
         end: event.end,
         backgroundColor: event.backgroundColor,
         resourceId: event.extendedProps.eventResourceId,
+        locationId: location,
         ...event.extendedProps
       }
       this.modalTitle = this.formData.title

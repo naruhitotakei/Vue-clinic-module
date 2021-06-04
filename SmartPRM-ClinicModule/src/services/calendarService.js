@@ -1,6 +1,7 @@
 // doctorUserIdList == null - all doctors according to role
 export async function getApontments (startdate, endate, doctorUserIdList) {
-  const rawResponse = await fetch('/api/calendar/' + startdate + '/' + endate + (id==null? '' : ('?doc=' + doctorUserIdList.toString()) ), {
+  // (id==null? '' : ('?doc=' + doctorUserIdList.toString()) )
+  const rawResponse = await fetch('/api/calendar/' + startdate + '/' + endate, {
     credentials: 'same-origin',
     headers: {
       'Accept': 'application/json'

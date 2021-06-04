@@ -74,7 +74,7 @@
                                               <button type="button" @click="addInvoice" class="btn btn-light m-1">{{ $t('EPR.overview.addInvoice') }}</button>
                                           </b-col>
                                           <b-col class="text-center">
-                                              <button type="" class="btn btn-danger mt-3">{{ $t('EPR.overview.deletePatient') }}</button>
+                                              <button type="button" class="btn btn-danger mt-3" @click="trashPatient">{{ $t('EPR.overview.deletePatient') }}</button>
                                           </b-col>
                                       </div>
                                   </iq-card>
@@ -390,8 +390,8 @@
                                                   rows="7"
                                                   ref="textareaGeneralNotes"
                                                   wrap="hard"
-                                                  v-model="patient.general_notes"
-                                                  @input="changeGeneralNotes"
+                                                  v-model="notesGeneral"
+                                                  @change="changeGeneralNotes"
                                                   v-html="patient.general_notes"
                                               ></textarea>
                                           </div>
@@ -677,7 +677,8 @@ import {
   getEnquiryInvoices,
   getEnquiryOffers,
   getEnquiryServices,
-  createEnquiryNotes
+  createEnquiryNotes,
+  trashEnquiry
 } from '../../services/enquiry'
 import { getDentists, getSurgeons } from '../../services/userService'
 import { getCountriesList, getRegionsList } from '../../services/commonCodeLists'
@@ -824,6 +825,7 @@ export default {
       modalAssigmentShow: false,
       modalNotesShow: false,
       generalNotes: '',
+      notesGeneral: '',
       users: [],
       patient: {},
       tempPatient: {},
@@ -970,10 +972,16 @@ export default {
       ]
     }
   },
+  watch: {
+    'patient.notes_general' () {
+    }
+  },
   methods: {
     changeGeneralNotes (e) {
       let str = e.target.innerHTML
-      this.generalNotes = str.replace(/\n/g, '<br>')
+      console.log(str)
+      console.log('notesGeneral', this.notesGeneral)
+      this.generalNotes = this.notesGeneral.replace(/\n/g, '<br>')
     },
     selectedUser (val) {
       console.log('selected', val)
@@ -1008,6 +1016,9 @@ export default {
         this.patient = response[0]
         if (this.patient.date_of_birth !== null) {
           this.patient.date_of_birth = moment(this.patient.date_of_birth).format('YYYY-MM-DD')
+        }
+        if (this.patient.general_notes.length) {
+          this.notesGeneral = this.patient.general_notes.replace(/<br>/g, '\n')
         }
       }
       )
@@ -1082,6 +1093,11 @@ export default {
         this.$bvToast.show('b-toaster-bottom-right')
       }).catch(errorMsg => {
         console.log('Error: ' + errorMsg)
+      })
+    },
+    trashPatient () {
+      trashEnquiry(this.patientId).then(() => {
+        this.$router.push({ path: `/patients` })
       })
     },
     addOffer () {
