@@ -82,19 +82,19 @@ export const servicesList = [
   {
     title: 'Consultations',
     list: [
-      { id: 1, serviceName: 'Consultation 1', time: '20 minutes', price: 30, section: 'Consultation' },
-      { id: 2, serviceName: 'Consultation 2', time: '20 minutes', price: 50, section: 'Consultation' },
-      { id: 3, serviceName: 'Consultation 3', time: '20 minutes', price: 70, section: 'Consultation' },
-      { id: 4, serviceName: 'Consultation 4', time: '20 minutes', price: 100, section: 'Consultation' }
+      { id: 1, serviceName: 'Consultation 1', time: 20, price: 30, section: 'Consultation' },
+      { id: 2, serviceName: 'Consultation 2', time: 20, price: 50, section: 'Consultation' },
+      { id: 3, serviceName: 'Consultation 3', time: 20, price: 70, section: 'Consultation' },
+      { id: 4, serviceName: 'Consultation 4', time: 20, price: 100, section: 'Consultation' }
     ]
   },
   {
     title: 'Teeth Withening',
     list: [
-      { id: 5, serviceName: 'Teeth Withening 1', time: '40 minutes', price: 30, section: 'Teeth Withening' },
-      { id: 6, serviceName: 'Teeth Withening 2', time: '40 minutes', price: 50, section: 'Teeth Withening' },
-      { id: 7, serviceName: 'Teeth Withening 3', time: '40 minutes', price: 70, section: 'Teeth Withening' },
-      { id: 8, serviceName: 'Teeth Withening 4', time: '40 minutes', price: 100, section: 'Teeth Withening' }
+      { id: 5, serviceName: 'Teeth Withening 1', time: 40, price: 30, section: 'Teeth Withening' },
+      { id: 6, serviceName: 'Teeth Withening 2', time: 40, price: 50, section: 'Teeth Withening' },
+      { id: 7, serviceName: 'Teeth Withening 3', time: 40, price: 70, section: 'Teeth Withening' },
+      { id: 8, serviceName: 'Teeth Withening 4', time: 40, price: 100, section: 'Teeth Withening' }
     ]
   }
 ]
