@@ -46,7 +46,7 @@
             <b-button
               align-self="end"
               variant="primary"
-              @click="$emit('change-tab', 1)">
+              @click="$emit('change-tab', 0)">
               Back to Services
             </b-button>
             <b-button
