@@ -15,7 +15,7 @@
         align-self="end"
         variant="primary"
         :disabled="!selectedServices.length"
-        @click="changeTab(1)">
+        @click="$emit('change-tab', 1)">
         Choose Time
       </b-button>
     </div>
