@@ -7,7 +7,11 @@
       responsive="sm"
     >
       <template #cell(doctors)="data">
-        <time-selection-table-row :doctors="data.value" @select-doctor="$emit('select-doctor', {doctor: $event, time: data.item.time})" />
+        <time-selection-table-row
+        :doctors="data.value"
+        :activeDoctor="getActiveDoctor(data.item.time)"
+        @select-doctor="$emit('select-doctor', {doctor: $event, time: data.item.time})"
+        />
       </template>
       <template #cell(selected)="{ rowSelected }">
         <template v-if="rowSelected">
@@ -37,7 +41,9 @@ export default {
     items: {
       type: Array,
       default: () => []
-    }
+    },
+    selectedSlot: Object,
+    selectedDate: Date
   },
   data () {
     return {
@@ -51,6 +57,9 @@ export default {
     // })
   },
   methods: {
+    getActiveDoctor: function (time) {
+      return (this.selectedSlot && this.selectedDate.getDate() === this.selectedSlot.date.getDate() && time === this.selectedSlot.time) ? this.selectedSlot.doctor : null
+    }
   }
 }
 </script>
