@@ -77,7 +77,7 @@ import resourceTimeGrid from '@fullcalendar/resource-timegrid'
 import dayGridPlugin from '@fullcalendar/daygrid'
 import timeGridPlugin from '@fullcalendar/timegrid'
 import interactionPlugin from '@fullcalendar/interaction'
-// import listPlugin from '@fullcalendar/list'
+import listPlugin from '@fullcalendar/list'
 import moment from 'moment'
 import { xray } from '../../../config/pluginInit'
 import { getPatients } from '../../../services/enquiry'
@@ -168,7 +168,7 @@ export default {
       viewName: 'dayGridMonth',
       event: {},
       calendarOptions: {
-        plugins: [dayGridPlugin, timeGridPlugin, interactionPlugin, resourceTimeGrid],
+        plugins: [dayGridPlugin, timeGridPlugin, interactionPlugin, resourceTimeGrid, listPlugin],
         allDayDefault: false,
         header: {
           left: 'prev,next today',
@@ -370,6 +370,13 @@ export default {
   writing-mode: tb-rl !important;
   transform: rotate(180deg) !important;
   line-height: 13px !important;
+}
+
+body .wrapper .custom-control-label::before {
+  top:50% !important;
+}
+body .wrapper .custom-control-label::after {
+  top:50% !important;
 }
 
   @import '~@fullcalendar/core/main.css';
