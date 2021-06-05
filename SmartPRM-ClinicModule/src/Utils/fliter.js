@@ -17,3 +17,9 @@ Vue.filter('formatDate', function (value) {
     return moment(String(value)).format('ddd, D MMM')
   }
 })
+
+Vue.filter('formatFullDate', function (value) {
+  if (value) {
+    return moment(String(value)).format('dddd, MMMM D, YYYY')
+  }
+})
