@@ -10,6 +10,15 @@
     :tabId="`${index}_tab`"
     @row-selected="rowSelectHandler"
     />
+    <div class="text-right">
+      <b-button
+        align-self="end"
+        variant="primary"
+        :disabled="!selectedServices.length"
+        @click="changeTab(1)">
+        Choose Time
+      </b-button>
+    </div>
   </div>
 </template>
 

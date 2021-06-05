@@ -1,42 +1,36 @@
 <template>
-  <div>
-    <div class="text-center">
-      <b-button-group class="mt-2">
-        <b-button :variant="activeBtnVariant(0)" @click="changeTab(0)">Pick service</b-button>
-        <b-button :variant="activeBtnVariant(1)" @click="changeTab(1)" :disabled="!serviceChoosed">Choose time</b-button>
-        <b-button :variant="activeBtnVariant(2)" @click="changeTab(2)" :disabled="!selectedSlot">Review</b-button>
-      </b-button-group>
+  <div class="text-center">
+    <b-button-group class="mt-2">
+      <b-button :variant="activeBtnVariant(0)" @click="changeTab(0)">Pick service</b-button>
+      <b-button :variant="activeBtnVariant(1)" @click="changeTab(1)" :disabled="!serviceChoosed">Choose time</b-button>
+      <b-button :variant="activeBtnVariant(2)" @click="changeTab(2)" :disabled="!serviceChoosed || !selectedSlot">Review</b-button>
+    </b-button-group>
 
-      <!-- <Consultations/> -->
-      <Services v-if="tabIndex === 0" @row-selected="selectServiceHandler" :services="servicesList" :selectedServices="selectedServices"/>
-      <ChooseTimeTab v-else-if="tabIndex === 1"
-      :services="selectedServices"
-      :totalPrice="totalPrice"
-      :selectedDate="selectedDate"
-      :doctor="selectedDoctor"
-      :time="selectedTime"
-      :selectedSlot="selectedSlot"
-      @select-date="dateSelectionHandler"
-      @select-doctor="doctorSelectionHandler"
-      @change-tab="changeTab"
-      />
-      <ReviewTab v-else-if="tabIndex === 2"
-      :selectedSlot="selectedSlot"
-      :services="selectedServices"
-      :totalPrice="totalPrice"
-      @change-tab="changeTab"
-      />
-    </div>
-    <div class="text-right">
-      <b-button
-        v-if="tabIndex === 0"
-        align-self="end"
-        variant="primary"
-        :disabled="!serviceChoosed"
-        @click="tabIndex++">
-        Choose Time
-      </b-button>
-    </div>
+    <!-- <Consultations/> -->
+    <Services
+    v-if="tabIndex === 0"
+    :services="servicesList"
+    :selectedServices="selectedServices"
+    @row-selected="selectServiceHandler"
+    @change-tab="changeTab"
+    />
+    <ChooseTimeTab v-else-if="tabIndex === 1"
+    :services="selectedServices"
+    :totalPrice="totalPrice"
+    :selectedDate="selectedDate"
+    :doctor="selectedDoctor"
+    :time="selectedTime"
+    :selectedSlot="selectedSlot"
+    @select-date="dateSelectionHandler"
+    @select-doctor="doctorSelectionHandler"
+    @change-tab="changeTab"
+    />
+    <ReviewTab v-else-if="tabIndex === 2"
+    :selectedSlot="selectedSlot"
+    :services="selectedServices"
+    :totalPrice="totalPrice"
+    @change-tab="changeTab"
+    />
   </div>
 </template>
 
