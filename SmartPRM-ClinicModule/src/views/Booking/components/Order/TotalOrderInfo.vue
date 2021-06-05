@@ -1,13 +1,13 @@
 <template>
-  <div class="total-card d-flex flex-column mt-5 app-border overflow-hidden p-3">
+  <div v-if="selectedSlot" class="total-card d-flex flex-column mt-5 app-border overflow-hidden p-3">
     <h4 class="primary-color" >Total Info</h4>
     <div class="text-left">
-    <div> Date: <b>{{date | formatDate }}</b></div>
-    <div> Time: <b>{{time}}</b></div>
+    <div> Date: <b>{{selectedSlot.date | formatDate }}</b></div>
+    <div> Time: <b>{{selectedSlot.time}}</b></div>
     <hr />
     <div v-if="doctor" class="d-flex align-items-center p-1">
       <img class="img-fluid avatar-40 rounded-circle mr-1" :src="doctor.img" :alt="doctor.name">
-      <p class="mb-0">{{doctor.name}}</p>
+      <p class="mb-0">{{selectedSlot.doctor.name}}</p>
       </div>
     </div>
     <div v-if="services">
@@ -34,7 +34,8 @@ export default {
     totalPrice: Number,
     date: Date,
     time: String,
-    doctor: Object
+    doctor: Object,
+    selectedSlot: Object
   }
 }
 </script>
