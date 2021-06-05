@@ -18,7 +18,15 @@
     <b-container>
       <b-row>
         <b-col md="9">
-          <time-selection-table :items="scedule" @select-doctor="$emit('select-doctor', $event)"/>
+          <template v-if="scedule.length">
+          <app-multiselect
+          :options="selectedDateDoctors"
+          label="name"
+          trackBy="name"
+          v-model="filterDoctors"
+          />
+          </template>
+          <time-selection-table :items="filteredScedule" @select-doctor="$emit('select-doctor', $event)"/>
         </b-col>
         <b-col md="3">
           <total-order-info
@@ -41,13 +49,15 @@ import { getDayOfWeek } from '@/Utils/appDate'
 import TimeSelectionTable from './TimeSelectionTable.vue'
 import { dailySchedule, daysScedule } from '../../booking-data'
 import TotalOrderInfo from './TotalOrderInfo.vue'
+import AppMultiselect from '../Controls/AppMultiselect.vue'
 
 export default {
   components: {
     Slick,
     DateCard,
     TimeSelectionTable,
-    TotalOrderInfo
+    TotalOrderInfo,
+    AppMultiselect
   },
   props: {
     services: Array,
@@ -60,14 +70,28 @@ export default {
     return {
       datesList: [],
       scedule: [],
-      selectedDateScedule: []
+      filteredScedule: [],
+      selectedDateDoctors: [],
+      filterDoctors: []
     }
   },
   watch: {
-    selectedDateScedule: {
+    selectedDateDoctors: {
       immediate: true,
       handler: function (value) {
         this.scedule = this.sceduleFormation(value, dailySchedule)
+      }
+    },
+    filterDoctors: {
+      immediate: true,
+      handler: function (doctors) {
+        this.filteredScedule = (!doctors.length) ? this.scedule : this.filterSceduleByDoctors(doctors)
+      }
+    },
+    scedule: {
+      immediate: true,
+      handler: function (value) {
+        this.filteredScedule = (!this.filterDoctors.length) ? value : this.filterSceduleByDoctors(this.filterDoctors)
       }
     }
   },
@@ -108,7 +132,7 @@ export default {
         }
         dayScedule = Array.from(set)
       }
-      this.selectedDateScedule = dayScedule
+      this.selectedDateDoctors = dayScedule
     },
     isActiveDate: function (date) {
       let active = false
@@ -130,6 +154,19 @@ export default {
             time,
             doctors,
             totalPrice: '$' + this.totalPrice
+          })
+        })
+      }
+      return resScedule
+    },
+    filterSceduleByDoctors: function (doctors) {
+      const resScedule = JSON.parse(JSON.stringify(this.scedule))
+      if (resScedule.length > 0 && doctors.length > 0) {
+        resScedule.forEach(timeItem => {
+          timeItem.doctors = timeItem.doctors.filter(doctor => {
+            if (doctors.some(filterDoc => filterDoc.name === doctor.name)) {
+              return doctor
+            }
           })
         })
       }
