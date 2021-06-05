@@ -28,6 +28,20 @@
         </tr>
     </template>
     </b-table>
+    <div class="d-flex justify-content-between mt-3">
+      <b-button
+        align-self="end"
+        variant="primary"
+        @click="$emit('change-tab', 1)">
+        Slots and Prices
+      </b-button>
+      <b-button
+        align-self="end"
+        variant="primary"
+        :disabled="!selectedSlot">
+        Confirm
+      </b-button>
+    </div>
   </div>
 </template>
 
