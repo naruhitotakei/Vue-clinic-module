@@ -144,6 +144,7 @@ export default {
     dateSelectionHandler: function (date) {
       this.getsDayScedule(date)
       this.$emit('select-date', date)
+      this.filterDoctors = []
     },
     sceduleFormation: function (scedule, template) {
       const resScedule = []
