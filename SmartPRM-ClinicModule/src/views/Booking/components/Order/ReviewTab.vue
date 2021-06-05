@@ -1,7 +1,7 @@
 <template>
   <div>
     <h5 class="text-left">Check selected slot and confirm reservation.</h5>
-    <div class="selected-slot p-2 my-3">Selected slot: Saturday, June 5th, 2021 at 2:00 pm</div>
+    <div class="selected-slot p-2 my-3">Selected slot: {{selectedSlot.date | formatFullDate}} at {{selectedSlot.time}}</div>
   </div>
 </template>
 
