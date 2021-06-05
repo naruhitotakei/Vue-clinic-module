@@ -20,7 +20,9 @@
       @select-doctor="doctorSelectionHandler"
       @change-tab="changeTab"
       />
-      <ReviewTab v-else-if="tabIndex === 2" />
+      <ReviewTab v-else-if="tabIndex === 2"
+      :selectedSlot="selectedSlot"
+      />
     </div>
     <div class="text-right">
       <b-button
