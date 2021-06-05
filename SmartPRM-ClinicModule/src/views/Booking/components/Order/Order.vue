@@ -22,6 +22,8 @@
       />
       <ReviewTab v-else-if="tabIndex === 2"
       :selectedSlot="selectedSlot"
+      :services="selectedServices"
+      :totalPrice="totalPrice"
       />
     </div>
     <div class="text-right">
@@ -75,11 +77,7 @@ export default {
     selectedServices: {
       immediate: true,
       handler: function (value) {
-        let price = 0
-        if (value.length) {
-          value.forEach(item => { price = price + item.price })
-        }
-        this.totalPrice = price
+        this.totalPrice = value.reduce((total, service) => total + service.price, 0)
       }
     }
   },
