@@ -26,7 +26,12 @@
           v-model="filterDoctors"
           />
           </template>
-          <time-selection-table :items="filteredScedule" @select-doctor="$emit('select-doctor', $event)"/>
+          <time-selection-table
+          :items="filteredScedule"
+          @select-doctor="$emit('select-doctor', $event)"
+          :selectedSlot="selectedSlot"
+          :selectedDate="selectedDate"
+          />
         </b-col>
         <b-col md="3">
           <total-order-info
