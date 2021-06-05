@@ -1,7 +1,7 @@
 <template>
   <div>
       <div class="mb-3">
-        <b-button block v-b-toggle="tabId" variant="primary">{{title}}</b-button>
+        <b-button block v-b-toggle="tabId" variant="primary" class="text-left">{{title}}</b-button>
         <b-collapse :id="tabId" visible appear>
           <b-table
           :items="list"
