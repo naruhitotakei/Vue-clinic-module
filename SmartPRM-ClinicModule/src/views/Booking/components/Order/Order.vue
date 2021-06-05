@@ -15,6 +15,7 @@
       :selectedDate="selectedDate"
       :doctor="selectedDoctor"
       :time="selectedTime"
+      :selectedSlot="selectedSlot"
       @select-date="dateSelectionHandler"
       @select-doctor="doctorSelectionHandler"
       />
@@ -49,14 +50,15 @@ export default {
   name: 'Order',
   data: function () {
     return {
-      tabIndex: 0,
+      tabIndex: 1,
       timeChoosed: false,
       servicesList,
       selectedServices: [],
       totalPrice: 0,
       selectedDate: null,
       selectedDoctor: null,
-      selectedTime: ''
+      selectedTime: '',
+      selectedSlot: null
     }
   },
   computed: {
@@ -89,6 +91,11 @@ export default {
     doctorSelectionHandler: function (data) {
       this.selectedDoctor = data.doctor
       this.selectedTime = data.time
+      this.selectedSlot = {
+        date: this.selectedDate,
+        time: data.time,
+        doctor: data.doctor
+      }
     }
   }
 }
