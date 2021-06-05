@@ -78,6 +78,7 @@ const createPremise = (req, res, premise) => {
     if (premise.building_section_number) premiseStatement += "building_section_number,"
     if (premise.special_notes) premiseStatement += "special_notes,"
     if (premise.company_id) premiseStatement += "company_id,"
+    if (premise.business_premise_id) premiseStatement += "business_premise_id,"
     if (premise.validity_date) premiseStatement += "validity_date,"
     premiseStatement += "created_date"
     premiseStatement += ") VALUES ("
@@ -94,6 +95,7 @@ const createPremise = (req, res, premise) => {
     if (premise.building_section_number) premiseStatement += "'" + premise.building_section_number + "',"
     if (premise.special_notes) premiseStatement += "'" + premise.special_notes + "',"
     if (premise.company_id) premiseStatement += "'" + premise.company_id + "',"
+    if (premise.business_premise_id) premiseStatement += "'" + premise.business_premise_id + "',"
     if (premise.validity_date) premiseStatement += "'" + premise.validity_date + "',"
     premiseStatement +="NOW())"
     console.log(premiseStatement)
@@ -104,6 +106,18 @@ const createPremise = (req, res, premise) => {
         } 
         res.status(200).json("OK")
     })    
+}
+
+const checkBusinessIdUniquness = (request, response, data) => {
+    console.log(JSON.stringify(data))
+    statement = "SELECT EXISTS(SELECT 1 FROM prm_company_premise pcp WHERE pcp.business_premise_id ='" + data.business_premise_id + "') AS exists"
+    pool.query(statement, (error, results) => {
+        if (error) {
+            throw error
+        }
+        console.log(statement)
+        response.status(200).json(results.rows)
+    })
 }
 
 const updatePremise = (req, res, id, premise) => {
@@ -205,5 +219,6 @@ module.exports = {
     createPremiseDevice,
     updatePremiseDevice,
     deletePremiseDevice,
-    getCompanyPremiseDeviceById
+    getCompanyPremiseDeviceById,
+    checkBusinessIdUniquness
 }

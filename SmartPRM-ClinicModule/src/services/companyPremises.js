@@ -145,3 +145,16 @@ export async function deletePremiseDevice (id) {
   })
   return rawResponse.json()
 }
+
+export async function checkBusinessIdUniquness (premiseBusinessId) {
+  const rawResponse = await fetch('/api/company-premises/check-business-id', {
+    method: 'POST',
+    credentials: 'same-origin',
+    headers: {
+      'Accept': 'application/json',
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify(premiseBusinessId)
+  })
+  return rawResponse.json()
+}

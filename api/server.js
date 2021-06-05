@@ -785,6 +785,11 @@ app.get('/api/company-premises', (req, res) => {
     daoCompanyPremises.getCompanyPremises(req, res)
 });
 
+app.post('/api/company-premises/check-business-id', (req, res) => {
+    const data = req.body
+    daoCompanyPremises.checkBusinessIdUniquness(req, res, data)
+});
+
 app.post('/api/company-premises', (req, res) => {
     const premise = req.body
     daoCompanyPremises.createPremise(req, res, premise)
