@@ -280,7 +280,7 @@
                       <input type="text" v-model="premiseFormData.premise_house_number_additional" class="form-control" placeholder="Additional house number">
                     </div>
                   </div>
-                  <div class="col-md-6 mb-3">
+                  <div class="col-md-4 mb-3">
                       <label for="title">Premise city *</label>
                     <div style="display: flex;">
                       <input type="text" v-model="premiseFormData.premise_city" class="form-control" placeholder="City" required>
@@ -292,7 +292,7 @@
                       <input type="text" v-model="premiseFormData.premise_post_code" class="form-control" placeholder="Post code" required>
                     </div>
                   </div>
-                  <div class="col-md-3 mb-3">
+                  <div class="col-md-5 mb-3">
                     <label for="title">Premise country *</label>
                     <v-select class="drop-down"
                       :clearable="false" v-model="premiseFormData.premise_country_code"
@@ -327,16 +327,25 @@
                       <input type="text" v-model="premiseFormData.premise_cadastral_number" class="form-control" placeholder="Cadastral number" required>
                     </div>
                   </div>
-                  <div class="col-md-6 mb-3">
+                  <div class="col-md-4 mb-3">
                       <label for="title">Premise community *</label>
                     <div style="display: flex;">
                       <input type="text" v-model="premiseFormData.premise_community" class="form-control" placeholder="Premise community">
                     </div>
                   </div>
-                  <div class="col-md-6 mb-3">
+                  <div class="col-md-4 mb-3">
                       <label for="title">Validity date *</label>
                     <div style="display: flex;">
                       <input type="date" v-model="premiseFormData.validity_date" class="form-control" placeholder="Validity date">
+                    </div>
+                  </div>
+                  <div class="col-md-4 mb-3">
+                      <label for="title">Business premise id *</label>
+                    <div>
+                      <input type="text" @keyup="checkBusinessIdUniquness" v-model="premiseFormData.business_premise_id" class="form-control" :class="'form-control mb-0' +( isBusinessPremiseIdUnique ? '' : ' is-invalid')" placeholder="Id" required>
+                      <div class="invalid-feedback" v-if="!isBusinessPremiseIdUnique">
+                        Business premise id must be unique
+                      </div>
                     </div>
                   </div>
                   <div class="col-md-12 mb-3">
@@ -393,31 +402,31 @@
                         </template>
                     </template>
                 </iq-card>
-                <b-modal v-model="modalDeviceShow" no-close-on-backdrop size="lg" title="Add device" :ok-disabled="isDeviceDisabled" @close="cancelDevice"  @cancel="cancelDevice" :ok-title="$t('servicesAndProducts.addProductModal.save')" @ok="addDevice" :cancel-title="$t('servicesAndProducts.addProductModal.close')">
-                  <form>
-                    <div class="col-md-12 mb-3">
-                        <label for="title">Premise name *</label>
-                        <v-select class="drop-down" label="premise_name"
-                            :clearable="false" v-model="deviceFormData.company_premise_id"
-                            :reduce="item => item.premise_id"
-                            :options="premises">
-                            <template #search="{attributes, events}">
-                              <input
-                                  class="vs__search"
-                                  :required="!premiseFormData.company_premise_id"
-                                  v-bind="attributes"
-                                  v-on="events"
-                                />
-                            </template>
-                          </v-select>
-                    </div>
-                    <div class="col-md-12 mb-3">
+                <b-modal v-model="modalDeviceShow" no-close-on-backdrop size="lg" title="Add device" :ok-disabled="isDeviceDisabled" @close="cancelDevice" @cancel="cancelDevice" :ok-title="$t('servicesAndProducts.addProductModal.save')" @ok="addDevice" :cancel-title="$t('servicesAndProducts.addProductModal.close')">
+                    <form>
+                      <div class="col-md-12 mb-3">
+                          <label for="title">Premise name *</label>
+                          <v-select class="drop-down" label="premise_name"
+                              :clearable="false" v-model="deviceFormData.company_premise_id"
+                              :reduce="item => item.premise_id"
+                              :options="premises">
+                              <template #search="{attributes, events}">
+                                <input
+                                    class="vs__search"
+                                    :required="!premiseFormData.company_premise_id"
+                                    v-bind="attributes"
+                                    v-on="events"
+                                  />
+                              </template>
+                            </v-select>
+                      </div>
+                      <div class="col-md-12 mb-3">
                         <label for="title">Device name *</label>
                       <div style="display: flex;">
                         <input type="text" v-model="deviceFormData.device_name" class="form-control" placeholder="Name" required>
                       </div>
-                    </div>
-                  </form>
+                      </div>
+                    </form>
                 </b-modal>
             </b-col>
         </b-row>
@@ -428,7 +437,7 @@
 import { xray } from '../../config/pluginInit'
 import { getCompanies, createCompany, updateCompany, deleteCompany, getCompanyById } from '../../services/companies'
 import { getCountriesList, getClients } from '../../services/commonCodeLists'
-import { getCompanyPremises, getPremiseById, getCompanyPremiseDevices, createPremise, updatePremise, deletePremise, getPremiseDeviceById, createPremiseDevice, updatePremiseDevice, deletePremiseDevice } from '../../services/companyPremises'
+import { getCompanyPremises, getPremiseById, checkBusinessIdUniquness, getCompanyPremiseDevices, createPremise, updatePremise, deletePremise, getPremiseDeviceById, createPremiseDevice, updatePremiseDevice, deletePremiseDevice } from '../../services/companyPremises'
 import moment from 'moment'
 
 export default {
@@ -454,7 +463,8 @@ export default {
       return !this.premiseFormData.company_id || !this.premiseFormData.premise_name || !this.premiseFormData.premise_street ||
         !this.premiseFormData.premise_house_number || !this.premiseFormData.premise_city || !this.premiseFormData.premise_post_code ||
         !this.premiseFormData.premise_country_code || !this.premiseFormData.premise_community || !this.premiseFormData.premise_cadastral_number ||
-        !this.premiseFormData.building_number || !this.premiseFormData.building_section_number || !this.premiseFormData.special_notes || !this.premiseFormData.validity_date
+        !this.premiseFormData.building_number || !this.premiseFormData.building_section_number || !this.premiseFormData.special_notes ||
+        !this.premiseFormData.validity_date || !this.premiseFormData.business_premise_id || !this.isBusinessPremiseIdUnique
     },
     isDeviceDisabled () {
       return !this.deviceFormData.company_premise_id || !this.deviceFormData.device_name
@@ -524,7 +534,8 @@ export default {
         building_number: '',
         building_section_number: '',
         special_notes: '',
-        validity_date: moment().format('YYYY-MM-DD')
+        validity_date: moment().format('YYYY-MM-DD'),
+        business_premise_id: ''
       },
       deviceFormData: {
         company_premise_id: '',
@@ -552,7 +563,9 @@ export default {
         { label: 'Action', key: 'action', class: 'text-center' }
       ],
       currentDevicePage: 1,
-      devicesPerPage: 20
+      devicesPerPage: 20,
+      isBusinessPremiseIdUnique: true,
+      timer: null
     }
   },
   methods: {
@@ -602,7 +615,8 @@ export default {
         building_number: '',
         building_section_number: '',
         special_notes: '',
-        validity_date: moment().format('YYYY-MM-DD')
+        validity_date: moment().format('YYYY-MM-DD'),
+        business_premise_id: ''
       }
     },
     defaultDeviceFormData () {
@@ -689,6 +703,19 @@ export default {
         })
       }
       this.premiseFormData = this.defaultPremiseFormData()
+    },
+    checkBusinessIdUniquness () {
+      if (this.timer) {
+        clearTimeout(this.timer)
+        this.timer = null
+      }
+      this.timer = setTimeout(() => {
+        let businessPremiseId = { business_premise_id: this.premiseFormData.business_premise_id }
+        checkBusinessIdUniquness(businessPremiseId).then(response => {
+          this.isBusinessPremiseIdUnique = !response[0].exists
+          console.log('unique: ' + this.isBusinessPremiseIdUnique)
+        })
+      }, 1000)
     },
     cancelPremise () {
       this.premiseFormData = this.defaultPremiseFormData()
