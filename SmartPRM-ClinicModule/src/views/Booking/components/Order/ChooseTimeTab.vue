@@ -114,6 +114,7 @@ export default {
       immediate: true,
       handler: function (value) {
         this.filteredScedule = (!this.filterDoctors.length) ? value : this.filterSceduleByDoctors(this.filterDoctors)
+        !this.selectedSlot && this.initialSlot()
       }
     }
   },
@@ -194,6 +195,23 @@ export default {
         })
       }
       return resScedule
+    },
+    initialSlot: function () {
+      if (this.scedule.length > 0) {
+        let doctor = null
+        let time = ''
+        for (let index = 0; index < this.scedule.length; index++) {
+          const timeItem = this.scedule[index]
+          if (timeItem.doctors.length > 0) {
+            doctor = timeItem.doctors[0]
+            time = timeItem.time
+            break
+          }
+        }
+        if (doctor) {
+          this.$emit('select-doctor', { doctor, time })
+        }
+      }
     }
   }
 }
