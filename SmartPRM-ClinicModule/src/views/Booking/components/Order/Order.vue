@@ -2,9 +2,9 @@
   <div>
     <div class="text-center">
       <b-button-group class="mt-2">
-        <b-button :variant="activeBtnVariant(0)" @click="tabIndex = 0">Pick service</b-button>
-        <b-button :variant="activeBtnVariant(1)" @click="tabIndex = 1" :disabled="!serviceChoosed">Choose time</b-button>
-        <b-button :variant="activeBtnVariant(2)" @click="tabIndex = 2" :disabled="!selectedSlot">Review</b-button>
+        <b-button :variant="activeBtnVariant(0)" @click="changeTab(0)">Pick service</b-button>
+        <b-button :variant="activeBtnVariant(1)" @click="changeTab(1)" :disabled="!serviceChoosed">Choose time</b-button>
+        <b-button :variant="activeBtnVariant(2)" @click="changeTab(2)" :disabled="!selectedSlot">Review</b-button>
       </b-button-group>
 
       <!-- <Consultations/> -->
@@ -24,6 +24,7 @@
       :selectedSlot="selectedSlot"
       :services="selectedServices"
       :totalPrice="totalPrice"
+      @change-tab="changeTab"
       />
     </div>
     <div class="text-right">
@@ -101,7 +102,13 @@ export default {
       }
     },
     changeTab: function (tab) {
-      this.tabIndex = tab
+      if (tab === 0) {
+        this.tabIndex = tab
+      } else if (tab === 1 && !!this.selectedServices.length) {
+        this.tabIndex = tab
+      } else if (tab === 2 && !!this.selectedServices.length && this.selectedSlot) {
+        this.tabIndex = tab
+      }
     }
   }
 }
