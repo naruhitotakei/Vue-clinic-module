@@ -4,7 +4,7 @@
       <b-button-group class="mt-2">
         <b-button :variant="activeBtnVariant(0)" @click="tabIndex = 0">Pick service</b-button>
         <b-button :variant="activeBtnVariant(1)" @click="tabIndex = 1" :disabled="!serviceChoosed">Choose time</b-button>
-        <b-button :variant="activeBtnVariant(2)" @click="tabIndex = 2" :disabled="!timeChoosed">Review</b-button>
+        <b-button :variant="activeBtnVariant(2)" @click="tabIndex = 2" :disabled="!selectedSlot">Review</b-button>
       </b-button-group>
 
       <!-- <Consultations/> -->
@@ -18,8 +18,9 @@
       :selectedSlot="selectedSlot"
       @select-date="dateSelectionHandler"
       @select-doctor="doctorSelectionHandler"
+      @change-tab="changeTab"
       />
-      <ChooseTimeTab v-else-if="tabIndex === 2" />
+      <ReviewTab v-else-if="tabIndex === 2" />
     </div>
     <div class="text-right">
       <b-button
@@ -36,6 +37,7 @@
 
 <script>
 import ChooseTimeTab from './ChooseTimeTab'
+import ReviewTab from './ReviewTab'
 // import { xray } from '../../../config/pluginInit'
 import Services from './Services'
 // import Consultations from './Consultations'
@@ -44,7 +46,8 @@ import { servicesList } from '@/views/Booking/booking-data.js'
 export default {
   components: {
     Services,
-    ChooseTimeTab
+    ChooseTimeTab,
+    ReviewTab
     // Consultations
   },
   name: 'Order',
@@ -96,6 +99,9 @@ export default {
         time: data.time,
         doctor: data.doctor
       }
+    },
+    changeTab: function (tab) {
+      this.tabIndex = tab
     }
   }
 }
