@@ -52,7 +52,7 @@ export default {
   name: 'Order',
   data: function () {
     return {
-      tabIndex: 1,
+      tabIndex: 0,
       timeChoosed: false,
       servicesList,
       selectedServices: [],
