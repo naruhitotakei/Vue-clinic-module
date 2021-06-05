@@ -42,6 +42,21 @@
           :time="time"
           :selectedSlot="selectedSlot"
           />
+          <div class="d-flex justify-content-between mt-3">
+            <b-button
+              align-self="end"
+              variant="primary"
+              @click="$emit('change-tab', 1)">
+              Back to Services
+            </b-button>
+            <b-button
+              align-self="end"
+              variant="primary"
+              :disabled="!selectedSlot"
+              @click="$emit('change-tab', 2)">
+              To review
+            </b-button>
+          </div>
         </b-col>
       </b-row>
     </b-container>
