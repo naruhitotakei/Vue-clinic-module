@@ -23,3 +23,15 @@ Vue.filter('formatFullDate', function (value) {
     return moment(String(value)).format('dddd, MMMM D, YYYY')
   }
 })
+
+Vue.filter('formatTime', function (value) {
+  if (value) {
+    return value + '\''
+  }
+})
+
+Vue.filter('formatMoney', function (value) {
+  if (value) {
+    return '$' + value
+  }
+})
