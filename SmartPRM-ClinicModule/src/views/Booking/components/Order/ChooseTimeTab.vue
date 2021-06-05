@@ -35,6 +35,7 @@
           :date="selectedDate"
           :doctor="doctor"
           :time="time"
+          :selectedSlot="selectedSlot"
           />
         </b-col>
       </b-row>
@@ -64,7 +65,8 @@ export default {
     totalPrice: Number,
     selectedDate: Date,
     time: String,
-    doctor: Object
+    doctor: Object,
+    selectedSlot: Object
   },
   data: function () {
     return {
