@@ -1,5 +1,5 @@
 <template>
-  <div v-if="selectedSlot" class="total-card d-flex flex-column mt-5 app-border overflow-hidden p-3">
+  <div v-if="selectedSlot" class="total-card d-flex flex-column app-border overflow-hidden p-3">
     <h4 class="primary-color" >Total Info</h4>
     <div class="text-left">
     <div> Date: <b>{{selectedSlot.date | formatDate }}</b></div>
