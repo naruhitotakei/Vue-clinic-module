@@ -36,3 +36,10 @@ export default {
 }
 </script>
 <style src="vue-multiselect/dist/vue-multiselect.min.css"></style>
+<style lang="scss">
+span.multiselect__tag,
+span.multiselect__option--highlight,
+span.multiselect__option--highlight::after{
+  background: #089bab;
+}
+</style>
