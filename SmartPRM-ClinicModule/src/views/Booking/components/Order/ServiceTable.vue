@@ -41,7 +41,7 @@ export default {
   },
   data () {
     return {
-      fields: [ { key: 'serviceName', label: this.title }, 'time', 'price', { key: 'selected', label: ' ' } ],
+      fields: [ { key: 'serviceName', label: this.title, tdClass: 'w-50' }, 'time', 'price', { key: 'selected', label: ' ', tdClass: 'checkColumn' } ],
       selectMode: 'multi',
       selected: []
     }
@@ -69,3 +69,8 @@ export default {
   }
 }
 </script>
+<style>
+.checkColumn{
+  width: 50px;
+}
+</style>
