@@ -342,7 +342,7 @@
                   <div class="col-md-4 mb-3">
                       <label for="title">Business premise id *</label>
                     <div>
-                      <input type="text" @keyup="checkBusinessIdUniquness" v-model="premiseFormData.business_premise_id" class="form-control" :class="'form-control mb-0' +( isBusinessPremiseIdUnique ? '' : ' is-invalid')" placeholder="Id" required>
+                      <input :disabled="premiseFormData.premise_id" type="text" @keyup="checkBusinessIdUniquness" v-model="premiseFormData.business_premise_id" class="form-control" :class="'form-control mb-0' +( isBusinessPremiseIdUnique ? '' : ' is-invalid')" placeholder="Id" required>
                       <div class="invalid-feedback" v-if="!isBusinessPremiseIdUnique">
                         Business premise id must be unique
                       </div>
@@ -404,27 +404,38 @@
                 </iq-card>
                 <b-modal v-model="modalDeviceShow" no-close-on-backdrop size="lg" title="Add device" :ok-disabled="isDeviceDisabled" @close="cancelDevice" @cancel="cancelDevice" :ok-title="$t('servicesAndProducts.addProductModal.save')" @ok="addDevice" :cancel-title="$t('servicesAndProducts.addProductModal.close')">
                     <form>
-                      <div class="col-md-12 mb-3">
-                          <label for="title">Premise name *</label>
-                          <v-select class="drop-down" label="premise_name"
-                              :clearable="false" v-model="deviceFormData.company_premise_id"
-                              :reduce="item => item.premise_id"
-                              :options="premises">
-                              <template #search="{attributes, events}">
-                                <input
-                                    class="vs__search"
-                                    :required="!premiseFormData.company_premise_id"
-                                    v-bind="attributes"
-                                    v-on="events"
-                                  />
-                              </template>
-                            </v-select>
-                      </div>
-                      <div class="col-md-12 mb-3">
-                        <label for="title">Device name *</label>
-                      <div style="display: flex;">
-                        <input type="text" v-model="deviceFormData.device_name" class="form-control" placeholder="Name" required>
-                      </div>
+                      <div class="form-row">
+                        <div class="col-md-12 mb-3">
+                            <label for="title">Premise name *</label>
+                            <v-select class="drop-down" label="premise_name"
+                                :clearable="false" v-model="deviceFormData.company_premise_id"
+                                :reduce="item => item.premise_id"
+                                :options="premises">
+                                <template #search="{attributes, events}">
+                                  <input
+                                      class="vs__search"
+                                      :required="!premiseFormData.company_premise_id"
+                                      v-bind="attributes"
+                                      v-on="events"
+                                    />
+                                </template>
+                              </v-select>
+                        </div>
+                        <div class="col-md-8 mb-3">
+                          <label for="title">Device name *</label>
+                          <div>
+                            <input type="text" v-model="deviceFormData.device_name" class="form-control" placeholder="Name" required>
+                          </div>
+                        </div>
+                        <div class="col-md-4 mb-3">
+                          <label for="title">Electronic device id *</label>
+                          <div>
+                            <input type="text" :disabled="deviceFormData.device_id" @keyup="checkElectronicDeviceId" v-model="deviceFormData.electronic_device_id" class="form-control" :class="'form-control mb-0' +( isElectronicDeviceIdUnique ? '' : ' is-invalid')" placeholder="Id" required>
+                            <div class="invalid-feedback" v-if="!isElectronicDeviceIdUnique">
+                              Electronic device id must be unique
+                            </div>
+                          </div>
+                        </div>
                       </div>
                     </form>
                 </b-modal>
@@ -437,7 +448,7 @@
 import { xray } from '../../config/pluginInit'
 import { getCompanies, createCompany, updateCompany, deleteCompany, getCompanyById } from '../../services/companies'
 import { getCountriesList, getClients } from '../../services/commonCodeLists'
-import { getCompanyPremises, getPremiseById, checkBusinessIdUniquness, getCompanyPremiseDevices, createPremise, updatePremise, deletePremise, getPremiseDeviceById, createPremiseDevice, updatePremiseDevice, deletePremiseDevice } from '../../services/companyPremises'
+import { getCompanyPremises, getPremiseById, checkElectronicDeviceIdUniquness, checkBusinessIdUniquness, getCompanyPremiseDevices, createPremise, updatePremise, deletePremise, getPremiseDeviceById, createPremiseDevice, updatePremiseDevice, deletePremiseDevice } from '../../services/companyPremises'
 import moment from 'moment'
 
 export default {
@@ -467,7 +478,7 @@ export default {
         !this.premiseFormData.validity_date || !this.premiseFormData.business_premise_id || !this.isBusinessPremiseIdUnique
     },
     isDeviceDisabled () {
-      return !this.deviceFormData.company_premise_id || !this.deviceFormData.device_name
+      return !this.deviceFormData.company_premise_id || !this.deviceFormData.device_name || !this.isElectronicDeviceIdUnique
     },
     hideCompaniesPagination () {
       return Math.floor(this.companies.length / this.companiesPerPage) !== 0
@@ -520,7 +531,6 @@ export default {
         { code: false, label: 'No' }
       ],
       premiseFormData: {
-        premise_id: '',
         company_id: '',
         premise_name: '',
         premise_street: '',
@@ -565,6 +575,7 @@ export default {
       currentDevicePage: 1,
       devicesPerPage: 20,
       isBusinessPremiseIdUnique: true,
+      isElectronicDeviceIdUnique: true,
       timer: null
     }
   },
@@ -601,7 +612,6 @@ export default {
       return {
         company_name: '',
         premise_address: '',
-        premise_id: '',
         company_id: '',
         premise_name: '',
         premise_street: '',
@@ -713,7 +723,18 @@ export default {
         let businessPremiseId = { business_premise_id: this.premiseFormData.business_premise_id }
         checkBusinessIdUniquness(businessPremiseId).then(response => {
           this.isBusinessPremiseIdUnique = !response[0].exists
-          console.log('unique: ' + this.isBusinessPremiseIdUnique)
+        })
+      }, 1000)
+    },
+    checkElectronicDeviceId () {
+      if (this.timer) {
+        clearTimeout(this.timer)
+        this.timer = null
+      }
+      this.timer = setTimeout(() => {
+        let electronicDeviceId = { electronic_device_id: this.deviceFormData.electronic_device_id }
+        checkElectronicDeviceIdUniquness(electronicDeviceId).then(response => {
+          this.isElectronicDeviceIdUnique = !response[0].exists
         })
       }, 1000)
     },

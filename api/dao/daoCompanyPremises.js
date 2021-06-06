@@ -28,7 +28,7 @@ const getCompanyPremiseById = (request, response, id) => {
 }
 
 const getCompanyPremiseDeviceById = (request, response, id) => {
-    pool.query("SELECT pcpd.device_id, pcpd.company_premise_id, pcpd.device_name, pcp.premise_name, pc.company_name FROM prm_company_premise_device pcpd JOIN prm_company_premise pcp ON pcpd.company_premise_id = pcp.premise_id JOIN prm_company pc ON pcp.company_id = pc.company_id WHERE pcpd.device_deleted = false and pcpd.device_id=$1", [id], (error, results) => {
+    pool.query("SELECT pcpd.device_id, pcpd.company_premise_id, pcpd.electronic_device_id, pcpd.device_name, pcp.premise_name, pc.company_name FROM prm_company_premise_device pcpd JOIN prm_company_premise pcp ON pcpd.company_premise_id = pcp.premise_id JOIN prm_company pc ON pcp.company_id = pc.company_id WHERE pcpd.device_deleted = false and pcpd.device_id=$1", [id], (error, results) => {
         if (error) {
             throw error
         }
@@ -109,7 +109,6 @@ const createPremise = (req, res, premise) => {
 }
 
 const checkBusinessIdUniquness = (request, response, data) => {
-    console.log(JSON.stringify(data))
     statement = "SELECT EXISTS(SELECT 1 FROM prm_company_premise pcp WHERE pcp.business_premise_id ='" + data.business_premise_id + "') AS exists"
     pool.query(statement, (error, results) => {
         if (error) {
@@ -164,6 +163,7 @@ const createPremiseDevice = (req, res, premiseDevice) => {
     var premiseDeviceStatement = "INSERT INTO prm_company_premise_device("
     if (premiseDevice.device_name) premiseDeviceStatement += "device_name,"
     if (premiseDevice.company_premise_id) premiseDeviceStatement += "company_premise_id,"
+    if (premiseDevice.electronic_device_id) premiseDeviceStatement += "electronic_device_id,"
     premiseDeviceStatement += "created_date"
     premiseDeviceStatement += ") VALUES ("
     if (premiseDevice.device_name) premiseDeviceStatement += "'" + premiseDevice.device_name + "',"
@@ -207,6 +207,17 @@ const deletePremiseDevice = (req, res, id) => {
     })    
 }
 
+const checkElectronicDeviceIdUniquness = (request, response, data) => {
+    statement = "SELECT EXISTS(SELECT 1 FROM prm_company_premise_device pcpd WHERE pcpd.electronic_device_id ='" + data.electronic_device_id + "') AS exists"
+    pool.query(statement, (error, results) => {
+        if (error) {
+            throw error
+        }
+        console.log(statement)
+        response.status(200).json(results.rows)
+    })
+}
+
 module.exports = {
     getCompanyPremises,
     getPremisesForCompany,
@@ -220,5 +231,6 @@ module.exports = {
     updatePremiseDevice,
     deletePremiseDevice,
     getCompanyPremiseDeviceById,
-    checkBusinessIdUniquness
+    checkBusinessIdUniquness,
+    checkElectronicDeviceIdUniquness
 }

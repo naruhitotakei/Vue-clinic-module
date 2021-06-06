@@ -68,6 +68,7 @@
                             <b-collapse id="collapse-6" class="mb-2"> </b-collapse>
                             <div class="mt-3">
                                 <b-pagination v-model="currentPage"
+                                  v-if="hidePaymentsPagination"
                                   :total-rows="totalRows"
                                   :per-page="perPage"
                                   aria-controls="my-table"></b-pagination>
@@ -87,6 +88,11 @@ import { getPatients } from '../../services/enquiry'
 import moment from 'moment'
 export default {
   components: {
+  },
+  computed: {
+    hidePaymentsPagination () {
+      return Math.floor(this.advPayments.length / this.perPage) !== 0
+    }
   },
   name: 'AdvPayments',
   data: function () {
