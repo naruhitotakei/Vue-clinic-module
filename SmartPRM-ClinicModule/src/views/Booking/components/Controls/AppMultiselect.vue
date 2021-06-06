@@ -2,7 +2,7 @@
   <multiselect
   v-model="selectValue"
   :options="options"
-  placeholder="Pick some"
+  :placeholder="placeholder"
   :multiple="true"
   :label="label"
   :track-by="trackBy"
@@ -21,7 +21,8 @@ export default {
     'options',
     'label',
     'trackBy',
-    'value'
+    'value',
+    'placeholder'
   ],
   computed: {
     selectValue: {
@@ -38,8 +39,15 @@ export default {
 <style src="vue-multiselect/dist/vue-multiselect.min.css"></style>
 <style lang="scss">
 span.multiselect__tag,
+span.multiselect__tag::after,
 span.multiselect__option--highlight,
 span.multiselect__option--highlight::after{
   background: #089bab;
+}
+.multiselect__tag-icon:after{
+  color: #08565f;
+}
+.multiselect__tag-icon:hover{
+  background: #077e8b;
 }
 </style>
