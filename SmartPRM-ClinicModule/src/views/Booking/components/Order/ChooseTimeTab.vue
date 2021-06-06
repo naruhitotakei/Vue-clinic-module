@@ -19,6 +19,7 @@
       <b-row>
         <b-col md="9">
           <template v-if="scedule.length">
+          <div class="favorite-doctor text-left">Choose your favorite doctor</div>
           <app-multiselect
           :options="selectedDateDoctors"
           label="name"
@@ -216,3 +217,10 @@ export default {
   }
 }
 </script>
+<style lang="scss" scoped>
+@import "~@/assets/scss/app-vars.scss";
+.favorite-doctor{
+  color: $primary;
+  font-size: 16px;
+}
+</style>
