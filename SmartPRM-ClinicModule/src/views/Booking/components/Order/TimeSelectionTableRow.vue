@@ -2,7 +2,7 @@
   <div>
   <b-container class="time-row" :class="{expanded}" fluid>
     <b-row ref="timeRow">
-      <b-col md="6" lg="4" xl="4" v-for="(doctor, index) in doctors" :key="`title_doctor_${index}`" class="p-1">
+      <b-col lg="6" xl="6" v-for="(doctor, index) in doctors" :key="`title_doctor_${index}`" class="p-1">
         <div
         class="doctor-item d-flex align-items-center active-element p-1 rounded-circle"
         :class="{'active': !!activeDoctor && activeDoctor.name === doctor.name}"
