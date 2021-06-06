@@ -114,7 +114,7 @@ export default {
     return {
       advPaymentId: this.$route.params.advPaymentId,
       invoiceNumber: '',
-      text: this.$t('invoice.invoiceHeader') + ' N° : ',
+      text: this.$t('advPayment.advPaymentHeader') + ' N° : ',
       summary: this.$t('invoice.invoiceSummary'),
       detail: this.$t('invoice.invoiceDetail'),
       invoiceDetailField: [
@@ -158,8 +158,8 @@ export default {
             return moment(value).format('YYYY-MM-DD')
           }
         },
-        { label: this.$t('invoice.invoiceInfo.invoiceTotal'), key: 'total_with_vat', class: 'text-left' },
-        { label: this.$t('invoice.invoiceInfo.invoiceStatus'),
+        { label: this.$t('invoice.invoiceInfo.invoiceStatus'), key: 'invoice_status', class: 'text-left' },
+        { label: this.$t('invoice.invoiceInfo.paymentStatus'),
           key: 'invoiceStatus',
           formatter: (value, key, item) => {
             if (item.paid_amount === '$0.00') {
@@ -185,7 +185,7 @@ export default {
             return details
           },
           class: 'text-left' },
-        { label: this.$t('invoice.invoiceInfo.invoiceIssuedIn'), key: 'company_name', class: 'text-left' },
+        { label: this.$t('invoice.invoiceInfo.invoiceIssuedIn'), key: 'company_city', class: 'text-left' },
         { label: this.$t('invoice.invoiceInfo.invoiceIssuedBy'), key: 'operator_name', class: 'text-left' }
       ],
       invoice: null,

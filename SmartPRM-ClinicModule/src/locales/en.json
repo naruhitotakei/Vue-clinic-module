@@ -314,7 +314,8 @@
     "invoiceInfo": {
       "invoiceDate": "Date",
       "invoiceTotal": "Total",
-      "invoiceStatus": "Status",
+      "invoiceStatus": "Confirmation status",
+      "paymentStatus": "Payment status",
       "invoiceDetails": "Billing Details",
       "invoiceIssuedIn": "Issued In",
       "invoiceIssuedBy": "Issued By"

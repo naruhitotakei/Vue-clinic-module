@@ -309,7 +309,8 @@
     "invoiceInfo": {
       "invoiceDate": "Datum",
       "invoiceTotal": "Znesek",
-      "invoiceStatus": "Status",
+      "invoiceStatus": "Status potrditve",
+      "paymentStatus": "Status plačila",
       "invoiceDetails": "Prejemnik",
       "invoiceIssuedIn": "Kraj izdaje",
       "invoiceIssuedBy": "Izdal"
