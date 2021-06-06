@@ -3,9 +3,27 @@
     <slick :option="{
       infinite: false,
       slidesToShow: 9,
-      slidesToScroll: 9,
+      slidesToScroll: 2,
       arrows: false,
-      dots: true
+      dots: true,
+      responsive: [
+      {
+        breakpoint: 1200,
+        settings: { slidesToShow: 6 }
+      },
+      {
+        breakpoint: 992,
+        settings: { slidesToShow: 4 }
+      },
+      {
+        breakpoint: 768,
+        settings: { slidesToShow: 3 }
+      },
+      {
+        breakpoint: 576,
+        settings: { slidesToShow: 2 }
+      }
+      ]
     }">
     <date-card v-for="(dateItem, index) in datesList" :key="`date_${index}`"
     :date="dateItem.date"
