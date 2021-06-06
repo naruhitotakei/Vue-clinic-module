@@ -57,7 +57,7 @@
                             <div class="table-responsive-sm">
                                 <b-table striped :items="invoice" :fields="invoiceSummaryFields">
                                     <template v-slot:cell(total_with_vat)="data">
-                                        <span class="font-weight-bold">{{data.value | euro}}</span>
+                                        <span style="font-size:25px" class="font-weight-bold">{{data.value | euro}}</span>
                                     </template>
                                 </b-table>
                             </div>
