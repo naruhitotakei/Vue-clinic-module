@@ -51,7 +51,7 @@ export default {
   transition: all .5s linear;
   animation: 1s open-content;
   &.expanded{
-    max-height: 250px;
+    max-height: 300px;
   }
 }
 .doctor-item {
