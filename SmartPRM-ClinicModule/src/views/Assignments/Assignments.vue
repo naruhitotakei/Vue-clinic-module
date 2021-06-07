@@ -21,17 +21,19 @@
                                     v-for="(item, index) in todaysAssigments"
                                     :key="index"
                                 >
-                                    <div class="assignments-container row align-items-center flex-nowrap justify-content-between" :class="{ 'taskIsActive' : !item.completed}">
-                                      <div class="row align-items-center justify-content-between">
-                                        <b-checkbox v-model="item.completed" :disabled="item.disabled" name="check-button" inline :key="index" class="completed-assignment" @change="finishAssignment(item.id, $event)"></b-checkbox>
-                                        <span class="assignments-description">{{ item.description }}</span>
-                                        <router-link tag="span" :to="'/patients/'+ item.enquiry_id" class="pl-5" style="cursor:pointer;">{{ item.patientname }} {{ item.patientlastname }}</router-link>
-                                        <span class="pl-5">{{ patientsDentist(item) }}</span>
-                                        <span class="text-right">{{ item.due_at | formatDateAssignments(getLocale) }}</span>
-                                      </div>
-                                      <b-button variant=" iq-bg-success mr-1 mb-1" size="sm" @click="editAssignments(item)" >
+                                    <div class="assignments-container row align-items-center flex-nowrap justify-content-between w-100" :class="{ 'taskIsActive' : !item.completed}">
+                                       <div class="row align-items-center flex-nowrap w-40">
+                                         <b-checkbox v-model="item.completed" :disabled="item.disabled" name="check-button" inline :key="index" class="completed-assignment ml-3 mr-0" @change="finishAssignment(item.id, $event)"></b-checkbox>
+                                         <span class="assignments-descriptions w-100 text-break">{{ item.description }}</span>
+                                       </div>
+                                       <div class="w-60 row justify-content-end flex-nowrap">
+                                         <router-link tag="span" :to="'/patients/'+ item.enquiry_id" class="pl-5" style="cursor:pointer;">{{ item.patientname }} {{ item.patientlastname }}</router-link>
+                                         <span class="pl-5">{{ patientsDentist(item) }}</span>
+                                         <span class="text-right text-width-150">{{ item.due_at | formatDateAssignments(getLocale) }}</span>
+                                        <b-button variant=" iq-bg-success mr-1 mb-1" size="sm" style="margin-left: 5%" @click="editAssignments(item)" >
                                           <i class="ri-ball-pen-fill m-0"></i>
-                                      </b-button>
+                                        </b-button>
+                                       </div>
                                     </div>
                                 </b-list-group-item>
                             </b-list-group>
@@ -63,20 +65,22 @@
                           v-for="(item, index) in overdueAssignments[overdueCurrentPage]"
                           :key="index"
                           :style="{'background': getDifferenceDate(item.due_at) === 1 && '#ffeeba' || getDifferenceDate(item.due_at) > 1 && '#f5c6cb'}">
-                        <div class="assignments-container row align-items-center flex-nowrap justify-content-between"
+                        <div class="assignments-container row align-items-center flex-nowrap justify-content-between w-100"
                              :class="{ 'taskIsActive' : !item.completed}">
-                          <div>
-                            <b-checkbox v-model="item.completed" :disabled="item.disabled" name="check-button" inline
-                                        :key="index" class="completed-assignment"
-                                        @change="finishAssignment(item.id, $event)"></b-checkbox>
-                            <span class="assignments-description">{{ item.description }}</span>
-                            <span class="pl-5">{{ item.patientname }} {{ item.patientlastname }}</span>
-                            <span class="pl-5">{{ patientsDentist(item) }}</span>
-                            <span class="text-right">{{ item.due_at | formatDate }}</span>
-                          </div>
-                          <b-button variant=" iq-bg-success mr-1 mb-1" size="sm" @click="editAssignments(item)">
-                            <i class="ri-ball-pen-fill m-0"></i>
-                          </b-button>
+                           <div class="w-40 flex-nowrap row">
+                             <b-checkbox v-model="item.completed" :disabled="item.disabled" name="check-button" inline
+                                         :key="index" class="completed-assignment ml-3 mr-0"
+                                         @change="finishAssignment(item.id, $event)"></b-checkbox>
+                             <span class="assignments-descriptions  w-100 text-break">{{ item.description }}</span>
+                           </div>
+                           <div class="w-60 row justify-content-end flex-nowrap">
+                             <span class="pl-5 text-left">{{ item.patientname }} {{ item.patientlastname }}</span>
+                             <span class="pl-5 text-left">{{ patientsDentist(item) }}</span>
+                             <span class="text-right text-width-150">{{ item.due_at | formatDate }}</span>
+                             <b-button variant=" iq-bg-success mr-1 mb-1" size="sm" style="margin-left: 5%;" @click="editAssignments(item)">
+                               <i class="ri-ball-pen-fill m-0"></i>
+                             </b-button>
+                           </div>
                         </div>
                       </b-list-group-item>
                     </b-list-group>
@@ -107,17 +111,19 @@
                                 v-for="(item, index) in futureAssigments[futureCurrentPage]"
                                 :key="index"
                             >
-                                <div class="assignments-container row align-items-center flex-nowrap justify-content-between" :class="{ 'taskIsActive' : !item.completed}">
-                                   <div>
-                                     <b-checkbox v-model="item.completed" :disabled="item.disabled" name="check-button" inline :key="index" class="completed-assignment" @change="finishAssignment(item.id, $event)"></b-checkbox>
-                                     <span class="assignments-description">{{ item.description }}</span>
-                                     <router-link tag="span" :to="'/patients/'+ item.enquiry_id" class="pl-5" style="cursor:pointer;">{{ item.patientname }} {{ item.patientlastname }}</router-link>
-                                     <span class="pl-5">{{ patientsDentist(item) }}</span>
-                                     <span class="text-right">{{ item.due_at | formatDateAssignments(getLocale) }}</span>
-                                   </div>
-                                  <b-button variant=" iq-bg-success mr-1 mb-1" size="sm" @click="editAssignments(item)">
-                                    <i class="ri-ball-pen-fill m-0"></i>
-                                  </b-button>
+                                <div class="assignments-container row align-items-center flex-nowrap justify-content-between w-100" :class="{ 'taskIsActive' : !item.completed}">
+                                    <div class="w-40 flex-nowrap row">
+                                      <b-checkbox v-model="item.completed" :disabled="item.disabled" name="check-button" inline :key="index" class="completed-assignment ml-3 mr-0" @change="finishAssignment(item.id, $event)"></b-checkbox>
+                                      <span class="assignments-description  w-100 text-break">{{ item.description }}</span>
+                                    </div>
+                                  <div class="w-60 row justify-content-end flex-nowrap">
+                                    <router-link tag="span" :to="'/patients/'+ item.enquiry_id" class="pl-5 text-left" style="cursor:pointer;">{{ item.patientname }} {{ item.patientlastname }}</router-link>
+                                    <span class="pl-5 text-left">{{ patientsDentist(item) }}</span>
+                                    <span class="text-right text-width-150">{{ item.due_at | formatDateAssignments(getLocale) }}</span>
+                                    <b-button variant=" iq-bg-success mr-1 mb-1" size="sm" style="margin-left: 5%;" @click="editAssignments(item)">
+                                      <i class="ri-ball-pen-fill m-0"></i>
+                                    </b-button>
+                                  </div>
                                 </div>
                             </b-list-group-item>
                         </b-list-group>
@@ -151,7 +157,7 @@
                                     <span class="assignments-description">{{ item.description }}</span>
                                     <router-link tag="span" :to="'/patients/'+ item.enquiry_id" class="pl-5" style="cursor:pointer;">{{ item.patientname }} {{ item.patientlastname }}</router-link>
                                   <span class="pl-5">{{ patientsDentist(item) }}</span>
-                                    <span class="text-right">{{ item.due_at | formatDateAssignments(getLocale) }}</span>
+                                    <span class="text-right ">{{ item.due_at | formatDateAssignments(getLocale) }}</span>
                                 </div>
                             </b-list-group-item>
                         </b-list-group>
@@ -237,6 +243,9 @@
   }
   body .wrapper .assignments-container span {
     width: 265px;
+  }
+  .text-width-150 {
+    width: 150px !important;
   }
 }
 
