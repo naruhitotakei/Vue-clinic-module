@@ -26,6 +26,8 @@
   <b-modal v-model="modalShow" no-close-on-backdrop size="lg" title="Event Details" ok-title="Save Changes" @ok="saveAppointment" cancel-title="Close">
     <form>
       <h3 v-if="modalTitle" style="text-align: center;">{{modalTitle}}</h3>
+      <pre>
+      </pre>
       <div class="form-row">
         <div class="col-md-12 mb-3">
           <label for="patient">{{ $t('calendarEvent.patient') }}</label>
@@ -216,7 +218,6 @@ export default {
       this.viewName = info.view.type
     },
     eventResize (info) {
-      console.log('info', info)
       let event = this.calendarApi.getEventById(info.event.id)
       this.setAssignmentDateAndDuration(info.event.start, info.event.end)
       event.setStart(this.formData.start)
@@ -301,6 +302,7 @@ export default {
       this.formData = this.defaultAppointment()
     },
     openCreateModal (selectionInfo) {
+      console.log('selectionInfo', selectionInfo)
       this.formData = this.defaultAppointment()
       this.modalTitle = ''
       this.modalShow = true
@@ -337,6 +339,7 @@ export default {
       this.modalShow = true
       let event = this.calendarApi.getEventById(selectionInfo.event.id)
       let location = this.locations.find(item => item.city === event.location)
+      console.log('openUpdateModal', event)
       this.formData = {
         id: event.id,
         title: event.title,

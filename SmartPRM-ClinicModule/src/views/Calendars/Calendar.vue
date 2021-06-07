@@ -114,20 +114,20 @@ export default {
       checkedListArray: [],
       events: [
         {
-          id: 'a',
-          title: 'event1',
-          start: '2021-06-04T16:00:00',
-          end: '2021-06-04T17:00:00',
+          id: 340,
+          title: '',
+          start: '2021-06-07T07:30:00.000Z',
+          end: '2021-06-07T07:45:00.000Z',
+          backgroundColor: '#64D6E8',
+          resourceId: 28,
+          eventResourceId: 28,
+          locationId: '',
+          assignmentDate: '2021-06-07T10:30',
           hours: 0,
           minutes: 15,
-          assignmentDate: moment(new Date()).format('YYYY-MM-DD') + 'T' + moment(new Date()).format('hh:mm'),
-          backgroundColor: '#148A9C',
-          doctorId: 'Dr. Gaja Bužan'
-        },
-        {
-          title: 'event2',
-          start: new Date(),
-          end: '2021-06-07'
+          notes: '',
+          patientId: '',
+          doctorId: 28
         }
       ],
       resources: [
@@ -136,9 +136,9 @@ export default {
         // { id: 24, title: 'Dr. Kržič' }
       ],
       clonedResources: [
-        { id: 'a', title: 'Doctor 1', eventColor: 'sandybrown' },
-        { id: 'b', title: 'Doctor 2', eventColor: 'blue' },
-        { id: 'c', title: 'Doctor 3', eventColor: 'red' }
+        // { id: 'a', title: 'Doctor 1', eventColor: 'sandybrown' },
+        // { id: 'b', title: 'Doctor 2', eventColor: 'blue' },
+        // { id: 'c', title: 'Doctor 3', eventColor: 'red' }
       ],
       formData: {
         appName: '',
@@ -215,27 +215,34 @@ export default {
         this.resources = _.uniqBy(this.resources, 'id')
         this.clonedResources = this.resources
         dataWithDoctor.map(item => {
+          let startDay = `${moment(item.date).add(moment.duration(item.time)).toISOString()}`
+          let endDay = this.calculateEndDate(moment(item.date).format('YYYY-MM-DD') + 'T' + item.time, 0, 15)
           this.events.push({
             id: item.id,
-            resourceId: item.id,
-            eventResourceId: item.id,
-            start: moment(item.date).format('YYYY-MM-DD') + 'T' + item.time,
-            end: moment(item.date).format('YYYY-MM-DD') + 'T' + item.time,
+            title: item.name + ' ' + item.last_name,
+            start: startDay,
+            end: endDay,
+            backgroundColor: '#148A9C',
+            resourceId: item.doctor_user_id,
+            eventResourceId: item.doctor_user_id,
+            locationId: item.location,
             hours: 0,
             minutes: 15,
             assignmentDate: moment(item.date).format('YYYY-MM-DD') + 'T' + item.time,
-            title: item.name + ' ' + item.last_name,
             last_name: item.last_name,
-            locationId: item.location,
             prm_client_id: item.prm_client_id,
             prm_client_name: item.prm_client_name,
             time: item.time,
             doctorId: item.doctor_name,
             enquiry_id: item.enquiry_id,
-            backgroundColor: '#148A9C'
+            patientId: 0,
+            allDay: false
           })
         })
       })
+    },
+    calculateEndDate (startDate, hours, minutes) {
+      return moment(startDate).add(hours, 'hours').add(minutes, 'minutes').toISOString()
     },
     allDoctorFun (value) {
       this.check = null
