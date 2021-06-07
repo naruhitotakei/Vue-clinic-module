@@ -38,16 +38,20 @@
       <b-button
         align-self="end"
         variant="primary"
-        :disabled="!selectedSlot">
+        :disabled="!selectedSlot"
+        v-b-modal.confirm-modal>
         Confirm
       </b-button>
     </div>
+    <SMSCodeModal :selectedSlot="selectedSlot" :services="services" />
   </div>
 </template>
 
 <script>
+import SMSCodeModal from './SMSCodeModal.vue'
 export default {
   components: {
+    SMSCodeModal
   },
   props: {
     services: Array,
