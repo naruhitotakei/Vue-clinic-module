@@ -1,5 +1,5 @@
 // doctorUserIdList == null - all doctors according to role
-export async function getApontments (startdate, endate, doctorUserIdList) {
+export async function getCalendar (startdate, endate, doctorUserIdList) {
   var url = '/api/calendar/' + startdate + '/' + endate
   if (doctorUserIdList && doctorUserIdList.length > 0) {
     url += encodeURI(JSON.stringify(doctorUserIdList))
