@@ -1,12 +1,14 @@
 {
   "sidebar": {
     "dashboard": "Domov",
+    "callCenterDashboard": "Klicni Center Dashboard",
     "calendar": "Koledar",
     "patients": "Pacienti",
     "documents": "Dokumenti",
     "assignments": "Naloge",
     "statistics": "Statistika",
     "reporting": "Poročila",
+    "callCenter": "Klicni Center",
     "settings": "Nastavitve"
   },
   "documents": {
@@ -23,11 +25,24 @@
     "doctor": "Doktor",
     "tax authority": "Davnčna uprava"
   },
+  "callCenter": {
+    "leads": "Leadi",
+    "clientInfo": "Podatki o Klientu",
+    "KPIs": "KPIs",
+    "workReport": "Poročila o Delu",
+    "activityReport": "Poročila o Aktivnosti",
+    "missingServices": "Manjkajoče Storitve"
+  },
   "settings": {
     "users": "Uporabniki",
     "locations": "Lokacije",
     "services and products": "Storitve in Izdelki",
-    "invoicing": "Izdajanje računov"
+    "invoicing": "Izdajanje računov",
+    "free slots": "Prosti termini",
+    "business customers": "Poslovne stranke",
+    "SMSTemplates": "SMS predloge",
+    "mailTemplates": "Mail predloge",
+    "advertising": "Oglaševanje"
   },
   "nav": {
     "allNotifications": "Vsa obvestila",
@@ -172,10 +187,10 @@
     "filesTab": "Datoteke",
     "filesHeader": "Datoteke",
     "files": {
-      "search": "Išči",
-      "searchBy": "Išči glede na",
+      "sortBy": "Razvrsti po",
       "addFile": "Dodaj datoteko",
       "fileName": "Ime datoteke",
+      "fileType": "Vrsta datoteke",
       "fileCreatedAt": "Ustvarjeno"
     },
     "invoicesTab": "Računi",
@@ -267,12 +282,16 @@
     },
     "newInvoice": {
       "newInvoiceHeader": "Nov račun",
+      "dateOfInvoice": "Datum izdaje",
+      "paymentMethodSummary": "",
+      "addPaymentMethod": "Dodaj nov način plačila",
       "newInvoiceColumn": {
         "invoiceDate": "Datum izdaje",
         "invoiceTotal": "Znesek",
-        "billingDetails": "Podatki prejemnika",
+        "customer": "Stranka",
         "issuedIn": "Izdano v",
-        "issuedBy": "Izdal"
+        "issuedBy": "Izdal",
+        "device": "Naprava"
       },
       "newInvoiceDetails": {
         "header": "Podatki o računu",
@@ -281,7 +300,7 @@
         "quantity": "Količina",
         "price": "Cena",
         "discount": "Popust",
-        "total": "Znesek",
+        "amount": "Znesek",
         "action": "Urejaj"
       },
       "newInvoiceSummary": {
@@ -300,10 +319,13 @@
   },
   "invoice": {
     "invoiceHeader": "Račun",
+    "saved": "Račun shranjen",
+    "notSaved": "Napaka, kontaktirajte administratorja",
     "invoiceInfo": {
       "invoiceDate": "Datum",
       "invoiceTotal": "Znesek",
-      "invoiceStatus": "Status",
+      "invoiceStatus": "Status potrditve",
+      "paymentStatus": "Status plačila",
       "invoiceDetails": "Prejemnik",
       "invoiceIssuedIn": "Kraj izdaje",
       "invoiceIssuedBy": "Izdal"
@@ -334,6 +356,53 @@
       "date": "Datum",
       "issuedBy": "Izdal",
       "amount": "Znesek"
+    },
+    "addNewAdvPayment": {
+      "selectPatient": "Izberi pacienta",
+      "patient": "Pacient",
+      "close": "Zapri",
+      "create": "Ustvari avansni račun"
+    },
+    "newAdvPayment": {
+      "newAdvPaymentHeader": "Nov avansni račun",
+      "alert": "Znesek načina plačila mora biti enak znesku avansnega računa",
+      "alert2": "Znesek avansnega računa ne sme biti 0",
+      "alert3": "Izbrati morate način plačila",
+      "paymentMethodSummary": "Povzetek načina plačila",
+      "downloadPrint": "Prenesi tiskano verzijo",
+      "saveDraft": "Shrani kot osnutek",
+      "save": "Shrani in potrdi",
+      "IBAN": "IBAN",
+      "vatId": "ID štev. za DDV",
+      "regNumber": "Matična št.",
+      "dateOfAdvPayment": "Datum izdaje",
+      "advPaymentNo": "AVANSNI RAČUN št.",
+      "copy": "Izvod",
+      "IssuedIn": "Kraj izdaje",
+      "code": "Šifra",
+      "item": "Opis",
+      "quantity": "Kol/g",
+      "price": "Cena/EM",
+      "value": "Vrednost",
+      "amount": "Znesek",
+      "total": "Skupaj",
+      "payment": "Vplačilo",
+      "paymentMethod": "Način plačila",
+      "vatExemptionReason": "Zdravstvene storitve in oskrba so v skladu z 2. in 4. točko, prvega odstavka, 42 člena ZDDV-1, oproščene plačila DDV, zato DDV ni nil obračunan",
+      "issuedBy": "Račun izdal",
+      "zoi": "ZOI",
+      "eor": "EOR",
+      "details": {
+        "header": "Podatki o avansnem računu",
+        "item": "Opis",
+        "amount": "Znesek",
+        "action": "Urejaj"
+      }
+    },
+    "newAdvPaymentColumn": {
+      "issuedBy": "Izdal",
+      "customer": "Stranka",
+      "issuedIn": "Kraj izdaje"
     }
   },
   "advPayment": {
@@ -362,6 +431,16 @@
       "discount": "Popust",
       "total": "Znesek"
     }
+  },
+  "paymentMethod": "Način plačila",
+  "paymentMethods": {
+    "cash": "Gotovina",
+    "creditCard": "Kreditna kartica",
+    "bankAccount": "Nakazilo na TRR"
+  },
+  "paymentMethodsColumn": {
+    "amount": "Znesek",
+    "action": "Urejaj"
   },
   "assignments": {
     "assignmentsHeader": "Moje Naloge",
@@ -433,7 +512,8 @@
       "address": "Naslov",
       "save": "Shrani",
       "close": "Zapri"
-    }
+    },
+    "headerInactiveLocations": "Neaktivne lokacije"
   },
   "servicesAndProducts": {
     "headerProducts": "Produkti",

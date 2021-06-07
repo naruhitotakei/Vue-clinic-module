@@ -3,35 +3,49 @@ import VueRouter from 'vue-router'
 /* Layouts */
 import Layout1 from '../layouts/Layout1'
 import AuthLayout1 from '../layouts/AuthLayouts/AuthLayout1'
-/* Calendar */
-import Calendar from '../views/Calendars/Calendar'
 /* Home */
 import Home from '../views/Home/Home'
-/* Assignments */
-import Assignments from '../views/Assignments/Assignments'
-import AdvInvoices from '../views/Documents/AdvPayments'
+/* Call Center Dashboard */
+import CallCenterDashboard from '../views/CallCenterDashboard/CallCenterDashboard'
+/* Calendar */
+import Calendar from '../views/Calendars/Calendar'
+/* Patients */
+import Patients from '../views/Patients/Patients'
+import ViewPatient from '../views/Patients/ViewPatient'
+/* Documents */
+import AdvPayments from '../views/Documents/AdvPayments'
 import Invoice from '../views/Documents/Invoice'
+import AdvPayment from '../views/Documents/AdvPayment'
 import Invoices from '../views/Documents/Invoices'
 import NewInvoice from '../views/Documents/NewInvoice'
+import NewAdvPayment from '../views/Documents/NewAdvPayment'
 import Offers from '../views/Documents/Offers'
-/* Documents */
-import Patients from '../views/Patients/Patients'
-/* Patients */
-import ViewPatient from '../views/Patients/ViewPatient'
-/* Extra Pages */
-import Doctor from '../views/Reporting/Doctor'
+/* Assignments */
+import Assignments from '../views/Assignments/Assignments'
+/* Statistics */
+import ClinicStatistics from '../views/Statistics/ClinicStatistics'
+import PersonalStatistics from '../views/Statistics/PersonalStatistics'
 /* Reporting */
 import Emazing from '../views/Reporting/Emazing'
 import TaxAuthority from '../views/Reporting/TaxAuthority'
+import Doctor from '../views/Reporting/Doctor'
+/* Call Center */
+import Leads from '../views/CallCenter/Leads'
+import ClientInfo from '../views/CallCenter/ClientInfo'
+import KPIs from '../views/CallCenter/KPIs'
+import WorkReport from '../views/CallCenter/WorkReport'
+import ActivityReport from '../views/CallCenter/ActivityReport'
+import MissingServices from '../views/CallCenter/MissingServices'
+/* Settings */
 import Invoicing from '../views/Settings/Invoicing'
 import Locations from '../views/Settings/Locations'
 import ServicesAndProducts from '../views/Settings/ServicesAndProducts'
 import BusinessCustomers from '../views/Settings/BusinessCustomers'
-/* Settings */
 import Users from '../views/Settings/Users'
-/* Statistics */
-import ClinicStatistics from '../views/Statistics/ClinicStatistics'
-import PersonalStatistics from '../views/Statistics/PersonalStatistics'
+import FreeSlots from '../views/Settings/FreeSlots'
+import SMSTemplates from '../views/Settings/SMSTemplates'
+import MailTemplates from '../views/Settings/MailTemplates'
+import Advertising from '../views/Settings/Advertising'
 /* Authentic View */
 import SignIn from '../views/Auth/Pages/SignIn'
 import SignUp from '../views/Auth/Pages/SignUp'
@@ -82,6 +96,12 @@ const childRoutes = (prop, mode) => [
     component: Home
   },
   {
+    path: 'call-center-dashboard',
+    name: prop + '.call-center-dashboard',
+    meta: { dark: mode, auth: true, name: 'Call Center Dashboard' },
+    component: CallCenterDashboard
+  },
+  {
     path: 'calendar',
     name: prop + '.calendar',
     meta: { dark: mode, auth: true, name: 'Calendar' },
@@ -114,10 +134,28 @@ const documentChildRoute = (prop, mode) => [
     component: Invoice
   },
   {
+    path: 'invoices/:patientId/new-invoice',
+    name: prop + '.invoiceId',
+    meta: { dark: mode, auth: true, name: 'Invoice' },
+    component: NewInvoice
+  },
+  {
     path: 'advance-payments',
     name: prop + '.advance-payments',
     meta: { dark: mode, auth: true, name: 'Advance Payments' },
-    component: AdvInvoices
+    component: AdvPayments
+  },
+  {
+    path: 'advance-payments/:advPaymentId',
+    name: prop + '.advance-payments',
+    meta: { dark: mode, auth: true, name: 'Advance Payments' },
+    component: AdvPayment
+  },
+  {
+    path: 'advance-payments/:patientId/new-adv-payment',
+    name: prop + '.new-adv-payment',
+    meta: { dark: mode, auth: true, name: 'Advance Payments' },
+    component: NewAdvPayment
   },
   {
     path: 'offers',
@@ -171,45 +209,99 @@ const reportingChildRoute = (prop, mode = false) => [
   }
 ]
 
+const callCenterChildRoute = (prop, mode = false) => [
+  {
+    path: 'leads',
+    name: prop + '.leads',
+    meta: { dark: mode, auth: true, name: 'Leads' },
+    component: Leads
+  },
+  {
+    path: 'client-info',
+    name: prop + '.client-info',
+    meta: { dark: mode, auth: true, name: 'Client Info' },
+    component: ClientInfo
+  },
+  {
+    path: 'KPIs',
+    name: prop + '.KPIs',
+    meta: { dark: mode, auth: true, name: 'KPIs' },
+    component: KPIs
+  },
+  {
+    path: 'work-report',
+    name: prop + '.work-report',
+    meta: { dark: mode, auth: true, name: 'Work Report' },
+    component: WorkReport
+  },
+  {
+    path: 'activity-report',
+    name: prop + '.activity-report',
+    meta: { dark: mode, auth: true, name: 'Activity Report' },
+    component: ActivityReport
+  },
+  {
+    path: 'missing-services',
+    name: prop + '.missing-services',
+    meta: { dark: mode, auth: true, name: 'Missing Services' },
+    component: MissingServices
+  }
+]
+
 const settingsChildRoute = (prop, mode = false) => [
   {
     path: 'users',
     name: prop + '.users',
-    meta: { darke: mode, auth: true, name: 'Users' },
+    meta: { dark: mode, auth: true, name: 'Users' },
     component: Users
   },
   {
     path: 'locations',
     name: prop + '.locations',
-    meta: { darke: mode, auth: true, name: 'Locations' },
+    meta: { dark: mode, auth: true, name: 'Locations' },
     component: Locations
   },
   {
     path: 'services-and-products',
     name: prop + '.services-and-products',
-    meta: { darke: mode, auth: true, name: 'Services And Products' },
+    meta: { dark: mode, auth: true, name: 'Services And Products' },
     component: ServicesAndProducts
   },
   {
     path: 'invoicing',
     name: prop + '.invoicing',
-    meta: { darke: mode, auth: true, name: 'Invoicing' },
+    meta: { dark: mode, auth: true, name: 'Invoicing' },
     component: Invoicing
   },
   {
     path: 'business-customers',
     name: prop + '.business-customers',
-    meta: { darke: mode, auth: true, name: 'Business Customers' },
+    meta: { dark: mode, auth: true, name: 'Business Customers' },
     component: BusinessCustomers
-  }
-]
-
-const defaultlayout = (prop, mode = false) => [
+  },
   {
-    path: 'new-invoice',
-    name: prop + '.new-invoice',
-    meta: { dark: mode, auth: true, name: 'New Invoices' },
-    component: NewInvoice
+    path: 'free-slots',
+    name: prop + '.free-slots',
+    meta: { dark: mode, auth: true, name: 'Free Slots' },
+    component: FreeSlots
+  },
+  {
+    path: 'sms-templates',
+    name: prop + '.sms-templates',
+    meta: { dark: mode, auth: true, name: 'SMS Templates' },
+    component: SMSTemplates
+  },
+  {
+    path: 'mail-customers',
+    name: prop + '.mail-customers',
+    meta: { dark: mode, auth: true, name: 'Mail Templates' },
+    component: MailTemplates
+  },
+  {
+    path: 'advertising',
+    name: prop + '.advertising',
+    meta: { dark: mode, auth: true, name: 'Advertising' },
+    component: Advertising
   }
 ]
 
@@ -250,18 +342,18 @@ const routes = [
     children: reportingChildRoute('reporting')
   },
   {
+    path: '/call-center',
+    name: 'call-center',
+    component: Layout1,
+    meta: { auth: true },
+    children: callCenterChildRoute('call-center')
+  },
+  {
     path: '/settings',
     name: 'settings',
     component: Layout1,
     meta: { auth: true },
     children: settingsChildRoute('settings')
-  },
-  {
-    path: '/extra-pages',
-    name: 'extra-pages',
-    component: Layout1,
-    meta: { auth: true },
-    children: defaultlayout('extra-pages')
   },
   {
     path: '/auth',

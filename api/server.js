@@ -24,9 +24,12 @@ const daoAdvPayments = require('./dao/daoAdvPayments')
 const daoOffers = require('./dao/daoOffers')
 const daoCodeLists = require('./dao/daoCodeLists')
 const daoProducts = require('./dao/daoProducts')
+const daoBusiness = require('./dao/daoBusiness')
+const daoCountries = require('./dao/daoCountries')
 const daoCalendar = require('./dao/daoCalendar')
 const daoCompanies = require('./dao/daoCompanies')
 const daoLocations = require('./dao/daoLocations')
+const daoCompanyPremises = require('./dao/daoCompanyPremises')
 const awsS3 = require('./services/awsS3')
 
 app.use(fileUpload({
@@ -107,6 +110,15 @@ app.post('/api/profile', async function(req, res) {
     } else {
        res.status(200).json("NOK: user not logged in")
     }    
+});
+
+app.post('/api/profile/change-lang', async function(req, res) {
+  const data = req.body
+  if (req.session.prm_user) {
+    daoUser.changeLang(req, res, data)
+  } else {
+    res.status(200).json("NOK: user not logged in")
+  }
 });
 
 app.get('/api/dentists', async function(req, res) {
@@ -287,12 +299,77 @@ app.get('/api/productGroups/:id/product-naming', (req, res) => {
 });
 
 ///////////////////////////////////
+// business
+///////////////////////////////////
+
+app.get('/api/business/:locale', (req, res) => {
+    const locale = req.params.locale
+    if (req.session.prm_user && req.session.prm_user.permissions && checkPermission(req.session.prm_user.permissions, productsPermission))
+        daoBusiness.getBusiness(req, res, locale)
+    else
+        res.status(401).json("OK: user unauthorized")
+});
+
+app.get('/api/business/:id', (req, res) => {
+  const id = req.params.id
+  if (req.session.prm_user && req.session.prm_user.permissions && checkPermission(req.session.prm_user.permissions, productsPermission))
+    daoBusiness.getBusinessByID(req, res, id)
+  else
+    res.status(401).json("OK: user unauthorized")
+});
+
+app.put('/api/business/:id', (req, res) => {
+  const id = req.params.id
+  const business = req.body
+  if (req.session.prm_user && req.session.prm_user.permissions && checkPermission(req.session.prm_user.permissions, productsPermission))
+    daoBusiness.updateBusiness(req, res, id, business)
+  else
+    res.status(401).json("OK: user unauthorized")
+});
+
+app.post('/api/business', (req, res) => {
+  const business = req.body
+  if(req.session.prm_user && req.session.prm_user.permissions && checkPermission(req.session.prm_user.permissions, productsPermission))
+    daoBusiness.createBusiness(req, res, business)
+  else
+    res.status(401).json("OK: user unauthorized")
+});
+
+app.delete('/api/business/:id', (req, res) => {
+  const id = req.params.id
+  if(req.session.prm_user && req.session.prm_user.permissions && checkPermission(req.session.prm_user.permissions, enquiriesPermission))
+    daoBusiness.deleteBusiness(req, res, id)
+  else
+    res.status(401).json("OK: user unauthorized")
+});
+
+///////////////////////////////////
+// countries
+///////////////////////////////////
+app.get('/api/countries/', (req, res) => {
+  if (req.session.prm_user && req.session.prm_user.permissions && checkPermission(req.session.prm_user.permissions, productsPermission))
+    daoCountries.getCountries(req, res)
+  else
+    res.status(401).json("OK: user unauthorized")
+});
+
+
+///////////////////////////////////
 // locations
 ///////////////////////////////////
 
 app.get('/api/locations', (req, res) => {
-    if (req.session.prm_user && req.session.prm_user.permissions && checkPermission(req.session.prm_user.permissions, locationsPermission))
+    if (req.session.prm_user && req.session.prm_user.permissions && checkPermission(req.session.prm_user.permissions, locationsPermission)) {
         daoLocations.getLocationsList(req, res)
+    }
+    else
+        res.status(401).json("OK: user unauthorized")
+});
+
+app.get('/api/inactive-locations', (req, res) => {
+    if (req.session.prm_user && req.session.prm_user.permissions && checkPermission(req.session.prm_user.permissions, locationsPermission)) {
+        daoLocations.getInactiveLocationsList(req, res)
+    }
     else
         res.status(401).json("OK: user unauthorized")
 });
@@ -310,6 +387,14 @@ app.put('/api/locations/:id', (req, res) => {
     const location = req.body
     if (req.session.prm_user && req.session.prm_user.permissions && checkPermission(req.session.prm_user.permissions, locationsPermission))
         daoLocations.updateLocation(req, res, id, location)
+    else
+        res.status(401).json("OK: user unauthorized")
+});
+
+app.put('/api/locations/:id/activation', (req, res) => {
+    const id = req.params.id
+    if (req.session.prm_user && req.session.prm_user.permissions && checkPermission(req.session.prm_user.permissions, locationsPermission))
+        daoLocations.toggleActivity(req, res, id)
     else
         res.status(401).json("OK: user unauthorized")
 });
@@ -370,6 +455,14 @@ app.get('/api/enquiries/:id/notes', (req, res) => {
         res.status(401).json("OK: user unauthorized")
 });
 
+app.post('/api/enquiries/notes', (req, res) => {
+  const notes = req.body
+  if(req.session.prm_user && req.session.prm_user.permissions && checkPermission(req.session.prm_user.permissions, enquiriesPermission))
+    daoEnquiries.createEnquiryNotes(req, res, notes)
+  else
+    res.status(401).json("OK: user unauthorized")
+});
+
 app.get('/api/enquiries/:id/appointments', (req, res) => {
     const id = req.params.id
     if(req.session.prm_user && req.session.prm_user.permissions && checkPermission(req.session.prm_user.permissions, enquiriesPermission))
@@ -419,10 +512,10 @@ app.put('/api/enquiries/:id', (req, res) => {
       res.status(401).json("OK: user unauthorized")
 });
 
-app.delete('/api/enquiries/:id', (req, res) => {
+app.put('/api/enquiries/:id/trashed', (req, res) => {
   const id = req.params.id
   if(req.session.prm_user && req.session.prm_user.permissions && checkPermission(req.session.prm_user.permissions, enquiriesPermission))
-      daoEnquiries.deleteEnquiries(req, res, id)
+      daoEnquiries.trashEnquiry(req, res, id)
   else
       res.status(401).json("OK: user unauthorized")
 });
@@ -465,7 +558,7 @@ app.get('/apitest/deleteenquiries/:id', (req, res) => {
 app.get('/api/assignments/:due', (req, res) => {
   const due = req.params.due
   if(req.session.prm_user && req.session.prm_user.permissions && checkPermission(req.session.prm_user.permissions, assignmentsPermission))
-      daoAssignments.getAssignments(req, res, getScope(req.session.prm_user.permissions, assignmentsPermission), req.session.prm_user.id, due)
+      daoAssignments.getAssignments(req, res, getScope(req.session.prm_user.permissions, assignmentsPermission), req.session.prm_user.id, req.session.prm_user.prm_client_id, due)
   else
       res.status(401).json("OK: user unauthorized")
 });
@@ -476,6 +569,31 @@ app.post('/api/assignments', (req, res) => {
       daoAssignments.finishAssignment(req, res, assignmentDescriptor)
   else
       res.status(401).json("OK: user unauthorized")
+});
+
+app.post('/api/assignments-create', (req, res) => {
+  const assignment = req.body
+  if(req.session.prm_user && req.session.prm_user.permissions && checkPermission(req.session.prm_user.permissions, assignmentsPermission))
+    daoAssignments.createAssignment(req, res, assignment)
+  else
+    res.status(401).json("OK: user unauthorized")
+});
+
+app.post('/api/assignments-update', (req, res) => {
+  const assignment = req.body
+  if(req.session.prm_user && req.session.prm_user.permissions && checkPermission(req.session.prm_user.permissions, assignmentsPermission))
+    daoAssignments.createAssignment(req, res, assignment)
+  else
+    res.status(401).json("OK: user unauthorized")
+});
+
+app.put('/api/assignments/:id', (req, res) => {
+  const id = req.params.id
+  const assignment = req.body
+  if (req.session.prm_user && req.session.prm_user.permissions && checkPermission(req.session.prm_user.permissions, productsPermission))
+    daoAssignments.updateAssignment(req, res, id, assignment)
+  else
+    res.status(401).json("OK: user unauthorized")
 });
 
 ///////////////////////////////////
@@ -495,7 +613,32 @@ app.get('/api/companies/:id', (req, res) => {
     daoCompanies.getCompanyById(req, res, id)
     else
         res.status(401).json("OK: user unauthorized")
-  });
+});
+
+app.post('/api/companies/', (req, res) => {
+    const company = req.body
+    if(req.session.prm_user && req.session.prm_user.permissions && checkPermission(req.session.prm_user.permissions, assignmentsPermission))
+    daoCompanies.createCompany(req, res, company)
+    else
+        res.status(401).json("OK: user unauthorized")
+});
+
+app.put('/api/companies/:id', (req, res) => {
+    const id = req.params.id
+    const company = req.body
+    if(req.session.prm_user && req.session.prm_user.permissions && checkPermission(req.session.prm_user.permissions, assignmentsPermission))
+    daoCompanies.updateCompany(req, res, id, company)
+    else
+        res.status(401).json("OK: user unauthorized")
+});
+
+app.delete('/api/companies/:id', (req, res) => {
+    const id = req.params.id
+    if(req.session.prm_user && req.session.prm_user.permissions && checkPermission(req.session.prm_user.permissions, assignmentsPermission))
+    daoCompanies.deleteCompany(req, res, id)
+    else
+        res.status(401).json("OK: user unauthorized")
+});
 
 ///////////////////////////////////
 // invoices, fiscal verification
@@ -517,10 +660,44 @@ app.get('/api/invoices', (req, res) => {
         res.status(401).json("OK: user unauthorized")
 });
 
+app.post('/api/invoices', (req, res) => {
+    const invoice = req.body
+    if (req.session.prm_user && req.session.prm_user.permissions && checkPermission(req.session.prm_user.permissions, invoicesPermission))
+        daoInvoices.createInvoices(req, res, invoice)
+    else
+        res.status(401).json("OK: user unauthorized")
+});
+
+app.put('/api/invoices/:id', (req, res) => {
+    const id = req.params.id
+    const invoice = req.body
+
+    if (req.session.prm_user && req.session.prm_user.permissions && checkPermission(req.session.prm_user.permissions, invoicesPermission))
+        daoInvoices.updateInvoices(req, res, id, invoice)
+    else
+        res.status(401).json("OK: user unauthorized")
+});
+
 app.get('/api/invoices/:id', (req, res) => {
     const id = req.params.id
     if (req.session.prm_user && req.session.prm_user.permissions && checkPermission(req.session.prm_user.permissions, invoicesPermission))
         daoInvoices.getInvoiceById(req, res, id)
+    else
+        res.status(401).json("OK: user unauthorized")
+});
+
+app.get('/api/invoices/company/:id/consecutive-number', (req, res) => {
+    const id = req.params.id
+    if (req.session.prm_user && req.session.prm_user.permissions && checkPermission(req.session.prm_user.permissions, invoicesPermission))
+        daoInvoices.getConsecutiveInvoiceNumberForCompany(req, res, id)
+    else
+        res.status(401).json("OK: user unauthorized")
+});
+
+app.get('/api/invoices/:id/items', (req, res) => {
+    const id = req.params.id
+    if (req.session.prm_user && req.session.prm_user.permissions && checkPermission(req.session.prm_user.permissions, invoicesPermission))
+        daoInvoices.getItemsOfInvoiceById(req, res, id)
     else
         res.status(401).json("OK: user unauthorized")
 });
@@ -606,8 +783,84 @@ app.get('/api/codelist/country/:id/tax-rate', (req, res) => {
     const id = req.params.id
     daoCodeLists.getTaxRateList(req, res, id)
 });
+app.get('/api/codelist/clients', (req, res) => {
+    daoCodeLists.getClients(req, res)
+});
 
 ///////////////////////////////////
+// company premises
+///////////////////////////////////
+app.get('/api/company-premises', (req, res) => {
+    daoCompanyPremises.getCompanyPremises(req, res)
+});
+
+app.post('/api/company-premises/check-business-id', (req, res) => {
+    const data = req.body
+    daoCompanyPremises.checkBusinessIdUniquness(req, res, data)
+});
+
+app.post('/api/company-premises', (req, res) => {
+    const premise = req.body
+    daoCompanyPremises.createPremise(req, res, premise)
+});
+
+app.put('/api/company-premises/:id', (req, res) => {
+    const id = req.params.id
+    const premise = req.body
+    daoCompanyPremises.updatePremise(req, res, id, premise)
+});
+
+app.get('/api/company-premises/:id', (req, res) => {
+    const id = req.params.id
+    daoCompanyPremises.getCompanyPremiseById(req, res, id)
+});
+
+app.delete('/api/company-premises/:id', (req, res) => {
+    const id = req.params.id
+    daoCompanyPremises.deletePremise(req, res, id)
+});
+
+app.get('/api/company-premise-devices', (req, res) => {
+    daoCompanyPremises.getCompanyPremiseDevices(req, res)
+});
+
+app.post('/api/company-premise-devices/check-electronic-device-id', (req, res) => {
+    const data = req.body
+    daoCompanyPremises.checkElectronicDeviceIdUniquness(req, res, data)
+});
+
+app.post('/api/company-premise-devices', (req, res) => {
+    const premiseDevice = req.body
+    daoCompanyPremises.createPremiseDevice(req, res, premiseDevice)
+});
+
+app.put('/api/company-premise-devices/:id', (req, res) => {
+    const id = req.params.id
+    const premiseDevice = req.body
+    daoCompanyPremises.updatePremiseDevice(req, res, id, premiseDevice)
+});
+
+app.get('/api/company-premise-devices/:id', (req, res) => {
+    const id = req.params.id
+    daoCompanyPremises.getCompanyPremiseDeviceById(req, res, id)
+});
+
+app.delete('/api/company-premise-devices/:id', (req, res) => {
+    const id = req.params.id
+    daoCompanyPremises.deletePremiseDevice(req, res, id)
+});
+
+app.get('/api/:companyId/company-premises', (req, res) => {
+    const companyId = req.params.companyId
+    daoCompanyPremises.getPremisesForCompany(req, res, companyId)
+});
+
+app.get('/api/company-premises/:companyPremiseId/devices', (req, res) => {
+    const companyPremiseId = req.params.companyPremiseId
+    daoCompanyPremises.getDevicesForCompanyPremise(req, res, companyPremiseId)
+});
+
+////////////////////////////////////
 // Files
 ///////////////////////////////////
 app.post('/api/files/avatar', async function(req, res) {

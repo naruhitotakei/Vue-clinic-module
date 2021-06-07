@@ -56,6 +56,19 @@ export async function editProfile (profile) {
   return rawResponse.json()
 }
 
+export async function changeLang (profile) {
+  const rawResponse = await fetch('/api/profile/change-lang', {
+    method: 'POST',
+    credentials: 'same-origin',
+    headers: {
+      'Accept': 'application/json',
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify(profile)
+  })
+  return rawResponse.json()
+}
+
 export async function getDentists () {
   const rawResponse = await fetch('/api/dentists', {
     method: 'GET',

@@ -5,11 +5,23 @@
     "is_heading": false,
     "is_active": false,
     "link": {
-      "name" : "dashboard.home"
+      "name": "dashboard.home"
     },
     "class_name": "",
     "is_icon_class": true,
     "icon": "ri-home-4-line"
+  },
+  {
+    "title": "Call Center Dashboard",
+    "name": "sidebar.callCenterDashboard",
+    "is_heading": false,
+    "is_active": false,
+    "link": {
+      "name": "dashboard.call-center-dashboard"
+    },
+    "class_name": "",
+    "is_icon_class": true,
+    "icon": "ri-phone-fill"
   },
   {
     "title": "Calendar",
@@ -17,7 +29,7 @@
     "is_heading": false,
     "is_active": false,
     "link": {
-      "name" : "dashboard.calendar"
+      "name": "dashboard.calendar"
     },
     "class_name": "",
     "is_icon_class": true,
@@ -34,63 +46,63 @@
     "is_icon_class": true,
     "icon": "ri-contacts-line"
   },
-    {
-      "title": "Documents",
-      "name": "sidebar.documents",
-      "is_heading": false,
-      "is_active": false,
-      "link": "",
-      "class_name": "",
-      "is_icon_class": true,
-      "icon": "ri-device-fill",
-      "children": [
-        {
-          "title": "Offers",
-          "name": "documents.offers",
-          "is_active": false,
-          "link": {
-            "name": "documents.offers"
-          },
-          "class_name": "",
-          "is_icon_class": true,
-          "icon": "ri-tablet-line"
+  {
+    "title": "Documents",
+    "name": "sidebar.documents",
+    "is_heading": false,
+    "is_active": false,
+    "link": "",
+    "class_name": "",
+    "is_icon_class": true,
+    "icon": "ri-device-fill",
+    "children": [
+      {
+        "title": "Offers",
+        "name": "documents.offers",
+        "is_active": false,
+        "link": {
+          "name": "documents.offers"
         },
-        {
-          "title": "Invoices",
-          "name": "documents.invoices",
-          "is_active": false,
-          "link": {
-            "name": "documents.invoices"
-          },
-          "class_name": "",
-          "is_icon_class": true,
-          "icon": "ri-device-line"
-        },
-        {
-          "title": "Advance Payments",
-          "name": "documents.advPayments",
-          "is_active": false,
-          "link": {
-            "name": "documents.advance-payments"
-          },
-          "class_name": "",
-          "is_icon_class": true,
-          "icon": "ri-wallet-line"
-        }
-      ]
-    },
-    {
-      "title": "Assignments",
-      "name": "sidebar.assignments",
-      "is_heading": false,
-      "is_active": false,
-      "link": {
-        "name" : "dashboard.assignments"
+        "class_name": "",
+        "is_icon_class": true,
+        "icon": "ri-tablet-line"
       },
-      "class_name": "",
-      "is_icon_class": true,
-      "icon": "ri-task-line"
+      {
+        "title": "Invoices",
+        "name": "documents.invoices",
+        "is_active": false,
+        "link": {
+          "name": "documents.invoices"
+        },
+        "class_name": "",
+        "is_icon_class": true,
+        "icon": "ri-device-line"
+      },
+      {
+        "title": "Advance Payments",
+        "name": "documents.advPayments",
+        "is_active": false,
+        "link": {
+          "name": "documents.advance-payments"
+        },
+        "class_name": "",
+        "is_icon_class": true,
+        "icon": "ri-wallet-line"
+      }
+    ]
+  },
+  {
+    "title": "Assignments",
+    "name": "sidebar.assignments",
+    "is_heading": false,
+    "is_active": false,
+    "link": {
+      "name": "dashboard.assignments"
     },
+    "class_name": "",
+    "is_icon_class": true,
+    "icon": "ri-task-line"
+  },
   {
     "title": "Statistics",
     "name": "sidebar.statistics",
@@ -130,7 +142,7 @@
     "name": "sidebar.reporting",
     "is_heading": false,
     "is_active": false,
-    "link":"",
+    "link": "",
     "class_name": "",
     "is_icon_class": true,
     "icon": "ri-file-chart-line",
@@ -171,15 +183,104 @@
     ]
   },
   {
+    "title": "Call Center",
+    "name": "sidebar.callCenter",
+    "is_heading": false,
+    "is_active": false,
+    "link": "",
+    "class_name": "",
+    "is_icon_class": true,
+    "icon": "ri-customer-service-2-line",
+    "children": [
+      {
+        "title": "Leads",
+        "name": "callCenter.leads",
+        "is_active": false,
+        "link": {
+          "name": "call-center.leads"
+        },
+        "class_name": "",
+        "is_icon_class": true,
+        "icon": "ri-guide-line"
+      },
+      {
+        "title": "Client Info",
+        "name": "callCenter.clientInfo",
+        "is_active": false,
+        "link": {
+          "name": "call-center.client-info"
+        },
+        "class_name": "",
+        "is_icon_class": true,
+        "icon": "ri-file-info-line"
+      },
+      {
+        "title": "KPIs",
+        "name": "callCenter.KPIs",
+        "is_active": false,
+        "link": {
+          "name": "call-center.KPIs"
+        },
+        "class_name": "",
+        "is_icon_class": true,
+        "icon": "ri-bar-chart-2-line"
+      },
+      {
+        "title": "Work Report",
+        "name": "callCenter.workReport",
+        "is_active": false,
+        "link": {
+          "name": "call-center.work-report"
+        },
+        "class_name": "",
+        "is_icon_class": true,
+        "icon": "ri-file-chart-line"
+      },
+      {
+        "title": "Activity Report",
+        "name": "callCenter.activityReport",
+        "is_active": false,
+        "link": {
+          "name": "call-center.activity-report"
+        },
+        "class_name": "",
+        "is_icon_class": true,
+        "icon": "ri-folder-chart-line"
+      },
+      {
+        "title": "Missing Services",
+        "name": "callCenter.missingServices",
+        "is_active": false,
+        "link": {
+          "name": "call-center.missing-services"
+        },
+        "class_name": "",
+        "is_icon_class": true,
+        "icon": "ri-alert-line"
+      }
+    ]
+  },
+  {
     "title": "Settings",
     "name": "sidebar.settings",
     "is_heading": false,
     "is_active": false,
-    "link":"",
+    "link": "",
     "class_name": "",
     "is_icon_class": true,
     "icon": "ri-settings-5-line",
     "children": [
+      {
+        "title": "Free Slots",
+        "name": "settings.free slots",
+        "is_active": false,
+        "link": {
+          "name": "settings.free-slots"
+        },
+        "class_name": "",
+        "is_icon_class": true,
+        "icon": "ri-user-3-line"
+      },
       {
         "title": "Users",
         "name": "settings.users",
@@ -214,6 +315,17 @@
         "icon": "ri-stack-line"
       },
       {
+        "title": "Business Customers",
+        "name": "settings.business customers",
+        "is_active": false,
+        "link": {
+          "name": "settings.business-customers"
+        },
+        "class_name": "",
+        "is_icon_class": true,
+        "icon": "ri-briefcase-3-line"
+      },
+      {
         "title": "Invoicing",
         "name": "settings.invoicing",
         "is_active": false,
@@ -225,15 +337,37 @@
         "icon": "ri-file-list-fill"
       },
       {
-        "title": "Business Customers",
-        "name": "settings.business-customers",
+        "title": "SMS Templates",
+        "name": "settings.SMSTemplates",
         "is_active": false,
         "link": {
-          "name": "settings.business-customers"
+          "name": "settings.SMS-templates"
         },
         "class_name": "",
         "is_icon_class": true,
-        "icon": "ri-briefcase-3-line"
+        "icon": "ri-smartphone-line"
+      },
+      {
+        "title": "Mail Templates",
+        "name": "settings.mailTemplates",
+        "is_active": false,
+        "link": {
+          "name": "settings.mail-templates"
+        },
+        "class_name": "",
+        "is_icon_class": true,
+        "icon": "ri-mail-send-line"
+      },
+      {
+        "title": "Advertising",
+        "name": "settings.advertising",
+        "is_active": false,
+        "link": {
+          "name": "settings.advertising"
+        },
+        "class_name": "",
+        "is_icon_class": true,
+        "icon": "ri-exchange-funds-line"
       }
     ]
   }

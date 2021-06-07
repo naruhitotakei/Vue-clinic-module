@@ -16,7 +16,7 @@
                                 <b-thead>
                                   <b-th>{{ $t('invoices.newInvoice.newInvoiceColumn.invoiceDate') }}</b-th>
                                   <b-th>{{ $t('invoices.newInvoice.newInvoiceColumn.invoiceTotal') }}</b-th>
-                                  <b-th>{{ $t('invoices.newInvoice.newInvoiceColumn.billingDetails') }}</b-th>
+                                  <b-th>{{ $t('invoices.newInvoice.newInvoiceColumn.customer') }}</b-th>
                                   <b-th>{{ $t('invoices.newInvoice.newInvoiceColumn.issuedIn') }}</b-th>
                                   <b-th>{{ $t('invoices.newInvoice.newInvoiceColumn.issuedBy') }}</b-th>
                                 </b-thead>
@@ -45,14 +45,14 @@
                             <template v-slot:body>
                               <b-row>
                                 <b-col md="12" class="table-responsive" style="min-height:250px">
-                                  <b-table bordered hover :items="rows" :fields="detailColumns">
+                                  <b-table bordered hover :items="items" :fields="detailColumns">
                                     <template v-slot:cell(id)="data">
-                                      <span>{{ rows.indexOf(data.item) + 1 }}</span>
+                                      <span>{{ items.indexOf(data.item) + 1 }}</span>
                                     </template>
                                     <template v-slot:cell(name)="data">
-                                      <span v-if="!data.item.editable">{{ data.item.item.name }}</span>
+                                      <span v-if="!data.item.editable">{{ data.item.item.product_name }}</span>
                                       <div v-else>
-                                      <v-select :clearable="false" label="name" class="style-chooser" v-model="data.item.item" :options="options" @input="getPrice"></v-select>
+                                      <v-select :clearable="false" label="product_name" class="style-chooser" v-model="data.item.item" :options="products" @input="getPrice"></v-select>
                                       </div>
                                     </template>
                                     <template v-slot:cell(quantity)="data">
@@ -60,7 +60,7 @@
                                       <input type="number" min="1" v-model="data.item.quantity" v-else class="form-control">
                                     </template>
                                     <template v-slot:cell(price)="data">
-                                      <span>{{ data.item.item.price }}</span>
+                                      <span>{{ data.item.item.product_price }}</span>
                                     </template>
                                     <template v-slot:cell(discount)="data">
                                       <span v-if="!data.item.editable">{{ data.item.discount | percentage }}</span>
@@ -69,7 +69,7 @@
                                     <template v-slot:cell(action)="data">
                                         <b-button variant=" iq-bg-success mr-1 mb-1" size="sm" @click="edit(data.item)" v-if="!data.item.editable"><i class="ri-ball-pen-fill m-0"></i></b-button>
                                         <b-button variant=" iq-bg-danger mr-1 mb-1" size="sm" v-if="!data.item.editable" @click="remove(data.item)"><i class="ri-delete-bin-line m-0"></i></b-button>
-                                        <b-button :disabled="!data.item.item.name" variant=" iq-bg-success mr-1 mb-1" size="sm" @click="submit(data.item)" v-if="data.item.editable"><i class="ri-checkbox-circle-fill m-0"></i></b-button>
+                                        <b-button :disabled="!data.item.item.product_name" variant=" iq-bg-success mr-1 mb-1" size="sm" @click="submit(data.item)" v-if="data.item.editable"><i class="ri-checkbox-circle-fill m-0"></i></b-button>
                                     </template>
                                   </b-table>
                                 </b-col>
@@ -114,14 +114,14 @@
                           </iq-card>
                         </b-col>
                         <b-col offset="6" cols="6" class="text-right" data-html2canvas-ignore="true">
-                            <b-button variant="link mr-3" @click="exportToPDF">
+                            <b-button v-if="showPdf" variant="link mr-3" @click="exportToPDF">
                                 <i class="ri-printer-line"></i>
                                 {{ $t('invoices.newInvoice.downloadPrint') }}
                             </b-button>
-                            <b-button variant="primary mr-4">
+                            <b-button variant="primary mr-4" @click="saveAsDraft">
                                 <i class="ri-bookmark-3-fill mr-2"></i>{{ $t('invoices.newInvoice.saveAsDraft') }}
                             </b-button>
-                            <b-button variant="primary mr-3">
+                            <b-button variant="primary mr-3" @click="saveInvoice">
                                 <i class="ri-save-3-line mr-2"></i>{{ $t('invoices.newInvoice.saveInvoice') }}
                             </b-button>
                         </b-col>
@@ -130,6 +130,27 @@
             </iq-card>
         </b-col>
     </b-row>
+    <b-toast id="b-toaster-bottom-right" variant="primary" solid>
+      <template #toast-title>
+        <div class="d-flex flex-grow-1 align-items-baseline">
+            <strong class="mr-auto">{{ $t('EPR.notification') }}</strong>
+        </div>
+      </template>
+      <template #default>
+          <span><i class="ri-checkbox-circle-line"></i>  {{ $t('invoice.saved') }}</span>
+      </template>
+    </b-toast>
+
+    <b-toast id="bottom-right-danger" variant="danger" solid>
+      <template #toast-title>
+        <div class="d-flex flex-grow-1 align-items-baseline">
+            <strong class="mr-auto">{{ $t('EPR.notification') }}</strong>
+        </div>
+      </template>
+      <template #default>
+          <span><i class="ri-error-warning-fill"></i>  {{ $t('invoice.notSaved') }}</span>
+      </template>
+    </b-toast>
 </b-container>
 </template>
 <script>
@@ -138,7 +159,10 @@ import moment from 'moment'
 import { sso } from '../../services/userService'
 import { getCompanyById } from '../../services/companies'
 import { getEnquiryById } from '../../services/enquiry'
+import { createInvoice } from '../../services/invoice'
+import { getProducts } from '../../services/products'
 import html2pdf from 'html2pdf.js'
+import _ from 'lodash'
 
 export default {
   name: 'NewInvoice',
@@ -146,10 +170,12 @@ export default {
     xray.index()
     this.getLoggedInUser()
     this.getPatient()
+    this.getProducts()
     this.summaryRows.push(this.defaultSummary())
   },
   data () {
     return {
+      showPdf: false,
       detailColumns: [
         { label: '#', key: 'id', class: 'text-left' },
         { label: this.$t('invoices.newInvoice.newInvoiceDetails.item'), key: 'name', class: 'text-left item-name' },
@@ -159,7 +185,7 @@ export default {
         { label: this.$t('invoices.newInvoice.newInvoiceDetails.total'), key: 'total', class: 'text-left' },
         { label: this.$t('invoices.newInvoice.newInvoiceDetails.action'), key: 'action', class: 'text-center action-column', thAttr: { 'data-html2canvas-ignore': true }, tdAttr: { 'data-html2canvas-ignore': true } }
       ],
-      rows: [
+      items: [
         {
           id: 1,
           item: {
@@ -173,14 +199,8 @@ export default {
         }
       ],
       summaryRows: [],
-      options: [
-        { id: 1, name: 'Odstranitev zobnega kamna', price: 300 },
-        { id: 2, name: 'Beljenje zob', price: 50 },
-        { id: 3, name: 'Zobni implantat', price: 100 },
-        { id: 4, name: 'Odstranitev kamna', price: 200 }
-      ],
+      products: [],
       paymentMethods: [
-        { id: null, name: 'Select method' },
         { id: 1, name: 'Cash' },
         { id: 2, name: 'Credit card' }
       ],
@@ -217,19 +237,20 @@ export default {
         }
       ],
       invoiceDate: moment().format('DD MMM, YYYY'),
-      billingDetails: this.$route.params.billingDetails,
-      enquireId: this.$route.params.enquireId,
+      patientId: this.$route.params.patientId,
       issuedIn: 'Ljubljana',
       isEditMode: false,
       logedInUser: {},
       patient: {},
       usersCompany: {},
-      invoiceTotal: 0
+      invoiceTotal: 0,
+      invoice: {},
+      billingDetails: ''
     }
   },
   methods: {
     exportToPDF () {
-      this.rows.pop()
+      this.items.pop()
       let options = {
         filename: 'invoice.pdf',
         image: { type: 'jpeg', quality: 0.98 },
@@ -241,11 +262,11 @@ export default {
     getInvoiceTotal () {
       let totalCount = 0
       let totalSubCount = 0
-      if (this.rows.length === 0) {
+      if (this.items.length === 0) {
         this.invoiceTotal = 0
         this.summaryRows[0].invoiceSubTotal = 0
       } else {
-        this.rows.forEach(element => {
+        this.items.forEach(element => {
           totalCount += this.calculatePrice(element)
           totalSubCount += this.calculatePriceBeforeDiscount(element)
         })
@@ -266,22 +287,42 @@ export default {
       this.selectedItemName = item.name
     },
     calculatePrice (item) {
-      return item.item.price ? item.quantity * (item.item.price - (item.item.price * item.discount / 100)) : 0
+      return item.item.product_price ? item.quantity * (item.item.product_price - (item.item.product_price * item.discount / 100)) : 0
     },
     calculatePriceBeforeDiscount (item) {
-      return item.item.price ? item.quantity * item.item.price : 0
+      return item.item.product_price ? item.quantity * item.item.product_price : 0
     },
     getLoggedInUser () {
       sso().then(response => {
         this.logedInUser = response
         getCompanyById(this.logedInUser.prm_company_id).then(response => {
-          this.usersCompany = response
+          this.usersCompany = response[0]
         })
       })
     },
     getPatient () {
-      getEnquiryById(this.enquireId).then(response => {
-        this.patient = response
+      getEnquiryById(this.patientId).then(response => {
+        this.patient = response[0]
+        this.createBillingDetails(this.patient)
+      })
+    },
+    createBillingDetails (selectedPatient) {
+      let details = ''
+      if (selectedPatient.name) details += selectedPatient.name
+      if (selectedPatient.last_name) details += ' ' + selectedPatient.last_name
+      details += '<br>'
+      if (selectedPatient.address_line_1) details += selectedPatient.address_line_1 + '<br>'
+      if (selectedPatient.post_code) details += selectedPatient.post_code
+      if (selectedPatient.city) details += ' ' + selectedPatient.city
+      if (selectedPatient.country) details += ', ' + selectedPatient.country
+      details += '<br>'
+      if (selectedPatient.phone) details += 'Telefon: ' + selectedPatient.phone + '<br>'
+      if (selectedPatient.email) details += 'Email: ' + selectedPatient.email
+      this.billingDetails = details
+    },
+    getProducts () {
+      getProducts('sl').then(response => {
+        this.products = response
       })
     },
     edit (item) {
@@ -289,28 +330,26 @@ export default {
       this.isEditMode = true
     },
     submit (item) {
-      item.total = this.calculatePrice(item)
+      item.total = this.calculatePrice(item).toFixed(2)
       item.editable = false
       this.getInvoiceTotal()
       if (!this.isEditMode) {
-        this.rows.push(this.default())
+        this.items.push(this.default())
       }
       this.isEditMode = false
     },
     remove (item) {
-      let index = this.rows.indexOf(item)
-      this.rows.splice(index, 1)
+      let index = this.items.indexOf(item)
+      this.items.splice(index, 1)
       this.getInvoiceTotal()
     },
     add () {
-      this.rows.push(this.default())
+      this.items.push(this.default())
     },
     default () {
       return {
-        id: this.rows.length + 1,
-        item: {
-          name: ''
-        },
+        id: this.items.length + 1,
+        item: {},
         quantity: '1',
         price: '0',
         discount: '',
@@ -328,6 +367,57 @@ export default {
         total: this.invoiceTotal,
         editable: true
       }
+    },
+    saveAsDraft () {
+      this.prepareInvoice('draft')
+      this.createInvoice()
+    },
+    saveInvoice () {
+      this.prepareInvoice('issued')
+      this.createInvoice()
+    },
+    createInvoice () {
+      this.items.pop()
+      createInvoice(this.invoice).then(response => {
+        console.log(response)
+        this.showPdf = true
+        this.$bvToast.show('b-toaster-bottom-right')
+      }).catch(errorMsg => {
+        console.log('Error: ' + errorMsg)
+        this.$bvToast.show('bottom-right-danger')
+      })
+    },
+    prepareInvoice (status) {
+      let temp = {
+        invoice_type: 'Invoice',
+        invoice_time: moment(this.invoiceDate).format('YYYY MM DD HH:MM:SS'),
+        invoice_number: '02-blagajna1-21aleksa',
+        invoice_numbering_structure: '{c}',
+        issued_in: this.issuedIn,
+        lines_sum: this.summaryRows[0].subTotal,
+        discount_sum: this.summaryRows[0].subTotal - this.invoiceTotal,
+        charges_sum: this.invoiceTotal,
+        total_without_vat: 0,
+        total_vat_amount: 0,
+        total_with_vat: 0,
+        paid_amount: 0,
+        amount_due_for_payment: 0,
+        payment_method: this.summaryRows[0].paymentMethod,
+        warranty: true,
+        vat_exemption_reason: 'test',
+        operator_name: this.logedInUser.name,
+        operator_tax_number: this.logedInUser.tax_number,
+        zoi: 'test',
+        eor: 'test',
+        invoice_special_notes: 'test',
+        reverted: false,
+        device_id: 1,
+        premise_id: 1,
+        business_customer_id: 1,
+        invoice_status: status,
+        invoiceItems: this.items
+      }
+      this.invoice = _.assignIn(this.invoice, this.patient, this.usersCompany, temp)
     }
   }
 }

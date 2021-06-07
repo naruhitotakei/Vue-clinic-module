@@ -19,7 +19,7 @@
               </b-checkbox>
             </template></div></div>
           <button @click="scroll_right" class="nav-btn btn-primary"><i class="ri-arrow-right-s-line"></i></button>
-          <b-checkbox name="check-button" v-model="allDoctorCheck" @change="allDoctorFun(allDoctorCheck)" :disabled="checkedListArray.length==0" inline>{{ $t('calendar.selectAll') }}</b-checkbox>
+          <b-checkbox name="check-button" v-model="allDoctorCheck" @change="allDoctorFun(allDoctorCheck)"  inline>{{ $t('calendar.selectAll') }}</b-checkbox>
           </div>
           </template>
         </iq-card>
@@ -91,7 +91,7 @@
           </form>
           </template>
           <template  v-slot:body>
-            <FullCalendar :resourcesOuter="resources" style="width: 100%; height: 100%;"/>
+            <FullCalendar :resourcesOuter="resources" :events="getEvents" style="width: 100%; height: 100%;"/>
           </template>
         </iq-card>
       </b-col>
@@ -101,6 +101,10 @@
 <script>
 import { xray } from '../../config/pluginInit'
 import appointmentBook from '../../services/appointbook'
+import { getApontments } from '@/services/calendarService'
+import _ from 'lodash'
+import moment from 'moment'
+
 export default {
   name: 'GoogleCalendar',
   components: { },
@@ -108,10 +112,28 @@ export default {
     return {
       allDoctorCheck: true,
       checkedListArray: [],
+      events: [
+        {
+          id: 'a',
+          title: 'event1',
+          start: '2021-06-04T16:00:00',
+          end: '2021-06-04T17:00:00',
+          hours: 0,
+          minutes: 15,
+          assignmentDate: moment(new Date()).format('YYYY-MM-DD') + 'T' + moment(new Date()).format('hh:mm'),
+          backgroundColor: '#148A9C',
+          doctorId: 'Dr. Gaja Bužan'
+        },
+        {
+          title: 'event2',
+          start: new Date(),
+          end: '2021-06-07'
+        }
+      ],
       resources: [
-        { id: 2, title: 'Dr. Katic' },
-        { id: 7, title: 'Dr. Fabjan' },
-        { id: 24, title: 'Dr. Kržič' }
+        // { id: 2, title: 'Dr. Katic22222', time: '2021-06-3' },
+        // { id: 7, title: 'Dr. Fabjan' },
+        // { id: 24, title: 'Dr. Kržič' }
       ],
       clonedResources: [
         { id: 'a', title: 'Doctor 1', eventColor: 'sandybrown' },
@@ -131,38 +153,95 @@ export default {
         presence: ''
       },
       doctors: [
-        {
-          id: 'a',
-          title: 'Doctor 1',
-          checked: false,
-          disabled: false
-        },
-        {
-          id: 'b',
-          title: 'Doctor 2',
-          checked: false,
-          disabled: false
-        },
-        {
-          id: 'c',
-          title: 'Doctor 3',
-          checked: false,
-          disabled: false
-        }
+        // {
+        //   id: 'a',
+        //   title: 'Doctor 1',
+        //   checked: false,
+        //   disabled: false
+        // },
+        // {
+        //   id: 'b',
+        //   title: 'Doctor 2',
+        //   checked: false,
+        //   disabled: false
+        // },
+        // {
+        //   id: 'c',
+        //   title: 'Doctor 3',
+        //   checked: false,
+        //   disabled: false
+        // }
       ],
       config: {
         dateFormat: 'Y-m-d',
         inline: true
-      }
+      },
+      check: null
     }
   },
   mounted () {
     xray.index()
+    this.getApontments()
   },
   computed: {
+    getEvents () {
+      return this.events.filter(e => {
+        if (!this.check) {
+          return this.events
+        }
+        return e.doctorId === this.check.title
+      })
+    }
   },
   methods: {
+    getApontments () {
+      getApontments('2021-01-01', '2021-06-30').then(data => {
+        let dataWithDoctor = data.filter(item => {
+          if (item.doctor_user_id !== null) {
+            this.doctors.push({
+              id: Date.now(),
+              title: item.doctor_name,
+              disabled: false,
+              checked: false
+            })
+            this.resources.push({
+              id: item.doctor_user_id,
+              title: item.doctor_name
+            })
+            return item
+          }
+        })
+        this.doctors = _.uniqBy(this.doctors, 'title')
+        this.resources = _.uniqBy(this.resources, 'id')
+        this.clonedResources = this.resources
+        dataWithDoctor.map(item => {
+          this.events.push({
+            id: item.id,
+            resourceId: item.id,
+            eventResourceId: item.id,
+            start: moment(item.date).format('YYYY-MM-DD') + 'T' + item.time,
+            end: moment(item.date).format('YYYY-MM-DD') + 'T' + item.time,
+            hours: 0,
+            minutes: 15,
+            assignmentDate: moment(item.date).format('YYYY-MM-DD') + 'T' + item.time,
+            title: item.name + ' ' + item.last_name,
+            last_name: item.last_name,
+            locationId: item.location,
+            prm_client_id: item.prm_client_id,
+            prm_client_name: item.prm_client_name,
+            time: item.time,
+            doctorId: item.doctor_name,
+            enquiry_id: item.enquiry_id,
+            backgroundColor: '#148A9C'
+          })
+        })
+      })
+    },
     allDoctorFun (value) {
+      this.check = null
+      this.doctors.map(item => {
+        item.checked = false
+      })
       // console.log('before THIS.CLONEDRESOURCES:', this.clonedResources)
       // if (value) {
       //   this.clonedResources.map((x) => {
@@ -173,45 +252,61 @@ export default {
       this.resources = value ? this.clonedResources : this.checkedListArray
     },
     checkData (item) {
-      let check = this.checkedListArray.includes(item)
-      let tempArray = this.checkedListArray
-      let resourcesArrayCloned = this.resources
-      let tempArray1 = []
-      if (!check) {
-        tempArray.push(item)
-        for (var i = 0; i < tempArray.length; i++) {
-          for (var j = 0; j < this.clonedResources.length; j++) {
-            if (tempArray[i].id === this.clonedResources[j].id) {
-              tempArray1.push(this.clonedResources[j])
-            }
-          }
-        }
-      } else {
-        tempArray.filter((data, index) => {
-          if (data.id === item.id) {
-            tempArray.splice(index, 1)
-          }
-        })
-        resourcesArrayCloned.filter((data) => {
-          if (data.id === item.id) {
-            tempArray1 = resourcesArrayCloned.filter((o) => {
-              if (o.id !== item.id) {
-                return o
-              }
-            })
-          }
-        })
-      }
-      this.checkedListArray = tempArray
-      if (tempArray1.length < this.clonedResources.length && tempArray1.length !== 0) {
-        this.resources = tempArray1
+      // let check = this.checkedListArray.includes(item)
+      // let tempArray = this.checkedListArray
+      // let resourcesArrayCloned = this.resources
+      // let tempArray1 = []
+      console.log(item)
+      if (item.checked) {
+        this.check = item
         this.allDoctorCheck = false
       } else {
-        if (tempArray1.length === 0 || tempArray1.length === this.clonedResources.length) {
-          this.resources = this.clonedResources
-          this.allDoctorCheck = true
-        }
+        this.check = null
+        this.allDoctorCheck = true
       }
+      if (!item) {
+
+      } else {
+        // console.log(item)
+        // console.log('before', this.events)
+        // this.events = this.events.filter(event => event.doctorId === item.title)
+        // console.log('after', this.events)
+      }
+      // if (!check) {
+      //   tempArray.push(item)
+      //   for (var i = 0; i < tempArray.length; i++) {
+      //     for (var j = 0; j < this.clonedResources.length; j++) {
+      //       if (tempArray[i].id === this.clonedResources[j].id) {
+      //         tempArray1.push(this.clonedResources[j])
+      //       }
+      //     }
+      //   }
+      // } else {
+      //   tempArray.filter((data, index) => {
+      //     if (data.id === item.id) {
+      //       tempArray.splice(index, 1)
+      //     }
+      //   })
+      //   resourcesArrayCloned.filter((data) => {
+      //     if (data.id === item.id) {
+      //       tempArray1 = resourcesArrayCloned.filter((o) => {
+      //         if (o.id !== item.id) {
+      //           return o
+      //         }
+      //       })
+      //     }
+      //   })
+      // }
+      // this.checkedListArray = tempArray
+      // if (tempArray1.length < this.clonedResources.length && tempArray1.length !== 0) {
+      //   this.resources = tempArray1
+      //   this.allDoctorCheck = false
+      // } else {
+      //   if (tempArray1.length === 0 || tempArray1.length === this.clonedResources.length) {
+      //     this.resources = this.clonedResources
+      //     this.allDoctorCheck = true
+      //   }
+      // }
       // console.log('cloned array length:', this.clonedResources.length)
       // console.log('temparray1 array length:', tempArray1.length)
       // console.log('ALL DOCTOR CHECK', this.allDoctorCheck)
@@ -226,16 +321,17 @@ export default {
     },
     scroll_left () {
       let content = document.querySelector('.wrapper-box')
-      content.scrollLeft -= 90
+      content.scrollLeft -= 250
     },
     scroll_right () {
       let content = document.querySelector('.wrapper-box')
-      content.scrollLeft += 90
+      content.scrollLeft += 250
     }
   }
 }
 </script>
 <style scoped>
+
 .main-wrapper {
   display: flex;
   flex-direction: row;
@@ -276,4 +372,5 @@ export default {
 #box .center {
   left: calc(50% - 25px);
 }
+
 </style>

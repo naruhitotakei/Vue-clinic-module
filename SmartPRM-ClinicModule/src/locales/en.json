@@ -1,12 +1,14 @@
 {
   "sidebar": {
     "dashboard": "Home",
+    "callCenterDashboard": "Call Center Dashboard",
     "calendar": "Calendar",
     "patients": "Patients",
     "documents": "Documents",
     "assignments": "Assignments",
     "statistics": "Statistics",
     "reporting": "Reporting",
+    "callCenter": "Call Center",
     "settings": "Settings"
   },
   "documents": {
@@ -23,11 +25,24 @@
     "doctor": "Doctor",
     "tax authority": "Tax Authority"
   },
+  "callCenter": {
+    "leads": "Leads",
+    "clientInfo": "Client info",
+    "KPIs": "KPIs",
+    "workReport": "Work Report",
+    "activityReport": "Activity Report",
+    "missingServices": "Missing Services"
+  },
   "settings": {
     "users": "Users",
     "locations": "Locations",
     "services and products": "Services and Products",
-    "invoicing": "Invoicing"
+    "invoicing": "Invoicing",
+    "free slots": "Free Slots",
+    "business customers": "Business Customers",
+    "SMSTemplates": "SMS templates",
+    "mailTemplates": "Mail templates",
+    "advertising": "Advertising"
   },
   "nav": {
     "allNotifications": "All Notifications",
@@ -132,7 +147,9 @@
       "deletePatient": "Delete patient",
       "personalDoctors": "Personal doctors",
       "personalDentist": "Personal dentist",
+      "Dentist": "Dentist",
       "personalSurgeon": "Personal surgeon",
+      "Surgeon": "Surgeon",
       "files": "Files",
       "generalNotes": "General notes",
       "generalNotesUpdated": "Last updated",
@@ -140,6 +157,7 @@
       "allergiesUpdated": "Last updated",
       "patientNotes": "Patient notes",
       "patientNotesOpen": "Open",
+      "openAssignments": "Open assignments",
       "futureAppointments": "Future appointments",
       "pastAppointments": "Past appointments",
       "notSelected": "Not selected"
@@ -172,11 +190,12 @@
     "filesTab": "Files",
     "filesHeader": "Files",
     "files": {
-      "search": "Search",
-      "searchBy": "Search by",
+      "sortBy": "Sort by",
       "addFile": "Add file",
       "fileName": "File name",
-      "fileCreatedAt": "Created at"
+      "fileType": "File type",
+      "fileCreatedAt": "Date",
+      "fileAddedAt": "Added at"
     },
     "invoicesTab": "Invoices",
     "invoices": {
@@ -252,6 +271,7 @@
     "invoicesHeader": "Invoices",
     "invoicesBtn": "Add Invoice",
     "invoicesColumn": {
+      "type": "Type",
       "no": "Number",
       "patientName": "Patient Name",
       "date": "Date",
@@ -267,12 +287,16 @@
     },
     "newInvoice": {
       "newInvoiceHeader": "New invoice",
+      "dateOfInvoice": "Date of invoice",
+      "paymentMethodSummary": "Payment Method Summary",
+      "addPaymentMethod": "Add new payment method",
       "newInvoiceColumn": {
         "invoiceDate": "Date",
         "invoiceTotal": "Total",
-        "billingDetails": "Billing details",
+        "customer": "Customer",
         "issuedIn": "Issued in",
-        "issuedBy": "Issued by"
+        "issuedBy": "Issued by",
+        "device": "Device"
       },
       "newInvoiceDetails": {
         "header": "Invoice detail",
@@ -281,7 +305,7 @@
         "quantity": "Quantity",
         "price": "Price",
         "discount": "Discount",
-        "total": "Total",
+        "amount": "Amount",
         "action": "Action"
       },
       "newInvoiceSummary": {
@@ -300,10 +324,13 @@
   },
   "invoice": {
     "invoiceHeader": "Invoice",
+    "saved": "Invoice saved",
+    "notSaved": "Something is wrong, contact admin",
     "invoiceInfo": {
       "invoiceDate": "Date",
       "invoiceTotal": "Total",
-      "invoiceStatus": "Status",
+      "invoiceStatus": "Confirmation status",
+      "paymentStatus": "Payment status",
       "invoiceDetails": "Billing Details",
       "invoiceIssuedIn": "Issued In",
       "invoiceIssuedBy": "Issued By"
@@ -330,10 +357,57 @@
     "advPaymentsBtn": "Add Advance Payment",
     "advPaymentsColumn": {
       "no": "Number",
-      "patientName": "Patient Name",
+      "patientName": "Patient name",
       "date": "Date",
-      "issuedBy": "Issued By",
+      "issuedBy": "Issued by",
       "amount": "Amount"
+    },
+    "addNewAdvPayment": {
+      "selectPatient": "Select patient",
+      "patient": "Patient",
+      "close": "Close",
+      "create": "Create advance payment"
+    },
+    "newAdvPayment": {
+      "newAdvPaymentHeader": "New advance payment",
+      "alert": "Payment method amount must be the same as advance payment amount",
+      "alert2": "Advance payment amount can't be 0",
+      "alert3": "Payment method must be selected",
+      "paymentMethodSummary": "Payment method summary",
+      "downloadPrint": "Download print",
+      "saveDraft": "Save advance payment as draft",
+      "save": "Save and confirm",
+      "IBAN": "IBAN",
+      "vatId": "VAT ID no.",
+      "regNumber": "Registration no.",
+      "dateOfAdvPayment": "Date of issue",
+      "advPaymentNo": "ADVANCE PAYMENT no.",
+      "copy": "Copy",
+      "IssuedIn": "Issued in",
+      "code": "Code",
+      "item": "Item",
+      "quantity": "Quantity",
+      "price": "Price",
+      "value": "Value",
+      "amount": "Amount",
+      "total": "Total",
+      "payment": "Payment",
+      "paymentMethod": "Payment method",
+      "vatExemptionReason": "In accordance with points 2 and 4 of the first paragraph of Article 42 of ZDDV-1, health services and care are exempt from VAT, therefore no VAT has been charged.",
+      "issuedBy": "Issued by",
+      "zoi": "ZOI",
+      "eor": "EOR",
+      "details": {
+        "header": "Advance payment details",
+        "item": "Item",
+        "amount": "Amount",
+        "action": "Action"
+      }
+    },
+    "newAdvPaymentColumn": {
+      "issuedBy": "Issued by",
+      "customer": "Customer",
+      "issuedIn": "Issued in"
     }
   },
   "advPayment": {
@@ -363,12 +437,32 @@
       "total": "Total"
     }
   },
+  "paymentMethod": "Payment method",
+  "paymentMethods": {
+    "cash": "Cash",
+    "creditCard": "Credit card",
+    "bankAccount": "Bank account"
+  },
+  "paymentMethodsColumn": {
+    "amount": "Amount",
+    "action": "Action"
+  },
   "assignments": {
     "assignmentsHeader": "My Assignments",
+    "addAssignments": "Add Assignments",
     "todaysAssignments": "Today's Assignments",
     "overdueAssignments": "Overdue Assignments",
     "futureAssignments": "Future Assignments",
-    "completedAssignments": "Completed Assignments"
+    "completedAssignments": "Completed Assignments",
+    "addAssignmentsModal" : {
+      "addAssignments": "Add Assignments",
+      "enquiry": "Enquiry",
+      "description": "Description",
+      "due_at": "Date",
+      "users": "Users",
+      "close": "Close",
+      "save": "Save"
+    }
   },
   "statisticsForClinic": {
     "attendance": "Number of attended appointments",
@@ -398,7 +492,7 @@
     "servicesListColumn": {
       "serviceDate": "Service Date",
       "serviceTitle": "Service Title",
-      "serviceLeadName": "Patient Name",
+      "serviceLeadName": "Patient",
       "serviceAmount": "Amount",
       "serviceFee": "Fee",
       "serviceLocation": "Location",
@@ -432,8 +526,9 @@
       "city": "City",
       "address": "Address",
       "save": "Save",
-      "close":  "Close"
-    }
+      "close": "Close"
+    },
+    "headerInactiveLocations": "Inactive locations"
   },
   "servicesAndProducts": {
     "headerProducts": "Products",
@@ -471,6 +566,32 @@
     "productCategoryColumn": {
       "productCategoryName": "Name",
       "productCategoryAction": "Action"
+    }
+  },
+  "business": {
+    "headerBusiness": "Business",
+    "addBusiness": "Add business",
+    "businessColumn": {
+      "businessName": "Name",
+      "businessEmail": "Email",
+      "businessAddress": "Address",
+      "businessCity": "City",
+      "businessTaxNumber": "Tax Number",
+      "businessZIPCode": "ZIP code",
+      "businessCountry": "Country",
+      "businessAction": "Action"
+    },
+    "addBusinessModal": {
+      "addBusiness": "Add business",
+      "name": "Name",
+      "email": "Email",
+      "address": "Address",
+      "city": "City",
+      "taxNumber": "Tax Number",
+      "zipCode": "ZIP code",
+      "countries": "Countries",
+      "close": "Close",
+      "save": "Save"
     }
   },
   "dashboard2": {

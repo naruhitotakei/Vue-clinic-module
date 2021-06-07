@@ -10,7 +10,15 @@ const pool = new Pool({
 })
 
 const getProducts = (request, response, locale) =>  {
-    pool.query("SELECT p.product_id, p.product_price, p.vat_tax_rate as tax_rate, p.product_group_id, p.product_type_id, ppgn.text as group_name, ppt.product_type_name as type_name, ppn.text as product_name FROM prm_product p JOIN prm_product_group_name ppgn ON p.product_group_id = ppgn.product_group_id JOIN prm_product_type ppt ON p.product_type_id = ppt.product_type_id join prm_product_name ppn on p.product_id = ppn.product_id where ppn.language='" + locale + "' and ppgn.language='" + locale + "' ORDER BY p.created_date DESC", (error, results) => {
+    pool.query("SELECT " +
+        "p.product_id, p.product_price, p.vat_tax_rate as tax_rate, p.tax_amount, p.product_group_id, p.product_type_id, ppgn.text as group_name, ppt.product_type_name as type_name, ppn.text as product_name " +
+        "FROM prm_product p " +
+        "JOIN prm_product_group_name ppgn " +
+        "ON p.product_group_id = ppgn.product_group_id " +
+        "JOIN prm_product_type ppt " +
+        "ON p.product_type_id = ppt.product_type_id " +
+        "join prm_product_name ppn " +
+        "on p.product_id = ppn.product_id where ppn.language='" + locale + "' and ppgn.language='" + locale + "' ORDER BY p.created_date DESC", (error, results) => {
         if (error) {
             throw error
         }

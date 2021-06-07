@@ -72,7 +72,7 @@
             <ul class="navbar-list">
               <li>
                 <a href="#" class="search-toggle iq-waves-effect d-flex align-items-center">
-                  <img :src="userProfile" class="img-fluid rounded mr-3" alt="user">
+                  <img :src="getAvatarUrl" class="img-fluid rounded mr-3 object-fit" alt="user">
                   <div class="caption">
                     <h6 class="mb-0 line-height">{{ logedInUser.name }}</h6>
                     <span class="font-size-12">{{ $t('nav.user.available') }}</span>
@@ -121,8 +121,8 @@
       <div class="form-row">
         <div style="margin: auto; text-align: center;">
                   <div class="add-img-user profile-img-edit">
-                    <b-img class="profile-pic height-150 width-150" fluid :src="user.profile_image" alt="profile-pic" />
-                    <input type="hidden" v-model="user.profile_image">
+                    <b-img class="profile-pic height-150 width-150 object-fit" style="object-fit: cover" fluid :src="getAvatarUrl" alt="profile-pic" />
+                    <input type="hidden" v-model="getAvatarUrl">
                     <div class="p-image">
                       <b-button variant="none" class="upload-button iq-bg-primary position-relative" style="left: 12px;" @click="onButtonClick">
                         File Upload
@@ -156,10 +156,10 @@
     </form>
   </b-modal>
   <!-- Account Setting -->
-  <b-modal v-model="accountModalShow" title="Account Setting" ok-title="Save Changes" @ok="handleSubmit(settingData)" cancel-title="Close">
+  <b-modal v-model="accountModalShow" title="Account Setting" ok-title="Save Changes" @ok="settingData" cancel-title="Close">
     <div class="mb-3">
       <label>Language</label>
-      <v-select :clearable="false" @input="langChange" :reduce="language => language.value" class="style-chooser" label="title" v-model="logedInUser.locale" :options="langsOptions"></v-select>
+      <v-select :clearable="false" @input="langChange" :reduce="language => language.value" class="style-chooser" label="title" v-model="logedInUser.prm_locale" :options="langsOptions"></v-select>
     </div>
     <ValidationObserver ref="form" v-slot="{ handleSubmit }">
     <form novalidate @submit.prevent="handleSubmit(settingData)">
@@ -226,7 +226,7 @@ import loader from '../assets/images/logo.png'
 import { xray } from '../config/pluginInit'
 import { Users } from '../FackApi/api/chat'
 import { mapGetters, mapActions } from 'vuex'
-import { sso, logout, editProfile } from '../services/userService'
+import { sso, logout, editProfile, changeLang } from '../services/userService'
 import { uploadAvatar } from '../services/upDownLoad'
 
 export default {
@@ -245,7 +245,10 @@ export default {
       selectedLang: 'Setting/langState',
       langsOptions: 'Setting/langOptionState',
       colors: 'Setting/colorState'
-    })
+    }),
+    getAvatarUrl: function () {
+      return '/api/files/avatar?' + this.avatar_version
+    }
   },
   watch: {
   },
@@ -262,7 +265,6 @@ export default {
         address1: '',
         address2: '',
         company_name: '',
-        profile_image: '/api/files/avatar?' + Math.random(),
         mobile_no: '',
         country: '',
         state: '',
@@ -273,6 +275,7 @@ export default {
         dob: '',
         url: ''
       },
+      avatar_version: Math.random(),
       formData: {
         old_password: '',
         new_password: '',
@@ -321,11 +324,19 @@ export default {
       }, { once: true })
       this.$refs.uploader.click()
     },
-    onFileChanged (e) {
+    async onFileChanged (e) {
       this.selectedFile = e.target.files[0]
       console.log(this.selectedFile.size)
       // todo check size
       uploadAvatar(this.selectedFile)
+      await this.sleep(1000)
+      // this will couse avatar to be dowloaded again
+      this.avatar_version = Math.random()
+    },
+    sleep (ms) {
+      return new Promise((resolve) => {
+        setTimeout(resolve, ms)
+      })
     },
     callModal (args) {
       if (args === 'edit') {
@@ -343,7 +354,17 @@ export default {
       })
     },
     settingData () {
-      console.log('setting data submitted')
+      let profile = {
+        email: this.logedInUser.email,
+        prm_locale: this.logedInUser.prm_locale
+      }
+      this.changeLang(profile)
+    },
+    changeLang (profile) {
+      changeLang(profile).then(() => {
+        console.log('Successful update')
+        this.$bvToast.show('b-toaster-bottom-right')
+      })
     },
     updateRadio () {
       this.horizontal = this.$store.getters['Setting/horizontalMenuState']
@@ -383,7 +404,7 @@ export default {
       sso().then(response => {
         if (typeof response !== 'string') {
           this.logedInUser = response
-          this.$i18n.locale = this.logedInUser.locale
+          this.$i18n.locale = this.logedInUser.prm_locale
           this.verticalMenu = this.filterMenu(SideBarItems)
         } else {
           this.$router.push({ name: 'auth1.sign-in' })
@@ -422,9 +443,12 @@ export default {
       return false
     },
     langChange (lang) {
+      console.log('lang', lang)
       this.langChangeState(lang)
       this.$i18n.locale = lang
-      document.getElementsByClassName('iq-show')[0].classList.remove('iq-show')
+      if (document.getElementsByClassName('iq-show').length) {
+        document.getElementsByClassName('iq-show')[0].classList.remove('iq-show')
+      }
       if (lang === 'ar') {
         this.rtlAdd(lang)
       } else {

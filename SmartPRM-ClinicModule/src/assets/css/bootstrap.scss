@@ -620,6 +620,10 @@ pre code {
     display: inline-block;
 }
 
+.assignments-container .assignments-description {
+	width: 500px;
+}
+
 @media (min-width:576px) {
 	.container {
 		max-width: 540px
@@ -1844,7 +1848,7 @@ pre code {
 
 .table td,
 .table th {
-	padding: .75rem;
+	padding: 0.55rem .75rem;
 	vertical-align: top;
 	border-top: 1px solid #dee2e6
 }

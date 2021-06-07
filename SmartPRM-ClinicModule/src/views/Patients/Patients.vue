@@ -29,7 +29,7 @@
                         <b-row>
                             <b-col md="12" class="table-responsive">
                                 <b-table
-                                  id="my-table"
+                                  id="patients-table"
                                   bordered
                                   hover
                                   :busy="!isDataLoaded"
@@ -102,9 +102,9 @@
                                       <input type="text" v-model="data.item.personal_dentist" v-else class="form-control" />
                                     </template>
                                     <template v-slot:cell(action)="data">
-                                      <b-button variant=" iq-bg-success mr-1 mb-1" size="sm" @click="edit(data.item)" v-if="!data.item.editable">
-                                          <i class="ri-ball-pen-fill m-0"></i>
-                                      </b-button>
+<!--                                      <b-button variant=" iq-bg-success mr-1 mb-1" size="sm" @click="edit(data.item)" v-if="!data.item.editable">-->
+<!--                                          <i class="ri-ball-pen-fill m-0"></i>-->
+<!--                                      </b-button>-->
                                       <b-button variant=" iq-bg-primary mr-1 mb-1" size="sm" @click="emailPatient(data.item)" v-if="!data.item.editable">
                                           <i class="ri-mail-line m-0"></i>
                                       </b-button>
@@ -121,7 +121,7 @@
                                   v-model="currentPage"
                                   :total-rows="totalRows"
                                   :per-page="perPage"
-                                  aria-controls="my-table"></b-pagination>
+                                  aria-controls="patients-table"></b-pagination>
                             </div>
                         </template>
                     </template>
@@ -255,6 +255,11 @@ export default {
   width: 120px !important;
 }
 
+.patient {
+  display: flex;
+  justify-content: flex-end;
+}
+
 @media (max-width: 479px) {
 .iq-search-bar {
   padding: 0 15px 0 0 !important;
@@ -269,16 +274,31 @@ export default {
 }
 }
 
-@media (min-width: 479px) and (max-width: 1400px) {
-.patient {
-  margin-right: -28px !important;
-}
+@media (min-width: 320px) and (max-width: 575px) {
+  .patient {
+   justify-content: flex-start;
+  }
 }
 
-@media (min-width: 1401px) {
-.patient {
-  margin-right: -71px !important;
-}
+@media (max-width: 1460px) {
+  #patients-table {
+    th{
+      &:nth-child(5),
+      &:nth-child(6)
+      {
+        display: none;
+      }
+    }
+    tr {
+      td{
+        &:nth-child(5),
+        &:nth-child(6)
+        {
+          display: none;
+        }
+      }
+    }
+  }
 }
 
 .patients .vs__search::placeholder,

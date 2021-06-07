@@ -132,7 +132,7 @@ export default {
           key: 'invoice_time',
           class: 'text-left',
           formatter: value => {
-            return moment(value).format('YYYY-MM-DD')
+            return moment(value).format('DD-MM-YYYY')
           },
           filterByFormatted: true
         },
@@ -166,21 +166,7 @@ export default {
       this.$router.push({ path: `/documents/invoices/${item.invoice_number}` })
     },
     addInvoice () {
-      this.$router.push({ name: 'extra-pages.new-invoice', params: { enquireId: this.selectedPatient.id, billingDetails: this.createBillingDetails() } })
-    },
-    createBillingDetails () {
-      let details = ''
-      if (this.selectedPatient.name) details += this.selectedPatient.name
-      if (this.selectedPatient.last_name) details += ' ' + this.selectedPatient.name
-      details += '<br>'
-      if (this.selectedPatient.address_line_1) details += this.selectedPatient.address_line_1 + '<br>'
-      if (this.selectedPatient.post_code) details += this.selectedPatient.post_code
-      if (this.selectedPatient.city) details += ' ' + this.selectedPatient.city
-      if (this.selectedPatient.country) details += ', ' + this.selectedPatient.country
-      details += '<br>'
-      if (this.selectedPatient.phone) details += 'Telefon: ' + this.selectedPatient.phone + '<br>'
-      if (this.selectedPatient.email) details += 'Email: ' + this.selectedPatient.email
-      return details
+      this.$router.push({ path: `/documents/invoices/${this.selectedPatient.id}/new-invoice` })
     },
     getInvoices () {
       getInvoices().then(response => {
@@ -213,6 +199,10 @@ export default {
 </script>
 
 <style lang="scss">
+.invoice {
+  display: flex;
+  justify-content: flex-end;
+}
 @media (max-width: 479px) {
 .iq-search-bar {
   padding: 0 15px 0 0 !important;
@@ -227,15 +217,9 @@ export default {
 }
 }
 
-@media (min-width: 479px) and (max-width: 1400px) {
-.invoice {
-  margin-right: -40px !important;
-}
-}
-
-@media (min-width: 1401px) {
-.invoice {
-  margin-right: -71px !important;
-}
+@media (min-width: 320px) and (max-width: 575px) {
+  .invoice {
+    justify-content: flex-start;
+  }
 }
 </style>

@@ -19,7 +19,7 @@ const getLocationsList = (request, response) => {
 }
 
 const getInactiveLocationsList = (request, response) => {
-    pool.query("SELECT id, name, address, city FROM locations WHERE prm_client_id = 1 AND active = false", (error, results) => {
+    pool.query("SELECT id, name AS i_name, address AS i_address, city AS i_city FROM locations WHERE prm_client_id = 1 AND active = false", (error, results) => {
         if (error) {
             throw error
         }
@@ -50,28 +50,13 @@ const updateLocation = (req, res, id, location) => {
     res.status(200).json(location)
 }
 
-const deactivateLocation = (req, res, id, location) => {
-    let statement = "UPDATE locations SET active = false"
-    statement = statement.slice(0, -1)
-    statement += " WHERE id = " + id
-    pool.query(statement, (error, results) => {
-        if (error) {
-            throw error
+const toggleActivity = (req, res, id) => {
+    pool.query("UPDATE locations SET active = NOT active, updated_at=now() WHERE id =$1", [id], (error, results) => {
+    if (error) {
+        throw error
         }
     })
-    res.status(200).json(location)
-}
-
-const reactivateLocation = (req, res, id, location) => {
-    let statement = "UPDATE locations SET active = true"
-    statement = statement.slice(0, -1)
-    statement += " WHERE id = " + id
-    pool.query(statement, (error, results) => {
-        if (error) {
-            throw error
-        }
-    })
-    res.status(200).json(location)
+    res.status(200).json("OK")
 }
 
 module.exports = {
@@ -79,6 +64,5 @@ module.exports = {
     getInactiveLocationsList,
     createLocation,
     updateLocation,
-    deactivateLocation,
-    reactivateLocation
+    toggleActivity
 }

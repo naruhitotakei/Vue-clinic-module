@@ -30,6 +30,56 @@
   }
 }
 
+.page-link {
+  color: #000 !important;
+}
+
+.object-fit {
+  object-fit: cover;
+}
+
+body .wrapper .form-control-disabled{
+  &:disabled {
+    background-color: transparent !important;
+    border: none;
+    &>div {
+      background-color: transparent !important;
+      border: none;
+    }
+  }
+
+    input:disabled  {
+    background-color: transparent !important;
+    border:none;
+  }
+}
+
+body .wrapper .vs--disabled {
+  &>div {
+    background-color: transparent !important;
+    border:none;
+    .vs__selected {
+      background: transparent !important;
+    }
+    .vs__actions {
+      display: none;
+    }
+  }
+}
+
+.custom-radio-st {
+  .custom-control {
+    &-label {
+      &:before {
+        top: 50%;
+      }
+      &:after {
+        top:50%
+      }
+    }
+  }
+}
+
 [dir="rtl"]{
   @import "../css/rtl/bootstrap";
   @import "../css/rtl/light/typography";

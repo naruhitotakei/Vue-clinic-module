@@ -145,7 +145,7 @@ export default {
           key: 'invoice_time',
           class: 'text-left',
           formatter: value => {
-            return moment(value).format('YYYY-MM-DD')
+            return moment(value).format('DD-MM-YYYY')
           },
           filterByFormatted: true
         },
@@ -162,6 +162,10 @@ export default {
 </script>
 
 <style lang="scss">
+.offer {
+  display: flex;
+  justify-content: flex-end;
+}
 @media (max-width: 479px) {
 .iq-search-bar {
   padding: 0 15px 0 0 !important;
@@ -176,15 +180,15 @@ export default {
 }
 }
 
-@media (min-width: 479px) and (max-width: 1400px) {
-.offer {
-  margin-right: -53px !important;
-}
+@media (min-width: 320px) and (max-width: 575px) {
+  .offer {
+    justify-content: flex-start;
+  }
 }
 
-@media (min-width: 1401px) {
-.offer {
-  margin-right: -88px !important;
-}
-}
+//@media (min-width: 1401px) {
+//.offer {
+//  margin-right: -88px !important;
+//}
+//}
 </style>

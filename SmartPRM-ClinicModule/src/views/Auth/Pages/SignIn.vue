@@ -2,7 +2,7 @@
   <div>
     <h1 class="mb-0">Sign in</h1>
     <!-- <p>Enter your email address and password to access admin panel.</p> -->
-    <sign-in-form formType="jwt" email="jasna.bordon@emazing.si" password="emazing"></sign-in-form>
+    <sign-in-form formType="jwt" email="info@emazing.si" password="emazing"></sign-in-form>
   </div>
 </template>
 

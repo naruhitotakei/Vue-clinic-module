@@ -4,7 +4,7 @@
   :datesAboveResources="true"
   :defaultView="calendarOptions.defaultView"
   :plugins="calendarOptions.plugins"
-  :events="calendarOptions.events"
+  :events="events"
   :resources="resourcesOuter"
   :minTime="calendarOptions.minTime"
   :maxTime="calendarOptions.maxTime"
@@ -13,6 +13,7 @@
   :selectable="isSelectable"
   editable="true"
   :header="calendarOptions.header"
+  :allDayDefault="false"
   @select="openCreateModal"
   @eventClick="openUpdateModal"
   @datesRender="onViewChange"
@@ -93,7 +94,8 @@ export default {
     }
   },
   props: {
-    resourcesOuter: Array
+    resourcesOuter: Array,
+    events: Array
   },
   data () {
     return {
@@ -166,7 +168,8 @@ export default {
       viewName: 'dayGridMonth',
       event: {},
       calendarOptions: {
-        plugins: [dayGridPlugin, listPlugin, timeGridPlugin, interactionPlugin, resourceTimeGrid],
+        plugins: [dayGridPlugin, timeGridPlugin, interactionPlugin, resourceTimeGrid, listPlugin],
+        allDayDefault: false,
         header: {
           left: 'prev,next today',
           center: 'title',
@@ -186,8 +189,8 @@ export default {
     }
   },
   mounted () {
-    console.log('this.resourcesOuter', this.resourcesOuter)
     this.calendarApi = this.$refs.calendar.getApi()
+    this.calendarOptions.events = this.events
     this.getPatients()
     this.getDoctors()
     this.getLocations()
@@ -213,6 +216,7 @@ export default {
       this.viewName = info.view.type
     },
     eventResize (info) {
+      console.log('info', info)
       let event = this.calendarApi.getEventById(info.event.id)
       this.setAssignmentDateAndDuration(info.event.start, info.event.end)
       event.setStart(this.formData.start)
@@ -273,14 +277,18 @@ export default {
           doctorId: this.formData.doctorId,
           locationId: this.formData.locationId
         })
+        console.log('calendarAPI', this.calendarApi)
+        console.log('calendarAPI', this.events)
       } else {
         let event = this.calendarApi.getEventById(this.formData.id)
+        console.log('EVENT ID OBJECT', event)
         event.setProp('title', this.formData.title)
         event.setProp('backgroundColor', this.formData.backgroundColor)
         event.setProp('resourceId', this.formData.resourceId)
         event.setStart(this.formData.assignmentDate)
         event.setEnd(endDate)
         event.setExtendedProp('assignmentDate', this.formData.assignmentDate)
+        event.setExtendedProp('start', this.formData.assignmentDate)
         event.setExtendedProp('hours', this.formData.hours)
         event.setExtendedProp('minutes', this.formData.minutes)
         event.setExtendedProp('notes', this.formData.notes)
@@ -288,6 +296,7 @@ export default {
         event.setExtendedProp('patientId', this.formData.patientId)
         event.setExtendedProp('doctorId', this.formData.doctorId)
         event.setExtendedProp('locationId', this.formData.locationId)
+        console.log('event', event)
       }
       this.formData = this.defaultAppointment()
     },
@@ -327,6 +336,7 @@ export default {
     openUpdateModal (selectionInfo) {
       this.modalShow = true
       let event = this.calendarApi.getEventById(selectionInfo.event.id)
+      let location = this.locations.find(item => item.city === event.location)
       this.formData = {
         id: event.id,
         title: event.title,
@@ -334,6 +344,7 @@ export default {
         end: event.end,
         backgroundColor: event.backgroundColor,
         resourceId: event.extendedProps.eventResourceId,
+        locationId: location,
         ...event.extendedProps
       }
       this.modalTitle = this.formData.title
@@ -354,6 +365,18 @@ export default {
 
 ::-webkit-scrollbar {
     display: none;
+}
+.fc-resourceTimeGridWeek-view .fc-resource-cell {
+  writing-mode: tb-rl !important;
+  transform: rotate(180deg) !important;
+  line-height: 13px !important;
+}
+
+body .wrapper .custom-control-label::before {
+  top:50% !important;
+}
+body .wrapper .custom-control-label::after {
+  top:50% !important;
 }
 
   @import '~@fullcalendar/core/main.css';

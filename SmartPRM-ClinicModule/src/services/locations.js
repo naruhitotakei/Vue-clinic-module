@@ -1,5 +1,5 @@
 export async function getLocationsList () {
-  const rawResponse = await fetch('/api/locations', {
+  const rawResponse = await fetch('/api/locations/', {
     method: 'GET',
     credentials: 'same-origin',
     headers: {
@@ -11,7 +11,7 @@ export async function getLocationsList () {
 }
 
 export async function getInactiveLocationsList () {
-  const rawResponse = await fetch('/api/locations', {
+  const rawResponse = await fetch('/api/inactive-locations/', {
     method: 'GET',
     credentials: 'same-origin',
     headers: {
@@ -48,28 +48,14 @@ export async function updateLocation (id, location) {
   return rawResponse.json()
 }
 
-export async function deactivateLocation (id, location) {
-  const rawResponse = await fetch('api/locations/' + id, {
+export async function toggleActivity (id) {
+  const rawResponse = await fetch('/api/locations/' + id + '/activation', {
     method: 'PUT',
     credentials: 'same-origin',
     headers: {
       'Accept': 'application/json',
       'Content-Type': 'application/json'
-    },
-    body: JSON.stringify(location)
-  })
-  return rawResponse.json()
-}
-
-export async function reactivateLocation (id, location) {
-  const rawResponse = await fetch('api/locations/' + id, {
-    method: 'PUT',
-    credentials: 'same-origin',
-    headers: {
-      'Accept': 'application/json',
-      'Content-Type': 'application/json'
-    },
-    body: JSON.stringify(location)
+    }
   })
   return rawResponse.json()
 }
