@@ -103,10 +103,65 @@ INSERT INTO prm_role_permission (role_permission_id, role_id, permission_id) VAL
 INSERT INTO prm_role_permission (role_permission_id, role_id, permission_id) VALUES (1133, 11, 331);
 
 --############################################################
---# ARemoving company_vat_number from prm_company table
+--# Removing company_vat_number from prm_company table
 --############################################################
 
 ALTER TABLE prm_company DROP COLUMN company_vat_number;
+
+--############################################################
+--# Renaming and altering payment_method 
+--############################################################
+
+ALTER TABLE payment_method RENAME TO payment_item;
+
+--############################################################
+--# Altering invoice table
+--############################################################
+
+ALTER TABLE invoice RENAME COLUMN invoice_status TO payment_status;
+ALTER TABLE invoice ADD COLUMN verification_status VARCHAR(64);
+
+--############################################################
+--# Creating payment_method table
+--############################################################
+
+CREATE TABLE IF NOT EXISTS payment_method (
+	id					SERIAL PRIMARY KEY,
+	payment_item_id		INT CONSTRAINT payment_method_payment_item_fk REFERENCES payment_item (id),
+	type				VARCHAR(128),
+	created_at			DATE NOT NULL DEFAULT CURRENT_DATE
+);
+
+--############################################################
+--# Creating payment_method_name table
+--############################################################
+
+CREATE TABLE IF NOT EXISTS payment_method_name (
+	id						SERIAL PRIMARY KEY,
+	payment_method_id		INT CONSTRAINT payment_method_name_payment_method_fk REFERENCES payment_method (id),
+	language				VARCHAR(8),
+	text					VARCHAR(128),
+	created_at				DATE NOT NULL DEFAULT CURRENT_DATE
+);
+
+--############################################################
+--# Creating appointments_label table
+--############################################################
+
+CREATE TABLE IF NOT EXISTS appointments_label (
+	id					SERIAL PRIMARY KEY,
+	appointment_id		INT CONSTRAINT appointments_appointments_label_fk REFERENCES appointments (id),
+	type				VARCHAR(64),
+	color				VARCHAR(64),
+	created_at			DATE NOT NULL DEFAULT CURRENT_DATE
+);
+
+--############################################################
+--# Altering invoice table
+--############################################################
+
+ALTER TABLE invoice ADD COLUMN payment_item_id INT
+CONSTRAINT invoice_payment_item_fk REFERENCES payment_item (id);
 
 
 UPDATE db_version SET version ='01.17', version_date=CURRENT_DATE WHERE resource='Tables';
