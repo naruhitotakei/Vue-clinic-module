@@ -472,7 +472,7 @@ export default {
     prepareInvoice () {
       let temp = {
         invoice_type: 'Advance payment',
-        invoice_time: this.dateOfAdvPayment,
+        invoice_time: moment(this.dateOfAdvPayment).format('YYYY-MM-DD HH:MM'),
         invoice_number: this.invoice_number,
         invoice_numbering_structure: '{c}',
         issued_in: this.issuedIn.premise_name,

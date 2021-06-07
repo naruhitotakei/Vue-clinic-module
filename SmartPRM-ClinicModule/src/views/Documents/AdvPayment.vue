@@ -1,5 +1,82 @@
 <template>
 <b-container fluid>
+   <div style="display: none">
+      <div id="printInvoice" style="color:black;margin-left:40px;height:1200px" v-if="invoice">
+        <b-row>
+            <b-col lg="12">
+              <p>{{invoice.company_name}}</p>
+              <p>{{invoice.company_address_line_1}}</p>
+              <p>{{invoice.company_post_code}} {{invoice.company_city}}</p>
+              <p>{{ $t('advPayments.newAdvPayment.IBAN') }}: {{invoice.company_iban}}</p>
+              <p>{{ $t('advPayments.newAdvPayment.vatId') }}: {{invoice.company_tax_registration_number}}</p>
+              <p>{{ $t('advPayments.newAdvPayment.regNumber') }}: {{invoice.company_legal_registration_identifier}}</p>
+            </b-col>
+        </b-row>
+        <b-row>
+          <b-col lg="6">
+            <p>{{invoice.enquiries_name}} {{invoice.enquiries_last_name}}</p>
+            <p>{{invoice.enquiries_address_line_1}}</p>
+            <p>{{invoice.enquiries_post_code}} {{invoice.enquiries_city}}</p>
+          </b-col>
+          <b-col lg="6">
+            <p>{{ $t('advPayments.newAdvPayment.advPaymentNo') }}: {{invoice.invoice_number}}</p>
+            <p>{{ $t('advPayments.newAdvPayment.copy') }}:<span style="margin-left:20px">Original</span></p>
+            <p>{{ $t('advPayments.newAdvPayment.IssuedIn') }}:<span style="margin-left:20px">{{invoice.issued_in}}</span></p>
+            <p>{{ $t('advPayments.newAdvPayment.dateOfAdvPayment') }}:<span style="margin-left:20px">{{invoice.invoice_time}}</span></p>
+          </b-col>
+        </b-row>
+        <b-row>
+          <b-table-simple small responsive>
+            <b-thead>
+              <b-tr>
+                <b-th colspan="1">{{ $t('advPayments.newAdvPayment.code') }}</b-th>
+                <b-th colspan="4">{{ $t('advPayments.newAdvPayment.item') }}</b-th>
+                <b-th colspan="1">{{ $t('advPayments.newAdvPayment.quantity') }}</b-th>
+                <b-th colspan="2">{{ $t('advPayments.newAdvPayment.price') }}</b-th>
+                <b-th colspan="2">{{ $t('advPayments.newAdvPayment.value') }}</b-th>
+                <b-th colspan="2">{{ $t('advPayments.newAdvPayment.amount') }}</b-th>
+              </b-tr>
+            </b-thead>
+            <b-tbody>
+              <b-tr>
+                <b-td colspan="1"></b-td>
+                <b-td colspan="4">{{ $t('advPayment.advPaymentHeader') }}</b-td>
+                <b-td colspan="1">1</b-td>
+                <b-td colspan="2">{{invoice.lines_sum}}</b-td>
+                <b-td colspan="2">{{invoice.lines_sum}}</b-td>
+                <b-td colspan="2">{{invoice.lines_sum}}</b-td>
+              </b-tr>
+              <b-tr>
+                <b-td colspan="8"></b-td>
+                <b-td colspan="2"><strong>{{ $t('advPayments.newAdvPayment.total') }}: </strong></b-td>
+                <b-td colspan="2">{{invoice.lines_sum}}</b-td>
+              </b-tr>
+              <b-tr>
+                <b-td colspan="8" class="hidden-row"></b-td>
+                <b-td colspan="2"><strong>{{ $t('advPayments.newAdvPayment.payment') }}: </strong></b-td>
+                <b-td colspan="2">{{invoice.lines_sum | euro}}</b-td>
+              </b-tr>
+            </b-tbody>
+          </b-table-simple>
+        </b-row>
+        <b-row>
+          <b-col lg="3">
+              <p>{{ $t('advPayments.newAdvPayment.paymentMethod') }}:</p>
+            <p style="border-bottom: solid;">{{invoice.payment_method}}<span style="margin-left:20px">{{invoice.amount | euro}}</span></p>
+          </b-col>
+        </b-row>
+        <b-row>
+          <b-col>
+              <p>{{ $t('advPayments.newAdvPayment.vatExemptionReason') }}</p>
+            <br>
+            <p>{{ $t('advPayments.newAdvPayment.issuedBy') }}: {{invoice.operator_name}}</p>
+            <br>
+            <p>{{ $t('advPayments.newAdvPayment.zoi') }}: {{invoice.zoi}}</p>
+            <p>{{ $t('advPayments.newAdvPayment.eor') }}: {{invoice.eor}}</p>
+          </b-col>
+        </b-row>
+      </div>
+    </div>
     <b-row>
         <b-col lg="12">
             <iq-card>
@@ -12,7 +89,7 @@
                     <b-row>
                         <b-col lg="12">
                             <div class="table-responsive-sm">
-                                <b-table :items="invoice" :fields="invoiceColumns">
+                                <b-table :items="invoices" :fields="invoiceColumns">
                                     <template v-slot:cell(invoiceStatus)="data">
                                         <span class="badge badge-danger" v-if="data.value == 'Unpaid'">Unpaid</span>
                                         <span class="badge badge-warning" v-if="data.value == 'Partialy Paid'">Partialy Paid</span>
@@ -55,22 +132,21 @@
                             </div>
                             <h5 style="margin-bottom: 15px;">{{ summary }}</h5>
                             <div class="table-responsive-sm">
-                                <b-table striped :items="invoice" :fields="invoiceSummaryFields">
+                                <b-table striped :items="invoices" :fields="invoiceSummaryFields">
                                     <template v-slot:cell(total_with_vat)="data">
                                         <span style="font-size:25px" class="font-weight-bold">{{data.value | euro}}</span>
                                     </template>
                                 </b-table>
                             </div>
                         </b-col>
-                        <!--<b-col offset="6" cols="6" class="text-right">
-                            <b-button variant="link mr-3">
+                    </b-row>
+                    <b-row>
+                        <b-col offset-md="4" cols="12" md="8" class="text-right">
+                            <b-button variant="primary mr-3" @click="exportToPDF">
                                 <i class="ri-printer-line"></i>
-                                Download Print
+                                {{ $t('advPayments.newAdvPayment.downloadPrint') }}
                             </b-button>
-                            <b-button variant="primary">
-                                Submit
-                            </b-button>
-                        </b-col>-->
+                        </b-col>
                     </b-row>
                 </template>
             </iq-card>
@@ -82,6 +158,7 @@
 import { xray } from '../../config/pluginInit'
 import { getInvoiceById, getItemsOfInvoiceById } from '../../services/invoice'
 import moment from 'moment'
+import html2pdf from 'html2pdf.js'
 
 export default {
   name: 'AdvPayment',
@@ -97,10 +174,11 @@ export default {
   methods: {
     getInvoice (id) {
       getInvoiceById(id).then(response => {
-        this.invoice = response
-        this.invoiceNumber = this.invoice[0].invoice_number
+        this.invoices = response
+        this.invoice = response[0]
+        this.invoiceNumber = this.invoice.invoice_number
         this.getItems(this.invoice.invoice_id)
-        this.invoiceDetails[0].total = this.invoice[0].charges_sum
+        this.invoiceDetails[0].total = this.invoice.charges_sum
       }
       )
     },
@@ -108,6 +186,16 @@ export default {
       getItemsOfInvoiceById(id).then(response => {
         this.items = response
       })
+    },
+    exportToPDF () {
+      let options = {
+        filename: 'invoice.pdf',
+        image: { type: 'jpeg', quality: 0.98 },
+        html2canvas: { y: 170 },
+        jsPDF: { unit: 'mm', format: 'a3' }
+      }
+      var source = window.document.getElementById('printInvoice')
+      html2pdf().set(options).from(source).save()
     }
   },
   data () {
@@ -158,7 +246,7 @@ export default {
             return moment(value).format('YYYY-MM-DD')
           }
         },
-        { label: this.$t('invoice.invoiceInfo.invoiceStatus'), key: 'invoice_status', class: 'text-left' },
+        { label: this.$t('invoice.invoiceInfo.invoiceStatus'), key: 'payment_status', class: 'text-left' },
         { label: this.$t('invoice.invoiceInfo.paymentStatus'),
           key: 'invoiceStatus',
           formatter: (value, key, item) => {
@@ -189,6 +277,7 @@ export default {
         { label: this.$t('invoice.invoiceInfo.invoiceIssuedBy'), key: 'operator_name', class: 'text-left' }
       ],
       invoice: null,
+      invoices: [],
       items: []
     }
   }
