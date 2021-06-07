@@ -8,37 +8,76 @@ const pool = new Pool({
   port: process.env.POSTGRES_PORT || 5432,
 })
 
-const getApontments = (request, response, from, to, client_id, user_id, scope, doctorUserIdList ) => {
-        var statement = "SELECT app.id, app.date, app.time, app.location, app.enquiry_id, enq.name, enq.last_name, app.attendance, app.product_id, app_s.location, app_s.doctor_name, us.id as doctor_user_id, pcl.id as prm_client_id, pcl.client_name as prm_client_name "
-        statement += "FROM appointments app "
-        statement += "LEFT JOIN appointment_slots app_s ON app.id = app_s.appointment_id "
-        statement += "LEFT JOIN users us ON app_s.doctor_name = us.name "
-        statement += "LEFT JOIN clients cl ON app_s.client_id = cl.id "
-        statement += "LEFT JOIN prm_client pcl ON cl.id = pcl.id "
-        statement += "LEFT JOIN enquiries enq ON app.enquiry_id = enq.id "
-        statement += "WHERE app.trashed = false "
-        statement += "AND pcl.client_deleted = false "
-        if (scope=='all') {
-        } else if (scope=='client') {
-            statement += "AND pcl.id=:client_id "
-        } else if (scope=='self only') {
-            statement += "AND us.id=:user_id "
-        }
-        statement += "AND '[:from, :to]'::daterange @> app.date "
-        
-        statement = statement.replace(":from",from).replace(":to",to).replace(":client_id",client_id).replace(":client_id",client_id) 
-        console.log(statement)
-        pool.query(statement , (error, results) => {
-          console.log(error)
-            if (error) {
-                throw error
+const getApontments = (request, response, from, to, user_id, accessible_user_ids, selctedIds, prm_client_id, scope ) => {
+    var statement = "SELECT app.id, app.date, app.time, app.location, app.enquiry_id, enq.name, enq.last_name, app.attendance, app.product_id, app_s.location, app_s.doctor_name, us.id as doctor_user_id, pcl.id as prm_client_id, pcl.client_name as prm_client_name "
+    statement += "FROM appointments app "
+    statement += "LEFT JOIN appointment_slots app_s ON app.id = app_s.appointment_id "
+    statement += "LEFT JOIN users us ON app_s.doctor_name = us.name "
+    statement += "LEFT JOIN clients cl ON app_s.client_id = cl.id "
+    statement += "LEFT JOIN prm_client pcl ON cl.id = pcl.id "
+    statement += "LEFT JOIN enquiries enq ON app.enquiry_id = enq.id "
+    statement += "WHERE app.trashed = false "
+    statement += "AND pcl.client_deleted = false "
+    if (scope=='All') {
+    } else if (scope=='PrmClient') {
+        statement += "AND us.prm_client_id=" + prm_client_id;             
+    } else if (scope=='Self') {
+        statement += "AND us.id=" + user_id 
+    } else if (scope==='Self&LinkedUsers') {
+        if (accessible_user_ids) {
+            statement += " AND ("
+            statement +=    "false";
+            for (const acc_id in accessible_user_ids) {
+                statement +=" OR us.id=" + accessible_user_ids[acc_id];
             }
-            response.status(200).json(results.rows)
-        })
+        statement += ") ";  
+        }
+    }
+    // just selected if set
+    if (selctedIds) {
+        statement += " AND ("
+        statement +=    "false";
+        for (const id in selctedIds) {
+            statement +=" OR us.id=" + selctedIds[id];
+        }
+    statement += ") ";  
+    } 
+
+    statement += "AND '[:from, :to]'::daterange @> app.date "
+        
+    statement = statement.replace(":from",from).replace(":to",to)
+    console.log(statement)
+    pool.query(statement , (error, results) => {
+        console.log(error)
+        if (error) {
+            throw error
+        }
+        response.status(200).json(results.rows)
+    })
 }
 
-const getDoctors = (request, response, client_id, user_id, scope ) => {
-    response.status(200).json(["Doctor 1", "Doctor 2"])
+const getDoctors = (request, response, user_id, accessible_user_ids, prm_client_id, scope ) => {
+    var statement = "SELECT id, name from users";
+    if (scope==='All') {
+    } else if (scope==='PrmClient') {
+       statement +=    "WHERE prm_client_id=" + prm_client_id;
+    } else if (scope==='Self') {
+       statement +=    "WHERE id=" + user_id;
+    } else if (scope==='Self&LinkedUsers') {
+       statement +=    "WHERE id=" + user_id;
+       if (accessible_user_ids) {
+           for (const id in accessible_user_ids) {
+               statement +="OR id=" + accessible_user_ids[id];
+           }
+       }
+    }         
+    pool.query(statement , (error, results) => {
+        console.log(error)
+        if (error) {
+            throw error
+        }
+        response.status(200).json(results.rows)
+    })
 }
 
 module.exports = {
