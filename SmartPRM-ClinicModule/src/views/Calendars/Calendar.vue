@@ -263,7 +263,6 @@ export default {
       // let tempArray = this.checkedListArray
       // let resourcesArrayCloned = this.resources
       // let tempArray1 = []
-      console.log(item)
       if (item.checked) {
         this.check = item
         this.allDoctorCheck = false
@@ -323,7 +322,6 @@ export default {
       // console.log('ITEM:', item)
     },
     submitFormData () {
-      console.log('FORM DATA:', this.formData)
       appointmentBook(this.formData)
     },
     scroll_left () {

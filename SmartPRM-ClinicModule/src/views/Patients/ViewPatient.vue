@@ -629,7 +629,8 @@
                 taggable
                 :clearable="false"
                 :getOptionLabel="getOptionLabel"
-                :options="users || []"
+                class="style-chooser"
+                :options="users"
                 v-model="formData.user"
                 @input="selectedUser"
             >
@@ -682,7 +683,7 @@ import {
 } from '../../services/enquiry'
 import { getDentists, getSurgeons } from '../../services/userService'
 import { getCountriesList, getRegionsList } from '../../services/commonCodeLists'
-import { getUsers } from '@/services/userService'
+// import { getUsers } from '@/services/userService'
 import moment from 'moment'
 import { createAssignments, getAssignments } from '@/services/assignmentsService'
 
@@ -987,7 +988,7 @@ export default {
       console.log('selected', val)
     },
     getOptionLabel (option) {
-      return (option && option.name) || ''
+      return (option && option.label) || ''
     },
     createBillingDetails () {
       let details = ''
@@ -1133,9 +1134,13 @@ export default {
       this.sortOn = array
     },
     getUsers () {
-      getUsers().then(response => {
-        this.users = response.filter(item => item.prm_role_id === 4)
+      getDentists().then(response => {
+        this.users = response
       })
+      // getUsers().then(response => {
+      //   console.log(response)
+      //   this.users = response.filter(item => item.prm_role_id === 4)
+      // })
     },
     getAssignments () {
       getAssignments('all').then(response => {
@@ -1156,6 +1161,7 @@ export default {
       this.formData = this.defaultFormData()
     },
     addAssignments () {
+      console.log(this.formData)
       createAssignments(this.formData).then(() => {
         this.getAssignments()
         this.formData = this.defaultFormData()
