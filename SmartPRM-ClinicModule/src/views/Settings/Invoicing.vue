@@ -79,25 +79,6 @@
                     </div>
                   </div>
                   <div class="col-md-4 mb-3">
-                      <label for="title">Company client *</label>
-                    <div style="display: flex;">
-                      <v-select class="drop-down"
-                      :clearable="false" v-model="companyFormData.prm_client_id"
-                      label="client_name"
-                      :reduce="item => item.id"
-                      :options="clients">
-                      <template #search="{attributes, events}">
-                        <input
-                            class="vs__search"
-                            :required="!companyFormData.prm_client_id"
-                            v-bind="attributes"
-                            v-on="events"
-                          />
-                      </template>
-                    </v-select>
-                    </div>
-                  </div>
-                  <div class="col-md-4 mb-3">
                       <label for="title">Company post code *</label>
                     <div style="display: flex;">
                       <input type="number" v-model="companyFormData.company_post_code" class="form-control" placeholder="Post code" required>
@@ -128,22 +109,16 @@
                     </v-select>
                     </div>
                   </div>
-                  <div class="col-md-6 mb-3">
-                      <label for="title">Company iban *</label>
-                    <div style="display: flex;">
-                      <input type="text" v-model="companyFormData.company_iban" class="form-control" placeholder="Iban" required>
-                    </div>
-                  </div>
-                  <div class="col-md-6 mb-3">
+                  <div class="col-md-4 mb-3">
                       <label for="title">Company tax number *</label>
                     <div style="display: flex;">
                       <input type="text" v-model="companyFormData.company_tax_registration_number" class="form-control" placeholder="Tax number" required>
                     </div>
                   </div>
                   <div class="col-md-6 mb-3">
-                      <label for="title">Company vat number *</label>
+                      <label for="title">Company iban *</label>
                     <div style="display: flex;">
-                      <input type="text" v-model="companyFormData.company_vat_number" class="form-control" placeholder="Vat number" required>
+                      <input type="text" v-model="companyFormData.company_iban" class="form-control" placeholder="Iban" required>
                     </div>
                   </div>
                   <div class="col-md-6 mb-3">
@@ -165,13 +140,13 @@
                     </div>
                   </div>
                   <div class="col-md-6 mb-3">
-                      <label for="title">Pass Phrase *</label>
+                      <label for="title">Pass Phrase</label>
                     <div style="display: flex;">
                       <input type="text" v-model="companyFormData.pass_phrase" class="form-control" placeholder="Pass Phrase" required>
                     </div>
                   </div>
                   <div class="col-md-6 mb-3">
-                      <label for="title">Company subject *</label>
+                      <label for="title">Company subject</label>
                     <div style="display: flex;">
                       <input type="text" v-model="companyFormData.company_subject" class="form-control" placeholder="Subject" required>
                     </div>
@@ -446,8 +421,9 @@
 
 <script>
 import { xray } from '../../config/pluginInit'
+import { sso } from '../../services/userService'
 import { getCompanies, createCompany, updateCompany, deleteCompany, getCompanyById } from '../../services/companies'
-import { getCountriesList, getClients } from '../../services/commonCodeLists'
+import { getCountriesList } from '../../services/commonCodeLists'
 import { getCompanyPremises, getPremiseById, checkElectronicDeviceIdUniquness, checkBusinessIdUniquness, getCompanyPremiseDevices, createPremise, updatePremise, deletePremise, getPremiseDeviceById, createPremiseDevice, updatePremiseDevice, deletePremiseDevice } from '../../services/companyPremises'
 import moment from 'moment'
 
@@ -460,15 +436,14 @@ export default {
     this.getCompanyPremiseDevices()
     this.getCompanies()
     this.getCountries()
-    this.getClients()
+    this.getLoggedInUser()
   },
   computed: {
     isCompanyDisabled () {
       return !this.companyFormData.company_name || !this.companyFormData.company_address_line_1 || !this.companyFormData.company_post_code ||
         !this.companyFormData.company_city || !this.companyFormData.company_country_code || !this.companyFormData.company_iban ||
-        !this.companyFormData.company_tax_registration_number || !this.companyFormData.company_vat_number || !this.companyFormData.company_legal_registration_identifier ||
-        !this.companyFormData.cert_file || !this.companyFormData.key_file || !this.companyFormData.pass_phrase || !this.companyFormData.company_subject ||
-        !this.companyFormData.company_issuer || !this.companyFormData.company_serial || !this.companyFormData.prm_client_id || !this.companyFormData.vat_payer
+        !this.companyFormData.company_tax_registration_number || !this.companyFormData.company_issuer || !this.companyFormData.company_serial ||
+        !this.companyFormData.cert_file || !this.companyFormData.key_file || !this.companyFormData.company_legal_registration_identifier
     },
     isPremiseDisabled () {
       return !this.premiseFormData.company_id || !this.premiseFormData.premise_name || !this.premiseFormData.premise_street ||
@@ -515,7 +490,6 @@ export default {
         company_country_code: '',
         company_iban: '',
         company_tax_registration_number: '',
-        company_vat_number: '',
         company_legal_registration_identifier: '',
         cert_file: '',
         key_file: '',
@@ -523,7 +497,6 @@ export default {
         company_subject: '',
         company_issuer: '',
         company_serial: '',
-        prm_client_id: '',
         vat_payer: false
       },
       vatPayerOptions: [
@@ -558,7 +531,6 @@ export default {
       devices: [],
       companies: [],
       countries: [],
-      clients: [],
       isCompanyDataLoaded: false,
       isPremiseDataLoaded: false,
       isDeviceDataLoaded: false,
@@ -576,7 +548,8 @@ export default {
       devicesPerPage: 20,
       isBusinessPremiseIdUnique: true,
       isElectronicDeviceIdUnique: true,
-      timer: null
+      timer: null,
+      clientId: null
     }
   },
   methods: {
@@ -585,9 +558,9 @@ export default {
         this.countries = response
       })
     },
-    getClients () {
-      getClients().then(response => {
-        this.clients = response
+    getLoggedInUser () {
+      sso().then(response => {
+        this.clientId = response.prm_client_id
       })
     },
     getCompanyPremises () {
@@ -644,7 +617,6 @@ export default {
         company_country_code: '',
         company_iban: '',
         company_tax_registration_number: '',
-        company_vat_number: '',
         company_legal_registration_identifier: '',
         cert_file: '',
         key_file: '',
@@ -652,8 +624,7 @@ export default {
         company_subject: '',
         company_issuer: '',
         company_serial: '',
-        vat_payer: '',
-        prm_client_id: ''
+        vat_payer: ''
       }
     },
     editCompany (item) {
@@ -671,6 +642,7 @@ export default {
       this.currentCompanyPage = 1
     },
     addCompany () {
+      this.companyFormData.prm_client_id = this.clientId
       this.setCurrentCompanyePage()
       if (this.companyFormData.company_id) {
         updateCompany(this.companyFormData.company_id, this.companyFormData).then(() => {
