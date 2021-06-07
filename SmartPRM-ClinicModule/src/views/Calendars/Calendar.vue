@@ -215,12 +215,12 @@ export default {
         this.resources = _.uniqBy(this.resources, 'id')
         this.clonedResources = this.resources
         dataWithDoctor.map(item => {
-          let startDay = `${moment(item.date).add(moment.duration(item.time)).toISOString()}`
+          // let startDay = `${moment(item.date).add(moment.duration(item.time)).toISOString()}`
           let endDay = this.calculateEndDate(moment(item.date).format('YYYY-MM-DD') + 'T' + item.time, 0, 15)
           this.events.push({
             id: item.id,
             title: item.name + ' ' + item.last_name,
-            start: startDay,
+            start: moment(item.date).format('YYYY-MM-DD') + 'T' + item.time,
             end: endDay,
             backgroundColor: '#148A9C',
             resourceId: item.doctor_user_id,
