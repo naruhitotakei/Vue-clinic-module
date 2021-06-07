@@ -163,6 +163,27 @@ CREATE TABLE IF NOT EXISTS appointments_label (
 ALTER TABLE invoice ADD COLUMN payment_item_id INT
 CONSTRAINT invoice_payment_item_fk REFERENCES payment_item (id);
 
+--############################################################
+--# Creating appointments_label_name table
+--############################################################
+
+CREATE TABLE IF NOT EXISTS appointments_label_name (
+	id						SERIAL PRIMARY KEY,
+	appointment_label_id	INT CONSTRAINT appointments_label_name_appointments_label_fk REFERENCES appointments_label (id),
+	language				VARCHAR(8),
+	text					VARCHAR(128),
+	created_at				DATE NOT NULL DEFAULT CURRENT_DATE
+);
+
+--############################################################
+--# Altering appoitments table
+--############################################################
+
+ALTER TABLE appointments
+ADD COLUMN patient_attended BOOLEAN,
+ADD COLUMN appointment_canceled_in_advance_by_clinic BOOLEAN DEFAULT 'f',
+ADD COLUMN appointment_canceled_in_advance_by_patient BOOLEAN DEFAULT 'f';
+
 
 UPDATE db_version SET version ='01.17', version_date=CURRENT_DATE WHERE resource='Tables';
 
