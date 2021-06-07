@@ -1,12 +1,14 @@
 {
   "sidebar": {
     "dashboard": "Domov",
+    "callCenterDashboard": "Klicni Center Dashboard",
     "calendar": "Koledar",
     "patients": "Pacienti",
     "documents": "Dokumenti",
     "assignments": "Naloge",
     "statistics": "Statistika",
     "reporting": "Poročila",
+    "callCenter": "Klicni Center",
     "settings": "Nastavitve"
   },
   "documents": {
@@ -23,13 +25,24 @@
     "doctor": "Doktor",
     "tax authority": "Davnčna uprava"
   },
+  "callCenter": {
+    "leads": "Leadi",
+    "clientInfo": "Podatki o Klientu",
+    "KPIs": "KPIs",
+    "workReport": "Poročila o Delu",
+    "activityReport": "Poročila o Aktivnosti",
+    "missingServices": "Manjkajoče Storitve"
+  },
   "settings": {
     "users": "Uporabniki",
     "locations": "Lokacije",
     "services and products": "Storitve in Izdelki",
     "invoicing": "Izdajanje računov",
     "free slots": "Prosti termini",
-    "business customers": "Poslovne stranke"
+    "business customers": "Poslovne stranke",
+    "SMSTemplates": "SMS predloge",
+    "mailTemplates": "Mail predloge",
+    "advertising": "Oglaševanje"
   },
   "nav": {
     "allNotifications": "Vsa obvestila",
@@ -377,8 +390,8 @@
       "paymentMethod": "Način plačila",
       "vatExemptionReason": "Zdravstvene storitve in oskrba so v skladu z 2. in 4. točko, prvega odstavka, 42 člena ZDDV-1, oproščene plačila DDV, zato DDV ni nil obračunan",
       "issuedBy": "Račun izdal",
-      "zoi":  "ZOI",
-      "eor":  "EOR",
+      "zoi": "ZOI",
+      "eor": "EOR",
       "details": {
         "header": "Podatki o avansnem računu",
         "item": "Opis",

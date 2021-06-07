@@ -1,12 +1,14 @@
 {
   "sidebar": {
     "dashboard": "Home",
+    "callCenterDashboard": "Call Center Dashboard",
     "calendar": "Calendar",
     "patients": "Patients",
     "documents": "Documents",
     "assignments": "Assignments",
     "statistics": "Statistics",
     "reporting": "Reporting",
+    "callCenter": "Call Center",
     "settings": "Settings"
   },
   "documents": {
@@ -23,13 +25,24 @@
     "doctor": "Doctor",
     "tax authority": "Tax Authority"
   },
+  "callCenter": {
+    "leads": "Leads",
+    "clientInfo": "Client info",
+    "KPIs": "KPIs",
+    "workReport": "Work Report",
+    "activityReport": "Activity Report",
+    "missingServices": "Missing Services"
+  },
   "settings": {
     "users": "Users",
     "locations": "Locations",
     "services and products": "Services and Products",
     "invoicing": "Invoicing",
     "free slots": "Free Slots",
-    "business customers": "Business Customers"
+    "business customers": "Business Customers",
+    "SMSTemplates": "SMS templates",
+    "mailTemplates": "Mail templates",
+    "advertising": "Advertising"
   },
   "nav": {
     "allNotifications": "All Notifications",

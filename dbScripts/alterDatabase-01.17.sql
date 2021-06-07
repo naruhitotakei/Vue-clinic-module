@@ -102,6 +102,13 @@ INSERT INTO prm_role_permission (role_permission_id, role_id, permission_id) VAL
 INSERT INTO prm_role_permission (role_permission_id, role_id, permission_id) VALUES (1132, 11, 321);
 INSERT INTO prm_role_permission (role_permission_id, role_id, permission_id) VALUES (1133, 11, 331);
 
+--############################################################
+--# ARemoving company_vat_number from prm_company table
+--############################################################
+
+ALTER TABLE prm_company DROP COLUMN company_vat_number;
+
+
 UPDATE db_version SET version ='01.17', version_date=CURRENT_DATE WHERE resource='Tables';
 
 
