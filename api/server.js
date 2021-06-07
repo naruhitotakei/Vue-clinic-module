@@ -924,3 +924,24 @@ app.get('/', (req,res) => {
 app.listen(port, () => {
     console.log(`Server listening on the port::${port}`);
 });
+
+///////////////////////////////////
+// booking methods
+///////////////////////////////////
+app.post('/api/booking/sendsms', (req, res) => {
+    const phone = req.body.phone
+    if(phone) {
+        res.status(200).json({ success: true })
+    } else {
+        res.status(400).json("No phone number")
+    }
+});
+
+app.post('/api/booking/confirm-and-save', (req, res) => {
+    const { code, selectedSlot } = req.body
+    if(code) {
+        res.status(200).json({ success: true, code, selectedSlot })
+    } else {
+        res.status(400).json("No confirmation code")
+    }
+});

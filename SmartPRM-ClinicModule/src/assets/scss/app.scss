@@ -1,0 +1,17 @@
+@import './app-vars.scss';
+.app-border{
+    border: 1px solid rgba(0, 0, 0, 0.125);
+    border-radius: 0.25rem;
+}
+
+.app-font-small{
+    font-size: 0.7rem;
+}
+
+.active-element{
+    cursor: pointer;
+}
+
+.primary-color{
+    color: $primary !important;
+}

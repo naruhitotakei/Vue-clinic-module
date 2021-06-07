@@ -53,6 +53,7 @@
     "vue-flatpickr-component": "^8.1.5",
     "vue-i18n": "^8.15.3",
     "vue-morris": "^1.1.0",
+    "vue-multiselect": "^2.1.6",
     "vue-property-decorator": "^8.3.0",
     "vue-resource-timeline": "^1.0.4",
     "vue-router": "^3.1.3",
