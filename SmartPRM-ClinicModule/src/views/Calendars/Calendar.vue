@@ -91,7 +91,7 @@
           </form>
           </template>
           <template  v-slot:body>
-            <FullCalendar :resourcesOuter="resources" :events="getEvents" style="width: 100%; height: 100%;"/>
+            <FullCalendar :resourcesOuter="getResources" :events="getEvents" style="width: 100%; height: 100%;"/>
           </template>
         </iq-card>
       </b-col>
@@ -176,21 +176,46 @@ export default {
         dateFormat: 'Y-m-d',
         inline: true
       },
-      check: null
+      check: []
     }
   },
   mounted () {
     xray.index()
     this.getApontments()
   },
+  watch: {
+    'allDoctorCheck' () {
+      console.log(this.allDoctorCheck)
+    }
+  },
   computed: {
     getEvents () {
-      return this.events.filter(e => {
-        if (!this.check) {
-          return this.events
-        }
-        return e.doctorId === this.check.title
+      if (!this.check.length) {
+        return this.events
+      }
+      let events = []
+      this.events.map(e => {
+        return this.check.map(c => {
+          if (e.doctorId === c.title) {
+            events.push(e)
+          }
+        })
       })
+      return events
+    },
+    getResources () {
+      if (!this.check.length) {
+        return this.resources
+      }
+      let resources = []
+      this.resources.map(e => {
+        return this.check.map(c => {
+          if (e.title === c.title) {
+            resources.push(e)
+          }
+        })
+      })
+      return resources
     }
   },
   methods: {
@@ -245,7 +270,7 @@ export default {
       return moment(startDate).add(hours, 'hours').add(minutes, 'minutes').toISOString()
     },
     allDoctorFun (value) {
-      this.check = null
+      this.check = []
       this.doctors.map(item => {
         item.checked = false
       })
@@ -256,20 +281,45 @@ export default {
       //   })
       //   console.log('THIS.CLONEDRESOURCES:', this.clonedResources)
       // }
-      this.resources = value ? this.clonedResources : this.checkedListArray
+      // this.resources = value ? this.clonedResources : this.checkedListArray
     },
     checkData (item) {
       // let check = this.checkedListArray.includes(item)
       // let tempArray = this.checkedListArray
       // let resourcesArrayCloned = this.resources
       // let tempArray1 = []
-      if (item.checked) {
-        this.check = item
-        this.allDoctorCheck = false
+
+      this.doctors.map(doctor => {
+        if (doctor.title === item.title) {
+          if (item.checked) {
+            this.check.push(item)
+          } else {
+            this.check.map((i, index) => {
+              if (i.title === item.title) {
+                this.check.splice(index, 1)
+              }
+            })
+          }
+        }
+      })
+
+      if (this.check.length) {
+        this.$nextTick(() => {
+          this.allDoctorCheck = false
+        })
       } else {
-        this.check = null
-        this.allDoctorCheck = true
+        this.$nextTick(() => {
+          this.allDoctorCheck = true
+        })
       }
+      // console.log('DOCTORS', this.doctors)
+      // if (item.checked) {
+      //   this.check = item
+      //   this.allDoctorCheck = false
+      // } else {
+      //   this.check = null
+      //   this.allDoctorCheck = true
+      // }
       if (!item) {
 
       } else {
