@@ -54,13 +54,17 @@
         <div class="col-md-12 mb-3">
           <label for="duration">{{ $t('calendarEvent.duration') }}</label>
           <div style="display: flex;">
-            <input type="number" v-model="formData.hours" class="form-control col-md-6" min="0" max="9" placeholder="Hours" required style="max-width: 150px;">
-            <input type="number" v-model="formData.minutes" min="0" max="59" class="form-control col-md-6 offset-1" step="5" placeholder="Minutes" required style="max-width: 150px;">
+            <div class="calendar-modal-input__hour mr-4">
+              <input type="number" v-model="formData.hours" class="form-control col-md-6 " min="0" max="9" placeholder="Hours" required style="max-width: 150px;">
+            </div>
+            <div class="calendar-modal-input__minutes">
+              <input type="number" v-model="formData.minutes" min="0" max="59" class="form-control col-md-6 offset-1" step="5" placeholder="Minutes" required style="max-width: 150px;">
+            </div>
           </div>
         </div>
         <div class="col-md-12 mb-3">
-          <label for="notes">{{ $t('calendarEvent.notes') }}</label>
-          <textarea row="2" v-model="formData.notes" class="form-control" placeholder="Add your notes here for event!" id="notes" required></textarea>
+          <label for="notes">{{ $t('calendarEvent.note') }}</label>
+          <textarea row="2" v-model="formData.notes" class="form-control" placeholder="Add your note here for event!" id="note" required></textarea>
         </div>
         <div class="col-md-12 mb-3">
           <label for="color">{{ $t('calendarEvent.changeColor') }}</label><br>
@@ -380,6 +384,35 @@ body .wrapper .custom-control-label::before {
 }
 body .wrapper .custom-control-label::after {
   top:50% !important;
+}
+
+.calendar-modal-input__hour {
+  position: relative;
+  &:after {
+    content: "h";
+    width: 29px;
+    height: 26px;
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    font-size: 14px;
+    right: -35px;
+    display: block;
+  }
+}
+.calendar-modal-input__minutes {
+  position: relative;
+  &:after {
+    content: "min";
+    width: 29px;
+    height: 26px;
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    font-size: 14px;
+    right: -42px;
+    display: block;
+  }
 }
 
   @import '~@fullcalendar/core/main.css';
