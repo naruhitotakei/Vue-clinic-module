@@ -31,3 +31,21 @@ Vue.filter('formatDateAssignments', function (value, lang) {
     return moment(String(value)).format('ddd, D MMM')
   }
 })
+
+Vue.filter('formatFullDate', function (value) {
+  if (value) {
+    return moment(String(value)).format('dddd, MMMM D, YYYY')
+  }
+})
+
+Vue.filter('formatTime', function (value) {
+  if (value) {
+    return value + '\''
+  }
+})
+
+Vue.filter('formatMoney', function (value) {
+  if (value) {
+    return '$' + value
+  }
+})

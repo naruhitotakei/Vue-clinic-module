@@ -2,8 +2,8 @@
     .nav-responsive {
       font-size: 30px;
       line-height: 15px;
-      width: 210px;
-      position: absolute;
+      /*width: 210px;*/
+      /*position: absolute;*/
     }
     .iq-menu-bt {
       right: 200px !important;
@@ -14,8 +14,8 @@
     .nav-responsive {
       font-size: 30px;
       line-height: 15px;
-      width: 255px;
-      position: absolute;
+      /*width: 255px;*/
+      /*position: absolute;*/
     }
     .iq-menu-bt {
       right: 200px !important;
@@ -26,8 +26,8 @@
     .nav-responsive {
       font-size: 30px;
       line-height: 15px;
-      width: 300px;
-      position: absolute;
+      /*width: 300px;*/
+      /*position: absolute;*/
     }
     .iq-menu-bt {
       right: 200px !important;
@@ -38,7 +38,7 @@
     .nav-responsive {
       font-size: 30px;
       line-height: 15px;
-      width: 415px;
+      /*width: 415px;*/
     }
     .iq-menu-bt {
       right: 200px !important;
@@ -48,7 +48,7 @@
     .nav-responsive {
       font-size: 30px;
       line-height: 15px;
-      width: 520px;
+      /*width: 520px;*/
     }
     .iq-menu-bt {
       right: 200px !important;
@@ -59,7 +59,7 @@
     .nav-responsive {
       font-size: 30px;
       line-height: 15px;
-      width: 600px;
+      /*width: 600px;*/
     }
     .iq-menu-bt {
       right: 190px !important;
@@ -70,7 +70,7 @@
     .nav-responsive {
       font-size: 30px;
       line-height: 15px;
-      width: 640px;
+      /*width: 640px;*/
     }
     .iq-menu-bt {
       right: 180px !important;
@@ -81,7 +81,7 @@
     .nav-responsive {
       font-size: 30px;
       line-height: 15px;
-      width: 690px;
+      /*width: 690px;*/
     }
     .iq-menu-bt {
       right: 180px !important;
@@ -93,13 +93,26 @@
       float: right;
     }
     .iq-menu-bt {
-      right: 285px !important;
+      right: 387px !important;
     }
 }
 
 @media (max-width: 993px) {
     .sub-font {
         font-size: 13px;
+    }
+    .navbar {
+        justify-content: flex-end !important;
+    }
+     .navbar .nav-responsive {
+        order: 2;
+    }
+     .navbar .iq-menu-bt {
+        position: static !important;
+        order: 1;
+    }
+     .navbar .navbar-list {
+        order: 3;
     }
 }
 

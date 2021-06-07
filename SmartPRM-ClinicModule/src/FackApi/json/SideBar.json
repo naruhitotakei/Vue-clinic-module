@@ -184,7 +184,7 @@
   },
   {
     "title": "Call Center",
-    "name": "sidebar.call center",
+    "name": "sidebar.callCenter",
     "is_heading": false,
     "is_active": false,
     "link": "",
@@ -194,18 +194,18 @@
     "children": [
       {
         "title": "Leads",
-        "name": "call center.leads",
+        "name": "callCenter.leads",
         "is_active": false,
         "link": {
           "name": "call-center.leads"
         },
         "class_name": "",
         "is_icon_class": true,
-        "icon": "ri-empathize-line"
+        "icon": "ri-guide-line"
       },
       {
         "title": "Client Info",
-        "name": "call center.client info",
+        "name": "callCenter.clientInfo",
         "is_active": false,
         "link": {
           "name": "call-center.client-info"
@@ -216,7 +216,7 @@
       },
       {
         "title": "KPIs",
-        "name": "call center.KPIs",
+        "name": "callCenter.KPIs",
         "is_active": false,
         "link": {
           "name": "call-center.KPIs"
@@ -227,7 +227,7 @@
       },
       {
         "title": "Work Report",
-        "name": "call center.work report",
+        "name": "callCenter.workReport",
         "is_active": false,
         "link": {
           "name": "call-center.work-report"
@@ -238,7 +238,7 @@
       },
       {
         "title": "Activity Report",
-        "name": "call center.activity report",
+        "name": "callCenter.activityReport",
         "is_active": false,
         "link": {
           "name": "call-center.activity-report"
@@ -249,14 +249,14 @@
       },
       {
         "title": "Missing Services",
-        "name": "call center.missing services",
+        "name": "callCenter.missingServices",
         "is_active": false,
         "link": {
           "name": "call-center.missing-services"
         },
         "class_name": "",
         "is_icon_class": true,
-        "icon": "ri-service-line"
+        "icon": "ri-alert-line"
       }
     ]
   },
@@ -316,7 +316,7 @@
       },
       {
         "title": "Business Customers",
-        "name": "settings.business-customers",
+        "name": "settings.business customers",
         "is_active": false,
         "link": {
           "name": "settings.business-customers"
@@ -338,7 +338,7 @@
       },
       {
         "title": "SMS Templates",
-        "name": "settings.SMS templates",
+        "name": "settings.SMSTemplates",
         "is_active": false,
         "link": {
           "name": "settings.SMS-templates"
@@ -349,7 +349,7 @@
       },
       {
         "title": "Mail Templates",
-        "name": "settings.mail templates",
+        "name": "settings.mailTemplates",
         "is_active": false,
         "link": {
           "name": "settings.mail-templates"
@@ -367,7 +367,7 @@
         },
         "class_name": "",
         "is_icon_class": true,
-        "icon": "ri-advertisement-line"
+        "icon": "ri-exchange-funds-line"
       }
     ]
   }

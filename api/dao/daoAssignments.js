@@ -8,7 +8,7 @@ const pool = new Pool({
   port: process.env.POSTGRES_PORT || 5432,
 })
 
-const getAssignments = (request, response, scope, userid, prmClientId, due) =>  {
+const getAssignments = (request, response, scope, userid, accessible_user_ids, prmClientId, due) =>  {
     var condition = null;
     if (due == "today") {
         condition = "WHERE (todos.due_at = now()::date) AND completed = false"
@@ -50,7 +50,7 @@ const getAssignments = (request, response, scope, userid, prmClientId, due) =>  
                          "LEFT JOIN clients_prm_client_bridge ON clients.id = clients_prm_client_bridge.clients_id",
                          "LEFT JOIN prm_client ON clients_prm_client_bridge.prm_client_id = prm_client.id",                         
                          condition,
-                         "AND prm_client.id = $1",
+                         "AND prm_client.id=" + prmClientId,
                          "ORDER BY todos.due_at ASC"].join('\n') 
         pool.query(statement, [prmClientId], (error, results) => {
             if (error) {
@@ -58,7 +58,7 @@ const getAssignments = (request, response, scope, userid, prmClientId, due) =>  
             }
             response.status(200).json(results.rows)
         }) 
-    } else if (scope == "Self") {
+    } else if (scope == "Self") {       
         var statement = ["SELECT todos.*, prm_client.id AS prm_client_id, enquiries.name AS patientname, enquiries.last_name AS patientlastname, users.name AS todoname, dentists.name AS dentistname FROM todos",
                          "LEFT JOIN enquiries ON todos.enquiry_id = enquiries.id",
                          "LEFT JOIN users ON todos.user_id = users.id",
@@ -67,10 +67,36 @@ const getAssignments = (request, response, scope, userid, prmClientId, due) =>  
                          "LEFT JOIN clients_prm_client_bridge ON clients.id = clients_prm_client_bridge.clients_id",
                          "LEFT JOIN prm_client ON clients_prm_client_bridge.prm_client_id = prm_client.id",
                          condition,
-                         "AND users.id = $1",
+                         "AND users.id=" + userid,
                          "ORDER BY todos.due_at ASC"].join('\n') 
         pool.query(statement, [userid], (error, results) => {
           console.log(error)
+            if (error) {
+                throw error
+            }
+            response.status(200).json(results.rows)
+        }) 
+    } else if (scope == "Self&LinkedUsers") {
+        var conditionScope = "AND ("
+        conditionScope +=    "users.id=" + userid;
+        if (accessible_user_ids) {
+            for (const acc_id in accessible_user_ids) {
+                conditionScope +=" OR users.id=" + accessible_user_ids[acc_id];
+            } 
+        }
+        conditionScope += ")";
+        var statement = ["SELECT todos.*, prm_client.id AS prm_client_id, enquiries.name AS patientname, enquiries.prm_dentist_user_id, enquiries.last_name AS patientlastname, users.name AS todoname, dentists.name AS dentist_name, dentists.id as dentists_id FROM todos",
+                         "LEFT JOIN enquiries ON todos.enquiry_id = enquiries.id",
+                         "LEFT JOIN users ON todos.user_id = users.id",
+                         "LEFT JOIN users dentists ON enquiries.prm_dentist_user_id = users.id",
+                         "LEFT JOIN clients ON todos.client_id = clients.id",
+                         "LEFT JOIN clients_prm_client_bridge ON clients.id = clients_prm_client_bridge.clients_id",
+                         "LEFT JOIN prm_client ON clients_prm_client_bridge.prm_client_id = prm_client.id",                         
+                         condition,
+                         conditionScope,
+                         "ORDER BY todos.due_at ASC"].join('\n') 
+        console.log(statement)
+        pool.query(statement, (error, results) => {
             if (error) {
                 throw error
             }
@@ -89,12 +115,16 @@ const createAssignment = (req, res, assignment) => {
   if (assignment.enquiry) assignmentStatement += "enquiry_id,"
   if (assignment.description) assignmentStatement += "description,"
   if (assignment.due_at) assignmentStatement += "due_at,"
-  if (assignment.user_id) assignmentStatement += "user_id"
+  if (assignment.user_id && !assignment.user) assignmentStatement += "user_id"
+  if (assignment.user_id && assignment.user) assignmentStatement += "user_id,"
+  if (assignment.user) assignmentStatement += "user_id"
   assignmentStatement += ") VALUES ("
   if (assignment.enquiry) assignmentStatement += "'" + assignment.enquiry.id + "',"
   if (assignment.description) assignmentStatement += "'" + assignment.description + "',"
   if (assignment.due_at) assignmentStatement += "'" + assignment.due_at + "',"
-  if (assignment.user_id) assignmentStatement += "'" + assignment.user_id + "'"
+  if (assignment.user_id && !assignment.user) assignmentStatement += "'" + assignment.user_id + "'"
+  if (assignment.user_id && assignment.user) assignmentStatement += "'" + assignment.user_id + "',"
+  if (assignment.user) assignmentStatement += "'" + assignment.user.code + "'"
   assignmentStatement += ")";
   console.log(assignmentStatement)
   pool.query(assignmentStatement , (error, results) => {

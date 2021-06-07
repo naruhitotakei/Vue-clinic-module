@@ -91,7 +91,7 @@
           </form>
           </template>
           <template  v-slot:body>
-            <FullCalendar :resourcesOuter="resources" :events="getEvents" style="width: 100%; height: 100%;"/>
+            <FullCalendar :resourcesOuter="getResources" :events="getEvents" style="width: 100%; height: 100%;"/>
           </template>
         </iq-card>
       </b-col>
@@ -114,20 +114,20 @@ export default {
       checkedListArray: [],
       events: [
         {
-          id: 'a',
-          title: 'event1',
-          start: '2021-06-04T16:00:00',
-          end: '2021-06-04T17:00:00',
+          id: 340,
+          title: '',
+          start: '2021-06-07T07:30:00.000Z',
+          end: '2021-06-07T07:45:00.000Z',
+          backgroundColor: '#64D6E8',
+          resourceId: 28,
+          eventResourceId: 28,
+          locationId: '',
+          assignmentDate: '2021-06-07T10:30',
           hours: 0,
           minutes: 15,
-          assignmentDate: moment(new Date()).format('YYYY-MM-DD') + 'T' + moment(new Date()).format('hh:mm'),
-          backgroundColor: '#148A9C',
-          doctorId: 'Dr. Gaja Bužan'
-        },
-        {
-          title: 'event2',
-          start: new Date(),
-          end: '2021-06-07'
+          notes: '',
+          patientId: '',
+          doctorId: 28
         }
       ],
       resources: [
@@ -136,9 +136,9 @@ export default {
         // { id: 24, title: 'Dr. Kržič' }
       ],
       clonedResources: [
-        { id: 'a', title: 'Doctor 1', eventColor: 'sandybrown' },
-        { id: 'b', title: 'Doctor 2', eventColor: 'blue' },
-        { id: 'c', title: 'Doctor 3', eventColor: 'red' }
+        // { id: 'a', title: 'Doctor 1', eventColor: 'sandybrown' },
+        // { id: 'b', title: 'Doctor 2', eventColor: 'blue' },
+        // { id: 'c', title: 'Doctor 3', eventColor: 'red' }
       ],
       formData: {
         appName: '',
@@ -176,21 +176,46 @@ export default {
         dateFormat: 'Y-m-d',
         inline: true
       },
-      check: null
+      check: []
     }
   },
   mounted () {
     xray.index()
     this.getApontments()
   },
+  watch: {
+    'allDoctorCheck' () {
+      console.log(this.allDoctorCheck)
+    }
+  },
   computed: {
     getEvents () {
-      return this.events.filter(e => {
-        if (!this.check) {
-          return this.events
-        }
-        return e.doctorId === this.check.title
+      if (!this.check.length) {
+        return this.events
+      }
+      let events = []
+      this.events.map(e => {
+        return this.check.map(c => {
+          if (e.doctorId === c.title) {
+            events.push(e)
+          }
+        })
       })
+      return events
+    },
+    getResources () {
+      if (!this.check.length) {
+        return this.resources
+      }
+      let resources = []
+      this.resources.map(e => {
+        return this.check.map(c => {
+          if (e.title === c.title) {
+            resources.push(e)
+          }
+        })
+      })
+      return resources
     }
   },
   methods: {
@@ -215,30 +240,37 @@ export default {
         this.resources = _.uniqBy(this.resources, 'id')
         this.clonedResources = this.resources
         dataWithDoctor.map(item => {
+          // let startDay = `${moment(item.date).add(moment.duration(item.time)).toISOString()}`
+          let endDay = this.calculateEndDate(moment(item.date).format('YYYY-MM-DD') + 'T' + item.time, 0, 15)
           this.events.push({
             id: item.id,
-            resourceId: item.id,
-            eventResourceId: item.id,
+            title: item.name + ' ' + item.last_name,
             start: moment(item.date).format('YYYY-MM-DD') + 'T' + item.time,
-            end: moment(item.date).format('YYYY-MM-DD') + 'T' + item.time,
+            end: endDay,
+            backgroundColor: '#148A9C',
+            resourceId: item.doctor_user_id,
+            eventResourceId: item.doctor_user_id,
+            locationId: item.location,
             hours: 0,
             minutes: 15,
             assignmentDate: moment(item.date).format('YYYY-MM-DD') + 'T' + item.time,
-            title: item.name + ' ' + item.last_name,
             last_name: item.last_name,
-            locationId: item.location,
             prm_client_id: item.prm_client_id,
             prm_client_name: item.prm_client_name,
             time: item.time,
             doctorId: item.doctor_name,
             enquiry_id: item.enquiry_id,
-            backgroundColor: '#148A9C'
+            patientId: 0,
+            allDay: false
           })
         })
       })
     },
+    calculateEndDate (startDate, hours, minutes) {
+      return moment(startDate).add(hours, 'hours').add(minutes, 'minutes').toISOString()
+    },
     allDoctorFun (value) {
-      this.check = null
+      this.check = []
       this.doctors.map(item => {
         item.checked = false
       })
@@ -249,21 +281,45 @@ export default {
       //   })
       //   console.log('THIS.CLONEDRESOURCES:', this.clonedResources)
       // }
-      this.resources = value ? this.clonedResources : this.checkedListArray
+      // this.resources = value ? this.clonedResources : this.checkedListArray
     },
     checkData (item) {
       // let check = this.checkedListArray.includes(item)
       // let tempArray = this.checkedListArray
       // let resourcesArrayCloned = this.resources
       // let tempArray1 = []
-      console.log(item)
-      if (item.checked) {
-        this.check = item
-        this.allDoctorCheck = false
+
+      this.doctors.map(doctor => {
+        if (doctor.title === item.title) {
+          if (item.checked) {
+            this.check.push(item)
+          } else {
+            this.check.map((i, index) => {
+              if (i.title === item.title) {
+                this.check.splice(index, 1)
+              }
+            })
+          }
+        }
+      })
+
+      if (this.check.length) {
+        this.$nextTick(() => {
+          this.allDoctorCheck = false
+        })
       } else {
-        this.check = null
-        this.allDoctorCheck = true
+        this.$nextTick(() => {
+          this.allDoctorCheck = true
+        })
       }
+      // console.log('DOCTORS', this.doctors)
+      // if (item.checked) {
+      //   this.check = item
+      //   this.allDoctorCheck = false
+      // } else {
+      //   this.check = null
+      //   this.allDoctorCheck = true
+      // }
       if (!item) {
 
       } else {
@@ -316,7 +372,6 @@ export default {
       // console.log('ITEM:', item)
     },
     submitFormData () {
-      console.log('FORM DATA:', this.formData)
       appointmentBook(this.formData)
     },
     scroll_left () {
