@@ -316,7 +316,7 @@
       },
       {
         "title": "Business Customers",
-        "name": "settings.business-customers",
+        "name": "settings.business customers",
         "is_active": false,
         "link": {
           "name": "settings.business-customers"

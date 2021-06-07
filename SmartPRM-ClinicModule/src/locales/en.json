@@ -27,7 +27,9 @@
     "users": "Users",
     "locations": "Locations",
     "services and products": "Services and Products",
-    "invoicing": "Invoicing"
+    "invoicing": "Invoicing",
+    "free slots": "Free Slots",
+    "business customers": "Business Customers"
   },
   "nav": {
     "allNotifications": "All Notifications",
