@@ -40,12 +40,12 @@
           <label for="patient">{{ $t('calendarEvent.patient') }}</label>
           <v-select :disabled="disabled" :clearable="false" label="full_name" :reduce="patient => patient.id" class="style-chooser form-control-disabled" v-model="formData.patientId" :options="patients"></v-select>
         </div>
-        <div class="col-md-12 mb-3">
-          <label for="title">Title</label>
-          <div style="display: flex;">
-            <input type="text" :disabled="disabled" v-model="formData.title" class="form-control form-control-disabled" placeholder="Title" id="title" required>
-          </div>
-        </div>
+<!--        <div class="col-md-12 mb-3">-->
+<!--          <label for="title">Title</label>-->
+<!--          <div style="display: flex;">-->
+<!--            <input type="text" :disabled="disabled" v-model="formData.title" class="form-control form-control-disabled" placeholder="Title" id="title" required>-->
+<!--          </div>-->
+<!--        </div>-->
         <div class="col-md-5 mb-3">
           <label for="location">{{ $t('calendarEvent.location') }}</label>
           <v-select :disabled="disabled" :clearable="false" label="city" :reduce="location => location.id" class="style-chooser form-control-disabled" v-model="formData.locationId" :options="locations"></v-select>
@@ -53,6 +53,10 @@
         <div class="col-md-5 offset-md-1 mb-3">
           <label for="doctor">{{ $t('calendarEvent.doctor') }}</label>
           <v-select :disabled="disabled" :clearable="false" :reduce="doctor => doctor.code" class="style-chooser form-control-disabled" v-model="formData.doctorId" :options="doctors"></v-select>
+        </div>
+        <div class="col-md-12 mb-3">
+          <label for="patient">{{ $t('calendarEvent.product_group') }}</label>
+          <v-select :disabled="disabled" :clearable="false" label="product_group_name" :reduce="patient => patient.id" class="style-chooser form-control-disabled" v-model="formData.product_groups" :options="product_groups"></v-select>
         </div>
         <div class="col-md-12 mb-3">
           <label for="start">{{ $t('calendarEvent.start') }}</label>
@@ -113,6 +117,7 @@ import { xray } from '../../../config/pluginInit'
 import { getPatients } from '../../../services/enquiry'
 import { getDentists } from '../../../services/userService'
 import { getLocationsList } from '../../../services/commonCodeLists'
+import { getProductGroups } from '@/services/products'
 
 export default {
   components: {
@@ -133,6 +138,7 @@ export default {
       eventResourceId: '',
       patientData: '',
       patients: [],
+      product_groups: [],
       disabled: true,
       locations: [],
       doctors: [],
@@ -235,15 +241,26 @@ export default {
       }
     }
   },
+  watch: {
+    '$i18n.locale' () {
+      this.getProductGroups(this.$i18n.locale)
+    }
+  },
   mounted () {
     this.calendarApi = this.$refs.calendar.getApi()
     this.calendarOptions.events = this.events
     this.getPatients()
     this.getDoctors()
     this.getLocations()
+    this.getProductGroups(this.$i18n.locale)
     xray.index()
   },
   methods: {
+    getProductGroups (lang) {
+      getProductGroups(lang).then(response => {
+        this.product_groups = response
+      })
+    },
     editMode (e) {
       e.preventDefault()
       this.disabled = false

@@ -266,7 +266,7 @@ export default {
             time: item.time,
             doctorId: item.doctor_name,
             enquiry_id: item.enquiry_id,
-            patientId: 0,
+            patientId: item.name + ' ' + item.last_name,
             allDay: false,
             app_lb_color: item.app_lb_color,
             app_lb_type: item.app_lb_type

@@ -115,7 +115,8 @@
     "patient": "Patient",
     "doctor": "Doctor",
     "location": "Location",
-    "patient_attended": "Patient attended"
+    "patient_attended": "Patient attended",
+    "product_group": "Product Group"
   },
   "patients": {
     "patientsHeader": "Patients",
