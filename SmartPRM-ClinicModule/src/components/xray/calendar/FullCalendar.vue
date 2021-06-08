@@ -80,13 +80,13 @@
         <div class="col-md-12 mb-3">
           <label for="color">{{ $t('calendarEvent.patient_attended') }}</label><br>
           <template v-for="(item,index) in patient_attend">
-            <b-form-radio class="custom-radio-patient" inline v-model="formData.patient_attended" :value="item.value" :key="index">{{ item.label }}</b-form-radio>
+            <b-form-radio class="custom-radio-patient" inline v-model="formData.patient_attended" :value="item.value" :key="index" v-if="showPatientAttended(item)">{{ item.label }}</b-form-radio>
           </template>
         </div>
         <div class="col-md-12 mb-3">
           <label for="color">{{ $t('calendarEvent.labels') }}</label><br>
           <template v-for="(item,index) in color">
-            <b-form-radio class="custom-radio-color" inline v-model="formData.backgroundColor" :color="item.color" :value="item.value" :key="index">{{ item.label }}</b-form-radio>
+            <b-form-radio class="custom-radio-color" inline v-model="formData.backgroundColor" :color="item.color" :value="item.value" :key="index" v-if="showLabels(item)">{{ item.label }}</b-form-radio>
           </template>
         </div>
        <div class="modal-footer modal-footer-bt" style="width: 100%;">
@@ -259,6 +259,20 @@ export default {
     xray.index()
   },
   methods: {
+    showPatientAttended (item) {
+      if (this.disabled && this.formData.patient_attended === item.value) {
+        return true
+      } else if (!this.disabled) {
+        return true
+      }
+    },
+    showLabels (item) {
+      if (this.disabled && this.formData.backgroundColor === item.value) {
+        return true
+      } else if (!this.disabled) {
+        return true
+      }
+    },
     getProductGroups (lang) {
       getProductGroups(lang).then(response => {
         this.product_groups = response
