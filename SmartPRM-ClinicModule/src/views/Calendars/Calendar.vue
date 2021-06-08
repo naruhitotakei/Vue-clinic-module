@@ -119,6 +119,7 @@ export default {
           start: '2021-06-07T07:30:00.000Z',
           end: '2021-06-07T07:45:00.000Z',
           backgroundColor: '#64D6E8',
+          patient_attended: 'unknown',
           resourceId: 28,
           eventResourceId: 28,
           locationId: '',
