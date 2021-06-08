@@ -1,4 +1,4 @@
---############################################################
+﻿--############################################################
 --# filling table clients_prm_client_bridge with values
 --############################################################
 
@@ -183,6 +183,52 @@ ALTER TABLE appointments
 ADD COLUMN patient_attended BOOLEAN,
 ADD COLUMN appointment_canceled_in_advance_by_clinic BOOLEAN DEFAULT 'f',
 ADD COLUMN appointment_canceled_in_advance_by_patient BOOLEAN DEFAULT 'f';
+
+--############################################################
+--# Linking prm_product_group to appointments table
+--############################################################
+
+ALTER TABLE appointments ADD COLUMN product_group_id INT
+CONSTRAINT appointments_prm_product_group_fk REFERENCES prm_product_group (product_group_id);
+
+--############################################################
+--# Adding 'first_name' and 'surname' columns to table
+--# 'users' and filling them with values
+--############################################################
+
+ALTER TABLE users
+ADD COLUMN first_name VARCHAR(128),
+ADD COLUMN surname VARCHAR(128);
+
+UPDATE users SET first_name = 'Emazing', surname = 'General' WHERE id = 4;
+UPDATE users SET first_name = 'Valerija', surname = 'Fabjan' WHERE id = 7;
+UPDATE users SET first_name = 'Gašper', surname = 'Fabjan' WHERE id = 13;
+UPDATE users SET first_name = 'Amadej', surname = 'Lah' WHERE id = 17;
+UPDATE users SET first_name = 'Andreja', surname = 'Kraševec' WHERE id = 18;
+UPDATE users SET first_name = 'Rok', surname = 'Kržič' WHERE id = 24;
+UPDATE users SET first_name = 'Matic', surname = 'Fabjan' WHERE id = 27;
+UPDATE users SET first_name = 'Živa', surname = 'Fabjan' WHERE id = 28;
+UPDATE users SET first_name = 'Marjan', surname = 'Fabjan' WHERE id = 29;
+UPDATE users SET first_name = 'Mirjana', surname = 'Tavčar' WHERE id = 39;
+UPDATE users SET first_name = 'Živa', surname = 'Fabjan' WHERE id = 50;
+UPDATE users SET first_name = 'Tina', surname = 'Fabjan' WHERE id = 78;
+UPDATE users SET first_name = 'Rene', surname = 'Male' WHERE id = 102;
+UPDATE users SET first_name = 'Jasna', surname = 'Bordon' WHERE id = 130;
+UPDATE users SET first_name = 'Zora', surname = 'Fabjan' WHERE id = 133;
+UPDATE users SET first_name = 'Matej', surname = 'Lavrič' WHERE id = 137;
+UPDATE users SET first_name = 'Manca', surname = 'Jeglič' WHERE id = 140;
+UPDATE users SET first_name = 'Alen', surname = 'Dedić' WHERE id = 143;
+UPDATE users SET first_name = 'Uroš', surname = 'Krmac' WHERE id = 147;
+UPDATE users SET first_name = 'Gaja', surname = 'Bužan' WHERE id = 148;
+UPDATE users SET first_name = 'Lea', surname = 'Žgur' WHERE id = 149;
+UPDATE users SET first_name = 'Sestra', surname = 'Primadent' WHERE id = 150;
+UPDATE users SET first_name = 'SuperSestra', surname = 'Primadent' WHERE id = 151;
+UPDATE users SET first_name = 'Emazing', surname = 'Demo' WHERE id = 152;
+UPDATE users SET first_name = 'Tomaž', surname = 'Lukanovič' WHERE id = 153;
+UPDATE users SET first_name = 'Špela', surname = 'Rangus' WHERE id = 154;
+UPDATE users SET first_name = 'Polona', surname = 'Šter' WHERE id = 155;
+UPDATE users SET first_name = 'Gašper', surname = 'Fortuna' WHERE id = 156;
+UPDATE users SET first_name = 'Žiga', surname = 'Kovačič' WHERE id = 157;
 
 
 UPDATE db_version SET version ='01.17', version_date=CURRENT_DATE WHERE resource='Tables';
