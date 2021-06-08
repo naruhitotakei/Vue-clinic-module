@@ -27,7 +27,7 @@
       v-model="modalShow"
       no-close-on-backdrop
       size="lg"
-      title="Event Details"
+      title="Appointment Details"
       ok-title="Save Changes"
       @ok="saveAppointment"
       cancel-title="Close"
@@ -46,6 +46,10 @@
 <!--            <input type="text" :disabled="disabled" v-model="formData.title" class="form-control form-control-disabled" placeholder="Title" id="title" required>-->
 <!--          </div>-->
 <!--        </div>-->
+        <div class="col-md-12 mb-3">
+          <label for="notes">{{ $t('calendarEvent.note') }}</label>
+          <textarea :disabled="disabled" row="2" v-model="formData.notes" class="form-control form-control-disabled" placeholder="Add your note here for event!" id="note" required ></textarea>
+        </div>
         <div class="col-md-5 mb-3">
           <label for="location">{{ $t('calendarEvent.location') }}</label>
           <v-select :disabled="disabled" :clearable="false" label="city" :reduce="location => location.id" class="style-chooser form-control-disabled" v-model="formData.locationId" :options="locations"></v-select>
@@ -76,17 +80,13 @@
         <div class="col-md-12 mb-3">
           <label for="color">{{ $t('calendarEvent.patient_attended') }}</label><br>
           <template v-for="(item,index) in patient_attend">
-            <b-form-radio class="custom-radio-patient" inline v-model="formData.patient_attended"  :value="item.label" :key="index">{{ item.label }}</b-form-radio>
+            <b-form-radio class="custom-radio-patient" inline v-model="formData.patient_attended" :value="item.value" :key="index">{{ item.label }}</b-form-radio>
           </template>
         </div>
         <div class="col-md-12 mb-3">
-          <label for="notes">{{ $t('calendarEvent.note') }}</label>
-          <textarea :disabled="disabled" row="2" v-model="formData.notes" class="form-control form-control-disabled" placeholder="Add your note here for event!" id="note" required></textarea>
-        </div>
-        <div class="col-md-12 mb-3">
-          <label for="color">{{ $t('calendarEvent.changeColor') }}</label><br>
+          <label for="color">{{ $t('calendarEvent.labels') }}</label><br>
           <template v-for="(item,index) in color">
-            <b-form-radio class="custom-radio-color" inline v-model="formData.app_lb_color" :color="item.color" :value="item.value" :key="index">{{ item.label }}</b-form-radio>
+            <b-form-radio class="custom-radio-color" inline v-model="formData.backgroundColor" :color="item.color" :value="item.value" :key="index">{{ item.label }}</b-form-radio>
           </template>
         </div>
        <div class="modal-footer modal-footer-bt" style="width: 100%;">
@@ -155,15 +155,18 @@ export default {
       patient_attend: [
         {
           label: 'Unknown',
-          value: 'unknown'
+          value: 'unknown',
+          checked: true
         },
         {
           label: 'Attended',
-          value: 'attended'
+          value: 'attended',
+          checked: false
         },
         {
           label: 'Not Attended',
-          value: 'not_attended'
+          value: 'not_attended',
+          checked: false
         }
       ],
       color: [
@@ -499,6 +502,10 @@ body .wrapper .custom-control-label::after {
     &>div {
       background-color: transparent !important;
       border: none;
+    }
+
+    &::placeholder {
+      color: transparent;
     }
   }
 
