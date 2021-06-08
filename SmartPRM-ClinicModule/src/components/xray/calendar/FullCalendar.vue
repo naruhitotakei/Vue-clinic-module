@@ -35,6 +35,9 @@
       >
     <form class="calendar-modal">
       <h3 v-if="modalTitle" style="text-align: center;">{{modalTitle}}</h3>
+      <pre>
+<!--        {{formData}}-->
+      </pre>
       <div class="form-row">
         <div class="col-md-12 mb-3">
           <label for="patient">{{ $t('calendarEvent.patient') }}</label>
@@ -82,7 +85,7 @@
         <div class="col-md-12 mb-3">
           <label for="color">{{ $t('calendarEvent.changeColor') }}</label><br>
           <template v-for="(item,index) in color">
-            <b-form-radio class="custom-radio-color" inline v-model="formData.backgroundColor" :color="item.color" :value="item.value" :key="index">{{ item.label }}</b-form-radio>
+            <b-form-radio class="custom-radio-color" inline v-model="formData.app_lb_color" :color="item.color" :value="item.value" :key="index">{{ item.label }}</b-form-radio>
           </template>
         </div>
        <div class="modal-footer modal-footer-bt" style="width: 100%;">
