@@ -35,9 +35,6 @@
       >
     <form class="calendar-modal">
       <h3 v-if="modalTitle" style="text-align: center;">{{modalTitle}}</h3>
-      <pre>
-<!--        {{formData}}-->
-      </pre>
       <div class="form-row">
         <div class="col-md-12 mb-3">
           <label for="patient">{{ $t('calendarEvent.patient') }}</label>
