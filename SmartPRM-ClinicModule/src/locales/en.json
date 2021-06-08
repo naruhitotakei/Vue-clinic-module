@@ -114,7 +114,8 @@
     "appointmentCancelled": "Appointment Cancelled by the Patient",
     "patient": "Patient",
     "doctor": "Doctor",
-    "location": "Location"
+    "location": "Location",
+    "patient_attended": "Patient attended"
   },
   "patients": {
     "patientsHeader": "Patients",

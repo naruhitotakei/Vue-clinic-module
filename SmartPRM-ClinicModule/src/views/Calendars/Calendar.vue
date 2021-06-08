@@ -101,7 +101,7 @@
 <script>
 import { xray } from '../../config/pluginInit'
 import appointmentBook from '../../services/appointbook'
-import { getApontments } from '@/services/calendarService'
+import { getCalendar, getDoctorList } from '@/services/calendarService'
 import _ from 'lodash'
 import moment from 'moment'
 
@@ -182,6 +182,7 @@ export default {
   mounted () {
     xray.index()
     this.getApontments()
+    this.getDoctorList()
   },
   watch: {
     'allDoctorCheck' () {
@@ -219,8 +220,13 @@ export default {
     }
   },
   methods: {
+    getDoctorList () {
+      getDoctorList((data) => {
+        console.log(data)
+      })
+    },
     getApontments () {
-      getApontments('2021-01-01', '2021-06-30').then(data => {
+      getCalendar('2021-01-01', '2021-06-30').then(data => {
         let dataWithDoctor = data.filter(item => {
           if (item.doctor_user_id !== null) {
             this.doctors.push({
@@ -261,7 +267,9 @@ export default {
             doctorId: item.doctor_name,
             enquiry_id: item.enquiry_id,
             patientId: 0,
-            allDay: false
+            allDay: false,
+            app_lb_color: item.app_lb_color,
+            app_lb_type: item.app_lb_type
           })
         })
       })
