@@ -21,15 +21,14 @@
           <b-col lg="6">
             <p>{{ $t('advPayments.newAdvPayment.advPaymentNo') }}: {{invoice_number}}</p>
             <p>{{ $t('advPayments.newAdvPayment.copy') }}:<span style="margin-left:20px">Original</span></p>
-            <p>{{ $t('advPayments.newAdvPayment.IssuedIn') }}:<span style="margin-left:20px">{{issuedIn.premise_name}}</span></p>
-            <p>{{ $t('advPayments.newAdvPayment.dateOfAdvPayment') }}:<span style="margin-left:20px">{{dateOfAdvPaymentPdf}}</span></p>
+            <p>{{ $t('advPayments.newAdvPayment.IssuedIn') }}:<span style="margin-left:20px">{{issuedIn.premise_city}}</span></p>
+            <p>{{ $t('advPayments.newAdvPayment.dateOfAdvPayment') }}:<span style="margin-left:20px">{{invoiceTime}}</span></p>
           </b-col>
         </b-row>
         <b-row>
           <b-table-simple small responsive>
             <b-thead>
               <b-tr>
-                <b-th colspan="1">{{ $t('advPayments.newAdvPayment.code') }}</b-th>
                 <b-th colspan="4">{{ $t('advPayments.newAdvPayment.item') }}</b-th>
                 <b-th colspan="1">{{ $t('advPayments.newAdvPayment.quantity') }}</b-th>
                 <b-th colspan="2">{{ $t('advPayments.newAdvPayment.price') }}</b-th>
@@ -39,7 +38,6 @@
             </b-thead>
             <b-tbody>
               <b-tr>
-                <b-td colspan="1"></b-td>
                 <b-td colspan="4">{{ $t('advPayment.advPaymentHeader') }}</b-td>
                 <b-td colspan="1">1</b-td>
                 <b-td colspan="2">{{advPayments[0].amount}}</b-td>
@@ -124,7 +122,7 @@
                     <b-row>
                       <b-col>
                         <b-form-group class="col-md-4" :label="$t('advPayments.newAdvPayment.dateOfAdvPayment')" style="color:black">
-                          <b-form-input v-model="dateOfAdvPayment" type="date"></b-form-input>
+                          <b-form-input v-model="dateOfAdvPayment" type="datetime-local"></b-form-input>
                         </b-form-group>
                       </b-col>
                     </b-row>
@@ -327,8 +325,7 @@ export default {
       invoice: {},
       canPrintPdf: false,
       companyPremises: [],
-      dateOfAdvPayment: moment().format('YYYY-MM-DD'),
-      dateOfAdvPaymentPdf: moment().format('YYYY-MM-DD HH:MM'),
+      dateOfAdvPayment: moment().format('YYYY-MM-DDTHH:MM'),
       device: null,
       devices: [],
       invoice_number: '',
@@ -336,7 +333,8 @@ export default {
       eor: '24as211d4232as1124',
       status: '',
       invoiceId: '',
-      consecutiveInvoiceNumber: null
+      consecutiveInvoiceNumber: null,
+      invoiceTime: ''
     }
   },
   computed: {
@@ -359,10 +357,11 @@ export default {
       })
     },
     exportToPDF () {
+      this.invoiceTime = moment(this.invoice.invoice_time).format('YYYY-MM-DD HH:MM')
       let options = {
-        filename: 'invoice.pdf',
+        filename: this.invoice_number + '.pdf',
         image: { type: 'jpeg', quality: 0.98 },
-        html2canvas: { y: 250 },
+        html2canvas: { y: 170 },
         jsPDF: { unit: 'mm', format: 'a3' }
       }
       var source = window.document.getElementById('printInvoice')
@@ -472,7 +471,7 @@ export default {
     prepareInvoice () {
       let temp = {
         invoice_type: 'Advance payment',
-        invoice_time: moment(this.dateOfAdvPayment).format('YYYY-MM-DD HH:MM'),
+        invoice_time: this.dateOfAdvPayment,
         invoice_number: this.invoice_number,
         invoice_numbering_structure: '{c}',
         issued_in: this.issuedIn.premise_name,
@@ -497,7 +496,7 @@ export default {
         premise_id: 1,
         business_customer_id: 1,
         invoiceItems: [],
-        invoice_status: this.status
+        verification_status: this.status
       }
       this.invoice = _.assignIn(this.invoice, this.patient, this.usersCompany, temp)
     },

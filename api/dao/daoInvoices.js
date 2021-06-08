@@ -55,7 +55,7 @@ const createInvoices = (request, response, invoice) => {
     if (invoice.device_id) statement += "device_id,"
     if (invoice.premise_id) statement += "premise_id,"
     if (invoice.business_customer_id) statement += "business_customer_id,"
-    if (invoice.invoice_status) statement += "invoice_status"
+    if (invoice.verification_status) statement += "verification_status"
     statement+= ") VALUES ("
     if (invoice.invoice_type) statement += "'" + invoice.invoice_type + "',"
     if (invoice.invoice_time) statement += "'" + invoice.invoice_time + "',"
@@ -101,7 +101,7 @@ const createInvoices = (request, response, invoice) => {
     if (invoice.device_id) statement += "'" + invoice.device_id + "',"
     if (invoice.premise_id) statement += "'" + invoice.premise_id + "',"
     if (invoice.business_customer_id) statement += "'" + invoice.business_customer_id + "',"
-    if (invoice.invoice_status) statement += "'" + invoice.invoice_status + "',"
+    if (invoice.verification_status) statement += "'" + invoice.verification_status + "',"
     statement = statement.slice(0, -1)
     statement += ") RETURNING invoice_id"
     
@@ -166,7 +166,7 @@ const updateInvoices = (request, response, id, invoice) => {
     if (invoice.device_id) statement += "device_id='" + invoice.device_id + "',"
     if (invoice.premise_id) statement += "premise_id='" + invoice.premise_id + "',"
     if (invoice.business_customer_id) statement += "business_customer_id='" + invoice.business_customer_id + "',"
-    if (invoice.invoice_status) statement += "invoice_status='" + invoice.invoice_status + "',"
+    if (invoice.verification_status) statement += "verification_status='" + invoice.verification_status + "',"
     statement = statement.slice(0, -1)
     statement += " WHERE invoice_id = " + id
     
@@ -176,7 +176,7 @@ const updateInvoices = (request, response, id, invoice) => {
             throw error
         }
         
-        response.status(200).json(invoice.invoice_status)
+        response.status(200).json(invoice.verification_status)
     })
     if (invoice.invoiceItems.length > 0) {
         invoice.invoiceItems.forEach(item => {
@@ -191,7 +191,7 @@ const updateInvoices = (request, response, id, invoice) => {
 }
 
 const createPaymentMethod = (invoiceId, paymentMethod, amount) => {
-    let statement = "INSERT INTO payment_method(invoice_id, amount, type, created_at"
+    let statement = "INSERT INTO payment_item(invoice_id, amount, type, created_at"
     statement+= ") VALUES (" + invoiceId + "," + amount + ",'" + paymentMethod + "',NOW())"
     console.log(statement)
     pool.query(statement, (error, results) => {
