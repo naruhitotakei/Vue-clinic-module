@@ -21,15 +21,14 @@
           <b-col lg="6">
             <p>{{ $t('advPayments.newAdvPayment.advPaymentNo') }}: {{invoice.invoice_number}}</p>
             <p>{{ $t('advPayments.newAdvPayment.copy') }}:<span style="margin-left:20px">Original</span></p>
-            <p>{{ $t('advPayments.newAdvPayment.IssuedIn') }}:<span style="margin-left:20px">{{invoice.issued_in}}</span></p>
-            <p>{{ $t('advPayments.newAdvPayment.dateOfAdvPayment') }}:<span style="margin-left:20px">{{invoice.invoice_time}}</span></p>
+            <p>{{ $t('advPayments.newAdvPayment.IssuedIn') }}:<span style="margin-left:20px">{{premiseCity}}</span></p>
+            <p>{{ $t('advPayments.newAdvPayment.dateOfAdvPayment') }}:<span style="margin-left:20px">{{invoiceDate}}</span></p>
           </b-col>
         </b-row>
         <b-row>
           <b-table-simple small responsive>
             <b-thead>
               <b-tr>
-                <b-th colspan="1">{{ $t('advPayments.newAdvPayment.code') }}</b-th>
                 <b-th colspan="4">{{ $t('advPayments.newAdvPayment.item') }}</b-th>
                 <b-th colspan="1">{{ $t('advPayments.newAdvPayment.quantity') }}</b-th>
                 <b-th colspan="2">{{ $t('advPayments.newAdvPayment.price') }}</b-th>
@@ -39,7 +38,6 @@
             </b-thead>
             <b-tbody>
               <b-tr>
-                <b-td colspan="1"></b-td>
                 <b-td colspan="4">{{ $t('advPayment.advPaymentHeader') }}</b-td>
                 <b-td colspan="1">1</b-td>
                 <b-td colspan="2">{{invoice.lines_sum}}</b-td>
@@ -62,7 +60,7 @@
         <b-row>
           <b-col lg="3">
               <p>{{ $t('advPayments.newAdvPayment.paymentMethod') }}:</p>
-            <p style="border-bottom: solid;">{{invoice.payment_method}}<span style="margin-left:20px">{{invoice.amount | euro}}</span></p>
+            <p style="border-bottom: solid;">{{invoice.payment_method}}<span style="margin-left:20px">{{invoice.lines_sum | euro}}</span></p>
           </b-col>
         </b-row>
         <b-row>
@@ -157,6 +155,7 @@
 <script>
 import { xray } from '../../config/pluginInit'
 import { getInvoiceById, getItemsOfInvoiceById } from '../../services/invoice'
+import { getPremiseById } from '../../services/companyPremises'
 import moment from 'moment'
 import html2pdf from 'html2pdf.js'
 
@@ -177,8 +176,12 @@ export default {
         this.invoices = response
         this.invoice = response[0]
         this.invoiceNumber = this.invoice.invoice_number
+        this.invoiceDate = moment(this.invoice.invoice_time).format('YYYY-MM-DD HH:MM')
         this.getItems(this.invoice.invoice_id)
         this.invoiceDetails[0].total = this.invoice.charges_sum
+        getPremiseById(this.invoice.premise_id).then(response => {
+          this.premiseCity = response[0].premise_city
+        })
       }
       )
     },
@@ -189,9 +192,8 @@ export default {
     },
     exportToPDF () {
       let options = {
-        filename: 'invoice.pdf',
+        filename: this.invoice.invoice_number + '.pdf',
         image: { type: 'jpeg', quality: 0.98 },
-        html2canvas: { y: 170 },
         jsPDF: { unit: 'mm', format: 'a3' }
       }
       var source = window.document.getElementById('printInvoice')
@@ -246,7 +248,7 @@ export default {
             return moment(value).format('YYYY-MM-DD')
           }
         },
-        { label: this.$t('invoice.invoiceInfo.invoiceStatus'), key: 'payment_status', class: 'text-left' },
+        { label: this.$t('invoice.invoiceInfo.invoiceStatus'), key: 'verification_status', class: 'text-left' },
         { label: this.$t('invoice.invoiceInfo.paymentStatus'),
           key: 'invoiceStatus',
           formatter: (value, key, item) => {
@@ -278,7 +280,9 @@ export default {
       ],
       invoice: null,
       invoices: [],
-      items: []
+      items: [],
+      invoiceDate: '',
+      premiseCity: ''
     }
   }
 }
