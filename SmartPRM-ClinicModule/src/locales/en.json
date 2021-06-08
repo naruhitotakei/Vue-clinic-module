@@ -109,12 +109,15 @@
     "duration": "Duration",
     "note": "Note",
     "changeColor": "Change Color",
+    "labels": "Labels",
     "viewPatient": "View Patient",
     "changeDisplayColor": "Change Appointment Color",
     "appointmentCancelled": "Appointment Cancelled by the Patient",
     "patient": "Patient",
     "doctor": "Doctor",
-    "location": "Location"
+    "location": "Location",
+    "patient_attended": "Patient attended",
+    "product_group": "Product Group"
   },
   "patients": {
     "patientsHeader": "Patients",

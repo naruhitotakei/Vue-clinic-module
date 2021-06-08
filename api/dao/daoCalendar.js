@@ -9,7 +9,14 @@ const pool = new Pool({
 })
 
 const getApontments = (request, response, from, to, user_id, accessible_user_ids, selctedIds, prm_client_id, scope ) => {
-    var statement = "SELECT app.id, app.date, app.kind, app.patient_attended, app.appointment_canceled_in_advance_by_clinic, app.appointment_canceled_in_advance_by_patient, app.time, app.location, app.enquiry_id, enq.name, enq.last_name, app.attendance, app.product_id, app_s.location, app_s.doctor_name, us.id as doctor_user_id, pcl.id as prm_client_id, pcl.client_name as prm_client_name, prd.name as prd_name, prd.group as prd_group, prd.category as prd_category, prd.fee as prd_fee, prd.price_adjustment as prd_price_adjustment, prd.fee_type as prd_fee_type  "
+    var statement = "SELECT app.id, app.date, app.kind, app.patient_attended, app.appointment_canceled_in_advance_by_clinic, " +
+        "app.appointment_canceled_in_advance_by_patient, app.time, app.location, app.enquiry_id, enq.name, enq.last_name, " +
+        "app.attendance, app.product_id, app_s.location, app_s.doctor_name, us.id as doctor_user_id, pcl.id as prm_client_id, " +
+        "pcl.client_name as prm_client_name, prd.name as prd_name, prd.group as prd_group, prd.category as prd_category, " +
+        "prd.fee as prd_fee, prd.price_adjustment as prd_price_adjustment, prd.fee_type as prd_fee_type,  " +
+        "app_lb.type as app_lb_type, app_lb.color as app_lb_color, " +
+        "prm_pr_group.product_group_code, prm_pr_group.fee as prm_pr_group_fee, " +
+        "prm_pr_group_name.text as prm_pr_group_name_text, prm_pr_group_name.id as prm_pr_group_name_id "
     statement += "FROM appointments app "
     statement += "LEFT JOIN appointment_slots app_s ON app.id = app_s.appointment_id "
     statement += "LEFT JOIN users us ON app_s.doctor_name = us.name "
@@ -17,6 +24,9 @@ const getApontments = (request, response, from, to, user_id, accessible_user_ids
     statement += "LEFT JOIN prm_client pcl ON cl.id = pcl.id "
     statement += "LEFT JOIN enquiries enq ON app.enquiry_id = enq.id "
     statement += "LEFT JOIN products prd ON app.product_id = prd.id "
+    statement += "LEFT JOIN appointments_label app_lb ON app.id = app_lb.appointment_id "
+    statement += "LEFT JOIN prm_product_group prm_pr_group ON app.product_group_id = prm_pr_group.product_group_id "
+    statement += "LEFT JOIN prm_product_group_name prm_pr_group_name ON prm_pr_group.product_group_id = prm_pr_group_name.product_group_id "
     statement += "WHERE app.trashed = false "
     statement += "AND pcl.client_deleted = false "
     if (scope=='All') {
