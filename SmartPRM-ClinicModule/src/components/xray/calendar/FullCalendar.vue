@@ -38,7 +38,7 @@
       <div class="form-row">
         <div class="col-md-12 mb-3">
           <label for="patient">{{ $t('calendarEvent.patient') }}</label>
-          <v-select :disabled="disabled" :clearable="false" label="full_name" :reduce="patient => patient.id" class="style-chooser form-control-disabled" v-model="formData.patientId" :options="patients"></v-select>
+          <v-select :disabled="disabled" :clearable="false" label="full_name" :reduce="patient => patient.id" class="style-chooser form-control-disabled font-size-15" v-model="formData.patientId" :options="patients"></v-select>
         </div>
 <!--        <div class="col-md-12 mb-3">-->
 <!--          <label for="title">Title</label>-->
@@ -48,19 +48,19 @@
 <!--        </div>-->
         <div class="col-md-12 mb-3">
           <label for="notes">{{ $t('calendarEvent.note') }}</label>
-          <textarea :disabled="disabled" row="2" v-model="formData.notes" class="form-control form-control-disabled" placeholder="Add your note here for event!" id="note" required ></textarea>
+          <textarea :disabled="disabled" row="2" v-model="formData.notes" class="form-control form-control-disabled font-size-15" placeholder="Add your note here for event!" id="note" required ></textarea>
         </div>
         <div class="col-md-5 mb-3">
           <label for="location">{{ $t('calendarEvent.location') }}</label>
-          <v-select :disabled="disabled" :clearable="false" label="city" :reduce="location => location.id" class="style-chooser form-control-disabled" v-model="formData.locationId" :options="locations"></v-select>
+          <v-select :disabled="disabled" :clearable="false" label="city" :reduce="location => location.id" class="style-chooser form-control-disabled font-size-15" v-model="formData.locationId" :options="locations"></v-select>
         </div>
         <div class="col-md-5 offset-md-1 mb-3">
           <label for="doctor">{{ $t('calendarEvent.doctor') }}</label>
-          <v-select :disabled="disabled" :clearable="false" :reduce="doctor => doctor.code" class="style-chooser form-control-disabled" v-model="formData.doctorId" :options="doctors"></v-select>
+          <v-select :disabled="disabled" :clearable="false" :reduce="doctor => doctor.code" class="style-chooser form-control-disabled font-size-15" v-model="formData.doctorId" :options="doctors"></v-select>
         </div>
         <div class="col-md-12 mb-3">
           <label for="patient">{{ $t('calendarEvent.product_group') }}</label>
-          <v-select :disabled="disabled" :clearable="false" label="product_group_name" :reduce="patient => patient.id" class="style-chooser form-control-disabled" v-model="formData.product_groups" :options="product_groups"></v-select>
+          <v-select :disabled="disabled" :clearable="false" label="product_group_name" :reduce="patient => patient.id" class="style-chooser form-control-disabled font-size-15" v-model="formData.product_groups" :options="product_groups"></v-select>
         </div>
         <div class="col-md-12 mb-3">
           <label for="start">{{ $t('calendarEvent.start') }}</label>
