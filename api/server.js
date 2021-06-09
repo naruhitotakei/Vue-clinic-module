@@ -140,15 +140,16 @@ app.get('/api/surgeons', async function (req, res) {
 ///////////////////////////////////
 // calendar
 ///////////////////////////////////
-app.get('/api/calendar/:statrtdate/:enddate', (req, res) => {
+app.get('/api/calendar/:statrtdate/:enddate/:lang', (req, res) => {
     const statrtdate = req.params.statrtdate
     const enddate = req.params.enddate
     var selctedIds = req.query.selctedIds;
+    let lang = req.params.lang;
     if (selctedIds) {
         selctedIds = JSON.parse(selctedIds);
     }
     if(req.session.prm_user && req.session.prm_user.permissions && checkPermission(req.session.prm_user.permissions, calendarPermission))
-        daoCalendar.getApontments(req, res, statrtdate, enddate, req.session.prm_user.id, req.session.prm_user.accessible_user_ids, selctedIds, req.session.prm_user.prm_client_id, getScope(req.session.prm_user.permissions, assignmentsPermission))
+        daoCalendar.getApontments(req, res, statrtdate, enddate, req.session.prm_user.id, req.session.prm_user.accessible_user_ids, selctedIds, req.session.prm_user.prm_client_id, getScope(req.session.prm_user.permissions, assignmentsPermission), lang)
     else
         res.status(401).json("OK: user unauthorized")
 });
@@ -158,6 +159,15 @@ app.get('/api/calendar/doctors', (req, res) => {
         daoCalendar.getDoctors(req, res, req.session.prm_user.id, req.session.prm_user.accessible_user_ids, req.session.prm_user.prm_client_id, getScope(req.session.prm_user.permissions, assignmentsPermission))
     else
         res.status(401).json("OK: user unauthorized")
+});
+
+app.put('/api/calendar/:id', (req, res) => {
+  const id = req.params.id
+  const appointment = req.body
+  if(req.session.prm_user && req.session.prm_user.permissions && checkPermission(req.session.prm_user.permissions, productsPermission))
+    daoCalendar.updateAppointments(req, res, id, appointment)
+  else
+    res.status(401).json("OK: user unauthorized")
 });
 
 ///////////////////////////////////

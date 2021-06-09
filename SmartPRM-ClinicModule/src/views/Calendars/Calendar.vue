@@ -91,7 +91,7 @@
           </form>
           </template>
           <template  v-slot:body>
-            <FullCalendar :resourcesOuter="getResources" :events="getEvents" style="width: 100%; height: 100%;"/>
+            <FullCalendar :resourcesOuter="getResources" :events="getEvents" @updateApp="updateApp" style="width: 100%; height: 100%;"/>
           </template>
         </iq-card>
       </b-col>
@@ -101,9 +101,10 @@
 <script>
 import { xray } from '../../config/pluginInit'
 import appointmentBook from '../../services/appointbook'
-import { getCalendar, getDoctorList } from '@/services/calendarService'
+import { getCalendar } from '@/services/calendarService'
 import _ from 'lodash'
 import moment from 'moment'
+import { getProductGroups } from '@/services/products'
 
 export default {
   name: 'GoogleCalendar',
@@ -131,6 +132,7 @@ export default {
           doctorId: 28
         }
       ],
+      product_groups: [],
       resources: [
         // { id: 2, title: 'Dr. Katic22222', time: '2021-06-3' },
         // { id: 7, title: 'Dr. Fabjan' },
@@ -184,6 +186,7 @@ export default {
     xray.index()
     this.getApontments()
     this.getDoctorList()
+    this.getProductGroups(this.$i18n.locale)
   },
   watch: {
     'allDoctorCheck' () {
@@ -221,13 +224,22 @@ export default {
     }
   },
   methods: {
-    getDoctorList () {
-      getDoctorList((data) => {
-        console.log(data)
+    getProductGroups (lang) {
+      getProductGroups(lang).then(response => {
+        this.product_groups = response
       })
     },
+    getDoctorList () {
+      // getDoctorList((data) => {
+      //   console.log(data)
+      // })
+    },
+    async updateApp () {
+      await this.getApontments()
+    },
     getApontments () {
-      getCalendar('2021-01-01', '2021-06-30').then(data => {
+      this.events = []
+      getCalendar('2021-05-01', '2021-06-30', '', this.$i18n.locale).then(data => {
         let dataWithDoctor = data.filter(item => {
           if (item.doctor_user_id !== null) {
             this.doctors.push({
@@ -246,7 +258,10 @@ export default {
         this.doctors = _.uniqBy(this.doctors, 'title')
         this.resources = _.uniqBy(this.resources, 'id')
         this.clonedResources = this.resources
+        // console.log(dataWithDoctor.find(item => item.id === 40969))
         dataWithDoctor.map(item => {
+          let patientAttended = item.patient_attended === true ? 'attended' : item.patient_attended === null ? 'unknown' : 'not_attended'
+          let productGroups = this.product_groups && this.product_groups.find(productName => productName.product_group_id === item.prm_pr_group_name_id)
           let endDay = this.calculateEndDate(moment(item.date).format('YYYY-MM-DD') + 'T' + item.time, 0, 15)
           this.events.push({
             id: item.id,
@@ -254,10 +269,14 @@ export default {
             start: moment(item.date).format('YYYY-MM-DD') + 'T' + item.time,
             end: endDay,
             backgroundColor: '#64D6E8',
-            patient_attended: item.patient_attended ? item.patient_attended : 'unknown',
+            patient_attended: patientAttended,
             resourceId: item.doctor_user_id,
             eventResourceId: item.doctor_user_id,
             locationId: item.location,
+            product_groups: productGroups ? {
+              product_group_id: productGroups.product_group_id,
+              product_group_name: productGroups.product_group_name
+            } : '',
             hours: 0,
             minutes: 15,
             assignmentDate: moment(item.date).format('YYYY-MM-DD') + 'T' + item.time,
@@ -268,12 +287,17 @@ export default {
             notes: item.note,
             doctorId: item.doctor_name,
             enquiry_id: item.enquiry_id,
-            patientId: item.name + ' ' + item.last_name,
+            patientId: {
+              id: item.enquiry_id,
+              full_name: item.name + ' ' + item.last_name
+            },
             allDay: false,
             app_lb_color: item.app_lb_color,
             app_lb_type: item.app_lb_type
           })
         })
+        this.events = _.uniqBy(this.events, 'id')
+        // console.log(this.events.find(item => item.id === 40684))
       })
     },
     calculateEndDate (startDate, hours, minutes) {

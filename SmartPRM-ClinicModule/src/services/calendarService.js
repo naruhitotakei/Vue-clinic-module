@@ -1,6 +1,6 @@
 // doctorUserIdList == null - all doctors according to role
-export async function getCalendar (startdate, endate, doctorUserIdList) {
-  var url = '/api/calendar/' + startdate + '/' + endate
+export async function getCalendar (startdate, endate, doctorUserIdList, lang) {
+  var url = '/api/calendar/' + startdate + '/' + endate + '/' + lang
   if (doctorUserIdList && doctorUserIdList.length > 0) {
     url += encodeURI(JSON.stringify(doctorUserIdList))
   }
@@ -9,6 +9,19 @@ export async function getCalendar (startdate, endate, doctorUserIdList) {
     headers: {
       'Accept': 'application/json'
     }
+  })
+  return rawResponse.json()
+}
+
+export async function updateCalendar (id, appointment) {
+  const rawResponse = await fetch('/api/calendar/' + id, {
+    method: 'PUT',
+    credentials: 'same-origin',
+    headers: {
+      'Accept': 'application/json',
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify(appointment)
   })
   return rawResponse.json()
 }

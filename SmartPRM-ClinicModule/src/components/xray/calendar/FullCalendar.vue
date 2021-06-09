@@ -4,7 +4,7 @@
   :datesAboveResources="true"
   :defaultView="calendarOptions.defaultView"
   :plugins="calendarOptions.plugins"
-  :events="events"
+  :events="getEvents"
   :resources="resourcesOuter"
   :minTime="calendarOptions.minTime"
   :maxTime="calendarOptions.maxTime"
@@ -56,11 +56,11 @@
         </div>
         <div class="col-md-5 offset-md-1 mb-3">
           <label for="doctor">{{ $t('calendarEvent.doctor') }}</label>
-          <v-select :disabled="disabled" :clearable="false" :reduce="doctor => doctor.code" class="style-chooser form-control-disabled font-size-15" v-model="formData.doctorId" :options="doctors"></v-select>
+          <v-select :disabled="disabled" :clearable="false" label="name" :reduce="doctor => doctor.id" class="style-chooser form-control-disabled font-size-15" v-model="formData.doctorId" :options="doctors"></v-select>
         </div>
         <div class="col-md-12 mb-3">
           <label for="patient">{{ $t('calendarEvent.product_group') }}</label>
-          <v-select :disabled="disabled" :clearable="false" label="product_group_name" :reduce="patient => patient.id" class="style-chooser form-control-disabled font-size-15" v-model="formData.product_groups" :options="product_groups"></v-select>
+          <v-select :disabled="disabled" :clearable="false" label="product_group_name" :reduce="product_group => product_group.product_group_id" class="style-chooser form-control-disabled font-size-15" v-model="formData.product_groups" :options="product_groups"></v-select>
         </div>
         <div class="col-md-12 mb-3">
           <label for="start">{{ $t('calendarEvent.start') }}</label>
@@ -115,9 +115,10 @@ import listPlugin from '@fullcalendar/list'
 import moment from 'moment'
 import { xray } from '../../../config/pluginInit'
 import { getPatients } from '../../../services/enquiry'
-import { getDentists } from '../../../services/userService'
+// import { getDentists } from '../../../services/userService'
 import { getLocationsList } from '../../../services/commonCodeLists'
 import { getProductGroups } from '@/services/products'
+import { getDoctorList, updateCalendar } from '@/services/calendarService'
 
 export default {
   components: {
@@ -126,6 +127,9 @@ export default {
   computed: {
     isSelectable () {
       return !this.viewName.includes('dayGridMonth')
+    },
+    getEvents () {
+      return this.events
     }
   },
   props: {
@@ -216,7 +220,8 @@ export default {
         patientId: '',
         doctorId: '',
         locationId: '',
-        enquiry_id: ''
+        enquiry_id: '',
+        product_groups: ''
       },
       calendarApi: null,
       modalTitle: '',
@@ -259,6 +264,11 @@ export default {
     xray.index()
   },
   methods: {
+    updateCalendar (id, appointment) {
+      updateCalendar(id, appointment).then(() => {
+
+      })
+    },
     showPatientAttended (item) {
       if (this.disabled && this.formData.patient_attended === item.value) {
         return true
@@ -296,8 +306,12 @@ export default {
       })
     },
     getDoctors () {
-      getDentists().then(response => {
-        this.doctors = response
+      // getDentists().then(response => {
+      //   this.doctors = response
+      // })
+      console.log('test')
+      getDoctorList().then((data) => {
+        this.doctors = data
       })
     },
     onViewChange (info) {
@@ -366,8 +380,6 @@ export default {
           doctorId: this.formData.doctorId,
           locationId: this.formData.locationId
         })
-        console.log('calendarAPI', this.calendarApi)
-        console.log('calendarAPI', this.events)
       } else {
         let event = this.calendarApi.getEventById(this.formData.id)
         console.log('EVENT ID OBJECT', event)
@@ -385,9 +397,31 @@ export default {
         event.setExtendedProp('patientId', this.formData.patientId)
         event.setExtendedProp('doctorId', this.formData.doctorId)
         event.setExtendedProp('locationId', this.formData.locationId)
-        console.log('event', event)
+
+        if (typeof this.formData.patientId === 'object') {
+          this.formData.patientId = this.formData.patientId.id
+          let title = this.patients.find(item => item.id === this.formData.patientId)
+          this.modalTitle = title.full_name
+        } else {
+          let title = this.patients.find(item => item.id === this.formData.patientId)
+          this.modalTitle = title.full_name
+        }
+        if (typeof this.formData.doctorId === 'number') {
+          let doctor = this.doctors.find(doctor => doctor.id === this.formData.doctorId)
+          this.formData.doctorId = doctor.name
+        }
+        if (typeof this.formData.locationId === 'number') {
+          let location = this.locations.find(location => location.id === this.formData.locationId)
+          this.formData.locationId = location.city
+        }
+        if (typeof this.formData.product_groups === 'object') {
+          this.formData.product_groups = this.formData.product_groups.product_group_id
+        }
+
+        this.updateCalendar(this.formData.id, this.formData)
+        this.$emit('updateApp')
       }
-      console.log(this.formData)
+
       // this.formData = this.defaultAppointment()
     },
     openCreateModal (selectionInfo) {

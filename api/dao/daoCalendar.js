@@ -7,9 +7,10 @@ const pool = new Pool({
   password: process.env.POSTGRES_PASSWORD,
   port: process.env.POSTGRES_PORT || 5432,
 })
+var moment = require('moment');
 
-const getApontments = (request, response, from, to, user_id, accessible_user_ids, selctedIds, prm_client_id, scope ) => {
-    var statement = "SELECT app.id, app.date, app.note, app.kind, app.patient_attended, app.appointment_canceled_in_advance_by_clinic, " +
+const getApontments = (request, response, from, to, user_id, accessible_user_ids, selctedIds, prm_client_id, scope, lang ) => {
+    var statement = "SELECT app.id, app.date, app.note, app.product_group_id, app.enquiry_id as app_enquiry_id, app.kind, app.patient_attended, app.appointment_canceled_in_advance_by_clinic, " +
         "app.appointment_canceled_in_advance_by_patient, app.time, app.location, app.enquiry_id, enq.name, enq.last_name, " +
         "app.attendance, app.product_id, app_s.location, app_s.doctor_name, us.id as doctor_user_id, pcl.id as prm_client_id, " +
         "pcl.client_name as prm_client_name, prd.name as prd_name, prd.group as prd_group, prd.category as prd_category, " +
@@ -29,6 +30,7 @@ const getApontments = (request, response, from, to, user_id, accessible_user_ids
     statement += "LEFT JOIN prm_product_group_name prm_pr_group_name ON prm_pr_group.product_group_id = prm_pr_group_name.product_group_id "
     statement += "WHERE app.trashed = false "
     statement += "AND pcl.client_deleted = false "
+    // statement += `AND prm_pr_group_name.language = '${lang}' `
     if (scope=='All') {
     } else if (scope=='PrmClient') {
         statement += "AND us.prm_client_id=" + prm_client_id;             
@@ -67,14 +69,28 @@ const getApontments = (request, response, from, to, user_id, accessible_user_ids
     })
 }
 
-const updateAppointments = (request, response, appointments) => {
-    let statement = "UPDATE appointments app SET "
-    if (appointments.start) statement += "start,"
-    if (appointments.end) statement += "end,"
-    statement += ") VALUES ("
-    if (appointments.start) statement += "'" + appointments.start + "',"
-    if (appointments.end) statement += "'" + appointments.end + "',"
-    statement += "WHERE app.id = " + appointments.id
+const updateAppointments = (request, response, id, appointments) => {
+    let patient_attended = appointments.patient_attended === 'attended' ? true : appointments.patient_attended === 'not_attended' ? false : null;
+    let time = moment(appointments.assignmentDate).format('HH:mm');
+    let statement = "UPDATE appointments SET "
+    if (appointments.doctorId) statement += "doctor_name='" + appointments.doctorId + "',"
+    if (appointments.locationId) statement += "location='" + appointments.locationId + "',"
+    if (appointments.notes) statement += "note='" + appointments.notes + "',"
+    if (appointments.patientId) statement += "enquiry_id='" + appointments.patientId + "',"
+    if (appointments.patient_attended) statement += "patient_attended=" + patient_attended + ","
+    if (appointments.product_groups) statement += "product_group_id='" + appointments.product_groups + "',"
+    if (appointments.assignmentDate) statement += "date='" + appointments.assignmentDate + "',"
+    if (appointments.time) statement += "time='" + time + "'"
+    statement += " WHERE appointments.id = " + id
+    console.log(statement)
+    pool.query(statement , (error, results) => {
+        console.log(error)
+        if (error) {
+            throw error
+        }
+        response.status(200).json(results)
+    })
+
 }
 
 const getDoctors = (request, response, user_id, accessible_user_ids, prm_client_id, scope ) => {
@@ -102,6 +118,7 @@ const getDoctors = (request, response, user_id, accessible_user_ids, prm_client_
 }
 
 module.exports = {
-  getApontments,
-  getDoctors
+    getApontments,
+    getDoctors,
+    updateAppointments
 }
