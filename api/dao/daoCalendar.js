@@ -9,7 +9,7 @@ const pool = new Pool({
 })
 
 const getApontments = (request, response, from, to, user_id, accessible_user_ids, selctedIds, prm_client_id, scope ) => {
-    var statement = "SELECT app.id, app.date, app.kind, app.patient_attended, app.appointment_canceled_in_advance_by_clinic, " +
+    var statement = "SELECT app.id, app.date, app.note, app.kind, app.patient_attended, app.appointment_canceled_in_advance_by_clinic, " +
         "app.appointment_canceled_in_advance_by_patient, app.time, app.location, app.enquiry_id, enq.name, enq.last_name, " +
         "app.attendance, app.product_id, app_s.location, app_s.doctor_name, us.id as doctor_user_id, pcl.id as prm_client_id, " +
         "pcl.client_name as prm_client_name, prd.name as prd_name, prd.group as prd_group, prd.category as prd_category, " +
@@ -65,6 +65,16 @@ const getApontments = (request, response, from, to, user_id, accessible_user_ids
         }
         response.status(200).json(results.rows)
     })
+}
+
+const updateAppointments = (request, response, appointments) => {
+    let statement = "UPDATE appointments app SET "
+    if (appointments.start) statement += "start,"
+    if (appointments.end) statement += "end,"
+    statement += ") VALUES ("
+    if (appointments.start) statement += "'" + appointments.start + "',"
+    if (appointments.end) statement += "'" + appointments.end + "',"
+    statement += "WHERE app.id = " + appointments.id
 }
 
 const getDoctors = (request, response, user_id, accessible_user_ids, prm_client_id, scope ) => {

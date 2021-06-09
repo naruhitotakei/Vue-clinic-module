@@ -35,7 +35,7 @@
       >
     <form class="calendar-modal">
       <h3 v-if="modalTitle" style="text-align: center;">{{modalTitle}}</h3>
-      <div class="form-row">
+        <div class="form-row">
         <div class="col-md-12 mb-3">
           <label for="patient">{{ $t('calendarEvent.patient') }}</label>
           <v-select :disabled="disabled" :clearable="false" label="full_name" :reduce="patient => patient.id" class="style-chooser form-control-disabled font-size-15" v-model="formData.patientId" :options="patients"></v-select>
@@ -387,6 +387,7 @@ export default {
         event.setExtendedProp('locationId', this.formData.locationId)
         console.log('event', event)
       }
+      console.log(this.formData)
       // this.formData = this.defaultAppointment()
     },
     openCreateModal (selectionInfo) {

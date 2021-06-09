@@ -247,7 +247,6 @@ export default {
         this.resources = _.uniqBy(this.resources, 'id')
         this.clonedResources = this.resources
         dataWithDoctor.map(item => {
-          // let startDay = `${moment(item.date).add(moment.duration(item.time)).toISOString()}`
           let endDay = this.calculateEndDate(moment(item.date).format('YYYY-MM-DD') + 'T' + item.time, 0, 15)
           this.events.push({
             id: item.id,
@@ -255,7 +254,7 @@ export default {
             start: moment(item.date).format('YYYY-MM-DD') + 'T' + item.time,
             end: endDay,
             backgroundColor: '#64D6E8',
-            patient_attended: 'unknown',
+            patient_attended: item.patient_attended ? item.patient_attended : 'unknown',
             resourceId: item.doctor_user_id,
             eventResourceId: item.doctor_user_id,
             locationId: item.location,
@@ -266,6 +265,7 @@ export default {
             prm_client_id: item.prm_client_id,
             prm_client_name: item.prm_client_name,
             time: item.time,
+            notes: item.note,
             doctorId: item.doctor_name,
             enquiry_id: item.enquiry_id,
             patientId: item.name + ' ' + item.last_name,
