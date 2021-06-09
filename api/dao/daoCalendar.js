@@ -95,11 +95,11 @@ const updateAppointments = (request, response, id, appointments) => {
 const updateAppointmentsLabel = (request, response, id, appointmentsLabel) => {
     //INSERT INTO appointments_label (color, appointment_id) VALUES ('#E8C007', 40774)
     let statement = "INSERT INTO appointments_label ("
-    statement += "appointment_id"
+    statement += "appointment_id,"
     if (appointmentsLabel.backgroundColor) statement += "color"
     statement += ") VALUES ("
-    if (appointmentsLabel.backgroundColor) statement += "'" + appointmentsLabel.backgroundColor + "',"
-    statement += "'" + id + "')"
+    statement += "'" + id + "',"
+    if (appointmentsLabel.backgroundColor) statement += "'" + appointmentsLabel.backgroundColor + "')"
 
     console.log(statement)
     pool.query(statement , (error, results) => {

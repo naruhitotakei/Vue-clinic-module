@@ -269,7 +269,7 @@ export default {
             title: item.name + ' ' + item.last_name,
             start: moment(item.date).format('YYYY-MM-DD') + 'T' + item.time,
             end: endDay,
-            backgroundColor: item.app_lb_type ? item.app_lb_type : '#64D6E8',
+            backgroundColor: item.app_lb_color ? item.app_lb_color : '#64D6E8',
             patient_attended: patientAttended,
             resourceId: item.doctor_user_id,
             eventResourceId: item.doctor_user_id,
