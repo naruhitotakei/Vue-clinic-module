@@ -90,7 +90,25 @@ const updateAppointments = (request, response, id, appointments) => {
         }
         response.status(200).json(results)
     })
+}
 
+const updateAppointmentsLabel = (request, response, id, appointmentsLabel) => {
+    //INSERT INTO appointments_label (color, appointment_id) VALUES ('#E8C007', 40774)
+    let statement = "INSERT INTO appointments_label ("
+    statement += "appointment_id,"
+    if (appointmentsLabel.backgroundColor) statement += "color"
+    statement += ") VALUES ("
+    statement += "'" + id + "',"
+    if (appointmentsLabel.backgroundColor) statement += "'" + appointmentsLabel.backgroundColor + "')"
+
+    console.log(statement)
+    pool.query(statement , (error, results) => {
+        console.log(error)
+        if (error) {
+            throw error
+        }
+        response.status(200).json(results)
+    })
 }
 
 const getDoctors = (request, response, user_id, accessible_user_ids, prm_client_id, scope ) => {
@@ -120,5 +138,6 @@ const getDoctors = (request, response, user_id, accessible_user_ids, prm_client_
 module.exports = {
     getApontments,
     getDoctors,
-    updateAppointments
+    updateAppointments,
+    updateAppointmentsLabel
 }
