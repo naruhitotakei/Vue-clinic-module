@@ -230,6 +230,36 @@ UPDATE users SET first_name = 'Polona', surname = 'Šter' WHERE id = 155;
 UPDATE users SET first_name = 'Gašper', surname = 'Fortuna' WHERE id = 156;
 UPDATE users SET first_name = 'Žiga', surname = 'Kovačič' WHERE id = 157;
 
+--############################################################
+--# Dropping NOT NULL CONSTRAINT in table prm_product, field
+--# field product_price, adding "advance payment" to prm_product
+--############################################################
+
+ALTER TABLE prm_product ALTER COLUMN product_price DROP NOT NULL;
+INSERT INTO prm_product (product_type_id, product_group_id) VALUES (1, 2);
+INSERT INTO prm_product_name (product_id, language, text) VALUES 
+(659, 'sl', 'Avansni račun'), (659, 'en', 'Advance payment'), (659, 'it', 'Pagamento anticipato');
+
+--############################################################
+--# Updating business_premise_id in prm_company_premise
+--############################################################
+
+UPDATE prm_company_premise SET business_premise_id = '5' WHERE premise_id = 5;
+UPDATE prm_company_premise SET business_premise_id = '2' WHERE premise_id = 2;
+UPDATE prm_company_premise SET business_premise_id = '3' WHERE premise_id = 3;
+UPDATE prm_company_premise SET business_premise_id = '4' WHERE premise_id = 4;
+UPDATE prm_company_premise SET business_premise_id = '1' WHERE premise_id = 1;
+
+--############################################################
+--# Adding columns to invoice table
+--############################################################
+
+ALTER TABLE invoice
+ADD COLUMN reference_code VARCHAR(16),
+ADD COLUMN invoice_number_furs VARCHAR(16),
+
+
+
 
 UPDATE db_version SET version ='01.17', version_date=CURRENT_DATE WHERE resource='Tables';
 
