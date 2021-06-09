@@ -266,12 +266,12 @@ export default {
   methods: {
     updateCalendar (id, appointment) {
       updateCalendar(id, appointment).then(() => {
-        // this.$emit('updateApp')
+        this.$emit('updateApp')
       })
     },
     updateCalendarLabel (id, appointment) {
       updateCalendarLabel(id, appointment).then(() => {
-        // this.$emit('updateApp')
+        this.$emit('updateApp')
       })
     },
     showPatientAttended (item) {
