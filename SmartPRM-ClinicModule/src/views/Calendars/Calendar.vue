@@ -239,7 +239,7 @@ export default {
     },
     getApontments () {
       this.events = []
-      getCalendar('2021-01-01', '2021-06-30', '', this.$i18n.locale).then(data => {
+      getCalendar('2021-05-01', '2021-06-30', '', this.$i18n.locale).then(data => {
         let dataWithDoctor = data.filter(item => {
           if (item.doctor_user_id !== null) {
             this.doctors.push({
@@ -263,12 +263,13 @@ export default {
           let patientAttended = item.patient_attended === true ? 'attended' : item.patient_attended === null ? 'unknown' : 'not_attended'
           let productGroups = this.product_groups && this.product_groups.find(productName => productName.product_group_id === item.prm_pr_group_name_id)
           let endDay = this.calculateEndDate(moment(item.date).format('YYYY-MM-DD') + 'T' + item.time, 0, 15)
+          console.log(item.app_lb_type)
           this.events.push({
             id: item.id,
             title: item.name + ' ' + item.last_name,
             start: moment(item.date).format('YYYY-MM-DD') + 'T' + item.time,
             end: endDay,
-            backgroundColor: '#64D6E8',
+            backgroundColor: item.app_lb_type ? item.app_lb_type : '#64D6E8',
             patient_attended: patientAttended,
             resourceId: item.doctor_user_id,
             eventResourceId: item.doctor_user_id,

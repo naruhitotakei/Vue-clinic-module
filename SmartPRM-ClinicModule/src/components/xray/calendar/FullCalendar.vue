@@ -118,7 +118,7 @@ import { getPatients } from '../../../services/enquiry'
 // import { getDentists } from '../../../services/userService'
 import { getLocationsList } from '../../../services/commonCodeLists'
 import { getProductGroups } from '@/services/products'
-import { getDoctorList, updateCalendar } from '@/services/calendarService'
+import { getDoctorList, updateCalendar, updateCalendarLabel } from '@/services/calendarService'
 
 export default {
   components: {
@@ -266,7 +266,12 @@ export default {
   methods: {
     updateCalendar (id, appointment) {
       updateCalendar(id, appointment).then(() => {
-
+        // this.$emit('updateApp')
+      })
+    },
+    updateCalendarLabel (id, appointment) {
+      updateCalendarLabel(id, appointment).then(() => {
+        // this.$emit('updateApp')
       })
     },
     showPatientAttended (item) {
@@ -309,7 +314,6 @@ export default {
       // getDentists().then(response => {
       //   this.doctors = response
       // })
-      console.log('test')
       getDoctorList().then((data) => {
         this.doctors = data
       })
@@ -419,7 +423,7 @@ export default {
         }
 
         this.updateCalendar(this.formData.id, this.formData)
-        this.$emit('updateApp')
+        this.updateCalendarLabel(this.formData.id, this.formData)
       }
 
       // this.formData = this.defaultAppointment()
