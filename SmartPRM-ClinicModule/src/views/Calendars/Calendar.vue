@@ -239,7 +239,7 @@ export default {
     },
     getApontments () {
       this.events = []
-      getCalendar('2021-05-01', '2021-06-30', '', this.$i18n.locale).then(data => {
+      getCalendar('2021-01-01', '2021-06-30', '', this.$i18n.locale).then(data => {
         let dataWithDoctor = data.filter(item => {
           if (item.doctor_user_id !== null) {
             this.doctors.push({
