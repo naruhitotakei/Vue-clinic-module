@@ -11,15 +11,32 @@
           <template v-slot:body>
           <div class="row justify-content-between align-items-center">
         <div class="row align-items-center">
-          <button @click="scroll_left" class="nav-btn btn-primary"><i class="ri-arrow-left-s-line"></i></button>
-          <div class="wrapper-box" style="width: 200px;">
-            <div id="box">
-              <template v-for="(item,index) in doctors">
-                <b-checkbox class="custom-switch-color" :color="item.color" @change="checkData(item)" v-model="item.checked" name="check-button" inline :key="index">
+          <div class="calendar-doctor-slider">
+            <button @click="scroll_left" class="nav-btn btn-primary mr-1"><i class="ri-arrow-left-s-line"></i></button>
+            <VueSlickCarousel
+                v-bind="optionSlider"
+                v-if="doctors.length"
+                ref="carousel"
+            >
+              <div v-for="(item,index) in doctors" :key="index" >
+                <b-checkbox class="custom-switch-color" :color="item.color" @change="checkData(item)" v-model="item.checked" :ref="'doctor_'+index" name="check-button" inline >
                   {{ item.title }}
                 </b-checkbox>
-              </template></div></div>
-          <button @click="scroll_right" class="nav-btn btn-primary"><i class="ri-arrow-right-s-line"></i></button>
+              </div>
+            </VueSlickCarousel>
+            <button @click="scroll_right" class="nav-btn btn-primary ml-1"><i class="ri-arrow-right-s-line"></i></button>
+          </div>
+<!--          <button @click="scroll_left" class="nav-btn btn-primary mr-5"><i class="ri-arrow-left-s-line"></i></button>-->
+<!--          <div class="wrapper-box" >-->
+<!--            <div id="box">-->
+<!--              <template v-for="(item,index) in doctors">-->
+<!--                <b-checkbox class="custom-switch-color" :color="item.color" @change="checkData(item)" v-model="item.checked" :ref="'doctor_'+index" name="check-button" inline :key="index">-->
+<!--                  {{ item.title }}-->
+<!--                </b-checkbox>-->
+<!--              </template>-->
+<!--            </div>-->
+<!--          </div>-->
+<!--          <button @click="scroll_right" class="nav-btn btn-primary ml-5"><i class="ri-arrow-right-s-line"></i></button>-->
           <b-checkbox style="margin-left: 30px" name="check-button" v-model="allDoctorCheck" @change="allDoctorFun(allDoctorCheck)"  inline>{{ $t('calendar.selectAll') }}</b-checkbox>
         </div>
             <b-button
@@ -116,14 +133,26 @@ import { getCalendar, getDoctorList } from '@/services/calendarService'
 import _ from 'lodash'
 import moment from 'moment'
 import { getProductGroups } from '@/services/products'
+import VueSlickCarousel from 'vue-slick-carousel'
 
 export default {
   name: 'GoogleCalendar',
-  components: { },
+  components: { VueSlickCarousel },
   data () {
     return {
       allDoctorCheck: true,
       checkedListArray: [],
+      slideCount: 0,
+      optionSlider: {
+        'centerMode': true,
+        'centerPadding': '0',
+        'focusOnSelect': true,
+        'slidesToShow': 1,
+        'slidesToScroll': 1,
+        'arrows': false,
+        'dots': false,
+        'infinite': false
+      },
       events: [
         {
           id: 340,
@@ -431,12 +460,10 @@ export default {
       appointmentBook(this.formData)
     },
     scroll_left () {
-      let content = document.querySelector('.wrapper-box')
-      content.scrollLeft -= 250
+      this.$refs.carousel.prev()
     },
     scroll_right () {
-      let content = document.querySelector('.wrapper-box')
-      content.scrollLeft += 250
+      this.$refs.carousel.next()
     }
   }
 }
@@ -451,7 +478,7 @@ export default {
   margin-left: -15px;
 }
 .wrapper-box {
-  max-width: 185px;
+  max-width: 250px;
   /* overflow: auto; */
   overflow: hidden;
 }
@@ -482,6 +509,17 @@ export default {
 
 #box .center {
   left: calc(50% - 25px);
+}
+.calendar-doctor-slider {
+  display: flex;
+}
+.calendar-doctor-slider .slick-slider {
+  max-width: 300px;
+}
+
+.calendar-doctor-slider .slick-slider .slick-slide div div {
+  display: flex;
+  justify-content: center;
 }
 
 </style>

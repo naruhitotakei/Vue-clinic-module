@@ -242,7 +242,7 @@ export default {
           right: 'dayGridMonth,resourceTimeGridWeek,resourceTimeGridDay'
         },
         timeZone: 'UTC',
-        defaultView: 'dayGridMonth',
+        defaultView: 'resourceTimeGridWeek',
         resources: this.resourcesOuter,
         minTime: '09:00:00',
         maxTime: '19:00:00',
