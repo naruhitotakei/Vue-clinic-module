@@ -154,6 +154,14 @@ app.get('/api/calendar/:statrtdate/:enddate/:lang', (req, res) => {
         res.status(401).json("OK: user unauthorized")
 });
 
+app.post('/api/calendar', (req, res) => {
+  const appointment = req.body
+  if(req.session.prm_user && req.session.prm_user.permissions && checkPermission(req.session.prm_user.permissions, productsPermission))
+    daoCalendar.createAppointment(req, res, appointment)
+  else
+    res.status(401).json("OK: user unauthorized")
+});
+
 app.get('/api/calendar/doctors', (req, res) => {
     if(req.session.prm_user && req.session.prm_user.permissions && checkPermission(req.session.prm_user.permissions, calendarPermission))
         daoCalendar.getDoctors(req, res, req.session.prm_user.id, req.session.prm_user.accessible_user_ids, req.session.prm_user.prm_client_id, getScope(req.session.prm_user.permissions, assignmentsPermission))
