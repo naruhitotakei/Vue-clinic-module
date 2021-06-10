@@ -256,8 +256,8 @@ UPDATE prm_company_premise SET business_premise_id = '1' WHERE premise_id = 1;
 
 ALTER TABLE invoice
 ADD COLUMN invoice_number_furs VARCHAR(16),
-ADD COLUMN reference_code VARCHAR(16),
-ADD COLUMN reference_code_furs VARCHAR(16);
+ADD COLUMN reference_code VARCHAR(64),
+ADD COLUMN reference_code_furs VARCHAR(64);
 
 
 UPDATE db_version SET version ='01.17', version_date=CURRENT_DATE WHERE resource='Tables';
