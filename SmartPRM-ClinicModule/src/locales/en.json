@@ -506,7 +506,10 @@
   "settingsUsers": {
     "editProfile": "Edit profile",
     "editProfileModal": {
+      "title": "Title",
       "name": "Name",
+      "surname": "Surname",
+      "specialization": "Specialization",
       "mail": "Mail",
       "phone": "Phone",
       "close": "Close",

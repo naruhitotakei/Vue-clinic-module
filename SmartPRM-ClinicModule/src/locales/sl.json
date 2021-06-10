@@ -488,7 +488,10 @@
   "settingsUsers": {
     "editProfile": "Uredi profil",
     "editProfileModal": {
+      "title": "Naziv",
       "name": "Ime",
+      "surname": "Priimek",
+      "specialization": "Specializacija",
       "mail": "Mail",
       "phone": "Telefon",
       "close": "Zapri",

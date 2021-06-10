@@ -25,7 +25,7 @@ const getAssignments = (request, response, scope, userid, accessible_user_ids, p
         return
     }
     if (scope == "All") {
-        var statement = ["SELECT todos.*, prm_client.id AS prm_client_id, enquiries.name AS patientname, enquiries.prm_dentist_user_id, enquiries.last_name AS patientlastname, users.name AS todoname, dentists.name AS dentist_name, dentists.id as dentists_id FROM todos",
+        var statement = ["SELECT todos.*, prm_client.id AS prm_client_id, enquiries.name AS patientname, enquiries.prm_dentist_user_id, enquiries.last_name AS patientlastname, concat(users.title, ' ', users.first_name, ' ', users.surname) AS todoname, dentists.name AS dentist_name, dentists.id as dentists_id FROM todos",
                          "LEFT JOIN enquiries ON todos.enquiry_id = enquiries.id",
                          "LEFT JOIN users ON todos.user_id = users.id",
                          "LEFT JOIN users dentists ON enquiries.prm_dentist_user_id = users.id",
@@ -42,7 +42,7 @@ const getAssignments = (request, response, scope, userid, accessible_user_ids, p
             response.status(200).json(results.rows)
         })
     } else if (scope == "PrmClient") {
-        var statement = ["SELECT todos.*, prm_client.id AS prm_client_id, enquiries.name AS patientname, enquiries.prm_dentist_user_id, enquiries.last_name AS patientlastname, users.name AS todoname, dentists.name AS dentist_name, dentists.id as dentists_id FROM todos",
+        var statement = ["SELECT todos.*, prm_client.id AS prm_client_id, enquiries.name AS patientname, enquiries.prm_dentist_user_id, enquiries.last_name AS patientlastname, concat(users.title, ' ', users.first_name, ' ', users.surname) AS todoname, dentists.name AS dentist_name, dentists.id as dentists_id FROM todos",
                          "LEFT JOIN enquiries ON todos.enquiry_id = enquiries.id",
                          "LEFT JOIN users ON todos.user_id = users.id",
                          "LEFT JOIN users dentists ON enquiries.prm_dentist_user_id = users.id",
@@ -59,7 +59,7 @@ const getAssignments = (request, response, scope, userid, accessible_user_ids, p
             response.status(200).json(results.rows)
         }) 
     } else if (scope == "Self") {       
-        var statement = ["SELECT todos.*, prm_client.id AS prm_client_id, enquiries.name AS patientname, enquiries.last_name AS patientlastname, users.name AS todoname, dentists.name AS dentistname FROM todos",
+        var statement = ["SELECT todos.*, prm_client.id AS prm_client_id, enquiries.name AS patientname, enquiries.last_name AS patientlastname, concat(users.title, ' ', users.first_name, ' ', users.surname) AS todoname, dentists.name AS dentistname FROM todos",
                          "LEFT JOIN enquiries ON todos.enquiry_id = enquiries.id",
                          "LEFT JOIN users ON todos.user_id = users.id",
                          "LEFT JOIN users dentists ON enquiries.prm_dentist_user_id = users.id",
@@ -85,7 +85,7 @@ const getAssignments = (request, response, scope, userid, accessible_user_ids, p
             } 
         }
         conditionScope += ")";
-        var statement = ["SELECT todos.*, prm_client.id AS prm_client_id, enquiries.name AS patientname, enquiries.prm_dentist_user_id, enquiries.last_name AS patientlastname, users.name AS todoname, dentists.name AS dentist_name, dentists.id as dentists_id FROM todos",
+        var statement = ["SELECT todos.*, prm_client.id AS prm_client_id, enquiries.name AS patientname, enquiries.prm_dentist_user_id, enquiries.last_name AS patientlastname, concat(users.title, ' ', users.first_name, ' ', users.surname) AS todoname, dentists.name AS dentist_name, dentists.id as dentists_id FROM todos",
                          "LEFT JOIN enquiries ON todos.enquiry_id = enquiries.id",
                          "LEFT JOIN users ON todos.user_id = users.id",
                          "LEFT JOIN users dentists ON enquiries.prm_dentist_user_id = users.id",
