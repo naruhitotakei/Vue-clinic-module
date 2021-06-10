@@ -92,8 +92,44 @@ const updateAppointments = (request, response, id, appointments) => {
     })
 }
 
+const createAppointment = (request, response, appointments) => {
+    console.log('appointments',appointments)
+    let patient_attended = appointments.patient_attended === 'attended' ? true : appointments.patient_attended === 'not_attended' ? false : null;
+    let time = moment(appointments.assignmentDate).format('HH:mm');
+    let statement = "INSERT INTO appointments ("
+    if (appointments.doctorId) statement += "doctor_name,"
+    if (appointments.locationId) statement += "location,"
+    if (appointments.notes) statement += "note,"
+    if (appointments.patientId) statement += "enquiry_id,"
+    if (appointments.patient_attended) statement += "patient_attended,"
+    if (appointments.product_groups) statement += "product_group_id,"
+    if (appointments.assignmentDate) statement += "date,"
+    statement += "time,"
+    statement += "created_at,"
+    statement += "kind"
+    statement += ") VALUES ("
+    if (appointments.doctorId) statement += "'"+ appointments.doctorId +"',"
+    if (appointments.locationId) statement += "'"+ appointments.locationId +"',"
+    if (appointments.notes) statement += "'"+ appointments.notes +"',"
+    if (appointments.patientId) statement += "'"+ appointments.patientId +"',"
+    if (appointments.patient_attended) statement += "'"+patient_attended +"',"
+    if (appointments.product_groups) statement += "'"+ appointments.product_groups +"',"
+    if (appointments.assignmentDate) statement += "'"+ appointments.assignmentDate +"',"
+    statement += "'"+ time +"',"
+    statement += "'"+ new Date().toLocaleDateString() +"',"
+    statement += "'Posvet')"
+    console.log(statement)
+    pool.query(statement , (error, results) => {
+        console.log(error)
+        console.log(results)
+        if (error) {
+            throw error
+        }
+        response.status(200).json(results)
+    })
+}
+
 const updateAppointmentsLabel = (request, response, id, appointmentsLabel) => {
-    //INSERT INTO appointments_label (color, appointment_id) VALUES ('#E8C007', 40774)
     let statement = "INSERT INTO appointments_label ("
     statement += "appointment_id,"
     if (appointmentsLabel.backgroundColor) statement += "color"
@@ -139,5 +175,6 @@ module.exports = {
     getApontments,
     getDoctors,
     updateAppointments,
-    updateAppointmentsLabel
+    updateAppointmentsLabel,
+    createAppointment
 }
