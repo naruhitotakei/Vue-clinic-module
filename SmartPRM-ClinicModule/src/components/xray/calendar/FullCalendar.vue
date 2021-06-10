@@ -311,9 +311,6 @@ export default {
       })
     },
     getDoctors () {
-      // getDentists().then(response => {
-      //   this.doctors = response
-      // })
       getDoctorList().then((data) => {
         this.doctors = data
       })
@@ -365,6 +362,7 @@ export default {
     },
     saveAppointment () {
       this.disabled = true
+      this.modalShow = false
       let id = this.calendarApi.getEvents().length + 1
       let endDate = this.calculateEndDate(this.formData.assignmentDate, this.formData.hours, this.formData.minutes)
       if (!this.formData.id) {
@@ -430,7 +428,6 @@ export default {
     },
     openCreateModal (selectionInfo) {
       this.disabled = false
-      console.log('selectionInfo', selectionInfo)
       this.formData = this.defaultAppointment()
       this.modalTitle = ''
       this.modalShow = true

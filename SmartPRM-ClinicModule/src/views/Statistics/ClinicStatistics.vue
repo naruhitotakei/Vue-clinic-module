@@ -7,7 +7,7 @@
             <iq-card class-name="iq-card-block iq-card-stretch iq-card-height" body-class="iq-bg-primary rounded">
               <template v-slot:body>
                 <div class="d-flex align-items-center justify-content-between">
-                  <div class="rounded-circle iq-card-icon bg-primary"><i class="ri-user-fill"></i></div>
+                  <div class="rounded-circle iq-card-icon bg-primary" style="min-height: 60px; min-width: 60px;"><i class="ri-user-fill"></i></div>
                   <div class="text-right">
                     <h2 class="mb-0"><span class="counter">{{ attendance }}</span></h2>
                     <h5 class="">{{ $t('statisticsForClinic.attendance') }}</h5>

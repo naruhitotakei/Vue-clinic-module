@@ -7,7 +7,7 @@
       <SideBarStyle1 :items="verticalMenu" :horizontal="horizontal" :logo="logo" @toggle="sidebarMini" />
       <div id="content-page" class="content-page" :class="horizontal ? 'ml-0' : ''">
         <!-- TOP Nav Bar -->
-        <NavBarStyle1 title="Dashboard" :homeURL="{ name: 'dashboard.home' }" @toggle="sidebarMini" :logo="logo" :horizontal="horizontal" :items="horizontalMenu">
+        <NavBarStyle1 title="Dashboard" :homeURL="{ name: 'dashboard.home' }" @toggle="sidebarMini" @setOpenMenu="setOpenMenu" :logo="logo" :horizontal="horizontal" :items="horizontalMenu">
           <template slot="responsiveRight">
             <ul class="navbar-nav ml-auto navbar-list">
               <li class="nav-item iq-full-screen full-screen">
@@ -300,6 +300,7 @@ export default {
       logo: loader,
       usersList: Users,
       rtl: false,
+      openMenu: false,
       message: [
         { image: require('../assets/images/user/01.jpg'), name: 'Dr. Bojan Jernejc', date: '13 Jan' },
         { image: require('../assets/images/user/02.jpg'), name: 'Dr. Silvija Lenart', date: '14 Jun' },
@@ -317,6 +318,14 @@ export default {
     }
   },
   methods: {
+    setOpenMenu () {
+      this.openMenu = !this.openMenu
+      if (this.openMenu) {
+        document.querySelector('body').style.overflow = 'hidden'
+      } else {
+        document.querySelector('body').style.overflow = 'auto'
+      }
+    },
     onButtonClick () {
       this.isSelecting = true
       window.addEventListener('focus', () => {

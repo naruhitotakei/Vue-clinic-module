@@ -37,7 +37,7 @@
                   <td>{{appointment.patient}}</td>
                   <td>{{appointment.doctor}}</td>
                   <td>{{appointment.date}}</td>
-                  <td>{{appointment.timing}}</td>
+                  <td style="min-width: 100px;">{{appointment.timing}}</td>
                   <td>{{appointment.contact}}</td>
                 </tr>
                 </tbody>
@@ -109,7 +109,7 @@
                       <td class="text-center"><img class="rounded-circle img-fluid avatar-40" src="../../assets/images/user/01.jpg" alt="profile"></td>
                       <td>Viktor Jereb</td>
                       <td>
-                        <div class="iq-media-group">
+                        <div class="iq-media-group" style="min-width: 100px;">
                           <a href="#" class="iq-media">
                             <img class="img-fluid avatar-40 rounded-circle" src="../../assets/images/user/05.jpg" alt="">
                           </a>
@@ -121,7 +121,7 @@
                           </a>
                         </div>
                       </td>
-                      <td>12-02-2020</td>
+                      <td style="min-width: 100px;">12-02-2020</td>
                       <td><i class="ri-file-pdf-line font-size-16 text-danger"></i></td>
                       <td>Zalivka</td>
                     </tr>
