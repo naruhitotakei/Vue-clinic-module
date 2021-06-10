@@ -293,6 +293,18 @@ UPDATE users SET first_name = 'Jana', surname = 'Lieber' WHERE id = 129;
 UPDATE users SET title = 'Dr.', specialization = 'dr. med., spec. plast. krg.', first_name = 'Rok', surname = 'Pavlič' WHERE id = 136;
 UPDATE users SET title = 'Dr.', specialization = 'dr. med., spec. spl. krg.' WHERE id = 137;
 
+--############################################################
+--# adding parent_id and child_id fields to invoice
+--############################################################
+
+categoryID integer PRIMARY KEY,
+parentID integer REFERENCES categories (categoryID) 
+
+ALTER TABLE invoice ADD COLUMN parent_id INT REFERENCES invoice (invoice_id);
+ALTER TABLE invoice ADD COLUMN child_id INT REFERENCES invoice (invoice_id);
+
+
+
 
 UPDATE db_version SET version ='01.17', version_date=CURRENT_DATE WHERE resource='Tables';
 
