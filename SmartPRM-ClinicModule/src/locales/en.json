@@ -102,7 +102,7 @@
   "calendar": {
     "selectDoctor": "Select Doctor",
     "selectAll": "Select All",
-    "bookAppointment": "Book Appointment"
+    "addAppointment": "Add Appointment"
   },
   "calendarEvent": {
     "start": "Start",

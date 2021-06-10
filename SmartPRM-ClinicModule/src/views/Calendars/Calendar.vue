@@ -5,9 +5,9 @@
         <iq-card>
           <template v-slot:headerTitle>
           <iq-card>
-          <template v-slot:headerTitle>
-              <h4 class="card-title">{{ $t('calendar.selectDoctor') }}</h4>
-          </template>
+<!--          <template v-slot:headerTitle>-->
+<!--              <h4 class="card-title">{{ $t('calendar.selectDoctor') }}</h4>-->
+<!--          </template>-->
           <template v-slot:body>
           <div class="row justify-content-between align-items-center">
         <div class="row align-items-center">
@@ -22,7 +22,7 @@
           <button @click="scroll_right" class="nav-btn btn-primary"><i class="ri-arrow-right-s-line"></i></button>
           <b-checkbox style="margin-left: 30px" name="check-button" v-model="allDoctorCheck" @change="allDoctorFun(allDoctorCheck)"  inline>{{ $t('calendar.selectAll') }}</b-checkbox>
         </div>
-            <b-button v-b-modal.modal-1 variant="primary" class="btn-add-patient" style="width: 190px;"><i class="ri-add-line mr-2"></i>{{ $t('calendar.bookAppointment') }}</b-button>
+            <b-button v-b-modal.modal-1 variant="primary" class="btn-add-patient" style="width: 190px;"><i class="ri-add-line mr-2"></i>{{ $t('calendar.addAppointment') }}</b-button>
 
           </div>
           </template>
