@@ -13,6 +13,7 @@
                         <b-row>
                             <b-col md="12" class="table-responsive">
                                 <b-table id="my-table"
+                                         class="table-t"
                                          bordered
                                          hover
                                          :busy="!isProductDataLoaded"

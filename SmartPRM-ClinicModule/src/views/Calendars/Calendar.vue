@@ -9,23 +9,26 @@
               <h4 class="card-title">{{ $t('calendar.selectDoctor') }}</h4>
           </template>
           <template v-slot:body>
-          <div class="main-wrapper">
+          <div class="row justify-content-between align-items-center">
+        <div class="row align-items-center">
           <button @click="scroll_left" class="nav-btn btn-primary"><i class="ri-arrow-left-s-line"></i></button>
-            <div class="wrapper-box">
-              <div id="box">
-            <template v-for="(item,index) in doctors">
-              <b-checkbox class="custom-switch-color" :color="item.color" @change="checkData(item)" v-model="item.checked" name="check-button" inline :key="index">
-                {{ item.title }}
-              </b-checkbox>
-            </template></div></div>
+          <div class="wrapper-box" style="width: 200px;">
+            <div id="box">
+              <template v-for="(item,index) in doctors">
+                <b-checkbox class="custom-switch-color" :color="item.color" @change="checkData(item)" v-model="item.checked" name="check-button" inline :key="index">
+                  {{ item.title }}
+                </b-checkbox>
+              </template></div></div>
           <button @click="scroll_right" class="nav-btn btn-primary"><i class="ri-arrow-right-s-line"></i></button>
-          <b-checkbox name="check-button" v-model="allDoctorCheck" @change="allDoctorFun(allDoctorCheck)"  inline>{{ $t('calendar.selectAll') }}</b-checkbox>
+          <b-checkbox style="margin-left: 30px" name="check-button" v-model="allDoctorCheck" @change="allDoctorFun(allDoctorCheck)"  inline>{{ $t('calendar.selectAll') }}</b-checkbox>
+        </div>
+            <b-button v-b-modal.modal-1 variant="primary" class="btn-add-patient" style="width: 190px;"><i class="ri-add-line mr-2"></i>{{ $t('calendar.bookAppointment') }}</b-button>
+
           </div>
           </template>
         </iq-card>
           </template>
           <template v-slot:headerAction>
-              <b-button v-b-modal.modal-1 variant="primary" class="btn-add-patient" style="width: 190px;"><i class="ri-add-line mr-2"></i>{{ $t('calendar.bookAppointment') }}</b-button>
             <form class="mt-4" novalidate @submit="submitFormData()">
               <b-modal id="modal-1" title="Appointment details" hide-footer>
               <form @submit="submitFormData()">

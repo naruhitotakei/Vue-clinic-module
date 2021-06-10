@@ -22,7 +22,7 @@
             <p>{{ $t('advPayments.newAdvPayment.advPaymentNo') }}: {{invoice.invoice_number}}</p>
             <p>{{ $t('advPayments.newAdvPayment.copy') }}:<span style="margin-left:20px">Original</span></p>
             <p>{{ $t('advPayments.newAdvPayment.IssuedIn') }}:<span style="margin-left:20px">{{premiseCity}}</span></p>
-            <p>{{ $t('advPayments.newAdvPayment.dateOfAdvPayment') }}:<span style="margin-left:20px">{{invoiceDate}}</span></p>
+            <p>{{ $t('advPayments.newAdvPayment.dateOfAdvPayment') }}:<span style="margin-left:20px;">{{invoiceDate}}</span></p>
           </b-col>
         </b-row>
         <b-row>
@@ -80,14 +80,14 @@
             <iq-card>
                 <template v-slot:body>
                     <b-row>
-                        <b-col cols="4" align-self="center" style="margin-bottom: 25px;">
+                        <b-col  class="col-md-4 col-sm-12" align-self="center" style="margin-bottom: 25px;">
                             <h4 class="mb-0">{{ title }}</h4>
                         </b-col>
                     </b-row>
                     <b-row>
                         <b-col lg="12">
                             <div class="table-responsive-sm">
-                                <b-table :items="invoices" :fields="invoiceColumns">
+                                <b-table :items="invoices" class="table-t" :fields="invoiceColumns">
                                     <template v-slot:cell(invoiceStatus)="data">
                                         <span class="badge badge-danger" v-if="data.value == 'Unpaid'">Unpaid</span>
                                         <span class="badge badge-warning" v-if="data.value == 'Partialy Paid'">Partialy Paid</span>
@@ -130,9 +130,9 @@
                             </div>
                             <h5 style="margin-bottom: 15px;">{{ summary }}</h5>
                             <div class="table-responsive-sm">
-                                <b-table striped :items="invoices" :fields="invoiceSummaryFields">
+                                <b-table striped :items="invoices" :fields="invoiceSummaryFields" class="table-t">
                                     <template v-slot:cell(total_with_vat)="data">
-                                        <span style="font-size:25px" class="font-weight-bold">{{data.value | euro}}</span>
+                                        <span style="font-size:18px" class="font-weight-bold">{{data.value | euro}}</span>
                                     </template>
                                 </b-table>
                             </div>

@@ -21,7 +21,7 @@
         </div>
         <div class="iq-menu-bt">
           <div class="wrapper-menu" @click="miniSidebar">
-            <div class="main-circle"><i class="ri-more-fill"></i></div>
+            <div class="main-circle" ><i class="ri-more-fill"></i></div>
             <div class="hover-circle"><i class="ri-more-2-fill"></i></div>
           </div>
         </div>
