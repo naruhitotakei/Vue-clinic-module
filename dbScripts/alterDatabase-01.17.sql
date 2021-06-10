@@ -241,7 +241,8 @@ INSERT INTO prm_product_name (product_id, language, text) VALUES
 (659, 'sl', 'Avansni račun'), (659, 'en', 'Advance payment'), (659, 'it', 'Pagamento anticipato');
 
 --############################################################
---# Updating business_premise_id in prm_company_premise
+--# Updating business_premise_id in prm_company_premise and
+--# electronic_device_id in prm_company_premise_device
 --############################################################
 
 UPDATE prm_company_premise SET business_premise_id = '5' WHERE premise_id = 5;
@@ -249,6 +250,11 @@ UPDATE prm_company_premise SET business_premise_id = '2' WHERE premise_id = 2;
 UPDATE prm_company_premise SET business_premise_id = '3' WHERE premise_id = 3;
 UPDATE prm_company_premise SET business_premise_id = '4' WHERE premise_id = 4;
 UPDATE prm_company_premise SET business_premise_id = '1' WHERE premise_id = 1;
+
+UPDATE prm_company_premise_device SET electronic_device_id = '1' WHERE device_id = 4;
+UPDATE prm_company_premise_device SET electronic_device_id = '1' WHERE device_id = 1;
+UPDATE prm_company_premise_device SET electronic_device_id = '2' WHERE device_id = 2;
+UPDATE prm_company_premise_device SET electronic_device_id = '3' WHERE device_id = 3;
 
 --############################################################
 --# Adding columns to invoice table
@@ -258,6 +264,34 @@ ALTER TABLE invoice
 ADD COLUMN invoice_number_furs VARCHAR(16),
 ADD COLUMN reference_code VARCHAR(64),
 ADD COLUMN reference_code_furs VARCHAR(64);
+
+--############################################################
+--# Updating users data
+--############################################################
+
+UPDATE users SET title = 'Dr.', specialization = 'dr. med., spec. spl. krg.' WHERE id = 17;
+UPDATE users SET title = 'Dr.' WHERE id = 27;
+UPDATE users SET title = 'Dr.', specialization = 'dr. med., spec. plast.' WHERE id = 28;
+UPDATE users SET title = 'Dr.', specialization = 'dr. med., spec. plast.' WHERE id = 29;
+UPDATE users SET first_name = 'Mojca', surname = 'Arnuga Erjavec' WHERE id = 30;
+UPDATE users SET first_name = 'Tanja', surname = '(Fabjan)' WHERE id = 51;
+UPDATE users SET title = 'Dr.', specialization = 'dr.med., spec.gin.por.', first_name = 'Mariusz', surname = 'Kosi' WHERE id = 62;
+UPDATE users SET first_name = 'Mateja', surname = 'Mlinarič' WHERE id = 98;
+UPDATE users SET title = 'Dr.', first_name = 'Miloš', surname = 'Petrović' WHERE id = 103;
+UPDATE users SET title = 'Dr.', specialization = 'dr. med., spec. plast.', first_name = 'Viljem', surname = 'Topćić' WHERE id = 104;
+UPDATE users SET title = 'Dr.', first_name = 'Tamara', surname = 'Levičnik' WHERE id = 105;
+UPDATE users SET title = 'Dr.', first_name = 'Gregor', surname = 'Hvalc' WHERE id = 106;
+UPDATE users SET title = 'Dr.', specialization = 'dr. med., spec. rentgenolog', first_name = 'Andreja', surname = 'Bohnec' WHERE id = 107;
+UPDATE users SET title = 'Dr.', specialization = 'dr.med., spec.gin.por.', first_name = 'Jernej', surname = 'Bernik' WHERE id = 108;
+UPDATE users SET first_name = 'Rebeka', surname = 'Celje - Medical' WHERE id = 110;
+UPDATE users SET first_name = 'Suzana', surname = 'Pohar' WHERE id = 119;
+UPDATE users SET first_name = 'Zobna', surname = 'Šenčur - Fabjan' WHERE id = 120;
+UPDATE users SET title = 'Dr.', specialization = 'dr. med. spec. ginek.', first_name = 'Suzana', surname = 'Peternelj' WHERE id = 121;
+UPDATE users SET first_name = 'Dermatologija', surname = 'Rogl-Fabjan' WHERE id = 125;
+UPDATE users SET title = 'Dr.', specialization = 'dr. med., spec. radiolog', first_name = 'Mitja', surname = 'Četina' WHERE id = 126;
+UPDATE users SET first_name = 'Jana', surname = 'Lieber' WHERE id = 129;
+UPDATE users SET title = 'Dr.', specialization = 'dr. med., spec. plast. krg.', first_name = 'Rok', surname = 'Pavlič' WHERE id = 136;
+UPDATE users SET title = 'Dr.', specialization = 'dr. med., spec. spl. krg.' WHERE id = 137;
 
 
 UPDATE db_version SET version ='01.17', version_date=CURRENT_DATE WHERE resource='Tables';
