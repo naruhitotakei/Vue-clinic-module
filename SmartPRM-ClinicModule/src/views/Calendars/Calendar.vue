@@ -297,6 +297,7 @@ export default {
     getApontments () {
       this.events = []
       getCalendar('2021-01-01', '2021-06-30', '', this.$i18n.locale).then(data => {
+        console.log(data.find(item => item.id === 41458))
         let dataWithDoctor = data.filter(item => {
           if (item.doctor_user_id !== null) {
             this.doctors.push({
@@ -309,8 +310,8 @@ export default {
               id: item.doctor_user_id,
               title: item.doctor_name
             })
-            return item
           }
+          return item
         })
         this.doctors = _.uniqBy(this.doctors, 'title')
         this.resources = _.uniqBy(this.resources, 'id')
