@@ -329,6 +329,7 @@
     "invoiceHeader": "Invoice",
     "saved": "Invoice saved",
     "notSaved": "Something is wrong, contact admin",
+    "pdfGuarantee": "The warranty is valid only with regular dental examinations at least once or twice per year and regular maintenance of oral hygiene.",
     "invoiceInfo": {
       "invoiceDate": "Date",
       "invoiceTotal": "Total",
