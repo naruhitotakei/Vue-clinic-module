@@ -38,33 +38,69 @@
     <form class="calendar-modal">
       <h3 v-if="modalTitle" style="text-align: center;">{{modalTitle}}</h3>
         <div class="form-row">
-        <div class="col-md-12 mb-3">
-          <label for="patient">{{ $t('calendarEvent.patient') }}</label>
-          <v-select :disabled="disabled" :clearable="false" label="full_name" :reduce="patient => patient.id" class="style-chooser form-control-disabled font-size-15" v-model="formData.patientId" :options="patients"></v-select>
-        </div>
+          <div class="row align-items-center justify-content-between w-100 mb-3">
+            <div class="col-md-1">
+              <label for="patient" class="mb-0">{{ $t('calendarEvent.patient') }}</label>
+            </div>
+            <div class="col-md-11">
+              <v-select :disabled="disabled" :clearable="false" label="full_name" :reduce="patient => patient.id" class="style-chooser form-control-disabled font-size-15" v-model="formData.patientId" :options="patients"></v-select>
+            </div>
+          </div>
 <!--        <div class="col-md-12 mb-3">-->
 <!--          <label for="title">Title</label>-->
 <!--          <div style="display: flex;">-->
 <!--            <input type="text" :disabled="disabled" v-model="formData.title" class="form-control form-control-disabled" placeholder="Title" id="title" required>-->
 <!--          </div>-->
 <!--        </div>-->
-        <div class="col-md-12 mb-3">
-          <label for="notes">{{ $t('calendarEvent.note') }}</label>
-          <textarea :disabled="disabled" row="2" v-model="formData.notes" class="form-control form-control-disabled font-size-15" placeholder="Add your note here for event!" id="note" required ></textarea>
+       <div class="row align-items-center justify-content-between w-100 mb-3">
+         <div class="col-md-1">
+         <label for="notes">{{ $t('calendarEvent.note') }}</label>
+         </div>
+         <div class="col-md-11">
+           <textarea :disabled="disabled" row="2" v-model="formData.notes" class="form-control form-control-disabled font-size-15" placeholder="Add your note here for event!" id="note" required ></textarea>
+         </div>
+       </div>
+       <div class="row align-items-center justify-content-between w-100 mb-3">
+         <div class="col-md-6">
+           <div class="row align-items-center ml-0">
+             <label for="location" class="mr-2 mb-0">{{ $t('calendarEvent.location') }}</label>
+             <v-select
+                 :disabled="disabled"
+                 :clearable="false"
+                 label="city"
+                 :reduce="location => location.id"
+                 class="style-chooser form-control-disabled font-size-15"
+                 v-model="formData.locationId"
+                 :options="locations"
+                 style="min-width:305px;"
+             ></v-select>
+           </div>
+          </div>
+         <div class="col-md-6">
+           <div class="row align-items-center mr-0">
+             <label for="doctor" class="ml-1 mr-2 mb-0">{{ $t('calendarEvent.doctor') }}</label>
+             <v-select
+                 :disabled="disabled"
+                 :clearable="false"
+                 label="name"
+                 :reduce="doctor => doctor.id"
+                 class="style-chooser form-control-disabled font-size-15"
+                 v-model="formData.doctorId"
+                 :options="doctors"
+                 style="min-width: 305px;"
+             ></v-select>
+           </div>
+         </div>
+       </div>
+
+       <div class="row align-items-center justify-content-between w-100 mb-3">
+        <div class="col-md-2 pl-3 pr-0">
+          <label for="patient" class="mb-0">{{ $t('calendarEvent.product_group') }}</label>
         </div>
-        <div class="col-md-5 mb-3">
-          <label for="location">{{ $t('calendarEvent.location') }}</label>
-          <v-select :disabled="disabled" :clearable="false" label="city" :reduce="location => location.id" class="style-chooser form-control-disabled font-size-15" v-model="formData.locationId" :options="locations"></v-select>
-        </div>
-        <div class="col-md-5 offset-md-1 mb-3">
-          <label for="doctor">{{ $t('calendarEvent.doctor') }}</label>
-          {{formData.doctorId}}
-          <v-select :disabled="disabled" :clearable="false" label="name" :reduce="doctor => doctor.id" class="style-chooser form-control-disabled font-size-15" v-model="formData.doctorId" :options="doctors"></v-select>
-        </div>
-        <div class="col-md-12 mb-3">
-          <label for="patient">{{ $t('calendarEvent.product_group') }}</label>
-          <v-select :disabled="disabled" :clearable="false" label="product_group_name" :reduce="product_group => product_group.product_group_id" class="style-chooser form-control-disabled font-size-15" v-model="formData.product_groups" :options="product_groups"></v-select>
-        </div>
+         <div class="col-md-10">
+           <v-select :disabled="disabled" :clearable="false" label="product_group_name" :reduce="product_group => product_group.product_group_id" class="style-chooser form-control-disabled font-size-15" v-model="formData.product_groups" :options="product_groups"></v-select>
+         </div>
+       </div>
         <div class="col-md-12 mb-3">
           <label for="start">{{ $t('calendarEvent.start') }}</label>
           <input :disabled="disabled" type="datetime-local" v-model="formData.assignmentDate" class="form-control form-control-disabled" id="start" required style="max-width: 227px;">
@@ -610,6 +646,11 @@ body .wrapper .custom-control-label::after {
     }
   }
 }
+
+ .fc-widget-content .fc-scroller {
+   overflow: visible !important;
+   height: auto !important;
+ }
 
   @import '~@fullcalendar/core/main.css';
   @import '~@fullcalendar/daygrid/main.css';
