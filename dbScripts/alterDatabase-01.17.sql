@@ -300,6 +300,33 @@ UPDATE users SET title = 'Dr.', specialization = 'dr. med., spec. spl. krg.' WHE
 ALTER TABLE invoice ADD COLUMN parent_id INT REFERENCES invoice (invoice_id);
 ALTER TABLE invoice ADD COLUMN child_id INT REFERENCES invoice (invoice_id);
 
+--############################################################
+--# Adding paid boolean field to payment_item table
+--############################################################
+
+ALTER TABLE payment_item ADD COLUMN paid BOOLEAN DEFAULT 'f';
+
+--############################################################
+--# Creating invoice_payment table
+--############################################################
+
+CREATE TABLE IF NOT EXISTS invoice_payment (
+	id						SERIAL PRIMARY KEY,
+	invoice_id				INT CONSTRAINT invoice_payment_invoice_fk REFERENCES invoice (invoice_id),
+	advance_payment_id		INT CONSTRAINT invoice_payment_advance_payment_fk REFERENCES invoice (invoice_id),
+	payment_type			VARCHAR(128),
+	amount					NUMERIC(8,2),
+	created_at				DATE NOT NULL DEFAULT CURRENT_DATE
+);
+
+--############################################################
+--# Altering appointments table
+--############################################################
+
+ALTER TABLE appointments 
+ALTER COLUMN patient_attended TYPE VARCHAR(32),
+ADD COLUMN hours INT,
+ADD COLUMN minutes INT;
 
 UPDATE db_version SET version ='01.17', version_date=CURRENT_DATE WHERE resource='Tables';
 
