@@ -39,10 +39,10 @@
       <h3 v-if="modalTitle" style="text-align: center;">{{modalTitle}}</h3>
         <div class="form-row">
           <div class="row align-items-center justify-content-between w-100 mb-3">
-            <div class="col-md-1">
+            <div class="col-md-3">
               <label for="patient" class="mb-0">{{ $t('calendarEvent.patient') }}</label>
             </div>
-            <div class="col-md-11">
+            <div class="col-md-9">
               <v-select :disabled="disabled" :clearable="false" label="full_name" :reduce="patient => patient.id" class="style-chooser form-control-disabled font-size-15" v-model="formData.patientId" :options="patients"></v-select>
             </div>
           </div>
@@ -53,32 +53,35 @@
 <!--          </div>-->
 <!--        </div>-->
        <div class="row align-items-center justify-content-between w-100 mb-3">
-         <div class="col-md-1">
+         <div class="col-md-3">
          <label for="notes">{{ $t('calendarEvent.note') }}</label>
          </div>
-         <div class="col-md-11">
+         <div class="col-md-9">
            <textarea :disabled="disabled" row="2" v-model="formData.notes" class="form-control form-control-disabled font-size-15" placeholder="Add your note here for event!" id="note" required ></textarea>
          </div>
        </div>
        <div class="row align-items-center justify-content-between w-100 mb-3">
-         <div class="col-md-6">
-           <div class="row align-items-center ml-0">
-             <label for="location" class="mr-2 mb-0">{{ $t('calendarEvent.location') }}</label>
-             <v-select
-                 :disabled="disabled"
-                 :clearable="false"
-                 label="city"
-                 :reduce="location => location.id"
-                 class="style-chooser form-control-disabled font-size-15"
-                 v-model="formData.locationId"
-                 :options="locations"
-                 style="min-width:305px;"
-             ></v-select>
+         <div class="col-md-3">
+           <label for="location" class="ml-0 mb-0">{{ $t('calendarEvent.location') }}</label>
+         </div>
+         <div class="col-md-9">
+           <v-select
+               :disabled="disabled"
+               :clearable="false"
+               label="city"
+               :reduce="location => location.id"
+               class="style-chooser form-control-disabled font-size-15"
+               v-model="formData.locationId"
+               :options="locations"
+               style="min-width:305px;"
+           ></v-select>
+         </div>
+       </div>
+          <div class="row align-items-center justify-content-between w-100 mb-3">
+           <div class="col-md-3">
+             <label for="doctor" class="mr-2 mb-0">{{ $t('calendarEvent.doctor') }}</label>
            </div>
-          </div>
-         <div class="col-md-6">
-           <div class="row align-items-center mr-0">
-             <label for="doctor" class="ml-1 mr-2 mb-0">{{ $t('calendarEvent.doctor') }}</label>
+           <div class="col-md-9">
              <v-select
                  :disabled="disabled"
                  :clearable="false"
@@ -91,22 +94,27 @@
              ></v-select>
            </div>
          </div>
-       </div>
-
        <div class="row align-items-center justify-content-between w-100 mb-3">
-        <div class="col-md-2 pl-3 pr-0">
+        <div class="col-md-3 pl-3 pr-0">
           <label for="patient" class="mb-0">{{ $t('calendarEvent.product_group') }}</label>
         </div>
-         <div class="col-md-10">
+         <div class="col-md-9">
            <v-select :disabled="disabled" :clearable="false" label="product_group_name" :reduce="product_group => product_group.product_group_id" class="style-chooser form-control-disabled font-size-15" v-model="formData.product_groups" :options="product_groups"></v-select>
          </div>
        </div>
-        <div class="col-md-12 mb-3">
-          <label for="start">{{ $t('calendarEvent.start') }}</label>
-          <input :disabled="disabled" type="datetime-local" v-model="formData.assignmentDate" class="form-control form-control-disabled" id="start" required style="max-width: 227px;">
+        <div class="row align-items-center justify-content-between w-100 mb-3">
+        <div class="col-md-3">
+          <label for="start" class="mb-0">{{ $t('calendarEvent.start') }}</label>
         </div>
-        <div class="col-md-12 mb-3">
-          <label for="duration">{{ $t('calendarEvent.duration') }}</label>
+          <div class="col-md-9">
+            <input :disabled="disabled" type="datetime-local" v-model="formData.assignmentDate" class="form-control form-control-disabled" id="start" required style="max-width: 227px;">
+          </div>
+        </div>
+       <div class="row align-items-center justify-content-between w-100 mb-3">
+        <div class="col-md-3">
+          <label for="duration" class="mb-0">{{ $t('calendarEvent.duration') }}</label>
+        </div>
+        <div class="col-md-9">
           <div style="display: flex;">
             <div class="calendar-modal-input__hour mr-4">
               <input :disabled="disabled" type="number" v-model="formData.hours" class="form-control col-md-6 form-control-disabled" min="0" max="9" placeholder="Hours" required style="max-width: 150px;">
@@ -116,17 +124,26 @@
             </div>
           </div>
         </div>
-        <div class="col-md-12 mb-3">
-          <label for="color">{{ $t('calendarEvent.patient_attended') }}</label><br>
-          <template v-for="(item,index) in patient_attend">
-            <b-form-radio class="custom-radio-patient" inline v-model="formData.patient_attended" :value="item.value" :key="index" v-if="showPatientAttended(item)">{{ item.label }}</b-form-radio>
-          </template>
+       </div>
+        <div class="row align-items-center justify-content-between w-100 mb-3">
+         <div class="col-md-3">
+           <label for="color" class="mb-0">{{ $t('calendarEvent.patient_attended') }}</label><br>
+         </div>
+         <div class="col-md-9">
+           <template v-for="(item,index) in patient_attend">
+             <b-form-radio class="custom-radio-patient" inline v-model="formData.patient_attended" :value="item.value" :key="index" v-if="showPatientAttended(item)">{{ item.label }}</b-form-radio>
+           </template>
+         </div>
         </div>
-        <div class="col-md-12 mb-3">
-          <label for="color">{{ $t('calendarEvent.labels') }}</label><br>
-          <template v-for="(item,index) in color">
-            <b-form-radio class="custom-radio-color" inline v-model="formData.backgroundColor" :color="item.color" :value="item.value" :key="index" v-if="showLabels(item)">{{ item.label }}</b-form-radio>
-          </template>
+        <div class="row align-items-center justify-content-between w-100 mb-3">
+         <div class="col-md-3">
+           <label for="color">{{ $t('calendarEvent.labels') }}</label><br>
+         </div>
+         <div class="col-md-9">
+           <template v-for="(item,index) in color">
+             <b-form-radio class="custom-radio-color" inline v-model="formData.backgroundColor" :color="item.color" :value="item.value" :key="index" v-if="showLabels(item)">{{ item.label }}</b-form-radio>
+           </template>
+         </div>
         </div>
        <div class="modal-footer modal-footer-bt" style="width: 100%;">
          <template v-if="disabled">
