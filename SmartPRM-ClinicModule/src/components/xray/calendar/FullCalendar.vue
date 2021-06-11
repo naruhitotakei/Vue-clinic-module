@@ -191,7 +191,7 @@ export default {
   props: {
     resourcesOuter: Array,
     events: Array,
-    modalShow: Boolean
+    modalShow: Object
   },
   data () {
     return {
@@ -311,12 +311,12 @@ export default {
     '$i18n.locale' () {
       this.getProductGroups(this.$i18n.locale)
     },
-    'modalShow' () {
+    'modalShow.show' () {
       if (!this.formData.id) {
         this.disabled = false
         this.formData = this.defaultAppointment()
       }
-      this.showModal = this.modalShow
+      this.showModal = this.modalShow.show
     }
   },
   mounted () {
@@ -415,8 +415,8 @@ export default {
         assignmentDate: '',
         start: '',
         end: '',
-        hours: '',
-        minutes: '',
+        hours: '0',
+        minutes: '15',
         notes: '',
         backgroundColor: '#64D6E8',
         patient_attended: 'unknown',
@@ -443,9 +443,8 @@ export default {
         this.$emit('setModalShow', false)
         let id = this.calendarApi.getEvents().length + 1
         let endDate = this.calculateEndDate(this.formData.assignmentDate, this.formData.hours, this.formData.minutes)
-        let title = this.patients.find(item => item.id === this.formData.patientId)
-        this.modalTitle = title.full_name
-        this.formData.title = title.full_name
+        // let title = this.patients.find(item => item.id === this.formData.patientId)
+        // this.modalTitle = title.full_name
         this.formData.resourceId = this.formData.doctorId
 
         if (typeof this.formData.patientId === 'object') {
@@ -453,6 +452,7 @@ export default {
         } else {
           let title = this.patients.find(item => item.id === this.formData.patientId)
           this.modalTitle = title.full_name
+          this.formData.title = title.full_name
         }
         if (typeof this.formData.doctorId === 'number') {
           let doctor = this.doctors.find(doctor => doctor.id === this.formData.doctorId)
@@ -510,6 +510,7 @@ export default {
         }
       }
       this.formData = this.defaultAppointment()
+      console.log('clear formData', this.formData)
     },
     openCreateModal (selectionInfo) {
       this.disabled = false

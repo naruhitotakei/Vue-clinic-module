@@ -40,7 +40,7 @@
           <b-checkbox style="margin-left: 30px" name="check-button" v-model="allDoctorCheck" @change="allDoctorFun(allDoctorCheck)"  inline>{{ $t('calendar.selectAll') }}</b-checkbox>
         </div>
             <b-button
-                @click="setModalShow(true)"
+                @click="addAppointment"
                 variant="primary"
                 class="btn-add-patient mt-0"
                 style="width: 190px;"
@@ -172,7 +172,10 @@ export default {
           doctorId: 28
         }
       ],
-      modalShow: false,
+      modalShow: {
+        show: false,
+        default: false
+      },
       product_groups: [],
       resources: [
         // { id: 2, title: 'Dr. Katic22222', time: '2021-06-3' },
@@ -266,8 +269,11 @@ export default {
     }
   },
   methods: {
+    addAppointment () {
+      this.setModalShow(true)
+    },
     setModalShow (bool) {
-      this.modalShow = bool
+      this.modalShow.show = bool
     },
     getProductGroups (lang) {
       getProductGroups(lang).then(response => {
@@ -291,13 +297,11 @@ export default {
     getApontments () {
       this.events = []
       getCalendar('2021-01-01', '2021-06-30', '', this.$i18n.locale).then(data => {
-        console.log(data.find(item => item.id > 41000))
-
         let dataWithDoctor = data.filter(item => {
           if (item.doctor_user_id !== null) {
             this.doctors.push({
               id: Date.now(),
-              title: item.doctor_name,
+              title: item.doctor_name.split(',')[0],
               disabled: false,
               checked: false
             })
@@ -310,6 +314,14 @@ export default {
         })
         this.doctors = _.uniqBy(this.doctors, 'title')
         this.resources = _.uniqBy(this.resources, 'id')
+        this.resources = this.resources.map(item => {
+          let name = item.title.split(',')[0]
+          let nameWithoutDr = name.split('Dr.')[0].length ? name.split('Dr.')[0] : name.split('Dr.')[1]
+          return {
+            id: item.id,
+            title: nameWithoutDr
+          }
+        })
         this.clonedResources = this.resources
         dataWithDoctor.map(item => {
           let patientAttended = item.patient_attended === true ? 'attended' : item.patient_attended === null ? 'unknown' : 'not_attended'
