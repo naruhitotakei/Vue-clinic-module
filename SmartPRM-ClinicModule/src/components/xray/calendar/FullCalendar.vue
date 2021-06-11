@@ -419,6 +419,7 @@ export default {
         minutes: '',
         notes: '',
         backgroundColor: '#64D6E8',
+        patient_attended: 'unknown',
         resourceId: '',
         eventResourceId: '',
         patientId: '',
