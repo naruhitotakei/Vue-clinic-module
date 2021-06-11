@@ -300,8 +300,8 @@ const settingsChildRoute = (prop, mode = false) => [
     component: SMSTemplates
   },
   {
-    path: 'mail-customers',
-    name: prop + '.mail-customers',
+    path: 'mail-templates',
+    name: prop + '.mail-templates',
     meta: { dark: mode, auth: true, name: 'Mail Templates' },
     component: MailTemplates
   },
