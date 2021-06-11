@@ -34,7 +34,7 @@
              <h5 class="card-title">{{ $t('reportingEmazing.servicesSummary') }}</h5>
              <a href="#" ref="excel-table1" class="btn btn-primary" @click="exportReportToExcel('table1')">Download Excel</a>
            </div>
-            <b-table-simple ref="table1">
+            <b-table-simple ref="table1" class="table-t">
               <thead>
               <tr>
                 <th v-for="(item,index) in servicesSummaryColumns" :key="index" :class="item.key === 'item' ? 'text-left' : ''">{{ item.label }}</th>
@@ -71,7 +71,7 @@
               <a href="#" ref="excel-table2" class="btn btn-primary" @click="exportReportToExcel('table2')">Download Excel</a>
             </div>
 <!--            <b-table small :items="servicesListItems" :fields="servicesListColumns" class="mb-0"></b-table>-->
-            <b-table-simple ref="table2">
+            <b-table-simple ref="table2" class="table-t">
               <thead>
               <tr>
                 <th v-for="(item,index) in servicesListColumns" :key="index" :class="item.key === 'item' ? 'text-left' : ''">{{ item.label }}</th>

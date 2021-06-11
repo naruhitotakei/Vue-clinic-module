@@ -259,7 +259,7 @@ a:hover { text-decoration: none; color: #02818f; }
 .iq-sidebar-menu .iq-menu li.active { border-bottom: none; }
 .iq-sidebar-menu .iq-menu li a:hover { color: #ffffff; }
 .iq-sidebar-menu .iq-menu li.active>a { color: #089bab; background-color: #ffffff; text-decoration: none; transition: none; }
-.iq-search-bar .searchbox .search-link { position: absolute; right: 15px; top: 2px; font-size: 16px; }
+.iq-search-bar .searchbox .search-link { position: absolute; right: 15px; bottom: 2px; font-size: 16px; }
 .iq-sidebar-menu .iq-menu li a[aria-expanded="true"] .iq-arrow-right{ transform: rotate(90deg); transition: all 0.3s ease-in-out; -webkit-transition: all 0.3s ease-in-out; -moz-transition: all 0.3s ease-in-out; -o-transition: all 0.3s ease-in-out; -ms-transition: all 0.3s ease-in-out; }
 .iq-sidebar-menu .iq-menu li .iq-submenu li a:hover, .iq-sidebar-menu .iq-menu li.active .iq-submenu li>a { background: transparent; }
 .iq-sidebar-menu .iq-menu li.active .iq-submenu li.active>a { background: #ceebee; color: #089bab; border-radius: 0; }

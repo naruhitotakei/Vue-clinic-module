@@ -27,7 +27,7 @@ const getRegionsList = (request, response) => {
 }
 
 const getLocationsList = (request, response) => {
-    pool.query("SELECT id, city FROM locations", (error, results) => {
+    pool.query("SELECT id, city FROM locations WHERE prm_client_id = 1 AND active = true", (error, results) => {
         if (error) {
             throw error
         }

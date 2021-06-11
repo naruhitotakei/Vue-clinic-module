@@ -8,9 +8,12 @@
                             <img class="rounded-circle img-fluid avatar-80" :src="profile.image" alt="profile">
                         </div>
                         <div class="iq-doc-info mt-3">
-                            <h4> {{user.name}}</h4>
+                            <h4> {{user.title}} {{user.name}} {{user.surname}} </h4>
                         </div>
                         <div class="iq-doc-description mt-2">
+                            <p class="mb-0">{{user.specialization}}</p>
+                        </div>
+                        <div class="iq-doc-description">
                             <p class="mb-0">{{user.mail}}</p>
                         </div>
                         <div class="iq-doc-description mt-2">
@@ -25,19 +28,37 @@
             <form>
                 <div class="form-row">
                     <div class="col-md-12 mb-3">
-                        <label for="title">{{ $t('settingsUsers.editProfileModal.name') }} *</label>
+                        <label for="title">{{ $t('settingsUsers.editProfileModal.title') }}</label>
+                        <div style="display: flex;">
+                            <input type="text" v-model="formData.title" class="form-control" :placeholder="$t('settingsUsers.editProfileModal.title')">
+                        </div>
+                    </div>
+                    <div class="col-md-12 mb-3">
+                        <label for="name">{{ $t('settingsUsers.editProfileModal.name') }} *</label>
                         <div style="display: flex;">
                             <input type="text" v-model="formData.name" class="form-control" :placeholder="$t('settingsUsers.editProfileModal.name')" required>
                         </div>
                     </div>
                     <div class="col-md-12 mb-3">
-                        <label for="title">{{ $t('settingsUsers.editProfileModal.mail') }} *</label>
+                        <label for="surname">{{ $t('settingsUsers.editProfileModal.surname') }} *</label>
+                        <div style="display: flex;">
+                            <input type="text" v-model="formData.surname" class="form-control" :placeholder="$t('settingsUsers.editProfileModal.surname')" required>
+                        </div>
+                    </div>
+                    <div class="col-md-12 mb-3">
+                        <label for="specialization">{{ $t('settingsUsers.editProfileModal.specialization') }}</label>
+                        <div style="display: flex;">
+                            <input type="text" v-model="formData.specialization" class="form-control" :placeholder="$t('settingsUsers.editProfileModal.specialization')">
+                        </div>
+                    </div>
+                    <div class="col-md-12 mb-3">
+                        <label for="mail">{{ $t('settingsUsers.editProfileModal.mail') }} *</label>
                         <div style="display: flex;">
                             <input type="text" v-model="formData.mail" class="form-control" :placeholder="$t('settingsUsers.editProfileModal.mail')" required>
                         </div>
                     </div>
                     <div class="col-md-12 mb-3">
-                        <label for="title">{{ $t('settingsUsers.editProfileModal.phone') }}</label>
+                        <label for="phone">{{ $t('settingsUsers.editProfileModal.phone') }}</label>
                         <div style="display: flex;">
                             <input type="text" v-model="formData.phone" class="form-control" :placeholder="$t('settingsUsers.editProfileModal.phone')">
                         </div>
@@ -60,7 +81,10 @@ export default {
       editProfileShowModal: false,
       formData: {
         id: '',
+        title: '',
         name: '',
+        surname: '',
+        specialization: '',
         mail: '',
         phone: ''
       }
@@ -96,7 +120,7 @@ export default {
   },
   computed: {
     isEditDisabled () {
-      return !this.formData.name || !this.formData.mail
+      return !this.formData.name || !this.formData.mail || !this.formData.surname
     }
   }
 }

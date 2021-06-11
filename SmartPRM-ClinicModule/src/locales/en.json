@@ -102,7 +102,7 @@
   "calendar": {
     "selectDoctor": "Select Doctor",
     "selectAll": "Select All",
-    "bookAppointment": "Book Appointment"
+    "addAppointment": "Add Appointment"
   },
   "calendarEvent": {
     "start": "Start",
@@ -507,7 +507,10 @@
   "settingsUsers": {
     "editProfile": "Edit profile",
     "editProfileModal": {
+      "title": "Title",
       "name": "Name",
+      "surname": "Surname",
+      "specialization": "Specialization",
       "mail": "Mail",
       "phone": "Phone",
       "close": "Close",

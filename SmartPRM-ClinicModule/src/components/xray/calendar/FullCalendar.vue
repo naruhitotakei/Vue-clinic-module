@@ -4,7 +4,7 @@
   :datesAboveResources="true"
   :defaultView="calendarOptions.defaultView"
   :plugins="calendarOptions.plugins"
-  :events="events"
+  :events="getEvents"
   :resources="resourcesOuter"
   :minTime="calendarOptions.minTime"
   :maxTime="calendarOptions.maxTime"
@@ -24,50 +24,97 @@
   />
   <!-- Event description modal -->
   <b-modal
-      v-model="modalShow"
+      v-model="showModal"
+      no-close-on-esc
       no-close-on-backdrop
       size="lg"
       title="Appointment Details"
       ok-title="Save Changes"
       @ok="saveAppointment"
+      @close="closeModal"
       cancel-title="Close"
       hide-footer
       >
     <form class="calendar-modal">
       <h3 v-if="modalTitle" style="text-align: center;">{{modalTitle}}</h3>
-      <div class="form-row">
-        <div class="col-md-12 mb-3">
-          <label for="patient">{{ $t('calendarEvent.patient') }}</label>
-          <v-select :disabled="disabled" :clearable="false" label="full_name" :reduce="patient => patient.id" class="style-chooser form-control-disabled font-size-15" v-model="formData.patientId" :options="patients"></v-select>
-        </div>
+        <div class="form-row">
+          <div class="row align-items-center justify-content-between w-100 mb-3">
+            <div class="col-md-3">
+              <label for="patient" class="mb-0">{{ $t('calendarEvent.patient') }}</label>
+            </div>
+            <div class="col-md-9">
+              <v-select :disabled="disabled" :clearable="false" label="full_name" :reduce="patient => patient.id" class="style-chooser form-control-disabled font-size-15" v-model="formData.patientId" :options="patients"></v-select>
+            </div>
+          </div>
 <!--        <div class="col-md-12 mb-3">-->
 <!--          <label for="title">Title</label>-->
 <!--          <div style="display: flex;">-->
 <!--            <input type="text" :disabled="disabled" v-model="formData.title" class="form-control form-control-disabled" placeholder="Title" id="title" required>-->
 <!--          </div>-->
 <!--        </div>-->
-        <div class="col-md-12 mb-3">
-          <label for="notes">{{ $t('calendarEvent.note') }}</label>
-          <textarea :disabled="disabled" row="2" v-model="formData.notes" class="form-control form-control-disabled font-size-15" placeholder="Add your note here for event!" id="note" required ></textarea>
+       <div class="row align-items-center justify-content-between w-100 mb-3">
+         <div class="col-md-3">
+         <label for="notes">{{ $t('calendarEvent.note') }}</label>
+         </div>
+         <div class="col-md-9">
+           <textarea :disabled="disabled" row="2" v-model="formData.notes" class="form-control form-control-disabled font-size-15" placeholder="Add your note here for event!" id="note" required ></textarea>
+         </div>
+       </div>
+       <div class="row align-items-center justify-content-between w-100 mb-3">
+         <div class="col-md-3">
+           <label for="location" class="ml-0 mb-0">{{ $t('calendarEvent.location') }}</label>
+         </div>
+         <div class="col-md-9">
+           <v-select
+               :disabled="disabled"
+               :clearable="false"
+               label="city"
+               :reduce="location => location.id"
+               class="style-chooser form-control-disabled font-size-15"
+               v-model="formData.locationId"
+               :options="locations"
+               style="min-width:305px;"
+           ></v-select>
+         </div>
+       </div>
+          <div class="row align-items-center justify-content-between w-100 mb-3">
+           <div class="col-md-3">
+             <label for="doctor" class="mr-2 mb-0">{{ $t('calendarEvent.doctor') }}</label>
+           </div>
+           <div class="col-md-9">
+             <v-select
+                 :disabled="disabled"
+                 :clearable="false"
+                 label="name"
+                 :reduce="doctor => doctor.id"
+                 class="style-chooser form-control-disabled font-size-15"
+                 v-model="formData.doctorId"
+                 :options="doctors"
+                 style="min-width: 305px;"
+             ></v-select>
+           </div>
+         </div>
+       <div class="row align-items-center justify-content-between w-100 mb-3">
+        <div class="col-md-3 pl-3 pr-0">
+          <label for="patient" class="mb-0">{{ $t('calendarEvent.product_group') }}</label>
         </div>
-        <div class="col-md-5 mb-3">
-          <label for="location">{{ $t('calendarEvent.location') }}</label>
-          <v-select :disabled="disabled" :clearable="false" label="city" :reduce="location => location.id" class="style-chooser form-control-disabled font-size-15" v-model="formData.locationId" :options="locations"></v-select>
+         <div class="col-md-9">
+           <v-select :disabled="disabled" :clearable="false" label="product_group_name" :reduce="product_group => product_group.product_group_id" class="style-chooser form-control-disabled font-size-15" v-model="formData.product_groups" :options="product_groups"></v-select>
+         </div>
+       </div>
+        <div class="row align-items-center justify-content-between w-100 mb-3">
+        <div class="col-md-3">
+          <label for="start" class="mb-0">{{ $t('calendarEvent.start') }}</label>
         </div>
-        <div class="col-md-5 offset-md-1 mb-3">
-          <label for="doctor">{{ $t('calendarEvent.doctor') }}</label>
-          <v-select :disabled="disabled" :clearable="false" :reduce="doctor => doctor.code" class="style-chooser form-control-disabled font-size-15" v-model="formData.doctorId" :options="doctors"></v-select>
+          <div class="col-md-9">
+            <input :disabled="disabled" type="datetime-local" v-model="formData.assignmentDate" class="form-control form-control-disabled" id="start" required style="max-width: 227px;">
+          </div>
         </div>
-        <div class="col-md-12 mb-3">
-          <label for="patient">{{ $t('calendarEvent.product_group') }}</label>
-          <v-select :disabled="disabled" :clearable="false" label="product_group_name" :reduce="patient => patient.id" class="style-chooser form-control-disabled font-size-15" v-model="formData.product_groups" :options="product_groups"></v-select>
+       <div class="row align-items-center justify-content-between w-100 mb-3">
+        <div class="col-md-3">
+          <label for="duration" class="mb-0">{{ $t('calendarEvent.duration') }}</label>
         </div>
-        <div class="col-md-12 mb-3">
-          <label for="start">{{ $t('calendarEvent.start') }}</label>
-          <input :disabled="disabled" type="datetime-local" v-model="formData.assignmentDate" class="form-control form-control-disabled" id="start" required style="max-width: 227px;">
-        </div>
-        <div class="col-md-12 mb-3">
-          <label for="duration">{{ $t('calendarEvent.duration') }}</label>
+        <div class="col-md-9">
           <div style="display: flex;">
             <div class="calendar-modal-input__hour mr-4">
               <input :disabled="disabled" type="number" v-model="formData.hours" class="form-control col-md-6 form-control-disabled" min="0" max="9" placeholder="Hours" required style="max-width: 150px;">
@@ -77,26 +124,35 @@
             </div>
           </div>
         </div>
-        <div class="col-md-12 mb-3">
-          <label for="color">{{ $t('calendarEvent.patient_attended') }}</label><br>
-          <template v-for="(item,index) in patient_attend">
-            <b-form-radio class="custom-radio-patient" inline v-model="formData.patient_attended" :value="item.value" :key="index" v-if="showPatientAttended(item)">{{ item.label }}</b-form-radio>
-          </template>
+       </div>
+        <div class="row align-items-center justify-content-between w-100 mb-3">
+         <div class="col-md-3">
+           <label for="color" class="mb-0">{{ $t('calendarEvent.patient_attended') }}</label><br>
+         </div>
+         <div class="col-md-9">
+           <template v-for="(item,index) in patient_attend">
+             <b-form-radio class="custom-radio-patient" inline v-model="formData.patient_attended" :value="item.value" :key="index" v-if="showPatientAttended(item)">{{ item.label }}</b-form-radio>
+           </template>
+         </div>
         </div>
-        <div class="col-md-12 mb-3">
-          <label for="color">{{ $t('calendarEvent.labels') }}</label><br>
-          <template v-for="(item,index) in color">
-            <b-form-radio class="custom-radio-color" inline v-model="formData.backgroundColor" :color="item.color" :value="item.value" :key="index" v-if="showLabels(item)">{{ item.label }}</b-form-radio>
-          </template>
+        <div class="row align-items-center justify-content-between w-100 mb-3">
+         <div class="col-md-3">
+           <label for="color">{{ $t('calendarEvent.labels') }}</label><br>
+         </div>
+         <div class="col-md-9">
+           <template v-for="(item,index) in color">
+             <b-form-radio class="custom-radio-color" inline v-model="formData.backgroundColor" :color="item.color" :value="item.value" :key="index" v-if="showLabels(item)">{{ item.label }}</b-form-radio>
+           </template>
+         </div>
         </div>
        <div class="modal-footer modal-footer-bt" style="width: 100%;">
          <template v-if="disabled">
-           <button type="button" class="btn btn-secondary" @click="modalShow = false">Close</button>
+           <button type="button" class="btn btn-secondary" @click="$emit('setModalShow', false)">Close</button>
            <button type="button" class="btn btn-secondary" @click="editMode">Edit Appointment</button>
            <button type="button" class="btn btn-primary" @click="viewPatient(formData.enquiry_id)">View Patient Record</button>
          </template>
          <template v-if="!disabled">
-           <button type="button" class="btn btn-secondary" @click="modalShow = false">Close</button>
+           <button type="button" class="btn btn-secondary" @click="$emit('setModalShow', false)">Close</button>
            <button type="button" class="btn btn-primary"   @click="saveAppointment">Save Changes</button>
          </template>
        </div>
@@ -115,9 +171,10 @@ import listPlugin from '@fullcalendar/list'
 import moment from 'moment'
 import { xray } from '../../../config/pluginInit'
 import { getPatients } from '../../../services/enquiry'
-import { getDentists } from '../../../services/userService'
+// import { getDentists } from '../../../services/userService'
 import { getLocationsList } from '../../../services/commonCodeLists'
 import { getProductGroups } from '@/services/products'
+import { createCalendar, getDoctorList, updateCalendar, updateCalendarLabel } from '@/services/calendarService'
 
 export default {
   components: {
@@ -126,11 +183,15 @@ export default {
   computed: {
     isSelectable () {
       return !this.viewName.includes('dayGridMonth')
+    },
+    getEvents () {
+      return this.events
     }
   },
   props: {
     resourcesOuter: Array,
-    events: Array
+    events: Array,
+    modalShow: Boolean
   },
   data () {
     return {
@@ -140,6 +201,7 @@ export default {
       patients: [],
       product_groups: [],
       disabled: true,
+      showModal: false,
       locations: [],
       doctors: [],
       state: [
@@ -216,11 +278,12 @@ export default {
         patientId: '',
         doctorId: '',
         locationId: '',
-        enquiry_id: ''
+        enquiry_id: '',
+        product_groups: ''
       },
       calendarApi: null,
       modalTitle: '',
-      modalShow: false,
+      // modalShow: false,
       viewName: 'dayGridMonth',
       event: {},
       calendarOptions: {
@@ -232,7 +295,7 @@ export default {
           right: 'dayGridMonth,resourceTimeGridWeek,resourceTimeGridDay'
         },
         timeZone: 'UTC',
-        defaultView: 'dayGridMonth',
+        defaultView: 'resourceTimeGridWeek',
         resources: this.resourcesOuter,
         minTime: '09:00:00',
         maxTime: '19:00:00',
@@ -247,6 +310,13 @@ export default {
   watch: {
     '$i18n.locale' () {
       this.getProductGroups(this.$i18n.locale)
+    },
+    'modalShow' () {
+      if (!this.formData.id) {
+        this.disabled = false
+        this.formData = this.defaultAppointment()
+      }
+      this.showModal = this.modalShow
     }
   },
   mounted () {
@@ -259,6 +329,20 @@ export default {
     xray.index()
   },
   methods: {
+    closeModal () {
+      this.$emit('setModalShow', false)
+      this.formData = this.defaultAppointment()
+    },
+    updateCalendar (id, appointment) {
+      updateCalendar(id, appointment).then(() => {
+        this.$emit('updateApp')
+      })
+    },
+    updateCalendarLabel (id, appointment) {
+      updateCalendarLabel(id, appointment).then(() => {
+        this.$emit('updateApp')
+      })
+    },
     showPatientAttended (item) {
       if (this.disabled && this.formData.patient_attended === item.value) {
         return true
@@ -296,8 +380,8 @@ export default {
       })
     },
     getDoctors () {
-      getDentists().then(response => {
-        this.doctors = response
+      getDoctorList().then((data) => {
+        this.doctors = data
       })
     },
     onViewChange (info) {
@@ -326,6 +410,7 @@ export default {
     },
     defaultAppointment () {
       return {
+        id: null,
         title: '',
         assignmentDate: '',
         start: '',
@@ -334,6 +419,7 @@ export default {
         minutes: '',
         notes: '',
         backgroundColor: '#64D6E8',
+        patient_attended: 'unknown',
         resourceId: '',
         eventResourceId: '',
         patientId: '',
@@ -342,59 +428,95 @@ export default {
         enquiry_id: ''
       }
     },
+    createCalendar (appointment) {
+      createCalendar(appointment).then(() => {
+
+      })
+    },
     calculateEndDate (startDate, hours, minutes) {
       return moment(startDate).add(hours, 'hours').add(minutes, 'minutes').format('YYYY-MM-DDTHH:mm')
     },
     saveAppointment () {
-      this.disabled = true
-      let id = this.calendarApi.getEvents().length + 1
-      let endDate = this.calculateEndDate(this.formData.assignmentDate, this.formData.hours, this.formData.minutes)
-      if (!this.formData.id) {
-        this.calendarApi.addEvent({
-          id: id,
-          title: this.formData.title,
-          assignmentDate: this.formData.assignmentDate,
-          start: this.formData.assignmentDate,
-          end: endDate,
-          hours: this.formData.hours,
-          minutes: this.formData.minutes,
-          notes: this.formData.notes,
-          backgroundColor: this.formData.backgroundColor,
-          resourceId: this.formData.resourceId,
-          eventResourceId: this.formData.resourceId,
-          patientId: this.formData.patientId,
-          doctorId: this.formData.doctorId,
-          locationId: this.formData.locationId
-        })
-        console.log('calendarAPI', this.calendarApi)
-        console.log('calendarAPI', this.events)
-      } else {
-        let event = this.calendarApi.getEventById(this.formData.id)
-        console.log('EVENT ID OBJECT', event)
-        event.setProp('title', this.formData.title)
-        event.setProp('backgroundColor', this.formData.backgroundColor)
-        event.setProp('resourceId', this.formData.resourceId)
-        event.setStart(this.formData.assignmentDate)
-        event.setEnd(endDate)
-        event.setExtendedProp('assignmentDate', this.formData.assignmentDate)
-        event.setExtendedProp('start', this.formData.assignmentDate)
-        event.setExtendedProp('hours', this.formData.hours)
-        event.setExtendedProp('minutes', this.formData.minutes)
-        event.setExtendedProp('notes', this.formData.notes)
-        event.setExtendedProp('eventResourceId', this.formData.resourceId)
-        event.setExtendedProp('patientId', this.formData.patientId)
-        event.setExtendedProp('doctorId', this.formData.doctorId)
-        event.setExtendedProp('locationId', this.formData.locationId)
-        console.log('event', event)
+      // this.modalShow = false
+      if (this.formData.patientId && this.formData.doctorId && this.formData.assignmentDate) {
+        this.disabled = true
+        this.$emit('setModalShow', false)
+        let id = this.calendarApi.getEvents().length + 1
+        let endDate = this.calculateEndDate(this.formData.assignmentDate, this.formData.hours, this.formData.minutes)
+        let title = this.patients.find(item => item.id === this.formData.patientId)
+        this.modalTitle = title.full_name
+        this.formData.title = title.full_name
+        this.formData.resourceId = this.formData.doctorId
+
+        if (typeof this.formData.patientId === 'object') {
+          this.formData.patientId = this.formData.patientId.id
+        } else {
+          let title = this.patients.find(item => item.id === this.formData.patientId)
+          this.modalTitle = title.full_name
+        }
+        if (typeof this.formData.doctorId === 'number') {
+          let doctor = this.doctors.find(doctor => doctor.id === this.formData.doctorId)
+          this.formData.doctorId = doctor.name
+        }
+        if (typeof this.formData.locationId === 'number') {
+          let location = this.locations.find(location => location.id === this.formData.locationId)
+          this.formData.locationId = location.city
+        }
+        if (typeof this.formData.product_groups === 'object') {
+          this.formData.product_groups = this.formData.product_groups.product_group_id
+        }
+
+        console.log(this.formData)
+        if (!this.formData.id) {
+          this.calendarApi.addEvent({
+            id: id,
+            title: this.formData.title,
+            assignmentDate: this.formData.assignmentDate,
+            start: this.formData.assignmentDate,
+            end: endDate,
+            hours: this.formData.hours,
+            minutes: this.formData.minutes,
+            notes: this.formData.notes,
+            product_groups: this.formData.product_groups,
+            patient_attended: this.formData.patient_attended,
+            backgroundColor: this.formData.backgroundColor,
+            resourceId: this.formData.resourceId,
+            eventResourceId: this.formData.resourceId,
+            patientId: this.formData.patientId,
+            doctorId: this.formData.doctorId,
+            locationId: this.formData.locationId
+          })
+          this.createCalendar(this.formData)
+        } else {
+          let event = this.calendarApi.getEventById(this.formData.id)
+          console.log('EVENT ID OBJECT', event)
+          event.setProp('title', this.formData.title)
+          event.setProp('backgroundColor', this.formData.backgroundColor)
+          event.setProp('resourceId', this.formData.resourceId)
+          event.setStart(this.formData.assignmentDate)
+          event.setEnd(endDate)
+          event.setExtendedProp('assignmentDate', this.formData.assignmentDate)
+          event.setExtendedProp('start', this.formData.assignmentDate)
+          event.setExtendedProp('hours', this.formData.hours)
+          event.setExtendedProp('minutes', this.formData.minutes)
+          event.setExtendedProp('notes', this.formData.notes)
+          event.setExtendedProp('eventResourceId', this.formData.resourceId)
+          event.setExtendedProp('patientId', this.formData.patientId)
+          event.setExtendedProp('doctorId', this.formData.doctorId)
+          event.setExtendedProp('locationId', this.formData.locationId)
+
+          this.updateCalendar(this.formData.id, this.formData)
+          this.updateCalendarLabel(this.formData.id, this.formData)
+        }
       }
-      // this.formData = this.defaultAppointment()
+      this.formData = this.defaultAppointment()
     },
     openCreateModal (selectionInfo) {
       this.disabled = false
-      console.log('selectionInfo', selectionInfo)
       this.formData = this.defaultAppointment()
       this.modalTitle = ''
-      this.modalShow = true
+      // this.modalShow = true
+      this.$emit('setModalShow', true)
       this.formData.resourceId = selectionInfo.resource.id
       this.formData.doctorId = +this.formData.resourceId
       this.formData.eventResourceId = selectionInfo.resource.id
@@ -425,7 +547,8 @@ export default {
       }
     },
     openUpdateModal (selectionInfo) {
-      this.modalShow = true
+      // this.modalShow = true
+      this.$emit('setModalShow', true)
       this.disabled = true
       let event = this.calendarApi.getEventById(selectionInfo.event.id)
       let location = this.locations.find(item => item.city === event.location)
@@ -541,6 +664,11 @@ body .wrapper .custom-control-label::after {
     }
   }
 }
+
+ .fc-widget-content .fc-scroller {
+   overflow: visible !important;
+   height: auto !important;
+ }
 
   @import '~@fullcalendar/core/main.css';
   @import '~@fullcalendar/daygrid/main.css';

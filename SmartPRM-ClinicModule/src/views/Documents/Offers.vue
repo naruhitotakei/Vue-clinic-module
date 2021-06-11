@@ -30,6 +30,7 @@
               <b-col md="12" class="table-responsive">
                 <b-table
                   id="my-table"
+                  class="table-t"
                   bordered
                   hover
                   :busy="!isDataLoaded"
@@ -165,6 +166,12 @@ export default {
 .offer {
   display: flex;
   justify-content: flex-end;
+}
+
+.table-t {
+  td {
+    min-width: 110px;
+  }
 }
 @media (max-width: 479px) {
 .iq-search-bar {

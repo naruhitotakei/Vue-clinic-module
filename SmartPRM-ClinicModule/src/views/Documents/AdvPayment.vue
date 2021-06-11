@@ -80,14 +80,14 @@
             <iq-card>
                 <template v-slot:body>
                     <b-row>
-                        <b-col cols="4" align-self="center" style="margin-bottom: 25px;">
+                        <b-col  class="col-md-4 col-sm-12" align-self="center" style="margin-bottom: 25px;">
                             <h4 class="mb-0">{{ title }}</h4>
                         </b-col>
                     </b-row>
                     <b-row>
                         <b-col lg="12">
                             <div class="table-responsive-sm">
-                                <b-table :items="invoices" :fields="invoiceColumns">
+                                <b-table :items="invoices" class="table-t" :fields="invoiceColumns">
                                     <template v-slot:cell(invoiceStatus)="data">
                                         <span class="badge badge-danger" v-if="data.value == 'Unpaid'">Unpaid</span>
                                         <span class="badge badge-warning" v-if="data.value == 'Partialy Paid'">Partialy Paid</span>

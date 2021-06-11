@@ -150,7 +150,7 @@ const editProfile = ((request, response, profile) => {
 })
 
 const getDentists = (request, response) => {
-  pool.query("SELECT u.id as code, concat(u.title, ' ', u.name) as label FROM users u WHERE function::text LIKE '%dentist%' AND active = true", (error, results) => {
+  pool.query("SELECT u.id as code, concat(u.title, ' ', u.first_name , ' ', u.surname) AS label FROM users u WHERE function::text LIKE '%dentist%' AND active = true", (error, results) => {
     if (error) {
       throw error
     }
@@ -159,7 +159,7 @@ const getDentists = (request, response) => {
 }
 
 const getSurgeons = (request, response) => {
-  pool.query("SELECT u.id as code, concat(u.title, ' ', u.name) as label FROM users u WHERE function::text LIKE '%surgeon%' AND active = true", (error, results) => {
+    pool.query("SELECT u.id as code, concat(u.title, ' ', u.first_name , ' ', u.surname) AS label FROM users u WHERE function::text LIKE '%surgeon%' AND active = true", (error, results) => {
     if (error) {
       throw error
     }
@@ -168,11 +168,10 @@ const getSurgeons = (request, response) => {
 }
 
 const getUsers = (request, response) => {
-  pool.query("SELECT users.id, users.prm_role_id, users.prm_client_id, users.prm_company_id, users.name, users.email AS mail, users.phone_number AS phone, prm_role.role_name, prm_role.role_id " +
+  pool.query("SELECT users.id, users.prm_role_id, users.prm_client_id, users.prm_company_id, users.title, users.first_name AS name, users.surname, users.specialization, users.email AS mail, users.phone_number AS phone, prm_role.role_name, prm_role.role_id " +
       "FROM users " +
       "LEFT JOIN prm_role ON users.prm_role_id = prm_role.role_id " +
       "WHERE users.roles::text LIKE '%doctor%' AND users.active = true", (error, results) => {
-    console.log(error)
     if (error) {
       throw error
     }
@@ -181,10 +180,8 @@ const getUsers = (request, response) => {
 }
 
 const updateUser = (req, res, id, user) => {
-  let statement = "UPDATE users SET " + "name='" + user.name + "', " + "email='" + user.mail + "',"
-  if (user.phone) statement += "phone_number='" + user.phone + "',"
-  statement = statement.slice(0, -1)
-  statement += " WHERE id = " + id
+  let statement = "UPDATE users SET " + "first_name='" + user.name + "'," + "surname='" + user.surname  + "'," + "email='" + user.mail + "'," + "phone_number='" + user.phone + "'," + "title='" + user.title + "'," + "specialization='" + user.specialization + "' WHERE id = " + id
+  console.log('stat: ' + statement)
   pool.query(statement, (error, results) => {
     if (error) {
       throw error

@@ -5,27 +5,55 @@
         <iq-card>
           <template v-slot:headerTitle>
           <iq-card>
-          <template v-slot:headerTitle>
-              <h4 class="card-title">{{ $t('calendar.selectDoctor') }}</h4>
-          </template>
+<!--          <template v-slot:headerTitle>-->
+<!--              <h4 class="card-title">{{ $t('calendar.selectDoctor') }}</h4>-->
+<!--          </template>-->
           <template v-slot:body>
-          <div class="main-wrapper">
-          <button @click="scroll_left" class="nav-btn btn-primary"><i class="ri-arrow-left-s-line"></i></button>
-            <div class="wrapper-box">
-              <div id="box">
-            <template v-for="(item,index) in doctors">
-              <b-checkbox class="custom-switch-color" :color="item.color" @change="checkData(item)" v-model="item.checked" name="check-button" inline :key="index">
-                {{ item.title }}
-              </b-checkbox>
-            </template></div></div>
-          <button @click="scroll_right" class="nav-btn btn-primary"><i class="ri-arrow-right-s-line"></i></button>
-          <b-checkbox name="check-button" v-model="allDoctorCheck" @change="allDoctorFun(allDoctorCheck)"  inline>{{ $t('calendar.selectAll') }}</b-checkbox>
+          <div class="row justify-content-between align-items-center">
+        <div class="row align-items-center">
+          <div class="calendar-doctor-slider">
+            <button @click="scroll_left" class="nav-btn btn-primary mr-1"><i class="ri-arrow-left-s-line"></i></button>
+            <VueSlickCarousel
+                v-bind="optionSlider"
+                v-if="doctors.length"
+                ref="carousel"
+            >
+              <div v-for="(item,index) in doctors" :key="index" >
+                <b-checkbox class="custom-switch-color" :color="item.color" @change="checkData(item)" v-model="item.checked" :ref="'doctor_'+index" name="check-button" inline >
+                  {{ item.title }}
+                </b-checkbox>
+              </div>
+            </VueSlickCarousel>
+            <button @click="scroll_right" class="nav-btn btn-primary ml-1"><i class="ri-arrow-right-s-line"></i></button>
+          </div>
+<!--          <button @click="scroll_left" class="nav-btn btn-primary mr-5"><i class="ri-arrow-left-s-line"></i></button>-->
+<!--          <div class="wrapper-box" >-->
+<!--            <div id="box">-->
+<!--              <template v-for="(item,index) in doctors">-->
+<!--                <b-checkbox class="custom-switch-color" :color="item.color" @change="checkData(item)" v-model="item.checked" :ref="'doctor_'+index" name="check-button" inline :key="index">-->
+<!--                  {{ item.title }}-->
+<!--                </b-checkbox>-->
+<!--              </template>-->
+<!--            </div>-->
+<!--          </div>-->
+<!--          <button @click="scroll_right" class="nav-btn btn-primary ml-5"><i class="ri-arrow-right-s-line"></i></button>-->
+          <b-checkbox style="margin-left: 30px" name="check-button" v-model="allDoctorCheck" @change="allDoctorFun(allDoctorCheck)"  inline>{{ $t('calendar.selectAll') }}</b-checkbox>
+        </div>
+            <b-button
+                @click="setModalShow(true)"
+                variant="primary"
+                class="btn-add-patient mt-0"
+                style="width: 190px;"
+            >
+              <i class="ri-add-line mr-2"></i>
+              {{ $t('calendar.addAppointment') }}
+            </b-button>
+
           </div>
           </template>
         </iq-card>
           </template>
           <template v-slot:headerAction>
-              <b-button v-b-modal.modal-1 variant="primary" class="btn-add-patient" style="width: 190px;"><i class="ri-add-line mr-2"></i>{{ $t('calendar.bookAppointment') }}</b-button>
             <form class="mt-4" novalidate @submit="submitFormData()">
               <b-modal id="modal-1" title="Appointment details" hide-footer>
               <form @submit="submitFormData()">
@@ -91,7 +119,7 @@
           </form>
           </template>
           <template  v-slot:body>
-            <FullCalendar :resourcesOuter="getResources" :events="getEvents" style="width: 100%; height: 100%;"/>
+            <FullCalendar :resourcesOuter="getResources" :events="getEvents" @updateApp="updateApp" @setModalShow="setModalShow" :modalShow="modalShow" style="width: 100%; height: 100%;"/>
           </template>
         </iq-card>
       </b-col>
@@ -104,14 +132,27 @@ import appointmentBook from '../../services/appointbook'
 import { getCalendar, getDoctorList } from '@/services/calendarService'
 import _ from 'lodash'
 import moment from 'moment'
+import { getProductGroups } from '@/services/products'
+import VueSlickCarousel from 'vue-slick-carousel'
 
 export default {
   name: 'GoogleCalendar',
-  components: { },
+  components: { VueSlickCarousel },
   data () {
     return {
       allDoctorCheck: true,
       checkedListArray: [],
+      slideCount: 0,
+      optionSlider: {
+        'centerMode': true,
+        'centerPadding': '0',
+        'focusOnSelect': true,
+        'slidesToShow': 1,
+        'slidesToScroll': 1,
+        'arrows': false,
+        'dots': false,
+        'infinite': false
+      },
       events: [
         {
           id: 340,
@@ -131,6 +172,8 @@ export default {
           doctorId: 28
         }
       ],
+      modalShow: false,
+      product_groups: [],
       resources: [
         // { id: 2, title: 'Dr. Katic22222', time: '2021-06-3' },
         // { id: 7, title: 'Dr. Fabjan' },
@@ -153,6 +196,7 @@ export default {
         answeredBy: '',
         presence: ''
       },
+      doctorsList: [],
       doctors: [
         // {
         //   id: 'a',
@@ -183,7 +227,8 @@ export default {
   mounted () {
     xray.index()
     this.getApontments()
-    this.getDoctorList()
+    this.getDoctors()
+    this.getProductGroups(this.$i18n.locale)
   },
   watch: {
     'allDoctorCheck' () {
@@ -221,13 +266,33 @@ export default {
     }
   },
   methods: {
-    getDoctorList () {
-      getDoctorList((data) => {
-        console.log(data)
+    setModalShow (bool) {
+      this.modalShow = bool
+    },
+    getProductGroups (lang) {
+      getProductGroups(lang).then(response => {
+        this.product_groups = response
       })
     },
+    getDoctors () {
+      getDoctorList().then((data) => {
+        this.doctorsList = data
+        // this.doctorsList.map(item => {
+        //   this.resources.push({
+        //     id: item.id,
+        //     title: item.name
+        //   })
+        // })
+      })
+    },
+    async updateApp () {
+      await this.getApontments()
+    },
     getApontments () {
-      getCalendar('2021-01-01', '2021-06-30').then(data => {
+      this.events = []
+      getCalendar('2021-01-01', '2021-06-30', '', this.$i18n.locale).then(data => {
+        console.log(data.find(item => item.id > 41000))
+
         let dataWithDoctor = data.filter(item => {
           if (item.doctor_user_id !== null) {
             this.doctors.push({
@@ -247,18 +312,23 @@ export default {
         this.resources = _.uniqBy(this.resources, 'id')
         this.clonedResources = this.resources
         dataWithDoctor.map(item => {
-          // let startDay = `${moment(item.date).add(moment.duration(item.time)).toISOString()}`
+          let patientAttended = item.patient_attended === true ? 'attended' : item.patient_attended === null ? 'unknown' : 'not_attended'
+          let productGroups = this.product_groups && this.product_groups.find(productName => productName.product_group_id === item.prm_pr_group_name_id)
           let endDay = this.calculateEndDate(moment(item.date).format('YYYY-MM-DD') + 'T' + item.time, 0, 15)
           this.events.push({
             id: item.id,
             title: item.name + ' ' + item.last_name,
             start: moment(item.date).format('YYYY-MM-DD') + 'T' + item.time,
             end: endDay,
-            backgroundColor: '#64D6E8',
-            patient_attended: 'unknown',
+            backgroundColor: item.app_lb_color ? item.app_lb_color : '#64D6E8',
+            patient_attended: patientAttended,
             resourceId: item.doctor_user_id,
             eventResourceId: item.doctor_user_id,
             locationId: item.location,
+            product_groups: productGroups ? {
+              product_group_id: productGroups.product_group_id,
+              product_group_name: productGroups.product_group_name
+            } : '',
             hours: 0,
             minutes: 15,
             assignmentDate: moment(item.date).format('YYYY-MM-DD') + 'T' + item.time,
@@ -266,14 +336,19 @@ export default {
             prm_client_id: item.prm_client_id,
             prm_client_name: item.prm_client_name,
             time: item.time,
+            notes: item.note,
             doctorId: item.doctor_name,
             enquiry_id: item.enquiry_id,
-            patientId: item.name + ' ' + item.last_name,
+            patientId: {
+              id: item.enquiry_id,
+              full_name: item.name + ' ' + item.last_name
+            },
             allDay: false,
             app_lb_color: item.app_lb_color,
             app_lb_type: item.app_lb_type
           })
         })
+        this.events = _.uniqBy(this.events, 'id')
       })
     },
     calculateEndDate (startDate, hours, minutes) {
@@ -385,12 +460,10 @@ export default {
       appointmentBook(this.formData)
     },
     scroll_left () {
-      let content = document.querySelector('.wrapper-box')
-      content.scrollLeft -= 250
+      this.$refs.carousel.prev()
     },
     scroll_right () {
-      let content = document.querySelector('.wrapper-box')
-      content.scrollLeft += 250
+      this.$refs.carousel.next()
     }
   }
 }
@@ -405,7 +478,7 @@ export default {
   margin-left: -15px;
 }
 .wrapper-box {
-  max-width: 185px;
+  max-width: 250px;
   /* overflow: auto; */
   overflow: hidden;
 }
@@ -436,6 +509,17 @@ export default {
 
 #box .center {
   left: calc(50% - 25px);
+}
+.calendar-doctor-slider {
+  display: flex;
+}
+.calendar-doctor-slider .slick-slider {
+  max-width: 300px;
+}
+
+.calendar-doctor-slider .slick-slider .slick-slide div div {
+  display: flex;
+  justify-content: center;
 }
 
 </style>
