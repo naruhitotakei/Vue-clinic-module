@@ -22,7 +22,7 @@
             <p>{{ $t('advPayments.newAdvPayment.advPaymentNo') }}: {{invoice.invoice_number}}</p>
             <p>{{ $t('advPayments.newAdvPayment.copy') }}:<span style="margin-left:20px">Original</span></p>
             <p>{{ $t('advPayments.newAdvPayment.IssuedIn') }}:<span style="margin-left:20px">{{premiseCity}}</span></p>
-            <p>{{ $t('advPayments.newAdvPayment.dateOfAdvPayment') }}:<span style="margin-left:20px">{{invoiceDate}}</span></p>
+            <p>{{ $t('advPayments.newAdvPayment.dateOfAdvPayment') }}:<span style="margin-left:20px">{{invoiceDatePdf}}</span></p>
           </b-col>
         </b-row>
         <b-row>
@@ -93,9 +93,6 @@
                                         <span class="badge badge-warning" v-if="data.value == 'Partialy Paid'">Partialy Paid</span>
                                         <span class="badge badge-success" v-if="data.value == 'Paid'">Paid</span>
                                     </template>
-                                    <template v-slot:cell(total_with_vat)="data">
-                                        <span class="font-weight-bold">{{data.value | euro}}</span>
-                                    </template>
                                     <template v-slot:cell(billingDetails)="data">
                                         <p v-html="data.value"></p>
                                     </template>
@@ -104,39 +101,47 @@
                         </b-col>
                     </b-row>
                     <b-row>
-                        <b-col lg="12">
-                            <h5 style="margin-bottom: 15px;">{{ detail }}</h5>
-                            <div class="table-responsive-sm">
-                                <b-table-simple striped class="text-center">
-                                    <thead>
-                                        <tr>
-                                            <th v-for="(item,index) in invoiceDetailField" :key="index" :class="item.key === 'item' ? 'text-left' : ''">{{ item.label }}</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        <tr v-for="(body, bodyKey) in invoiceDetails" :key="bodyKey">
-                                            <template v-for="(item,index) in invoiceDetailField">
-                                                <th v-if="item.key === 'id'" :key="item.key+index">{{ body[item.key] }}</th>
-                                                <td v-else-if="item.key === 'item'" :key="item.key+index" class="text-left">
-                                                    <h6 class="mb-0">{{ body[item.key].title }}</h6>
-                                                </td>
-                                                <td v-else :key="item.key+index" :class="item.key === 'total' ? 'font-weight-bold' : ''">
-                                                    {{ body[item.key] }}
-                                                </td>
-                                            </template>
-                                        </tr>
-                                    </tbody>
-                                </b-table-simple>
-                            </div>
-                            <h5 style="margin-bottom: 15px;">{{ summary }}</h5>
-                            <div class="table-responsive-sm">
-                                <b-table striped :items="invoices" :fields="invoiceSummaryFields">
-                                    <template v-slot:cell(total_with_vat)="data">
-                                        <span style="font-size:25px" class="font-weight-bold">{{data.value | euro}}</span>
-                                    </template>
-                                </b-table>
-                            </div>
-                        </b-col>
+                      <b-col lg="2">
+                        <div class="table-responsive-sm">
+                          <b-table-simple striped>
+                            <b-thead>
+                              <b-th colspan="2">{{ $t('advPayments.advPaymentsColumn.date') }}</b-th>
+                            </b-thead>
+                            <b-tbody>
+                              <b-tr>
+                                <b-td colspan="2">{{invoiceDate}}</b-td>
+                              </b-tr>
+                            </b-tbody>
+                          </b-table-simple>
+                        </div>
+                      </b-col>
+                      <b-col class="mt-4" lg="12">
+                          <h5 style="margin-bottom: 15px;">{{ detail }}</h5>
+                          <div class="table-responsive-sm">
+                              <b-table-simple striped class="text-center">
+                                  <b-thead>
+                                    <b-th>{{ $t('invoice.invoiceDetailColumn.item') }}</b-th>
+                                    <b-th>{{ $t('advPayments.advPaymentsColumn.amount') }}</b-th>
+                                  </b-thead>
+                                  <b-tbody>
+                                    <b-tr>
+                                      <b-td>{{itemName}}</b-td>
+                                      <b-td>{{itemAmount | numeral('0,0.00') | euro}}</b-td>
+                                    </b-tr>
+                                  </b-tbody>
+                              </b-table-simple>
+                          </div>
+                      </b-col>
+                      <b-col class="mt-4" lg="8">
+                          <h5 style="margin-bottom: 15px;">{{ $t('advPayments.newAdvPayment.paymentMethodSummary') }}</h5>
+                          <div class="table-responsive-sm">
+                              <b-table striped :items="invoices" :fields="invoiceSummaryFields">
+                                  <template v-slot:cell(lines_sum)="data">
+                                      <span style="font-size:25px" class="font-weight-bold">{{data.value | numeral('0,0.00') | euro}}</span>
+                                  </template>
+                              </b-table>
+                          </div>
+                      </b-col>
                     </b-row>
                     <b-row>
                         <b-col offset-md="4" cols="12" md="8" class="text-right">
@@ -176,9 +181,10 @@ export default {
         this.invoices = response
         this.invoice = response[0]
         this.invoiceNumber = this.invoice.invoice_number
-        this.invoiceDate = moment(this.invoice.invoice_time).format('YYYY-MM-DD HH:MM')
-        this.getItems(this.invoice.invoice_id)
-        this.invoiceDetails[0].total = this.invoice.charges_sum
+        this.invoiceDatePdf = moment(this.invoice.invoice_time).format('DD.MM.YYYY HH:MM')
+        this.invoiceDate = moment(this.invoice.invoice_time).format('DD.MM.YYYY')
+        this.itemAmount = this.invoice.lines_sum
+        this.invoiceDetails[0].total = this.invoice.lines_sum
         getPremiseById(this.invoice.premise_id).then(response => {
           this.premiseCity = response[0].premise_city
         })
@@ -207,16 +213,8 @@ export default {
       text: this.$t('advPayment.advPaymentHeader') + ' N° : ',
       summary: this.$t('invoice.invoiceSummary'),
       detail: this.$t('invoice.invoiceDetail'),
-      invoiceDetailField: [
-        {
-          key: 'name',
-          label: this.$t('invoice.invoiceDetailColumn.item')
-        },
-        {
-          key: 'total',
-          label: this.$t('invoice.invoiceDetailColumn.total')
-        }
-      ],
+      itemName: this.$t('advPayment.advPaymentHeader'),
+      itemAmount: '',
       invoiceDetails: [
         {
           name: this.$t('advPayment.advPaymentHeader'),
@@ -225,29 +223,15 @@ export default {
       ],
       invoiceSummaryFields: [
         {
-          label: this.$t('invoice.invoiceSummaryColumn.dueDate'),
-          key: 'invoice_time',
-          formatter: value => {
-            return moment(value).format('YYYY-MM-DD')
-          }
-        },
-        {
           key: 'payment_method',
           label: this.$t('invoice.invoiceSummaryColumn.paymentMethod')
         },
         {
-          key: 'total_with_vat',
-          label: this.$t('invoice.invoiceSummaryColumn.total')
+          key: 'lines_sum',
+          label: this.$t('advPayments.advPaymentsColumn.amount')
         }
       ],
       invoiceColumns: [
-        { label: this.$t('invoice.invoiceInfo.invoiceDate'),
-          key: 'invoice_time',
-          class: 'text-left',
-          formatter: value => {
-            return moment(value).format('YYYY-MM-DD')
-          }
-        },
         { label: this.$t('invoice.invoiceInfo.invoiceStatus'), key: 'verification_status', class: 'text-left' },
         { label: this.$t('invoice.invoiceInfo.paymentStatus'),
           key: 'invoiceStatus',
@@ -281,6 +265,7 @@ export default {
       invoice: null,
       invoices: [],
       items: [],
+      invoiceDatePdf: '',
       invoiceDate: '',
       premiseCity: ''
     }
