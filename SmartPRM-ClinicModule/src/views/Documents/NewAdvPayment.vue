@@ -40,14 +40,14 @@
               <b-tr>
                 <b-td colspan="4">{{ $t('advPayment.advPaymentHeader') }}</b-td>
                 <b-td colspan="1">1</b-td>
-                <b-td colspan="2">{{advPayments[0].amount}}</b-td>
-                <b-td colspan="2">{{advPayments[0].amount}}</b-td>
-                <b-td colspan="2">{{advPayments[0].amount}}</b-td>
+                <b-td colspan="2">{{advPayments[0].amount | euro}}</b-td>
+                <b-td colspan="2">{{advPayments[0].amount | euro}}</b-td>
+                <b-td colspan="2">{{advPayments[0].amount | euro}}</b-td>
               </b-tr>
               <b-tr>
                 <b-td colspan="8"></b-td>
                 <b-td colspan="2"><strong>{{ $t('advPayments.newAdvPayment.total') }}: </strong></b-td>
-                <b-td colspan="2">{{advPayments[0].amount}}</b-td>
+                <b-td colspan="2">{{advPayments[0].amount | euro}}</b-td>
               </b-tr>
               <b-tr>
                 <b-td colspan="8" class="hidden-row"></b-td>
@@ -183,7 +183,7 @@
                         </b-col>
                     </b-row>
                     <b-row>
-                        <b-col offset-md="4" cols="12" md="8" class="text-right" data-html2canvas-ignore="true">
+                        <b-col offset-md="4" cols="12" md="8" class="text-right">
                             <b-button :disabled="!canPrintPdf" variant="primary mr-3" @click="exportToPDF">
                                 <i class="ri-printer-line"></i>
                                 {{ $t('advPayments.newAdvPayment.downloadPrint') }}
@@ -252,6 +252,17 @@
       </template>
       <template #default>
           <span><i class="ri-error-warning-fill"></i>{{ $t('advPayments.newAdvPayment.alert3') }}</span>
+      </template>
+    </b-toast>
+
+    <b-toast id="mandatory-device-id" variant="danger" solid>
+      <template #toast-title>
+        <div class="d-flex flex-grow-1 align-items-baseline">
+            <strong class="mr-auto">{{ $t('EPR.notification') }}</strong>
+        </div>
+      </template>
+      <template #default>
+          <span><i class="ri-error-warning-fill"></i>Device id is mandatory</span>
       </template>
     </b-toast>
 </b-container>
@@ -326,7 +337,8 @@ export default {
       canPrintPdf: false,
       companyPremises: [],
       dateOfAdvPayment: moment().format('YYYY-MM-DDTHH:MM'),
-      device: null,
+      device: {},
+      deviceId: '',
       devices: [],
       invoice_number: '',
       zoi: '24as211d4232as1124',
@@ -415,6 +427,7 @@ export default {
     saveAsDraft () {
       this.status = 'draft'
       this.invoice_number = 'draft advance payment invoice'
+      this.deviceId = this.device ? this.device.device_id : ''
       this.prepareInvoice()
       if (this.isInoiceValid()) this.createInvoice()
     },
@@ -424,6 +437,7 @@ export default {
         this.status = 'issued'
         let year = moment().year()
         this.invoice_number = this.consecutiveInvoiceNumber.toString() + '-' + year.toString()
+        this.deviceId = this.device ? this.device.device_id : ''
         this.prepareInvoice()
         if (this.isInoiceValid()) this.createInvoice()
       })
@@ -440,6 +454,10 @@ export default {
       }
       if (!this.paymentMethods[0].paymentMethod) {
         this.$bvToast.show('mandatory-payment-method')
+        valid = false
+      }
+      if (!this.deviceId) {
+        this.$bvToast.show('mandatory-device-id')
         valid = false
       }
       return valid
@@ -481,7 +499,7 @@ export default {
         total_without_vat: this.advPayments[0].amount,
         total_vat_amount: null,
         total_with_vat: this.advPayments[0].amount,
-        paid_amount: 0,
+        paid_amount: this.advPayments[0].amount,
         amount_due_for_payment: 1,
         payment_method: this.paymentMethods[0].paymentMethod,
         warranty: true,
@@ -492,7 +510,7 @@ export default {
         eor: this.eor,
         invoice_special_notes: 'test',
         reverted: false,
-        device_id: this.device.device_id,
+        device_id: this.deviceId,
         premise_id: 1,
         business_customer_id: 1,
         invoiceItems: [],
