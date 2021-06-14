@@ -29,7 +29,7 @@ const getApontments = (request, response, from, to, user_id, accessible_user_ids
     statement += "LEFT JOIN prm_product_group prm_pr_group ON app.product_group_id = prm_pr_group.product_group_id "
     statement += "LEFT JOIN prm_product_group_name prm_pr_group_name ON prm_pr_group.product_group_id = prm_pr_group_name.product_group_id "
     statement += "WHERE app.trashed = false "
-    statement += "AND pcl.client_deleted = false "
+    // statement += "AND pcl.client_deleted = false "
     // statement += `AND prm_pr_group_name.language = '${lang}' `
     if (scope=='All') {
     } else if (scope=='PrmClient') {
