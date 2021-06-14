@@ -64,7 +64,7 @@
           </b-col>
         </b-row>
         <b-row>
-          <b-col>
+          <b-col lg="6">
               <p>{{ $t('advPayments.newAdvPayment.vatExemptionReason') }}</p>
             <br>
             <p>{{ $t('advPayments.newAdvPayment.issuedBy') }}: {{logedInUser.name}}</p>
@@ -73,6 +73,13 @@
             <p>{{ $t('advPayments.newAdvPayment.eor') }}: {{eor}}</p>
           </b-col>
         </b-row>
+        <b-col lg="6">
+            <qrcode-vue
+              value="test value"
+              size="100"
+              level="H"
+            ></qrcode-vue>
+        </b-col>
       </div>
     </div>
     <b-row>
@@ -278,9 +285,13 @@ import { createInvoice, updateInvoice, getItemsOfInvoiceById, getConsecutiveInvo
 import { getPremisesForCompany, getDevicesForPremise } from '../../services/companyPremises'
 import html2pdf from 'html2pdf.js'
 import _ from 'lodash'
+import QrcodeVue from 'qrcode.vue'
 
 export default {
   name: 'NewAdvPayment',
+  components: {
+    QrcodeVue
+  },
   mounted () {
     xray.index()
     this.getLoggedInUser()
@@ -304,7 +315,7 @@ export default {
         {
           paymentMethod: null,
           amount: 0,
-          editable: true
+          paid: true
         }
       ],
       products: [],
@@ -501,7 +512,7 @@ export default {
         total_with_vat: this.advPayments[0].amount,
         paid_amount: this.advPayments[0].amount,
         amount_due_for_payment: 1,
-        payment_method: this.paymentMethods[0].paymentMethod,
+        payment_method: this.paymentMethods,
         warranty: true,
         vat_exemption_reason: 'test',
         operator_name: this.logedInUser.name,

@@ -291,6 +291,7 @@
     "newInvoice": {
       "newInvoiceHeader": "New invoice",
       "dateOfInvoice": "Date of invoice",
+      "dateOfService": "Date of service",
       "paymentMethodSummary": "Payment Method Summary",
       "addPaymentMethod": "Add new payment method",
       "newInvoiceColumn": {
@@ -449,7 +450,8 @@
   },
   "paymentMethodsColumn": {
     "amount": "Amount",
-    "action": "Action"
+    "action": "Action",
+    "paid": "Paid"
   },
   "assignments": {
     "assignmentsHeader": "My Assignments",

@@ -1,5 +1,95 @@
 <template>
 <b-container ref="invoice" fluid>
+  <!-- <div style="display: none"> -->
+    <div>
+      <div id="printInvoice" style="color:black;margin-left:40px;height:1200px">
+        <b-row>
+            <b-col lg="12">
+              <p>{{usersCompany.company_name}}</p>
+              <p>{{usersCompany.company_address_line_1}}</p>
+              <p>{{usersCompany.company_post_code}} {{usersCompany.company_city}}</p>
+              <p>{{ $t('advPayments.newAdvPayment.IBAN') }}: {{usersCompany.company_iban}}</p>
+              <p>{{ $t('advPayments.newAdvPayment.vatId') }}: {{usersCompany.company_tax_registration_number}}</p>
+              <p>{{ $t('advPayments.newAdvPayment.regNumber') }}: {{usersCompany.company_legal_registration_identifier}}</p>
+            </b-col>
+        </b-row>
+        <b-row>
+          <b-col lg="6">
+            <p>{{patient.name}} {{patient.last_name}}</p>
+            <p>{{patient.address_line_1}}</p>
+            <p>{{patient.post_code}} {{patient.city}}</p>
+          </b-col>
+          <b-col lg="6">
+            <p>{{ $t('invoice.invoiceHeader') }}: {{invoiceNumber}}</p>
+            <p>{{ $t('advPayments.newAdvPayment.copy') }}:<span style="margin-left:20px">Original</span></p>
+            <p>{{ $t('advPayments.newAdvPayment.IssuedIn') }}:<span style="margin-left:20px">{{issuedIn.premise_city}}</span></p>
+            <p>{{ $t('advPayments.newAdvPayment.dateOfAdvPayment') }}:<span style="margin-left:20px">{{invoiceTime}}</span></p>
+          </b-col>
+        </b-row>
+        <b-row>
+          <b-table-simple small responsive>
+            <b-thead>
+              <b-tr>
+                <b-th colspan="2">{{ $t('invoice.invoiceInfo.invoiceDate') }}</b-th>
+                <b-th colspan="2">{{ $t('advPayments.newAdvPayment.code') }}</b-th>
+                <b-th colspan="2">{{ $t('advPayments.newAdvPayment.item') }}</b-th>
+                <b-th colspan="1">{{ $t('advPayments.newAdvPayment.quantity') }}</b-th>
+                <b-th colspan="1">{{ $t('advPayments.newAdvPayment.price') }}</b-th>
+                <b-th colspan="2">{{ $t('advPayments.newAdvPayment.value') }}</b-th>
+                <b-th colspan="2">{{ $t('advPayments.newAdvPayment.amount') }}</b-th>
+              </b-tr>
+            </b-thead>
+            <b-tbody>
+              <b-tr v-for="(item,index) in items" :key="index">
+                <b-td colspan="2">{{ dateOfServicePdf }}</b-td>
+                <b-td colspan="2">{{ item.item.product_code }}</b-td>
+                <b-td colspan="2">{{ item.item.product_name }}</b-td>
+                <b-td colspan="1">{{item.quantity}}</b-td>
+                <b-td colspan="1">{{item.item.product_price | euro}}</b-td>
+                <b-td colspan="2">{{item.item.product_price | euro}}</b-td>
+                <b-td colspan="2">{{item.total | euro}}</b-td>
+              </b-tr>
+              <b-tr>
+                <b-td colspan="8"></b-td>
+                <b-td colspan="2"><strong>{{ $t('advPayments.newAdvPayment.total') }}: </strong></b-td>
+                <b-td colspan="2">{{invoiceTotal | euro}}</b-td>
+              </b-tr>
+              <b-tr>
+                <b-td colspan="8" class="hidden-row"></b-td>
+                <b-td colspan="2"><strong>{{ $t('advPayments.newAdvPayment.payment') }}: </strong></b-td>
+                <b-td colspan="2">{{invoiceTotal | euro}}</b-td>
+              </b-tr>
+            </b-tbody>
+          </b-table-simple>
+        </b-row>
+        <b-row>
+          <b-col lg="3">
+              <p>{{ $t('advPayments.newAdvPayment.paymentMethod') }}:</p>
+            <p style="border-bottom: solid;">{{paymentMethods[0].payment_method}}<span style="margin-left:20px">{{invoiceTotal | euro}}</span></p>
+          </b-col>
+        </b-row>
+        <b-row>
+          <b-col lg="12">
+              <p>{{ $t('advPayments.newAdvPayment.vatExemptionReason') }}</p>
+              <p>{{ $t('invoice.pdfGuarantee') }}</p>
+            <br>
+          </b-col>
+          <b-col lg="6">
+            <p>{{ $t('advPayments.newAdvPayment.issuedBy') }}: {{logedInUser.name}}</p>
+            <br>
+            <p>{{ $t('advPayments.newAdvPayment.zoi') }}: {{zoi}}</p>
+            <p>{{ $t('advPayments.newAdvPayment.eor') }}: {{eor}}</p>
+          </b-col>
+          <b-col lg="6">
+            <qrcode-vue
+              value="test value"
+              size="100"
+              level="H"
+            ></qrcode-vue>
+          </b-col>
+        </b-row>
+      </div>
+    </div>
     <b-row>
         <b-col lg="12">
             <iq-card>
@@ -14,33 +104,61 @@
                             <div class="table-responsive-sm">
                               <b-table-simple>
                                 <b-thead>
-                                  <b-th>{{ $t('invoices.newInvoice.newInvoiceColumn.invoiceDate') }}</b-th>
-                                  <b-th>{{ $t('invoices.newInvoice.newInvoiceColumn.invoiceTotal') }}</b-th>
-                                  <b-th>{{ $t('invoices.newInvoice.newInvoiceColumn.customer') }}</b-th>
-                                  <b-th>{{ $t('invoices.newInvoice.newInvoiceColumn.issuedIn') }}</b-th>
-                                  <b-th>{{ $t('invoices.newInvoice.newInvoiceColumn.issuedBy') }}</b-th>
+                                  <b-th colspan="2">{{ $t('invoices.newInvoice.newInvoiceColumn.issuedBy') }}</b-th>
+                                  <b-th colspan="3">{{ $t('invoices.newInvoice.newInvoiceColumn.customer') }}</b-th>
+                                  <b-th colspan="4">{{ $t('invoices.newInvoice.newInvoiceColumn.issuedIn') }}</b-th>
+                                  <b-th colspan="3">{{ $t('invoices.newInvoice.newInvoiceColumn.device') }}</b-th>
                                 </b-thead>
                                 <b-tbody>
                                   <b-tr>
-                                    <b-td>{{ invoiceDate }}</b-td>
-                                    <b-td><strong>{{invoiceTotal | euro}}</strong></b-td>
-                                    <b-td v-html="billingDetails"></b-td>
-                                    <b-td>{{issuedIn}}</b-td>
-                                    <b-td>{{logedInUser.name}}</b-td>
+                                    <b-td colspan="2">{{ usersCompany.company_name }}</b-td>
+                                    <b-td colspan="3" v-html="billingDetails"></b-td>
+                                    <b-td colspan="4">
+                                      <span v-if="isInvoiceStatusIssued">
+                                          {{ issuedIn.premise_name}}
+                                      </span>
+                                      <v-select v-else :clearable="false" label="premise_name" class="premises" v-model="issuedIn" @input="findDevicesForPremise" :options="companyPremises"></v-select>
+                                    </b-td>
+                                    <b-td colspan="3">
+                                      <span v-if="devices.length == 1">{{device.device_name}}</span>
+                                      <div v-else>
+                                        <span v-if="isInvoiceStatusIssued">
+                                          {{ device.device_name}}
+                                        </span>
+                                        <v-select v-else :clearable="false" label="device_name" class="premises" v-model="device" :options="devices"></v-select>
+                                      </div>
+                                    </b-td>
                                   </b-tr>
                                 </b-tbody>
                               </b-table-simple>
                             </div>
                         </b-col>
                     </b-row>
-                    <b-row>
+                    <b-row class="mt-3">
+                      <b-col lg="4">
+                        <b-form-group :label="$t('invoices.newInvoice.dateOfInvoice')" style="color:black">
+                          <b-form-input v-model="dateOfInvoice" type="datetime-local"></b-form-input>
+                        </b-form-group>
+                      </b-col>
+                      <b-col lg="4">
+                        <b-form-group :label="$t('invoices.newInvoice.dateOfService')" style="color:black">
+                          <b-form-input v-model="dateOfService" type="date"></b-form-input>
+                        </b-form-group>
+                      </b-col>
+                      <b-col lg="4">
+                        <b-form-group :label="$t('invoices.newInvoice.newInvoiceSummary.dueDate')" style="color:black">
+                          <b-form-input v-model="dueDate" type="date"></b-form-input>
+                        </b-form-group>
+                      </b-col>
+                    </b-row>
+                    <b-row class="mt-3">
                         <b-col lg="12">
                           <iq-card>
                             <template v-slot:headerTitle>
                                 <h5 style="margin-bottom: 15px;">{{ $t('invoices.newInvoice.newInvoiceDetails.header') }}</h5>
                             </template>
                             <template v-slot:headerAction>
-                                <b-button variant="primary" data-html2canvas-ignore="true" style="white-space:nowrap" @click="add"><i class="ri-add-line mr-2"></i>{{ $t('invoices.newInvoice.newInvoiceDetails.addNewItem') }}</b-button>
+                                <b-button variant="primary" style="white-space:nowrap" @click="add"><i class="ri-add-line mr-2"></i>{{ $t('invoices.newInvoice.newInvoiceDetails.addNewItem') }}</b-button>
                             </template>
                             <template v-slot:body>
                               <b-row>
@@ -76,36 +194,42 @@
                               </b-row>
                             </template>
                           </iq-card>
+                        </b-col>
+                    </b-row>
+                    <b-row>
+                      <b-col lg="6" offset-lg="6">
+                          <h2 class="text-center">{{ $t('advPayment.advPaymentInfo.advPaymentTotal')}}: {{invoiceTotal | euro}}</h2>
+                      </b-col>
+                    </b-row>
+                    <b-row>
+                        <b-col lg="8">
                           <iq-card>
                             <template v-slot:headerTitle>
-                                <h5 style="margin-bottom: 15px;">{{ $t('invoices.newInvoice.newInvoiceSummary.header') }}</h5>
+                                <h5 style="margin-bottom: 15px;">{{ $t('advPayments.newAdvPayment.paymentMethodSummary') }}</h5>
+                            </template>
+                            <template v-slot:headerAction>
+                                <b-button variant="primary" style="white-space:nowrap" @click="addPaymentMethod"><i class="ri-add-line mr-2"></i>{{ $t('invoices.newInvoice.addPaymentMethod') }}</b-button>
                             </template>
                             <template v-slot:body>
                                <b-row>
                                 <b-col md="12" class="table-responsive" style="min-height:200px">
-                                  <b-table striped :items="summaryRows" :fields="summaryColumns">
-                                    <template v-slot:cell(dueDate)="data">
-                                      <span v-if="!data.item.editable">{{ data.item.dueDate }}</span>
-                                      <input type="number" min="0" v-model="data.item.dueDateNumber" v-else class="form-control">
-                                    </template>
-                                    <template v-slot:cell(paymentMethod)="data">
-                                      <span v-if="!data.item.editable">{{ data.item.paymentMethod }}</span>
+                                  <b-table bordered :items="paymentMethods" :fields="paymentMethodColumns">
+                                    <template v-slot:cell(payment_method)="data">
+                                      <span v-if="isInvoiceStatusIssued">
+                                          {{ data.item.payment_method }}
+                                      </span>
                                       <div v-else>
-                                        <v-select :clearable="false" label="name" :reduce="opt => opt.name" class="style-chooser" v-model="data.item.paymentMethod" :options="paymentMethods"></v-select>
+                                        <v-select :clearable="false" label="name" :reduce="opt => opt.name" class="style-chooser" v-model="data.item.payment_method" :options="paymentMethodOptions"></v-select>
                                       </div>
                                     </template>
-                                    <template v-slot:cell(subTotal)="data">
-                                      <span>{{ data.item.subTotal | euro }}</span>
+                                    <template v-slot:cell(amount)="data">
+                                      <input type="number" :disabled="isInvoiceStatusIssued" min="0"  v-model="data.item.amount" class="form-control">
                                     </template>
-                                    <template v-slot:cell(discount)="data">
-                                      <span >{{ data.item.discount | euro }}</span>
-                                    </template>
-                                    <template v-slot:cell(total)="data">
-                                      <span>{{ data.item.total | euro }}</span>
+                                    <template v-slot:cell(paid)="data">
+                                      <input type="checkbox" style="height:28px;" :disabled="isInvoiceStatusIssued" v-model="data.item.paid" class="form-control">
                                     </template>
                                     <template v-slot:cell(action)="data">
-                                        <b-button variant=" iq-bg-success mr-1 mb-1" size="sm" :disabled="!data.item.paymentMethod" @click="submitSummary(data.item)" v-if="data.item.editable"><i class="ri-checkbox-circle-fill m-0"></i></b-button>
-                                        <b-button variant=" iq-bg-primary mr-1 mb-1" size="sm" @click="editSummary(data.item)" v-if="!data.item.editable"><i class="ri-ball-pen-fill m-0"></i></b-button>
+                                      <b-button variant=" iq-bg-danger mr-1 mb-1" size="sm" @click="removePaymentMethod(data.item)"><i class="ri-delete-bin-line m-0"></i></b-button>
                                     </template>
                                   </b-table>
                                 </b-col>
@@ -113,8 +237,8 @@
                             </template>
                           </iq-card>
                         </b-col>
-                        <b-col offset="6" cols="6" class="text-right" data-html2canvas-ignore="true">
-                            <b-button v-if="showPdf" variant="link mr-3" @click="exportToPDF">
+                        <b-col offset="6" cols="6" class="text-right">
+                            <b-button v-if="showPdf" variant="primary mr-3" @click="exportToPDF">
                                 <i class="ri-printer-line"></i>
                                 {{ $t('invoices.newInvoice.downloadPrint') }}
                             </b-button>
@@ -151,6 +275,50 @@
           <span><i class="ri-error-warning-fill"></i>  {{ $t('invoice.notSaved') }}</span>
       </template>
     </b-toast>
+
+    <b-toast id="no-items" variant="danger" solid>
+      <template #toast-title>
+        <div class="d-flex flex-grow-1 align-items-baseline">
+            <strong class="mr-auto">{{ $t('EPR.notification') }}</strong>
+        </div>
+      </template>
+      <template #default>
+          <span><i class="ri-error-warning-fill"></i>At least one submitted item is mandatory</span>
+      </template>
+    </b-toast>
+
+    <b-toast id="different-amount" variant="danger" solid>
+      <template #toast-title>
+        <div class="d-flex flex-grow-1 align-items-baseline">
+            <strong class="mr-auto">{{ $t('EPR.notification') }}</strong>
+        </div>
+      </template>
+      <template #default>
+          <span><i class="ri-error-warning-fill"></i>{{ $t('advPayments.newAdvPayment.alert') }}</span>
+      </template>
+    </b-toast>
+
+    <b-toast id="mandatory-payment-method" variant="danger" solid>
+      <template #toast-title>
+        <div class="d-flex flex-grow-1 align-items-baseline">
+            <strong class="mr-auto">{{ $t('EPR.notification') }}</strong>
+        </div>
+      </template>
+      <template #default>
+          <span><i class="ri-error-warning-fill"></i>{{ $t('advPayments.newAdvPayment.alert3') }}</span>
+      </template>
+    </b-toast>
+
+    <b-toast id="mandatory-device-id" variant="danger" solid>
+      <template #toast-title>
+        <div class="d-flex flex-grow-1 align-items-baseline">
+            <strong class="mr-auto">{{ $t('EPR.notification') }}</strong>
+        </div>
+      </template>
+      <template #default>
+          <span><i class="ri-error-warning-fill"></i>Device id is mandatory</span>
+      </template>
+    </b-toast>
 </b-container>
 </template>
 <script>
@@ -158,20 +326,24 @@ import { xray } from '../../config/pluginInit'
 import moment from 'moment'
 import { sso } from '../../services/userService'
 import { getCompanyById } from '../../services/companies'
+import { getPremisesForCompany, getDevicesForPremise } from '../../services/companyPremises'
 import { getEnquiryById } from '../../services/enquiry'
 import { createInvoice } from '../../services/invoice'
 import { getProducts } from '../../services/products'
 import html2pdf from 'html2pdf.js'
 import _ from 'lodash'
+import QrcodeVue from 'qrcode.vue'
 
 export default {
   name: 'NewInvoice',
+  components: {
+    QrcodeVue
+  },
   mounted () {
     xray.index()
     this.getLoggedInUser()
     this.getPatient()
     this.getProducts()
-    this.summaryRows.push(this.defaultSummary())
   },
   data () {
     return {
@@ -182,8 +354,8 @@ export default {
         { label: this.$t('invoices.newInvoice.newInvoiceDetails.quantity'), key: 'quantity', class: 'text-left narrow-column' },
         { label: this.$t('invoices.newInvoice.newInvoiceDetails.price'), key: 'price', class: 'text-left' },
         { label: this.$t('invoices.newInvoice.newInvoiceDetails.discount'), key: 'discount', class: 'text-left narrow-column' },
-        { label: this.$t('invoices.newInvoice.newInvoiceDetails.total'), key: 'total', class: 'text-left' },
-        { label: this.$t('invoices.newInvoice.newInvoiceDetails.action'), key: 'action', class: 'text-center action-column', thAttr: { 'data-html2canvas-ignore': true }, tdAttr: { 'data-html2canvas-ignore': true } }
+        { label: this.$t('invoices.newInvoice.newInvoiceDetails.amount'), key: 'total', class: 'text-left' },
+        { label: this.$t('invoices.newInvoice.newInvoiceDetails.action'), key: 'action', class: 'text-center action-column' }
       ],
       items: [
         {
@@ -198,82 +370,115 @@ export default {
           editable: true
         }
       ],
-      summaryRows: [],
-      products: [],
       paymentMethods: [
-        { id: 1, name: 'Cash' },
-        { id: 2, name: 'Credit card' }
-      ],
-      selectedItemName: '',
-      summary: 'Invoice Summary',
-      summaryColumns: [
         {
-          key: 'dueDate',
-          label: this.$t('invoices.newInvoice.newInvoiceSummary.dueDate'),
+          payment_method: null,
+          amount: 0,
+          paid: false
+        }
+      ],
+      paymentMethodOptions: [
+        { id: 1, name: 'Cash', label: this.$t('paymentMethods.cash') },
+        { id: 2, name: 'Credit card', label: this.$t('paymentMethods.creditCard') },
+        { id: 3, name: 'Bank Account', label: this.$t('paymentMethods.bankAccount') }
+      ],
+      paymentMethodColumns: [
+        {
+          key: 'payment_method',
+          label: this.$t('paymentMethod')
+        },
+        {
+          key: 'amount',
+          label: this.$t('paymentMethodsColumn.amount'),
           class: 'action-column'
         },
         {
-          key: 'paymentMethod',
-          label: this.$t('invoices.newInvoice.newInvoiceSummary.paymentMethod')
+          key: 'paid',
+          label: this.$t('paymentMethodsColumn.paid'),
+          class: 'text-center action-column'
         },
-        {
-          key: 'subTotal',
-          label: this.$t('invoices.newInvoice.newInvoiceSummary.subTotal')
-        },
-        {
-          key: 'discount',
-          label: this.$t('invoices.newInvoice.newInvoiceSummary.discount')
-        },
-        {
-          key: 'total',
-          label: this.$t('invoices.newInvoice.newInvoiceSummary.total')
-        },
-        {
-          label: this.$t('invoices.newInvoice.newInvoiceSummary.action'),
+        { label: this.$t('servicesAndProducts.productGroupColumn.productGroupAction'),
           key: 'action',
-          class: 'text-center action-column',
-          thAttr: { 'data-html2canvas-ignore': true },
-          tdAttr: { 'data-html2canvas-ignore': true }
+          class: 'text-center action-column'
         }
+
       ],
-      invoiceDate: moment().format('DD MMM, YYYY'),
+      products: [],
+      selectedItemName: '',
+      dateOfInvoice: moment().format('YYYY-MM-DDTHH:MM'),
+      dateOfService: moment().format('YYYY-MM-DD'),
+      dueDate: moment().format('YYYY-MM-DD'),
       patientId: this.$route.params.patientId,
-      issuedIn: 'Ljubljana',
+      issuedIn: '',
       isEditMode: false,
       logedInUser: {},
       patient: {},
       usersCompany: {},
       invoiceTotal: 0,
+      paymentTotal: 0,
+      subTotal: 0,
+      discount: 0,
       invoice: {},
-      billingDetails: ''
+      companyPremises: [],
+      billingDetails: '',
+      devices: [],
+      device: {},
+      deviceId: '',
+      invoiceTime: '',
+      status: '',
+      invoiceDatePdf: moment().format('DD.MM.YYYY'),
+      dateOfServicePdf: '',
+      invoiceNumber: '',
+      zoi: '24as211d4232as1124',
+      eor: '24as211d4232as1124'
+    }
+  },
+  computed: {
+    isInvoiceStatusIssued () {
+      return this.status === 'issued'
     }
   },
   methods: {
+    addPaymentMethod () {
+      this.paymentMethods.push(this.defaultPaymentMethod())
+    },
+    defaultPaymentMethod () {
+      return {
+        payment_method: null,
+        amount: 0,
+        paid: false
+      }
+    },
+    removePaymentMethod (item) {
+      let index = this.paymentMethods.indexOf(item)
+      this.paymentMethods.splice(index, 1)
+    },
     exportToPDF () {
-      this.items.pop()
+      this.dateOfServicePdf = moment(this.dateOfService).format('DD.MM.YYYY')
+      this.invoiceTime = moment(this.invoice.invoice_time).format('DD.MM.YYYY HH:MM')
       let options = {
-        filename: 'invoice.pdf',
+        filename: this.invoice_number + '.pdf',
         image: { type: 'jpeg', quality: 0.98 },
-        html2canvas: { y: 350 },
+        html2canvas: { y: 50 },
         jsPDF: { unit: 'mm', format: 'legal', orientation: 'landscape' }
       }
-      html2pdf().set(options).from(this.$refs.invoice).save()
+      var source = window.document.getElementById('printInvoice')
+      html2pdf().set(options).from(source).save()
     },
     getInvoiceTotal () {
       let totalCount = 0
       let totalSubCount = 0
       if (this.items.length === 0) {
         this.invoiceTotal = 0
-        this.summaryRows[0].invoiceSubTotal = 0
+        this.subTotal = 0
       } else {
         this.items.forEach(element => {
           totalCount += this.calculatePrice(element)
           totalSubCount += this.calculatePriceBeforeDiscount(element)
         })
         this.invoiceTotal = totalCount.toFixed(2)
-        this.summaryRows[0].total = this.invoiceTotal
-        this.summaryRows[0].subTotal = totalSubCount.toFixed(2)
-        this.summaryRows[0].discount = (this.summaryRows[0].subTotal - this.summaryRows[0].total).toFixed(2)
+        this.subTotal = totalSubCount.toFixed(2)
+        this.discount = (this.subTotal - this.invoiceTotal).toFixed(2)
       }
     },
     submitSummary (item) {
@@ -298,6 +503,17 @@ export default {
         getCompanyById(this.logedInUser.prm_company_id).then(response => {
           this.usersCompany = response[0]
         })
+        getPremisesForCompany(this.logedInUser.prm_company_id).then(response => {
+          this.companyPremises = response
+          this.issuedIn = this.companyPremises[0]
+          this.findDevicesForPremise(this.issuedIn)
+        })
+      })
+    },
+    findDevicesForPremise (value) {
+      getDevicesForPremise(value.premise_id).then(response => {
+        this.devices = response
+        this.device = this.devices[0]
       })
     },
     getPatient () {
@@ -357,27 +573,28 @@ export default {
         editable: true
       }
     },
-    defaultSummary () {
-      return {
-        dueDate: this.invoiceDate,
-        dueDateNumber: 0,
-        paymentMethod: null,
-        subTotal: 0,
-        discount: 0,
-        total: this.invoiceTotal,
-        editable: true
-      }
+    calculatePaymentTotal () {
+      this.paymentTotal = _.reduce(this.paymentMethods, function (sum, item) {
+        return sum + parseFloat(item.amount)
+      }, 0)
+      console.log('paym' + this.paymentTotal)
+      console.log('inv' + this.invoiceTotal)
     },
     saveAsDraft () {
-      this.prepareInvoice('draft')
-      this.createInvoice()
+      this.status = 'draft invoice'
+      this.invoiceNumber = 'draft invoice'
+      this.deviceId = this.device ? this.device.device_id : ''
+      this.prepareInvoice()
+      if (this.isInoiceValid()) this.createInvoice()
     },
     saveInvoice () {
-      this.prepareInvoice('issued')
-      this.createInvoice()
+      this.status = 'issued'
+      this.deviceId = this.device ? this.device.device_id : ''
+      this.prepareInvoice()
+      if (this.isInoiceValid()) this.createInvoice()
     },
     createInvoice () {
-      this.items.pop()
+      if (!this.isItemValid()) this.items.pop()
       createInvoice(this.invoice).then(response => {
         console.log(response)
         this.showPdf = true
@@ -387,22 +604,47 @@ export default {
         this.$bvToast.show('bottom-right-danger')
       })
     },
-    prepareInvoice (status) {
+    isItemValid () {
+      let item = _.last(this.items)
+      return parseFloat(item.price) > 0
+    },
+    isInoiceValid () {
+      this.calculatePaymentTotal()
+      let valid = true
+      if (this.invoiceTotal !== this.paymentTotal.toFixed(2)) {
+        this.$bvToast.show('different-amount')
+        valid = false
+      }
+      if (this.items.length < 2) {
+        this.$bvToast.show('no-items')
+        valid = false
+      }
+      // if (!this.paymentMethods[0].paymentMethod) {
+      //   this.$bvToast.show('mandatory-payment-method')
+      //   valid = false
+      // }
+      if (!this.deviceId) {
+        this.$bvToast.show('mandatory-device-id')
+        valid = false
+      }
+      return valid
+    },
+    prepareInvoice () {
       let temp = {
         invoice_type: 'Invoice',
-        invoice_time: moment(this.invoiceDate).format('YYYY MM DD HH:MM:SS'),
-        invoice_number: '02-blagajna1-21aleksa',
+        invoice_time: moment(this.dateOfInvoice).format('YYYY MM DD HH:MM:SS'),
+        invoice_number: this.invoiceNumber,
         invoice_numbering_structure: '{c}',
-        issued_in: this.issuedIn,
-        lines_sum: this.summaryRows[0].subTotal,
-        discount_sum: this.summaryRows[0].subTotal - this.invoiceTotal,
+        issued_in: this.issuedIn.premise_name,
+        lines_sum: this.subTotal,
+        discount_sum: this.discount,
         charges_sum: this.invoiceTotal,
         total_without_vat: 0,
         total_vat_amount: 0,
         total_with_vat: 0,
         paid_amount: 0,
         amount_due_for_payment: 0,
-        payment_method: this.summaryRows[0].paymentMethod,
+        payment_methods: this.paymentMethods,
         warranty: true,
         vat_exemption_reason: 'test',
         operator_name: this.logedInUser.name,
@@ -414,8 +656,10 @@ export default {
         device_id: 1,
         premise_id: 1,
         business_customer_id: 1,
-        invoice_status: status,
-        invoiceItems: this.items
+        invoice_status: this.status,
+        invoiceItems: this.items,
+        service_date: this.dateOfService,
+        due_date: this.dueDate
       }
       this.invoice = _.assignIn(this.invoice, this.patient, this.usersCompany, temp)
     }
@@ -439,4 +683,7 @@ export default {
   display: grid;
 }
 
+.headerTitle {
+  width: 60% !important;
+}
 </style>

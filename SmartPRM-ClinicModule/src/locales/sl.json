@@ -283,6 +283,7 @@
     "newInvoice": {
       "newInvoiceHeader": "Nov račun",
       "dateOfInvoice": "Datum izdaje",
+      "dateOfService": "Datum storitve",
       "paymentMethodSummary": "",
       "addPaymentMethod": "Dodaj nov način plačila",
       "newInvoiceColumn": {
@@ -441,7 +442,8 @@
   },
   "paymentMethodsColumn": {
     "amount": "Znesek",
-    "action": "Urejaj"
+    "action": "Urejaj",
+    "paid": "Plačano"
   },
   "assignments": {
     "assignmentsHeader": "Moje Naloge",

@@ -55,7 +55,10 @@ const createInvoices = (request, response, invoice) => {
     if (invoice.device_id) statement += "device_id,"
     if (invoice.premise_id) statement += "premise_id,"
     if (invoice.business_customer_id) statement += "business_customer_id,"
-    if (invoice.verification_status) statement += "verification_status"
+    if (invoice.verification_status) statement += "verification_status,"
+    if (invoice.service_date) statement += "service_date,"
+    if (invoice.due_date) statement += "due_date,"
+    statement = statement.slice(0, -1)
     statement+= ") VALUES ("
     if (invoice.invoice_type) statement += "'" + invoice.invoice_type + "',"
     if (invoice.invoice_time) statement += "'" + invoice.invoice_time + "',"
@@ -102,6 +105,8 @@ const createInvoices = (request, response, invoice) => {
     if (invoice.premise_id) statement += "'" + invoice.premise_id + "',"
     if (invoice.business_customer_id) statement += "'" + invoice.business_customer_id + "',"
     if (invoice.verification_status) statement += "'" + invoice.verification_status + "',"
+    if (invoice.service_date) statement += "'" + invoice.service_date + "',"
+    if (invoice.due_date) statement += "'" + invoice.due_date + "',"
     statement = statement.slice(0, -1)
     statement += ") RETURNING invoice_id"
     
@@ -116,7 +121,11 @@ const createInvoices = (request, response, invoice) => {
                 createInoviceItem(item, invoiceId)
             });
         }
-        createPaymentMethod(invoiceId, invoice.payment_method, invoice.lines_sum)
+        if (invoice.payment_methods.length > 0) {
+            invoice.payment_methods.forEach(item => {
+                createPaymentMethod(invoiceId, item.payment_method, item.amount, item.paid)
+            });
+        }
         response.status(200).json(invoiceId)
     })
 }
@@ -167,6 +176,8 @@ const updateInvoices = (request, response, id, invoice) => {
     if (invoice.premise_id) statement += "premise_id='" + invoice.premise_id + "',"
     if (invoice.business_customer_id) statement += "business_customer_id='" + invoice.business_customer_id + "',"
     if (invoice.verification_status) statement += "verification_status='" + invoice.verification_status + "',"
+    if (invoice.service_date) statement += "service_date='" + invoice.service_date + "',"
+    if (invoice.due_date) statement += "due_date='" + invoice.due_date + "',"
     statement = statement.slice(0, -1)
     statement += " WHERE invoice_id = " + id
     
@@ -187,12 +198,20 @@ const updateInvoices = (request, response, id, invoice) => {
             }
         });
     }
-    updatePaymentMethod(id, invoice.payment_method, invoice.lines_sum)
+    if (invoice.payment_methods.length > 0) {
+        invoice.payment_methods.forEach(item => {
+            if (item.id) {
+                updatePaymentMethod(id, item.payment_method, item.amount, item.paid)
+            } else {
+                createPaymentMethod(invoiceId, item.payment_method, item.amount, item.paid)
+            }
+        });
+    }
 }
 
-const createPaymentMethod = (invoiceId, paymentMethod, amount) => {
-    let statement = "INSERT INTO payment_item(invoice_id, amount, type, created_at"
-    statement+= ") VALUES (" + invoiceId + "," + amount + ",'" + paymentMethod + "',NOW())"
+const createPaymentMethod = (invoiceId, paymentMethod, amount, paid) => {
+    let statement = "INSERT INTO payment_item(invoice_id, amount, type, paid, created_at"
+    statement+= ") VALUES (" + invoiceId + "," + amount + ",'" + paymentMethod + "'," + paid + ",NOW())"
     console.log(statement)
     pool.query(statement, (error, results) => {
         if (error) {
@@ -201,8 +220,8 @@ const createPaymentMethod = (invoiceId, paymentMethod, amount) => {
     })
 }
 
-const updatePaymentMethod = (invoiceId, paymentMethod, amount) => {
-    let statement = "UPDATE payment_method SET "
+const updatePaymentMethod = (invoiceId, paymentMethod, amount, paid) => {
+    let statement = "UPDATE payment_item SET paid=" + paid + ","
     if (paymentMethod) statement += "type='" + paymentMethod + "',"
     if (amount) statement += "amount='" + amount + "',"
     statement = statement.slice(0, -1)
