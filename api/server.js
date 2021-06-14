@@ -5,7 +5,8 @@ var Rollbar = require('rollbar');
 var rollbar = new Rollbar({
   accessToken: '1922e9135f0a45a292341f0137316fc7',
   captureUncaught: true,
-  captureUnhandledRejections: true
+  captureUnhandledRejections: true,
+  enabled: process.env.NODE_ENV === 'development' ? true : false
 });
 const session = require("express-session");
 var cors = require('cors')
