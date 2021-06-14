@@ -328,6 +328,22 @@ ALTER COLUMN patient_attended TYPE VARCHAR(32),
 ADD COLUMN hours INT,
 ADD COLUMN minutes INT;
 
+--############################################################
+--# Altering invoice table
+--############################################################
+
+ALTER TABLE invoice
+ADD COLUMN service_date DATE DEFAULT CURRENT_DATE,
+ADD COLUMN due_date DATE DEFAULT CURRENT DATE;
+
+--############################################################
+--# Altering payment_item table
+--############################################################
+
+ALTER TABLE payment_item
+ADD COLUMN due_date DATE,
+ADD COLUMN payment_date DATE;
+
 UPDATE db_version SET version ='01.17', version_date=CURRENT_DATE WHERE resource='Tables';
 
 
