@@ -295,7 +295,7 @@ export default {
         { value: { enter: 'rotateInDownLeft', exit: 'rotateOutDownLeft' }, text: 'Roll' }
       ],
       horizontalMenu: HorizontalItems,
-      verticalMenu: {},
+      verticalMenu: SideBarItems,
       userProfile: profile,
       logo: loader,
       usersList: Users,
