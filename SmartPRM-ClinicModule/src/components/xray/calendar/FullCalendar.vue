@@ -99,7 +99,14 @@
           <label for="patient" class="mb-0">{{ $t('calendarEvent.product_group') }}</label>
         </div>
          <div class="col-md-9">
-           <v-select :disabled="disabled" :clearable="false" label="product_group_name" :reduce="product_group => product_group.product_group_id" class="style-chooser form-control-disabled font-size-15" v-model="formData.product_groups" :options="product_groups"></v-select>
+           <v-select
+               :disabled="disabled"
+               :clearable="false"
+               label="product_group_name"
+               :reduce="product_group => product_group.product_group_id"
+               class="style-chooser form-control-disabled font-size-15"
+               v-model="formData.product_groups"
+               :options="product_groups"></v-select>
          </div>
        </div>
         <div class="row align-items-center justify-content-between w-100 mb-3">
@@ -509,8 +516,8 @@ export default {
           this.updateCalendarLabel(this.formData.id, this.formData)
         }
       }
+      // this.$emit('setModalShow', false)
       this.formData = this.defaultAppointment()
-      console.log('clear formData', this.formData)
     },
     openCreateModal (selectionInfo) {
       this.disabled = false
@@ -584,7 +591,7 @@ export default {
     display: none;
 }
 .fc-resourceTimeGridWeek-view .fc-resource-cell {
-  writing-mode: tb-rl !important;
+  writing-mode:  vertical-lr !important;
   transform: rotate(180deg) !important;
   line-height: 13px !important;
 }

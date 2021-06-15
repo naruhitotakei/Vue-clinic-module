@@ -11,8 +11,8 @@ var moment = require('moment');
 
 const getApontments = (request, response, from, to, user_id, accessible_user_ids, selctedIds, prm_client_id, scope, lang ) => {
     var statement = "SELECT app.id, app.date, app.note, app.product_group_id, app.enquiry_id as app_enquiry_id, app.kind, app.patient_attended, app.appointment_canceled_in_advance_by_clinic, " +
-        "app.appointment_canceled_in_advance_by_patient, app.time, app.location, app.enquiry_id, enq.name, enq.last_name, " +
-        "app.attendance, app.product_id, app_s.location, app_s.doctor_name, us.id as doctor_user_id, pcl.id as prm_client_id, " +
+        "app.appointment_canceled_in_advance_by_patient, app.time, app.location as app_location, app.enquiry_id, enq.name, enq.last_name, " +
+        "app.attendance, app.product_id, app_s.location as app_s_location, app_s.doctor_name, us.id as doctor_user_id, pcl.id as prm_client_id, " +
         "pcl.client_name as prm_client_name, prd.name as prd_name, prd.group as prd_group, prd.category as prd_category, " +
         "prd.fee as prd_fee, prd.price_adjustment as prd_price_adjustment, prd.fee_type as prd_fee_type,  " +
         "app_lb.type as app_lb_type, app_lb.color as app_lb_color, " +
@@ -107,7 +107,6 @@ const createAppointment = (request, response, appointments) => {
     if (appointments.hours) statement += "hours,"
     if (appointments.minutes) statement += "minutes,"
     statement += "time,"
-    statement += "created_at,"
     statement += "kind"
     statement += ") VALUES ("
     if (appointments.doctorId) statement += "'"+ appointments.doctorId +"',"
@@ -115,12 +114,11 @@ const createAppointment = (request, response, appointments) => {
     if (appointments.notes) statement += "'"+ appointments.notes +"',"
     if (appointments.patientId) statement += "'"+ appointments.patientId +"',"
     if (appointments.patient_attended) statement += "'"+patient_attended +"',"
-    if (appointments.product_groups) statement += "'"+ appointments.product_groups +"',"
+    if (appointments.product_groups) statement += ""+ appointments.product_groups +","
     if (appointments.assignmentDate) statement += "'"+ appointments.assignmentDate +"',"
-    if (appointments.hours) statement += "'"+ appointments.hours +"',"
-    if (appointments.minutes) statement += "'"+ appointments.minutes +"',"
+    if (appointments.hours) statement += ""+ appointments.hours +","
+    if (appointments.minutes) statement += ""+ appointments.minutes +","
     statement += "'"+ time +"',"
-    statement += "'"+ new Date().toLocaleDateString() +"',"
     statement += "'Posvet')"
     console.log(statement)
     pool.query(statement , (error, results) => {
