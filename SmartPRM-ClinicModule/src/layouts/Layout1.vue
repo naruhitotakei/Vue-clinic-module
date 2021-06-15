@@ -73,18 +73,10 @@
               <li>
                 <a href="#" class="search-toggle iq-waves-effect d-flex align-items-center">
                   <img :src="getAvatarUrl" class="img-fluid rounded mr-3 object-fit" alt="user">
-                  <div class="caption">
-                    <h6 class="mb-0 line-height">{{ logedInUser.name }}</h6>
-                    <span class="font-size-12">{{ $t('nav.user.available') }}</span>
-                  </div>
                 </a>
                 <div class="iq-sub-dropdown iq-dropdown">
                   <div class="iq-card shadow-none m-0">
                     <div class="iq-card-body p-0 ">
-                      <div class="bg-primary p-3">
-                        <h5 class="mb-0 text-white line-height">Hello {{ logedInUser.name }}</h5>
-                        <span class="text-white font-size-12">{{ $t('nav.user.available') }}</span>
-                      </div>
                       <a v-on:click="callModal('edit')" class="iq-sub-card iq-bg-primary-success-hover">
                         <div class="media align-items-center">
                           <div class="rounded iq-card-icon iq-bg-success">
