@@ -179,11 +179,19 @@ app.put('/api/calendar/:id', (req, res) => {
     res.status(401).json("OK: user unauthorized")
 });
 
-app.post('/api/calendar/label/:id', (req, res) => {
+app.put('/api/calendar/label/:id', (req, res) => {
   const id = req.params.id
   const appointmentLabel = req.body
   if(req.session.prm_user && req.session.prm_user.permissions && checkPermission(req.session.prm_user.permissions, productsPermission))
     daoCalendar.updateAppointmentsLabel(req, res, id, appointmentLabel)
+  else
+    res.status(401).json("OK: user unauthorized")
+});
+app.post('/api/calendar/label/:id', (req, res) => {
+  const id = req.params.id
+  const appointmentLabel = req.body
+  if(req.session.prm_user && req.session.prm_user.permissions && checkPermission(req.session.prm_user.permissions, productsPermission))
+    daoCalendar.createAppointmentsLabel(req, res, id, appointmentLabel)
   else
     res.status(401).json("OK: user unauthorized")
 });

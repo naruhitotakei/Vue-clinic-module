@@ -154,12 +154,12 @@
         </div>
        <div class="modal-footer modal-footer-bt" style="width: 100%;">
          <template v-if="disabled">
-           <button type="button" class="btn btn-secondary" @click="$emit('setModalShow', false)">Close</button>
+           <button type="button" class="btn btn-secondary" @click="$emit('setModalShow', false), formData = defaultAppointment">Close</button>
            <button type="button" class="btn btn-secondary" @click="editMode">Edit Appointment</button>
            <button type="button" class="btn btn-primary" @click="viewPatient(formData.enquiry_id)">View Patient Record</button>
          </template>
          <template v-if="!disabled">
-           <button type="button" class="btn btn-secondary" @click="$emit('setModalShow', false)">Close</button>
+           <button type="button" class="btn btn-secondary" @click="$emit('setModalShow', false), formData = defaultAppointment">Close</button>
            <button type="button" class="btn btn-primary"   @click="saveAppointment">Save Changes</button>
          </template>
        </div>
@@ -181,7 +181,7 @@ import { getPatients } from '../../../services/enquiry'
 // import { getDentists } from '../../../services/userService'
 import { getLocationsList } from '../../../services/commonCodeLists'
 import { getProductGroups } from '@/services/products'
-import { createCalendar, getDoctorList, updateCalendar, updateCalendarLabel } from '@/services/calendarService'
+import { createCalendar, getDoctorList, updateCalendar, updateCalendarLabel, createCalendarLabel } from '@/services/calendarService'
 
 export default {
   components: {
@@ -347,7 +347,7 @@ export default {
     },
     updateCalendarLabel (id, appointment) {
       updateCalendarLabel(id, appointment).then(() => {
-        this.$emit('updateApp')
+        // this.$emit('updateApp')
       })
     },
     showPatientAttended (item) {
@@ -447,7 +447,6 @@ export default {
       // this.modalShow = false
       if (this.formData.patientId && this.formData.doctorId && this.formData.assignmentDate) {
         this.disabled = true
-        this.$emit('setModalShow', false)
         let id = this.calendarApi.getEvents().length + 1
         let endDate = this.calculateEndDate(this.formData.assignmentDate, this.formData.hours, this.formData.minutes)
         // let title = this.patients.find(item => item.id === this.formData.patientId)
@@ -473,7 +472,6 @@ export default {
           this.formData.product_groups = this.formData.product_groups.product_group_id
         }
 
-        console.log(this.formData)
         if (!this.formData.id) {
           this.calendarApi.addEvent({
             id: id,
@@ -493,10 +491,14 @@ export default {
             doctorId: this.formData.doctorId,
             locationId: this.formData.locationId
           })
-          this.createCalendar(this.formData)
+          createCalendar(this.formData).then((data) => {
+            createCalendarLabel(data[0].id, this.formData).then(() => {
+              this.formData = this.defaultAppointment()
+              this.$emit('setModalShow', false)
+            })
+          })
         } else {
           let event = this.calendarApi.getEventById(this.formData.id)
-          console.log('EVENT ID OBJECT', event)
           event.setProp('title', this.formData.title)
           event.setProp('backgroundColor', this.formData.backgroundColor)
           event.setProp('resourceId', this.formData.resourceId)
@@ -514,10 +516,11 @@ export default {
 
           this.updateCalendar(this.formData.id, this.formData)
           this.updateCalendarLabel(this.formData.id, this.formData)
+          this.formData = this.defaultAppointment()
+          this.$emit('setModalShow', false)
         }
       }
       // this.$emit('setModalShow', false)
-      this.formData = this.defaultAppointment()
     },
     openCreateModal (selectionInfo) {
       this.disabled = false

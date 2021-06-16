@@ -93,7 +93,6 @@ const updateAppointments = (request, response, id, appointments) => {
 }
 
 const createAppointment = (request, response, appointments) => {
-    console.log('appointments',appointments)
     let patient_attended = appointments.patient_attended === 'attended' ? true : appointments.patient_attended === 'not_attended' ? false : null;
     let time = moment(appointments.assignmentDate).format('HH:mm');
     let statement = "INSERT INTO appointments ("
@@ -120,23 +119,24 @@ const createAppointment = (request, response, appointments) => {
     if (appointments.minutes) statement += ""+ appointments.minutes +","
     statement += "'"+ time +"',"
     statement += "'Posvet')"
-    console.log(statement)
     pool.query(statement , (error, results) => {
         console.log(error)
-        console.log(results)
         if (error) {
             throw error
         }
-        response.status(200).json(results)
+        pool.query("SELECT * FROM appointments WHERE id=(SELECT max(id) FROM appointments)" , (err, res) => {
+            console.log(err)
+            response.status(200).json(res.rows)
+        })
     })
 }
 
-const updateAppointmentsLabel = (request, response, id, appointmentsLabel) => {
+const createAppointmentsLabel = (request, response, id, appointmentsLabel) => {
     let statement = "INSERT INTO appointments_label ("
     statement += "appointment_id,"
     if (appointmentsLabel.backgroundColor) statement += "color"
     statement += ") VALUES ("
-    statement += "'" + id + "',"
+    statement += "" + id + ","
     if (appointmentsLabel.backgroundColor) statement += "'" + appointmentsLabel.backgroundColor + "')"
 
     console.log(statement)
@@ -148,6 +148,23 @@ const updateAppointmentsLabel = (request, response, id, appointmentsLabel) => {
         response.status(200).json(results)
     })
 }
+
+
+const updateAppointmentsLabel = (request, response, id, appointmentsLabel) => {
+    let statement = "UPDATE appointments_label SET "
+    if (appointmentsLabel.backgroundColor) statement += "color='" + appointmentsLabel.backgroundColor + "'"
+    statement += " WHERE appointment_id = " + id
+
+    console.log(statement)
+    pool.query(statement , (error, results) => {
+        console.log(error)
+        if (error) {
+            throw error
+        }
+        response.status(200).json(results)
+    })
+}
+
 
 const getDoctors = (request, response, user_id, accessible_user_ids, prm_client_id, scope ) => {
     var statement = "SELECT id, name from users";
@@ -178,5 +195,6 @@ module.exports = {
     getDoctors,
     updateAppointments,
     updateAppointmentsLabel,
-    createAppointment
+    createAppointment,
+    createAppointmentsLabel
 }
