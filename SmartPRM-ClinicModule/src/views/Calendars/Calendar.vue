@@ -338,7 +338,7 @@ export default {
             patient_attended: patientAttended,
             resourceId: item.doctor_user_id,
             eventResourceId: item.doctor_user_id,
-            locationId: item.location,
+            locationId: item.location ? item.location : item.app_location,
             product_groups: item.product_group_id,
             hours: 0,
             minutes: 15,
@@ -348,7 +348,7 @@ export default {
             prm_client_name: item.prm_client_name,
             time: item.time,
             notes: item.note,
-            doctorId: item.doctor_name,
+            doctorId: item.doctor_name ? item.doctor_name : item.app_doctor_name,
             enquiry_id: item.enquiry_id,
             patientId: {
               id: item.enquiry_id,
