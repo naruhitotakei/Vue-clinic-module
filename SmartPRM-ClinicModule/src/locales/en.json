@@ -102,19 +102,22 @@
   "calendar": {
     "selectDoctor": "Select Doctor",
     "selectAll": "Select All",
-    "bookAppointment": "Book Appointment"
+    "addAppointment": "Add Appointment"
   },
   "calendarEvent": {
     "start": "Start",
     "duration": "Duration",
-    "notes": "Notes",
+    "note": "Note",
     "changeColor": "Change Color",
+    "labels": "Labels",
     "viewPatient": "View Patient",
     "changeDisplayColor": "Change Appointment Color",
     "appointmentCancelled": "Appointment Cancelled by the Patient",
     "patient": "Patient",
     "doctor": "Doctor",
-    "location": "Location"
+    "location": "Location",
+    "patient_attended": "Patient attended",
+    "product_group": "Product Group"
   },
   "patients": {
     "patientsHeader": "Patients",
@@ -288,6 +291,7 @@
     "newInvoice": {
       "newInvoiceHeader": "New invoice",
       "dateOfInvoice": "Date of invoice",
+      "dateOfService": "Date of service",
       "paymentMethodSummary": "Payment Method Summary",
       "addPaymentMethod": "Add new payment method",
       "newInvoiceColumn": {
@@ -326,6 +330,7 @@
     "invoiceHeader": "Invoice",
     "saved": "Invoice saved",
     "notSaved": "Something is wrong, contact admin",
+    "pdfGuarantee": "The warranty is valid only with regular dental examinations at least once or twice per year and regular maintenance of oral hygiene.",
     "invoiceInfo": {
       "invoiceDate": "Date",
       "invoiceTotal": "Total",
@@ -445,7 +450,8 @@
   },
   "paymentMethodsColumn": {
     "amount": "Amount",
-    "action": "Action"
+    "action": "Action",
+    "paid": "Paid"
   },
   "assignments": {
     "assignmentsHeader": "My Assignments",
@@ -503,7 +509,10 @@
   "settingsUsers": {
     "editProfile": "Edit profile",
     "editProfileModal": {
+      "title": "Title",
       "name": "Name",
+      "surname": "Surname",
+      "specialization": "Specialization",
       "mail": "Mail",
       "phone": "Phone",
       "close": "Close",

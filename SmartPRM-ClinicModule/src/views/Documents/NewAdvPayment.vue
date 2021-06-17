@@ -21,15 +21,14 @@
           <b-col lg="6">
             <p>{{ $t('advPayments.newAdvPayment.advPaymentNo') }}: {{invoice_number}}</p>
             <p>{{ $t('advPayments.newAdvPayment.copy') }}:<span style="margin-left:20px">Original</span></p>
-            <p>{{ $t('advPayments.newAdvPayment.IssuedIn') }}:<span style="margin-left:20px">{{issuedIn.premise_name}}</span></p>
-            <p>{{ $t('advPayments.newAdvPayment.dateOfAdvPayment') }}:<span style="margin-left:20px">{{dateOfAdvPaymentPdf}}</span></p>
+            <p>{{ $t('advPayments.newAdvPayment.IssuedIn') }}:<span style="margin-left:20px">{{issuedIn.premise_city}}</span></p>
+            <p>{{ $t('advPayments.newAdvPayment.dateOfAdvPayment') }}:<span style="margin-left:20px">{{invoiceTime}}</span></p>
           </b-col>
         </b-row>
         <b-row>
           <b-table-simple small responsive>
             <b-thead>
               <b-tr>
-                <b-th colspan="1">{{ $t('advPayments.newAdvPayment.code') }}</b-th>
                 <b-th colspan="4">{{ $t('advPayments.newAdvPayment.item') }}</b-th>
                 <b-th colspan="1">{{ $t('advPayments.newAdvPayment.quantity') }}</b-th>
                 <b-th colspan="2">{{ $t('advPayments.newAdvPayment.price') }}</b-th>
@@ -39,17 +38,16 @@
             </b-thead>
             <b-tbody>
               <b-tr>
-                <b-td colspan="1"></b-td>
                 <b-td colspan="4">{{ $t('advPayment.advPaymentHeader') }}</b-td>
                 <b-td colspan="1">1</b-td>
-                <b-td colspan="2">{{advPayments[0].amount}}</b-td>
-                <b-td colspan="2">{{advPayments[0].amount}}</b-td>
-                <b-td colspan="2">{{advPayments[0].amount}}</b-td>
+                <b-td colspan="2">{{advPayments[0].amount | euro}}</b-td>
+                <b-td colspan="2">{{advPayments[0].amount | euro}}</b-td>
+                <b-td colspan="2">{{advPayments[0].amount | euro}}</b-td>
               </b-tr>
               <b-tr>
                 <b-td colspan="8"></b-td>
                 <b-td colspan="2"><strong>{{ $t('advPayments.newAdvPayment.total') }}: </strong></b-td>
-                <b-td colspan="2">{{advPayments[0].amount}}</b-td>
+                <b-td colspan="2">{{advPayments[0].amount | euro}}</b-td>
               </b-tr>
               <b-tr>
                 <b-td colspan="8" class="hidden-row"></b-td>
@@ -66,7 +64,7 @@
           </b-col>
         </b-row>
         <b-row>
-          <b-col>
+          <b-col lg="6">
               <p>{{ $t('advPayments.newAdvPayment.vatExemptionReason') }}</p>
             <br>
             <p>{{ $t('advPayments.newAdvPayment.issuedBy') }}: {{logedInUser.name}}</p>
@@ -75,6 +73,13 @@
             <p>{{ $t('advPayments.newAdvPayment.eor') }}: {{eor}}</p>
           </b-col>
         </b-row>
+        <b-col lg="6">
+            <qrcode-vue
+              value="test value"
+              size="100"
+              level="H"
+            ></qrcode-vue>
+        </b-col>
       </div>
     </div>
     <b-row>
@@ -124,7 +129,7 @@
                     <b-row>
                       <b-col>
                         <b-form-group class="col-md-4" :label="$t('advPayments.newAdvPayment.dateOfAdvPayment')" style="color:black">
-                          <b-form-input v-model="dateOfAdvPayment" type="date"></b-form-input>
+                          <b-form-input v-model="dateOfAdvPayment" type="datetime-local"></b-form-input>
                         </b-form-group>
                       </b-col>
                     </b-row>
@@ -185,7 +190,7 @@
                         </b-col>
                     </b-row>
                     <b-row>
-                        <b-col offset-md="4" cols="12" md="8" class="text-right" data-html2canvas-ignore="true">
+                        <b-col offset-md="4" cols="12" md="8" class="text-right">
                             <b-button :disabled="!canPrintPdf" variant="primary mr-3" @click="exportToPDF">
                                 <i class="ri-printer-line"></i>
                                 {{ $t('advPayments.newAdvPayment.downloadPrint') }}
@@ -256,6 +261,17 @@
           <span><i class="ri-error-warning-fill"></i>{{ $t('advPayments.newAdvPayment.alert3') }}</span>
       </template>
     </b-toast>
+
+    <b-toast id="mandatory-device-id" variant="danger" solid>
+      <template #toast-title>
+        <div class="d-flex flex-grow-1 align-items-baseline">
+            <strong class="mr-auto">{{ $t('EPR.notification') }}</strong>
+        </div>
+      </template>
+      <template #default>
+          <span><i class="ri-error-warning-fill"></i>Device id is mandatory</span>
+      </template>
+    </b-toast>
 </b-container>
 
 </template>
@@ -269,9 +285,13 @@ import { createInvoice, updateInvoice, getItemsOfInvoiceById, getConsecutiveInvo
 import { getPremisesForCompany, getDevicesForPremise } from '../../services/companyPremises'
 import html2pdf from 'html2pdf.js'
 import _ from 'lodash'
+import QrcodeVue from 'qrcode.vue'
 
 export default {
   name: 'NewAdvPayment',
+  components: {
+    QrcodeVue
+  },
   mounted () {
     xray.index()
     this.getLoggedInUser()
@@ -295,7 +315,7 @@ export default {
         {
           paymentMethod: null,
           amount: 0,
-          editable: true
+          paid: true
         }
       ],
       products: [],
@@ -327,16 +347,17 @@ export default {
       invoice: {},
       canPrintPdf: false,
       companyPremises: [],
-      dateOfAdvPayment: moment().format('YYYY-MM-DD'),
-      dateOfAdvPaymentPdf: moment().format('YYYY-MM-DD HH:MM'),
-      device: null,
+      dateOfAdvPayment: moment().format('YYYY-MM-DDTHH:MM'),
+      device: {},
+      deviceId: '',
       devices: [],
       invoice_number: '',
       zoi: '24as211d4232as1124',
       eor: '24as211d4232as1124',
       status: '',
       invoiceId: '',
-      consecutiveInvoiceNumber: null
+      consecutiveInvoiceNumber: null,
+      invoiceTime: ''
     }
   },
   computed: {
@@ -359,10 +380,11 @@ export default {
       })
     },
     exportToPDF () {
+      this.invoiceTime = moment(this.invoice.invoice_time).format('YYYY-MM-DD HH:MM')
       let options = {
-        filename: 'invoice.pdf',
+        filename: this.invoice_number + '.pdf',
         image: { type: 'jpeg', quality: 0.98 },
-        html2canvas: { y: 250 },
+        html2canvas: { y: 170 },
         jsPDF: { unit: 'mm', format: 'a3' }
       }
       var source = window.document.getElementById('printInvoice')
@@ -416,6 +438,7 @@ export default {
     saveAsDraft () {
       this.status = 'draft'
       this.invoice_number = 'draft advance payment invoice'
+      this.deviceId = this.device ? this.device.device_id : ''
       this.prepareInvoice()
       if (this.isInoiceValid()) this.createInvoice()
     },
@@ -425,6 +448,7 @@ export default {
         this.status = 'issued'
         let year = moment().year()
         this.invoice_number = this.consecutiveInvoiceNumber.toString() + '-' + year.toString()
+        this.deviceId = this.device ? this.device.device_id : ''
         this.prepareInvoice()
         if (this.isInoiceValid()) this.createInvoice()
       })
@@ -441,6 +465,10 @@ export default {
       }
       if (!this.paymentMethods[0].paymentMethod) {
         this.$bvToast.show('mandatory-payment-method')
+        valid = false
+      }
+      if (!this.deviceId) {
+        this.$bvToast.show('mandatory-device-id')
         valid = false
       }
       return valid
@@ -482,9 +510,9 @@ export default {
         total_without_vat: this.advPayments[0].amount,
         total_vat_amount: null,
         total_with_vat: this.advPayments[0].amount,
-        paid_amount: 0,
+        paid_amount: this.advPayments[0].amount,
         amount_due_for_payment: 1,
-        payment_method: this.paymentMethods[0].paymentMethod,
+        payment_method: this.paymentMethods,
         warranty: true,
         vat_exemption_reason: 'test',
         operator_name: this.logedInUser.name,
@@ -493,11 +521,11 @@ export default {
         eor: this.eor,
         invoice_special_notes: 'test',
         reverted: false,
-        device_id: this.device.device_id,
+        device_id: this.deviceId,
         premise_id: 1,
         business_customer_id: 1,
         invoiceItems: [],
-        invoice_status: this.status
+        verification_status: this.status
       }
       this.invoice = _.assignIn(this.invoice, this.patient, this.usersCompany, temp)
     },

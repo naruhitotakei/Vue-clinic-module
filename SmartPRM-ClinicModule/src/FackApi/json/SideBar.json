@@ -341,7 +341,7 @@
         "name": "settings.SMSTemplates",
         "is_active": false,
         "link": {
-          "name": "settings.SMS-templates"
+          "name": "settings.sms-templates"
         },
         "class_name": "",
         "is_icon_class": true,

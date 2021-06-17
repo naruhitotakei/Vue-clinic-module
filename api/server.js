@@ -5,7 +5,8 @@ var Rollbar = require('rollbar');
 var rollbar = new Rollbar({
   accessToken: '1922e9135f0a45a292341f0137316fc7',
   captureUncaught: true,
-  captureUnhandledRejections: true
+  captureUnhandledRejections: true,
+  enabled: process.env.NODE_ENV === 'development' ? true : false
 });
 const session = require("express-session");
 var cors = require('cors')
@@ -140,17 +141,26 @@ app.get('/api/surgeons', async function (req, res) {
 ///////////////////////////////////
 // calendar
 ///////////////////////////////////
-app.get('/api/calendar/:statrtdate/:enddate', (req, res) => {
+app.get('/api/calendar/:statrtdate/:enddate/:lang', (req, res) => {
     const statrtdate = req.params.statrtdate
     const enddate = req.params.enddate
     var selctedIds = req.query.selctedIds;
+    let lang = req.params.lang;
     if (selctedIds) {
         selctedIds = JSON.parse(selctedIds);
     }
     if(req.session.prm_user && req.session.prm_user.permissions && checkPermission(req.session.prm_user.permissions, calendarPermission))
-        daoCalendar.getApontments(req, res, statrtdate, enddate, req.session.prm_user.id, req.session.prm_user.accessible_user_ids, selctedIds, req.session.prm_user.prm_client_id, getScope(req.session.prm_user.permissions, calendarPermission))
+        daoCalendar.getApontments(req, res, statrtdate, enddate, req.session.prm_user.id, req.session.prm_user.accessible_user_ids, selctedIds, req.session.prm_user.prm_client_id, getScope(req.session.prm_user.permissions, calendarPermission), lang)
     else
         res.status(401).json("OK: user unauthorized")
+});
+
+app.post('/api/calendar', (req, res) => {
+  const appointment = req.body
+  if(req.session.prm_user && req.session.prm_user.permissions && checkPermission(req.session.prm_user.permissions, productsPermission))
+    daoCalendar.createAppointment(req, res, appointment)
+  else
+    res.status(401).json("OK: user unauthorized")
 });
 
 app.get('/api/calendar/doctors', (req, res) => {
@@ -158,6 +168,32 @@ app.get('/api/calendar/doctors', (req, res) => {
         daoCalendar.getDoctors(req, res, req.session.prm_user.id, req.session.prm_user.accessible_user_ids, req.session.prm_user.prm_client_id, getScope(req.session.prm_user.permissions, assignmentsPermission))
     else
         res.status(401).json("OK: user unauthorized")
+});
+
+app.put('/api/calendar/:id', (req, res) => {
+  const id = req.params.id
+  const appointment = req.body
+  if(req.session.prm_user && req.session.prm_user.permissions && checkPermission(req.session.prm_user.permissions, productsPermission))
+    daoCalendar.updateAppointments(req, res, id, appointment)
+  else
+    res.status(401).json("OK: user unauthorized")
+});
+
+app.put('/api/calendar/label/:id', (req, res) => {
+  const id = req.params.id
+  const appointmentLabel = req.body
+  if(req.session.prm_user && req.session.prm_user.permissions && checkPermission(req.session.prm_user.permissions, productsPermission))
+    daoCalendar.updateAppointmentsLabel(req, res, id, appointmentLabel)
+  else
+    res.status(401).json("OK: user unauthorized")
+});
+app.post('/api/calendar/label/:id', (req, res) => {
+  const id = req.params.id
+  const appointmentLabel = req.body
+  if(req.session.prm_user && req.session.prm_user.permissions && checkPermission(req.session.prm_user.permissions, productsPermission))
+    daoCalendar.createAppointmentsLabel(req, res, id, appointmentLabel)
+  else
+    res.status(401).json("OK: user unauthorized")
 });
 
 ///////////////////////////////////
@@ -923,4 +959,25 @@ app.get('/', (req,res) => {
 
 app.listen(port, () => {
     console.log(`Server listening on the port::${port}`);
+});
+
+///////////////////////////////////
+// booking methods
+///////////////////////////////////
+app.post('/api/booking/sendsms', (req, res) => {
+    const phone = req.body.phone
+    if(phone) {
+        res.status(200).json({ success: true })
+    } else {
+        res.status(400).json("No phone number")
+    }
+});
+
+app.post('/api/booking/confirm-and-save', (req, res) => {
+    const { code, selectedSlot } = req.body
+    if(code) {
+        res.status(200).json({ success: true, code, selectedSlot })
+    } else {
+        res.status(400).json("No confirmation code")
+    }
 });

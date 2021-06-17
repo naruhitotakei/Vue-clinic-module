@@ -7,7 +7,7 @@
       <SideBarStyle1 :items="verticalMenu" :horizontal="horizontal" :logo="logo" @toggle="sidebarMini" />
       <div id="content-page" class="content-page" :class="horizontal ? 'ml-0' : ''">
         <!-- TOP Nav Bar -->
-        <NavBarStyle1 title="Dashboard" :homeURL="{ name: 'dashboard.home' }" @toggle="sidebarMini" :logo="logo" :horizontal="horizontal" :items="horizontalMenu">
+        <NavBarStyle1 title="Dashboard" :homeURL="{ name: 'dashboard.home' }" @toggle="sidebarMini" @setOpenMenu="setOpenMenu" :logo="logo" :horizontal="horizontal" :items="horizontalMenu">
           <template slot="responsiveRight">
             <ul class="navbar-nav ml-auto navbar-list">
               <li class="nav-item iq-full-screen full-screen">
@@ -73,18 +73,10 @@
               <li>
                 <a href="#" class="search-toggle iq-waves-effect d-flex align-items-center">
                   <img :src="getAvatarUrl" class="img-fluid rounded mr-3 object-fit" alt="user">
-                  <div class="caption">
-                    <h6 class="mb-0 line-height">{{ logedInUser.name }}</h6>
-                    <span class="font-size-12">{{ $t('nav.user.available') }}</span>
-                  </div>
                 </a>
                 <div class="iq-sub-dropdown iq-dropdown">
                   <div class="iq-card shadow-none m-0">
                     <div class="iq-card-body p-0 ">
-                      <div class="bg-primary p-3">
-                        <h5 class="mb-0 text-white line-height">Hello {{ logedInUser.name }}</h5>
-                        <span class="text-white font-size-12">{{ $t('nav.user.available') }}</span>
-                      </div>
                       <a v-on:click="callModal('edit')" class="iq-sub-card iq-bg-primary-success-hover">
                         <div class="media align-items-center">
                           <div class="rounded iq-card-icon iq-bg-success">
@@ -295,11 +287,12 @@ export default {
         { value: { enter: 'rotateInDownLeft', exit: 'rotateOutDownLeft' }, text: 'Roll' }
       ],
       horizontalMenu: HorizontalItems,
-      verticalMenu: {},
+      verticalMenu: SideBarItems,
       userProfile: profile,
       logo: loader,
       usersList: Users,
       rtl: false,
+      openMenu: false,
       message: [
         { image: require('../assets/images/user/01.jpg'), name: 'Dr. Bojan Jernejc', date: '13 Jan' },
         { image: require('../assets/images/user/02.jpg'), name: 'Dr. Silvija Lenart', date: '14 Jun' },
@@ -317,6 +310,14 @@ export default {
     }
   },
   methods: {
+    setOpenMenu () {
+      this.openMenu = !this.openMenu
+      if (this.openMenu) {
+        document.querySelector('body').style.overflow = 'hidden'
+      } else {
+        document.querySelector('body').style.overflow = 'auto'
+      }
+    },
     onButtonClick () {
       this.isSelecting = true
       window.addEventListener('focus', () => {

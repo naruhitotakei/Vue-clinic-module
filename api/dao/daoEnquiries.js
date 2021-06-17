@@ -16,8 +16,6 @@ const getEnquiries = (request, response, user_id, accessible_user_ids, prm_clien
     statement +=    "WHERE enquiries.trashed IS FALSE ";
     statement +=    "AND clients.trashed IS FALSE ";
     statement +=    "AND prm_client.client_deleted IS FALSE ";
-    console.log("scope " + scope)
-    console.log("prm_client_id " + prm_client_id)
     if (scope=='All') {        
     } else if (scope=='PrmClient') {
         statement += "AND prm_client.id=" + prm_client_id;  
@@ -216,6 +214,7 @@ const getEnquiryServices = (request, response, enquiryId) => {
 
 const getPatients = (request, response) => {
     pool.query("SELECT enquiries.*, CONCAT_WS(' ', enquiries.name, enquiries.last_name) AS full_name FROM enquiries JOIN clients ON enquiries.client_id = clients.id WHERE enquiries.trashed IS FALSE AND clients.slug = 'primadent_si'", (error, results) => {
+        console.log(error)
         if (error) {
             throw error
         }

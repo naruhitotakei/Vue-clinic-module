@@ -21,7 +21,7 @@ import { xray } from '../../../config/pluginInit'
 export default {
   name: 'List',
   props: {
-    items: {},
+    items: Array,
     className: { type: String, default: 'iq-menu' },
     horizontal: Boolean,
     open: { type: Boolean, default: false },

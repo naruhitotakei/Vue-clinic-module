@@ -145,11 +145,11 @@
                                                   }"
                                            >
                                              <div class="w-100">
+                                               <p class="pl-2 pr-2 mb-0">{{item.description}}</p>
                                                <div class="row justify-content-between p-1 w-100 ml-0 pl-2 pr-2 line-height">
                                                  <h6>{{item.todoname}}</h6>
                                                  <p class="mb-0">{{item.due_at | formatDate}}</p>
                                                </div>
-                                               <p class="pl-2 pr-2 mb-0">{{item.description}}</p>
                                              </div>
                                            </li>
                                          </ul>
@@ -182,11 +182,11 @@
                                                   }"
                                            >
                                              <div class="w-100">
+                                               <p class="pl-2 pr-2 mb-0">{{item.description}}</p>
                                                <div class="row justify-content-between p-1 w-100 ml-0 pl-2 pr-2 line-height">
                                                  <h6>{{item.todoname}}</h6>
                                                  <p class="mb-0">{{item.due_at | formatDate}}</p>
                                                </div>
-                                               <p class="pl-2 pr-2 mb-0">{{item.description}}</p>
                                              </div>
                                            </li>
                                          </ul>
@@ -232,11 +232,11 @@
                                                   }"
                                            >
                                              <div class="w-100">
+                                               <p class="pl-2 pr-2 mb-0">{{item.description}}</p>
                                                <div class="row justify-content-between p-1 w-100 ml-0 pl-2 pr-2 line-height">
                                                  <h6>{{item.todoname}}</h6>
                                                  <p class="mb-0">{{item.due_at | formatDate}}</p>
                                                </div>
-                                               <p class="pl-2 pr-2 mb-0">{{item.description}}</p>
                                              </div>
                                            </li>
                                          </ul>

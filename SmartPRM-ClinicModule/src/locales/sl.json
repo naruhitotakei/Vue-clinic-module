@@ -283,6 +283,7 @@
     "newInvoice": {
       "newInvoiceHeader": "Nov račun",
       "dateOfInvoice": "Datum izdaje",
+      "dateOfService": "Datum storitve",
       "paymentMethodSummary": "",
       "addPaymentMethod": "Dodaj nov način plačila",
       "newInvoiceColumn": {
@@ -321,6 +322,7 @@
     "invoiceHeader": "Račun",
     "saved": "Račun shranjen",
     "notSaved": "Napaka, kontaktirajte administratorja",
+    "pdfGuarantee": "Garancija velja ob rednih zobozdravstvenih pregledih vsaj enkrat ali dvakrat letno ter rednem vzdrževanju ustne higijene.",
     "invoiceInfo": {
       "invoiceDate": "Datum",
       "invoiceTotal": "Znesek",
@@ -440,7 +442,8 @@
   },
   "paymentMethodsColumn": {
     "amount": "Znesek",
-    "action": "Urejaj"
+    "action": "Urejaj",
+    "paid": "Plačano"
   },
   "assignments": {
     "assignmentsHeader": "Moje Naloge",
@@ -488,7 +491,10 @@
   "settingsUsers": {
     "editProfile": "Uredi profil",
     "editProfileModal": {
+      "title": "Naziv",
       "name": "Ime",
+      "surname": "Priimek",
+      "specialization": "Specializacija",
       "mail": "Mail",
       "phone": "Telefon",
       "close": "Zapri",

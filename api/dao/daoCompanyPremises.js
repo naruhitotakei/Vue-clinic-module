@@ -46,7 +46,7 @@ const getCompanyPremiseDevices = (request, response) => {
 }
 
 const getPremisesForCompany = (request, response,id) => {
-    pool.query("SELECT pcp.premise_id, pcp.premise_name, pcp.premise_street, pcp.premise_house_number FROM prm_company_premise pcp WHERE pcp.company_id = $1", [id], (error, results) => {
+    pool.query("SELECT pcp.premise_id, pcp.premise_name, pcp.premise_street, pcp.premise_house_number, pcp.premise_city FROM prm_company_premise pcp WHERE pcp.company_id = $1", [id], (error, results) => {
         if (error) {
             throw error
         }
