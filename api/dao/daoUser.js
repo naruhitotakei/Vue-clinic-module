@@ -167,16 +167,20 @@ const getSurgeons = (request, response) => {
   })
 }
 
-const getUsers = (request, response) => {
-  pool.query("SELECT users.id, users.prm_role_id, users.prm_client_id, users.prm_company_id, users.title, users.first_name AS name, users.surname, users.specialization, users.email AS mail, users.phone_number AS phone, prm_role.role_name, prm_role.role_id " +
-      "FROM users " +
-      "LEFT JOIN prm_role ON users.prm_role_id = prm_role.role_id " +
-      "WHERE users.roles::text LIKE '%doctor%' AND users.active = true", (error, results) => {
-    if (error) {
-      throw error
+const getUsers = (request, response, prm_client_id, scope) => {
+    let statement = "SELECT users.id, users.prm_client_id, users.title, users.first_name AS name, users.surname, users.specialization, users.email AS mail, users.phone_number AS phone FROM users "
+    statement += "LEFT JOIN prm_client ON users.prm_client_id = prm_client.id "
+    statement += "WHERE prm_client.client_deleted = false "
+    if (scope == "All") {
+    } else if (scope == 'PrmClient') {
+        statement += "AND prm_client.id=" + prm_client_id;
     }
-    response.status(200).json(results.rows)
-  })
+    pool.query(statement, (error, results) => {
+        if (error) {
+            throw error
+        }
+        response.status(200).json(results.rows)
+    })
 }
 
 const updateUser = (req, res, id, user) => {

@@ -442,7 +442,7 @@ app.put('/api/locations/:id/activation', (req, res) => {
 
 app.get('/api/users', (req, res) => {
     if (req.session.prm_user && req.session.prm_user.permissions && checkPermission(req.session.prm_user.permissions, usersPermission)) {
-        daoUser.getUsers(req, res)
+        daoUser.getUsers(req, res, req.session.prm_user.prm_client_id, getScope(req.session.prm_user.permissions, usersPermission))
     } else {
         res.status(401).json("OK: user unauthorized")
     }
