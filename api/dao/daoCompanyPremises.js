@@ -46,7 +46,7 @@ const getCompanyPremiseDevices = (request, response) => {
 }
 
 const getPremisesForCompany = (request, response,id) => {
-    pool.query("SELECT pcp.premise_id, pcp.premise_name, pcp.premise_street, pcp.premise_house_number, pcp.premise_city FROM prm_company_premise pcp WHERE pcp.company_id = $1", [id], (error, results) => {
+    pool.query("SELECT pcp.premise_id, pcp.business_premise_id, pcp.premise_name, pcp.premise_street, pcp.premise_house_number, pcp.premise_city FROM prm_company_premise pcp WHERE pcp.company_id = $1", [id], (error, results) => {
         if (error) {
             throw error
         }
@@ -55,7 +55,7 @@ const getPremisesForCompany = (request, response,id) => {
 }
 
 const getDevicesForCompanyPremise = (request, response,id) => {
-    pool.query("SELECT device_id, device_name FROM prm_company_premise_device WHERE company_premise_id = $1", [id], (error, results) => {
+    pool.query("SELECT device_id, device_name, electronic_device_id FROM prm_company_premise_device WHERE company_premise_id = $1", [id], (error, results) => {
         if (error) {
             throw error
         }

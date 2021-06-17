@@ -697,6 +697,22 @@ app.get('/api/invoices', (req, res) => {
         res.status(401).json("OK: user unauthorized")
 });
 
+app.get('/api/invoices/serial-number', (req, res) => {
+    const data = req.body
+    if (req.session.prm_user && req.session.prm_user.permissions && checkPermission(req.session.prm_user.permissions, invoicesPermission))
+        daoInvoices.getSerialForInvoiceNumberBasedOnType(req, res, data)
+    else
+        res.status(401).json("OK: user unauthorized")
+});
+
+app.get('/api/invoices/furs-serial-number', (req, res) => {
+    const data = req.body
+    if (req.session.prm_user && req.session.prm_user.permissions && checkPermission(req.session.prm_user.permissions, invoicesPermission))
+        daoInvoices.getSerialForFursInvoiceNumberBasedOnType(req, res, data)
+    else
+        res.status(401).json("OK: user unauthorized")
+});
+
 app.post('/api/invoices', (req, res) => {
     const invoice = req.body
     if (req.session.prm_user && req.session.prm_user.permissions && checkPermission(req.session.prm_user.permissions, invoicesPermission))

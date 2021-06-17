@@ -312,6 +312,24 @@ const getConsecutiveInvoiceNumberForCompany = (request, response, id) => {
     })
 }
 
+const getSerialForInvoiceNumberBasedOnType = (request, response, data) => {
+    pool.query("SELECT COUNT(invoice_number) FROM invoice WHERE invoice_type ='" + data.type + "'", (error, results) => {
+        if (error) {
+            throw error
+        }
+        response.status(200).json(results.rows)
+    })
+}
+
+const getSerialForFursInvoiceNumberBasedOnType = (request, response, data) => {
+    pool.query("SELECT COUNT(invoice_number_furs) FROM invoice WHERE invoice_type ='" + data.type + "' AND invoice_number LIKE '" + data.business_premise_id + "%'", (error, results) => {
+        if (error) {
+            throw error
+        }
+        response.status(200).json(results.rows)
+    })
+}
+
 module.exports = {
     createInvoices,
     getInvoices,
@@ -319,5 +337,7 @@ module.exports = {
     getItemsOfInvoiceById,
     updateInvoices,
     getConsecutiveInvoiceNumberForCompany,
-    getPaymentItemsOfInvoiceById
+    getPaymentItemsOfInvoiceById,
+    getSerialForInvoiceNumberBasedOnType,
+    getSerialForFursInvoiceNumberBasedOnType
 }
