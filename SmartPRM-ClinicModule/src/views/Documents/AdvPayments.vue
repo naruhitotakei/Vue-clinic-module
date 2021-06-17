@@ -150,7 +150,7 @@ export default {
       })
     },
     paymentSelected (item) {
-      this.$router.push({ path: `/documents/advance-payments/${item.invoice_number}` })
+      this.$router.push({ path: `/documents/advance-payments/${item.invoice_id}` })
     },
     filterSelected (value) {
       let array = [value]

@@ -84,6 +84,32 @@ export async function updateInvoice (id, invoice) {
   return rawResponse.json()
 }
 
+export async function getSerialForInvoiceNumberBasedOnType (data) {
+  const rawResponse = await fetch('/api/invoices/serial-number', {
+    method: 'POST',
+    credentials: 'same-origin',
+    headers: {
+      'Accept': 'application/json',
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify(data)
+  })
+  return rawResponse.json()
+}
+
+export async function getSerialForFursInvoiceNumberBasedOnType (data) {
+  const rawResponse = await fetch('/api/invoices/furs-serial-number', {
+    method: 'POST',
+    credentials: 'same-origin',
+    headers: {
+      'Accept': 'application/json',
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify(data)
+  })
+  return rawResponse.json()
+}
+
 export async function deleteInvoice (id) {
   const rawResponse = await fetch('/api/invoices/' + id, {
     method: 'DELETE',
