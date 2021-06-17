@@ -1,8 +1,7 @@
 <template>
 <b-container ref="invoice" fluid>
-  <!-- <div style="display: none"> -->
-    <div>
-      <div id="printInvoice" style="color:black;margin-left:40px;height:1200px">
+  <div style="display: none">
+      <div id="printInvoice" style="color:black;margin-left:40px;height:1500px">
         <b-row>
             <b-col lg="12">
               <p>{{usersCompany.company_name}}</p>
@@ -65,7 +64,7 @@
         <b-row>
           <b-col lg="3">
               <p>{{ $t('advPayments.newAdvPayment.paymentMethod') }}:</p>
-            <p style="border-bottom: solid;">{{paymentMethods[0].payment_method}}<span style="margin-left:20px">{{invoiceTotal | euro}}</span></p>
+            <p style="border-bottom: solid;">{{paymentMethods[0].type}}<span style="margin-left:20px">{{invoiceTotal | euro}}</span></p>
           </b-col>
         </b-row>
         <b-row>
@@ -177,7 +176,7 @@
                                       <span v-if="!data.item.editable">{{ data.item.quantity }}</span>
                                       <input type="number" min="1" v-model="data.item.quantity" v-else class="form-control">
                                     </template>
-                                    <template v-slot:cell(price)="data">
+                                    <template v-slot:cell(product_price)="data">
                                       <span>{{ data.item.item.product_price }}</span>
                                     </template>
                                     <template v-slot:cell(discount)="data">
@@ -186,8 +185,8 @@
                                     </template>
                                     <template v-slot:cell(action)="data">
                                         <b-button variant=" iq-bg-success mr-1 mb-1" size="sm" @click="edit(data.item)" v-if="!data.item.editable"><i class="ri-ball-pen-fill m-0"></i></b-button>
-                                        <b-button variant=" iq-bg-danger mr-1 mb-1" size="sm" v-if="!data.item.editable" @click="remove(data.item)"><i class="ri-delete-bin-line m-0"></i></b-button>
                                         <b-button :disabled="!data.item.item.product_name" variant=" iq-bg-success mr-1 mb-1" size="sm" @click="submit(data.item)" v-if="data.item.editable"><i class="ri-checkbox-circle-fill m-0"></i></b-button>
+                                        <b-button variant=" iq-bg-danger mr-1 mb-1" size="sm" v-if="data.item.editable" @click="remove(data.item)"><i class="ri-delete-bin-line m-0"></i></b-button>
                                     </template>
                                   </b-table>
                                 </b-col>
@@ -214,12 +213,12 @@
                                <b-row>
                                 <b-col md="12" class="table-responsive" style="min-height:200px">
                                   <b-table bordered :items="paymentMethods" :fields="paymentMethodColumns">
-                                    <template v-slot:cell(payment_method)="data">
+                                    <template v-slot:cell(type)="data">
                                       <span v-if="isInvoiceStatusIssued">
-                                          {{ data.item.payment_method }}
+                                          {{ data.item.type }}
                                       </span>
                                       <div v-else>
-                                        <v-select :clearable="false" label="name" :reduce="opt => opt.name" class="style-chooser" v-model="data.item.payment_method" :options="paymentMethodOptions"></v-select>
+                                        <v-select :clearable="false" label="name" :reduce="opt => opt.name" class="style-chooser" v-model="data.item.type" :options="paymentMethodOptions"></v-select>
                                       </div>
                                     </template>
                                     <template v-slot:cell(amount)="data">
@@ -328,7 +327,7 @@ import { sso } from '../../services/userService'
 import { getCompanyById } from '../../services/companies'
 import { getPremisesForCompany, getDevicesForPremise } from '../../services/companyPremises'
 import { getEnquiryById } from '../../services/enquiry'
-import { createInvoice } from '../../services/invoice'
+import { createInvoice, updateInvoice, getItemsOfInvoiceById, getPaymentItemsOfInvoiceById } from '../../services/invoice'
 import { getProducts } from '../../services/products'
 import html2pdf from 'html2pdf.js'
 import _ from 'lodash'
@@ -352,7 +351,7 @@ export default {
         { label: '#', key: 'id', class: 'text-left' },
         { label: this.$t('invoices.newInvoice.newInvoiceDetails.item'), key: 'name', class: 'text-left item-name' },
         { label: this.$t('invoices.newInvoice.newInvoiceDetails.quantity'), key: 'quantity', class: 'text-left narrow-column' },
-        { label: this.$t('invoices.newInvoice.newInvoiceDetails.price'), key: 'price', class: 'text-left' },
+        { label: this.$t('invoices.newInvoice.newInvoiceDetails.price'), key: 'product_price', class: 'text-left' },
         { label: this.$t('invoices.newInvoice.newInvoiceDetails.discount'), key: 'discount', class: 'text-left narrow-column' },
         { label: this.$t('invoices.newInvoice.newInvoiceDetails.amount'), key: 'total', class: 'text-left' },
         { label: this.$t('invoices.newInvoice.newInvoiceDetails.action'), key: 'action', class: 'text-center action-column' }
@@ -364,15 +363,14 @@ export default {
             name: ''
           },
           quantity: '1',
-          price: '0',
-          discount: '',
-          total: '0 ',
+          discount: '0',
+          total: '0',
           editable: true
         }
       ],
       paymentMethods: [
         {
-          payment_method: null,
+          type: null,
           amount: 0,
           paid: false
         }
@@ -384,7 +382,7 @@ export default {
       ],
       paymentMethodColumns: [
         {
-          key: 'payment_method',
+          key: 'type',
           label: this.$t('paymentMethod')
         },
         {
@@ -429,6 +427,8 @@ export default {
       invoiceDatePdf: moment().format('DD.MM.YYYY'),
       dateOfServicePdf: '',
       invoiceNumber: '',
+      invoiceId: '',
+      paidAmount: 0,
       zoi: '24as211d4232as1124',
       eor: '24as211d4232as1124'
     }
@@ -444,7 +444,7 @@ export default {
     },
     defaultPaymentMethod () {
       return {
-        payment_method: null,
+        type: null,
         amount: 0,
         paid: false
       }
@@ -457,10 +457,10 @@ export default {
       this.dateOfServicePdf = moment(this.dateOfService).format('DD.MM.YYYY')
       this.invoiceTime = moment(this.invoice.invoice_time).format('DD.MM.YYYY HH:MM')
       let options = {
-        filename: this.invoice_number + '.pdf',
+        filename: this.invoiceNumber + '.pdf',
         image: { type: 'jpeg', quality: 0.98 },
-        html2canvas: { y: 50 },
-        jsPDF: { unit: 'mm', format: 'legal', orientation: 'landscape' }
+        html2canvas: { y: 300 },
+        jsPDF: { unit: 'mm', format: 'a3' }
       }
       var source = window.document.getElementById('printInvoice')
       html2pdf().set(options).from(source).save()
@@ -473,7 +473,7 @@ export default {
         this.subTotal = 0
       } else {
         this.items.forEach(element => {
-          totalCount += this.calculatePrice(element)
+          totalCount += this.calculatePrice(element.item.product_price, element.quantity, element.discount)
           totalSubCount += this.calculatePriceBeforeDiscount(element)
         })
         this.invoiceTotal = totalCount.toFixed(2)
@@ -491,8 +491,8 @@ export default {
     getPrice (item) {
       this.selectedItemName = item.name
     },
-    calculatePrice (item) {
-      return item.item.product_price ? item.quantity * (item.item.product_price - (item.item.product_price * item.discount / 100)) : 0
+    calculatePrice (productPrice, quantity, discount) {
+      return productPrice ? quantity * (productPrice - (productPrice * discount / 100)) : 0
     },
     calculatePriceBeforeDiscount (item) {
       return item.item.product_price ? item.quantity * item.item.product_price : 0
@@ -546,7 +546,7 @@ export default {
       this.isEditMode = true
     },
     submit (item) {
-      item.total = this.calculatePrice(item).toFixed(2)
+      item.total = this.calculatePrice(item.item.product_price, item.quantity, item.discount).toFixed(2)
       item.editable = false
       this.getInvoiceTotal()
       if (!this.isEditMode) {
@@ -567,9 +567,8 @@ export default {
         id: this.items.length + 1,
         item: {},
         quantity: '1',
-        price: '0',
-        discount: '',
-        total: '0 ',
+        discount: '0',
+        total: '0',
         editable: true
       }
     },
@@ -577,8 +576,12 @@ export default {
       this.paymentTotal = _.reduce(this.paymentMethods, function (sum, item) {
         return sum + parseFloat(item.amount)
       }, 0)
-      console.log('paym' + this.paymentTotal)
-      console.log('inv' + this.invoiceTotal)
+    },
+    calculatePayedAmount () {
+      let payed = _.filter(this.paymentMethods, function (method) { return method.paid })
+      this.paidAmount = _.reduce(payed, function (sum, item) {
+        return sum + parseFloat(item.amount)
+      }, 0)
     },
     saveAsDraft () {
       this.status = 'draft invoice'
@@ -593,20 +596,51 @@ export default {
       this.prepareInvoice()
       if (this.isInoiceValid()) this.createInvoice()
     },
+    findProduct (productId) {
+      return _.find(this.products, function (prod) { return prod.product_id === productId })
+    },
+    fetchItemsAndPaymentMethods (invoiceId) {
+      getItemsOfInvoiceById(invoiceId).then(response => {
+        this.items = []
+        response.forEach(element => {
+          let item = {
+            id: element.id,
+            item: this.findProduct(element.product_id),
+            quantity: element.invoiced_quantity,
+            discount: element.discount,
+            total: this.calculatePrice(element.product_price, element.invoiced_quantity, element.discount).toFixed(2),
+            editable: false
+          }
+          this.items.push(item)
+        })
+      })
+      getPaymentItemsOfInvoiceById(invoiceId).then(response => {
+        this.paymentMethods = response
+      })
+    },
     createInvoice () {
       if (!this.isItemValid()) this.items.pop()
-      createInvoice(this.invoice).then(response => {
-        console.log(response)
-        this.showPdf = true
-        this.$bvToast.show('b-toaster-bottom-right')
-      }).catch(errorMsg => {
-        console.log('Error: ' + errorMsg)
-        this.$bvToast.show('bottom-right-danger')
-      })
+      if (!this.invoiceId) {
+        createInvoice(this.invoice).then(response => {
+          this.invoiceId = response
+          this.showPdf = true
+          this.$bvToast.show('b-toaster-bottom-right')
+          this.fetchItemsAndPaymentMethods(this.invoiceId)
+        }).catch(errorMsg => {
+          console.log('Error: ' + errorMsg)
+          this.$bvToast.show('bottom-right-danger')
+        })
+      } else {
+        updateInvoice(this.invoiceId, this.invoice).then(response => {
+          this.fetchItemsAndPaymentMethods(this.invoiceId)
+          this.$bvToast.show('b-toaster-bottom-right')
+          if (response === 'issued') this.redirectToDetailsPage()
+        })
+      }
     },
     isItemValid () {
       let item = _.last(this.items)
-      return parseFloat(item.price) > 0
+      return parseFloat(item.total) > 0
     },
     isInoiceValid () {
       this.calculatePaymentTotal()
@@ -615,14 +649,10 @@ export default {
         this.$bvToast.show('different-amount')
         valid = false
       }
-      if (this.items.length < 2) {
+      if (this.items.length < 1 && this.isItemValid()) {
         this.$bvToast.show('no-items')
         valid = false
       }
-      // if (!this.paymentMethods[0].paymentMethod) {
-      //   this.$bvToast.show('mandatory-payment-method')
-      //   valid = false
-      // }
       if (!this.deviceId) {
         this.$bvToast.show('mandatory-device-id')
         valid = false
@@ -630,6 +660,7 @@ export default {
       return valid
     },
     prepareInvoice () {
+      this.calculatePayedAmount()
       let temp = {
         invoice_type: 'Invoice',
         invoice_time: moment(this.dateOfInvoice).format('YYYY MM DD HH:MM:SS'),
@@ -642,7 +673,7 @@ export default {
         total_without_vat: 0,
         total_vat_amount: 0,
         total_with_vat: 0,
-        paid_amount: 0,
+        paid_amount: this.paidAmount,
         amount_due_for_payment: 0,
         payment_methods: this.paymentMethods,
         warranty: true,

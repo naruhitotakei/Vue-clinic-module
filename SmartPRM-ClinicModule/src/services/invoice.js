@@ -46,6 +46,18 @@ export async function getItemsOfInvoiceById (id) {
   return rawResponse.json()
 }
 
+export async function getPaymentItemsOfInvoiceById (id) {
+  const rawResponse = await fetch('/api/invoices/' + id + '/payment-items', {
+    method: 'GET',
+    credentials: 'same-origin',
+    headers: {
+      'Accept': 'application/json',
+      'Content-Type': 'application/json'
+    }
+  })
+  return rawResponse.json()
+}
+
 export async function createInvoice (invoice) {
   const rawResponse = await fetch('/api/invoices', {
     method: 'POST',

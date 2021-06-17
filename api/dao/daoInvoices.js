@@ -123,7 +123,7 @@ const createInvoices = (request, response, invoice) => {
         }
         if (invoice.payment_methods.length > 0) {
             invoice.payment_methods.forEach(item => {
-                createPaymentMethod(invoiceId, item.payment_method, item.amount, item.paid)
+                createPaymentMethod(invoiceId, item.type, item.amount, item.paid)
             });
         }
         response.status(200).json(invoiceId)
@@ -201,9 +201,9 @@ const updateInvoices = (request, response, id, invoice) => {
     if (invoice.payment_methods.length > 0) {
         invoice.payment_methods.forEach(item => {
             if (item.id) {
-                updatePaymentMethod(id, item.payment_method, item.amount, item.paid)
+                updatePaymentMethod(id, item.type, item.amount, item.paid)
             } else {
-                createPaymentMethod(invoiceId, item.payment_method, item.amount, item.paid)
+                createPaymentMethod(id, item.type, item.amount, item.paid)
             }
         });
     }
@@ -235,7 +235,7 @@ const updatePaymentMethod = (invoiceId, paymentMethod, amount, paid) => {
 }
 
 const createInoviceItem = (item, id) => {
-    let net_amount = parseFloat(item.item.product_price) + parseFloat(item.item.tax_amount)
+    let net_amount = item.item.tax_amount ? parseFloat(item.item.product_price) + parseFloat(item.item.tax_amount) : parseFloat(item.item.product_price)
     let statement = "INSERT INTO invoice_item(invoice_id, product_id, product_name, product_price, invoiced_quantity, discount, product_vat_tax_rate, product_tax_amount, net_amount, created_date) VALUES (" + id + "," + item.item.product_id + ",'" + item.item.product_name + "'," + item.item.product_price + "," + item.quantity + ","+ item.discount + "," + item.item.tax_rate + "," + item.item.tax_amount + "," + net_amount + ",NOW())"
     console.log(statement)
     pool.query(statement, (error, results) => {
@@ -246,7 +246,7 @@ const createInoviceItem = (item, id) => {
 }
 
 const updateInoviceItem = (item, id) => {
-    let net_amount = parseFloat(item.item.product_price) + parseFloat(item.item.tax_amount)
+    let net_amount = item.item.tax_amount ? parseFloat(item.item.product_price) + parseFloat(item.item.tax_amount) : parseFloat(item.item.product_price)
 
     let statement = "UPDATE invoice_item SET "
     if (item.item.product_id) statement += "product_id='" + item.item.product_id + "',"
@@ -255,8 +255,8 @@ const updateInoviceItem = (item, id) => {
     if (item.invoiced_quantity) statement += "invoiced_quantity='" + item.invoiced_quantity + "',"
     if (item.discount) statement += "discount='" + item.discount + "',"
     if (item.item.tax_rate) statement += "product_vat_tax_rate='" + item.item.tax_rate + "',"
-    if (item.item.product_tax_amount) statement += "product_tax_amount='" + item.item.product_tax_amount + "',"
-    statement += "net_amount='" + net_amount
+    if (item.item.tax_amount) statement += "product_tax_amount='" + item.item.tax_amount + "',"
+    statement += "net_amount='" + net_amount + "'"
     console.log(statement)
     pool.query(statement, (error, results) => {
         if (error) {
@@ -294,6 +294,15 @@ const getItemsOfInvoiceById = (request, response, id) => {
     })
 }
 
+const getPaymentItemsOfInvoiceById = (request, response, id) => {
+    pool.query("SELECT * FROM payment_item WHERE invoice_id = $1 ORDER BY id", [id] , (error, results) => {
+        if (error) {
+            throw error
+        }
+        response.status(200).json(results.rows)
+    })
+}
+
 const getConsecutiveInvoiceNumberForCompany = (request, response, id) => {
     pool.query("SELECT COUNT(company_id) FROM invoice WHERE company_id = $1", [id] , (error, results) => {
         if (error) {
@@ -309,5 +318,6 @@ module.exports = {
     getInvoiceById,
     getItemsOfInvoiceById,
     updateInvoices,
-    getConsecutiveInvoiceNumberForCompany
+    getConsecutiveInvoiceNumberForCompany,
+    getPaymentItemsOfInvoiceById
 }
