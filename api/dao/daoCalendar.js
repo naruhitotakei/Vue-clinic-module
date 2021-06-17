@@ -24,14 +24,13 @@ const getApontments = (request, response, from, to, user_id, accessible_user_ids
     } else if (scope=='Self') {
         statement += "AND us.id=" + user_id 
     } else if (scope==='Self&LinkedUsers') {
-        if (accessible_user_ids) {
-            statement += " AND ("
-            statement +=    "false";
+        statement += " AND (us.id=" + user_id;
+        if (accessible_user_ids) {           
             for (const acc_id in accessible_user_ids) {
                 statement +=" OR us.id=" + accessible_user_ids[acc_id];
-            }
-        statement += ") ";  
+            } 
         }
+        statement += ") ";
     }
     // just selected if set
     if (selctedIds) {

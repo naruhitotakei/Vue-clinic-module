@@ -148,7 +148,7 @@ app.get('/api/calendar/:statrtdate/:enddate', (req, res) => {
         selctedIds = JSON.parse(selctedIds);
     }
     if(req.session.prm_user && req.session.prm_user.permissions && checkPermission(req.session.prm_user.permissions, calendarPermission))
-        daoCalendar.getApontments(req, res, statrtdate, enddate, req.session.prm_user.id, req.session.prm_user.accessible_user_ids, selctedIds, req.session.prm_user.prm_client_id, getScope(req.session.prm_user.permissions, assignmentsPermission))
+        daoCalendar.getApontments(req, res, statrtdate, enddate, req.session.prm_user.id, req.session.prm_user.accessible_user_ids, selctedIds, req.session.prm_user.prm_client_id, getScope(req.session.prm_user.permissions, calendarPermission))
     else
         res.status(401).json("OK: user unauthorized")
 });
@@ -430,7 +430,7 @@ app.put('/api/users/:id', (req, res) => {
 
 app.get('/api/enquiries', (req, res) => {
   if(req.session.prm_user && req.session.prm_user.permissions && checkPermission(req.session.prm_user.permissions, enquiriesPermission))
-      daoEnquiries.getEnquiries(req, res)
+      daoEnquiries.getEnquiries(req, res, req.session.prm_user.id, req.session.prm_user.accessible_user_ids, req.session.prm_user.prm_client_id, getScope(req.session.prm_user.permissions, calendarPermission))
   else
       res.status(401).json("OK: user unauthorized")
 });

@@ -9,8 +9,30 @@ const pool = new Pool({
 })
 var moment = require('moment');  
 
-const getEnquiries = (request, response) => {
-    pool.query("SELECT enquiries.* FROM enquiries JOIN clients ON enquiries.client_id = clients.id WHERE enquiries.trashed IS FALSE AND clients.slug = 'primadent_si'", (error, results) => {
+const getEnquiries = (request, response, user_id, accessible_user_ids, prm_client_id, scope) => {
+    var statement = "SELECT enquiries.* FROM enquiries " 
+    statement +=    "JOIN clients ON enquiries.client_id = clients.id "
+    statement +=    "LEFT JOIN prm_client ON prm_client.id = clients.id  "
+    statement +=    "WHERE enquiries.trashed IS FALSE ";
+    statement +=    "AND clients.trashed IS FALSE ";
+    statement +=    "AND prm_client.client_deleted IS FALSE ";
+    console.log("scope " + scope)
+    console.log("prm_client_id " + prm_client_id)
+    if (scope=='All') {        
+    } else if (scope=='PrmClient') {
+        statement += "AND prm_client.id=" + prm_client_id;  
+    } else if (scope=='Self') {
+        statement += "AND enquiries.user_id=" + user_id; 
+    } else if (scope==='Self&LinkedUsers') {
+        statement += " AND (enquiries.user_id=" + user_id;
+        if (accessible_user_ids) {           
+            for (const acc_id in accessible_user_ids) {
+                statement +=" OR enquiries.user_id=" + accessible_user_ids[acc_id];
+            } 
+        }
+        statement += ") ";    
+    }
+    pool.query(statement, (error, results) => {
         if (error) {
             throw error
         }
