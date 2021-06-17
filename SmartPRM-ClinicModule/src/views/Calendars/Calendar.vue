@@ -297,7 +297,7 @@ export default {
     getApontments () {
       this.events = []
       getCalendar('2021-01-01', '2021-06-30', '', this.$i18n.locale).then(data => {
-        console.log(data.find(item => item.id === 41458))
+        console.log(data.find(item => item.id === 41461))
         let dataWithDoctor = data.filter(item => {
           if (item.doctor_user_id !== null) {
             this.doctors.push({
@@ -324,9 +324,10 @@ export default {
           }
         })
         this.clonedResources = this.resources
+        console.log(this.product_groups)
         dataWithDoctor.map(item => {
-          let patientAttended = item.patient_attended === true ? 'attended' : item.patient_attended === null ? 'unknown' : 'not_attended'
-          let productGroups = this.product_groups && this.product_groups.find(productName => productName.product_group_id === item.prm_pr_group_name_id)
+          let patientAttended = item.patient_attended === 'true' ? 'attended' : item.patient_attended === 'null' ? 'unknown' : 'not_attended'
+          // let productGroups = this.product_groups && this.product_groups.find(productName => productName.product_group_id === item.prm_pr_group_name_id)
           let endDay = this.calculateEndDate(moment(item.date).format('YYYY-MM-DD') + 'T' + item.time, 0, 15)
           this.events.push({
             id: item.id,
@@ -337,11 +338,8 @@ export default {
             patient_attended: patientAttended,
             resourceId: item.doctor_user_id,
             eventResourceId: item.doctor_user_id,
-            locationId: item.location,
-            product_groups: productGroups ? {
-              product_group_id: productGroups.product_group_id,
-              product_group_name: productGroups.product_group_name
-            } : '',
+            locationId: item.location ? item.location : item.app_location,
+            product_groups: item.product_group_id,
             hours: 0,
             minutes: 15,
             assignmentDate: moment(item.date).format('YYYY-MM-DD') + 'T' + item.time,
@@ -350,7 +348,7 @@ export default {
             prm_client_name: item.prm_client_name,
             time: item.time,
             notes: item.note,
-            doctorId: item.doctor_name,
+            doctorId: item.doctor_name ? item.doctor_name : item.app_doctor_name,
             enquiry_id: item.enquiry_id,
             patientId: {
               id: item.enquiry_id,

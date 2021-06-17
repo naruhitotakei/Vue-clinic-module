@@ -41,6 +41,19 @@ export async function createCalendar (appointment) {
 
 export async function updateCalendarLabel (id, appointment) {
   const rawResponse = await fetch('/api/calendar/label/' + id, {
+    method: 'PUT',
+    credentials: 'same-origin',
+    headers: {
+      'Accept': 'application/json',
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify(appointment)
+  })
+  return rawResponse.json()
+}
+
+export async function createCalendarLabel (id, appointment) {
+  const rawResponse = await fetch('/api/calendar/label/' + id, {
     method: 'POST',
     credentials: 'same-origin',
     headers: {

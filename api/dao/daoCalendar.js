@@ -11,8 +11,8 @@ var moment = require('moment');
 
 const getApontments = (request, response, from, to, user_id, accessible_user_ids, selctedIds, prm_client_id, scope, lang ) => {
     var statement = "SELECT app.id, app.date, app.note, app.product_group_id, app.enquiry_id as app_enquiry_id, app.kind, app.patient_attended, app.appointment_canceled_in_advance_by_clinic, " +
-        "app.appointment_canceled_in_advance_by_patient, app.time, app.location, app.enquiry_id, enq.name, enq.last_name, " +
-        "app.attendance, app.product_id, app_s.location, app_s.doctor_name, us.id as doctor_user_id, pcl.id as prm_client_id, " +
+        "app.appointment_canceled_in_advance_by_patient, app.time, app.location as app_location, app.doctor_name as app_doctor_name, app.enquiry_id, enq.name, enq.last_name, " +
+        "app.attendance, app.product_id, app_s.location as app_s_location, app_s.doctor_name, us.id as doctor_user_id, pcl.id as prm_client_id, " +
         "pcl.client_name as prm_client_name, prd.name as prd_name, prd.group as prd_group, prd.category as prd_category, " +
         "prd.fee as prd_fee, prd.price_adjustment as prd_price_adjustment, prd.fee_type as prd_fee_type,  " +
         "app_lb.type as app_lb_type, app_lb.color as app_lb_color, " +
@@ -37,14 +37,13 @@ const getApontments = (request, response, from, to, user_id, accessible_user_ids
     } else if (scope=='Self') {
         statement += "AND us.id=" + user_id 
     } else if (scope==='Self&LinkedUsers') {
-        if (accessible_user_ids) {
-            statement += " AND ("
-            statement +=    "false";
+        statement += " AND (us.id=" + user_id;
+        if (accessible_user_ids) {           
             for (const acc_id in accessible_user_ids) {
                 statement +=" OR us.id=" + accessible_user_ids[acc_id];
-            }
-        statement += ") ";  
+            } 
         }
+        statement += ") ";
     }
     // just selected if set
     if (selctedIds) {
@@ -93,7 +92,6 @@ const updateAppointments = (request, response, id, appointments) => {
 }
 
 const createAppointment = (request, response, appointments) => {
-    console.log('appointments',appointments)
     let patient_attended = appointments.patient_attended === 'attended' ? true : appointments.patient_attended === 'not_attended' ? false : null;
     let time = moment(appointments.assignmentDate).format('HH:mm');
     let statement = "INSERT INTO appointments ("
@@ -107,7 +105,6 @@ const createAppointment = (request, response, appointments) => {
     if (appointments.hours) statement += "hours,"
     if (appointments.minutes) statement += "minutes,"
     statement += "time,"
-    statement += "created_at,"
     statement += "kind"
     statement += ") VALUES ("
     if (appointments.doctorId) statement += "'"+ appointments.doctorId +"',"
@@ -115,30 +112,30 @@ const createAppointment = (request, response, appointments) => {
     if (appointments.notes) statement += "'"+ appointments.notes +"',"
     if (appointments.patientId) statement += "'"+ appointments.patientId +"',"
     if (appointments.patient_attended) statement += "'"+patient_attended +"',"
-    if (appointments.product_groups) statement += "'"+ appointments.product_groups +"',"
+    if (appointments.product_groups) statement += ""+ appointments.product_groups +","
     if (appointments.assignmentDate) statement += "'"+ appointments.assignmentDate +"',"
-    if (appointments.hours) statement += "'"+ appointments.hours +"',"
-    if (appointments.minutes) statement += "'"+ appointments.minutes +"',"
+    if (appointments.hours) statement += ""+ appointments.hours +","
+    if (appointments.minutes) statement += ""+ appointments.minutes +","
     statement += "'"+ time +"',"
-    statement += "'"+ new Date().toLocaleDateString() +"',"
     statement += "'Posvet')"
-    console.log(statement)
     pool.query(statement , (error, results) => {
         console.log(error)
-        console.log(results)
         if (error) {
             throw error
         }
-        response.status(200).json(results)
+        pool.query("SELECT * FROM appointments WHERE id=(SELECT max(id) FROM appointments)" , (err, res) => {
+            console.log(err)
+            response.status(200).json(res.rows)
+        })
     })
 }
 
-const updateAppointmentsLabel = (request, response, id, appointmentsLabel) => {
+const createAppointmentsLabel = (request, response, id, appointmentsLabel) => {
     let statement = "INSERT INTO appointments_label ("
     statement += "appointment_id,"
     if (appointmentsLabel.backgroundColor) statement += "color"
     statement += ") VALUES ("
-    statement += "'" + id + "',"
+    statement += "" + id + ","
     if (appointmentsLabel.backgroundColor) statement += "'" + appointmentsLabel.backgroundColor + "')"
 
     console.log(statement)
@@ -150,6 +147,23 @@ const updateAppointmentsLabel = (request, response, id, appointmentsLabel) => {
         response.status(200).json(results)
     })
 }
+
+
+const updateAppointmentsLabel = (request, response, id, appointmentsLabel) => {
+    let statement = "UPDATE appointments_label SET "
+    if (appointmentsLabel.backgroundColor) statement += "color='" + appointmentsLabel.backgroundColor + "'"
+    statement += " WHERE appointment_id = " + id
+
+    console.log(statement)
+    pool.query(statement , (error, results) => {
+        console.log(error)
+        if (error) {
+            throw error
+        }
+        response.status(200).json(results)
+    })
+}
+
 
 const getDoctors = (request, response, user_id, accessible_user_ids, prm_client_id, scope ) => {
     var statement = "SELECT id, name from users";
@@ -180,5 +194,6 @@ module.exports = {
     getDoctors,
     updateAppointments,
     updateAppointmentsLabel,
-    createAppointment
+    createAppointment,
+    createAppointmentsLabel
 }
