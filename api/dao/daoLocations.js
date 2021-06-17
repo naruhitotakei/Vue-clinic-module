@@ -9,8 +9,16 @@ const pool = new Pool({
     port: process.env.POSTGRES_PORT || 5432,
 })
 
-const getLocationsList = (request, response) => {
-    pool.query("SELECT id, name, address, city FROM locations WHERE prm_client_id = 1 AND active = true", (error, results) => {
+const getLocationsList = (request, response, prm_client_id, scope) => {
+    let statement = "SELECT locations.* FROM locations "
+    statement += "LEFT JOIN prm_client ON prm_client.id = locations.prm_client_id "
+    statement += "WHERE active = true "
+    statement += "AND prm_client.client_deleted = false "
+    if (scope == 'All') {
+    } else if (scope == 'PrmClient') {
+        statement += "AND prm_client.id=" + prm_client_id
+    }
+    pool.query(statement, (error, results) => {
         if (error) {
             throw error
         }
@@ -18,8 +26,16 @@ const getLocationsList = (request, response) => {
     })
 }
 
-const getInactiveLocationsList = (request, response) => {
-    pool.query("SELECT id, name AS i_name, address AS i_address, city AS i_city FROM locations WHERE prm_client_id = 1 AND active = false", (error, results) => {
+const getInactiveLocationsList = (request, response, prm_client_id, scope) => {
+    let statement = "SELECT locations.id, locations.name AS i_name, locations.address AS i_address, city AS i_city FROM locations  "
+    statement += "LEFT JOIN prm_client ON prm_client.id = locations.prm_client_id "
+    statement += "WHERE active = false "
+    statement += "AND prm_client.client_deleted = false "
+    if (scope == 'All') {
+    } else if (scope == 'PrmClient') {
+        statement += "AND prm_client.id=" + prm_client_id
+    }
+    pool.query(statement, (error, results) => {
         if (error) {
             throw error
         }
