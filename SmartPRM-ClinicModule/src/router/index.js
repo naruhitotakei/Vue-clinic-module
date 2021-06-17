@@ -3,6 +3,7 @@ import VueRouter from 'vue-router'
 /* Layouts */
 import Layout1 from '../layouts/Layout1'
 import AuthLayout1 from '../layouts/AuthLayouts/AuthLayout1'
+import PublicLayout from '../layouts/PublicLayout'
 /* Home */
 import Home from '../views/Home/Home'
 /* Call Center Dashboard */
@@ -369,6 +370,12 @@ const routes = [
     component: AuthLayout1,
     meta: { auth: true },
     children: authChildRoutes('auth1')
+  },
+  {
+    path: '/public',
+    name: 'public',
+    component: PublicLayout,
+    meta: { auth: false }
   }
 ]
 
