@@ -398,17 +398,15 @@ app.get('/api/countries/', (req, res) => {
 ///////////////////////////////////
 
 app.get('/api/locations', (req, res) => {
-    if (req.session.prm_user && req.session.prm_user.permissions && checkPermission(req.session.prm_user.permissions, locationsPermission)) {
-        daoLocations.getLocationsList(req, res)
-    }
+    if (req.session.prm_user && req.session.prm_user.permissions && checkPermission(req.session.prm_user.permissions, locationsPermission))
+        daoLocations.getLocationsList(req, res, req.session.prm_user.prm_client_id, getScope (req.session.prm_user.permissions, locationsPermission))
     else
         res.status(401).json("OK: user unauthorized")
 });
 
 app.get('/api/inactive-locations', (req, res) => {
-    if (req.session.prm_user && req.session.prm_user.permissions && checkPermission(req.session.prm_user.permissions, locationsPermission)) {
-        daoLocations.getInactiveLocationsList(req, res)
-    }
+    if (req.session.prm_user && req.session.prm_user.permissions && checkPermission(req.session.prm_user.permissions, locationsPermission))
+        daoLocations.getInactiveLocationsList(req, res, req.session.prm_user.prm_client_id, getScope(req.session.prm_user.permissions, locationsPermission))
     else
         res.status(401).json("OK: user unauthorized")
 });
