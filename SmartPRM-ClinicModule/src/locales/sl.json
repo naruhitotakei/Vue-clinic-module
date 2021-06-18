@@ -102,7 +102,7 @@
   "calendar": {
     "selectDoctor": "Izberi zdravnika",
     "selectAll": "Izberi vse",
-    "bookAppointment": "Dodaj termin"
+    "bookAppointment": "Nov termin"
   },
   "calendarEvent": {
     "start": "Začetek",
@@ -118,7 +118,7 @@
   },
   "patients": {
     "patientsHeader": "Pacienti",
-    "addPatient": "Dodaj pacienta",
+    "addPatient": "Nov pacient",
     "patientsColumn": {
       "name": "Ime",
       "lastName": "Priimek",
@@ -141,9 +141,9 @@
       "email": "Email",
       "address": "Naslov",
       "addressUnknown": "Neznano",
-      "addAppointment": "Dodaj termin",
-      "addInvoice": "Dodaj Račun",
-      "addAssignment": "Dodaj nalogo",
+      "addAppointment": "Nov termin",
+      "addInvoice": "Nov Račun",
+      "addAssignment": "Nova naloga",
       "deletePatient": "Izbriši pacienta",
       "personalDoctors": "Osebni zdravniki",
       "personalDentist": "Osebni zobozdravnik",
@@ -188,7 +188,7 @@
     "filesHeader": "Datoteke",
     "files": {
       "sortBy": "Razvrsti po",
-      "addFile": "Dodaj datoteko",
+      "addFile": "Nova datoteka",
       "fileName": "Ime datoteke",
       "fileType": "Vrsta datoteke",
       "fileCreatedAt": "Ustvarjeno"
@@ -229,7 +229,7 @@
   },
   "offers": {
     "offersHeader": "Ponudbe",
-    "offersBtn": "Dodaj ponudbo",
+    "offersBtn": "Nova ponudba",
     "offersColumn": {
       "no": "Številka",
       "patientName": "Ime pacienta",
@@ -265,7 +265,7 @@
   },
   "invoices": {
     "invoicesHeader": "Računi",
-    "invoicesBtn": "Dodaj Račun",
+    "invoicesBtn": "Nov Račun",
     "invoicesColumn": {
       "no": "Št.",
       "patientName": "Ime pacienta",
@@ -296,7 +296,7 @@
       },
       "newInvoiceDetails": {
         "header": "Podatki o računu",
-        "addNewItem": "Dodaj artikel",
+        "addNewItem": "Nov artikel",
         "item": "Opis",
         "quantity": "Količina",
         "price": "Cena",
@@ -351,7 +351,7 @@
   },
   "advPayments": {
     "advPaymentsHeader": "Avansni računi",
-    "advPaymentsBtn": "Dodaj avansni račun",
+    "advPaymentsBtn": "Nov avansni račun",
     "advPaymentsColumn": {
       "no": "Številka",
       "patientName": "Ime Pacienta",
@@ -503,14 +503,14 @@
   },
   "settingsLocations": {
     "headerLocations": "Lokacije",
-    "addLocation": "Dodaj lokacijo",
+    "addLocation": "Nova lokacija",
     "locationsColumn": {
       "name": "Ime",
       "address": "Naslov",
       "city": "Kraj",
       "action": "Urejaj"
     },
-    "addLocationModalHeader": "Dodaj lokacijo",
+    "addLocationModalHeader": "Nova lokacija",
     "editLocationModalHeader": "Uredi lokacijo",
     "locationModal": {
       "name": "Ime",
@@ -523,7 +523,7 @@
   },
   "servicesAndProducts": {
     "headerProducts": "Produkti",
-    "addProduct": "Dodaj produkt",
+    "addProduct": "Nov produkt",
     "productColumn": {
       "productName": "Opis",
       "productPrice": "Cena",
@@ -532,7 +532,7 @@
       "productAction": "Urejaj"
     },
     "addProductModal": {
-      "addProduct": "Dodaj produkt",
+      "addProduct": "Nov produkt",
       "nameSlovenian": "Opis (slovenščina)",
       "nameItalian": "Opis (italijanščina)",
       "nameGerman": "Opis (nemščina)",
@@ -545,7 +545,7 @@
       "save": "Shrani"
     },
     "headerProductGroup": "Skupine produktov",
-    "addProductGroup": "Dodaj skupino",
+    "addProductGroup": "Nova skupina",
     "productGroupColumn": {
       "productGroupName": "Opis",
       "productGroupCategory": "Kategorija",
@@ -553,7 +553,7 @@
       "productGroupAction": "Urejaj"
     },
     "headerProductCategories": "Kategorije produktov",
-    "addProductCategory": "Dodaj kategorijo",
+    "addProductCategory": "Nova kategorija",
     "productCategoryColumn": {
       "productCategoryName": "Opis",
       "productCategoryAction": "Urejaj"
