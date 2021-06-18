@@ -448,6 +448,14 @@ app.get('/api/users', (req, res) => {
     }
 });
 
+app.get('/api/users-roles', (req, res) => {
+    if (req.session.prm_user && req.session.prm_user.permissions && checkPermission(req.session.prm_user.permissions, usersPermission)) {
+        daoUser.getRoles(req, res)
+    } else {
+        res.status(401).json("OK: user unauthorized")
+    }
+});
+
 app.put('/api/users/:id', (req, res) => {
     const id = req.params.id
     const user = req.body

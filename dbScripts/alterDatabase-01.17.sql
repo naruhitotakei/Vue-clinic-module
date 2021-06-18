@@ -344,6 +344,31 @@ ALTER TABLE payment_item
 ADD COLUMN due_date DATE,
 ADD COLUMN payment_date DATE;
 
+--############################################################
+--# Adding prm_client_id to users
+--############################################################
+
+UPDATE users SET prm_client_id = 1 
+WHERE id IN (7, 13, 17, 18, 24, 27, 28, 29, 39, 50, 78, 102, 130, 133, 137, 140, 143, 147, 148, 149, 150, 151, 152, 153, 154, 155, 156, 157);
+
+--############################################################
+--# Altering users table
+--############################################################
+
+ALTER TABLE users ADD COLUMN position VARCHAR(128);
+
+--############################################################
+--# Giving role "administrator" permission to see patients
+--############################################################
+
+INSERT INTO prm_role_permission (role_permission_id, role_id, permission_id) VALUES (304, 3, 42);
+
+--############################################################
+--# Altering locations table
+--############################################################
+
+UPDATE locations SET prm_client_id = NULL WHERE id != 77;
+
 UPDATE db_version SET version ='01.17', version_date=CURRENT_DATE WHERE resource='Tables';
 
 

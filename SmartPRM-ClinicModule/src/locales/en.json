@@ -513,6 +513,8 @@
       "name": "Name",
       "surname": "Surname",
       "specialization": "Specialization",
+      "position": "Position",
+      "role": "Role",
       "mail": "Mail",
       "phone": "Phone",
       "close": "Close",

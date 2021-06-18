@@ -14,6 +14,12 @@
                             <p class="mb-0">{{user.specialization}}</p>
                         </div>
                         <div class="iq-doc-description">
+                            <p class="mb-0">{{user.position}}</p>
+                        </div>
+                        <div class="iq-doc-description">
+                            <p class="mb-0">{{user.role_name}}</p>
+                        </div>
+                        <div class="iq-doc-description">
                             <p class="mb-0">{{user.mail}}</p>
                         </div>
                         <div class="iq-doc-description mt-2">
@@ -52,6 +58,20 @@
                         </div>
                     </div>
                     <div class="col-md-12 mb-3">
+                        <label for="position">{{ $t('settingsUsers.editProfileModal.position') }}</label>
+                        <div style="display: flex;">
+                            <input type="text" v-model="formData.position" class="form-control" :placeholder="$t('settingsUsers.editProfileModal.position')">
+                        </div>
+                    </div>
+                    <div class="col-md-12 mb-3">
+                        <label for="role_name">{{ $t('settingsUsers.editProfileModal.role') }}</label>
+                        <div>
+                            <v-select :label="$t('settingsUsers.editProfileModal.role')" v-model="formData.role_id"
+                                      :clearable="false" :options="roles" :reduce="role => role.role_id" :getOptionLabel="user => user.role_name">
+                            </v-select>
+                        </div>
+                    </div>
+                    <div class="col-md-12 mb-3">
                         <label for="mail">{{ $t('settingsUsers.editProfileModal.mail') }} *</label>
                         <div style="display: flex;">
                             <input type="text" v-model="formData.mail" class="form-control" :placeholder="$t('settingsUsers.editProfileModal.mail')" required>
@@ -70,13 +90,14 @@
 </template>
 <script>
 import { xray } from '../../config/pluginInit'
-import { getUsers, updateUser } from '../../services/userService'
+import { getUsers, updateUser, getRoles } from '../../services/userService'
 
 export default {
   name: 'UserList',
   data () {
     return {
       users: [],
+      roles: [],
       profile: { image: require('../../assets/images/user/placeholder.png') },
       editProfileShowModal: false,
       formData: {
@@ -85,6 +106,9 @@ export default {
         name: '',
         surname: '',
         specialization: '',
+        position: '',
+        role_id: '',
+        role_name: '',
         mail: '',
         phone: ''
       }
@@ -93,6 +117,7 @@ export default {
   mounted () {
     xray.index()
     this.getUserList()
+    this.getRolesList()
   },
   firestore () {
     return {
@@ -108,9 +133,15 @@ export default {
         this.users = response
       })
     },
+    getRolesList () {
+      getRoles().then(response => {
+        this.roles = response
+      })
+    },
     editUser () {
       updateUser(this.formData.id, this.formData).then(() => {
         this.editProfileShowModal = false
+        this.getUserList()
       })
     },
     openProfileModal (user) {
