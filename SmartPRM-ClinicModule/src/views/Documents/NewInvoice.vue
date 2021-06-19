@@ -185,8 +185,8 @@
                                     </template>
                                     <template v-slot:cell(action)="data">
                                         <b-button variant=" iq-bg-success mr-1 mb-1" size="sm" @click="edit(data.item)" v-if="!data.item.editable"><i class="ri-ball-pen-fill m-0"></i></b-button>
-                                        <b-button :disabled="!data.item.item.product_name" variant=" iq-bg-success mr-1 mb-1" size="sm" @click="submit(data.item)" v-if="data.item.editable"><i class="ri-checkbox-circle-fill m-0"></i></b-button>
-                                        <b-button variant=" iq-bg-danger mr-1 mb-1" size="sm" v-if="data.item.editable" @click="remove(data.item)"><i class="ri-delete-bin-line m-0"></i></b-button>
+                                        <b-button :disabled="!data.item.item.product_name || data.item.discount > 100" variant=" iq-bg-success mr-1 mb-1" size="sm" @click="submit(data.item)" v-if="data.item.editable"><i class="ri-checkbox-circle-fill m-0"></i></b-button>
+                                        <b-button variant=" iq-bg-danger mr-1 mb-1" size="sm" @click="remove(data.item)"><i class="ri-delete-bin-line m-0"></i></b-button>
                                     </template>
                                   </b-table>
                                 </b-col>
@@ -244,8 +244,8 @@
                             <b-button variant="primary mr-4" @click="saveAsDraft">
                                 <i class="ri-bookmark-3-fill mr-2"></i>{{ $t('invoices.newInvoice.saveAsDraft') }}
                             </b-button>
-                            <b-button variant="primary mr-3" @click="saveInvoice">
-                                <i class="ri-save-3-line mr-2"></i>{{ $t('invoices.newInvoice.saveInvoice') }}
+                            <b-button variant="warning mr-3" @click="saveInvoice">
+                                <i class="ri-save-3-line mr-2"></i>{{ $t('advPayments.newAdvPayment.save') }}
                             </b-button>
                         </b-col>
                     </b-row>
@@ -327,7 +327,7 @@ import { sso } from '../../services/userService'
 import { getCompanyById } from '../../services/companies'
 import { getPremisesForCompany, getDevicesForPremise } from '../../services/companyPremises'
 import { getEnquiryById } from '../../services/enquiry'
-import { createInvoice, updateInvoice, getItemsOfInvoiceById, getPaymentItemsOfInvoiceById } from '../../services/invoice'
+import { createInvoice, updateInvoice, getItemsOfInvoiceById, getPaymentItemsOfInvoiceById, getSerialForInvoiceNumberBasedOnType, getSerialForFursInvoiceNumberBasedOnType } from '../../services/invoice'
 import { getProducts } from '../../services/products'
 import html2pdf from 'html2pdf.js'
 import _ from 'lodash'
@@ -427,10 +427,14 @@ export default {
       invoiceDatePdf: moment().format('DD.MM.YYYY'),
       dateOfServicePdf: '',
       invoiceNumber: '',
+      invoiceNumberFurs: '',
       invoiceId: '',
       paidAmount: 0,
       zoi: '24as211d4232as1124',
-      eor: '24as211d4232as1124'
+      eor: '24as211d4232as1124',
+      invoiceType: 'Invoice',
+      referenceCode: '',
+      referenceCodeFurs: ''
     }
   },
   computed: {
@@ -593,8 +597,33 @@ export default {
     saveInvoice () {
       this.status = 'issued'
       this.deviceId = this.device ? this.device.device_id : ''
-      this.prepareInvoice()
-      if (this.isInoiceValid()) this.createInvoice()
+      this.generateInvoiceNumber()
+    },
+    generateReferenceCode () {
+      let year = moment().format('YY')
+      this.referenceCode = 'R-' + year + '-' + this.invoiceNumber
+      this.referenceCodeFurs = 'R-' + year + '-' + this.invoiceNumber
+    },
+    generateInvoiceNumber () {
+      let data = {
+        type: this.invoiceType,
+        business_premise_id: this.issuedIn.business_premise_id,
+        draft: 'draft invoice'
+      }
+      getSerialForInvoiceNumberBasedOnType(data).then(response => {
+        let number = parseInt(response[0].count) + 1
+        console.log('inv_num: ' + number)
+        this.invoiceNumber = number
+        this.generateReferenceCode()
+        getSerialForFursInvoiceNumberBasedOnType(data).then(furs => {
+          let number = parseInt(furs[0].count) + 1
+          this.invoiceNumberFurs = this.issuedIn.business_premise_id + '-' + this.device.electronic_device_id + '-' + number
+          console.log('furs: ' + this.invoiceNumberFurs)
+
+          this.prepareInvoice()
+          if (this.isInoiceValid()) this.createInvoice()
+        })
+      })
     },
     findProduct (productId) {
       return _.find(this.products, function (prod) { return prod.product_id === productId })
@@ -613,9 +642,9 @@ export default {
           }
           this.items.push(item)
         })
-      })
-      getPaymentItemsOfInvoiceById(invoiceId).then(response => {
-        this.paymentMethods = response
+        getPaymentItemsOfInvoiceById(invoiceId).then(items => {
+          this.paymentMethods = items
+        })
       })
     },
     createInvoice () {
@@ -626,6 +655,7 @@ export default {
           this.showPdf = true
           this.$bvToast.show('b-toaster-bottom-right')
           this.fetchItemsAndPaymentMethods(this.invoiceId)
+          if (this.isInvoiceStatusIssued) this.redirectToDetailsPage()
         }).catch(errorMsg => {
           console.log('Error: ' + errorMsg)
           this.$bvToast.show('bottom-right-danger')
@@ -637,6 +667,9 @@ export default {
           if (response === 'issued') this.redirectToDetailsPage()
         })
       }
+    },
+    redirectToDetailsPage () {
+      this.$router.push({ path: `/documents/invoices/${this.invoice.invoice_id}` })
     },
     isItemValid () {
       let item = _.last(this.items)
@@ -662,9 +695,10 @@ export default {
     prepareInvoice () {
       this.calculatePayedAmount()
       let temp = {
-        invoice_type: 'Invoice',
+        invoice_type: this.invoiceType,
         invoice_time: moment(this.dateOfInvoice).format('YYYY MM DD HH:MM:SS'),
         invoice_number: this.invoiceNumber,
+        invoice_number_furs: this.invoiceNumberFurs,
         invoice_numbering_structure: '{c}',
         issued_in: this.issuedIn.premise_name,
         lines_sum: this.subTotal,
@@ -690,7 +724,9 @@ export default {
         invoice_status: this.status,
         invoiceItems: this.items,
         service_date: this.dateOfService,
-        due_date: this.dueDate
+        due_date: this.dueDate,
+        reference_code: this.referenceCode,
+        reference_code_furs: this.referenceCodeFurs
       }
       this.invoice = _.assignIn(this.invoice, this.patient, this.usersCompany, temp)
     }

@@ -19,7 +19,7 @@
             <p>{{patient.post_code}} {{patient.city}}</p>
           </b-col>
           <b-col lg="6">
-            <p>{{ $t('advPayments.newAdvPayment.advPaymentNo') }}: {{invoice_number}}</p>
+            <p>{{ $t('advPayments.newAdvPayment.advPaymentNo') }}: {{invoiceNumber}}</p>
             <p>{{ $t('advPayments.newAdvPayment.copy') }}:<span style="margin-left:20px">Original</span></p>
             <p>{{ $t('advPayments.newAdvPayment.IssuedIn') }}:<span style="margin-left:20px">{{issuedIn.premise_city}}</span></p>
             <p>{{ $t('advPayments.newAdvPayment.dateOfAdvPayment') }}:<span style="margin-left:20px">{{invoiceTime}}</span></p>
@@ -60,7 +60,7 @@
         <b-row>
           <b-col lg="3">
               <p>{{ $t('advPayments.newAdvPayment.paymentMethod') }}:</p>
-            <p style="border-bottom: solid;">{{paymentMethods[0].paymentMethod}}<span style="margin-left:20px">{{advPayments[0].amount | euro}}</span></p>
+            <p style="border-bottom: solid;">{{paymentMethods[0].type}}<span style="margin-left:20px">{{advPayments[0].amount | euro}}</span></p>
           </b-col>
         </b-row>
         <b-row>
@@ -171,12 +171,12 @@
                                <b-row>
                                 <b-col md="12" class="table-responsive" style="min-height:200px">
                                   <b-table bordered :items="paymentMethods" :fields="paymentMethodColumns">
-                                    <template v-slot:cell(paymentMethod)="data">
+                                    <template v-slot:cell(type)="data">
                                       <span v-if="isInvoiceStatusIssued">
-                                          {{ data.item.paymentMethod }}
+                                          {{ data.item.type }}
                                       </span>
                                       <div v-else>
-                                        <v-select :clearable="false" label="name" :reduce="opt => opt.name" class="style-chooser" v-model="data.item.paymentMethod" :options="paymentMethodOptions"></v-select>
+                                        <v-select :clearable="false" label="name" :reduce="opt => opt.name" class="style-chooser" v-model="data.item.type" :options="paymentMethodOptions"></v-select>
                                       </div>
                                     </template>
                                     <template v-slot:cell(amount)="data">
@@ -281,7 +281,7 @@ import moment from 'moment'
 import { sso } from '../../services/userService'
 import { getCompanyById } from '../../services/companies'
 import { getEnquiryById } from '../../services/enquiry'
-import { createInvoice, updateInvoice, getItemsOfInvoiceById, getConsecutiveInvoiceNumberForCompany } from '../../services/invoice'
+import { createInvoice, updateInvoice, getSerialForInvoiceNumberBasedOnType, getPaymentItemsOfInvoiceById, getSerialForFursInvoiceNumberBasedOnType } from '../../services/invoice'
 import { getPremisesForCompany, getDevicesForPremise } from '../../services/companyPremises'
 import html2pdf from 'html2pdf.js'
 import _ from 'lodash'
@@ -313,7 +313,7 @@ export default {
       summaryRows: [],
       paymentMethods: [
         {
-          paymentMethod: null,
+          type: null,
           amount: 0,
           paid: true
         }
@@ -328,7 +328,7 @@ export default {
       summary: this.$t('advPayment.advPaymentSummary'),
       paymentMethodColumns: [
         {
-          key: 'paymentMethod',
+          key: 'type',
           label: this.$t('paymentMethod')
         },
         {
@@ -351,13 +351,16 @@ export default {
       device: {},
       deviceId: '',
       devices: [],
-      invoice_number: '',
+      invoiceNumber: '',
       zoi: '24as211d4232as1124',
       eor: '24as211d4232as1124',
       status: '',
       invoiceId: '',
       consecutiveInvoiceNumber: null,
-      invoiceTime: ''
+      invoiceTime: '',
+      invoiceType: 'Advance payment',
+      referenceCode: '',
+      referenceCodeFurs: ''
     }
   },
   computed: {
@@ -368,7 +371,7 @@ export default {
   methods: {
     defaultPayment () {
       return {
-        paymentMethod: null,
+        type: null,
         amount: 0,
         editable: true
       }
@@ -382,7 +385,7 @@ export default {
     exportToPDF () {
       this.invoiceTime = moment(this.invoice.invoice_time).format('YYYY-MM-DD HH:MM')
       let options = {
-        filename: this.invoice_number + '.pdf',
+        filename: this.invoiceNumber + '.pdf',
         image: { type: 'jpeg', quality: 0.98 },
         html2canvas: { y: 170 },
         jsPDF: { unit: 'mm', format: 'a3' }
@@ -437,25 +440,45 @@ export default {
     },
     saveAsDraft () {
       this.status = 'draft'
-      this.invoice_number = 'draft advance payment invoice'
+      this.invoiceNumber = 'draft advance payment invoice'
       this.deviceId = this.device ? this.device.device_id : ''
       this.prepareInvoice()
       if (this.isInoiceValid()) this.createInvoice()
     },
     saveInvoice () {
-      getConsecutiveInvoiceNumberForCompany(this.usersCompany.company_id).then(response => {
-        this.consecutiveInvoiceNumber = parseInt(response[0].count) + 1
-        this.status = 'issued'
-        let year = moment().year()
-        this.invoice_number = this.consecutiveInvoiceNumber.toString() + '-' + year.toString()
-        this.deviceId = this.device ? this.device.device_id : ''
-        this.prepareInvoice()
-        if (this.isInoiceValid()) this.createInvoice()
+      this.status = 'issued'
+      this.deviceId = this.device ? this.device.device_id : ''
+      this.generateInvoiceNumber()
+    },
+    generateInvoiceNumber () {
+      let data = {
+        type: this.invoiceType,
+        business_premise_id: this.issuedIn.business_premise_id,
+        draft: 'draft advance payment invoice'
+      }
+      getSerialForInvoiceNumberBasedOnType(data).then(response => {
+        let number = parseInt(response[0].count) + 1
+        console.log('inv_num: ' + number)
+        this.invoiceNumber = number
+        this.generateReferenceCode()
+        getSerialForFursInvoiceNumberBasedOnType(data).then(furs => {
+          let number = parseInt(furs[0].count) + 1
+          this.invoiceNumberFurs = this.issuedIn.business_premise_id + '-' + this.device.electronic_device_id + '-' + number
+          console.log('furs: ' + this.invoiceNumberFurs)
+
+          this.prepareInvoice()
+          if (this.isInoiceValid()) this.createInvoice()
+        })
       })
+    },
+    generateReferenceCode () {
+      let year = moment().format('YY')
+      this.referenceCode = 'AR-' + year + '-' + this.invoiceNumber
+      this.referenceCodeFurs = 'AR-' + year + '-' + this.invoiceNumber
     },
     isInoiceValid () {
       let valid = true
-      if (this.advPayments[0].amount !== this.paymentMethods[0].amount) {
+      if (parseFloat(this.advPayments[0].amount).toFixed(2) !== parseFloat(this.paymentMethods[0].amount).toFixed(2)) {
         this.$bvToast.show('different-amount')
         valid = false
       }
@@ -463,7 +486,7 @@ export default {
         this.$bvToast.show('amount-zero')
         valid = false
       }
-      if (!this.paymentMethods[0].paymentMethod) {
+      if (!this.paymentMethods[0].type) {
         this.$bvToast.show('mandatory-payment-method')
         valid = false
       }
@@ -478,30 +501,35 @@ export default {
         createInvoice(this.invoice).then(response => {
           this.invoiceId = response
           this.canPrintPdf = true
+          this.fetchItemsAndPaymentMethods(this.invoiceId)
           this.$bvToast.show('b-toaster-bottom-right')
-          getItemsOfInvoiceById(this.invoiceId).then(response => {
-            this.invoice.invoiceItems = response
-          })
-          if (this.status === 'issued') this.redirectToDetailsPage()
+          if (this.isInvoiceStatusIssued) this.redirectToDetailsPage()
         }).catch(errorMsg => {
           console.log('Error: ' + errorMsg)
           this.$bvToast.show('bottom-right-danger')
         })
       } else {
         updateInvoice(this.invoiceId, this.invoice).then(response => {
+          this.fetchItemsAndPaymentMethods(this.invoiceId)
           this.$bvToast.show('b-toaster-bottom-right')
           if (response === 'issued') this.redirectToDetailsPage()
         })
       }
     },
+    fetchItemsAndPaymentMethods (invoiceId) {
+      getPaymentItemsOfInvoiceById(invoiceId).then(items => {
+        this.paymentMethods = items
+      })
+    },
     redirectToDetailsPage () {
-      this.$router.push({ path: `/documents/advance-payments/${this.invoice.invoice_number}` })
+      this.$router.push({ path: `/documents/advance-payments/${this.invoiceId}` })
     },
     prepareInvoice () {
       let temp = {
-        invoice_type: 'Advance payment',
+        invoice_type: this.invoiceType,
         invoice_time: this.dateOfAdvPayment,
-        invoice_number: this.invoice_number,
+        invoice_number: this.invoiceNumber,
+        invoice_number_furs: this.invoiceNumberFurs,
         invoice_numbering_structure: '{c}',
         issued_in: this.issuedIn.premise_name,
         lines_sum: this.advPayments[0].amount,
@@ -512,7 +540,7 @@ export default {
         total_with_vat: this.advPayments[0].amount,
         paid_amount: this.advPayments[0].amount,
         amount_due_for_payment: 1,
-        payment_method: this.paymentMethods,
+        payment_methods: this.paymentMethods,
         warranty: true,
         vat_exemption_reason: 'test',
         operator_name: this.logedInUser.name,
@@ -525,7 +553,9 @@ export default {
         premise_id: 1,
         business_customer_id: 1,
         invoiceItems: [],
-        verification_status: this.status
+        verification_status: this.status,
+        reference_code: this.referenceCode,
+        reference_code_furs: this.referenceCodeFurs
       }
       this.invoice = _.assignIn(this.invoice, this.patient, this.usersCompany, temp)
     },

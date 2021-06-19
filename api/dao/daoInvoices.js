@@ -15,6 +15,7 @@ const createInvoices = (request, response, invoice) => {
     if (invoice.invoice_time) statement += "invoice_time,"
     if (invoice.invoice_numbering_structure) statement += "invoice_numbering_structure,"
     if (invoice.invoice_number) statement += "invoice_number,"
+    if (invoice.invoice_number_furs) statement += "invoice_number_furs,"
     if (invoice.issued_in) statement += "issued_in,"
     if (invoice.company_id) statement += "company_id,"
     if (invoice.company_name) statement += "company_name,"
@@ -58,12 +59,15 @@ const createInvoices = (request, response, invoice) => {
     if (invoice.verification_status) statement += "verification_status,"
     if (invoice.service_date) statement += "service_date,"
     if (invoice.due_date) statement += "due_date,"
+    if (invoice.reference_code) statement += "reference_code,"
+    if (invoice.reference_code_furs) statement += "reference_code_furs,"
     statement = statement.slice(0, -1)
     statement+= ") VALUES ("
     if (invoice.invoice_type) statement += "'" + invoice.invoice_type + "',"
     if (invoice.invoice_time) statement += "'" + invoice.invoice_time + "',"
     if (invoice.invoice_numbering_structure) statement += "'" + invoice.invoice_numbering_structure + "',"
     if (invoice.invoice_number) statement += "'" + invoice.invoice_number + "',"
+    if (invoice.invoice_number_furs) statement += "'" + invoice.invoice_number_furs + "',"
     if (invoice.issued_in) statement += "'" + invoice.issued_in + "',"
     if (invoice.company_id) statement += "'" + invoice.company_id + "',"
     if (invoice.company_name) statement += "'" + invoice.company_name + "',"
@@ -107,6 +111,8 @@ const createInvoices = (request, response, invoice) => {
     if (invoice.verification_status) statement += "'" + invoice.verification_status + "',"
     if (invoice.service_date) statement += "'" + invoice.service_date + "',"
     if (invoice.due_date) statement += "'" + invoice.due_date + "',"
+    if (invoice.reference_code) statement += "'" + invoice.reference_code + "',"
+    if (invoice.reference_code_furs) statement += "'" + invoice.reference_code_furs + "',"
     statement = statement.slice(0, -1)
     statement += ") RETURNING invoice_id"
     
@@ -116,12 +122,15 @@ const createInvoices = (request, response, invoice) => {
             throw error
         }
         var invoiceId = results.rows[0].invoice_id;
+        
         if (invoice.invoiceItems.length > 0) {
+            console.log('usao u itemse!')
             invoice.invoiceItems.forEach(item => {
                 createInoviceItem(item, invoiceId)
             });
         }
         if (invoice.payment_methods.length > 0) {
+            console.log('usao u payments!')
             invoice.payment_methods.forEach(item => {
                 createPaymentMethod(invoiceId, item.type, item.amount, item.paid)
             });
@@ -136,6 +145,7 @@ const updateInvoices = (request, response, id, invoice) => {
     if (invoice.invoice_time) statement += "invoice_time='" + invoice.invoice_time + "',"
     if (invoice.invoice_numbering_structure) statement += "invoice_numbering_structure='" + invoice.invoice_numbering_structure + "',"
     if (invoice.invoice_number) statement += "invoice_number='" + invoice.invoice_number + "',"
+    if (invoice.invoice_number_furs) statement += "invoice_number_furs='" + invoice.invoice_number_furs + "',"
     if (invoice.issued_in) statement += "issued_in='" + invoice.issued_in + "',"
     if (invoice.company_id) statement += "company_id='" + invoice.company_id + "',"
     if (invoice.company_name) statement += "company_name='" + invoice.company_name + "',"
@@ -178,9 +188,11 @@ const updateInvoices = (request, response, id, invoice) => {
     if (invoice.verification_status) statement += "verification_status='" + invoice.verification_status + "',"
     if (invoice.service_date) statement += "service_date='" + invoice.service_date + "',"
     if (invoice.due_date) statement += "due_date='" + invoice.due_date + "',"
+    if (invoice.reference_code) statement += "reference_code='" + invoice.reference_code + "',"
+    if (invoice.reference_code_furs) statement += "reference_code_furs='" + invoice.reference_code_furs + "',"
     statement = statement.slice(0, -1)
     statement += " WHERE invoice_id = " + id
-    
+
     console.log(statement)
     pool.query(statement, (error, results) => {
         if (error) {
@@ -189,6 +201,7 @@ const updateInvoices = (request, response, id, invoice) => {
         
         response.status(200).json(invoice.verification_status)
     })
+    
     if (invoice.invoiceItems.length > 0) {
         invoice.invoiceItems.forEach(item => {
             if (item.id) {
@@ -201,7 +214,7 @@ const updateInvoices = (request, response, id, invoice) => {
     if (invoice.payment_methods.length > 0) {
         invoice.payment_methods.forEach(item => {
             if (item.id) {
-                updatePaymentMethod(id, item.type, item.amount, item.paid)
+                updatePaymentMethod(item.id, item.type, item.amount, item.paid)
             } else {
                 createPaymentMethod(id, item.type, item.amount, item.paid)
             }
@@ -220,12 +233,12 @@ const createPaymentMethod = (invoiceId, paymentMethod, amount, paid) => {
     })
 }
 
-const updatePaymentMethod = (invoiceId, paymentMethod, amount, paid) => {
+const updatePaymentMethod = (id, paymentMethod, amount, paid) => {
     let statement = "UPDATE payment_item SET paid=" + paid + ","
     if (paymentMethod) statement += "type='" + paymentMethod + "',"
     if (amount) statement += "amount='" + amount + "',"
     statement = statement.slice(0, -1)
-    statement += " WHERE invoice_id = " + invoiceId
+    statement += " WHERE id = " + id
     console.log(statement)
     pool.query(statement, (error, results) => {
         if (error) {
@@ -256,7 +269,7 @@ const updateInoviceItem = (item, id) => {
     if (item.discount) statement += "discount='" + item.discount + "',"
     if (item.item.tax_rate) statement += "product_vat_tax_rate='" + item.item.tax_rate + "',"
     if (item.item.tax_amount) statement += "product_tax_amount='" + item.item.tax_amount + "',"
-    statement += "net_amount='" + net_amount + "'"
+    statement += "net_amount='" + net_amount + "' WHERE id = " + id
     console.log(statement)
     pool.query(statement, (error, results) => {
         if (error) {
@@ -286,7 +299,9 @@ const getInvoiceById = (request, response, id) => {
 }
 
 const getItemsOfInvoiceById = (request, response, id) => {
-    pool.query("SELECT * FROM invoice_item WHERE invoice_id = $1", [id] , (error, results) => {
+    let statement = "SELECT * FROM invoice_item WHERE invoice_id = " + id
+    console.log(statement)
+    pool.query(statement, (error, results) => {
         if (error) {
             throw error
         }
@@ -295,7 +310,9 @@ const getItemsOfInvoiceById = (request, response, id) => {
 }
 
 const getPaymentItemsOfInvoiceById = (request, response, id) => {
-    pool.query("SELECT * FROM payment_item WHERE invoice_id = $1 ORDER BY id", [id] , (error, results) => {
+    let statement = "SELECT * FROM payment_item WHERE invoice_id = " + id
+    console.log(statement)
+    pool.query(statement, (error, results) => {
         if (error) {
             throw error
         }
@@ -313,7 +330,9 @@ const getConsecutiveInvoiceNumberForCompany = (request, response, id) => {
 }
 
 const getSerialForInvoiceNumberBasedOnType = (request, response, data) => {
-    pool.query("SELECT COUNT(invoice_number) FROM invoice WHERE invoice_type ='" + data.type + "'", (error, results) => {
+    let statement = "SELECT COUNT(invoice_number) FROM invoice WHERE invoice_type ='" + data.type + "' and invoice_number !='" + data.draft + "'"
+    console.log(statement)
+    pool.query(statement, (error, results) => {
         if (error) {
             throw error
         }
@@ -322,7 +341,9 @@ const getSerialForInvoiceNumberBasedOnType = (request, response, data) => {
 }
 
 const getSerialForFursInvoiceNumberBasedOnType = (request, response, data) => {
-    pool.query("SELECT COUNT(invoice_number_furs) FROM invoice WHERE invoice_type ='" + data.type + "' AND invoice_number LIKE '" + data.business_premise_id + "%'", (error, results) => {
+    let statement = "SELECT COUNT(invoice_number_furs) FROM invoice WHERE invoice_type ='" + data.type + "' AND invoice_number_furs LIKE '" + data.business_premise_id + "%'"
+    console.log(statement)
+    pool.query(statement, (error, results) => {
         if (error) {
             throw error
         }
