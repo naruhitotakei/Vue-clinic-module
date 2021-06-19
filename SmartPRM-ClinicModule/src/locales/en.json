@@ -102,7 +102,7 @@
   "calendar": {
     "selectDoctor": "Select Doctor",
     "selectAll": "Select All",
-    "addAppointment": "Add Appointment"
+    "addAppointment": "New Appointment"
   },
   "calendarEvent": {
     "start": "Start",
@@ -121,7 +121,7 @@
   },
   "patients": {
     "patientsHeader": "Patients",
-    "addPatient": "Add Patient",
+    "addPatient": "New Patient",
     "patientsColumn": {
       "name": "Name",
       "lastName": "Last Name",
@@ -144,9 +144,9 @@
       "email": "Email",
       "address": "Address",
       "addressUnknown": "Unknown",
-      "addAppointment": "Add appointment",
-      "addInvoice": "Add invoice",
-      "addAssignment": "Add assignment",
+      "addAppointment": "New appointment",
+      "addInvoice": "New invoice",
+      "addAssignment": "New assignment",
       "deletePatient": "Delete patient",
       "personalDoctors": "Personal doctors",
       "personalDentist": "Personal dentist",
@@ -194,7 +194,7 @@
     "filesHeader": "Files",
     "files": {
       "sortBy": "Sort by",
-      "addFile": "Add file",
+      "addFile": "New file",
       "fileName": "File name",
       "fileType": "File type",
       "fileCreatedAt": "Date",
@@ -236,7 +236,7 @@
   },
   "offers": {
     "offersHeader": "Offers",
-    "offersBtn": "Add Offer",
+    "offersBtn": "New Offer",
     "offersColumn": {
       "no": "Number",
       "patientName": "Patient Name",
@@ -272,7 +272,7 @@
   },
   "invoices": {
     "invoicesHeader": "Invoices",
-    "invoicesBtn": "Add Invoice",
+    "invoicesBtn": "New Invoice",
     "invoicesColumn": {
       "type": "Type",
       "no": "Number",
@@ -359,7 +359,7 @@
   },
   "advPayments": {
     "advPaymentsHeader": "Advance Payments",
-    "advPaymentsBtn": "Add Advance Payment",
+    "advPaymentsBtn": "New Advance Payment",
     "advPaymentsColumn": {
       "no": "Number",
       "patientName": "Patient name",
@@ -455,13 +455,13 @@
   },
   "assignments": {
     "assignmentsHeader": "My Assignments",
-    "addAssignments": "Add Assignments",
+    "addAssignments": "New Assignments",
     "todaysAssignments": "Today's Assignments",
     "overdueAssignments": "Overdue Assignments",
     "futureAssignments": "Future Assignments",
     "completedAssignments": "Completed Assignments",
     "addAssignmentsModal" : {
-      "addAssignments": "Add Assignments",
+      "addAssignments": "New Assignments",
       "enquiry": "Enquiry",
       "description": "Description",
       "due_at": "Date",
@@ -513,6 +513,8 @@
       "name": "Name",
       "surname": "Surname",
       "specialization": "Specialization",
+      "position": "Position",
+      "role": "Role",
       "mail": "Mail",
       "phone": "Phone",
       "close": "Close",
@@ -521,14 +523,14 @@
   },
   "settingsLocations": {
     "headerLocations": "Locations",
-    "addLocation": "Add location",
+    "addLocation": "New location",
     "locationsColumn": {
       "name": "Name",
       "address": "Address",
       "city": "City",
       "action": "Action"
     },
-    "addLocationModalHeader": "Add location",
+    "addLocationModalHeader": "New location",
     "editLocationModalHeader": "Edit location",
     "locationModal": {
       "name": "Name",
@@ -541,7 +543,7 @@
   },
   "servicesAndProducts": {
     "headerProducts": "Products",
-    "addProduct": "Add product",
+    "addProduct": "New product",
     "productColumn": {
       "productName": "Name",
       "productPrice": "Price",
@@ -550,7 +552,7 @@
       "productAction": "Action"
     },
     "addProductModal": {
-      "addProduct": "Add product",
+      "addProduct": "New product",
       "nameSlovenian": "Name (Slovenian)",
       "nameItalian": "Name (Italian)",
       "nameGerman": "Name (German)",
@@ -563,7 +565,7 @@
       "save": "Save"
     },
     "headerProductGroup": "Product groups",
-    "addProductGroup": "Add product group",
+    "addProductGroup": "New product group",
     "productGroupColumn": {
       "productGroupName": "Name",
       "productGroupCategory": "Category",
@@ -571,7 +573,7 @@
       "productGroupAction": "Action"
     },
     "headerProductCategories": "Product categories",
-    "addProductCategory": "Add product category",
+    "addProductCategory": "New product category",
     "productCategoryColumn": {
       "productCategoryName": "Name",
       "productCategoryAction": "Action"
@@ -579,7 +581,7 @@
   },
   "business": {
     "headerBusiness": "Business",
-    "addBusiness": "Add business",
+    "addBusiness": "New business",
     "businessColumn": {
       "businessName": "Name",
       "businessEmail": "Email",
@@ -591,7 +593,7 @@
       "businessAction": "Action"
     },
     "addBusinessModal": {
-      "addBusiness": "Add business",
+      "addBusiness": "New business",
       "name": "Name",
       "email": "Email",
       "address": "Address",

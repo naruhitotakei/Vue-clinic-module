@@ -43,7 +43,17 @@
               <label for="patient" class="mb-0">{{ $t('calendarEvent.patient') }}</label>
             </div>
             <div class="col-md-9">
-              <v-select :disabled="disabled" :clearable="false" label="full_name" :reduce="patient => patient.id" class="style-chooser form-control-disabled font-size-15" v-model="formData.patientId" :options="patients"></v-select>
+              <v-select
+                  :disabled="disabled"
+                  :clearable="false"
+                  label="full_name"
+                  :reduce="patient => patient.id"
+                  class="style-chooser form-control-disabled font-size-15"
+                  v-model="formData.patientId"
+                  :options="patients"
+                  style="max-height: 400px;"
+              >
+              </v-select>
             </div>
           </div>
 <!--        <div class="col-md-12 mb-3">-->
@@ -679,6 +689,10 @@ body .wrapper .custom-control-label::after {
  .fc-widget-content .fc-scroller {
    overflow: visible !important;
    height: auto !important;
+ }
+
+ .vs__dropdown-menu {
+   max-height: 300px !important;
  }
 
   @import '~@fullcalendar/core/main.css';

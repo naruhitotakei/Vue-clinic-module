@@ -105,6 +105,18 @@ export async function getUsers () {
   return rawResponse.json()
 }
 
+export async function getRoles () {
+  const rawResponse = await fetch('/api/users-roles', {
+    method: 'GET',
+    credentials: 'same-origin',
+    headers: {
+      'Accept': 'application/json',
+      'Content-Type': 'application/json'
+    }
+  })
+  return rawResponse.json()
+}
+
 export async function updateUser (id, user) {
   const rawResponse = await fetch('/api/users/' + id, {
     method: 'PUT',
