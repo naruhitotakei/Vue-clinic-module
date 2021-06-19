@@ -237,7 +237,7 @@
                           </iq-card>
                         </b-col>
                         <b-col offset="6" cols="6" class="text-right">
-                            <b-button v-if="showPdf" variant="primary mr-3" @click="exportToPDF">
+                            <b-button :disabled="showPdf" variant="primary mr-3" @click="exportToPDF">
                                 <i class="ri-printer-line"></i>
                                 {{ $t('invoices.newInvoice.downloadPrint') }}
                             </b-button>
@@ -628,9 +628,9 @@ export default {
     findProduct (productId) {
       return _.find(this.products, function (prod) { return prod.product_id === productId })
     },
-    fetchItemsAndPaymentMethods (invoiceId) {
-      getItemsOfInvoiceById(invoiceId).then(response => {
-        this.items = []
+    fetchItemsAndPaymentMethods () {
+      getItemsOfInvoiceById(this.invoiceId).then(response => {
+        let responseItems = []
         response.forEach(element => {
           let item = {
             id: element.id,
@@ -640,9 +640,10 @@ export default {
             total: this.calculatePrice(element.product_price, element.invoiced_quantity, element.discount).toFixed(2),
             editable: false
           }
-          this.items.push(item)
+          responseItems.push(item)
         })
-        getPaymentItemsOfInvoiceById(invoiceId).then(items => {
+        this.items = responseItems
+        getPaymentItemsOfInvoiceById(this.invoiceId).then(items => {
           this.paymentMethods = items
         })
       })
@@ -654,22 +655,21 @@ export default {
           this.invoiceId = response
           this.showPdf = true
           this.$bvToast.show('b-toaster-bottom-right')
-          this.fetchItemsAndPaymentMethods(this.invoiceId)
           if (this.isInvoiceStatusIssued) this.redirectToDetailsPage()
         }).catch(errorMsg => {
           console.log('Error: ' + errorMsg)
           this.$bvToast.show('bottom-right-danger')
         })
       } else {
+        this.fetchItemsAndPaymentMethods()
         updateInvoice(this.invoiceId, this.invoice).then(response => {
-          this.fetchItemsAndPaymentMethods(this.invoiceId)
           this.$bvToast.show('b-toaster-bottom-right')
           if (response === 'issued') this.redirectToDetailsPage()
         })
       }
     },
     redirectToDetailsPage () {
-      this.$router.push({ path: `/documents/invoices/${this.invoice.invoice_id}` })
+      this.$router.push({ path: `/documents/invoices/${this.invoiceId}` })
     },
     isItemValid () {
       let item = _.last(this.items)
@@ -721,10 +721,10 @@ export default {
         device_id: 1,
         premise_id: 1,
         business_customer_id: 1,
-        invoice_status: this.status,
         invoiceItems: this.items,
         service_date: this.dateOfService,
         due_date: this.dueDate,
+        verification_status: this.status,
         reference_code: this.referenceCode,
         reference_code_furs: this.referenceCodeFurs
       }

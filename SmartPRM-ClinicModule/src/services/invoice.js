@@ -71,19 +71,6 @@ export async function createInvoice (invoice) {
   return rawResponse.json()
 }
 
-export async function updateInvoice (id, invoice) {
-  const rawResponse = await fetch('/api/invoices/' + id, {
-    method: 'PUT',
-    credentials: 'same-origin',
-    headers: {
-      'Accept': 'application/json',
-      'Content-Type': 'application/json'
-    },
-    body: JSON.stringify(invoice)
-  })
-  return rawResponse.json()
-}
-
 export async function getSerialForInvoiceNumberBasedOnType (data) {
   const rawResponse = await fetch('/api/invoices/serial-number', {
     method: 'POST',
@@ -118,6 +105,19 @@ export async function deleteInvoice (id) {
       'Accept': 'application/json',
       'Content-Type': 'application/json'
     }
+  })
+  return rawResponse.json()
+}
+
+export async function updateInvoice (id, invoice) {
+  const rawResponse = await fetch('/api/invoices/' + id, {
+    method: 'PUT',
+    credentials: 'same-origin',
+    headers: {
+      'Accept': 'application/json',
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify(invoice)
   })
   return rawResponse.json()
 }

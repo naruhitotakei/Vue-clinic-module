@@ -124,13 +124,11 @@ const createInvoices = (request, response, invoice) => {
         var invoiceId = results.rows[0].invoice_id;
         
         if (invoice.invoiceItems.length > 0) {
-            console.log('usao u itemse!')
             invoice.invoiceItems.forEach(item => {
                 createInoviceItem(item, invoiceId)
             });
         }
         if (invoice.payment_methods.length > 0) {
-            console.log('usao u payments!')
             invoice.payment_methods.forEach(item => {
                 createPaymentMethod(invoiceId, item.type, item.amount, item.paid)
             });
@@ -254,7 +252,7 @@ const createInoviceItem = (item, id) => {
     pool.query(statement, (error, results) => {
         if (error) {
             throw error
-        } 
+        }
     })
 }
 
