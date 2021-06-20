@@ -75,9 +75,9 @@
         </b-row>
         <b-col lg="6">
             <qrcode-vue
-              value="test value"
-              size="100"
-              level="H"
+              value="qrCode"
+              size="120"
+              level="M"
             ></qrcode-vue>
         </b-col>
       </div>
@@ -286,6 +286,7 @@ import { getPremisesForCompany, getDevicesForPremise } from '../../services/comp
 import html2pdf from 'html2pdf.js'
 import _ from 'lodash'
 import QrcodeVue from 'qrcode.vue'
+import BigNumber from 'bignumber.js'
 
 export default {
   name: 'NewAdvPayment',
@@ -347,7 +348,7 @@ export default {
       invoice: {},
       canPrintPdf: false,
       companyPremises: [],
-      dateOfAdvPayment: moment().format('YYYY-MM-DDTHH:MM'),
+      dateOfAdvPayment: moment().format('YYYY-MM-DDTHH:MM:SS'),
       device: {},
       deviceId: '',
       devices: [],
@@ -360,7 +361,8 @@ export default {
       invoiceTime: '',
       invoiceType: 'Advance payment',
       referenceCode: '',
-      referenceCodeFurs: ''
+      referenceCodeFurs: '',
+      qrCode: ''
     }
   },
   computed: {
@@ -383,6 +385,7 @@ export default {
       })
     },
     exportToPDF () {
+      this.calculateQRCode()
       this.invoiceTime = moment(this.invoice.invoice_time).format('YYYY-MM-DD HH:MM')
       let options = {
         filename: this.invoiceNumber + '.pdf',
@@ -523,6 +526,21 @@ export default {
     },
     redirectToDetailsPage () {
       this.$router.push({ path: `/documents/advance-payments/${this.invoiceId}` })
+    },
+    calculateQRCode () {
+      let hexaNumber = new BigNumber(this.zoi, 16)
+      let decimalNumber = hexaNumber.toString(10)
+      this.decimalZoi = (decimalNumber.length < 39) ? '0'.repeat(39 - decimalNumber.length) + decimalNumber : decimalNumber
+      let timeStamp = moment(this.dateOfInvoice).format('DDMMYYHHMMSS')
+      this.qrCode = this.decimalZoi + this.logedInUser.tax_number + timeStamp
+      this.calculateControlNumber()
+    },
+    calculateControlNumber () {
+      let sum = 0
+      for (let c of this.qrCode) {
+        sum += parseInt(c)
+      }
+      this.qrCode += sum % 10
     },
     prepareInvoice () {
       let temp = {

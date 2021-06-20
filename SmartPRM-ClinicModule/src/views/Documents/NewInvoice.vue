@@ -81,9 +81,9 @@
           </b-col>
           <b-col lg="6">
             <qrcode-vue
-              value="test value"
-              size="100"
-              level="H"
+              :value="qrCode"
+              size="120"
+              level="M"
             ></qrcode-vue>
           </b-col>
         </b-row>
@@ -332,6 +332,7 @@ import { getProducts } from '../../services/products'
 import html2pdf from 'html2pdf.js'
 import _ from 'lodash'
 import QrcodeVue from 'qrcode.vue'
+import BigNumber from 'bignumber.js'
 
 export default {
   name: 'NewInvoice',
@@ -403,7 +404,7 @@ export default {
       ],
       products: [],
       selectedItemName: '',
-      dateOfInvoice: moment().format('YYYY-MM-DDTHH:MM'),
+      dateOfInvoice: moment().format('YYYY-MM-DDTHH:MM:SS'),
       dateOfService: moment().format('YYYY-MM-DD'),
       dueDate: moment().format('YYYY-MM-DD'),
       patientId: this.$route.params.patientId,
@@ -431,10 +432,12 @@ export default {
       invoiceId: '',
       paidAmount: 0,
       zoi: 'a7e5f55e1dbb48b799268e1a6d8618a3',
+      decimalZoi: '',
       eor: 'a7e5f55e1dbb48b799268e1a6d8618a3',
       invoiceType: 'Invoice',
       referenceCode: '',
-      referenceCodeFurs: ''
+      referenceCodeFurs: '',
+      qrCode: ''
     }
   },
   computed: {
@@ -458,6 +461,7 @@ export default {
       this.paymentMethods.splice(index, 1)
     },
     exportToPDF () {
+      this.calculateQRCode()
       this.dateOfServicePdf = moment(this.dateOfService).format('DD.MM.YYYY')
       this.invoiceTime = moment(this.invoice.invoice_time).format('DD.MM.YYYY HH:MM')
       let options = {
@@ -692,6 +696,21 @@ export default {
         valid = false
       }
       return valid
+    },
+    calculateQRCode () {
+      let hexaNumber = new BigNumber(this.zoi, 16)
+      let decimalNumber = hexaNumber.toString(10)
+      this.decimalZoi = (decimalNumber.length < 39) ? '0'.repeat(39 - decimalNumber.length) + decimalNumber : decimalNumber
+      let timeStamp = moment(this.dateOfInvoice).format('DDMMYYHHMMSS')
+      this.qrCode = this.decimalZoi + this.logedInUser.tax_number + timeStamp
+      this.calculateControlNumber()
+    },
+    calculateControlNumber () {
+      let sum = 0
+      for (let c of this.qrCode) {
+        sum += parseInt(c)
+      }
+      this.qrCode += sum % 10
     },
     prepareInvoice () {
       this.calculatePayedAmount()
