@@ -237,7 +237,7 @@
                           </iq-card>
                         </b-col>
                         <b-col offset="6" cols="6" class="text-right">
-                            <b-button :disabled="showPdf" variant="primary mr-3" @click="exportToPDF">
+                            <b-button :disabled="!showPdf" variant="primary mr-3" @click="exportToPDF">
                                 <i class="ri-printer-line"></i>
                                 {{ $t('invoices.newInvoice.downloadPrint') }}
                             </b-button>
@@ -430,8 +430,8 @@ export default {
       invoiceNumberFurs: '',
       invoiceId: '',
       paidAmount: 0,
-      zoi: '24as211d4232as1124',
-      eor: '24as211d4232as1124',
+      zoi: 'a7e5f55e1dbb48b799268e1a6d8618a3',
+      eor: 'a7e5f55e1dbb48b799268e1a6d8618a3',
       invoiceType: 'Invoice',
       referenceCode: '',
       referenceCodeFurs: ''
@@ -655,14 +655,15 @@ export default {
           this.invoiceId = response
           this.showPdf = true
           this.$bvToast.show('b-toaster-bottom-right')
+          this.fetchItemsAndPaymentMethods()
           if (this.isInvoiceStatusIssued) this.redirectToDetailsPage()
         }).catch(errorMsg => {
           console.log('Error: ' + errorMsg)
           this.$bvToast.show('bottom-right-danger')
         })
       } else {
-        this.fetchItemsAndPaymentMethods()
         updateInvoice(this.invoiceId, this.invoice).then(response => {
+          this.fetchItemsAndPaymentMethods()
           this.$bvToast.show('b-toaster-bottom-right')
           if (response === 'issued') this.redirectToDetailsPage()
         })
@@ -714,8 +715,8 @@ export default {
         vat_exemption_reason: 'test',
         operator_name: this.logedInUser.name,
         operator_tax_number: this.logedInUser.tax_number,
-        zoi: 'test',
-        eor: 'test',
+        zoi: this.zoi,
+        eor: this.eor,
         invoice_special_notes: 'test',
         reverted: false,
         device_id: 1,
