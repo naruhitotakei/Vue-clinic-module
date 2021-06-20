@@ -136,7 +136,7 @@
                     <b-row class="mt-3">
                       <b-col lg="4">
                         <b-form-group :label="$t('invoices.newInvoice.dateOfInvoice')" style="color:black">
-                          <b-form-input v-model="dateOfInvoice" type="datetime-local"></b-form-input>
+                          <b-form-input v-model="dateOfInvoice" type="datetime-local" step="1"></b-form-input>
                         </b-form-group>
                       </b-col>
                       <b-col lg="4">
@@ -739,8 +739,8 @@ export default {
         invoice_special_notes: 'test',
         reverted: false,
         device_id: 1,
-        premise_id: 1,
-        business_customer_id: 1,
+        premise_id: this.issuedIn.premise_id,
+        business_customer_id: this.issuedIn.business_customer_id,
         invoiceItems: this.items,
         service_date: this.dateOfService,
         due_date: this.dueDate,

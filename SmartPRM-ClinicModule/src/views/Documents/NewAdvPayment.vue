@@ -64,22 +64,24 @@
           </b-col>
         </b-row>
         <b-row>
-          <b-col lg="6">
+          <b-col lg="12">
               <p>{{ $t('advPayments.newAdvPayment.vatExemptionReason') }}</p>
             <br>
+          </b-col>
+          <b-col lg="6">
             <p>{{ $t('advPayments.newAdvPayment.issuedBy') }}: {{logedInUser.name}}</p>
             <br>
             <p>{{ $t('advPayments.newAdvPayment.zoi') }}: {{zoi}}</p>
             <p>{{ $t('advPayments.newAdvPayment.eor') }}: {{eor}}</p>
           </b-col>
-        </b-row>
-        <b-col lg="6">
+          <b-col lg="6">
             <qrcode-vue
-              value="qrCode"
+              :value="qrCode"
               size="120"
               level="M"
             ></qrcode-vue>
-        </b-col>
+          </b-col>
+        </b-row>
       </div>
     </div>
     <b-row>
@@ -129,7 +131,7 @@
                     <b-row>
                       <b-col>
                         <b-form-group class="col-md-4" :label="$t('advPayments.newAdvPayment.dateOfAdvPayment')" style="color:black">
-                          <b-form-input v-model="dateOfAdvPayment" type="datetime-local"></b-form-input>
+                          <b-form-input v-model="dateOfAdvPayment" type="datetime-local" step="1"></b-form-input>
                         </b-form-group>
                       </b-col>
                     </b-row>
@@ -531,7 +533,7 @@ export default {
       let hexaNumber = new BigNumber(this.zoi, 16)
       let decimalNumber = hexaNumber.toString(10)
       this.decimalZoi = (decimalNumber.length < 39) ? '0'.repeat(39 - decimalNumber.length) + decimalNumber : decimalNumber
-      let timeStamp = moment(this.dateOfInvoice).format('DDMMYYHHMMSS')
+      let timeStamp = moment(this.dateOfAdvPayment).format('DDMMYYHHMMSS')
       this.qrCode = this.decimalZoi + this.logedInUser.tax_number + timeStamp
       this.calculateControlNumber()
     },
@@ -568,8 +570,8 @@ export default {
         invoice_special_notes: 'test',
         reverted: false,
         device_id: this.deviceId,
-        premise_id: 1,
-        business_customer_id: 1,
+        premise_id: this.issuedIn.premise_id,
+        business_customer_id: this.issuedIn.business_customer_id,
         invoiceItems: [],
         verification_status: this.status,
         reference_code: this.referenceCode,

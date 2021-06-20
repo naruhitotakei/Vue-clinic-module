@@ -40,14 +40,14 @@
               <b-tr>
                 <b-td colspan="4">{{ $t('advPayment.advPaymentHeader') }}</b-td>
                 <b-td colspan="1">1</b-td>
-                <b-td colspan="2">{{invoice.lines_sum}}</b-td>
-                <b-td colspan="2">{{invoice.lines_sum}}</b-td>
-                <b-td colspan="2">{{invoice.lines_sum}}</b-td>
+                <b-td colspan="2">{{invoice.lines_sum | euro}}</b-td>
+                <b-td colspan="2">{{invoice.lines_sum | euro}}</b-td>
+                <b-td colspan="2">{{invoice.lines_sum | euro}}</b-td>
               </b-tr>
               <b-tr>
                 <b-td colspan="8"></b-td>
                 <b-td colspan="2"><strong>{{ $t('advPayments.newAdvPayment.total') }}: </strong></b-td>
-                <b-td colspan="2">{{invoice.lines_sum}}</b-td>
+                <b-td colspan="2">{{invoice.lines_sum | euro}}</b-td>
               </b-tr>
               <b-tr>
                 <b-td colspan="8" class="hidden-row"></b-td>
@@ -64,13 +64,22 @@
           </b-col>
         </b-row>
         <b-row>
-          <b-col>
+          <b-col lg="12">
               <p>{{ $t('advPayments.newAdvPayment.vatExemptionReason') }}</p>
             <br>
+          </b-col>
+          <b-col lg="6">
             <p>{{ $t('advPayments.newAdvPayment.issuedBy') }}: {{invoice.operator_name}}</p>
             <br>
             <p>{{ $t('advPayments.newAdvPayment.zoi') }}: {{invoice.zoi}}</p>
             <p>{{ $t('advPayments.newAdvPayment.eor') }}: {{invoice.eor}}</p>
+          </b-col>
+          <b-col lg="6">
+            <qrcode-vue
+              :value="qrCode"
+              size="120"
+              level="M"
+            ></qrcode-vue>
           </b-col>
         </b-row>
       </div>
@@ -163,9 +172,14 @@ import { getInvoiceById, getItemsOfInvoiceById } from '../../services/invoice'
 import { getPremiseById } from '../../services/companyPremises'
 import moment from 'moment'
 import html2pdf from 'html2pdf.js'
+import QrcodeVue from 'qrcode.vue'
+import BigNumber from 'bignumber.js'
 
 export default {
   name: 'AdvPayment',
+  components: {
+    QrcodeVue
+  },
   mounted () {
     xray.index()
     this.getInvoice(this.advPaymentId)
@@ -187,6 +201,7 @@ export default {
         this.invoiceDetails[0].total = this.invoice.lines_sum
         getPremiseById(this.invoice.premise_id).then(response => {
           this.premiseCity = response[0].premise_city
+          this.invoice.company_city = this.premiseCity
         })
       }
       )
@@ -196,10 +211,27 @@ export default {
         this.items = response
       })
     },
+    calculateQRCode () {
+      let hexaNumber = new BigNumber(this.invoice.zoi, 16)
+      let decimalNumber = hexaNumber.toString(10)
+      this.decimalZoi = (decimalNumber.length < 39) ? '0'.repeat(39 - decimalNumber.length) + decimalNumber : decimalNumber
+      let timeStamp = moment(this.invoice.invoice_time).format('DDMMYYHHMMSS')
+      this.qrCode = this.decimalZoi + this.invoice.operator_tax_number + timeStamp
+      this.calculateControlNumber()
+    },
+    calculateControlNumber () {
+      let sum = 0
+      for (let c of this.qrCode) {
+        sum += parseInt(c)
+      }
+      this.qrCode += sum % 10
+    },
     exportToPDF () {
+      this.calculateQRCode()
       let options = {
         filename: this.invoice.invoice_number + '.pdf',
         image: { type: 'jpeg', quality: 0.98 },
+        html2canvas: { y: -40 },
         jsPDF: { unit: 'mm', format: 'a3' }
       }
       var source = window.document.getElementById('printInvoice')
@@ -267,7 +299,8 @@ export default {
       items: [],
       invoiceDatePdf: '',
       invoiceDate: '',
-      premiseCity: ''
+      premiseCity: '',
+      qrCode: ''
     }
   }
 }
