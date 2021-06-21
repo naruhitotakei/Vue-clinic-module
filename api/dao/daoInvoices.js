@@ -289,12 +289,11 @@ const getInvoices = (request, response) => {
 }
 
 const getInvoiceById = (request, response, id) => {
-    pool.query("SELECT invoice.*,enquiries.email,enquiries.phone, countries.name as country, p.type as payment_method FROM invoice LEFT JOIN enquiries ON invoice.enquiries_id = enquiries.id LEFT JOIN countries ON invoice.enquiries_country_code = countries.code LEFT JOIN payment_item p ON invoice.invoice_id = p.invoice_id WHERE invoice.invoice_id = $1", [id] , (error, results) => {
+    pool.query("SELECT invoice.*,enquiries.email,enquiries.phone, countries.name as country FROM invoice LEFT JOIN enquiries ON invoice.enquiries_id = enquiries.id LEFT JOIN countries ON invoice.enquiries_country_code = countries.code WHERE invoice.invoice_id = $1", [id] , (error, results) => {
         if (error) {
             console.log(error)
             throw error
         }
-        console.log(JSON.stringify(results.rows))
         response.status(200).json(results.rows)
     })
 }

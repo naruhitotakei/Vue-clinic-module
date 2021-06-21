@@ -60,7 +60,7 @@
         <b-row>
           <b-col lg="3">
               <p>{{ $t('advPayments.newAdvPayment.paymentMethod') }}:</p>
-            <p style="border-bottom: solid;">{{invoice.payment_method}}<span style="margin-left:20px">{{invoice.lines_sum | euro}}</span></p>
+            <p style="border-bottom: solid;">{{payments[0].type}}<span style="margin-left:20px">{{invoice.lines_sum | euro}}</span></p>
           </b-col>
         </b-row>
         <b-row>
@@ -90,7 +90,7 @@
                 <template v-slot:body>
                     <b-row>
                         <b-col  class="col-md-4 col-sm-12" align-self="center" style="margin-bottom: 25px;">
-                            <h4 class="mb-0">{{ title }}</h4>
+                            <h4 class="mb-0">{{ $t('advPayment.advPaymentHeader') }}  N° : {{invoiceNumber}} </h4>
                         </b-col>
                     </b-row>
                     <b-row>
@@ -125,7 +125,7 @@
                         </div>
                       </b-col>
                       <b-col class="mt-4" lg="12">
-                          <h5 style="margin-bottom: 15px;">{{ detail }}</h5>
+                          <h5 style="margin-bottom: 15px;">{{ $t('invoice.invoiceDetail') }}</h5>
                           <div class="table-responsive-sm">
                               <b-table-simple striped class="text-center">
                                   <b-thead>
@@ -151,9 +151,9 @@
                       <b-col class="mt-4" lg="8">
                           <h5 style="margin-bottom: 15px;">{{ $t('advPayments.newAdvPayment.paymentMethodSummary') }}</h5>
                           <div class="table-responsive-sm">
-                              <b-table striped :items="invoices" :fields="invoiceSummaryFields">
-                                  <template v-slot:cell(lines_sum)="data">
-                                      <span class="font-weight-bold">{{data.value | numeral('0,0.00') | euro}}</span>
+                              <b-table striped :items="payments" :fields="invoiceSummaryFields">
+                                  <template v-slot:cell(amount)="data">
+                                      <span class="font-weight-bold">{{data.item.amount | numeral('0,0.00') | euro}}</span>
                                   </template>
                               </b-table>
                           </div>
@@ -175,7 +175,7 @@
 </template>
 <script>
 import { xray } from '../../config/pluginInit'
-import { getInvoiceById, getItemsOfInvoiceById } from '../../services/invoice'
+import { getInvoiceById, getItemsOfInvoiceById, getPaymentItemsOfInvoiceById } from '../../services/invoice'
 import { getPremiseById } from '../../services/companyPremises'
 import moment from 'moment'
 import html2pdf from 'html2pdf.js'
@@ -190,11 +190,7 @@ export default {
   mounted () {
     xray.index()
     this.getInvoice(this.advPaymentId)
-  },
-  computed: {
-    title () {
-      return this.text + this.invoiceNumber
-    }
+    this.getPaymentItems(this.advPaymentId)
   },
   methods: {
     getInvoice (id) {
@@ -212,6 +208,11 @@ export default {
         })
       }
       )
+    },
+    getPaymentItems (id) {
+      getPaymentItemsOfInvoiceById(id).then(response => {
+        this.payments = response
+      })
     },
     getItems (id) {
       getItemsOfInvoiceById(id).then(response => {
@@ -249,9 +250,6 @@ export default {
     return {
       advPaymentId: this.$route.params.advPaymentId,
       invoiceNumber: '',
-      text: this.$t('advPayment.advPaymentHeader') + ' N° : ',
-      summary: this.$t('invoice.invoiceSummary'),
-      detail: this.$t('invoice.invoiceDetail'),
       itemName: this.$t('advPayment.advPaymentHeader'),
       itemAmount: '',
       invoiceDetails: [
@@ -262,11 +260,11 @@ export default {
       ],
       invoiceSummaryFields: [
         {
-          key: 'payment_method',
+          key: 'type',
           label: this.$t('invoice.invoiceSummaryColumn.paymentMethod')
         },
         {
-          key: 'lines_sum',
+          key: 'amount',
           label: this.$t('advPayments.advPaymentsColumn.amount')
         }
       ],
@@ -308,7 +306,8 @@ export default {
       invoiceDatePdf: '',
       invoiceDate: '',
       premiseCity: '',
-      qrCode: ''
+      qrCode: '',
+      payments: []
     }
   }
 }
