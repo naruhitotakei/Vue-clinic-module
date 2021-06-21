@@ -181,7 +181,7 @@
                                     </template>
                                     <template v-slot:cell(discount)="data">
                                       <span v-if="!data.item.editable">{{ data.item.discount | percentage }}</span>
-                                      <input type="number" min="0" max="100" v-model="data.item.discount" v-else class="form-control">
+                                      <input type="number" min="0" max="100" :class="'form-control mb-0' +( data.item.discount < 100 ? '' : ' is-invalid')" v-model="data.item.discount" v-else class="form-control">
                                     </template>
                                     <template v-slot:cell(action)="data">
                                         <b-button variant=" iq-bg-success mr-1 mb-1" size="sm" @click="edit(data.item)" v-if="!data.item.editable"><i class="ri-ball-pen-fill m-0"></i></b-button>
@@ -353,7 +353,7 @@ export default {
         { label: this.$t('invoices.newInvoice.newInvoiceDetails.item'), key: 'name', class: 'text-left item-name' },
         { label: this.$t('invoices.newInvoice.newInvoiceDetails.quantity'), key: 'quantity', class: 'text-left narrow-column' },
         { label: this.$t('invoices.newInvoice.newInvoiceDetails.price'), key: 'product_price', class: 'text-left' },
-        { label: this.$t('invoices.newInvoice.newInvoiceDetails.discount'), key: 'discount', class: 'text-left narrow-column' },
+        { label: this.$t('invoices.newInvoice.newInvoiceDetails.discount'), key: 'discount', class: 'text-left percentage-column' },
         { label: this.$t('invoices.newInvoice.newInvoiceDetails.amount'), key: 'total', class: 'text-left' },
         { label: this.$t('invoices.newInvoice.newInvoiceDetails.action'), key: 'action', class: 'text-center action-column' }
       ],
@@ -759,8 +759,8 @@ export default {
   width: 120px !important;
 }
 
-.narrow-column {
-  width: 100px !important;
+.percentage-column {
+  width: 110px !important;
 }
 .item-name {
   min-width: 240px !important;
