@@ -563,7 +563,7 @@ export default {
         payment_methods: this.paymentMethods,
         warranty: true,
         vat_exemption_reason: 'test',
-        operator_name: this.logedInUser.name,
+        operator_name: this.logedInUser.first_name + ' ' + this.logedInUser.surname,
         operator_tax_number: this.logedInUser.tax_number,
         zoi: this.zoi,
         eor: this.eor,
