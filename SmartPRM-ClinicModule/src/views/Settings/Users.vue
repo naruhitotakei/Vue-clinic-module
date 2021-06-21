@@ -5,7 +5,7 @@
                 <iq-card body-class="text-center">
                     <template v-slot:body>
                         <div class="doc-profile">
-                            <img class="rounded-circle img-fluid avatar-80" :src="profile.image" alt="profile">
+                            <img class="rounded-circle img-fluid avatar-80" :src="getAvatarUrl" alt="profile">
                         </div>
                         <div class="iq-doc-info mt-3">
                             <h4> {{user.title}} {{user.name}} {{user.surname}} </h4>
@@ -33,6 +33,27 @@
         <b-modal v-model="editProfileShowModal" no-close-on-backdrop size="lg" :title="$t('settingsUsers.editProfile')" :ok-disabled="isEditDisabled" @close="editProfileShowModal = false" @cancel="editProfileShowModal = false" :ok-title="$t('settingsUsers.editProfileModal.save')" @ok="editUser" :cancel-title="$t('settingsUsers.editProfileModal.close')">
             <form>
                 <div class="form-row">
+                    <div style="margin: auto; text-align: center;">
+                        <div class="add-img-user profile-img-edit">
+                            <b-img class="profile-pic height-150 width-150 object-fit" style="object-fit: cover" fluid :src="getAvatarUrl" alt="profile-pic" />
+                            <input type="hidden" v-model="getAvatarUrl">
+                            <div class="p-image">
+                                <b-button variant="none" class="upload-button iq-bg-primary position-relative" style="left: 12px;" @click="onButtonClick">
+                                    File Upload
+                                </b-button>
+                                <input ref="uploader" class="d-none" type="file" accept="image/*" @change="onFileChanged">
+                            </div>
+                        </div>
+                        <div class="img-extension mt-3">
+                            <div class="d-inline-block align-items-center">
+                                <span>Only</span>
+                                <b-link href="javascript:void(0);">.jpg</b-link>
+                                <b-link href="javascript:void(0);">.png</b-link>
+                                <b-link href="javascript:void(0);">.jpeg</b-link>
+                                <span>allowed</span>
+                            </div>
+                        </div>
+                    </div>
                     <div class="col-md-12 mb-3">
                         <label for="title">{{ $t('settingsUsers.editProfileModal.title') }}</label>
                         <div style="display: flex;">
@@ -91,6 +112,7 @@
 <script>
 import { xray } from '../../config/pluginInit'
 import { getUsers, updateUser, getRoles } from '../../services/userService'
+import { uploadAvatar } from '../../services/upDownLoad'
 
 export default {
   name: 'UserList',
@@ -100,6 +122,7 @@ export default {
       roles: [],
       profile: { image: require('../../assets/images/user/placeholder.png') },
       editProfileShowModal: false,
+      avatar_version: Math.random(),
       formData: {
         id: '',
         title: '',
@@ -147,11 +170,35 @@ export default {
     openProfileModal (user) {
       this.editProfileShowModal = true
       this.formData = user
+    },
+    onButtonClick () {
+      this.isSelecting = true
+      window.addEventListener('focus', () => {
+        this.isSelecting = false
+      }, { once: true })
+      this.$refs.uploader.click()
+    },
+    async onFileChanged (e) {
+      this.selectedFile = e.target.files[0]
+      console.log(this.selectedFile.size)
+      // todo check size
+      uploadAvatar(this.selectedFile)
+      await this.sleep(1000)
+      // this will couse avatar to be dowloaded again
+      this.avatar_version = Math.random()
+    },
+    sleep (ms) {
+      return new Promise((resolve) => {
+        setTimeout(resolve, ms)
+      })
     }
   },
   computed: {
     isEditDisabled () {
       return !this.formData.name || !this.formData.mail || !this.formData.surname
+    },
+    getAvatarUrl: function () {
+      return '/api/files/avatar?' + this.avatar_version
     }
   }
 }
