@@ -119,7 +119,14 @@ export default {
       filter: '',
       filterOn: [],
       columns: [
-        { label: this.$t('advPayments.advPaymentsColumn.no'), key: 'invoice_number', class: 'text-left' },
+        { label: this.$t('advPayments.advPaymentsColumn.no'),
+          key: 'invoice_number',
+          class: 'text-left',
+          formatter: (value, key, item) => {
+            return item.invoice_number === 'invoice.draft' ? this.$t(item.invoice_number) : item.invoice_number
+          },
+          filterByFormatted: true
+        },
         {
           label: this.$t('advPayments.advPaymentsColumn.patientName'),
           key: 'patient_name',

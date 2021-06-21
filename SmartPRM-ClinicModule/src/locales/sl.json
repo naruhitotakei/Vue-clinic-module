@@ -319,6 +319,8 @@
     }
   },
   "invoice": {
+    "draft": "Osnutek",
+    "issued": "Izdala",
     "invoiceHeader": "Račun",
     "saved": "Račun shranjen",
     "notSaved": "Napaka, kontaktirajte administratorja",

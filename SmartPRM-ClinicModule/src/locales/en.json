@@ -327,6 +327,8 @@
     }
   },
   "invoice": {
+    "draft": "Draft",
+    "issued": "Issued",
     "invoiceHeader": "Invoice",
     "saved": "Invoice saved",
     "notSaved": "Something is wrong, contact admin",

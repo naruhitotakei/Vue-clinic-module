@@ -592,14 +592,14 @@ export default {
       }, 0)
     },
     saveAsDraft () {
-      this.status = 'draft invoice'
-      this.invoiceNumber = 'draft invoice'
+      this.status = 'invoice.draft'
+      this.invoiceNumber = 'invoice.draft'
       this.deviceId = this.device ? this.device.device_id : ''
       this.prepareInvoice()
       if (this.isInoiceValid()) this.createInvoice()
     },
     saveInvoice () {
-      this.status = 'issued'
+      this.status = 'invoice.issued'
       this.deviceId = this.device ? this.device.device_id : ''
       this.generateInvoiceNumber()
     },

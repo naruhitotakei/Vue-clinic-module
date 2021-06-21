@@ -120,7 +120,14 @@ export default {
       currentPage: 1,
       perPage: 10,
       columns: [
-        { label: this.$t('invoices.invoicesColumn.no'), key: 'invoice_number', class: 'text-left' },
+        { label: this.$t('invoices.invoicesColumn.no'),
+          key: 'invoice_number',
+          class: 'text-left',
+          formatter: (value, key, item) => {
+            return item.invoice_number === 'invoice.draft' ? this.$t(item.invoice_number) : item.invoice_number
+          },
+          filterByFormatted: true
+        },
         { label: this.$t('invoices.invoicesColumn.patientName'),
           key: 'patient_name',
           class: 'text-left',

@@ -264,7 +264,14 @@ export default {
         }
       ],
       invoiceColumns: [
-        { label: this.$t('invoice.invoiceInfo.invoiceStatus'), key: 'verification_status', class: 'text-left' },
+        { label: this.$t('invoice.invoiceInfo.invoiceStatus'),
+          key: 'verification_status',
+          class: 'text-left',
+          formatter: (value, key, item) => {
+            return this.$t(item.verification_status)
+          },
+          filterByFormatted: true
+        },
         { label: this.$t('invoice.invoiceInfo.paymentStatus'),
           key: 'invoiceStatus',
           formatter: (value, key, item) => {

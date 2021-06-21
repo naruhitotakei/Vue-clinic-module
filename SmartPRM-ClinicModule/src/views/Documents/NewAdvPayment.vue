@@ -444,14 +444,14 @@ export default {
       item.editable = false
     },
     saveAsDraft () {
-      this.status = 'draft'
-      this.invoiceNumber = 'draft advance payment invoice'
+      this.status = 'invoice.draft'
+      this.invoiceNumber = 'invoice.draft'
       this.deviceId = this.device ? this.device.device_id : ''
       this.prepareInvoice()
       if (this.isInoiceValid()) this.createInvoice()
     },
     saveInvoice () {
-      this.status = 'issued'
+      this.status = 'invoice.issued'
       this.deviceId = this.device ? this.device.device_id : ''
       this.generateInvoiceNumber()
     },
@@ -459,7 +459,7 @@ export default {
       let data = {
         type: this.invoiceType,
         business_premise_id: this.issuedIn.business_premise_id,
-        draft: 'draft advance payment invoice'
+        draft: 'invoice.draft'
       }
       getSerialForInvoiceNumberBasedOnType(data).then(response => {
         let number = parseInt(response[0].count) + 1
