@@ -517,7 +517,7 @@ export default {
         updateInvoice(this.invoiceId, this.invoice).then(response => {
           this.fetchItemsAndPaymentMethods(this.invoiceId)
           this.$bvToast.show('b-toaster-bottom-right')
-          if (response === 'issued') this.redirectToDetailsPage()
+          if (response === 'invoice.issued') this.redirectToDetailsPage()
         })
       }
     },
@@ -574,6 +574,7 @@ export default {
         business_customer_id: this.issuedIn.business_customer_id,
         invoiceItems: [],
         verification_status: this.status,
+        payment_status: 'Paid',
         reference_code: this.referenceCode,
         reference_code_furs: this.referenceCodeFurs
       }

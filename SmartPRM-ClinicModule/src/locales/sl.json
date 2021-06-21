@@ -320,6 +320,9 @@
   },
   "invoice": {
     "draft": "Osnutek",
+    "paid": "Plačan",
+    "unpaid": "Neplačano",
+    "partialyPaid": "Delno plačano",
     "issued": "Izdala",
     "invoiceHeader": "Račun",
     "saved": "Račun shranjen",

@@ -328,6 +328,9 @@
   },
   "invoice": {
     "draft": "Draft",
+    "paid": "Paid",
+    "unpaid": "Unpaid",
+    "partialyPaid": "Partialy paid",
     "issued": "Issued",
     "invoiceHeader": "Invoice",
     "saved": "Invoice saved",

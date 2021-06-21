@@ -164,7 +164,7 @@
                               <b-row>
                                 <b-col md="12" class="table-responsive" style="min-height:250px">
                                   <b-table bordered hover :items="items" :fields="detailColumns">
-                                    <template v-slot:cell(id)="data">
+                                   <template v-slot:cell(id)="data">
                                       <span>{{ items.indexOf(data.item) + 1 }}</span>
                                     </template>
                                     <template v-slot:cell(name)="data">
@@ -438,7 +438,8 @@ export default {
       invoiceType: 'Invoice',
       referenceCode: '',
       referenceCodeFurs: '',
-      qrCode: ''
+      qrCode: '',
+      paymentStatus: ''
     }
   },
   computed: {
@@ -670,7 +671,7 @@ export default {
         updateInvoice(this.invoiceId, this.invoice).then(response => {
           this.fetchItemsAndPaymentMethods()
           this.$bvToast.show('b-toaster-bottom-right')
-          if (response === 'issued') this.redirectToDetailsPage()
+          if (response === 'invoice.issued') this.redirectToDetailsPage()
         })
       }
     },
@@ -713,8 +714,16 @@ export default {
       }
       this.qrCode += sum % 10
     },
+    calculatePaymentStatus () {
+      if (this.paidAmount === 0) {
+        this.paymentStatus = 'Unpaid'
+      } else {
+        this.paymentStatus = this.paidAmount === this.invoiceTotal ? 'Paid' : 'Partialy Paid'
+      }
+    },
     prepareInvoice () {
       this.calculatePayedAmount()
+      this.calculatePaymentStatus()
       let temp = {
         invoice_type: this.invoiceType,
         invoice_time: moment(this.dateOfInvoice).format('YYYY MM DD HH:MM:SS'),
@@ -746,6 +755,7 @@ export default {
         service_date: this.dateOfService,
         due_date: this.dueDate,
         verification_status: this.status,
+        payment_status: this.paymentStatus,
         reference_code: this.referenceCode,
         reference_code_furs: this.referenceCodeFurs
       }

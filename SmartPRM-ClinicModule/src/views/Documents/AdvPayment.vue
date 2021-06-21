@@ -97,10 +97,10 @@
                         <b-col lg="12">
                             <div class="table-responsive-sm">
                                 <b-table :items="invoices" class="table-t" :fields="invoiceColumns">
-                                    <template v-slot:cell(invoiceStatus)="data">
-                                        <span class="badge badge-danger" v-if="data.value == 'Unpaid'">Unpaid</span>
-                                        <span class="badge badge-warning" v-if="data.value == 'Partialy Paid'">Partialy Paid</span>
-                                        <span class="badge badge-success" v-if="data.value == 'Paid'">Paid</span>
+                                    <template v-slot:cell(payment_status)="data">
+                                         <span class="badge badge-danger" v-if="data.value == 'Unpaid'">{{ $t('invoice.unpaid') }}</span>
+                                        <span class="badge badge-warning" v-if="data.value == 'Partialy Paid'">{{ $t('invoice.partialyPaid') }}</span>
+                                        <span class="badge badge-success" v-if="data.value == 'Paid'">{{ $t('invoice.paid') }}</span>
                                     </template>
                                     <template v-slot:cell(billingDetails)="data">
                                         <p v-html="data.value"></p>
@@ -141,12 +141,19 @@
                               </b-table-simple>
                           </div>
                       </b-col>
+                    </b-row>
+                    <b-row>
+                      <b-col class="mt-4" lg="6" offset-lg="6">
+                          <h2 class="text-center">{{ $t('advPayment.advPaymentInfo.advPaymentTotal')}}: {{itemAmount | euro}}</h2>
+                      </b-col>
+                    </b-row>
+                    <b-row>
                       <b-col class="mt-4" lg="8">
                           <h5 style="margin-bottom: 15px;">{{ $t('advPayments.newAdvPayment.paymentMethodSummary') }}</h5>
                           <div class="table-responsive-sm">
                               <b-table striped :items="invoices" :fields="invoiceSummaryFields">
                                   <template v-slot:cell(lines_sum)="data">
-                                      <span style="font-size:25px" class="font-weight-bold">{{data.value | numeral('0,0.00') | euro}}</span>
+                                      <span class="font-weight-bold">{{data.value | numeral('0,0.00') | euro}}</span>
                                   </template>
                               </b-table>
                           </div>
@@ -273,13 +280,7 @@ export default {
           filterByFormatted: true
         },
         { label: this.$t('invoice.invoiceInfo.paymentStatus'),
-          key: 'invoiceStatus',
-          formatter: (value, key, item) => {
-            if (item.paid_amount === '$0.00') {
-              return 'Unpaid'
-            }
-            return item.total_with_vat === item.paid_amount ? 'Paid' : 'Partialy Paid'
-          },
+          key: 'payment_status',
           class: 'text-left' },
         { label: this.$t('invoice.invoiceInfo.invoiceDetails'),
           key: 'billingDetails',
