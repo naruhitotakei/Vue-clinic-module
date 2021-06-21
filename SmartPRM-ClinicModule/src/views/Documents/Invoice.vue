@@ -64,7 +64,7 @@
         <b-row>
           <b-col lg="3">
               <p>{{ $t('advPayments.newAdvPayment.paymentMethod') }}:</p>
-            <p style="border-bottom: solid;">{{invoice.payment_method}}<span style="margin-left:20px">{{invoice.lines_sum | euro}}</span></p>
+              <p v-for="(payment,index) in payments" :key="index" style="border-bottom: solid;">{{payment.type}}<span style="margin-left:20px">{{payment.amount | euro}}</span></p>
           </b-col>
         </b-row>
         <b-row>
@@ -140,7 +140,7 @@
                                   <span>{{ data.item.product_name }}</span>
                                 </template>
                                 <template v-slot:cell(invoiced_quantity)="data">
-                                  <span>{{ data.item.quantity }}</span>
+                                  <span>{{ data.item.invoiced_quantity }}</span>
                                 </template>
                                 <template v-slot:cell(product_price)="data">
                                   <span>{{ data.item.product_price | numeral('0,0.00') | euro }}</span>
@@ -214,7 +214,7 @@ export default {
         this.invoiceNumber = this.invoice.invoice_number
         this.invoiceDatePdf = moment(this.invoice.invoice_time).format('DD.MM.YYYY HH:MM')
         this.invoiceDate = moment(this.invoice.invoice_time).format('DD.MM.YYYY')
-        this.itemAmount = this.invoice.lines_sum
+        this.itemAmount = this.invoice.charges_sum
         getPremiseById(this.invoice.premise_id).then(response => {
           this.premiseCity = response[0].premise_city
           this.invoice.company_city = this.premiseCity

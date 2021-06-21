@@ -200,7 +200,7 @@ export default {
         this.invoiceNumber = this.invoice.invoice_number
         this.invoiceDatePdf = moment(this.invoice.invoice_time).format('DD.MM.YYYY HH:MM')
         this.invoiceDate = moment(this.invoice.invoice_time).format('DD.MM.YYYY')
-        this.itemAmount = this.invoice.lines_sum
+        this.itemAmount = this.invoice.charges_sum
         this.invoiceDetails[0].total = this.invoice.lines_sum
         getPremiseById(this.invoice.premise_id).then(response => {
           this.premiseCity = response[0].premise_city
