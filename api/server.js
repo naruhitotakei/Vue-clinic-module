@@ -932,6 +932,15 @@ app.get('/api/company-premises/:companyPremiseId/devices', (req, res) => {
 ////////////////////////////////////
 // Files
 ///////////////////////////////////
+app.post('/api/files/upload', async function(req, res) {
+  if(req.session.prm_user) {
+    const rv = await awsS3.fileUpload( req.session.prm_user.id +'-picture-' + Date.now() , req.files.file.data, req.files.file.mimetype)
+    res.status(200).json(rv.status)
+  }
+  else
+    res.status(401).json("OK: user unauthorized")
+});
+
 app.post('/api/files/avatar', async function(req, res) {
   let files = req.files
   if(req.session.prm_user) {

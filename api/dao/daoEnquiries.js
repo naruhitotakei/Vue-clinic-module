@@ -39,7 +39,12 @@ const getEnquiries = (request, response, user_id, accessible_user_ids, prm_clien
 }
 
 const getEnquiriesById = (request, response, id) => {
-    pool.query("SELECT enquiries.*, c.name as country FROM enquiries LEFT JOIN clients ON enquiries.client_id = clients.id LEFT JOIN countries c ON enquiries.country_id = c.id WHERE enquiries.trashed IS FALSE AND clients.slug = 'primadent_si' AND enquiries.id = $1", [id] , (error, results) => {
+    //AND clients.slug = 'primadent_si'
+    pool.query("SELECT enquiries.*, c.name as country " +
+        "FROM enquiries " +
+        "LEFT JOIN clients ON enquiries.client_id = clients.id " +
+        "LEFT JOIN countries c ON enquiries.country_id = c.id " +
+        "WHERE enquiries.trashed IS FALSE AND enquiries.id = $1", [id] , (error, results) => {
         if (error) {
             throw error
         }

@@ -470,7 +470,13 @@
                               <template v-slot:headerTitle>
                                   <h3 class="card-title mt-3 mb-2">{{ $t('EPR.filesHeader') }}</h3>
                                   <div class="btn-add-patient mt-2">
-                                      <b-button variant="primary" @click="add_file"><i class="ri-add-line mr-2"></i>{{ $t('EPR.files.addFile') }}</b-button>
+                                      <b-button variant="primary" @click="add_file">
+                                        <label for="upload-file" class="btn btn-primary m-0 p-0">
+                                          <i class="ri-add-line mr-2"></i>
+                                          {{ $t('EPR.files.addFile') }}
+                                          <input type="file" @change="uploadFile" id="upload-file" hidden/>
+                                        </label>
+                                      </b-button>
                                   </div>
                                   <div class="iq-card-header-toolbar d-flex align-items-center" style="margin-top: -10px;">
                                       <h5 class="mt-2">{{ $t('EPR.files.sortBy') }}</h5>
@@ -509,9 +515,13 @@
                       <iq-card>
                           <template v-slot:headerTitle>
                               <h3 class="card-title" style="margin-top: 10px;">
-                                  {{ $t('EPR.invoices.invoicesHeader') }}<span class="float-right">
-                                      <b-button variant="primary" @click="addInvoice"><i class="ri-add-line mr-2"></i>{{ $t('EPR.invoices.addInvoice') }}</b-button>
-                                  </span>
+                                  {{ $t('EPR.invoices.invoicesHeader') }}
+                                <span class="float-right">
+                                  <b-button variant="primary" @click="addInvoice">
+                                    <i class="ri-add-line mr-2"></i>
+                                    {{ $t('EPR.invoices.addInvoice') }}
+                                  </b-button>
+                                </span>
                               </h3>
                           </template>
                           <template v-slot:body>
@@ -697,6 +707,7 @@ import { getCountriesList, getRegionsList } from '../../services/commonCodeLists
 // import { getUsers } from '@/services/userService'
 import moment from 'moment'
 import { createAssignments, getAssignments } from '@/services/assignmentsService'
+import { fileUpload, getFiles } from '@/services/upDownLoad'
 
 export default {
   name: 'ViewPatient',
@@ -714,6 +725,7 @@ export default {
     this.getPatientServices(this.patientId)
     this.getUsers()
     this.getAssignments()
+    this.getFiles()
   },
   computed: {
     isOkDisabled () {
@@ -745,12 +757,12 @@ export default {
       return assignments.reverse()
     },
     futureAppointments: function () {
-      return this.appointments.filter((item) => {
+      return this.appointments && this.appointments.filter((item) => {
         return this.filterAppointments(item)
       })
     },
     pastAppointments: function () {
-      return this.appointments.filter((item) => {
+      return this.appointments && this.appointments.filter((item) => {
         return !this.filterAppointments(item)
       }).reverse()
     },
@@ -989,6 +1001,15 @@ export default {
     }
   },
   methods: {
+    uploadFile (e) {
+      console.log(e.target.files)
+      fileUpload(e.target.files[0])
+    },
+    getFiles () {
+      getFiles().then(data => {
+        console.log(data)
+      })
+    },
     changeGeneralNotes (e) {
       let str = e.target.innerHTML
       console.log(str)
@@ -1029,7 +1050,7 @@ export default {
         if (this.patient.date_of_birth !== null) {
           this.patient.date_of_birth = moment(this.patient.date_of_birth).format('YYYY-MM-DD')
         }
-        if (this.patient.general_notes.length) {
+        if (this.patient.general_notes !== null) {
           this.notesGeneral = this.patient.general_notes.replace(/<br>/g, '\n')
         }
       }
