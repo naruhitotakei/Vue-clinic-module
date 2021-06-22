@@ -36,3 +36,17 @@ export async function fileUpload (file, id) {
   })
   return rawResponse.json()
 }
+
+export async function userAvatarUpload (file, id) {
+  let data = new FormData()
+  data.append('file', file)
+  const rawResponse = await fetch(`/api/files/user_avatar/${id}`, {
+    method: 'POST',
+    credentials: 'same-origin',
+    headers: {
+      'Accept': 'application/json'
+    },
+    body: data
+  })
+  return rawResponse.json()
+}

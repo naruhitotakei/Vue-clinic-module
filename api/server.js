@@ -979,6 +979,7 @@ app.get('/api/files/avatar', async function(req, res) {
       res.status(401).json("OK: user unauthorized")
 });
 
+
 app.get('/api/files/:key', async function(req, res) {
   let key = req.params.key
   if(req.session.prm_user) {
@@ -998,6 +999,29 @@ app.get('/api/files/:key', async function(req, res) {
     res.status(401).json("OK: user unauthorized")
 });
 
+app.post('/api/files/user_avatar/:id', async function(req, res) {
+  let id = req.params.id
+  if(req.session.prm_user) {
+    const rv = await awsS3.upload('user_avatar-' + id, req.files.file.data, req.files.file.mimetype)
+    res.status(200).json(rv.status)
+  }
+  else
+    res.status(401).json("OK: user unauthorized")
+});
+app.get('/api/files/user_avatar/:id', async function(req, res) {
+  let id = req.params.id
+  if(req.session.prm_user) {
+    const rv = await awsS3.download('user_avatar-' + id)
+    if (rv.status=='OK') {
+      const download = Buffer.from(rv.data.Body)
+      res.end(download)
+    } else {
+      res.download('./resources/avatar-default.png', 'avatar-default.png');
+    }
+  }
+  else
+    res.status(401).json("OK: user unauthorized")
+});
 
 ///////////////////////////////////
 // common methodes
