@@ -385,7 +385,7 @@
       "alert3": "Payment method must be selected",
       "paymentMethodSummary": "Payment method summary",
       "downloadPrint": "Download print",
-      "saveDraft": "Save advance payment as draft",
+      "saveDraft": "Save as draft",
       "save": "Save and confirm",
       "IBAN": "IBAN",
       "vatId": "VAT ID no.",
