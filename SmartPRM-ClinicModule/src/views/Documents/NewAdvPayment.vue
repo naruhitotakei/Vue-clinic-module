@@ -194,7 +194,7 @@
                     </b-row>
                     <b-row>
                         <b-col offset-md="4" cols="12" md="8" class="text-right">
-                            <b-button variant="primary mr-3" @click="exportToPDF">
+                            <b-button :disabled="!canPrintPdf" variant="primary mr-3" @click="exportToPDF">
                                 <i class="ri-printer-line"></i>
                                 {{ $t('advPayments.newAdvPayment.downloadPrint') }}
                             </b-button>
