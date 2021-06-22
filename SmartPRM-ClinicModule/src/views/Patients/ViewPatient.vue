@@ -470,7 +470,13 @@
                               <template v-slot:headerTitle>
                                   <h3 class="card-title mt-3 mb-2">{{ $t('EPR.filesHeader') }}</h3>
                                   <div class="btn-add-patient mt-2">
-                                      <b-button variant="primary" @click="add_file"><i class="ri-add-line mr-2"></i>{{ $t('EPR.files.addFile') }}</b-button>
+                                      <b-button variant="primary" @click="add_file">
+                                        <label for="upload-file" class="text-white m-0 p-0">
+                                          <i class="ri-add-line mr-2"></i>
+                                          {{ $t('EPR.files.addFile') }}
+                                          <input type="file" ref="file_upload" @change="uploadFile" id="upload-file" hidden accept="image/png, image/jpg, image/jpeg"/>
+                                        </label>
+                                      </b-button>
                                   </div>
                                   <div class="iq-card-header-toolbar d-flex align-items-center" style="margin-top: -10px;">
                                       <h5 class="mt-2">{{ $t('EPR.files.sortBy') }}</h5>
@@ -493,7 +499,9 @@
                                   <div class="iq-card-body">
                                       <ul class="profile-img-gallary d-flex flex-wrap p-0 m-0">
                                           <li class="col-md-4 col-6 pb-3" v-for="(file, index) in filesSortBy" :key="index + file.created_at">
-                                              <img :src="file.image" alt="gallary-image" class="img-fluid">
+                                              <img :src="file.image" alt="gallary-image" class="img-fluid patient-filex" v-if="!file.pdf">
+                                              <object :data="file.image" type="application/pdf" width="250px" height="auto" class="m-auto d-block" v-else>
+                                              </object>
                                               <div class="text-center">
                                                   <p class="mb-0">{{ $t('EPR.files.fileName') }}: {{file.name}}</p>
                                                   <p class="mb-0">{{ $t('EPR.files.fileType') }}: {{file.type}}</p>
@@ -509,9 +517,13 @@
                       <iq-card>
                           <template v-slot:headerTitle>
                               <h3 class="card-title" style="margin-top: 10px;">
-                                  {{ $t('EPR.invoices.invoicesHeader') }}<span class="float-right">
-                                      <b-button variant="primary" @click="addInvoice"><i class="ri-add-line mr-2"></i>{{ $t('EPR.invoices.addInvoice') }}</b-button>
-                                  </span>
+                                  {{ $t('EPR.invoices.invoicesHeader') }}
+                                <span class="float-right">
+                                  <b-button variant="primary" @click="addInvoice">
+                                    <i class="ri-add-line mr-2"></i>
+                                    {{ $t('EPR.invoices.addInvoice') }}
+                                  </b-button>
+                                </span>
                               </h3>
                           </template>
                           <template v-slot:body>
@@ -697,6 +709,7 @@ import { getCountriesList, getRegionsList } from '../../services/commonCodeLists
 // import { getUsers } from '@/services/userService'
 import moment from 'moment'
 import { createAssignments, getAssignments } from '@/services/assignmentsService'
+import { fileUpload, getFiles } from '@/services/upDownLoad'
 
 export default {
   name: 'ViewPatient',
@@ -714,6 +727,7 @@ export default {
     this.getPatientServices(this.patientId)
     this.getUsers()
     this.getAssignments()
+    this.getFiles()
   },
   computed: {
     isOkDisabled () {
@@ -745,12 +759,12 @@ export default {
       return assignments.reverse()
     },
     futureAppointments: function () {
-      return this.appointments.filter((item) => {
+      return this.appointments && this.appointments.filter((item) => {
         return this.filterAppointments(item)
       })
     },
     pastAppointments: function () {
-      return this.appointments.filter((item) => {
+      return this.appointments && this.appointments.filter((item) => {
         return !this.filterAppointments(item)
       }).reverse()
     },
@@ -882,15 +896,15 @@ export default {
         { value: 'created_at', text: this.$t('EPR.files.fileCreatedAt'), sort: 'desc' }
       ],
       files: [
-        { image: require('../../assets/images/login/1.png'), name: 'File 2', type: 'Rentgen', created_at: '21.04.2021' },
-        { image: require('../../assets/images/login/2.png'), name: 'File 4', type: 'Krvna slika', created_at: '17.04.2021' },
-        { image: require('../../assets/images/login/3.png'), name: 'File 5', type: 'Rentgen', created_at: '11.04.2021' },
-        { image: require('../../assets/images/login/1.png'), name: 'File 1', type: 'Anamneza', created_at: '10.04.2021' },
-        { image: require('../../assets/images/login/2.png'), name: 'File 9', type: 'Rentgen', created_at: '03.04.2021' },
-        { image: require('../../assets/images/login/3.png'), name: 'File 7', type: 'Krvna Slika', created_at: '21.03.2021' },
-        { image: require('../../assets/images/login/1.png'), name: 'File 6', type: 'Rentgen', created_at: '17.03.2021' },
-        { image: require('../../assets/images/login/2.png'), name: 'File 3', type: 'Anamneza', created_at: '12.03.2021' },
-        { image: require('../../assets/images/login/3.png'), name: 'File 8', type: 'Rentgen', created_at: '08.03.2021' }
+        // { image: require('../../assets/images/login/1.png'), name: 'File 2', type: 'Rentgen', created_at: '21.04.2021' },
+        // { image: require('../../assets/images/login/2.png'), name: 'File 4', type: 'Krvna slika', created_at: '17.04.2021' },
+        // { image: require('../../assets/images/login/3.png'), name: 'File 5', type: 'Rentgen', created_at: '11.04.2021' },
+        // { image: require('../../assets/images/login/1.png'), name: 'File 1', type: 'Anamneza', created_at: '10.04.2021' },
+        // { image: require('../../assets/images/login/2.png'), name: 'File 9', type: 'Rentgen', created_at: '03.04.2021' },
+        // { image: require('../../assets/images/login/3.png'), name: 'File 7', type: 'Krvna Slika', created_at: '21.03.2021' },
+        // { image: require('../../assets/images/login/1.png'), name: 'File 6', type: 'Rentgen', created_at: '17.03.2021' },
+        // { image: require('../../assets/images/login/2.png'), name: 'File 3', type: 'Anamneza', created_at: '12.03.2021' },
+        // { image: require('../../assets/images/login/3.png'), name: 'File 8', type: 'Rentgen', created_at: '08.03.2021' }
       ],
       disabled: true,
       doctor: {
@@ -989,6 +1003,42 @@ export default {
     }
   },
   methods: {
+    uploadFile (e) {
+      fileUpload(e.target.files[0], this.$route.params.patientId)
+      let reader = new FileReader()
+      reader.readAsDataURL(e.target.files[0])
+      reader.onload = () => {
+        let image = e.target.files[0].type.split('/')[1] === 'tiff' || e.target.files[0].type.split('/')[1] === 'dcm' ? require('../../assets/images/icon-preview.png') : reader.result
+        let file = {
+          image: image,
+          name: this.$route.params.patientId + '-' + Date.now() + '.' + e.target.files[0].type.split('/')[1],
+          type: e.target.files[0].type.split('/')[1],
+          created_at: moment(Date.now()).format('YYYY-MM-DD'),
+          pdf: e.target.files[0].type.split('/')[1] === 'pdf'
+        }
+        console.log(file)
+        this.files.push(file)
+      }
+      console.log(this.$refs)
+    },
+    getFiles () {
+      getFiles().then(data => {
+        for (let i = 0; i < data.data.Contents.length; i++) {
+          let key = data.data.Contents[i].Key.split('-')[0]
+          let type = data.data.Contents[i].Key.split('.')[1]
+          let image = type === 'tiff' || type === 'dcm' ? require('../../assets/images/icon-preview.png') : '/api/files/' + data.data.Contents[i].Key
+          if (key === this.$route.params.patientId) {
+            this.files.push({
+              image: image,
+              name: data.data.Contents[i].Key,
+              type: type,
+              created_at: moment(data.data.Contents[i].LastModified).format('YYYY-MM-DD'),
+              pdf: type === 'pdf'
+            })
+          }
+        }
+      })
+    },
     changeGeneralNotes (e) {
       let str = e.target.innerHTML
       console.log(str)
@@ -1029,7 +1079,7 @@ export default {
         if (this.patient.date_of_birth !== null) {
           this.patient.date_of_birth = moment(this.patient.date_of_birth).format('YYYY-MM-DD')
         }
-        if (this.patient.general_notes.length) {
+        if (this.patient.general_notes !== null) {
           this.notesGeneral = this.patient.general_notes.replace(/<br>/g, '\n')
         }
       }
@@ -1217,6 +1267,12 @@ export default {
 .vs--disabled .vs__dropdown-toggle, .vs--disabled .vs__clear, .vs--disabled .vs__search, .vs--disabled .vs__selected, .vs--disabled .vs__open-indicator {
     background-color: #e9ecef !important;
     margin-top: 4px;
+}
+
+.patient-filex {
+  max-width: 250px !important;
+  margin: 0 auto;
+  display: block;
 }
 
 @media (max-width: 992px) {

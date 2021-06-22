@@ -932,6 +932,25 @@ app.get('/api/company-premises/:companyPremiseId/devices', (req, res) => {
 ////////////////////////////////////
 // Files
 ///////////////////////////////////
+app.get('/api/files/', async function(req, res) {
+  if(req.session.prm_user) {
+    const rv = await awsS3.listBucketObjects()
+    res.status(200).json(rv)
+  }
+  else
+    res.status(401).json("OK: user unauthorized")
+});
+app.post('/api/files/upload/:id', async function(req, res) {
+  let id = req.params.id
+  console.log(req.files.file)
+  if(req.session.prm_user) {
+    const rv = await awsS3.fileUpload( id, id +'-picture-' + Date.now() , req.files.file.data, req.files.file.mimetype)
+    res.status(200).json(rv.status)
+  }
+  else
+    res.status(401).json("OK: user unauthorized")
+});
+
 app.post('/api/files/avatar', async function(req, res) {
   let files = req.files
   if(req.session.prm_user) {
@@ -960,6 +979,50 @@ app.get('/api/files/avatar', async function(req, res) {
       res.status(401).json("OK: user unauthorized")
 });
 
+
+app.get('/api/files/:key', async function(req, res) {
+  let key = req.params.key
+  if(req.session.prm_user) {
+    const rv = await awsS3.fileDownload(key)
+    if (rv.status=='OK') {
+      // res.writeHead(200, {
+      //   'Content-Disposition': `attachment; filename=` + 'avatar-' + req.session.prm_user.id,
+      //   'Content-Type': rv.data.ContentType,
+      // })
+      const download = Buffer.from(rv.data.Body)
+      res.end(download)
+    } else {
+      res.download('./resources/avatar-default.png', 'avatar-default.png');
+    }
+  }
+  else
+    res.status(401).json("OK: user unauthorized")
+});
+
+app.post('/api/files/user_avatar/:id', async function(req, res) {
+  let id = req.params.id
+  if(req.session.prm_user) {
+    const rv = await awsS3.upload('user_avatar-' + id, req.files.file.data, req.files.file.mimetype)
+    res.status(200).json(rv.status)
+  }
+  else
+    res.status(401).json("OK: user unauthorized")
+});
+
+app.get('/api/files/user_avatar/:id', async function(req, res) {
+  let id = req.params.id
+  if(req.session.prm_user) {
+    const rv = await awsS3.download('user_avatar-' + id)
+    if (rv.status=='OK') {
+      const download = Buffer.from(rv.data.Body)
+      res.end(download)
+    } else {
+      res.download('./resources/avatar-default.png', 'avatar-default.png');
+    }
+  }
+  else
+    res.status(401).json("OK: user unauthorized")
+});
 
 ///////////////////////////////////
 // common methodes

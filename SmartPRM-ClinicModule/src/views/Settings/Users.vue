@@ -5,7 +5,7 @@
                 <iq-card body-class="text-center">
                     <template v-slot:body>
                         <div class="doc-profile">
-                            <img class="rounded-circle img-fluid avatar-80" :src="getAvatarUrl" alt="profile">
+                            <img class="rounded-circle img-fluid avatar-80" :src="'/api/files/user_avatar-' + user.id + '?' + avatar_version" alt="profile">
                         </div>
                         <div class="iq-doc-info mt-3">
                             <h4> {{user.title}} {{user.name}} {{user.surname}} </h4>
@@ -35,8 +35,13 @@
                 <div class="form-row">
                     <div style="margin: auto; text-align: center;">
                         <div class="add-img-user profile-img-edit">
-                            <b-img class="profile-pic height-150 width-150 object-fit" style="object-fit: cover" fluid :src="getAvatarUrl" alt="profile-pic" />
-                            <input type="hidden" v-model="getAvatarUrl">
+                            <b-img
+                                class="profile-pic height-150 width-150 object-fit"
+                                style="object-fit: cover"
+                                fluid
+                                :src="'/api/files/user_avatar-' + formData.id + '?' + avatar_version"
+                                alt="profile-pic" />
+                            <input type="hidden" v-model="formData.img">
                             <div class="p-image">
                                 <b-button variant="none" class="upload-button iq-bg-primary position-relative" style="left: 12px;" @click="onButtonClick">
                                     File Upload
@@ -112,7 +117,7 @@
 <script>
 import { xray } from '../../config/pluginInit'
 import { getUsers, updateUser, getRoles } from '../../services/userService'
-import { uploadAvatar } from '../../services/upDownLoad'
+import { userAvatarUpload } from '../../services/upDownLoad'
 
 export default {
   name: 'UserList',
@@ -133,7 +138,8 @@ export default {
         role_id: '',
         role_name: '',
         mail: '',
-        phone: ''
+        phone: '',
+        img: ''
       }
     }
   },
@@ -180,9 +186,8 @@ export default {
     },
     async onFileChanged (e) {
       this.selectedFile = e.target.files[0]
-      console.log(this.selectedFile.size)
       // todo check size
-      uploadAvatar(this.selectedFile)
+      await userAvatarUpload(this.selectedFile, this.formData.id)
       await this.sleep(1000)
       // this will couse avatar to be dowloaded again
       this.avatar_version = Math.random()

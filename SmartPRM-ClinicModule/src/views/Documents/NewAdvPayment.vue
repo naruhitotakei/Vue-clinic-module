@@ -76,6 +76,7 @@
           </b-col>
           <b-col lg="6">
             <qrcode-vue
+              class="qr-margin float-right"
               :value="qrCode"
               size="120"
               level="M"
@@ -619,6 +620,10 @@ export default {
 
 .hidden-row {
   border: none !important;
+}
+
+.qr-margin {
+    margin: 3rem 12rem 0 0;
 }
 
 </style>
