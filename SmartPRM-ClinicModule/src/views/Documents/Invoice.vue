@@ -19,7 +19,7 @@
             <p>{{invoice.enquiries_post_code}} {{invoice.enquiries_city}}</p>
           </b-col>
           <b-col lg="6">
-            <p>{{ $t('advPayments.newAdvPayment.advPaymentNo') }}: {{invoice.invoice_number}}</p>
+            <p>{{ $t('advPayments.newAdvPayment.advPaymentNo') }}: {{pdfNumber}}</p>
             <p>{{ $t('advPayments.newAdvPayment.copy') }}:<span style="margin-left:20px">Original</span></p>
             <p>{{ $t('advPayments.newAdvPayment.IssuedIn') }}:<span style="margin-left:20px">{{premiseCity}}</span></p>
             <p>{{ $t('advPayments.newAdvPayment.dateOfAdvPayment') }}:<span style="margin-left:20px">{{invoiceTime}}</span></p>
@@ -64,7 +64,7 @@
         <b-row>
           <b-col lg="3">
               <p>{{ $t('advPayments.newAdvPayment.paymentMethod') }}:</p>
-              <p v-for="(payment,index) in payments" :key="index" style="border-bottom: solid;">{{payment.type}}<span style="margin-left:20px">{{payment.amount | euro}}</span></p>
+              <p v-for="(payment,index) in payments" :key="index">{{payment.type}}<span style="margin-left:20px">{{payment.amount | euro}}</span></p>
           </b-col>
         </b-row>
         <b-row>
@@ -189,7 +189,7 @@
 <script>
 import { xray } from '../../config/pluginInit'
 import { getInvoiceById, getItemsOfInvoiceById, getPaymentItemsOfInvoiceById } from '../../services/invoice'
-import { getPremiseById } from '../../services/companyPremises'
+import { getPremiseById, getPremiseDeviceById } from '../../services/companyPremises'
 import moment from 'moment'
 import html2pdf from 'html2pdf.js'
 import QrcodeVue from 'qrcode.vue'
@@ -217,7 +217,11 @@ export default {
         this.itemAmount = this.invoice.charges_sum
         getPremiseById(this.invoice.premise_id).then(response => {
           this.premiseCity = response[0].premise_city
+          this.premiseId = response[0].premise_id
           this.invoice.company_city = this.premiseCity
+        })
+        getPremiseDeviceById(this.invoice.device_id).then(response => {
+          this.deviceName = response[0].device_name
         })
       }
       )
@@ -249,6 +253,7 @@ export default {
     },
     exportToPDF () {
       this.calculateQRCode()
+      this.calculatePdfNumber()
       this.dateOfServicePdf = moment(this.dateOfService).format('DD.MM.YYYY')
       this.invoiceTime = moment(this.invoice.invoice_time).format('DD.MM.YYYY HH:MM')
       let options = {
@@ -259,6 +264,10 @@ export default {
       }
       var source = window.document.getElementById('printInvoice')
       html2pdf().set(options).from(source).save()
+    },
+    calculatePdfNumber () {
+      let premiseNumber = this.premiseId < 10 ? '0' + this.premiseId : this.premiseId
+      this.pdfNumber = premiseNumber + '-' + this.deviceName + '-' + this.invoice.invoice_number
     }
   },
   data () {
@@ -342,7 +351,10 @@ export default {
       qrCode: '',
       dateOfServicePdf: '',
       premiseCity: '',
-      invoiceTime: ''
+      premiseId: '',
+      invoiceTime: '',
+      pdfNumber: '',
+      deviceName: ''
     }
   }
 }

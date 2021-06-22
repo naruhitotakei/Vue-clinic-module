@@ -19,7 +19,7 @@
             <p>{{patient.post_code}} {{patient.city}}</p>
           </b-col>
           <b-col lg="6">
-            <p>{{ $t('advPayments.newAdvPayment.advPaymentNo') }}: {{invoiceNumber}}</p>
+            <p>{{ $t('advPayments.newAdvPayment.advPaymentNo') }}: {{pdfNumber}}</p>
             <p>{{ $t('advPayments.newAdvPayment.copy') }}:<span style="margin-left:20px">Original</span></p>
             <p>{{ $t('advPayments.newAdvPayment.IssuedIn') }}:<span style="margin-left:20px">{{issuedIn.premise_city}}</span></p>
             <p>{{ $t('advPayments.newAdvPayment.dateOfAdvPayment') }}:<span style="margin-left:20px">{{invoiceTime}}</span></p>
@@ -364,7 +364,8 @@ export default {
       invoiceType: 'Advance payment',
       referenceCode: '',
       referenceCodeFurs: '',
-      qrCode: ''
+      qrCode: '',
+      pdfNumber: ''
     }
   },
   computed: {
@@ -388,6 +389,7 @@ export default {
     },
     exportToPDF () {
       this.calculateQRCode()
+      this.calculatePdfNumber()
       this.invoiceTime = moment(this.invoice.invoice_time).format('YYYY-MM-DD HH:MM')
       let options = {
         filename: this.invoiceNumber + '.pdf',
@@ -397,6 +399,10 @@ export default {
       }
       var source = window.document.getElementById('printInvoice')
       html2pdf().set(options).from(source).save()
+    },
+    calculatePdfNumber () {
+      let premiseNumber = this.issuedIn.premise_id < 10 ? '0' + this.issuedIn.premiseId : this.issuedIn.premiseId
+      this.pdfNumber = premiseNumber + '-' + this.device.device_name + '-' + this.invoiceNumber
     },
     createBillingDetails (selectedPatient) {
       let details = ''
