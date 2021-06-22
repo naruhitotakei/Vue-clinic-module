@@ -607,6 +607,7 @@ export default {
   writing-mode:  vertical-lr !important;
   transform: rotate(180deg) !important;
   line-height: 13px !important;
+  vertical-align: middle;
 }
 
 body .wrapper .custom-control-label::before {
