@@ -471,10 +471,10 @@
                                   <h3 class="card-title mt-3 mb-2">{{ $t('EPR.filesHeader') }}</h3>
                                   <div class="btn-add-patient mt-2">
                                       <b-button variant="primary" @click="add_file">
-                                        <label for="upload-file" class="btn btn-primary m-0 p-0">
+                                        <label for="upload-file" class="text-white m-0 p-0">
                                           <i class="ri-add-line mr-2"></i>
                                           {{ $t('EPR.files.addFile') }}
-                                          <input type="file" @change="uploadFile" id="upload-file" hidden/>
+                                          <input type="file" ref="file_upload" @change="uploadFile" id="upload-file" hidden accept="image/png, image/jpg, image/jpeg"/>
                                         </label>
                                       </b-button>
                                   </div>
@@ -499,7 +499,7 @@
                                   <div class="iq-card-body">
                                       <ul class="profile-img-gallary d-flex flex-wrap p-0 m-0">
                                           <li class="col-md-4 col-6 pb-3" v-for="(file, index) in filesSortBy" :key="index + file.created_at">
-                                              <img :src="file.image" alt="gallary-image" class="img-fluid">
+                                              <img :src="file.image" alt="gallary-image" class="img-fluid patient-filex">
                                               <div class="text-center">
                                                   <p class="mb-0">{{ $t('EPR.files.fileName') }}: {{file.name}}</p>
                                                   <p class="mb-0">{{ $t('EPR.files.fileType') }}: {{file.type}}</p>
@@ -894,15 +894,15 @@ export default {
         { value: 'created_at', text: this.$t('EPR.files.fileCreatedAt'), sort: 'desc' }
       ],
       files: [
-        { image: require('../../assets/images/login/1.png'), name: 'File 2', type: 'Rentgen', created_at: '21.04.2021' },
-        { image: require('../../assets/images/login/2.png'), name: 'File 4', type: 'Krvna slika', created_at: '17.04.2021' },
-        { image: require('../../assets/images/login/3.png'), name: 'File 5', type: 'Rentgen', created_at: '11.04.2021' },
-        { image: require('../../assets/images/login/1.png'), name: 'File 1', type: 'Anamneza', created_at: '10.04.2021' },
-        { image: require('../../assets/images/login/2.png'), name: 'File 9', type: 'Rentgen', created_at: '03.04.2021' },
-        { image: require('../../assets/images/login/3.png'), name: 'File 7', type: 'Krvna Slika', created_at: '21.03.2021' },
-        { image: require('../../assets/images/login/1.png'), name: 'File 6', type: 'Rentgen', created_at: '17.03.2021' },
-        { image: require('../../assets/images/login/2.png'), name: 'File 3', type: 'Anamneza', created_at: '12.03.2021' },
-        { image: require('../../assets/images/login/3.png'), name: 'File 8', type: 'Rentgen', created_at: '08.03.2021' }
+        // { image: require('../../assets/images/login/1.png'), name: 'File 2', type: 'Rentgen', created_at: '21.04.2021' },
+        // { image: require('../../assets/images/login/2.png'), name: 'File 4', type: 'Krvna slika', created_at: '17.04.2021' },
+        // { image: require('../../assets/images/login/3.png'), name: 'File 5', type: 'Rentgen', created_at: '11.04.2021' },
+        // { image: require('../../assets/images/login/1.png'), name: 'File 1', type: 'Anamneza', created_at: '10.04.2021' },
+        // { image: require('../../assets/images/login/2.png'), name: 'File 9', type: 'Rentgen', created_at: '03.04.2021' },
+        // { image: require('../../assets/images/login/3.png'), name: 'File 7', type: 'Krvna Slika', created_at: '21.03.2021' },
+        // { image: require('../../assets/images/login/1.png'), name: 'File 6', type: 'Rentgen', created_at: '17.03.2021' },
+        // { image: require('../../assets/images/login/2.png'), name: 'File 3', type: 'Anamneza', created_at: '12.03.2021' },
+        // { image: require('../../assets/images/login/3.png'), name: 'File 8', type: 'Rentgen', created_at: '08.03.2021' }
       ],
       disabled: true,
       doctor: {
@@ -1002,12 +1002,35 @@ export default {
   },
   methods: {
     uploadFile (e) {
-      console.log(e.target.files)
-      fileUpload(e.target.files[0])
+      fileUpload(e.target.files[0], this.$route.params.patientId)
+      let reader = new FileReader()
+      reader.readAsDataURL(e.target.files[0])
+      reader.onload = () => {
+        let file = {
+          image: reader.result,
+          name: this.$route.params.patientId + '-' + Date.now() + '.' + e.target.files[0].type.split('/')[1],
+          type: e.target.files[0].type.split('/')[1],
+          created_at: moment(Date.now()).format('YYYY-MM-DD')
+        }
+        console.log(file)
+        this.files.push(file)
+      }
+      console.log(this.$refs)
     },
     getFiles () {
       getFiles().then(data => {
-        console.log(data)
+        for (let i = 0; i < data.data.Contents.length; i++) {
+          let key = data.data.Contents[i].Key.split('-')[0]
+          let type = data.data.Contents[i].Key.split('.')[1]
+          if (key === this.$route.params.patientId) {
+            this.files.push({
+              image: '/api/files/' + data.data.Contents[i].Key,
+              name: data.data.Contents[i].Key,
+              type: type,
+              created_at: moment(data.data.Contents[i].LastModified).format('YYYY-MM-DD')
+            })
+          }
+        }
       })
     },
     changeGeneralNotes (e) {
@@ -1238,6 +1261,12 @@ export default {
 .vs--disabled .vs__dropdown-toggle, .vs--disabled .vs__clear, .vs--disabled .vs__search, .vs--disabled .vs__selected, .vs--disabled .vs__open-indicator {
     background-color: #e9ecef !important;
     margin-top: 4px;
+}
+
+.patient-filex {
+  max-width: 300px !important;
+  margin: 0 auto;
+  display: block;
 }
 
 @media (max-width: 992px) {

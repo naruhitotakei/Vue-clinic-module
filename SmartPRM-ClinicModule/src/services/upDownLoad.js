@@ -23,10 +23,10 @@ export async function getFiles () {
   return rawResponse.json()
 }
 
-export async function fileUpload (file) {
+export async function fileUpload (file, id) {
   let data = new FormData()
   data.append('file', file)
-  const rawResponse = await fetch('/api/files/upload', {
+  const rawResponse = await fetch(`/api/files/upload/${id}`, {
     method: 'POST',
     credentials: 'same-origin',
     headers: {

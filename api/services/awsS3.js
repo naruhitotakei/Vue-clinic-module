@@ -27,36 +27,11 @@ const listBuckets = async () => {
 }
 
 const listBucketObjects = async () => {
-  console.log(s3.config);
   return new Promise((resolve, reject) => {
     let params = {
       Bucket: defaultBucketName
     }
     s3.listObjects(params, function (err, data) {
-      if (err) {
-        let rv = {
-          status: "NOK",
-          error: err
-        }
-        resolve(rv);
-      } else {
-        let rv = {
-          status: "OK",
-          data: data
-        }
-        resolve(rv);
-      }
-    })
-  })
-}
-
-const listBucketObjectsV2 = async () => {
-  console.log(s3.config);
-  return new Promise((resolve, reject) => {
-    let params = {
-      Bucket: defaultBucketName
-    }
-    s3.listObjectsV2(params, function (err, data) {
       if (err) {
         let rv = {
           status: "NOK",
@@ -92,6 +67,7 @@ const listBucketObjectsWithPrefix = async (prefix) => {
           status: "OK",
           data: data
         }
+        console.log(data)
         resolve(rv);
       }
     })
@@ -99,11 +75,11 @@ const listBucketObjectsWithPrefix = async (prefix) => {
 }
 
 const fileUpload = async (id, fileName, fileContent, mimeType) => {
-  console.log(fileName, fileContent, mimeType)
   return new Promise((resolve, reject) => {
+
     var params = {
       Bucket: defaultBucketName,
-      Key: fileName,
+      Key: fileName+ '.' + mimeType.split('/')[1],
       Body: fileContent,
       ContentType: mimeType,
       userId: id
@@ -176,6 +152,30 @@ const download = async (fileName) => {
   })
 }
 
+const fileDownload = async (fileName) => {
+  return new Promise((resolve, reject) => {
+    var params = {
+      Bucket: defaultBucketName,
+      Key: fileName
+    }
+    s3.getObject(params, function (err, data) {
+      if (err) {
+        let rv = {
+          status: "NOK",
+          error: err
+        }
+        resolve(rv);
+      } else {
+        let rv = {
+          status: "OK",
+          data: data
+        }
+        resolve(rv);
+      }
+    })
+  })
+}
+
 const remove = async (fileName) => {
   return new Promise((resolve, reject) => {
     var params = {
@@ -207,5 +207,6 @@ module.exports = {
   upload,
   download,
   remove,
-  fileUpload
+  fileUpload,
+  fileDownload
 }
