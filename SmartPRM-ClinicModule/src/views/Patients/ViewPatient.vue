@@ -500,7 +500,7 @@
                                       <ul class="profile-img-gallary d-flex flex-wrap p-0 m-0">
                                           <li class="col-md-4 col-6 pb-3" v-for="(file, index) in filesSortBy" :key="index + file.created_at">
                                               <img :src="file.image" alt="gallary-image" class="img-fluid patient-filex" v-if="!file.pdf">
-                                              <object :data="file.image" type="application/pdf" width="auto" height="auto" class="m-auto d-block" v-else>
+                                              <object :data="file.image" type="application/pdf" width="250px" height="auto" class="m-auto d-block" v-else>
                                               </object>
                                               <div class="text-center">
                                                   <p class="mb-0">{{ $t('EPR.files.fileName') }}: {{file.name}}</p>
