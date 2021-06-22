@@ -50,6 +50,30 @@ const listBucketObjects = async () => {
   })
 }
 
+const listBucketObjectsV2 = async () => {
+  console.log(s3.config);
+  return new Promise((resolve, reject) => {
+    let params = {
+      Bucket: defaultBucketName
+    }
+    s3.listObjectsV2(params, function (err, data) {
+      if (err) {
+        let rv = {
+          status: "NOK",
+          error: err
+        }
+        resolve(rv);
+      } else {
+        let rv = {
+          status: "OK",
+          data: data
+        }
+        resolve(rv);
+      }
+    })
+  })
+}
+
 const listBucketObjectsWithPrefix = async (prefix) => {
   return new Promise((resolve, reject) => {
     var params = {
@@ -74,14 +98,15 @@ const listBucketObjectsWithPrefix = async (prefix) => {
   })
 }
 
-const fileUpload = async (fileName, fileContent, mimeType) => {
+const fileUpload = async (id, fileName, fileContent, mimeType) => {
   console.log(fileName, fileContent, mimeType)
   return new Promise((resolve, reject) => {
     var params = {
       Bucket: defaultBucketName,
       Key: fileName,
       Body: fileContent,
-      ContentType: mimeType
+      ContentType: mimeType,
+      userId: id
     }
     s3.upload(params, function (err, data) {
       if (err) {
@@ -102,7 +127,6 @@ const fileUpload = async (fileName, fileContent, mimeType) => {
 }
 
 const upload = async (fileName, fileContent, mimeType) => {
-  console.log(fileName, fileContent, mimeType)
   return new Promise((resolve, reject) => {
     var params = {
       Bucket: defaultBucketName,
