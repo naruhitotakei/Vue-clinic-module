@@ -786,7 +786,7 @@ export default {
 }
 
 .qr-margin {
-    margin: 1.5rem 12rem 0 0;
+    margin: 3rem 12rem 0 0;
 }
 
 </style>

@@ -76,6 +76,7 @@
           </b-col>
           <b-col lg="6">
             <qrcode-vue
+              class="qr-margin float-right"
               :value="qrCode"
               size="120"
               level="M"
@@ -193,7 +194,7 @@
                     </b-row>
                     <b-row>
                         <b-col offset-md="4" cols="12" md="8" class="text-right">
-                            <b-button :disabled="!canPrintPdf" variant="primary mr-3" @click="exportToPDF">
+                            <b-button variant="primary mr-3" @click="exportToPDF">
                                 <i class="ri-printer-line"></i>
                                 {{ $t('advPayments.newAdvPayment.downloadPrint') }}
                             </b-button>
@@ -613,6 +614,10 @@ export default {
 
 .hidden-row {
   border: none !important;
+}
+
+.qr-margin {
+    margin: 3rem 12rem 0 0;
 }
 
 </style>
