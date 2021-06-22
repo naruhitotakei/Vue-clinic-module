@@ -1008,6 +1008,7 @@ app.post('/api/files/user_avatar/:id', async function(req, res) {
   else
     res.status(401).json("OK: user unauthorized")
 });
+
 app.get('/api/files/user_avatar/:id', async function(req, res) {
   let id = req.params.id
   if(req.session.prm_user) {

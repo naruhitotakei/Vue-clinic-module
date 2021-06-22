@@ -1022,9 +1022,10 @@ export default {
         for (let i = 0; i < data.data.Contents.length; i++) {
           let key = data.data.Contents[i].Key.split('-')[0]
           let type = data.data.Contents[i].Key.split('.')[1]
+          let image = type === 'tiff' || type === 'dcm' ? require('../../assets/images/icon-preview.png') : '/api/files/' + data.data.Contents[i].Key
           if (key === this.$route.params.patientId) {
             this.files.push({
-              image: '/api/files/' + data.data.Contents[i].Key,
+              image: image,
               name: data.data.Contents[i].Key,
               type: type,
               created_at: moment(data.data.Contents[i].LastModified).format('YYYY-MM-DD')
@@ -1264,7 +1265,7 @@ export default {
 }
 
 .patient-filex {
-  max-width: 300px !important;
+  max-width: 250px !important;
   margin: 0 auto;
   display: block;
 }
