@@ -499,7 +499,9 @@
                                   <div class="iq-card-body">
                                       <ul class="profile-img-gallary d-flex flex-wrap p-0 m-0">
                                           <li class="col-md-4 col-6 pb-3" v-for="(file, index) in filesSortBy" :key="index + file.created_at">
-                                              <img :src="file.image" alt="gallary-image" class="img-fluid patient-filex">
+                                              <img :src="file.image" alt="gallary-image" class="img-fluid patient-filex" v-if="!file.pdf">
+                                              <object :data="file.image" type="application/pdf" width="auto" height="auto" class="m-auto d-block" v-else>
+                                              </object>
                                               <div class="text-center">
                                                   <p class="mb-0">{{ $t('EPR.files.fileName') }}: {{file.name}}</p>
                                                   <p class="mb-0">{{ $t('EPR.files.fileType') }}: {{file.type}}</p>
@@ -1006,11 +1008,13 @@ export default {
       let reader = new FileReader()
       reader.readAsDataURL(e.target.files[0])
       reader.onload = () => {
+        let image = e.target.files[0].type.split('/')[1] === 'tiff' || e.target.files[0].type.split('/')[1] === 'dcm' ? require('../../assets/images/icon-preview.png') : reader.result
         let file = {
-          image: reader.result,
+          image: image,
           name: this.$route.params.patientId + '-' + Date.now() + '.' + e.target.files[0].type.split('/')[1],
           type: e.target.files[0].type.split('/')[1],
-          created_at: moment(Date.now()).format('YYYY-MM-DD')
+          created_at: moment(Date.now()).format('YYYY-MM-DD'),
+          pdf: e.target.files[0].type.split('/')[1] === 'pdf'
         }
         console.log(file)
         this.files.push(file)
@@ -1028,7 +1032,8 @@ export default {
               image: image,
               name: data.data.Contents[i].Key,
               type: type,
-              created_at: moment(data.data.Contents[i].LastModified).format('YYYY-MM-DD')
+              created_at: moment(data.data.Contents[i].LastModified).format('YYYY-MM-DD'),
+              pdf: type === 'pdf'
             })
           }
         }
