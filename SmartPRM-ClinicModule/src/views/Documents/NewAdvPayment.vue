@@ -366,12 +366,13 @@ export default {
       referenceCode: '',
       referenceCodeFurs: '',
       qrCode: '',
-      pdfNumber: ''
+      pdfNumber: '',
+      pdfName: ''
     }
   },
   computed: {
     isInvoiceStatusIssued () {
-      return this.status === 'issued'
+      return this.status === 'invoice.issued'
     }
   },
   methods: {
@@ -391,9 +392,10 @@ export default {
     exportToPDF () {
       this.calculateQRCode()
       this.calculatePdfNumber()
+      this.setPdfName()
       this.invoiceTime = moment(this.invoice.invoice_time).format('YYYY-MM-DD HH:MM')
       let options = {
-        filename: this.invoiceNumber + '.pdf',
+        filename: this.pdfName + '.pdf',
         image: { type: 'jpeg', quality: 0.98 },
         html2canvas: { y: 170 },
         jsPDF: { unit: 'mm', format: 'a3' }
@@ -401,9 +403,13 @@ export default {
       var source = window.document.getElementById('printInvoice')
       html2pdf().set(options).from(source).save()
     },
+    setPdfName () {
+      this.pdfName = this.invoiceNumber === 'invoice.draft' ? this.$t('invoice.draft') : this.invoiceNumber
+    },
     calculatePdfNumber () {
-      let premiseNumber = this.issuedIn.premise_id < 10 ? '0' + this.issuedIn.premiseId : this.issuedIn.premiseId
-      this.pdfNumber = premiseNumber + '-' + this.device.device_name + '-' + this.invoiceNumber
+      let premiseNumber = this.issuedIn.premise_id < 10 ? '0' + this.issuedIn.premise_id : this.issuedIn.premise_id
+      let invoiceNumber = this.invoiceNumber === 'invoice.draft' ? this.$t('invoice.draft').toLowerCase() : this.invoiceNumber
+      this.pdfNumber = premiseNumber + '-' + this.device.device_name + '-' + invoiceNumber
     },
     createBillingDetails (selectedPatient) {
       let details = ''
@@ -464,7 +470,6 @@ export default {
     },
     generateInvoiceNumber () {
       let data = {
-        type: this.invoiceType,
         business_premise_id: this.issuedIn.business_premise_id,
         draft: 'invoice.draft'
       }

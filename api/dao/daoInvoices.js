@@ -291,7 +291,6 @@ const getInvoices = (request, response) => {
 const getInvoiceById = (request, response, id) => {
     pool.query("SELECT invoice.*,enquiries.email,enquiries.phone, countries.name as country FROM invoice LEFT JOIN enquiries ON invoice.enquiries_id = enquiries.id LEFT JOIN countries ON invoice.enquiries_country_code = countries.code WHERE invoice.invoice_id = $1", [id] , (error, results) => {
         if (error) {
-            console.log(error)
             throw error
         }
         response.status(200).json(results.rows)
@@ -330,7 +329,7 @@ const getConsecutiveInvoiceNumberForCompany = (request, response, id) => {
 }
 
 const getSerialForInvoiceNumberBasedOnType = (request, response, data) => {
-    let statement = "SELECT COUNT(invoice_number) FROM invoice WHERE invoice_type ='" + data.type + "' and invoice_number !='" + data.draft + "'"
+    let statement = "SELECT COUNT(invoice_number) FROM invoice WHERE invoice_type !='Offer' and invoice_number !='" + data.draft + "'"
     console.log(statement)
     pool.query(statement, (error, results) => {
         if (error) {
@@ -341,7 +340,7 @@ const getSerialForInvoiceNumberBasedOnType = (request, response, data) => {
 }
 
 const getSerialForFursInvoiceNumberBasedOnType = (request, response, data) => {
-    let statement = "SELECT COUNT(invoice_number_furs) FROM invoice WHERE invoice_type ='" + data.type + "' AND invoice_number_furs LIKE '" + data.business_premise_id + "%'"
+    let statement = "SELECT COUNT(invoice_number_furs) FROM invoice WHERE invoice_type !='Offer' AND invoice_number_furs LIKE '" + data.business_premise_id + "%'"
     console.log(statement)
     pool.query(statement, (error, results) => {
         if (error) {
