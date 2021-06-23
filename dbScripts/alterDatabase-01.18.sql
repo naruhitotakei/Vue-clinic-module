@@ -31,6 +31,15 @@ UPDATE users SET prm_role_id = 6, prm_password_hash = '$2b$12$zHk/lqjgGOaYmzWU9G
 UPDATE users SET prm_role_id = 5 WHERE id = 130;
 UPDATE users SET prm_role_id = 4 WHERE id = 140;
 
+UPDATE users SET prm_client_id = NULL WHERE id IN (1, 53, 130, 140, 150, 151, 153, 154, 157);
+
+--############################################################
+--# Adding prm_client FK to enquiry table
+--############################################################
+
+ALTER TABLE enquiries ADD COLUMN prm_client_id INT
+CONSTRAINT enquiries_prm_client_fk REFERENCES prm_client (id);
+
 UPDATE db_version SET version ='01.18', version_date=CURRENT_DATE WHERE resource='Tables';
 
 
