@@ -12,7 +12,6 @@
                       <tab-nav-items class="col-12 col-sm-4 col-md-2 p-0" :active="false" href="#info" :title="$t('EPR.personalInfoTab')" />
                       <tab-nav-items class="col-12 col-sm-1 col-md-2 p-0" :active="false" href="#files" :title="$t('EPR.filesTab')" />
                       <tab-nav-items class="col-12 col-sm-2 col-md-2 p-0" :active="false" href="#invoices" :title="$t('EPR.invoicesTab')" />
-<!--                      <tab-nav-items class="col-12 col-sm-2 col-md-2 p-0 mobile-border" :active="false" href="#offers" :title="$t('EPR.offersTab')" />-->
                   </tab-nav>
               </div>
             </template>
@@ -56,20 +55,20 @@
                                                   <div class="col-8 pl-lg-3 p-md-0 text-dark" v-if="patient.address_line_1">{{patient.address_line_1}}</div>
                                                   <div class="col-8 pl-lg-3 p-md-0 text-dark" v-else>{{ $t('EPR.overview.addressUnknown') }}</div>
                                               </div>
-                                            <hr>
-                                            <div class="row ml-1">
-                                              <div class="col-4 pl-lg-3 p-md-0"><h6>{{ $t('EPR.overview.Dentist') }}:</h6></div>
-                                              <div v-if="patientsDentist" class="col-8 p-md-0 pl-lg-3 text-dark">{{patientsDentist.label}}</div>
-                                              <div v-if="!patientsDentist" class="col-8 text-dark">{{ $t('EPR.overview.notSelected') }}</div>
-                                              <div class="col-4 pl-lg-3 p-md-0"><h6>{{ $t('EPR.overview.Surgeon') }}:</h6></div>
-                                              <div v-if="patientsSurgeon" class="col-8 p-md-0 pl-lg-3 text-dark">{{patientsSurgeon.label}}</div>
-                                              <div v-if="!patientsSurgeon" class="col-8 pl-lg-3 p-md-0 text-dark">{{ $t('EPR.overview.notSelected') }}</div>
-                                            </div>
+                                              <hr>
+                                              <div class="row ml-1">
+                                                  <div class="col-4 pl-lg-3 p-md-0"><h6>{{ $t('EPR.overview.Dentist') }}:</h6></div>
+                                                  <div v-if="patientsDentist" class="col-8 p-md-0 pl-lg-3 text-dark">{{patientsDentist.label}}</div>
+                                                  <div v-if="!patientsDentist" class="col-8 text-dark">{{ $t('EPR.overview.notSelected') }}</div>
+                                                  <div class="col-4 pl-lg-3 p-md-0"><h6>{{ $t('EPR.overview.Surgeon') }}:</h6></div>
+                                                  <div v-if="patientsSurgeon" class="col-8 p-md-0 pl-lg-3 text-dark">{{patientsSurgeon.label}}</div>
+                                                  <div v-if="!patientsSurgeon" class="col-8 pl-lg-3 p-md-0 text-dark">{{ $t('EPR.overview.notSelected') }}</div>
+                                              </div>
                                           </div>
                                       </template>
                                       <div class="bg-primary pb-2 p-1" style="border-radius: 0 0 25px 25px;">
                                           <b-col md="14" class="d-flex justify-content-center">
-                                              <button type="" class="btn btn-light m-1 ">{{ $t('EPR.overview.addAppointment') }}</button>&nbsp;
+                                              <button type="button" class="btn btn-light m-1" @click="addAppointment">{{ $t('EPR.overview.addAppointment') }}</button>&nbsp;
                                               <button type="" class="btn btn-light m-1" @click.prevent="modalAssigmentShow = true">{{ $t('EPR.overview.addAssignment') }}</button>&nbsp;
                                               <button type="button" @click="addInvoice" class="btn btn-light m-1">{{ $t('EPR.overview.addInvoice') }}</button>
                                           </b-col>
@@ -78,47 +77,151 @@
                                           </b-col>
                                       </div>
                                   </iq-card>
-<!--                                  <iq-card>-->
-<!--                                      <template v-slot:body>-->
-<!--                                          <div class="iq-card-header d-flex justify-content-between">-->
-<!--                                              <div class="iq-header-title">-->
-<!--                                                  <h4 class="card-title">{{ $t('EPR.overview.personalDoctors') }}</h4><hr />-->
-<!--                                              </div>-->
-<!--                                          </div>-->
-<!--                                          <div class="iq-card-body">-->
-<!--                                              <div class="row font-size-16 ">-->
-<!--                                                  <div class="col-12 col-sm-7"><h6>{{ $t('EPR.overview.personalDentist') }}:</h6></div>-->
-<!--                                                  <div v-if="patientsDentist" class="col-12 col-sm-5">{{patientsDentist.label}}</div>-->
-<!--                                                  <div v-if="!patientsDentist" class="col-5">{{ $t('EPR.overview.notSelected') }}</div>-->
-<!--                                                  <div class="col-7"><h6>{{ $t('EPR.overview.personalSurgeon') }}:</h6></div>-->
-<!--                                                  <div v-if="patientsSurgeon" class="col-12 col-sm-5">{{patientsSurgeon.label}}</div>-->
-<!--                                                  <div v-if="!patientsSurgeon" class="col-5">{{ $t('EPR.overview.notSelected') }}</div>-->
-<!--                                              </div>-->
-<!--                                          </div>-->
-<!--                                      </template>-->
-<!--                                  </iq-card>-->
-                                  <iq-card body-class="iq-card-body">
-                                      <template v-slot:body>
-                                          <div class="iq-card-header d-flex justify-content-between">
-                                              <div class="iq-header-title">
-                                                  <h4 class="card-title">{{ $t('EPR.overview.files') }} (9)</h4><hr />
+                                  <b-modal v-model="addAppointmentModal" no-close-on-esc no-close-on-backdrop size="lg" title="Appointment Details" ok-title="Save Changes" @ok="saveAppointment" @close="closeModal" cancel-title="Close" hide-footer>
+                                      <form class="calendar-modal">
+                                          <h3 v-if="modalTitle" style="text-align: center;">{{modalTitle}}</h3>
+                                          <div class="form-row">
+                                              <div class="row align-items-center justify-content-between w-100 mb-3">
+                                                  <div class="col-md-3">
+                                                      <label for="patient" class="mb-0">{{ $t('calendarEvent.patient') }}</label>
+                                                  </div>
+                                                  <div class="col-md-9">
+                                                      <p class="text-black mb-0">{{ patient.name }} {{patient.last_name}}</p>
+                                                  </div>
+                                              </div>
+                                              <div class="row align-items-center justify-content-between w-100 mb-3">
+                                                  <div class="col-md-3">
+                                                      <label for="notes">{{ $t('calendarEvent.note') }}</label>
+                                                  </div>
+                                                  <div class="col-md-9">
+                                                      <textarea row="2" v-model="formData.notes" class="form-control form-control-disabled font-size-15" placeholder="Add your note here for event!" id="note" required></textarea>
+                                                  </div>
+                                              </div>
+                                              <div class="row align-items-center justify-content-between w-100 mb-3">
+                                                  <div class="col-md-3">
+                                                      <label for="location" class="ml-0 mb-0">{{ $t('calendarEvent.location') }}</label>
+                                                  </div>
+                                                  <div class="col-md-9">
+                                                      <v-select :clearable="false"
+                                                                label="city"
+                                                                :reduce="location => location.id"
+                                                                class="style-chooser form-control-disabled font-size-15"
+                                                                v-model="formData.location_id"
+                                                                :options="locations"
+                                                                style="min-width:305px;"></v-select>
+                                                  </div>
+                                              </div>
+                                              <div class="row align-items-center justify-content-between w-100 mb-3">
+                                                  <div class="col-md-3">
+                                                      <label for="doctor" class="mr-2 mb-0">{{ $t('calendarEvent.doctor') }}</label>
+                                                  </div>
+                                                  <div class="col-md-9">
+                                                      <v-select :clearable="false"
+                                                                label="name"
+                                                                :reduce="doctor => doctor.id"
+                                                                class="style-chooser form-control-disabled font-size-15"
+                                                                v-model="formData.doctorId"
+                                                                :options="doctors"
+                                                                style="min-width: 305px;"></v-select>
+                                                  </div>
+                                              </div>
+                                             <div class="row align-items-center justify-content-between w-100 mb-3">
+                                                  <div class="col-md-3 pl-3 pr-0">
+                                                      <label for="product_group" class="mb-0">{{ $t('calendarEvent.product_group') }}</label>
+                                                  </div>
+                                                  <div class="col-md-9">
+                                                      <v-select :clearable="false"
+                                                                label="product_group_name"
+                                                                :reduce="product_group => product_group.product_group_id"
+                                                                class="style-chooser form-control-disabled font-size-15"
+                                                                v-model="formData.product_groups"
+                                                                :options="product_groups"></v-select>
+                                                  </div>
+                                              </div>
+                                              <div class="row align-items-center justify-content-between w-100 mb-3">
+                                                  <div class="col-md-3">
+                                                      <label for="start" class="mb-0">{{ $t('calendarEvent.start') }}</label>
+                                                  </div>
+                                                  <div class="col-md-9">
+                                                      <input type="datetime-local" v-model="formData.assignmentDate" class="form-control form-control-disabled" id="start" required style="max-width: 227px;">
+                                                  </div>
+                                              </div>
+                                              <div class="row align-items-center justify-content-between w-100 mb-3">
+                                                  <div class="col-md-3">
+                                                      <label for="duration" class="mb-0">{{ $t('calendarEvent.duration') }}</label>
+                                                  </div>
+                                                  <div class="col-md-9">
+                                                      <div style="display: flex;">
+                                                          <div class="calendar-modal-input__hour mr-4">
+                                                              <input type="number" v-model="formData.hours" class="form-control col-md-6 form-control-disabled" min="0" max="9" required style="max-width: 150px;">
+                                                          </div>
+                                                          <div class="calendar-modal-input__minutes">
+                                                              <input type="number" v-model="formData.minutes" min="0" max="59" class="form-control col-md-6 offset-1 form-control-disabled" step="5" required style="max-width: 150px;">
+                                                          </div>
+                                                      </div>
+                                                  </div>
+                                              </div>
+                                              <div class="row align-items-center justify-content-between w-100 mb-3">
+                                                  <div class="col-md-3">
+                                                      <label for="color">{{ $t('calendarEvent.labels') }}</label><br>
+                                                  </div>
+                                                  <div class="col-md-9">
+                                                      <template v-for="(item,index) in color">
+                                                          <b-form-radio class="custom-radio-color" inline v-model="formData.backgroundColor" :color="item.color" :value="item.value" :key="index">{{ item.label }}</b-form-radio>
+                                                      </template>
+                                                  </div>
+                                              </div> -->
+                                              <div class="modal-footer modal-footer-bt" style="width: 100%;">
+                                                  <template v-if="disabled">
+                                                      <button type="button" class="btn btn-secondary">Cancel</button>
+                                                      <button type="button" class="btn btn-primary" @click="saveAppointment">Save Appointment</button>
+                                                  </template>
                                               </div>
                                           </div>
-                                          <div class="iq-card-body p-0">
-                                              <ul class="profile-img-gallary d-flex flex-wrap p-0 m-0 font-size-12 overflow-y-scroll" style="max-height: 230px;">
-                                                  <li class="col-md-4 col-6"><a href="javascript:void(0);"><img src="../../assets/images/login/1.png" alt="gallary-image" class="img-fluid"></a><div class="text-center"><p class="mb-0 pb-0">x-ray_1.jpg</p><p>03-03-2021</p></div></li>
-                                                  <li class="col-md-4 col-6"><a href="javascript:void(0);"><img src="../../assets/images/login/2.png" alt="gallary-image" class="img-fluid"></a><div class="text-center"><p class="mb-0 pb-0">blood_test_1.jpg</p><p>10-03-2021</p></div></li>
-                                                  <li class="col-md-4 col-6"><a href="javascript:void(0);"><img src="../../assets/images/login/3.png" alt="gallary-image" class="img-fluid"></a><div class="text-center"><p class="mb-0 pb-0">imprint_1.jpg</p><p>09-03-2021</p></div></li>
-                                                  <li class="col-md-4 col-6"><a href="javascript:void(0);"><img src="../../assets/images/login/1.png" alt="gallary-image" class="img-fluid"></a><div class="text-center"><p class="mb-0 pb-0">imprint_2.jpg</p><p>17-04-2021</p></div></li>
-                                                  <li class="col-md-4 col-6"><a href="javascript:void(0);"><img src="../../assets/images/login/2.png" alt="gallary-image" class="img-fluid"></a><div class="text-center"><p class="mb-0 pb-0">x-ray_2.jpg</p><p>21-03-2021</p></div></li>
-                                                  <li class="col-md-4 col-6"><a href="javascript:void(0);"><img src="../../assets/images/login/3.png" alt="gallary-image" class="img-fluid"></a><div class="text-center"><p class="mb-0 pb-0">anamnesis_1.jpg</p><p>08-03-2021</p></div></li>
-                                                  <li class="col-md-4 col-6"><a href="javascript:void(0);"><img src="../../assets/images/login/1.png" alt="gallary-image" class="img-fluid"></a><div class="text-center"><p class="mb-0 pb-0">anamnesis_2.jpg</p><p>11-04-2021</p></div></li>
-                                                  <li class="col-md-4 col-6"><a href="javascript:void(0);"><img src="../../assets/images/login/2.png" alt="gallary-image" class="img-fluid"></a><div class="text-center"><p class="mb-0 pb-0">blood_test_2.jpg</p><p>21-04-2021</p></div></li>
-                                                  <li class="col-md-4 col-6"><a href="javascript:void(0);"><img src="../../assets/images/login/3.png" alt="gallary-image" class="img-fluid"></a><div class="text-center"><p class="mb-0 pb-0">x-ray_3.jpg</p><p>12-04-2021</p></div></li>
-                                              </ul>
-                                          </div>
-                                      </template>
-                                  </iq-card>
+                                      </form>
+                                  </b-modal>
+                                      <!--                                  <iq-card>-->
+                                      <!--                                      <template v-slot:body>-->
+                                      <!--                                          <div class="iq-card-header d-flex justify-content-between">-->
+                                      <!--                                              <div class="iq-header-title">-->
+                                      <!--                                                  <h4 class="card-title">{{ $t('EPR.overview.personalDoctors') }}</h4><hr />-->
+                                      <!--                                              </div>-->
+                                      <!--                                          </div>-->
+                                      <!--                                          <div class="iq-card-body">-->
+                                      <!--                                              <div class="row font-size-16 ">-->
+                                      <!--                                                  <div class="col-12 col-sm-7"><h6>{{ $t('EPR.overview.personalDentist') }}:</h6></div>-->
+                                      <!--                                                  <div v-if="patientsDentist" class="col-12 col-sm-5">{{patientsDentist.label}}</div>-->
+                                      <!--                                                  <div v-if="!patientsDentist" class="col-5">{{ $t('EPR.overview.notSelected') }}</div>-->
+                                      <!--                                                  <div class="col-7"><h6>{{ $t('EPR.overview.personalSurgeon') }}:</h6></div>-->
+                                      <!--                                                  <div v-if="patientsSurgeon" class="col-12 col-sm-5">{{patientsSurgeon.label}}</div>-->
+                                      <!--                                                  <div v-if="!patientsSurgeon" class="col-5">{{ $t('EPR.overview.notSelected') }}</div>-->
+                                      <!--                                              </div>-->
+                                      <!--                                          </div>-->
+                                      <!--                                      </template>-->
+                                      <!--                                  </iq-card>-->
+                                      <iq-card body-class="iq-card-body">
+                                          ar
+                                          <template v-slot:body>
+                                              <div class="iq-card-header d-flex justify-content-between">
+                                                  <div class="iq-header-title">
+                                                      <h4 class="card-title">{{ $t('EPR.overview.files') }} (9)</h4><hr />
+                                                  </div>
+                                              </div>
+                                              <div class="iq-card-body p-0">
+                                                  <ul class="profile-img-gallary d-flex flex-wrap p-0 m-0 font-size-12 overflow-y-scroll" style="max-height: 230px;">
+                                                      <li class="col-md-4 col-6"><a href="javascript:void(0);"><img src="../../assets/images/login/1.png" alt="gallary-image" class="img-fluid"></a><div class="text-center"><p class="mb-0 pb-0">x-ray_1.jpg</p><p>03-03-2021</p></div></li>
+                                                      <li class="col-md-4 col-6"><a href="javascript:void(0);"><img src="../../assets/images/login/2.png" alt="gallary-image" class="img-fluid"></a><div class="text-center"><p class="mb-0 pb-0">blood_test_1.jpg</p><p>10-03-2021</p></div></li>
+                                                      <li class="col-md-4 col-6"><a href="javascript:void(0);"><img src="../../assets/images/login/3.png" alt="gallary-image" class="img-fluid"></a><div class="text-center"><p class="mb-0 pb-0">imprint_1.jpg</p><p>09-03-2021</p></div></li>
+                                                      <li class="col-md-4 col-6"><a href="javascript:void(0);"><img src="../../assets/images/login/1.png" alt="gallary-image" class="img-fluid"></a><div class="text-center"><p class="mb-0 pb-0">imprint_2.jpg</p><p>17-04-2021</p></div></li>
+                                                      <li class="col-md-4 col-6"><a href="javascript:void(0);"><img src="../../assets/images/login/2.png" alt="gallary-image" class="img-fluid"></a><div class="text-center"><p class="mb-0 pb-0">x-ray_2.jpg</p><p>21-03-2021</p></div></li>
+                                                      <li class="col-md-4 col-6"><a href="javascript:void(0);"><img src="../../assets/images/login/3.png" alt="gallary-image" class="img-fluid"></a><div class="text-center"><p class="mb-0 pb-0">anamnesis_1.jpg</p><p>08-03-2021</p></div></li>
+                                                      <li class="col-md-4 col-6"><a href="javascript:void(0);"><img src="../../assets/images/login/1.png" alt="gallary-image" class="img-fluid"></a><div class="text-center"><p class="mb-0 pb-0">anamnesis_2.jpg</p><p>11-04-2021</p></div></li>
+                                                      <li class="col-md-4 col-6"><a href="javascript:void(0);"><img src="../../assets/images/login/2.png" alt="gallary-image" class="img-fluid"></a><div class="text-center"><p class="mb-0 pb-0">blood_test_2.jpg</p><p>21-04-2021</p></div></li>
+                                                      <li class="col-md-4 col-6"><a href="javascript:void(0);"><img src="../../assets/images/login/3.png" alt="gallary-image" class="img-fluid"></a><div class="text-center"><p class="mb-0 pb-0">x-ray_3.jpg</p><p>12-04-2021</p></div></li>
+                                                  </ul>
+                                              </div>
+                                          </template>
+                                      </iq-card>
                               </b-col>
                               <b-col lg="8">
                                  <div class="row">
@@ -705,12 +808,13 @@ import {
   trashEnquiry
 } from '../../services/enquiry'
 import { getDentists, getSurgeons } from '../../services/userService'
-import { getCountriesList, getRegionsList } from '../../services/commonCodeLists'
+import { getCountriesList, getRegionsList, getLocationsList } from '../../services/commonCodeLists'
 // import { getUsers } from '@/services/userService'
 import moment from 'moment'
 import { createAssignments, getAssignments } from '@/services/assignmentsService'
 import { fileUpload, getFiles } from '@/services/upDownLoad'
-
+import { getDoctorList } from '@/services/calendarService'
+import { getProductGroups } from '@/services/products'
 export default {
   name: 'ViewPatient',
   mounted () {
@@ -728,6 +832,9 @@ export default {
     this.getUsers()
     this.getAssignments()
     this.getFiles()
+    this.getLocations()
+    this.getDoctors()
+    this.getProductGroups(this.$i18n.locale)
   },
   computed: {
     isOkDisabled () {
@@ -850,6 +957,7 @@ export default {
       patientId: this.$route.params.patientId,
       modalAssigmentShow: false,
       modalNotesShow: false,
+      addAppointmentModal: false,
       generalNotes: '',
       notesGeneral: '',
       users: [],
@@ -865,10 +973,52 @@ export default {
       invoices: [],
       services: [],
       offers: [],
+      locations: [],
+      doctors: [],
+      product_groups: [],
+      color: [
+        {
+          label: 'Default',
+          color: 'default',
+          value: '#64D6E8'
+        },
+        {
+          label: 'Label 1',
+          color: 'label1',
+          value: '#F54E65'
+        },
+        {
+          label: 'Label 2',
+          color: 'label2',
+          value: '#9E1729'
+        },
+        {
+          label: 'Label 3',
+          color: 'label3',
+          value: '#148A9C'
+        },
+        {
+          label: 'Label 4',
+          color: 'label4',
+          value: '#E8C007'
+        },
+        {
+          label: 'Label 5',
+          color: 'label5',
+          value: '#9E8205'
+        }
+      ],
       formData: {
         enquiry: {
           id: +this.$route.params.patientId
         },
+        notes: '',
+        location_id: location.city,
+        doctor_id: '',
+        assignmentDate: '',
+        hours: '',
+        minutes: '',
+        backgroundColor: '',
         description: '',
         due_at: null,
         user: {}
@@ -1000,6 +1150,9 @@ export default {
   },
   watch: {
     'patient.notes_general' () {
+    },
+    '$i18n.locale' () {
+      this.getProductGroups(this.$i18n.locale)
     }
   },
   methods: {
@@ -1237,6 +1390,24 @@ export default {
     },
     cancelNotes () {
       this.notesFormData.content = ''
+    },
+    addAppointment () {
+      this.addAppointmentModal = true
+    },
+    getLocations () {
+      getLocationsList().then(response => {
+        this.locations = response
+      })
+    },
+    getDoctors () {
+      getDoctorList().then((response) => {
+        this.doctors = response
+      })
+    },
+    getProductGroups (lang) {
+      getProductGroups(lang).then((response) => {
+        this.product_groups = response
+      })
     }
   }
 }
