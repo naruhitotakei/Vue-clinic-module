@@ -77,7 +77,7 @@
                                           </b-col>
                                       </div>
                                   </iq-card>
-                                  <b-modal v-model="addAppointmentModal" no-close-on-esc no-close-on-backdrop size="lg" title="Appointment Details" ok-title="Save Changes" @ok="saveAppointment" @close="closeModal" cancel-title="Close" hide-footer>
+                                  <b-modal v-model="addAppointmentModal" no-close-on-esc no-close-on-backdrop size="lg" title="Appointment Details" ok-title="Save Changes" @ok="addAppointmentModal = false" @close="addAppointmentModal = false" cancel-title="Close" hide-footer>
                                       <form class="calendar-modal">
                                           <h3 v-if="modalTitle" style="text-align: center;">{{modalTitle}}</h3>
                                           <div class="form-row">
@@ -173,8 +173,8 @@
                                               </div> -->
                                               <div class="modal-footer modal-footer-bt" style="width: 100%;">
                                                   <template v-if="disabled">
-                                                      <button type="button" class="btn btn-secondary">Cancel</button>
-                                                      <button type="button" class="btn btn-primary" @click="saveAppointment">Save Appointment</button>
+                                                      <button type="button" class="btn btn-secondary" @click="addAppointmentModal = false">Cancel</button>
+                                                      <button type="button" class="btn btn-primary" @click="addAppointmentModal = false">Save Appointment</button>
                                                   </template>
                                               </div>
                                           </div>
