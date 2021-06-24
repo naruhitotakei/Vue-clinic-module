@@ -207,6 +207,7 @@
       "servicesSummary": "Services Summary"
     },
     "invoicesColumn": {
+      "type": "Type",
       "no": "Number",
       "date": "Date",
       "issuedBy": "Issued by",

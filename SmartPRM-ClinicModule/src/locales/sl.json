@@ -200,6 +200,7 @@
       "servicesSummary": "Povzetek storitev"
     },
     "invoicesColumn": {
+      "type": "Tip",
       "no": "Številka",
       "date": "Datum",
       "issuedBy": "Izdal",
