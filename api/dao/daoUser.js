@@ -150,7 +150,8 @@ const editProfile = ((request, response, profile) => {
 })
 
 const getDentists = (request, response, prm_client_id) => {
-  pool.query("SELECT u.id as code, concat(u.title, ' ', u.first_name , ' ', u.surname) AS label FROM users u WHERE function::text LIKE '%dentist%' AND active = true AND prm_client_id = " + prm_client_id, (error, results) => {
+  pool.query("SELECT u.id as code, concat(u.title, ' ', u.first_name , ' ', u.surname) AS label FROM users u " +
+      "WHERE function::text LIKE '%dentist%' AND active = true AND prm_client_id = " + prm_client_id, (error, results) => {
     if (error) {
       throw error
     }
@@ -168,7 +169,8 @@ const getSurgeons = (request, response, prm_client_id) => {
 }
 
 const getUsers = (request, response, prm_client_id, scope) => {
-    let statement = "SELECT users.id AS id, title, first_name AS name, surname, specialization, email AS mail, phone_number AS phone, position, prm_role_id AS role_id, role_name FROM users LEFT JOIN prm_role ON users.prm_role_id = prm_role.role_id "
+    let statement = "SELECT users.id AS id, title, first_name AS name, surname, specialization, email AS mail, phone_number AS phone, " +
+        "position, prm_role_id AS role_id, role_name FROM users LEFT JOIN prm_role ON users.prm_role_id = prm_role.role_id "
     statement += "LEFT JOIN prm_client ON users.prm_client_id = prm_client.id "
     statement += "WHERE prm_client.client_deleted = false "
     statement += "AND first_name::text NOT ILIKE '%emazing%' "

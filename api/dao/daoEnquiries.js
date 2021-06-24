@@ -9,10 +9,11 @@ const pool = new Pool({
 })
 var moment = require('moment');  
 
-const getEnquiries = (request, response, user_id, accessible_user_ids, prm_client_id, scope) => {
-    var statement = "SELECT enquiries.* FROM enquiries " 
+const getEnquiries = (request, response, user_id, accessible_user_ids, prm_client_id, scope, sortBy) => {
+    var statement = "SELECT enquiries.* , concat(u.title, ' ', u.first_name , ' ', u.surname) AS label FROM enquiries "
     statement +=    "JOIN clients ON enquiries.client_id = clients.id "
     statement +=    "LEFT JOIN prm_client ON prm_client.id = clients.id  "
+    statement +=    "LEFT JOIN users u ON u.id = enquiries.prm_dentist_user_id  "
     statement +=    "WHERE enquiries.trashed IS FALSE ";
     statement +=    "AND clients.trashed IS FALSE ";
     statement +=    "AND prm_client.client_deleted IS FALSE ";
@@ -133,6 +134,7 @@ const updateEnquiry = (req, res, id, enquiry) => {
             statement +=" WHERE id=" + id
             console.log("Update enquiry status:" + statement)
             pool.query(statement , (error, results) => {
+                console.log(error)
                 if (error) {
                     throw error
                 }

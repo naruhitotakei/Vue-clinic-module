@@ -198,6 +198,7 @@ export default {
       this.isDataLoaded = false
       getEnquires(sort).then(response => {
         this.isDataLoaded = true
+        console.log(response)
         this.patients = response.map(obj => (
           { ...obj,
             editable: false,
@@ -205,7 +206,7 @@ export default {
             country: 'n/a',
             last_visit: '2011/04/25',
             next_visit: '2011/04/30',
-            personal_dentist: 'Doctor3'
+            personal_dentist: obj.label
           }
         ))
         this.setTotalRows(this.patients.length)
@@ -222,8 +223,7 @@ export default {
       let array = [value]
       this.filterOn = array
     },
-    sortSelected (value) {
-      console.log(this.sortBy)
+    sortSelected () {
       this.getPatients(this.sortBy.sort.toUpperCase())
     }
   },
