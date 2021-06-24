@@ -174,7 +174,7 @@
                                               <div class="modal-footer modal-footer-bt" style="width: 100%;">
                                                   <template v-if="disabled">
                                                       <button type="button" class="btn btn-secondary" @click="addAppointmentModal = false">Cancel</button>
-                                                      <button type="button" class="btn btn-primary" @click="addAppointmentModal = false">Save Appointment</button>
+                                                      <button type="button" class="btn btn-primary" @click="saveAppointment">Save Appointment</button>
                                                   </template>
                                               </div>
                                           </div>
@@ -1366,6 +1366,13 @@ export default {
         enquiry: {
           id: +this.patientId
         },
+        notes: '',
+        location_id: location.city,
+        doctor_id: '',
+        assignmentDate: '',
+        hours: '',
+        minutes: '',
+        backgroundColor: '',
         description: '',
         due_at: null,
         user: {}
@@ -1393,6 +1400,10 @@ export default {
     },
     addAppointment () {
       this.addAppointmentModal = true
+    },
+    saveAppointment  () {
+      this.addAppointmentModal = false
+      this.formData = this.defaultFormData()
     },
     getLocations () {
       getLocationsList().then(response => {
