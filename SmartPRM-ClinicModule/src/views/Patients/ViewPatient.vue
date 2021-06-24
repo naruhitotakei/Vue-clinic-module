@@ -278,7 +278,7 @@
                                            </div>
                                          </div>
                                          <ul class="list-inline m-0 overflow-y-scroll" style="max-height: 300px;">
-                                           <li v-for="(item,index) in openAssignments" :key="index + item.due_at"
+                                           <li v-for="(item,index) in assignments" :key="index + item.due_at"
                                                class="d-flex align-items-center justify-content-between mb-3  "
                                                :style="{
                                                   'background': index === 0 && '#c3e6cb'
@@ -287,7 +287,7 @@
                                              <div class="w-100">
                                                <p class="pl-2 pr-2 mb-0">{{item.description}}</p>
                                                <div class="row justify-content-between p-1 w-100 ml-0 pl-2 pr-2 line-height">
-                                                 <h6>{{item.todoname}}</h6>
+                                                 <h6>{{item.name}}</h6>
                                                  <p class="mb-0">{{item.due_at | formatDate}}</p>
                                                </div>
                                              </div>
@@ -801,6 +801,7 @@ import {
   updateEnquiry,
   getEnquiryNotes,
   getEnquiryAppointments,
+  getEnquiryAssignments,
   getEnquiryInvoices,
   getEnquiryOffers,
   getEnquiryServices,
@@ -1250,6 +1251,11 @@ export default {
         this.timeSinceFirstVisit = response.length && response[0].date
       }
       )
+    },
+    getPatientAssignments (id) {
+      getEnquiryAssignments(id).then(response => {
+        this.assignments = response
+      })
     },
     getPatientInvoices (id) {
       getEnquiryInvoices(id).then(response => {

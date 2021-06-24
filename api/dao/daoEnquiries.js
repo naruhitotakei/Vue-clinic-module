@@ -9,7 +9,7 @@ const pool = new Pool({
 })
 var moment = require('moment');  
 
-const getEnquiries = (request, response, user_id, accessible_user_ids, prm_client_id, scope, sortBy) => {
+const getEnquiries = (request, response, user_id, accessible_user_ids, prm_client_id, scope) => {
     var statement = "SELECT enquiries.* FROM enquiries " 
     statement +=    "JOIN clients ON enquiries.client_id = clients.id "
     statement +=    "LEFT JOIN prm_client ON prm_client.id = clients.id  "
@@ -28,10 +28,8 @@ const getEnquiries = (request, response, user_id, accessible_user_ids, prm_clien
                 statement +=" OR enquiries.user_id=" + accessible_user_ids[acc_id];
             } 
         }
-        statement += ") ";
+        statement += ") ";    
     }
-    statement +=  ` ORDER BY enquiries.last_name ${sortBy} `
-    console.log(statement)
     pool.query(statement, (error, results) => {
         if (error) {
             throw error
@@ -133,7 +131,7 @@ const updateEnquiry = (req, res, id, enquiry) => {
         if (statement.length !== initialUpdateStatement.length) {
             statement = statement.slice(0, -1)
             statement +=" WHERE id=" + id
-            console.log("Update enquiry status: " + statement)
+            console.log("Update enquiry status:" + statement)
             pool.query(statement , (error, results) => {
                 if (error) {
                     throw error
@@ -192,6 +190,21 @@ const getEnquiryAppointments = (request, response, enquiryId) => {
     })
 }
 
+const getEnquiryAssignments = (request, response, enquiryId) => {
+    let statement = ["SELECT enquiries.id AS id, todos.description AS description, todos.due_at AS due_at, concat(title, ' ', first_name, ' ', surname) AS name FROM todos ",
+                     "LEFT JOIN enquiries ON todos.enquiry_id = enquiries.id",
+                     "LEFT JOIN users ON todos.user_id = users.id",
+                     "WHERE completed = FALSE and enquiries.id = $1",
+                     "ORDER BY due_at ASC"].join('\n')
+    pool.query(statement, [enquiryId], (error, results) => {
+        console.log(error)
+        if (error) {
+            throw error
+        }
+        response.status(200).json(results.rows)
+    })
+}
+
 const getEnquiryInvoices = (request, response, enquiryId) => {
     pool.query("SELECT * FROM invoice WHERE invoice_type != 'Offer' AND enquiries_id = $1", [enquiryId], (error, results) => {
         if (error) {
@@ -237,6 +250,7 @@ module.exports = {
   trashEnquiry,
   getEnquiryNotes,
   getEnquiryAppointments,
+  getEnquiryAssignments,
   getEnquiryInvoices,
   getEnquiryOffers,
   getEnquiryServices,
