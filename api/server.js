@@ -124,7 +124,7 @@ app.post('/api/profile/change-lang', async function(req, res) {
 
 app.get('/api/dentists', async function(req, res) {
     if (req.session.prm_user) { 
-        daoUser.getDentists(req, res)
+        daoUser.getDentists(req, res, req.session.prm_user.prm_client_id)
     } else {
        res.status(200).json("NOK: user not logged in")
     }    
@@ -132,7 +132,7 @@ app.get('/api/dentists', async function(req, res) {
 
 app.get('/api/surgeons', async function (req, res) {
     if (req.session.prm_user) {
-        daoUser.getSurgeons(req, res)
+        daoUser.getSurgeons(req, res, req.session.prm_user.prm_client_id)
     } else {
         res.status(200).json("NOK: user not logged in")
     }
@@ -548,7 +548,7 @@ app.post('/api/enquiries', (req, res) => {
       res.status(401).json("OK: user unauthorized")
 });
 
-app.put('/api/enquiries/:id', (req, res) => {
+app.put('/api/enquiries/:id/update-enquiry', (req, res) => {
   const enquiry = req.body
   const id = req.params.id
   if(req.session.prm_user && req.session.prm_user.permissions && checkPermission(req.session.prm_user.permissions, enquiriesPermission))
@@ -576,20 +576,6 @@ app.get('/apitest/createenquiries', (req, res) => {
     lead_owner_id: 0
   }
   daoEnquiries.createEnquiry(req, res, enquiry)
-});
-
-app.get('/apitest/updateenquiries/:id', (req, res) => {
-  const enquiry = {
-    name: 'aaaaaa',
-    phone: '123',
-    email: 'email1',
-    client_id: 23,
-    gender: 'male',
-    last_name: 'priimek',
-    lead_owner_id: 0
-  }
-  const id = req.params.id
-  daoEnquiries.updateEnquiry(req, res, id, enquiry)
 });
 
 app.get('/apitest/deleteenquiries/:id', (req, res) => {

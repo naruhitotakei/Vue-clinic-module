@@ -123,7 +123,7 @@ export async function createEnquiry (enquiry) {
 }
 
 export async function updateEnquiry (id, enquiry) {
-  const rawResponse = await fetch('/api/enquiries/' + id, {
+  const rawResponse = await fetch('/api/enquiries/' + id + '/update-enquiry', {
     method: 'PUT',
     credentials: 'same-origin',
     headers: {

@@ -131,7 +131,7 @@ const updateEnquiry = (req, res, id, enquiry) => {
         if (statement.length !== initialUpdateStatement.length) {
             statement = statement.slice(0, -1)
             statement +=" WHERE id=" + id
-            console.log(statement)
+            console.log("Update enquiry status: " + statement)
             pool.query(statement , (error, results) => {
                 if (error) {
                     throw error
