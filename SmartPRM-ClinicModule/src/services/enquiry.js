@@ -1,5 +1,5 @@
-export async function getEnquires () {
-  const rawResponse = await fetch('/api/enquiries', {
+export async function getEnquires (sort) {
+  const rawResponse = await fetch('/api/enquiries?sort=' + sort, {
     method: 'GET',
     credentials: 'same-origin',
     headers: {

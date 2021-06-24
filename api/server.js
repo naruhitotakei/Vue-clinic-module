@@ -471,8 +471,9 @@ app.put('/api/users/:id', (req, res) => {
 ///////////////////////////////////
 
 app.get('/api/enquiries', (req, res) => {
+  let sortBy = req.query.sort
   if(req.session.prm_user && req.session.prm_user.permissions && checkPermission(req.session.prm_user.permissions, enquiriesPermission))
-      daoEnquiries.getEnquiries(req, res, req.session.prm_user.id, req.session.prm_user.accessible_user_ids, req.session.prm_user.prm_client_id, getScope(req.session.prm_user.permissions, calendarPermission))
+      daoEnquiries.getEnquiries(req, res, req.session.prm_user.id, req.session.prm_user.accessible_user_ids, req.session.prm_user.prm_client_id, getScope(req.session.prm_user.permissions, calendarPermission), sortBy)
   else
       res.status(401).json("OK: user unauthorized")
 });
@@ -795,7 +796,7 @@ app.get('/api/report/emazing/services/:statrtdate/:enddate/:countrie', (req, res
   const enddate = req.params.enddate
   const countrie = req.params.countrie
   if(req.session.prm_user && req.session.prm_user.permissions && checkPermission(req.session.prm_user.permissions, reportingEmazingPermission))
-      daoReporting.getEmazingServicesReport(req, res, statrtdate, enddate, countrie)
+      daoReporting.getEmazingServicesReport(req, res, statrtdate, enddate, countrie, req.session.prm_user.prm_client_id, getScope(req.session.prm_user.permissions, reportingEmazingPermission))
   else
       res.status(401).json("OK: user unauthorized")
 });
