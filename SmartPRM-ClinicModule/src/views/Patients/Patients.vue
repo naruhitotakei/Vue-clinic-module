@@ -23,6 +23,23 @@
                                   </v-select>
                                 </b-form-group>
                             </iq-card>
+                          <iq-card class="mt-4 ml-3 mt-sm-0">
+                            <b-form-group label-for="searchOptions" label="Sort By:">
+                              <v-select class="patients" label="text"
+                                        :clearable="false"
+                                        :options="sortOptions"
+                                        @input="sortSelected"
+                                        v-model="sortBy"
+                              >
+                                <template v-slot:option="option">
+                                  <div class="row justify-content-between">
+                                    {{option.text}}
+                                    <i :class="{'ri-arrow-up-s-line': option.sort === 'asc', 'ri-arrow-down-s-line': option.sort === 'desc',}"></i>
+                                  </div>
+                                </template>
+                              </v-select>
+                            </b-form-group>
+                          </iq-card>
                         </div>
                     </template>
                     <template v-slot:body>
@@ -139,7 +156,7 @@ export default {
   name: 'UiDataTable',
   async mounted () {
     xray.index()
-    this.getPatients()
+    this.getPatients('ASC')
   },
   methods: {
     add () {
@@ -177,8 +194,9 @@ export default {
     emailPatient (item) {
       console.log('Email sent to patients address: ' + item.email)
     },
-    async getPatients () {
-      getEnquires().then(response => {
+    async getPatients (sort) {
+      this.isDataLoaded = false
+      getEnquires(sort).then(response => {
         this.isDataLoaded = true
         this.patients = response.map(obj => (
           { ...obj,
@@ -203,6 +221,10 @@ export default {
     filterSelected (value) {
       let array = [value]
       this.filterOn = array
+    },
+    sortSelected (value) {
+      console.log(this.sortBy)
+      this.getPatients(this.sortBy.sort.toUpperCase())
     }
   },
   data () {
@@ -229,6 +251,11 @@ export default {
         { value: 'next_visit', text: 'Next Visit' },
         { value: 'personal_dentist', text: 'Personal Dentist' }
       ],
+      sortOptions: [
+        { value: 'last_name', text: 'Last Name', sort: 'asc' },
+        { value: 'last_name', text: 'Last Name', sort: 'desc' }
+      ],
+      sortBy: '',
       columns: [
         { label: this.$t('patients.patientsColumn.name'), key: 'name', class: 'text-left' },
         { label: this.$t('patients.patientsColumn.lastName'), key: 'last_name', class: 'text-left' },
