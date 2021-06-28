@@ -36,7 +36,6 @@
       hide-footer
       >
     <form class="calendar-modal">
-      <h3 v-if="modalTitle" style="text-align: center;">{{modalTitle}}</h3>
         <div class="form-row">
           <div class="row align-items-center justify-content-between w-100 mb-3">
             <div class="col-md-3">
@@ -75,16 +74,20 @@
            <label for="location" class="ml-0 mb-0">{{ $t('calendarEvent.location') }}</label>
          </div>
          <div class="col-md-9">
-           <v-select
-               :disabled="disabled"
-               :clearable="false"
-               label="city"
-               :reduce="location => location.id"
-               class="style-chooser form-control-disabled font-size-15"
-               v-model="formData.locationId"
-               :options="locations"
-               style="min-width:305px;"
-           ></v-select>
+             <template v-if="locations.length == 1">
+                 <p v-model="formData.locationId" 
+                    class="text-black ml-0 mb-0"> {{ locations[0].city }} </p>
+             </template>
+             <template v-else>
+                 <v-select :disabled="disabled"
+                           :clearable="false"
+                           label="city"
+                           :reduce="location => location.id"
+                           class="style-chooser form-control-disabled font-size-15"
+                           v-model="formData.locationId"
+                           :options="locations"
+                           style="min-width:305px;"></v-select>
+             </template>
          </div>
        </div>
           <div class="row align-items-center justify-content-between w-100 mb-3">
@@ -203,7 +206,10 @@ export default {
     },
     getEvents () {
       return this.events
-    }
+    },
+    selected () {
+      return this.locations.length == 1 ? this.formData.locationId : null
+    },
   },
   props: {
     resourcesOuter: Array,
@@ -345,7 +351,7 @@ export default {
     this.getProductGroups(this.$i18n.locale)
     xray.index()
   },
-  methods: {
+   methods: {
     closeModal () {
       this.$emit('setModalShow', false)
       this.formData = this.defaultAppointment()

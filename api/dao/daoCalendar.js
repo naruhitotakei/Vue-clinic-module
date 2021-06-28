@@ -80,7 +80,7 @@ const updateAppointments = (request, response, id, appointments) => {
     if (appointments.product_groups) statement += "product_group_id='" + appointments.product_groups + "',"
     if (appointments.assignmentDate) statement += "date='" + appointments.assignmentDate + "',"
     if (appointments.time) statement += "time='" + time + "'"
-    statement += " WHERE appointments.id = " + id
+    statement += " WHERE id = " + id
     console.log(statement)
     pool.query(statement , (error, results) => {
         console.log(error)

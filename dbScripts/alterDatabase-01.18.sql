@@ -33,6 +33,8 @@ UPDATE users SET prm_role_id = 4 WHERE id = 140;
 
 UPDATE users SET prm_client_id = NULL WHERE id IN (1, 53, 130, 140, 150, 151, 153, 154, 157);
 
+UPDATE users SET function = NULL WHERE id IN (78, 102, 154, 155);
+
 --############################################################
 --# Adding prm_client FK to enquiry table
 --############################################################
