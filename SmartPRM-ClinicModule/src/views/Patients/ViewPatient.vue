@@ -241,7 +241,7 @@
                                            </div>
                                          </div>
                                          <ul class="list-inline m-0 overflow-y-scroll" style="max-height: 300px;">
-                                           <li v-for="(item,index) in openAssignments" :key="index + item.due_at"
+                                           <li v-for="(item,index) in assignments" :key="index + item.due_at"
                                                class="d-flex align-items-center justify-content-between mb-3  "
                                                :style="{
                                                   'background': index === 0 && '#c3e6cb'
@@ -250,7 +250,7 @@
                                              <div class="w-100">
                                                <p class="pl-2 pr-2 mb-0">{{item.description}}</p>
                                                <div class="row justify-content-between p-1 w-100 ml-0 pl-2 pr-2 line-height">
-                                                 <h6>{{item.todoname}}</h6>
+                                                 <h6>{{item.name}}</h6>
                                                  <p class="mb-0">{{item.due_at | formatDate}}</p>
                                                </div>
                                              </div>
@@ -328,7 +328,7 @@
                                            </div>
                                          </div>
                                          <ul class="list-inline m-0 overflow-y-scroll" style="max-height: 300px;">
-                                           <li v-for="(item,index) in openAssignments" :key="index + item.due_at"
+                                           <li v-for="(item,index) in assignments" :key="index + item.due_at"
                                                class="d-flex align-items-center justify-content-between mb-3  "
                                                :style="{
                                                   'background': index === 0 && '#c3e6cb'
@@ -337,7 +337,7 @@
                                              <div class="w-100">
                                                <p class="pl-2 pr-2 mb-0">{{item.description}}</p>
                                                <div class="row justify-content-between p-1 w-100 ml-0 pl-2 pr-2 line-height">
-                                                 <h6>{{item.todoname}}</h6>
+                                                 <h6>{{item.name}}</h6>
                                                  <p class="mb-0">{{item.due_at | formatDate}}</p>
                                                </div>
                                              </div>
@@ -812,7 +812,7 @@ import { getDentists, getSurgeons } from '../../services/userService'
 import { getCountriesList, getRegionsList, getLocationsList } from '../../services/commonCodeLists'
 // import { getUsers } from '@/services/userService'
 import moment from 'moment'
-import { createAssignments, getAssignments } from '@/services/assignmentsService'
+import { createAssignments } from '@/services/assignmentsService'
 import { fileUpload, getFiles } from '@/services/upDownLoad'
 import { getDoctorList } from '@/services/calendarService'
 import { getProductGroups } from '@/services/products'
@@ -823,6 +823,7 @@ export default {
     this.getPatient(this.patientId)
     this.getPatientNotes(this.patientId)
     this.getPatientAppointments(this.patientId)
+    this.getPatientAssignments(this.patientId)
     this.getCountries()
     this.getRegions()
     this.getDentists()
@@ -831,7 +832,6 @@ export default {
     this.getPatientOffers(this.patientId)
     this.getPatientServices(this.patientId)
     this.getUsers()
-    this.getAssignments()
     this.getFiles()
     this.getLocations()
     this.getDoctors()
@@ -1362,11 +1362,6 @@ export default {
       //   this.users = response.filter(item => item.prm_role_id === 4)
       // })
     },
-    getAssignments () {
-      getAssignments('all').then(response => {
-        this.assignments = response.filter(item => item.enquiry_id === +this.$route.params.patientId)
-      })
-    },
     defaultFormData () {
       return {
         enquiry: {
@@ -1390,7 +1385,7 @@ export default {
     addAssignments () {
       console.log(this.formData)
       createAssignments(this.formData).then(() => {
-        this.getAssignments()
+        this.getPatientAssignments()
         this.formData = this.defaultFormData()
       })
     },

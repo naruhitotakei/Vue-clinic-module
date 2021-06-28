@@ -59,7 +59,7 @@ export async function getEnquiryAppointments (id) {
   return rawResponse.json()
 }
 
-export async function getEnquiryAssignments(id) {
+export async function getEnquiryAssignments (id) {
   const rawResponse = await fetch(`/api/enquiries/${id}/assignments`, {
     method: 'GET',
     credentials: 'same-origin',
