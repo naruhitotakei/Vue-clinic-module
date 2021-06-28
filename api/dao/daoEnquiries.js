@@ -92,7 +92,7 @@ const createEnquiry = (req, res, enquiry) => {
 }
 
 const updateEnquiry = (req, res, id, enquiry) => {
-    pool.query("SELECT enquiries.* FROM enquiries JOIN clients ON enquiries.client_id = clients.id WHERE enquiries.trashed IS FALSE AND clients.slug = 'primadent_si' AND enquiries.id = $1", [id] , (error, results) => {
+    pool.query("SELECT * FROM enquiries WHERE enquiries.id = $1", [id] , (error, results) => {
         var currentEnquiry = results.rows[0];
         time = moment(new Date).format('YYYY-MM-DD HH:mm:ss');
         var initialUpdateStatement = "UPDATE enquiries SET "
@@ -132,7 +132,6 @@ const updateEnquiry = (req, res, id, enquiry) => {
         if (statement.length !== initialUpdateStatement.length) {
             statement = statement.slice(0, -1)
             statement +=" WHERE id=" + id
-            console.log("Update enquiry status:" + statement)
             pool.query(statement , (error, results) => {
                 console.log(error)
                 if (error) {
