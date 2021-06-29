@@ -807,7 +807,7 @@ import {
   createEnquiryNotes,
   trashEnquiry
 } from '../../services/enquiry'
-import { getDentists, getSurgeons } from '../../services/userService'
+import { getDentists, getSurgeons, sso } from '../../services/userService'
 import { getCountriesList, getRegionsList, getLocationsList } from '../../services/commonCodeLists'
 // import { getUsers } from '@/services/userService'
 import moment from 'moment'
@@ -833,9 +833,9 @@ export default {
     this.getUsers()
     this.getFiles()
     this.getLocations()
+    this.getUserLogin()
     this.getDoctors()
     this.getProductGroups(this.$i18n.locale)
-    // this.calendarApi = this.$refs.calendar.getApi()
   },
   computed: {
     isOkDisabled () {
@@ -955,6 +955,7 @@ export default {
   },
   data () {
     return {
+      logedInUser: {},
       calendarApi: null,
       patientId: this.$route.params.patientId,
       modalAssigmentShow: false,
@@ -1447,7 +1448,17 @@ export default {
     },
     getDoctors () {
       getDoctorList().then((response) => {
+        console.log(response)
         this.doctors = response
+        this.formAppointments.doctor_id = response.find(doctor => doctor.name === this.logedInUser.name)
+      })
+    },
+    getUserLogin () {
+      sso().then(response => {
+        if (typeof response !== 'string') {
+          console.log(response)
+          this.logedInUser = response
+        }
       })
     },
     getProductGroups (lang) {
