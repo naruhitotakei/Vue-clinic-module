@@ -40,13 +40,24 @@ export async function fileUpload (file, id) {
 export async function userAvatarUpload (file, id) {
   let data = new FormData()
   data.append('file', file)
-  const rawResponse = await fetch(`/api/files/user_avatar/${id}`, {
+  const rawResponse = await fetch(`/api/files/avatar/${id}`, {
     method: 'POST',
     credentials: 'same-origin',
     headers: {
       'Accept': 'application/json'
     },
     body: data
+  })
+  return rawResponse.json()
+}
+
+export async function getUserAvatar (id) {
+  const rawResponse = await fetch(`/api/files/avatar/${id}`, {
+    method: 'GET',
+    credentials: 'same-origin',
+    headers: {
+      'Accept': 'application/json'
+    }
   })
   return rawResponse.json()
 }

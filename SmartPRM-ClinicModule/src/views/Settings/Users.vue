@@ -5,7 +5,7 @@
                 <iq-card body-class="text-center">
                     <template v-slot:body>
                         <div class="doc-profile">
-                            <img class="rounded-circle img-fluid avatar-80" :src="'/api/files/user_avatar-' + user.id + '?' + avatar_version" alt="profile">
+                            <img class="rounded-circle img-fluid avatar-80" :src="'/api/files/avatar-' + user.id + '?' + avatar_version" alt="profile">
                         </div>
                         <div class="iq-doc-info mt-3">
                             <h4> {{user.title}} {{user.name}} {{user.surname}} </h4>
@@ -39,7 +39,7 @@
                                 class="profile-pic height-150 width-150 object-fit"
                                 style="object-fit: cover"
                                 fluid
-                                :src="'/api/files/user_avatar-' + formData.id + '?' + avatar_version"
+                                :src="'/api/files/avatar-' + formData.id + '?' + avatar_version"
                                 alt="profile-pic" />
                             <input type="hidden" v-model="formData.img">
                             <div class="p-image">

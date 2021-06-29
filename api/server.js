@@ -994,20 +994,20 @@ app.get('/api/files/:key', async function(req, res) {
     res.status(401).json("OK: user unauthorized")
 });
 
-app.post('/api/files/user_avatar/:id', async function(req, res) {
+app.post('/api/files/avatar/:id', async function(req, res) {
   let id = req.params.id
   if(req.session.prm_user) {
-    const rv = await awsS3.upload('user_avatar-' + id, req.files.file.data, req.files.file.mimetype)
+    const rv = await awsS3.upload('avatar-' + id + '/', req.files.file.data, req.files.file.mimetype)
     res.status(200).json(rv.status)
   }
   else
     res.status(401).json("OK: user unauthorized")
 });
 
-app.get('/api/files/user_avatar/:id', async function(req, res) {
+app.get('/api/files/avatar/:id', async function(req, res) {
   let id = req.params.id
   if(req.session.prm_user) {
-    const rv = await awsS3.download('user_avatar-' + id)
+    const rv = await awsS3.download('avatar-' + id + '/')
     if (rv.status=='OK') {
       const download = Buffer.from(rv.data.Body)
       res.end(download)
