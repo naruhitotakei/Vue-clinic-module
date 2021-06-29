@@ -31,6 +31,7 @@ const getEnquiries = (request, response, user_id, accessible_user_ids, prm_clien
         }
         statement += ") ";    
     }
+    statement += "ORDER BY last_name ASC"
     pool.query(statement, (error, results) => {
         if (error) {
             throw error
