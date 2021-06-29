@@ -74,11 +74,6 @@
            <label for="location" class="ml-0 mb-0">{{ $t('calendarEvent.location') }}</label>
          </div>
          <div class="col-md-9">
-             <template v-if="locations.length == 1">
-                 <p v-model="formData.locationId" 
-                    class="text-black ml-0 mb-0"> {{ locations[0].city }} </p>
-             </template>
-             <template v-else>
                  <v-select :disabled="disabled"
                            :clearable="false"
                            label="city"
@@ -87,7 +82,6 @@
                            v-model="formData.locationId"
                            :options="locations"
                            style="min-width:305px;"></v-select>
-             </template>
          </div>
        </div>
           <div class="row align-items-center justify-content-between w-100 mb-3">
@@ -206,10 +200,7 @@ export default {
     },
     getEvents () {
       return this.events
-    },
-    selected () {
-      return this.locations.length == 1 ? this.formData.locationId : null
-    },
+    }
   },
   props: {
     resourcesOuter: Array,
@@ -447,7 +438,7 @@ export default {
         eventResourceId: '',
         patientId: '',
         doctorId: '',
-        locationId: '',
+        locationId: this.locations.length == 1 ? this.locations[0].city : '',
         enquiry_id: ''
       }
     },
