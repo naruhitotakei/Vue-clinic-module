@@ -79,7 +79,6 @@
                                   </iq-card>
                                   <b-modal v-model="addAppointmentModal" no-close-on-esc no-close-on-backdrop size="lg" title="Appointment Details" ok-title="Save Changes" @ok="addAppointmentModal = false" @close="addAppointmentModal = false" cancel-title="Close" hide-footer>
                                       <form class="calendar-modal">
-                                          <h3 v-if="modalTitle" style="text-align: center;">{{modalTitle}}</h3>
                                           <div class="form-row">
                                               <div class="row align-items-center justify-content-between w-100 mb-3">
                                                   <div class="col-md-3">
@@ -94,7 +93,7 @@
                                                       <label for="notes">{{ $t('calendarEvent.note') }}</label>
                                                   </div>
                                                   <div class="col-md-9">
-                                                      <textarea row="2" v-model="formData.notes" class="form-control form-control-disabled font-size-15" placeholder="Add your note here for event!" id="note" required></textarea>
+                                                      <textarea row="2" v-model="formAppointments.notes" class="form-control form-control-disabled font-size-15" placeholder="Add your note here for event!" id="note" required></textarea>
                                                   </div>
                                               </div>
                                               <div class="row align-items-center justify-content-between w-100 mb-3">
@@ -106,7 +105,7 @@
                                                                 label="city"
                                                                 :reduce="location => location.id"
                                                                 class="style-chooser form-control-disabled font-size-15"
-                                                                v-model="formData.location_id"
+                                                                v-model="formAppointments.location_id"
                                                                 :options="locations"
                                                                 style="min-width:305px;"></v-select>
                                                   </div>
@@ -120,7 +119,7 @@
                                                                 label="name"
                                                                 :reduce="doctor => doctor.id"
                                                                 class="style-chooser form-control-disabled font-size-15"
-                                                                v-model="formData.doctorId"
+                                                                v-model="formAppointments.doctorId"
                                                                 :options="doctors"
                                                                 style="min-width: 305px;"></v-select>
                                                   </div>
@@ -134,7 +133,7 @@
                                                                 label="product_group_name"
                                                                 :reduce="product_group => product_group.product_group_id"
                                                                 class="style-chooser form-control-disabled font-size-15"
-                                                                v-model="formData.product_groups"
+                                                                v-model="formAppointments.product_groups"
                                                                 :options="product_groups"></v-select>
                                                   </div>
                                               </div>
@@ -143,7 +142,7 @@
                                                       <label for="start" class="mb-0">{{ $t('calendarEvent.start') }}</label>
                                                   </div>
                                                   <div class="col-md-9">
-                                                      <input type="datetime-local" v-model="formData.assignmentDate" class="form-control form-control-disabled" id="start" required style="max-width: 227px;">
+                                                      <input type="datetime-local" v-model="formAppointments.assignmentDate" class="form-control form-control-disabled" id="start" required style="max-width: 227px;">
                                                   </div>
                                               </div>
                                               <div class="row align-items-center justify-content-between w-100 mb-3">
@@ -153,10 +152,10 @@
                                                   <div class="col-md-9">
                                                       <div style="display: flex;">
                                                           <div class="calendar-modal-input__hour mr-4">
-                                                              <input type="number" v-model="formData.hours" class="form-control col-md-6 form-control-disabled" min="0" max="9" required style="max-width: 150px;">
+                                                              <input type="number" v-model="formAppointments.hours" class="form-control col-md-6 form-control-disabled" min="0" max="9" required style="max-width: 150px;">
                                                           </div>
                                                           <div class="calendar-modal-input__minutes">
-                                                              <input type="number" v-model="formData.minutes" min="0" max="59" class="form-control col-md-6 offset-1 form-control-disabled" step="5" required style="max-width: 150px;">
+                                                              <input type="number" v-model="formAppointments.minutes" min="0" max="59" class="form-control col-md-6 offset-1 form-control-disabled" step="5" required style="max-width: 150px;">
                                                           </div>
                                                       </div>
                                                   </div>
@@ -167,10 +166,10 @@
                                                   </div>
                                                   <div class="col-md-9">
                                                       <template v-for="(item,index) in color">
-                                                          <b-form-radio class="custom-radio-color" inline v-model="formData.backgroundColor" :color="item.color" :value="item.value" :key="index">{{ item.label }}</b-form-radio>
+                                                          <b-form-radio class="custom-radio-color" inline v-model="formAppointments.backgroundColor" :color="item.color" :value="item.value" :key="index">{{ item.label }}</b-form-radio>
                                                       </template>
                                                   </div>
-                                              </div> -->
+                                              </div>
                                               <div class="modal-footer modal-footer-bt" style="width: 100%;">
                                                   <template v-if="disabled">
                                                       <button type="button" class="btn btn-secondary" @click="addAppointmentModal = false">Cancel</button>
@@ -814,7 +813,7 @@ import { getCountriesList, getRegionsList, getLocationsList } from '../../servic
 import moment from 'moment'
 import { createAssignments } from '@/services/assignmentsService'
 import { fileUpload, getFiles } from '@/services/upDownLoad'
-import { getDoctorList } from '@/services/calendarService'
+import { createCalendar, createCalendarLabel, getDoctorList } from '@/services/calendarService'
 import { getProductGroups } from '@/services/products'
 export default {
   name: 'ViewPatient',
@@ -836,6 +835,7 @@ export default {
     this.getLocations()
     this.getDoctors()
     this.getProductGroups(this.$i18n.locale)
+    // this.calendarApi = this.$refs.calendar.getApi()
   },
   computed: {
     isOkDisabled () {
@@ -955,6 +955,7 @@ export default {
   },
   data () {
     return {
+      calendarApi: null,
       patientId: this.$route.params.patientId,
       modalAssigmentShow: false,
       modalNotesShow: false,
@@ -1013,6 +1014,11 @@ export default {
         enquiry: {
           id: +this.$route.params.patientId
         },
+        due_at: null,
+        user: {}
+      },
+      formAppointments: {
+        patientId: null,
         notes: '',
         location_id: location.city,
         doctor_id: '',
@@ -1021,8 +1027,7 @@ export default {
         minutes: '',
         backgroundColor: '',
         description: '',
-        due_at: null,
-        user: {}
+        product_groups: ''
       },
       notesFormData: {
         enquiry_id: +this.$route.params.patientId,
@@ -1367,6 +1372,13 @@ export default {
         enquiry: {
           id: +this.patientId
         },
+        description: '',
+        due_at: null,
+        user: {}
+      }
+    },
+    defaultFormAppointment () {
+      return {
         notes: '',
         location_id: location.city,
         doctor_id: '',
@@ -1375,8 +1387,7 @@ export default {
         minutes: '',
         backgroundColor: '',
         description: '',
-        due_at: null,
-        user: {}
+        product_groups: ''
       }
     },
     cancelAssignments () {
@@ -1404,11 +1415,34 @@ export default {
     },
     saveAppointment  () {
       this.addAppointmentModal = false
-      this.formData = this.defaultFormData()
+      this.formAppointments.resourceId = this.formAppointments.doctorId
+
+      this.formAppointments.patientId = this.patient.id
+      if (typeof this.formAppointments.doctorId === 'number') {
+        let doctor = this.doctors.find(doctor => doctor.id === this.formAppointments.doctorId)
+        this.formAppointments.doctorId = doctor.name
+      }
+      if (typeof this.formAppointments.locationId === 'number') {
+        let location = this.locations.find(location => location.id === this.formAppointments.locationId)
+        this.formAppointments.locationId = location.city
+      }
+      if (typeof this.formAppointments.product_groups === 'object') {
+        this.formAppointments.product_groups = this.formAppointments.product_groups.product_group_id
+      }
+      console.log(this.formAppointments)
+      createCalendar(this.formAppointments).then((data) => {
+        createCalendarLabel(data[0].id, this.formAppointments).then(() => {
+          this.formAppointments = this.defaultFormAppointment()
+          this.$emit('setModalShow', false)
+        })
+      })
     },
     getLocations () {
       getLocationsList().then(response => {
         this.locations = response
+        if (response.length === 1) {
+          this.formAppointments.location_id = response[0].city
+        }
       })
     },
     getDoctors () {

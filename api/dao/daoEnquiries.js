@@ -32,6 +32,7 @@ const getEnquiries = (request, response, user_id, accessible_user_ids, prm_clien
         statement += ") ";    
     }
     statement += "ORDER BY last_name ASC"
+    console.log(statement)
     pool.query(statement, (error, results) => {
         if (error) {
             throw error
@@ -101,7 +102,7 @@ const updateEnquiry = (req, res, id, enquiry) => {
         var statement = initialUpdateStatement
         if (enquiry.name !== currentEnquiry.name) statement += "name='" + enquiry.name + "',"
         if (enquiry.last_name !== currentEnquiry.last_name) statement += "last_name='" + enquiry.last_name + "',"
-        if (enquiry.date_of_birth !== moment(currentEnquiry.date_of_birth).format('YYYY-MM-DD')) statement += "date_of_birth='" + enquiry.date_of_birth + "',"
+        if (enquiry.date_of_birth && enquiry.date_of_birth !== moment(currentEnquiry.date_of_birth).format('YYYY-MM-DD')) statement += "date_of_birth='" + enquiry.date_of_birth + "',"
         if (enquiry.gender !== currentEnquiry.gender) statement += "gender='"+ enquiry.gender + "',"
         if (enquiry.address_line_1 !== currentEnquiry.address_line_1) statement += "address_line_1='" + enquiry.address_line_1 + "',"
         if (enquiry.post_code !== currentEnquiry.post_code) statement += "post_code='" + enquiry.post_code + "',"
@@ -183,7 +184,9 @@ const createEnquiryNotes = (request, response, notes) => {
 }
 
 const getEnquiryAppointments = (request, response, enquiryId) => {
-    pool.query("SELECT appointments.*, enquiries.*  FROM appointments LEFT JOIN enquiries ON appointments.enquiry_id = enquiries.id  WHERE enquiry_id = $1 ORDER BY date ASC", [enquiryId] , (error, results) => {
+    pool.query("SELECT appointments.*, enquiries.*  FROM appointments " +
+      "LEFT JOIN enquiries ON appointments.enquiry_id = enquiries.id  " +
+      "WHERE enquiry_id = $1 ORDER BY date ASC", [enquiryId] , (error, results) => {
         console.log(error)
         if (error) {
             throw error
