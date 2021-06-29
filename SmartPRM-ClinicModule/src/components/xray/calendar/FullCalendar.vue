@@ -342,7 +342,7 @@ export default {
     this.getProductGroups(this.$i18n.locale)
     xray.index()
   },
-   methods: {
+  methods: {
     closeModal () {
       this.$emit('setModalShow', false)
       this.formData = this.defaultAppointment()
@@ -438,7 +438,7 @@ export default {
         eventResourceId: '',
         patientId: '',
         doctorId: '',
-        locationId: this.locations.length == 1 ? this.locations[0].city : '',
+        locationId: this.locations.length === 1 ? this.locations[0].city : '',
         enquiry_id: ''
       }
     },
