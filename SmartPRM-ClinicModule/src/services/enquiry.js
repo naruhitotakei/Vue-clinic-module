@@ -71,8 +71,8 @@ export async function getEnquiryAssignments (id) {
   return rawResponse.json()
 }
 
-export async function getEnquiryInvoices (id) {
-  const rawResponse = await fetch(`/api/enquiries/${id}/invoices`, {
+export async function getEnquiryInvoices (id, sort) {
+  const rawResponse = await fetch(`/api/enquiries/${id}/invoices?sort=${sort}`, {
     method: 'GET',
     credentials: 'same-origin',
     headers: {

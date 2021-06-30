@@ -527,8 +527,9 @@ app.get('/api/enquiries/:id/assignments', (req, res) => {
 
 app.get('/api/enquiries/:id/invoices', (req, res) => {
     const id = req.params.id
+    let sortBy = req.query.sort
     if (req.session.prm_user && req.session.prm_user.permissions && checkPermission(req.session.prm_user.permissions, enquiriesPermission))
-        daoEnquiries.getEnquiryInvoices(req, res, id)
+        daoEnquiries.getEnquiryInvoices(req, res, id, sortBy)
     else
         res.status(401).json("OK: user unauthorized")
 });

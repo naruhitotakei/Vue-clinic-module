@@ -618,15 +618,32 @@
                   <tab-content-item :active="false" id="invoices">
                       <iq-card>
                           <template v-slot:headerTitle>
-                              <h3 class="card-title" style="margin-top: 10px;">
+                            <b-row class="row align-items-center justify-content-between">
+                              <div class="row align-items-center p-0 m-0">
+                                <h3 class="card-title mr-2" >
                                   {{ $t('EPR.invoices.invoicesHeader') }}
-                                <span class="float-right">
+                                </h3>
+                                <v-select class="patients" label="text"
+                                          :clearable="false"
+                                          :options="sortOptionsInvoice"
+                                          @input="sortSelectedInvoice"
+                                          v-model="sortByInvoice"
+                                >
+                                  <template v-slot:option="option">
+                                    <div class="row justify-content-between">
+                                      {{option.text}}
+                                      <i :class="{'ri-arrow-up-s-line': option.sort === 'asc', 'ri-arrow-down-s-line': option.sort === 'desc',}"></i>
+                                    </div>
+                                  </template>
+                                </v-select>
+                              </div>
+                              <span class="float-right">
                                   <b-button variant="primary" @click="addInvoice">
                                     <i class="ri-add-line mr-2"></i>
                                     {{ $t('EPR.invoices.addInvoice') }}
                                   </b-button>
                                 </span>
-                              </h3>
+                            </b-row>
                           </template>
                           <template v-slot:body>
                               <b-row>
@@ -827,7 +844,7 @@ export default {
     this.getRegions()
     this.getDentists()
     this.getSurgeons()
-    this.getPatientInvoices(this.patientId)
+    this.getPatientInvoices(this.patientId, 'ASC')
     this.getPatientOffers(this.patientId)
     this.getPatientServices(this.patientId)
     this.getUsers()
@@ -1044,6 +1061,7 @@ export default {
       dropDownText: '',
       selected: this.value,
       sortBy: '',
+      sortByInvoice: '',
       sortOptions: [
         { value: 'name', text: this.$t('EPR.files.fileName'), sort: 'asc' },
         { value: 'name', text: this.$t('EPR.files.fileName'), sort: 'desc' },
@@ -1051,6 +1069,10 @@ export default {
         { value: 'type', text: this.$t('EPR.files.fileType'), sort: 'desc' },
         { value: 'created_at', text: this.$t('EPR.files.fileCreatedAt'), sort: 'asc' },
         { value: 'created_at', text: this.$t('EPR.files.fileCreatedAt'), sort: 'desc' }
+      ],
+      sortOptionsInvoice: [
+        { value: 'invoice_type', text: this.$t('EPR.invoices.filters.invoice_type'), sort: 'asc' },
+        { value: 'invoice_type', text: this.$t('EPR.invoices.filters.invoice_type'), sort: 'desc' }
       ],
       files: [
         // { image: require('../../assets/images/login/1.png'), name: 'File 2', type: 'Rentgen', created_at: '21.04.2021' },
@@ -1163,6 +1185,10 @@ export default {
     }
   },
   methods: {
+    sortSelectedInvoice () {
+      console.log(this.sortByInvoice)
+      this.getPatientInvoices(this.patientId, this.sortByInvoice.sort.toUpperCase())
+    },
     uploadFile (e) {
       fileUpload(e.target.files[0], this.$route.params.patientId)
       let reader = new FileReader()
@@ -1263,8 +1289,8 @@ export default {
         this.assignments = response
       })
     },
-    getPatientInvoices (id) {
-      getEnquiryInvoices(id).then(response => {
+    getPatientInvoices (id, sort) {
+      getEnquiryInvoices(id, sort).then(response => {
         this.invoices = response
       })
     },
