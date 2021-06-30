@@ -808,6 +808,33 @@
         </div>
       </div>
     </b-modal>
+    <b-modal
+        v-model="modalInvoiceShow"
+        ok-title="Continue"
+        cancel-title="Cancel"
+        :ok-disabled="!selectedInvoices"
+        title="Choose invoices"
+        @ok="chooseInvoice"
+        @close="cancelInvoices"
+        @cancel="cancelInvoices"
+    >
+      <div class="col-md-12 mb-3">
+        <label for="title">Invoices *</label>
+        <div style="display: flex; flex-direction: column">
+          <template v-for="(item) in invoicesType">
+            <b-form-radio
+                class="custom-radio-color"
+                inline
+                v-model="selectedInvoices"
+                :name="item.value"
+                :value="item.value"
+                :key="item.value"
+            >{{ item.label }}
+            </b-form-radio>
+          </template>
+        </div>
+      </div>
+    </b-modal>
   </b-container>
 </template>
 <script>
@@ -977,6 +1004,7 @@ export default {
       patientId: this.$route.params.patientId,
       modalAssigmentShow: false,
       modalNotesShow: false,
+      modalInvoiceShow: false,
       addAppointmentModal: false,
       generalNotes: '',
       notesGeneral: '',
@@ -996,6 +1024,21 @@ export default {
       locations: [],
       doctors: [],
       product_groups: [],
+      selectedInvoices: '',
+      invoicesType: [
+        {
+          label: 'invoice',
+          value: 'new-invoice'
+        },
+        {
+          label: 'advance payment',
+          value: 'new-adv-payment'
+        },
+        {
+          label: 'offer',
+          value: 'offer'
+        }
+      ],
       color: [
         {
           label: 'Default',
@@ -1329,7 +1372,7 @@ export default {
       this.$router.push({ path: `/documents/invoices/${item.invoice_number}` })
     },
     addInvoice () {
-      this.$router.push({ path: `/documents/invoices/${this.patient.id}/new-invoice` })
+      this.modalInvoiceShow = true
     },
     editPatient () {
       this.disabled = !this.disabled
@@ -1435,8 +1478,23 @@ export default {
         this.cancelNotes()
       })
     },
+    chooseInvoice () {
+      switch (this.selectedInvoices) {
+        case 'new-invoice':
+          return this.$router.push({ path: `/documents/invoices/${this.patient.id}/${this.selectedInvoices}` })
+        case 'new-adv-payment':
+          return this.$router.push({ path: `/documents/advance-payments/${this.patient.id}/${this.selectedInvoices}` })
+        case 'offer':
+          return this.$router.push({ path: `/documents/offer/${this.patient.id}/${this.selectedInvoices}` })
+        default:
+      }
+    },
     cancelNotes () {
       this.notesFormData.content = ''
+    },
+    cancelInvoices () {
+      this.modalInvoiceShow = false
+      this.selectedInvoices = ''
     },
     addAppointment () {
       this.addAppointmentModal = true
