@@ -136,8 +136,11 @@ const changeLang = ((req, res, profile) => {
 
 const editProfile = ((request, response, profile) => {
   var statement = "UPDATE users SET "
-  if (profile.name) statement += "name='" + profile.name + "',"
+  if (profile.first_name) statement += "first_name='" + profile.first_name + "',"
+  if (profile.surname) statement += "surname='" + profile.surname + "',"
   if (profile.phone_number) statement += "phone_number='" + profile.phone_number + "',"
+  if (profile.specialization) statement += "specialization='" + profile.specialization + "',"
+  if (profile.position) statement += "position='" + profile.position + "',"
   statement = statement.slice(0, -1)
   statement += " WHERE email='" + profile.email + "'"
   console.log('stat: ' + statement)

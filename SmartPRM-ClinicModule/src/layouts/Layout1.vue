@@ -108,7 +108,7 @@
               </li>
             </ul>
   <!-- Edit profile modal -->
-  <b-modal v-model="profileModalShow" title="Edit Profile" ok-title="Save Changes" @ok="editProfile" cancel-title="Close">
+  <b-modal v-model="profileModalShow" title="Edit Profile" ok-title="Save Changes" @ok="editProfile" :ok-disabled="isEditDisabled" cancel-title="Close">
     <form>
       <div class="form-row">
         <div style="margin: auto; text-align: center;">
@@ -134,7 +134,11 @@
                 </div>
         <div class="col-md-12 mb-3">
           <label for="name">Name:</label>
-          <input type="text" class="form-control" v-model="logedInUser.name" id="name" required>
+          <input type="text" class="form-control" v-model="logedInUser.first_name" id="name" required>
+        </div>
+        <div class="col-md-12 mb-3">
+          <label for="name">Surname:</label>
+          <input type="text" class="form-control" v-model="logedInUser.surname" id="surname" required>
         </div>
         <div class="col-md-12 mb-3">
           <label for="email">Email:</label>
@@ -143,6 +147,14 @@
         <div class="col-md-12 mb-3">
           <label for="phone">Phone:</label>
           <input type="tel" class="form-control" v-model="logedInUser.phone_number" id="phone" required>
+        </div>
+        <div class="col-md-12 mb-3">
+          <label for="Specialization">Specialization:</label>
+          <input type="text" class="form-control" placeholder="Specialization" v-model="logedInUser.specialization" id="specialization" >
+        </div>
+        <div class="col-md-12 mb-3">
+          <label for="position">Position:</label>
+          <input type="text" class="form-control" placeholder="Position" v-model="logedInUser.position" id="position" >
         </div>
       </div>
     </form>
@@ -240,6 +252,9 @@ export default {
     }),
     getAvatarUrl: function () {
       return '/api/files/avatar?' + this.avatar_version
+    },
+    isEditDisabled () {
+      return !this.logedInUser.first_name || !this.logedInUser.surname || !this.logedInUser.email
     }
   },
   watch: {
@@ -405,6 +420,7 @@ export default {
       sso().then(response => {
         if (typeof response !== 'string') {
           this.logedInUser = response
+          console.log(this.logedInUser)
           this.$i18n.locale = this.logedInUser.prm_locale
           this.verticalMenu = this.filterMenu(SideBarItems)
         } else {
