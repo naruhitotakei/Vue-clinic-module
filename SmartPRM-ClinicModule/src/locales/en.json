@@ -216,6 +216,7 @@
       "issuedBy": "Issued by",
       "amount": "Amount",
       "status": "Status",
+      "verificationStatus": "Verification status",
       "paymentStatus": "Payment status"
     },
     "servicesSummaryColumn": {

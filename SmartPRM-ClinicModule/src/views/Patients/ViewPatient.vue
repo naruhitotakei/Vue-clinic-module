@@ -618,9 +618,9 @@
                   <tab-content-item :active="false" id="invoices">
                       <iq-card>
                           <template v-slot:headerTitle>
-                            <b-row class="row align-items-center justify-content-between">
+                            <b-row class="row align-items-center justify-content-between m-0">
                               <div class="row align-items-center p-0 m-0">
-                                <h3 class="card-title mr-2" >
+                                <h3 class="card-title mr-4" >
                                   {{ $t('EPR.invoices.invoicesHeader') }}
                                 </h3>
                                 <v-select class="patients" label="text"
@@ -1131,7 +1131,7 @@ export default {
         },
         { label: this.$t('EPR.invoicesColumn.issuedBy'), key: 'operator_name', class: 'text-left' },
         { label: this.$t('EPR.invoicesColumn.amount'), key: 'total_with_vat', class: 'text-left' },
-        { label: this.$t('EPR.invoicesColumn.status'),
+        { label: this.$t('EPR.invoicesColumn.paymentStatus'),
           key: 'status',
           class: 'text-left',
           formatter: (value, key, item) => {
@@ -1141,7 +1141,7 @@ export default {
             return item.total_with_vat === item.paid_amount ? 'Paid' : 'Partialy Paid'
           }
         },
-        { label: this.$t('EPR.invoicesColumn.paymentStatus'), key: 'verification_status', class: 'text-left' }
+        { label: this.$t('EPR.invoicesColumn.verificationStatus'), key: 'verification_status', class: 'text-left' }
       ],
       servicesSummaryColumns: [
         { label: this.$t('EPR.servicesSummaryColumn.serviceTitle'), key: 'name', class: 'text-left' },
