@@ -211,7 +211,7 @@ const getEnquiryAssignments = (request, response, enquiryId) => {
 }
 
 const getEnquiryInvoices = (request, response, enquiryId, sortBy) => {
-    let statement = `SELECT * FROM invoice WHERE invoice_type != 'Offer' AND enquiries_id = ${enquiryId} ORDER BY invoice_type ${sortBy}`
+    let statement = `SELECT * FROM invoice WHERE enquiries_id = ${enquiryId} ORDER BY invoice_type ${sortBy}`
     pool.query(statement, (error, results) => {
         console.log(statement)
         console.log(error)
