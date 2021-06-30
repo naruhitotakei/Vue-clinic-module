@@ -296,7 +296,7 @@ export default {
     },
     getApontments () {
       this.events = []
-      getCalendar('2021-01-01', '2021-06-30', '', this.$i18n.locale).then(data => {
+      getCalendar('2021-01-01', '2021-12-31', '', this.$i18n.locale).then(data => {
         console.log(data.find(item => item.id === 41461))
         let dataWithDoctor = data.filter(item => {
           if (item.doctor_user_id !== null) {
