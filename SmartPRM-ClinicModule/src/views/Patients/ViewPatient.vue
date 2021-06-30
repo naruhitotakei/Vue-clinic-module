@@ -1140,7 +1140,8 @@ export default {
             }
             return item.total_with_vat === item.paid_amount ? 'Paid' : 'Partialy Paid'
           }
-        }
+        },
+        { label: this.$t('EPR.invoicesColumn.paymentStatus'), key: 'verification_status', class: 'text-left' }
       ],
       servicesSummaryColumns: [
         { label: this.$t('EPR.servicesSummaryColumn.serviceTitle'), key: 'name', class: 'text-left' },

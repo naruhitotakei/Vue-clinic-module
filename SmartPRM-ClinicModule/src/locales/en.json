@@ -215,7 +215,8 @@
       "date": "Date",
       "issuedBy": "Issued by",
       "amount": "Amount",
-      "status": "Status"
+      "status": "Status",
+      "paymentStatus": "Payment status"
     },
     "servicesSummaryColumn": {
       "serviceTitle": "Service",
