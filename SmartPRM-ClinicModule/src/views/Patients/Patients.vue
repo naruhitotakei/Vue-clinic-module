@@ -204,8 +204,8 @@ export default {
             editable: false,
             region: 'n/a',
             country: 'n/a',
-            last_visit: '2011/04/25',
-            next_visit: '2011/04/30',
+            last_visit: obj.last_visit,
+            next_visit: obj.next_visit,
             personal_dentist: obj.label
           }
         ))
