@@ -105,7 +105,7 @@
                                                                 label="city"
                                                                 :reduce="location => location.id"
                                                                 class="style-chooser form-control-disabled font-size-15"
-                                                                v-model="formAppointments.location_id"
+                                                                v-model="formAppointments.locationId"
                                                                 :options="locations"
                                                                 style="min-width:305px;"></v-select>
                                                   </div>
@@ -1038,7 +1038,7 @@ export default {
       formAppointments: {
         patientId: null,
         notes: '',
-        location_id: location.city,
+        locationId: '',
         doctor_id: '',
         assignmentDate: '',
         hours: '',
@@ -1469,7 +1469,7 @@ export default {
       getLocationsList().then(response => {
         this.locations = response
         if (response.length === 1) {
-          this.formAppointments.location_id = response[0].city
+          this.formAppointments.locationId = response[0].city
         }
       })
     },

@@ -118,6 +118,7 @@ const createAppointment = (request, response, appointments) => {
     if (appointments.minutes) statement += ""+ appointments.minutes +","
     statement += "'"+ time +"',"
     statement += "'Posvet')"
+    console.log(statement)
     pool.query(statement , (error, results) => {
         console.log(error)
         if (error) {
