@@ -30,7 +30,16 @@
                 </iq-card>
             </b-col>
         </b-row>
-        <b-modal v-model="editProfileShowModal" no-close-on-backdrop size="lg" :title="$t('settingsUsers.editProfile')" :ok-disabled="isEditDisabled" @close="editProfileShowModal = false" @cancel="editProfileShowModal = false" :ok-title="$t('settingsUsers.editProfileModal.save')" @ok="editUser" :cancel-title="$t('settingsUsers.editProfileModal.close')">
+        <b-modal
+            v-model="editProfileShowModal"
+            no-close-on-backdrop size="lg"
+            :title="$t('settingsUsers.editProfile')"
+            :ok-disabled="isEditDisabled"
+            @close="editProfileShowModal = false"
+            @cancel="editProfileShowModal = false"
+            :ok-title="$t('settingsUsers.editProfileModal.save')"
+            @ok="editUser"
+            :cancel-title="$t('settingsUsers.editProfileModal.close')">
             <form>
                 <div class="form-row">
                     <div style="margin: auto; text-align: center;">
