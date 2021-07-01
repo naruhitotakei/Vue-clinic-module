@@ -238,7 +238,13 @@
       "amount": "Amount"
     },
     "notification": "Notification",
-    "changesSaved": "Changes saved"
+    "changesSaved": "Changes saved",
+    "invoiceType": "Choose invoice type",
+    "invoice": "Invoice",
+    "advPayment": "Advance Payment",
+    "offer": "Offer",
+    "cancel": "Cancel",
+    "continue": "Continue"
   },
   "offers": {
     "offersHeader": "Offers",

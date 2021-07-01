@@ -129,7 +129,7 @@
       "lastVisit": "Zadnji termin",
       "nextVisit": "Naslednji termin",
       "personalDentist": "Osebni zobozdravnik",
-      "action": "Urejaj"
+      "action": "Možnosti"
     }
   },
   "EPR": {
@@ -226,7 +226,13 @@
       "amount": "Znesek"
     },
     "notification": "Obvestilo",
-    "changesSaved": "Spremembe shranjene"
+    "changesSaved": "Spremembe shranjene",
+    "invoiceType": "Izberi vrsto računa",
+    "invoice": "Račun",
+    "advPayment": "Avansni račun",
+    "offer": "Ponudba",
+    "cancel": "Prekliči",
+    "continue": "Nadaljuj"
   },
   "offers": {
     "offersHeader": "Ponudbe",

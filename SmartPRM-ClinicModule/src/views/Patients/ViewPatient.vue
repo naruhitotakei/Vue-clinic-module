@@ -810,17 +810,16 @@
     </b-modal>
     <b-modal
         v-model="modalInvoiceShow"
-        ok-title="Continue"
-        cancel-title="Cancel"
+        :ok-title="$t('EPR.continue')"
+        :cancel-title="$t('EPR.cancel')"
         :ok-disabled="!selectedInvoices"
-        title="Choose invoices"
+        :title="$t('EPR.invoiceType')"
         @ok="chooseInvoice"
         @close="cancelInvoices"
         @cancel="cancelInvoices"
     >
-      <div class="col-md-12 mb-3">
-        <label for="title">Invoices *</label>
-        <div style="display: flex; flex-direction: column">
+      <div class="col-md-12 mb-2">
+        <div class="d-flex justify-content-around mt-2">
           <template v-for="(item) in invoicesType">
             <b-form-radio
                 class="custom-radio-color"
@@ -1027,15 +1026,15 @@ export default {
       selectedInvoices: '',
       invoicesType: [
         {
-          label: 'invoice',
+          label: this.$t('EPR.invoice'),
           value: 'new-invoice'
         },
         {
-          label: 'advance payment',
+          label: this.$t('EPR.advPayment'),
           value: 'new-adv-payment'
         },
         {
-          label: 'offer',
+          label: this.$t('EPR.offer'),
           value: 'offer'
         }
       ],
