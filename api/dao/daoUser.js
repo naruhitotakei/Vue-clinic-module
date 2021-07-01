@@ -141,6 +141,7 @@ const editProfile = ((request, response, profile) => {
   if (profile.phone_number) statement += "phone_number='" + profile.phone_number + "',"
   if (profile.specialization) statement += "specialization='" + profile.specialization + "',"
   if (profile.position) statement += "position='" + profile.position + "',"
+  if (profile.title) statement += "title='" + profile.title + "',"
   statement = statement.slice(0, -1)
   statement += " WHERE email='" + profile.email + "'"
   console.log('stat: ' + statement)

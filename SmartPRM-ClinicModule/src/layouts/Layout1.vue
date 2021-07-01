@@ -133,28 +133,32 @@
                   </div>
                 </div>
         <div class="col-md-12 mb-3">
-          <label for="name">Name:</label>
+          <label for="title">Title</label>
+          <input type="text" class="form-control" placeholder="Title" v-model="logedInUser.title" id="title" >
+        </div>
+        <div class="col-md-12 mb-3">
+          <label for="name">Name *</label>
           <input type="text" class="form-control" v-model="logedInUser.first_name" id="name" required>
         </div>
         <div class="col-md-12 mb-3">
-          <label for="name">Surname:</label>
+          <label for="name">Surname *</label>
           <input type="text" class="form-control" v-model="logedInUser.surname" id="surname" required>
         </div>
         <div class="col-md-12 mb-3">
-          <label for="email">Email:</label>
-          <input type="email" disabled class="form-control" v-model="logedInUser.email" id="email" required>
-        </div>
-        <div class="col-md-12 mb-3">
-          <label for="phone">Phone:</label>
-          <input type="tel" class="form-control" v-model="logedInUser.phone_number" id="phone" required>
-        </div>
-        <div class="col-md-12 mb-3">
-          <label for="Specialization">Specialization:</label>
+          <label for="Specialization">Specialization</label>
           <input type="text" class="form-control" placeholder="Specialization" v-model="logedInUser.specialization" id="specialization" >
         </div>
         <div class="col-md-12 mb-3">
-          <label for="position">Position:</label>
+          <label for="position">Position</label>
           <input type="text" class="form-control" placeholder="Position" v-model="logedInUser.position" id="position" >
+        </div>
+        <div class="col-md-12 mb-3">
+          <label for="email">Mail *</label>
+          <input type="email" class="form-control" v-model="logedInUser.email" id="email" required>
+        </div>
+        <div class="col-md-12 mb-3">
+          <label for="phone">Phone</label>
+          <input type="tel" class="form-control" v-model="logedInUser.phone_number" id="phone" >
         </div>
       </div>
     </form>
@@ -364,6 +368,7 @@ export default {
     editProfile () {
       editProfile(this.logedInUser).then(() => {
         console.log('Successful update')
+        this.getUserLogin()
         // this.$bvToast.show('b-toaster-bottom-right')
       }).catch(errorMsg => {
         console.log('Error: ' + errorMsg)
