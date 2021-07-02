@@ -181,7 +181,7 @@
           no-close-on-backdrop
           size="md"
           :ok-disabled="isOkDisabled"
-          :title="$t('assignments.addAssignmentsModal.addAssignments')"
+          :title="!formData.id ? $t('assignments.addAssignmentsModal.addAssignments') : $t('assignments.addAssignmentsModal.editAssignments')"
           :ok-title="$t('assignments.addAssignmentsModal.save')"
           :cancel-title="$t('assignments.addAssignmentsModal.close')"
           @ok="addAssignments"
@@ -214,6 +214,30 @@
               <label for="title">{{ $t('assignments.addAssignmentsModal.due_at') }} </label>
                 <b-form-input class="date" id="exampleInputdate" type="date" v-model="formData.due_at" ></b-form-input>
             </div>
+            <template v-if="formData.id">
+              <div class="col-md-12 mb-3">
+                <label for="title">{{ $t('assignments.addAssignmentsModal.patientAttended') }} </label>
+               <div>
+                 <b-form-radio inline v-model="formData.patient_attended"  value="null">null</b-form-radio>
+                 <b-form-radio inline v-model="formData.patient_attended"  value="true">true</b-form-radio>
+                 <b-form-radio inline v-model="formData.patient_attended"  value="false">false</b-form-radio>
+               </div>
+              </div>
+              <div class="col-md-12 mb-3">
+                <label for="title">{{ $t('assignments.addAssignmentsModal.appointmentCanceledInAdvanceByClinic') }} </label>
+                <div >
+                  <b-form-radio inline v-model="formData.appointment_canceled_in_advance_by_clinic"  value="true">true</b-form-radio>
+                  <b-form-radio inline v-model="formData.appointment_canceled_in_advance_by_clinic"  value="false">false</b-form-radio>
+                </div>
+              </div>
+              <div class="col-md-12 mb-3">
+                <label for="title">{{ $t('assignments.addAssignmentsModal.appointmentCanceledInAdvanceByPatient') }} </label>
+                <div>
+                  <b-form-radio inline v-model="formData.appointment_canceled_in_advance_by_patient"  value="true">true</b-form-radio>
+                  <b-form-radio inline v-model="formData.appointment_canceled_in_advance_by_patient"  value="false">false</b-form-radio>
+                </div>
+              </div>
+            </template>
           </div>
         </form>
       </b-modal>
@@ -235,6 +259,13 @@
     top: 50%;
     transform: translateY(-50%);
   }
+}
+
+body  .custom-control-label::before {
+  top:50% !important;
+}
+body  .custom-control-label::after {
+  top:50% !important;
 }
 
 @media (max-width: 1661px) {
@@ -310,13 +341,18 @@ export default {
   },
   methods: {
     editAssignments (assignment) {
+      console.log(assignment)
       let enquiry = this.enquires.find(item => item.id === assignment.enquiry_id)
       this.formData = {
         id: assignment.id,
         enquiry: enquiry,
         description: assignment.description,
         due_at: moment(assignment.due_at).format('YYYY-MM-DD'),
-        user_id: assignment.user_id
+        user_id: assignment.user_id,
+        patient_attended: assignment.patient_attended,
+        appointment_canceled_in_advance_by_clinic: assignment.appointment_canceled_in_advance_by_clinic,
+        appointment_canceled_in_advance_by_patient: assignment.appointment_canceled_in_advance_by_patient
+
       }
       this.modalAssigmentShow = true
     },
@@ -373,6 +409,7 @@ export default {
       if (this.formData.id) {
         updateAssignments(this.formData.id, this.formData).then(() => {
           this.getAssignments()
+          console.log('udpated', this.formData)
           this.formData = this.defaultFormData()
           this.getUserLogin()
         })
@@ -453,7 +490,10 @@ export default {
         enquiry: {},
         description: '',
         due_at: null,
-        user_id: 0
+        user_id: 0,
+        patient_attended: null,
+        appointment_canceled_in_advance_by_clinic: false,
+        appointment_canceled_in_advance_by_patient: false
       }
     }
   }

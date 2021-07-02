@@ -479,12 +479,16 @@
     "completedAssignments": "Completed Assignments",
     "addAssignmentsModal" : {
       "addAssignments": "New Assignments",
+      "editAssignments": "Edit Assignments",
       "enquiry": "Enquiry",
       "description": "Description",
       "due_at": "Date",
       "users": "Users",
       "close": "Close",
-      "save": "Save"
+      "save": "Save",
+      "patientAttended": "Patient Attended",
+      "appointmentCanceledInAdvanceByClinic": "Appointment canceled in advance  by clinic",
+      "appointmentCanceledInAdvanceByPatient": "Appointment canceled in advance  by patient"
     }
   },
   "statisticsForClinic": {

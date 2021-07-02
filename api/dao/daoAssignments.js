@@ -25,13 +25,16 @@ const getAssignments = (request, response, scope, userid, accessible_user_ids, p
         return
     }
     if (scope == "All") {
-        var statement = ["SELECT todos.*, prm_client.id AS prm_client_id, enquiries.name AS patientname, enquiries.prm_dentist_user_id, enquiries.last_name AS patientlastname, concat(users.title, ' ', users.first_name, ' ', users.surname) AS todoname, dentists.name AS dentist_name, dentists.id as dentists_id FROM todos",
+        var statement = ["SELECT todos.*, prm_client.id AS prm_client_id, enquiries.name AS patientname, enquiries.prm_dentist_user_id, " +
+        "enquiries.last_name AS patientlastname, concat(users.title, ' ', users.first_name, ' ', users.surname) AS todoname, " +
+        "dentists.name AS dentist_name, dentists.id as dentists_id, appointments.patient_attended, appointments.appointment_canceled_in_advance_by_clinic, appointments.appointment_canceled_in_advance_by_patient FROM todos",
                          "LEFT JOIN enquiries ON todos.enquiry_id = enquiries.id",
                          "LEFT JOIN users ON todos.user_id = users.id",
                          "LEFT JOIN users dentists ON enquiries.prm_dentist_user_id = users.id",
                          "LEFT JOIN clients ON todos.client_id = clients.id",
                          "LEFT JOIN clients_prm_client_bridge ON clients.id = clients_prm_client_bridge.clients_id",
                          "LEFT JOIN prm_client ON clients_prm_client_bridge.prm_client_id = prm_client.id",                         
+                         "LEFT JOIN appointments ON todos.enquiry_id = appointments.enquiry_id",
                          condition,
                          "ORDER BY todos.due_at ASC"].join('\n') 
         pool.query(statement, (error, results) => {
@@ -151,6 +154,20 @@ const updateAssignment = (req, res, id, assignment) => {
       throw error
     }
   })
+
+  let appointments = `UPDATE appointments SET 
+  patient_attended=${assignment.patient_attended}, 
+  appointment_canceled_in_advance_by_clinic=${assignment.appointment_canceled_in_advance_by_clinic},
+  appointment_canceled_in_advance_by_patient=${assignment.appointment_canceled_in_advance_by_patient} 
+  WHERE appointments.enquiry_id = ${assignment.enquiry.id}`
+  console.log(appointments)
+  pool.query(appointments , (err, res) => {
+    console.log(err)
+    if (err) {
+      throw err
+    }
+  })
+
   res.status(200).json(assignment)
 }
 
