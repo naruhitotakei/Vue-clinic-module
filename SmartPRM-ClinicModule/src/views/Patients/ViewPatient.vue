@@ -162,7 +162,7 @@
                                               </div>
                                               <div class="row align-items-center justify-content-between w-100 mb-3">
                                                   <div class="col-md-3">
-                                                      <label for="color">{{ $t('calendarEvent.labels') }}</label><br>
+                                                      <label for="color" >{{ $t('calendarEvent.labels') }}</label><br>
                                                   </div>
                                                   <div class="col-md-9">
                                                       <template v-for="(item,index) in color">
@@ -170,6 +170,7 @@
                                                       </template>
                                                   </div>
                                               </div>
+
                                               <div class="modal-footer modal-footer-bt" style="width: 100%;">
                                                   <template v-if="disabled">
                                                       <button type="button" class="btn btn-secondary" @click="addAppointmentModal = false">Cancel</button>

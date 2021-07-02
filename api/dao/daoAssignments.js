@@ -155,18 +155,6 @@ const updateAssignment = (req, res, id, assignment) => {
     }
   })
 
-  let appointments = `UPDATE appointments SET 
-  patient_attended=${assignment.patient_attended}, 
-  appointment_canceled_in_advance_by_clinic=${assignment.appointment_canceled_in_advance_by_clinic},
-  appointment_canceled_in_advance_by_patient=${assignment.appointment_canceled_in_advance_by_patient} 
-  WHERE appointments.enquiry_id = ${assignment.enquiry.id}`
-  console.log(appointments)
-  pool.query(appointments , (err, res) => {
-    console.log(err)
-    if (err) {
-      throw err
-    }
-  })
 
   res.status(200).json(assignment)
 }

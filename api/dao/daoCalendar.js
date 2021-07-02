@@ -69,6 +69,7 @@ const getApontments = (request, response, from, to, user_id, accessible_user_ids
 }
 
 const updateAppointments = (request, response, id, appointments) => {
+    console.log(appointments)
     let patient_attended = appointments.patient_attended === 'attended' ? true : appointments.patient_attended === 'not_attended' ? false : null;
     let time = moment(appointments.assignmentDate).format('HH:mm');
     let statement = "UPDATE appointments SET "
@@ -77,10 +78,13 @@ const updateAppointments = (request, response, id, appointments) => {
     if (appointments.notes) statement += "note='" + appointments.notes + "',"
     if (appointments.patientId) statement += "enquiry_id='" + appointments.patientId + "',"
     if (appointments.patient_attended) statement += "patient_attended=" + patient_attended + ","
+    statement += "appointment_canceled_in_advance_by_patient=" + appointments.appointment_canceled_in_advance_by_patient + ","
+    statement += "appointment_canceled_in_advance_by_clinic=" + appointments.appointment_canceled_in_advance_by_clinic + ","
     if (appointments.product_groups) statement += "product_group_id='" + appointments.product_groups + "',"
     if (appointments.assignmentDate) statement += "date='" + appointments.assignmentDate + "',"
     if (appointments.time) statement += "time='" + time + "'"
     statement += " WHERE id = " + id
+    console.log("==========================================================")
     console.log(statement)
     pool.query(statement , (error, results) => {
         console.log(error)
@@ -100,6 +104,9 @@ const createAppointment = (request, response, appointments) => {
     if (appointments.notes) statement += "note,"
     if (appointments.patientId) statement += "enquiry_id,"
     if (appointments.patient_attended) statement += "patient_attended,"
+    if (appointments.appointment_canceled_in_advance_by_patient) statement += "appointment_canceled_in_advance_by_patient,"
+    if (appointments.appointment_canceled_in_advance_by_clinic) statement += "appointment_canceled_in_advance_by_clinic,"
+    if (appointments.patient_attended) statement += "patient_attended,"
     if (appointments.product_groups) statement += "product_group_id,"
     if (appointments.assignmentDate) statement += "date,"
     if (appointments.hours) statement += "hours,"
@@ -112,6 +119,8 @@ const createAppointment = (request, response, appointments) => {
     if (appointments.notes) statement += "'"+ appointments.notes +"',"
     if (appointments.patientId) statement += "'"+ appointments.patientId +"',"
     if (appointments.patient_attended) statement += "'"+patient_attended +"',"
+    if (appointments.appointment_canceled_in_advance_by_patient) statement += "'"+appointments.appointment_canceled_in_advance_by_patient +"',"
+    if (appointments.appointment_canceled_in_advance_by_clinic) statement += "'"+appointments.appointment_canceled_in_advance_by_clinic +"',"
     if (appointments.product_groups) statement += ""+ appointments.product_groups +","
     if (appointments.assignmentDate) statement += "'"+ appointments.assignmentDate +"',"
     if (appointments.hours) statement += ""+ appointments.hours +","

@@ -145,20 +145,67 @@
          </div>
          <div class="col-md-9">
            <template v-for="(item,index) in patient_attend">
-             <b-form-radio class="custom-radio-patient" inline v-model="formData.patient_attended" :value="item.value" :key="index" v-if="showPatientAttended(item)">{{ item.label }}</b-form-radio>
+             <b-form-radio
+                 class="custom-radio-patient"
+                 inline
+                 v-model="formData.patient_attended"
+                 :value="item.value"
+                 :key="index"
+                 v-if="showProps(item, formData.patient_attended)"
+             >
+               {{ item.label }}
+             </b-form-radio>
            </template>
          </div>
         </div>
-        <div class="row align-items-center justify-content-between w-100 mb-3">
-         <div class="col-md-3">
-           <label for="color">{{ $t('calendarEvent.labels') }}</label><br>
-         </div>
-         <div class="col-md-9">
-           <template v-for="(item,index) in color">
-             <b-form-radio class="custom-radio-color" inline v-model="formData.backgroundColor" :color="item.color" :value="item.value" :key="index" v-if="showLabels(item)">{{ item.label }}</b-form-radio>
-           </template>
-         </div>
-        </div>
+          <div class="row align-items-center justify-content-between w-100 mb-3">
+            <div class="col-md-3">
+              <label for="title">{{ $t('assignments.addAssignmentsModal.appointmentCanceledInAdvanceByClinic') }} </label>
+            </div>
+            <div class="col-md-9">
+              <template v-for="(item,index) in appointment_canceled_in_advance_by_clinic">
+                <b-form-radio
+                    class="custom-radio-patient"
+                    inline
+                    v-model="formData.appointment_canceled_in_advance_by_clinic"
+                    :value="item.value"
+                    :key="index"
+                    v-if="showProps(item, formData.appointment_canceled_in_advance_by_clinic)"
+                >
+                  {{ item.label }}
+                </b-form-radio>
+              </template>
+            </div>
+          </div>
+          <div class="row align-items-center justify-content-between w-100 mb-3">
+            <div class="col-md-3">
+              <label for="title">{{ $t('assignments.addAssignmentsModal.appointmentCanceledInAdvanceByPatient') }} </label>
+            </div>
+            <div class="col-md-9">
+            <template v-for="(item,index) in appointment_canceled_in_advance_by_patient">
+              <b-form-radio
+                  class="custom-radio-patient"
+                  inline
+                  v-model="formData.appointment_canceled_in_advance_by_patient"
+                  :value="item.value"
+                  :key="index"
+                  v-if="showProps(item, formData.appointment_canceled_in_advance_by_patient)"
+              >
+                {{ item.label }}
+              </b-form-radio>
+            </template>
+            </div>
+          </div>
+          <div class="row align-items-center justify-content-between w-100 mb-3">
+            <div class="col-md-3">
+              <label for="color">{{ $t('calendarEvent.labels') }}</label><br>
+            </div>
+            <div class="col-md-9">
+              <template v-for="(item,index) in color">
+                <b-form-radio class="custom-radio-color" inline v-model="formData.backgroundColor" :color="item.color" :value="item.value" :key="index" v-if="showLabels(item)">{{ item.label }}</b-form-radio>
+              </template>
+            </div>
+          </div>
        <div class="modal-footer modal-footer-bt" style="width: 100%;">
          <template v-if="disabled">
            <button type="button" class="btn btn-secondary" @click="$emit('setModalShow', false), formData = defaultAppointment">Close</button>
@@ -245,6 +292,30 @@ export default {
           checked: false
         }
       ],
+      appointment_canceled_in_advance_by_clinic: [
+        {
+          label: false,
+          value: false,
+          checked: true
+        },
+        {
+          label: true,
+          value: true,
+          checked: false
+        }
+      ],
+      appointment_canceled_in_advance_by_patient: [
+        {
+          label: false,
+          value: false,
+          checked: true
+        },
+        {
+          label: true,
+          value: true,
+          checked: false
+        }
+      ],
       color: [
         {
           label: 'Default',
@@ -293,7 +364,9 @@ export default {
         doctorId: '',
         locationId: '',
         enquiry_id: '',
-        product_groups: ''
+        product_groups: '',
+        appointment_canceled_in_advance_by_clinic: '',
+        appointment_canceled_in_advance_by_patient: ''
       },
       calendarApi: null,
       modalTitle: '',
@@ -357,8 +430,9 @@ export default {
         // this.$emit('updateApp')
       })
     },
-    showPatientAttended (item) {
-      if (this.disabled && this.formData.patient_attended === item.value) {
+    showProps (item, prop) {
+      if (this.disabled && prop === item.value) {
+        console.log(prop)
         return true
       } else if (!this.disabled) {
         return true
@@ -451,7 +525,6 @@ export default {
       return moment(startDate).add(hours, 'hours').add(minutes, 'minutes').format('YYYY-MM-DDTHH:mm')
     },
     saveAppointment () {
-      // this.modalShow = false
       if (this.formData.patientId && this.formData.doctorId && this.formData.assignmentDate) {
         this.disabled = true
         let id = this.calendarApi.getEvents().length + 1
@@ -490,6 +563,8 @@ export default {
             minutes: this.formData.minutes,
             notes: this.formData.notes,
             product_groups: this.formData.product_groups,
+            appointment_canceled_in_advance_by_clinic: this.formData.appointment_canceled_in_advance_by_clinic,
+            appointment_canceled_in_advance_by_patient: this.formData.appointment_canceled_in_advance_by_patient,
             patient_attended: this.formData.patient_attended,
             backgroundColor: this.formData.backgroundColor,
             resourceId: this.formData.resourceId,

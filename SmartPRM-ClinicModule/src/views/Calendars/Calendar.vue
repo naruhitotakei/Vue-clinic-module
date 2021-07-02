@@ -336,6 +336,8 @@ export default {
             end: endDay,
             backgroundColor: item.app_lb_color ? item.app_lb_color : '#64D6E8',
             patient_attended: patientAttended,
+            appointment_canceled_in_advance_by_patient: item.appointment_canceled_in_advance_by_patient,
+            appointment_canceled_in_advance_by_clinic: item.appointment_canceled_in_advance_by_clinic,
             resourceId: item.doctor_user_id,
             eventResourceId: item.doctor_user_id,
             locationId: item.location ? item.location : item.app_location,
