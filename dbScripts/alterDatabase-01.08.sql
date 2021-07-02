@@ -4,7 +4,7 @@
 
 ALTER TABLE prm_product_category ADD CONSTRAINT prm_product_category_pk PRIMARY KEY (category_id);
 
-ALTER TABLE prm_product_group ADD COLUMN category_id SERIAL
+ALTER TABLE prm_product_group ADD COLUMN category_id INT
 CONSTRAINT product_group_product_category REFERENCES prm_product_category(category_id);
 
 --############################################################

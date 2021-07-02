@@ -104,8 +104,8 @@ CREATE TABLE IF NOT EXISTS prm_invoice_item (
 --############################################################
 CREATE TABLE IF NOT EXISTS prm_product (
    product_id			SERIAL UNIQUE,
-   product_type_id		SERIAL UNIQUE CONSTRAINT product_product_type_fk REFERENCES prm_product_type (product_type_id),
-   product_group_id		SERIAL UNIQUE CONSTRAINT product_product_group_fk REFERENCES prm_product_group (product_group_id),
+   product_type_id		INT CONSTRAINT product_product_type_fk REFERENCES prm_product_type (product_type_id),
+   product_group_id		INT CONSTRAINT product_product_group_fk REFERENCES prm_product_group (product_group_id),
    product_name		    VARCHAR(32) NOT NULL,
    product_price		MONEY NOT NULL,
    VAT_tax_rate		    DECIMAL,

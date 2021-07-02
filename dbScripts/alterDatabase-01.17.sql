@@ -21,21 +21,6 @@ ALTER TABLE invoice_item ALTER COLUMN invoice_id TYPE INT;
 ALTER TABLE invoice_item ALTER COLUMN product_id TYPE INT;
 
 --############################################################
---# changing foreign keys in prm tables to INT type
---############################################################
-
-ALTER TABLE prm_product ALTER COLUMN product_type_id TYPE INT;
-ALTER TABLE prm_product ALTER COLUMN product_group_id TYPE INT;
-
-ALTER TABLE prm_product_group ALTER COLUMN category_id TYPE INT;
-
-ALTER TABLE prm_product_category_name ALTER COLUMN category_id TYPE INT;
-
-ALTER TABLE prm_product_name ALTER COLUMN product_id TYPE INT;
-
-ALTER TABLE prm_product_group_name ALTER COLUMN product_group_id TYPE INT;
-
---############################################################
 --# removing premise_label column from prm_company_premise
 --############################################################
 

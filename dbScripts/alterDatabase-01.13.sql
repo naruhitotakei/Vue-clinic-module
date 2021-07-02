@@ -16,7 +16,7 @@ ALTER TABLE prm_product DROP COLUMN taxable_amount;
 
 CREATE TABLE IF NOT EXISTS prm_product_translation (
 	id SERIAL,
-	product_id		SERIAL CONSTRAINT prm_product_translations_prm_product REFERENCES prm_product (product_id),
+	product_id		INT CONSTRAINT prm_product_translations_prm_product REFERENCES prm_product (product_id),
 	english			VARCHAR(256),
 	italian			VARCHAR(256),
 	german			VARCHAR(256),
@@ -655,7 +655,7 @@ CONSTRAINT users_prm_company_fk REFERENCES prm_company (company_id);
 
 CREATE TABLE IF NOT EXISTS prm_product_group_name (
 	id					SERIAL PRIMARY KEY,
-	product_group_id	SERIAL CONSTRAINT prm_product_group_name_prm_product_group REFERENCES prm_product_group (product_group_id),
+	product_group_id	INT CONSTRAINT prm_product_group_name_prm_product_group REFERENCES prm_product_group (product_group_id),
 	language			VARCHAR(8),
 	text				VARCHAR(128),
 	created_date		DATE NOT NULL DEFAULT CURRENT_DATE 
@@ -713,7 +713,7 @@ ALTER TABLE prm_product_group DROP COLUMN product_group_name;
 
 CREATE TABLE IF NOT EXISTS prm_product_category_name (
 	id						SERIAL PRIMARY KEY,
-	product_category_id		SERIAL CONSTRAINT prm_product_category_name_prm_product_category REFERENCES prm_product_category (category_id),
+	product_category_id		INT CONSTRAINT prm_product_category_name_prm_product_category REFERENCES prm_product_category (category_id),
 	language				VARCHAR(8),
 	text					VARCHAR(128),
 	created_date			DATE NOT NULL DEFAULT CURRENT_DATE 
