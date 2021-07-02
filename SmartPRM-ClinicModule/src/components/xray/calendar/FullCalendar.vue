@@ -158,44 +158,47 @@
            </template>
          </div>
         </div>
-          <div class="row align-items-center justify-content-between w-100 mb-3">
-            <div class="col-md-3">
-              <label for="title">{{ $t('assignments.addAssignmentsModal.appointmentCanceledInAdvanceByClinic') }} </label>
+          <template v-if="formData.id">
+            <div class="row align-items-center justify-content-between w-100 mb-3">
+              <div class="col-md-3">
+                <label for="title">{{ $t('assignments.addAssignmentsModal.appointmentCanceledInAdvanceByClinic') }} </label>
+              </div>
+              <div class="col-md-9">
+                <template v-for="(item,index) in appointment_canceled_in_advance_by_clinic">
+                  <b-form-radio
+                      class="custom-radio-patient"
+                      inline
+                      v-model="formData.appointment_canceled_in_advance_by_clinic"
+                      :value="item.value"
+                      :key="index"
+                      v-if="showProps(item, formData.appointment_canceled_in_advance_by_clinic)"
+                  >
+                    {{ item.label }}
+                  </b-form-radio>
+                </template>
+              </div>
             </div>
-            <div class="col-md-9">
-              <template v-for="(item,index) in appointment_canceled_in_advance_by_clinic">
-                <b-form-radio
-                    class="custom-radio-patient"
-                    inline
-                    v-model="formData.appointment_canceled_in_advance_by_clinic"
-                    :value="item.value"
-                    :key="index"
-                    v-if="showProps(item, formData.appointment_canceled_in_advance_by_clinic)"
-                >
-                  {{ item.label }}
-                </b-form-radio>
-              </template>
+            <div class="row align-items-center justify-content-between w-100 mb-3">
+              <div class="col-md-3">
+                <label for="title">{{ $t('assignments.addAssignmentsModal.appointmentCanceledInAdvanceByPatient') }} </label>
+              </div>
+              <div class="col-md-9">
+                <template v-for="(item,index) in appointment_canceled_in_advance_by_patient">
+                  <b-form-radio
+                      class="custom-radio-patient"
+                      inline
+                      v-model="formData.appointment_canceled_in_advance_by_patient"
+                      :value="item.value"
+                      :key="index"
+                      :click="checkRadio"
+                      v-if="showProps(item, formData.appointment_canceled_in_advance_by_patient)"
+                  >
+                    {{ item.label }}
+                  </b-form-radio>
+                </template>
+              </div>
             </div>
-          </div>
-          <div class="row align-items-center justify-content-between w-100 mb-3">
-            <div class="col-md-3">
-              <label for="title">{{ $t('assignments.addAssignmentsModal.appointmentCanceledInAdvanceByPatient') }} </label>
-            </div>
-            <div class="col-md-9">
-            <template v-for="(item,index) in appointment_canceled_in_advance_by_patient">
-              <b-form-radio
-                  class="custom-radio-patient"
-                  inline
-                  v-model="formData.appointment_canceled_in_advance_by_patient"
-                  :value="item.value"
-                  :key="index"
-                  v-if="showProps(item, formData.appointment_canceled_in_advance_by_patient)"
-              >
-                {{ item.label }}
-              </b-form-radio>
-            </template>
-            </div>
-          </div>
+          </template>
           <div class="row align-items-center justify-content-between w-100 mb-3">
             <div class="col-md-3">
               <label for="color">{{ $t('calendarEvent.labels') }}</label><br>
@@ -294,22 +297,12 @@ export default {
       ],
       appointment_canceled_in_advance_by_clinic: [
         {
-          label: false,
-          value: false,
-          checked: true
-        },
-        {
           label: true,
           value: true,
           checked: false
         }
       ],
       appointment_canceled_in_advance_by_patient: [
-        {
-          label: false,
-          value: false,
-          checked: true
-        },
         {
           label: true,
           value: true,
@@ -365,8 +358,8 @@ export default {
         locationId: '',
         enquiry_id: '',
         product_groups: '',
-        appointment_canceled_in_advance_by_clinic: '',
-        appointment_canceled_in_advance_by_patient: ''
+        appointment_canceled_in_advance_by_clinic: false,
+        appointment_canceled_in_advance_by_patient: false
       },
       calendarApi: null,
       modalTitle: '',
@@ -404,6 +397,16 @@ export default {
         this.formData = this.defaultAppointment()
       }
       this.showModal = this.modalShow.show
+    },
+    'formData.appointment_canceled_in_advance_by_clinic' () {
+      if (this.formData.appointment_canceled_in_advance_by_clinic) {
+        this.formData.appointment_canceled_in_advance_by_patient = false
+      }
+    },
+    'formData.appointment_canceled_in_advance_by_patient' () {
+      if (this.formData.appointment_canceled_in_advance_by_patient) {
+        this.formData.appointment_canceled_in_advance_by_clinic = false
+      }
     }
   },
   mounted () {
@@ -429,6 +432,16 @@ export default {
       updateCalendarLabel(id, appointment).then(() => {
         // this.$emit('updateApp')
       })
+    },
+    checkRadio () {
+      console.log('1')
+      console.log(this.formData.appointment_canceled_in_advance_by_patient)
+      console.log(this.formData.appointment_canceled_in_advance_by_clinic)
+      if (this.formData.appointment_canceled_in_advance_by_patient) {
+        this.formData.appointment_canceled_in_advance_by_clinic = ''
+      } else {
+        this.formData.appointment_canceled_in_advance_by_patient = ''
+      }
     },
     showProps (item, prop) {
       if (this.disabled && prop === item.value) {
@@ -532,7 +545,13 @@ export default {
         // let title = this.patients.find(item => item.id === this.formData.patientId)
         // this.modalTitle = title.full_name
         this.formData.resourceId = this.formData.doctorId
-
+        if (!this.formData.appointment_canceled_in_advance_by_clinic) {
+          this.formData.appointment_canceled_in_advance_by_clinic = false
+        }
+        if (!this.formData.appointment_canceled_in_advance_by_patient) {
+          this.formData.appointment_canceled_in_advance_by_patient = false
+        }
+        console.log(this.formData)
         if (typeof this.formData.patientId === 'object') {
           this.formData.patientId = this.formData.patientId.id
         } else {
@@ -595,7 +614,6 @@ export default {
           event.setExtendedProp('patientId', this.formData.patientId)
           event.setExtendedProp('doctorId', this.formData.doctorId)
           event.setExtendedProp('locationId', this.formData.locationId)
-
           this.updateCalendar(this.formData.id, this.formData)
           this.updateCalendarLabel(this.formData.id, this.formData)
           this.formData = this.defaultAppointment()

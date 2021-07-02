@@ -235,7 +235,6 @@ export default {
   },
   watch: {
     'allDoctorCheck' () {
-      console.log(this.allDoctorCheck)
     }
   },
   computed: {
@@ -297,7 +296,6 @@ export default {
     getApontments () {
       this.events = []
       getCalendar('2021-01-01', '2021-12-31', '', this.$i18n.locale).then(data => {
-        console.log(data.find(item => item.id === 41461))
         let dataWithDoctor = data.filter(item => {
           if (item.doctor_user_id !== null) {
             this.doctors.push({
@@ -324,7 +322,6 @@ export default {
           }
         })
         this.clonedResources = this.resources
-        console.log(this.product_groups)
         dataWithDoctor.map(item => {
           let patientAttended = item.patient_attended === 'true' ? 'attended' : item.patient_attended === 'null' ? 'unknown' : 'not_attended'
           // let productGroups = this.product_groups && this.product_groups.find(productName => productName.product_group_id === item.prm_pr_group_name_id)

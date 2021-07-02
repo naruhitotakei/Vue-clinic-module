@@ -487,8 +487,8 @@
       "close": "Close",
       "save": "Save",
       "patientAttended": "Patient Attended",
-      "appointmentCanceledInAdvanceByClinic": "Appointment canceled in advance  by clinic",
-      "appointmentCanceledInAdvanceByPatient": "Appointment canceled in advance  by patient"
+      "appointmentCanceledInAdvanceByClinic": "Appointment canceled by clinic",
+      "appointmentCanceledInAdvanceByPatient": "Appointment canceled by patient"
     }
   },
   "statisticsForClinic": {
