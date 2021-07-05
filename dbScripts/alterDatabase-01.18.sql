@@ -56,13 +56,6 @@ ADD COLUMN next_visit DATE;
 
 UPDATE enquiries SET prm_client_id = 1 WHERE client_id IN (10, 23);
 
---############################################################
---# Adding reference_code_furs column to prm_company_premise
---############################################################
-
-ALTER TABLE prm_company_premise ADD COLUMN reference_code_furs VARCHAR(16);
-UPDATE prm_company_premise SET reference_code_furs = 01 WHERE id = 
-
 UPDATE db_version SET version ='01.18', version_date=CURRENT_DATE WHERE resource='Tables';
 
 
