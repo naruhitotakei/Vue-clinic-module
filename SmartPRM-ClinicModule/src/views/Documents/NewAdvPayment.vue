@@ -407,9 +407,11 @@ export default {
       this.pdfName = this.invoiceNumber === 'invoice.draft' ? this.$t('invoice.draft') : this.invoiceNumber
     },
     calculatePdfNumber () {
+      let year = moment().format('YY')
       let premiseNumber = this.issuedIn.premise_id < 10 ? '0' + this.issuedIn.premise_id : this.issuedIn.premise_id
       let invoiceNumber = this.invoiceNumber === 'invoice.draft' ? this.$t('invoice.draft').toLowerCase() : this.invoiceNumber
-      this.pdfNumber = premiseNumber + '-' + this.device.device_name + '-' + invoiceNumber
+      let zeroFill = _.padStart(invoiceNumber, 5, '0')
+      this.pdfNumber = premiseNumber + '-' + this.device.device_name + '-' + year + zeroFill
     },
     createBillingDetails (selectedPatient) {
       let details = ''
@@ -489,9 +491,11 @@ export default {
       })
     },
     generateReferenceCode () {
+      let premiseNumber = this.issuedIn.premise_id < 10 ? '0' + this.issuedIn.premise_id : this.issuedIn.premise_id
       let year = moment().format('YY')
+      let zeroFill = _.padStart(this.invoiceNumber, 5, '0')
       this.referenceCode = 'AR-' + year + '-' + this.invoiceNumber
-      this.referenceCodeFurs = 'AR-' + year + '-' + this.invoiceNumber
+      this.referenceCodeFurs = premiseNumber + '-' + this.device.device_name + '-' + year + zeroFill
     },
     isInoiceValid () {
       let valid = true
