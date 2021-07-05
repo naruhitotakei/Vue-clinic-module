@@ -19,7 +19,7 @@
             <p>{{patient.post_code}} {{patient.city}}</p>
           </b-col>
           <b-col lg="6">
-            <p>{{ $t('advPayments.newAdvPayment.advPaymentNo') }}: {{pdfNumber}}</p>
+            <p>{{ $t('advPayments.newAdvPayment.advPaymentNo') }}: {{referenceCodeFurs}}</p>
             <p>{{ $t('advPayments.newAdvPayment.copy') }}:<span style="margin-left:20px">Original</span></p>
             <p>{{ $t('advPayments.newAdvPayment.IssuedIn') }}:<span style="margin-left:20px">{{issuedIn.premise_city}}</span></p>
             <p>{{ $t('advPayments.newAdvPayment.dateOfAdvPayment') }}:<span style="margin-left:20px">{{invoiceTime}}</span></p>
