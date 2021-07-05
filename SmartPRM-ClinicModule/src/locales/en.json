@@ -305,6 +305,7 @@
       "dateOfInvoice": "Date of invoice",
       "dateOfService": "Date of service",
       "paymentMethodSummary": "Payment Method Summary",
+      "invoiceNo": "INVOICE no.",
       "addPaymentMethod": "Add new payment method",
       "newInvoiceColumn": {
         "invoiceDate": "Date",

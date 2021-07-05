@@ -291,7 +291,8 @@
       "newInvoiceHeader": "Nov račun",
       "dateOfInvoice": "Datum izdaje",
       "dateOfService": "Datum storitve",
-      "paymentMethodSummary": "",
+      "paymentMethodSummary": "Povzetek načina plačila",
+      "invoiceNo": "RAČUN št.",
       "addPaymentMethod": "Dodaj nov način plačila",
       "newInvoiceColumn": {
         "invoiceDate": "Datum izdaje",

@@ -19,7 +19,7 @@
             <p>{{invoice.enquiries_post_code}} {{invoice.enquiries_city}}</p>
           </b-col>
           <b-col lg="6">
-            <p>{{ $t('advPayments.newAdvPayment.advPaymentNo') }}: {{pdfNumber}}</p>
+            <p>{{ $t('advPayments.newAdvPayment.advPaymentNo') }}: {{invoice.reference_code_furs}}</p>
             <p>{{ $t('advPayments.newAdvPayment.copy') }}:<span style="margin-left:20px">Original</span></p>
             <p>{{ $t('advPayments.newAdvPayment.IssuedIn') }}:<span style="margin-left:20px">{{premiseCity}}</span></p>
             <p>{{ $t('advPayments.newAdvPayment.dateOfAdvPayment') }}:<span style="margin-left:20px">{{invoiceDatePdf}}</span></p>
