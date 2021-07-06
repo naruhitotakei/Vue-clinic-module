@@ -10,13 +10,16 @@ const pool = new Pool({
 var moment = require('moment');  
 
 const getEnquiries = (request, response, user_id, accessible_user_ids, prm_client_id, scope, sortBy) => {
-    var statement = "SELECT enquiries.* , concat(u.title, ' ', u.first_name , ' ', u.surname) AS label FROM enquiries "
+    let statement = "SELECT  enquiries.* , concat(u.title, ' ', u.first_name , ' ', u.surname) AS label, " +
+      "r.name AS region_name, countries.code AS country_code, countries.name AS country_name FROM enquiries "
     statement +=    "JOIN clients ON enquiries.client_id = clients.id "
     statement +=    "LEFT JOIN prm_client ON prm_client.id = clients.id  "
     statement +=    "LEFT JOIN users u ON u.id = enquiries.prm_dentist_user_id  "
-    statement +=    "WHERE enquiries.trashed IS FALSE ";
-    statement +=    "AND clients.trashed IS FALSE ";
-    statement +=    "AND prm_client.client_deleted IS FALSE ";
+    statement +=    "LEFT JOIN countries ON countries.id = enquiries.country_id  "
+    statement +=    "LEFT JOIN regions r ON r.country_id = countries.id  "
+    statement +=    "WHERE enquiries.trashed IS FALSE "
+    statement +=    "AND clients.trashed IS FALSE "
+    statement +=    "AND prm_client.client_deleted IS FALSE "
     if (scope=='All') {        
     } else if (scope=='PrmClient') {
         statement += "AND prm_client.id=" + prm_client_id;  
@@ -32,8 +35,9 @@ const getEnquiries = (request, response, user_id, accessible_user_ids, prm_clien
         statement += ") ";    
     }
     statement += "ORDER BY last_name ASC"
-    console.log(statement)
+    console.log('statement>>>>>>>', statement)
     pool.query(statement, (error, results) => {
+        console.log(error)
         if (error) {
             throw error
         }

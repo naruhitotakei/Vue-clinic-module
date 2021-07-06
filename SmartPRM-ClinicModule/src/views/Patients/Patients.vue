@@ -202,8 +202,8 @@ export default {
         this.patients = response.map(obj => (
           { ...obj,
             editable: false,
-            region: 'n/a',
-            country: 'n/a',
+            region: !obj.region_name ? 'n/a' : obj.region_name,
+            country: !obj.country_name ? 'n/a' : obj.country_name,
             last_visit: obj.last_visit,
             next_visit: obj.next_visit,
             personal_dentist: obj.label
