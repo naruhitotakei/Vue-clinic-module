@@ -21,22 +21,6 @@
                     </template>
                   </v-select>
                 </div>
-                <div class="col-md-12 mb-3">
-                  <label for="title">Invoices *</label>
-                  <div style="display: flex; flex-direction: column">
-                    <template v-for="(item) in invoicesType">
-                      <b-form-radio
-                          class="custom-radio-color"
-                          inline
-                          v-model="selectedInvoices"
-                          :name="item.value"
-                          :value="item.value"
-                          :key="item.value"
-                      >{{ item.label }}
-                      </b-form-radio>
-                    </template>
-                  </div>
-                </div>
               </div>
             </form>
           </b-modal>
@@ -160,21 +144,6 @@ export default {
       selectedPatient: null,
       patients: [],
       modalInvoiceShow: false,
-      selectedInvoices: '',
-      invoicesType: [
-        {
-          label: 'invoice',
-          value: 'new-invoice'
-        },
-        {
-          label: 'advance payment',
-          value: 'new-adv-payment'
-        },
-        {
-          label: 'offer',
-          value: 'offer'
-        }
-      ],
       searchOptions: [
         { value: 'invoice_number', text: 'Number' },
         { value: 'patient_name', text: 'Patient Name' },
@@ -256,16 +225,7 @@ export default {
       this.$router.push({ path: `/documents/invoices/${item.invoice_id}` })
     },
     addInvoice () {
-      // this.$router.push({ path: `/documents/invoices/${this.selectedPatient.id}/new-invoice` })
-      switch (this.selectedInvoices) {
-        case 'new-invoice':
-          return this.$router.push({ path: `/documents/invoices/${this.selectedPatient.id}/${this.selectedInvoices}` })
-        case 'new-adv-payment':
-          return this.$router.push({ path: `/documents/advance-payments/${this.selectedPatient.id}/${this.selectedInvoices}` })
-        case 'offer':
-          return this.$router.push({ path: `/documents/offer/${this.selectedPatient.id}/${this.selectedInvoices}` })
-        default:
-      }
+      this.$router.push({ path: `/documents/invoices/${this.selectedPatient.id}/new-invoice` })
     },
     getInvoices () {
       getInvoices().then(response => {
