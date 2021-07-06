@@ -5,7 +5,7 @@
           <b-modal v-model="modalShow"
                    no-close-on-backdrop size="md"
                    :title="$t('invoices.addNewInvoice.selectPatient')"
-                   :ok-disabled="!selectedPatient || !selectedInvoices"
+                   :ok-disabled="!selectedPatient"
                    :ok-title="$t('invoices.addNewInvoice.create')"
                    @ok="addInvoice"
                    @close="selectedPatient = null; selectedInvoices = ''"
