@@ -55,12 +55,6 @@
               </v-select>
             </div>
           </div>
-<!--        <div class="col-md-12 mb-3">-->
-<!--          <label for="title">Title</label>-->
-<!--          <div style="display: flex;">-->
-<!--            <input type="text" :disabled="disabled" v-model="formData.title" class="form-control form-control-disabled" placeholder="Title" id="title" required>-->
-<!--          </div>-->
-<!--        </div>-->
        <div class="row align-items-center justify-content-between w-100 mb-3">
          <div class="col-md-3">
          <label for="notes">{{ $t('calendarEvent.note') }}</label>
@@ -297,14 +291,14 @@ export default {
       ],
       appointment_canceled_in_advance_by_clinic: [
         {
-          label: true,
+          label: 'Canceled',
           value: true,
           checked: false
         }
       ],
       appointment_canceled_in_advance_by_patient: [
         {
-          label: true,
+          label: 'Canceled',
           value: true,
           checked: false
         }
