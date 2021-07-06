@@ -76,6 +76,7 @@
           </b-col>
           <b-col lg="6">
             <qrcode-vue
+              class="qr-margin float-right"
               :value="qrCode"
               size="120"
               level="M"
@@ -244,7 +245,7 @@ export default {
       let options = {
         filename: this.invoice.invoice_number + '.pdf',
         image: { type: 'jpeg', quality: 0.98 },
-        html2canvas: { y: -40 },
+        html2canvas: { y: 240 },
         jsPDF: { unit: 'mm', format: 'a3' }
       }
       var source = window.document.getElementById('printInvoice')
@@ -324,3 +325,11 @@ export default {
   }
 }
 </script>
+
+<style lang="scss">
+
+.qr-margin {
+    margin: 3rem 12rem 0 0;
+}
+
+</style>
