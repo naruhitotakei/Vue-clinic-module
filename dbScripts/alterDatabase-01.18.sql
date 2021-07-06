@@ -56,6 +56,26 @@ ADD COLUMN next_visit DATE;
 
 UPDATE enquiries SET prm_client_id = 1 WHERE client_id IN (10, 23);
 
+--############################################################
+--# adding ON DELETE CASCADE constraints
+--############################################################
+
+ALTER TABLE payment_item
+DROP CONSTRAINT payment_method_invoice_fk,
+ADD CONSTRAINT payment_item_invoice_id_fk 
+FOREIGN KEY (invoice_id)
+REFERENCES invoice (invoice_id) ON DELETE CASCADE;
+
+ALTER TABLE invoice_item
+DROP CONSTRAINT invoice_item_invoice_fk,
+ADD CONSTRAINT invoice_item_invoice_id_fk
+FOREIGN KEY (invoice_id)
+REFERENCES invoice (invoice_id) ON DELETE CASCADE;
+
+--############################################################
+--# update version
+--############################################################
+
 UPDATE db_version SET version ='01.18', version_date=CURRENT_DATE WHERE resource='Tables';
 
 
