@@ -602,8 +602,14 @@
                                   <div class="iq-card-body">
                                       <ul class="profile-img-gallary d-flex flex-wrap p-0 m-0">
                                           <li class="col-md-4 col-6 pb-3" v-for="(file, index) in filesSortBy" :key="index + file.created_at">
-                                              <img :src="file.image" alt="gallary-image" class="img-fluid patient-filex" v-if="!file.pdf">
-                                              <object :data="file.image" type="application/pdf" width="250px" height="auto" class="m-auto d-block" v-else>
+                                            <div v-html="tiffConvertToCanvas(file, index)" :class="`tiff-block-${index}`"></div>
+                                              <img
+                                                  :src="file.image"
+                                                  alt="gallary-image"
+                                                  class="img-fluid img-files"
+                                                  v-if="file.type !== 'tiff'"
+                                              >
+                                              <object :data="file.image" type="application/pdf" width="250px" height="auto" class="m-auto d-block" v-if="file.pdf">
                                               </object>
                                               <div class="text-center">
                                                   <p class="mb-0">{{ $t('EPR.files.fileName') }}: {{file.name}}</p>
@@ -853,12 +859,13 @@ import {
 } from '../../services/enquiry'
 import { getDentists, getSurgeons, sso } from '../../services/userService'
 import { getCountriesList, getRegionsList, getLocationsList } from '../../services/commonCodeLists'
-// import { getUsers } from '@/services/userService'
 import moment from 'moment'
 import { createAssignments } from '@/services/assignmentsService'
 import { fileUpload, getFiles } from '@/services/upDownLoad'
 import { createCalendar, createCalendarLabel, getDoctorList } from '@/services/calendarService'
 import { getProductGroups } from '@/services/products'
+import Tiff from 'tiff.js'
+
 export default {
   name: 'ViewPatient',
   mounted () {
@@ -1230,33 +1237,40 @@ export default {
   },
   methods: {
     sortSelectedInvoice () {
-      console.log(this.sortByInvoice)
       this.getPatientInvoices(this.patientId, this.sortByInvoice.sort.toUpperCase())
     },
     uploadFile (e) {
-      fileUpload(e.target.files[0], this.$route.params.patientId)
-      let reader = new FileReader()
-      reader.readAsDataURL(e.target.files[0])
-      reader.onload = () => {
-        let image = e.target.files[0].type.split('/')[1] === 'tiff' || e.target.files[0].type.split('/')[1] === 'dcm' ? require('../../assets/images/icon-preview.png') : reader.result
-        let file = {
-          image: image,
-          name: this.$route.params.patientId + '-' + Date.now() + '.' + e.target.files[0].type.split('/')[1],
-          type: e.target.files[0].type.split('/')[1],
-          created_at: moment(Date.now()).format('YYYY-MM-DD'),
-          pdf: e.target.files[0].type.split('/')[1] === 'pdf'
+      console.log(e)
+      fileUpload(e.target.files[0], this.$route.params.patientId).then(data => {
+        let reader = new FileReader()
+        reader.readAsDataURL(e.target.files[0])
+        reader.onload = () => {
+          let file = {
+            image: reader.result,
+            name: this.$route.params.patientId + '-' + Date.now() + '.' + e.target.files[0].type.split('/')[1],
+            type: e.target.files[0].type.split('/')[1],
+            created_at: moment(Date.now()).format('YYYY-MM-DD'),
+            pdf: e.target.files[0].type.split('/')[1] === 'pdf'
+          }
+          this.files.push(file)
         }
-        console.log(file)
-        this.files.push(file)
-      }
-      console.log(this.$refs)
+        let type = data.data.split('.')[5]
+        let img = data.data.split('/')[3]
+        let file = {
+          image: `/api/files/${img}`
+        }
+        console.log(this.files.length + 1)
+        if (type === 'tiff') {
+          this.tiffConvertToCanvas(file, this.files.length)
+        }
+      })
     },
     getFiles () {
       getFiles().then(data => {
         for (let i = 0; i < data.data.Contents.length; i++) {
           let key = data.data.Contents[i].Key.split('-')[0]
           let type = data.data.Contents[i].Key.split('.')[1]
-          let image = type === 'tiff' || type === 'dcm' ? require('../../assets/images/icon-preview.png') : '/api/files/' + data.data.Contents[i].Key
+          let image = '/api/files/' + data.data.Contents[i].Key
           if (key === this.$route.params.patientId) {
             this.files.push({
               image: image,
@@ -1269,14 +1283,28 @@ export default {
         }
       })
     },
+    tiffConvertToCanvas (file, index) {
+      let type = file.image.split('.')[1]
+      if (type === 'tiff') {
+        let canvas = null
+        const xhr = new XMLHttpRequest()
+        xhr.open('GET', file.image)
+        xhr.responseType = 'arraybuffer'
+        xhr.onload = function (e) {
+          const buffer = xhr.response
+          const tiff = new Tiff({ buffer: buffer })
+          canvas = tiff.toCanvas()
+          if (canvas) {
+            document.querySelector(`.tiff-block-${index}`).append(canvas)
+          }
+        }
+        xhr.send()
+      }
+    },
     changeGeneralNotes (e) {
-      let str = e.target.innerHTML
-      console.log(str)
-      console.log('notesGeneral', this.notesGeneral)
       this.generalNotes = this.notesGeneral.replace(/\n/g, '<br>')
     },
     selectedUser (val) {
-      console.log('selected', val)
     },
     getOptionLabel (option) {
       return (option && option.label) || ''
@@ -1465,7 +1493,6 @@ export default {
       this.formData = this.defaultFormData()
     },
     addAssignments () {
-      console.log(this.formData)
       createAssignments(this.formData).then(() => {
         this.getPatientAssignments()
         this.formData = this.defaultFormData()
@@ -1515,7 +1542,6 @@ export default {
       if (typeof this.formAppointments.product_groups === 'object') {
         this.formAppointments.product_groups = this.formAppointments.product_groups.product_group_id
       }
-      console.log(this.formAppointments)
       createCalendar(this.formAppointments).then((data) => {
         createCalendarLabel(data[0].id, this.formAppointments).then(() => {
           this.formAppointments = this.defaultFormAppointment()
@@ -1533,7 +1559,6 @@ export default {
     },
     getDoctors () {
       getDoctorList().then((response) => {
-        console.log(response)
         this.doctors = response
         this.formAppointments.doctor_id = response.find(doctor => doctor.name === this.logedInUser.name)
       })
@@ -1541,7 +1566,6 @@ export default {
     getUserLogin () {
       sso().then(response => {
         if (typeof response !== 'string') {
-          console.log(response)
           this.logedInUser = response
         }
       })
@@ -1586,6 +1610,22 @@ export default {
   max-width: 250px !important;
   margin: 0 auto;
   display: block;
+}
+
+.img-files {
+  display: block;
+  margin: 0 auto;
+  max-width: 300px !important;
+}
+
+canvas {
+  max-width: 300px;
+  display: block;
+  margin: 0 auto;
+  &:not(:first-child)
+  {
+    display: none;
+  }
 }
 
 @media (max-width: 992px) {

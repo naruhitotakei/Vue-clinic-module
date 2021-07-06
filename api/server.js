@@ -941,7 +941,7 @@ app.post('/api/files/upload/:id', async function(req, res) {
   console.log(req.files.file)
   if(req.session.prm_user) {
     const rv = await awsS3.fileUpload( id, id +'-picture-' + Date.now() , req.files.file.data, req.files.file.mimetype)
-    res.status(200).json(rv.status)
+    res.status(200).json(rv)
   }
   else
     res.status(401).json("OK: user unauthorized")
