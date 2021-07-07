@@ -102,19 +102,22 @@
   "calendar": {
     "selectDoctor": "Izberi zdravnika",
     "selectAll": "Izberi vse",
-    "bookAppointment": "Nov termin"
+    "addAppointment": "Nov termin"
   },
   "calendarEvent": {
     "start": "Začetek",
     "duration": "Trajanje",
-    "notes": "Opombe",
+    "note": "Opombe",
     "changeColor": "Spremeni barvo",
+    "labels": "Oznaka",
     "viewPatient": "Ogled pacienta",
     "changeDisplayColor": "Spremeni barvo termina",
     "appointmentCancelled": "Pacient je odpovedal termin",
     "patient": "Pacient",
     "doctor": "Zdravnik",
-    "location": "Lokacije"
+    "location": "Lokacije",
+    "patient_attended": "Pacient je prišel na termin",
+    "product_group": "Skupina produkta"
   },
   "patients": {
     "patientsHeader": "Pacienti",
@@ -147,7 +150,9 @@
       "deletePatient": "Izbriši pacienta",
       "personalDoctors": "Osebni zdravniki",
       "personalDentist": "Osebni zobozdravnik",
+      "Dentist": "Zobozdravnik",
       "personalSurgeon": "Osebni kirurg",
+      "Surgeon": "Kirurg",
       "files": "Datoteke",
       "generalNotes": "Splošne opombe",
       "generalNotesUpdated": "Nazadnje posodobljeno",
@@ -155,6 +160,7 @@
       "allergiesUpdated": "Nazadnje posodobljeno",
       "patientNotes": "Opombe o pacientu",
       "patientNotesOpen": "Odpri",
+      "openAssignments": "Odprte naloge",
       "futureAppointments": "Bodoči termini",
       "pastAppointments": "Pretekli termini",
       "notSelected": "Ni izbrano"
@@ -191,10 +197,14 @@
       "addFile": "Dodaj datoteko",
       "fileName": "Ime datoteke",
       "fileType": "Vrsta datoteke",
-      "fileCreatedAt": "Ustvarjeno"
+      "fileCreatedAt": "Ustvarjeno",
+      "fileAddedAt": "Dodano"
     },
     "invoicesTab": "Računi",
     "invoices": {
+      "filters": {
+        "invoice_type": "Vrsta računa"
+      },
       "invoicesHeader": "Računi",
       "addInvoice": "Nov račun",
       "servicesSummary": "Povzetek storitev"
@@ -205,7 +215,9 @@
       "date": "Datum",
       "issuedBy": "Izdal",
       "amount": "Znesek",
-      "status": "Status"
+      "status": "Status",
+      "verificationStatus": "Status potrditve",
+      "paymentStatus": "Status plačila"
     },
     "servicesSummaryColumn": {
       "serviceTitle": "Storitev",
@@ -274,6 +286,7 @@
     "invoicesHeader": "Računi",
     "invoicesBtn": "Nov Račun",
     "invoicesColumn": {
+      "type": "Tip",
       "no": "Št.",
       "patientName": "Ime pacienta",
       "date": "Datum",
@@ -310,7 +323,7 @@
         "price": "Cena",
         "discount": "Popust",
         "amount": "Znesek",
-        "action": "Urejaj"
+        "action": "Možnosti"
       },
       "newInvoiceSummary": {
         "header": "Povzetek računa",
@@ -319,7 +332,7 @@
         "subTotal": "Cena",
         "discount": "Popust",
         "total": "Znesek",
-        "action": "Urejaj"
+        "action": "Možnosti"
       },
       "downloadPrint": "Prenesi tiskano verzijo",
       "saveAsDraft": "Shrani kot osnutek",
@@ -411,7 +424,7 @@
         "header": "Podatki o avansnem računu",
         "item": "Opis",
         "amount": "Znesek",
-        "action": "Urejaj"
+        "action": "Možnosti"
       }
     },
     "newAdvPaymentColumn": {
@@ -455,15 +468,29 @@
   },
   "paymentMethodsColumn": {
     "amount": "Znesek",
-    "action": "Urejaj",
+    "action": "Možnosti",
     "paid": "Plačano"
   },
   "assignments": {
     "assignmentsHeader": "Moje Naloge",
+    "addAssignments": "Nova Naloga",
     "todaysAssignments": "Današnje Naloge",
     "overdueAssignments": "Zapadle Naloge",
     "futureAssignments": "Naslednje Naloge",
-    "completedAssignments": "Opravljene Naloge"
+    "completedAssignments": "Opravljene Naloge",
+    "addAssignmentsModal": {
+      "addAssignments": "Nova naloga",
+      "editAssignments": "Uredi nalogo",
+      "enquiry": "Pacient",
+      "description": "Opis",
+      "due_at": "Datum",
+      "users": "Zdravnik",
+      "close": "Zapri",
+      "save": "Shrani",
+      "patientAttended": "Pacient se je udeležil",
+      "appointmentCanceledInAdvanceByClinic": "Klinika je preklicala termin",
+      "appointmentCanceledInAdvanceByPatient": "Pacient je preklical termin"
+    }
   },
   "statisticsForClinic": {
     "attendance": "Število terminov z udeležbo",
@@ -523,7 +550,7 @@
       "name": "Ime",
       "address": "Naslov",
       "city": "Kraj",
-      "action": "Urejaj"
+      "action": "Možnosti"
     },
     "addLocationModalHeader": "Nova lokacija",
     "editLocationModalHeader": "Uredi lokacijo",
@@ -544,7 +571,7 @@
       "productPrice": "Cena",
       "productGroup": "Skupina",
       "productType": "Vrsta",
-      "productAction": "Urejaj"
+      "productAction": "Možnosti"
     },
     "addProductModal": {
       "addProduct": "Nov produkt",
@@ -565,13 +592,39 @@
       "productGroupName": "Opis",
       "productGroupCategory": "Kategorija",
       "productGroupFee": "Emazing provizija",
-      "productGroupAction": "Urejaj"
+      "productGroupAction": "Možnosti"
     },
     "headerProductCategories": "Kategorije produktov",
     "addProductCategory": "Nova kategorija",
     "productCategoryColumn": {
       "productCategoryName": "Opis",
-      "productCategoryAction": "Urejaj"
+      "productCategoryAction": "Možnosti"
+    }
+  },
+  "business": {
+    "headerBusiness": "Poslovna stranka",
+    "addBusiness": "Nova poslovna stranka",
+    "businessColumn": {
+      "businessName": "Naziv",
+      "businessEmail": "Email",
+      "businessAddress": "Naslov",
+      "businessCity": "Mesto",
+      "businessTaxNumber": "Davčna številka",
+      "businessZIPCode": "Poštna številka",
+      "businessCountry": "Država",
+      "businessAction": "Možnosti"
+    },
+    "addBusinessModal": {
+      "addBusiness": "Nova poslovna stranka",
+      "name": "Naziv",
+      "email": "Email",
+      "address": "Naslov",
+      "city": "Mesto",
+      "taxNumber": "Davčna številka",
+      "zipCode": "Poštna številka",
+      "countries": "Država",
+      "close": "Zapri",
+      "save": "Shrani"
     }
   },
   "dashboard2": {

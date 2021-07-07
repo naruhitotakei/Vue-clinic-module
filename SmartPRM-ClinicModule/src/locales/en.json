@@ -481,10 +481,10 @@
     "addAssignmentsModal" : {
       "addAssignments": "New Assignments",
       "editAssignments": "Edit Assignments",
-      "enquiry": "Enquiry",
+      "enquiry": "Patient",
       "description": "Description",
       "due_at": "Date",
-      "users": "Users",
+      "users": "Doctor",
       "close": "Close",
       "save": "Save",
       "patientAttended": "Patient Attended",
@@ -602,8 +602,8 @@
     }
   },
   "business": {
-    "headerBusiness": "Business",
-    "addBusiness": "New business",
+    "headerBusiness": "Business customer",
+    "addBusiness": "New business customer",
     "businessColumn": {
       "businessName": "Name",
       "businessEmail": "Email",
