@@ -62,7 +62,7 @@ ADD COLUMN VAT_number	              VARCHAR(32);
 --# Create company table
 --############################################################
 CREATE TABLE IF NOT EXISTS prm_company (
-   company_id								 INT,
+   company_id								 SERIAL,
    company_name								 VARCHAR(128) NOT NULL,
    company_address_line_1					 VARCHAR(128) NOT NULL,
    company_post_code						 INT NOT NULL,
@@ -136,7 +136,7 @@ CREATE TABLE IF NOT EXISTS prm_product_group (
 --# Create premises table
 --############################################################
 CREATE TABLE IF NOT EXISTS prm_premise (
-   premise_id									SERIAL UNIQUE,
+   premise_id									SERIAL,
    company_id									SERIAL UNIQUE CONSTRAINT premise_company_fk REFERENCES prm_company (company_id),
    company_name									VARCHAR(128) NOT NULL,
    company_tax_registration_number				VARCHAR(64) NOT NULL,

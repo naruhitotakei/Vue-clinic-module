@@ -6,14 +6,6 @@ INSERT INTO clients_prm_client_bridge (clients_id, prm_client_id) VALUES
 (10, 1), (23, 1), (27,1), (25, 2), (30, 2), (21, 2), (28, 2), (22, 2), (1, 2), (5, 2), (19, 2);
 
 --############################################################
---# changing company_id in prm_company to SERIAL
---############################################################
-
-CREATE SEQUENCE prm_company_company_id_seq MINVALUE 8;
-ALTER TABLE prm_company ALTER COLUMN company_id SET DEFAULT nextval('prm_company_premise_premise_id_seq');
-ALTER SEQUENCE prm_company_company_id_seq OWNED BY prm_company.company_id;
-
---############################################################
 --# changing foreign keys in invoice_item to INT type
 --############################################################
 

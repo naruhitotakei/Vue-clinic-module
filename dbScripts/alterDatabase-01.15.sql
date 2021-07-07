@@ -160,10 +160,6 @@ RENAME COLUMN tax_payer TO vat_payer;
 --# prm_company_premise
 --############################################################
 
-CREATE SEQUENCE prm_company_premise_premise_id_seq MINVALUE 6;
-ALTER TABLE prm_company_premise ALTER COLUMN premise_id SET DEFAULT nextval('prm_company_premise_premise_id_seq');
-ALTER SEQUENCE prm_company_premise_premise_id_seq OWNED BY prm_company_premise.premise_id;
-
 ALTER TABLE prm_company_premise_device DROP COLUMN device_id CASCADE;
 ALTER TABLE prm_company_premise_device ADD COLUMN device_id SERIAL PRIMARY KEY;
 ALTER TABLE invoice DROP COLUMN device_id;
