@@ -12,13 +12,11 @@ var moment = require('moment');
 const getEnquiries = (request, response, user_id, accessible_user_ids, prm_client_id, scope, sortBy) => {
     let statement = "SELECT  enquiries.* , concat(u.title, ' ', u.first_name , ' ', u.surname) AS label, " +
       "r.name AS region_name, countries.code AS country_code, countries.name AS country_name FROM enquiries "
-    statement +=    "JOIN clients ON enquiries.client_id = clients.id "
-    statement +=    "LEFT JOIN prm_client ON prm_client.id = clients.id  "
+    statement +=    "LEFT JOIN prm_client ON enquiries.prm_client_id = prm_client.id  "
     statement +=    "LEFT JOIN users u ON u.id = enquiries.prm_dentist_user_id  "
     statement +=    "LEFT JOIN countries ON countries.id = enquiries.country_id  "
-    statement +=    "LEFT JOIN regions r ON r.country_id = countries.id  "
+    statement +=    "LEFT JOIN regions r ON r.country_id = enquiries.region_id  "
     statement +=    "WHERE enquiries.trashed IS FALSE "
-    statement +=    "AND clients.trashed IS FALSE "
     statement +=    "AND prm_client.client_deleted IS FALSE "
     if (scope=='All') {        
     } else if (scope=='PrmClient') {
