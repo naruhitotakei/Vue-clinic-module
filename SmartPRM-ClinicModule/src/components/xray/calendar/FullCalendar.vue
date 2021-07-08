@@ -47,7 +47,7 @@
                   :clearable="false"
                   label="full_name"
                   :reduce="patient => patient.id"
-                  class="style-chooser form-control-disabled font-size-15"
+                  class="style-chooser form-control-disabled font-size-16"
                   v-model="formData.patientId"
                   :options="patients"
                   style="max-height: 400px;"
@@ -60,7 +60,7 @@
          <label for="notes">{{ $t('calendarEvent.note') }}</label>
          </div>
          <div class="col-md-9">
-           <textarea :disabled="disabled" row="2" v-model="formData.notes" class="form-control form-control-disabled font-size-15" placeholder="Add your note here for event!" id="note" required ></textarea>
+           <textarea :disabled="disabled" row="2" v-model="formData.notes" class="form-control form-control-disabled font-size-16" placeholder="Add your note here for event!" id="note" required ></textarea>
          </div>
        </div>
        <div class="row align-items-center justify-content-between w-100 " :class="{'mb-3': !disabled}">
@@ -72,7 +72,7 @@
                            :clearable="false"
                            label="city"
                            :reduce="location => location.id"
-                           class="style-chooser form-control-disabled font-size-15"
+                           class="style-chooser form-control-disabled font-size-16"
                            v-model="formData.locationId"
                            :options="locations"
                            style="min-width:305px;"></v-select>
@@ -88,7 +88,7 @@
                  :clearable="false"
                  label="name"
                  :reduce="doctor => doctor.id"
-                 class="style-chooser form-control-disabled font-size-15"
+                 class="style-chooser form-control-disabled font-size-16"
                  v-model="formData.doctorId"
                  :options="doctors"
                  style="min-width: 305px;"
@@ -105,7 +105,7 @@
                :clearable="false"
                label="product_group_name"
                :reduce="product_group => product_group.product_group_id"
-               class="style-chooser form-control-disabled font-size-15"
+               class="style-chooser form-control-disabled font-size-16"
                v-model="formData.product_groups"
                :options="product_groups"></v-select>
          </div>
@@ -115,7 +115,7 @@
           <label for="start" class="mb-0">{{ $t('calendarEvent.start') }}</label>
         </div>
           <div class="col-md-9">
-            <input :disabled="disabled" type="datetime-local" v-model="formData.assignmentDate" class="form-control form-control-disabled" id="start" required style="max-width: 227px;">
+            <input :disabled="disabled" type="datetime-local" v-model="formData.assignmentDate" class="form-control form-control-disabled font-size-16" id="start" required style="max-width: 237px;">
           </div>
         </div>
        <div class="row align-items-center justify-content-between w-100 " :class="{'mb-3': !disabled}">
@@ -125,10 +125,10 @@
         <div class="col-md-9">
           <div style="display: flex;">
             <div class="calendar-modal-input__hour mr-4">
-              <input :disabled="disabled" type="number" v-model="formData.hours" class="form-control col-md-6 form-control-disabled" min="0" max="9" placeholder="Hours" required style="max-width: 150px;">
+              <input :disabled="disabled" type="number" v-model="formData.hours" class="form-control col-md-6 form-control-disabled font-size-16" min="0" max="9" placeholder="Hours" required style="max-width: 150px;">
             </div>
             <div class="calendar-modal-input__minutes">
-              <input :disabled="disabled" type="number" v-model="formData.minutes" min="0" max="59" class="form-control col-md-6 offset-1 form-control-disabled" step="5" placeholder="Minutes" required style="max-width: 150px;">
+              <input :disabled="disabled" type="number" v-model="formData.minutes" min="0" max="59" class="form-control col-md-6 offset-1 font-size-16 form-control-disabled" step="5" placeholder="Minutes" required style="max-width: 150px;">
             </div>
           </div>
         </div>
@@ -140,7 +140,7 @@
          <div class="col-md-9">
            <template v-for="(item,index) in patient_attend">
              <b-form-radio
-                 class="custom-radio-patient"
+                 class="custom-radio-patient font-size-16"
                  inline
                  v-model="formData.patient_attended"
                  :value="item.value"
@@ -160,7 +160,7 @@
               <div class="col-md-9">
                 <template v-for="(item,index) in appointment_canceled_in_advance_by_clinic">
                   <b-form-radio
-                      class="custom-radio-patient"
+                      class="custom-radio-patient font-size-16"
                       inline
                       v-model="formData.appointment_canceled_in_advance_by_clinic"
                       :value="item.value"
@@ -179,7 +179,7 @@
               <div class="col-md-9">
                 <template v-for="(item,index) in appointment_canceled_in_advance_by_patient">
                   <b-form-radio
-                      class="custom-radio-patient"
+                      class="custom-radio-patient font-size-16"
                       inline
                       v-model="formData.appointment_canceled_in_advance_by_patient"
                       :value="item.value"
@@ -199,7 +199,7 @@
             </div>
             <div class="col-md-9">
               <template v-for="(item,index) in color">
-                <b-form-radio class="custom-radio-color" inline v-model="formData.backgroundColor" :color="item.color" :value="item.value" :key="index" v-if="showLabels(item)">{{ item.label }}</b-form-radio>
+                <b-form-radio class="custom-radio-color font-size-16" inline v-model="formData.backgroundColor" :color="item.color" :value="item.value" :key="index" v-if="showLabels(item)">{{ item.label }}</b-form-radio>
               </template>
             </div>
           </div>
