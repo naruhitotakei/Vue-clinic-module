@@ -158,6 +158,10 @@ INSERT INTO prm_permission (permission_id, resource_name, scope_id) VALUES (331,
 INSERT INTO prm_permission (permission_id, resource_name, scope_id) VALUES (332, 'Advertising', 2);
 INSERT INTO prm_permission (permission_id, resource_name, scope_id) VALUES (333, 'Advertising', 3);
 INSERT INTO prm_permission (permission_id, resource_name, scope_id) VALUES (334, 'Advertising', 4);
+INSERT INTO prm_permission (permission_id, resource_name, scope_id) VALUES (341, 'Labels', 1);
+INSERT INTO prm_permission (permission_id, resource_name, scope_id) VALUES (342, 'Labels', 2);
+INSERT INTO prm_permission (permission_id, resource_name, scope_id) VALUES (343, 'Labels', 3);
+INSERT INTO prm_permission (permission_id, resource_name, scope_id) VALUES (344, 'Labels', 4);
 -- Manager
 INSERT INTO prm_role_permission (role_permission_id, role_id, permission_id) VALUES (101, 1, 12);
 INSERT INTO prm_role_permission (role_permission_id, role_id, permission_id) VALUES (103, 1, 32);
@@ -181,6 +185,7 @@ INSERT INTO prm_role_permission (role_permission_id, role_id, permission_id) VAL
 INSERT INTO prm_role_permission (role_permission_id, role_id, permission_id) VALUES (128, 1, 282);
 INSERT INTO prm_role_permission (role_permission_id, role_id, permission_id) VALUES (129, 1, 292);
 INSERT INTO prm_role_permission (role_permission_id, role_id, permission_id) VALUES (130, 1, 302);
+INSERT INTO prm_role_permission (role_permission_id, role_id, permission_id) VALUES (134, 1, 342);
 -- Admin
 INSERT INTO prm_role_permission (role_permission_id, role_id, permission_id) VALUES (201, 2, 13);
 INSERT INTO prm_role_permission (role_permission_id, role_id, permission_id) VALUES (224, 2, 241);
@@ -258,6 +263,7 @@ INSERT INTO prm_role_permission (role_permission_id, role_id, permission_id) VAL
 INSERT INTO prm_role_permission (role_permission_id, role_id, permission_id) VALUES (531, 5, 312);
 INSERT INTO prm_role_permission (role_permission_id, role_id, permission_id) VALUES (532, 5, 322);
 INSERT INTO prm_role_permission (role_permission_id, role_id, permission_id) VALUES (533, 5, 332);
+INSERT INTO prm_role_permission (role_permission_id, role_id, permission_id) VALUES (534, 5, 342);
 -- Doctor
 INSERT INTO prm_role_permission (role_permission_id, role_id, permission_id) VALUES (601, 6, 12);
 INSERT INTO prm_role_permission (role_permission_id, role_id, permission_id) VALUES (603, 6, 33);
@@ -293,6 +299,7 @@ INSERT INTO prm_role_permission (role_permission_id, role_id, permission_id) VAL
 INSERT INTO prm_role_permission (role_permission_id, role_id, permission_id) VALUES (727, 7, 272);
 INSERT INTO prm_role_permission (role_permission_id, role_id, permission_id) VALUES (728, 7, 282);
 INSERT INTO prm_role_permission (role_permission_id, role_id, permission_id) VALUES (729, 7, 292);
+INSERT INTO prm_role_permission (role_permission_id, role_id, permission_id) VALUES (734, 7, 342);
 -- Technician
 INSERT INTO prm_role_permission (role_permission_id, role_id, permission_id) VALUES (801, 8, 12);
 INSERT INTO prm_role_permission (role_permission_id, role_id, permission_id) VALUES (809, 8, 94);
@@ -327,6 +334,7 @@ INSERT INTO prm_role_permission (role_permission_id, role_id, permission_id) VAL
 INSERT INTO prm_role_permission (role_permission_id, role_id, permission_id) VALUES (1027, 10, 272);
 INSERT INTO prm_role_permission (role_permission_id, role_id, permission_id) VALUES (1028, 10, 282);
 INSERT INTO prm_role_permission (role_permission_id, role_id, permission_id) VALUES (1029, 10, 292);
+INSERT INTO prm_role_permission (role_permission_id, role_id, permission_id) VALUES (1034, 10, 342);
 
 
 --############################################################

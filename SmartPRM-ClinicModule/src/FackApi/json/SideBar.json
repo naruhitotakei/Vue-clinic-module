@@ -33,7 +33,7 @@
     },
     "class_name": "",
     "is_icon_class": true,
-    "icon": "ri-calendar-event-fill"
+    "icon": "ri-calendar-todo-line"
   },
   {
     "title": "Patients",
@@ -279,7 +279,7 @@
         },
         "class_name": "",
         "is_icon_class": true,
-        "icon": "ri-user-3-line"
+        "icon": "ri-calendar-event-line"
       },
       {
         "title": "Users",
@@ -302,6 +302,17 @@
         "class_name": "",
         "is_icon_class": true,
         "icon": "ri-map-pin-line"
+      },
+      {
+        "title": "Labels",
+        "name": "settings.labels",
+        "is_active": false,
+        "link": {
+          "name": "settings.labels"
+        },
+        "class_name": "",
+        "is_icon_class": true,
+        "icon": "ri-bookmark-line"
       },
       {
         "title": "Services and Products",

@@ -42,7 +42,8 @@
     "business customers": "Business Customers",
     "SMSTemplates": "SMS templates",
     "mailTemplates": "Mail templates",
-    "advertising": "Advertising"
+    "advertising": "Advertising",
+    "labels": "Labels"
   },
   "nav": {
     "allNotifications": "All Notifications",

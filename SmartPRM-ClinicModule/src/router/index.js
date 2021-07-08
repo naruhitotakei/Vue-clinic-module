@@ -47,6 +47,7 @@ import FreeSlots from '../views/Settings/FreeSlots'
 import SMSTemplates from '../views/Settings/SMSTemplates'
 import MailTemplates from '../views/Settings/MailTemplates'
 import Advertising from '../views/Settings/Advertising'
+import Labels from '../views/Settings/Labels'
 /* Authentic View */
 import SignIn from '../views/Auth/Pages/SignIn'
 import SignUp from '../views/Auth/Pages/SignUp'
@@ -311,6 +312,12 @@ const settingsChildRoute = (prop, mode = false) => [
     name: prop + '.advertising',
     meta: { dark: mode, auth: true, name: 'Advertising' },
     component: Advertising
+  },
+  {
+    path: 'labels',
+    name: prop + '.labels',
+    meta: { dark: mode, auth: true, name: 'Labels' },
+    component: Labels
   }
 ]
 

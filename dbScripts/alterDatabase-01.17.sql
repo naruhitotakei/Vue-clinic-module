@@ -78,6 +78,7 @@ INSERT INTO prm_role_permission (role_permission_id, role_id, permission_id) VAL
 INSERT INTO prm_role_permission (role_permission_id, role_id, permission_id) VALUES (1131, 11, 311);
 INSERT INTO prm_role_permission (role_permission_id, role_id, permission_id) VALUES (1132, 11, 321);
 INSERT INTO prm_role_permission (role_permission_id, role_id, permission_id) VALUES (1133, 11, 331);
+INSERT INTO prm_role_permission (role_permission_id, role_id, permission_id) VALUES (1134, 11, 341);
 
 --############################################################
 --# Removing company_vat_number from prm_company table

@@ -42,7 +42,8 @@
     "business customers": "Poslovne stranke",
     "SMSTemplates": "SMS predloge",
     "mailTemplates": "Mail predloge",
-    "advertising": "Oglaševanje"
+    "advertising": "Oglaševanje",
+    "labels": "Oznake"
   },
   "nav": {
     "allNotifications": "Vsa obvestila",
