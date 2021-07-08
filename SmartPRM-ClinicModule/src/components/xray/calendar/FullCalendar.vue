@@ -37,7 +37,7 @@
       >
     <form class="calendar-modal">
         <div class="form-row">
-          <div class="row align-items-center justify-content-between w-100 mb-3">
+          <div class="row align-items-center justify-content-between w-100 " :class="{'mb-3': !disabled}">
             <div class="col-md-3">
               <label for="patient" class="mb-0">{{ $t('calendarEvent.patient') }}</label>
             </div>
@@ -55,7 +55,7 @@
               </v-select>
             </div>
           </div>
-       <div class="row align-items-center justify-content-between w-100 mb-3">
+       <div class="row align-items-center justify-content-between w-100 " :class="{'mb-3': !disabled}">
          <div class="col-md-3">
          <label for="notes">{{ $t('calendarEvent.note') }}</label>
          </div>
@@ -63,7 +63,7 @@
            <textarea :disabled="disabled" row="2" v-model="formData.notes" class="form-control form-control-disabled font-size-15" placeholder="Add your note here for event!" id="note" required ></textarea>
          </div>
        </div>
-       <div class="row align-items-center justify-content-between w-100 mb-3">
+       <div class="row align-items-center justify-content-between w-100 " :class="{'mb-3': !disabled}">
          <div class="col-md-3">
            <label for="location" class="ml-0 mb-0">{{ $t('calendarEvent.location') }}</label>
          </div>
@@ -78,7 +78,7 @@
                            style="min-width:305px;"></v-select>
          </div>
        </div>
-          <div class="row align-items-center justify-content-between w-100 mb-3">
+          <div class="row align-items-center justify-content-between w-100 " :class="{'mb-3': !disabled}">
            <div class="col-md-3">
              <label for="doctor" class="mr-2 mb-0">{{ $t('calendarEvent.doctor') }}</label>
            </div>
@@ -95,7 +95,7 @@
              ></v-select>
            </div>
          </div>
-       <div class="row align-items-center justify-content-between w-100 mb-3">
+       <div class="row align-items-center justify-content-between w-100 " :class="{'mb-3': !disabled}">
         <div class="col-md-3 pl-3 pr-0">
           <label for="patient" class="mb-0">{{ $t('calendarEvent.product_group') }}</label>
         </div>
@@ -110,7 +110,7 @@
                :options="product_groups"></v-select>
          </div>
        </div>
-        <div class="row align-items-center justify-content-between w-100 mb-3">
+        <div class="row align-items-center justify-content-between w-100 " :class="{'mb-3': !disabled}">
         <div class="col-md-3">
           <label for="start" class="mb-0">{{ $t('calendarEvent.start') }}</label>
         </div>
@@ -118,7 +118,7 @@
             <input :disabled="disabled" type="datetime-local" v-model="formData.assignmentDate" class="form-control form-control-disabled" id="start" required style="max-width: 227px;">
           </div>
         </div>
-       <div class="row align-items-center justify-content-between w-100 mb-3">
+       <div class="row align-items-center justify-content-between w-100 " :class="{'mb-3': !disabled}">
         <div class="col-md-3">
           <label for="duration" class="mb-0">{{ $t('calendarEvent.duration') }}</label>
         </div>
@@ -133,7 +133,7 @@
           </div>
         </div>
        </div>
-        <div class="row align-items-center justify-content-between w-100 mb-3">
+        <div class="row align-items-center justify-content-between w-100 " :class="{'mb-3': !disabled}">
          <div class="col-md-3">
            <label for="color" class="mb-0">{{ $t('calendarEvent.patient_attended') }}</label><br>
          </div>
@@ -153,7 +153,7 @@
          </div>
         </div>
           <template v-if="formData.id">
-            <div class="row align-items-center justify-content-between w-100 mb-3">
+            <div class="row align-items-center justify-content-between w-100" :class="{'mb-3': !disabled}">
               <div class="col-md-3">
                 <label for="title">{{ $t('assignments.addAssignmentsModal.appointmentCanceledInAdvanceByClinic') }} </label>
               </div>
@@ -172,7 +172,7 @@
                 </template>
               </div>
             </div>
-            <div class="row align-items-center justify-content-between w-100 mb-3">
+            <div class="row align-items-center justify-content-between w-100 " :class="{'mb-3': !disabled}">
               <div class="col-md-3">
                 <label for="title">{{ $t('assignments.addAssignmentsModal.appointmentCanceledInAdvanceByPatient') }} </label>
               </div>
@@ -193,7 +193,7 @@
               </div>
             </div>
           </template>
-          <div class="row align-items-center justify-content-between w-100 mb-3">
+          <div class="row align-items-center justify-content-between w-100 mb-3" >
             <div class="col-md-3">
               <label for="color">{{ $t('calendarEvent.labels') }}</label><br>
             </div>

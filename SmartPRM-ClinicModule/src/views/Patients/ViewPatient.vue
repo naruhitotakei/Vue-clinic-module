@@ -200,24 +200,29 @@
                                       <!--                                      </template>-->
                                       <!--                                  </iq-card>-->
                                       <iq-card body-class="iq-card-body">
-                                          ar
                                           <template v-slot:body>
                                               <div class="iq-card-header d-flex justify-content-between">
                                                   <div class="iq-header-title">
-                                                      <h4 class="card-title">{{ $t('EPR.overview.files') }} (9)</h4><hr />
+                                                      <h4 class="card-title">{{ $t('EPR.overview.files') }} ({{filesSortBy.length}})</h4><hr />
                                                   </div>
                                               </div>
                                               <div class="iq-card-body p-0">
-                                                  <ul class="profile-img-gallary d-flex flex-wrap p-0 m-0 font-size-12 overflow-y-scroll" style="max-height: 230px;">
-                                                      <li class="col-md-4 col-6"><a href="javascript:void(0);"><img src="../../assets/images/login/1.png" alt="gallary-image" class="img-fluid"></a><div class="text-center"><p class="mb-0 pb-0">x-ray_1.jpg</p><p>03-03-2021</p></div></li>
-                                                      <li class="col-md-4 col-6"><a href="javascript:void(0);"><img src="../../assets/images/login/2.png" alt="gallary-image" class="img-fluid"></a><div class="text-center"><p class="mb-0 pb-0">blood_test_1.jpg</p><p>10-03-2021</p></div></li>
-                                                      <li class="col-md-4 col-6"><a href="javascript:void(0);"><img src="../../assets/images/login/3.png" alt="gallary-image" class="img-fluid"></a><div class="text-center"><p class="mb-0 pb-0">imprint_1.jpg</p><p>09-03-2021</p></div></li>
-                                                      <li class="col-md-4 col-6"><a href="javascript:void(0);"><img src="../../assets/images/login/1.png" alt="gallary-image" class="img-fluid"></a><div class="text-center"><p class="mb-0 pb-0">imprint_2.jpg</p><p>17-04-2021</p></div></li>
-                                                      <li class="col-md-4 col-6"><a href="javascript:void(0);"><img src="../../assets/images/login/2.png" alt="gallary-image" class="img-fluid"></a><div class="text-center"><p class="mb-0 pb-0">x-ray_2.jpg</p><p>21-03-2021</p></div></li>
-                                                      <li class="col-md-4 col-6"><a href="javascript:void(0);"><img src="../../assets/images/login/3.png" alt="gallary-image" class="img-fluid"></a><div class="text-center"><p class="mb-0 pb-0">anamnesis_1.jpg</p><p>08-03-2021</p></div></li>
-                                                      <li class="col-md-4 col-6"><a href="javascript:void(0);"><img src="../../assets/images/login/1.png" alt="gallary-image" class="img-fluid"></a><div class="text-center"><p class="mb-0 pb-0">anamnesis_2.jpg</p><p>11-04-2021</p></div></li>
-                                                      <li class="col-md-4 col-6"><a href="javascript:void(0);"><img src="../../assets/images/login/2.png" alt="gallary-image" class="img-fluid"></a><div class="text-center"><p class="mb-0 pb-0">blood_test_2.jpg</p><p>21-04-2021</p></div></li>
-                                                      <li class="col-md-4 col-6"><a href="javascript:void(0);"><img src="../../assets/images/login/3.png" alt="gallary-image" class="img-fluid"></a><div class="text-center"><p class="mb-0 pb-0">x-ray_3.jpg</p><p>12-04-2021</p></div></li>
+                                                  <ul class="profile-img-gallary profile-preview-gallery d-flex flex-wrap p-0 m-0 font-size-12 overflow-y-scroll" style="max-height: 230px;">
+                                                    <li class="col-md-4 col-6 pb-3" v-for="(file, index) in filesSortBy" :key="index + file.created_at">
+                                                      <div v-html="tiffConvertToCanvas(file, index, true)" :class="`tiff-block-${index}-preview`"></div>
+                                                      <img
+                                                          :src="file.image"
+                                                          alt="gallary-image"
+                                                          class="img-fluid img-files"
+                                                          v-if="file.type !== 'tiff'"
+                                                      >
+                                                      <object :data="file.image" type="application/pdf" width="250px" height="auto" class="m-auto d-block" v-if="file.pdf">
+                                                      </object>
+                                                      <div class="text-center">
+                                                        <p class="mb-0"> {{file.name}}</p>
+                                                        <p>{{file.created_at}}</p>
+                                                      </div>
+                                                    </li>
                                                   </ul>
                                               </div>
                                           </template>
@@ -1283,7 +1288,7 @@ export default {
         }
       })
     },
-    tiffConvertToCanvas (file, index) {
+    tiffConvertToCanvas (file, index, preview) {
       let type = file.image.split('.')[1]
       if (type === 'tiff') {
         let canvas = null
@@ -1295,6 +1300,9 @@ export default {
           const tiff = new Tiff({ buffer: buffer })
           canvas = tiff.toCanvas()
           if (canvas) {
+            if (preview) {
+              document.querySelector(`.tiff-block-${index}-preview`).append(canvas)
+            }
             document.querySelector(`.tiff-block-${index}`).append(canvas)
           }
         }
@@ -1616,6 +1624,12 @@ export default {
   display: block;
   margin: 0 auto;
   max-width: 300px !important;
+}
+
+.profile-preview-gallery {
+  .img-files {
+    max-width: 120px !important;
+  }
 }
 
 canvas {
