@@ -33,7 +33,7 @@ const getApontments = (request, response, from, to, user_id, accessible_user_ids
     // statement += `AND prm_pr_group_name.language = '${lang}' `
     if (scope=='All') {
     } else if (scope=='PrmClient') {
-        statement += "AND us.prm_client_id=" + prm_client_id;             
+        statement += "AND enq.prm_client_id=" + prm_client_id;             
     } else if (scope=='Self') {
         statement += "AND us.id=" + user_id 
     } else if (scope==='Self&LinkedUsers') {
