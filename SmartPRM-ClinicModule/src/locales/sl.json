@@ -180,7 +180,7 @@
       "address": "Naslov",
       "postCodeCity": "Poštna številka, Mesto",
       "country": "Država",
-      "region": "Regija(EU)",
+      "region": "Regija",
       "insurance": "Številka zavarovanja, zavarovan pri",
       "phone": "Telefonska številka",
       "email": "Email naslov",

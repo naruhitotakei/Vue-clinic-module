@@ -199,7 +199,7 @@
                                       <!--                                          </div>-->
                                       <!--                                      </template>-->
                                       <!--                                  </iq-card>-->
-                                      <iq-card body-class="iq-card-body">
+                                      <iq-card body-class="iq-card-body" v-if="files.length > 0">
                                           <template v-slot:body>
                                               <div class="iq-card-header d-flex justify-content-between">
                                                   <div class="iq-header-title">
@@ -231,12 +231,12 @@
                               <b-col lg="8">
                                  <div class="row">
                                    <b-col md="6" v-if="patient.general_notes">
-                                     <b-card class="iq-card" >
-                                       <b-card-title>{{ $t('EPR.overview.generalNotes') }}</b-card-title>
-                                       <hr />
-                                       <b-card-text class="text-black" v-html="patient.general_notes"></b-card-text>
-                                       <b-card-text><small class="text-muted">{{ $t('EPR.overview.generalNotesUpdated') }} {{patient.general_notes_updated_at | fromNowDate}}</small></b-card-text>
-                                     </b-card>
+                                       <b-card class="iq-card">
+                                           <b-card-title>{{ $t('EPR.overview.generalNotes') }}</b-card-title>
+                                           <hr />
+                                           <b-card-text class="text-black" v-html="patient.general_notes"></b-card-text>
+                                           <!-- <b-card-text><small class="text-muted">{{ $t('EPR.overview.generalNotesUpdated') }} {{patient.general_notes_updated_at | fromNowDate}}</small></b-card-text> -->
+                                       </b-card>
                                       <!--  TODO make more elegantly -->
                                      <iq-card  v-if="patient.general_notes && !patient.allergies">
                                        <template v-slot:body>
@@ -271,8 +271,8 @@
                                          class="iq-card">
                                        <b-card-title class="text-white">{{ $t('EPR.overview.allergies') }}</b-card-title>
                                        <blockquote class="blockquote mb-0">
-                                         <p class="font-size-14">{{patient.allergies}}</p>
-                                         <footer class="blockquote-footer text-white font-size-12">{{ $t('EPR.overview.allergiesUpdated') }} {{patient.allergies_updated_at | fromNowDate}}</footer>
+                                           <p class="font-size-14">{{patient.allergies}}</p>
+                                           <!--<footer class="blockquote-footer text-white font-size-12">{{ $t('EPR.overview.allergiesUpdated') }} {{patient.allergies_updated_at | fromNowDate}}</footer> -->
                                        </blockquote>
                                      </b-card>
                                      <iq-card  v-if="patient.allergies && !patient.general_notes">
@@ -527,9 +527,9 @@
                                               <h4>{{ $t('EPR.personalInfo.personalDoctors') }}</h4>
                                               <hr />
                                           </div>
-                                          <div class="iq-card-body">
+                                          <div class="iq-card-body" style="margin-top: -1rem;">
                                               <div class="row">
-                                                <b-form-group class="col-md-12 align-items-center" label-cols-sm="3" label-for="region">
+                                                <b-form-group class="col-md-8 align-items-center" label-cols-sm="3" label-for="region">
                                                   <template slot="label" >
                                                     <span style="height: 45px; display: flex; align-items: center">
                                                       {{ $t('EPR.personalInfo.personalDentist') }}:
@@ -539,18 +539,18 @@
                                                     :disabled="disabled"
                                                     :clearable="false"
                                                     :reduce="dentist => dentist.code"
-                                                    class="style-chooser form-control-disabled"
+                                                    class="style-chooser form-control-disabled mb-1"
                                                     v-model="patient.prm_dentist_user_id"
                                                     :options="dentists">
                                                 </v-select>
                                                 </b-form-group>
-                                                <b-form-group class="col-md-12 align-items-center" label-cols-sm="3" label-for="region">
+                                                <b-form-group class="col-md-8 align-items-center" label-cols-sm="3" label-for="region" style="margin-top: -1.5rem;">
                                                   <template slot="label">
                                                     <span style="height: 45px; display: flex; align-items: center">
                                                      {{ $t('EPR.personalInfo.personalSurgeon') }}:
                                                     </span>
                                                   </template>
-                                                <v-select :disabled="disabled" :clearable="false" :reduce="dentist => dentist.code" class="style-chooser form-control-disabled" v-model="patient.prm_surgeon_user_id" :options="surgeons"></v-select>
+                                                <v-select :disabled="disabled" :clearable="false" :reduce="dentist => dentist.code" class="style-chooser form-control-disabled mb-1" v-model="patient.prm_surgeon_user_id" :options="surgeons"></v-select>
                                                 </b-form-group>
                                               </div>
                                           </div>

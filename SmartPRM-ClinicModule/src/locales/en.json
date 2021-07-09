@@ -180,7 +180,7 @@
       "address": "Address",
       "postCodeCity": "Postcode, City",
       "country": "Country",
-      "region": "Region(EU)",
+      "region": "Region",
       "insurance": "Insurance number, insured at",
       "phone": "Mobile number",
       "email": "Email address",
