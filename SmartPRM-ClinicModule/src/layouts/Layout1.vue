@@ -13,7 +13,7 @@
               <li class="nav-item iq-full-screen full-screen">
                 <a href="#" class="iq-waves-effect" id="btnFullscreen"><i class="ri-fullscreen-line"></i></a>
               </li>
-              <li class="nav-item">
+             <!-- <li class="nav-item">
                 <a href="#" class="search-toggle iq-waves-effect">
                   <i class="ri-notification-3-fill"></i>
                   <span class="bg-danger dots"></span>
@@ -65,7 +65,7 @@
                     </div>
                   </div>
                 </div>
-              </li>
+              </li>-->
             </ul>
           </template>
           <template slot="right">
