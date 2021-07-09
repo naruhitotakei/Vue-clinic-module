@@ -22,12 +22,13 @@ const getOffers = (request, response, user_id, accessible_user_ids, prm_client_i
     } else if (scope == 'Self') {
         statement += "AND (enquiries.prm_dentist_user_id = " + user_id + " OR enquiries.prm_surgeon_user_id = " + user_id + ")";
     } else if (scope === 'Self&LinkedUsers') {
+        statement += "AND (enquiries.prm_dentist_user_id = " + user_id + " OR enquiries.prm_surgeon_user_id = " + user_id;
         if (accessible_user_ids) {
-            statement += "AND (enquiries.prm_dentist_user_id = " + user_id + " OR enquiries.prm_surgeon_user_id = " + user_id;
             for (const acc_id in accessible_user_ids) {
-                statement += " OR enquiries.prm_dentist_user_id = " + accessible_user_ids[acc_id] + " OR enquiries.prm_surgeon_user_id = " + accessible_user_ids[acc_id] + ")"
+                statement += " OR enquiries.prm_dentist_user_id = " + accessible_user_ids[acc_id] + " OR enquiries.prm_surgeon_user_id = " + accessible_user_ids[acc_id]
             }
         }
+        statement += ") ";
     }
     pool.query(statement, (error, results) => {
         if (error) {
