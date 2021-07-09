@@ -114,8 +114,14 @@
         <div class="col-md-3">
           <label for="start" class="mb-0">{{ $t('calendarEvent.start') }}</label>
         </div>
-          <div class="col-md-9">
-            <input :disabled="disabled" type="datetime-local" v-model="formData.assignmentDate" class="form-control form-control-disabled font-size-16" id="start" required style="max-width: 237px;">
+          <div class="col-md-9 d-flex align-items-center">
+            <input :disabled="disabled" type="datetime-local" :min="'2021-07-08T10:38'"
+                   v-model="formData.assignmentDate" class="form-control form-control-disabled font-size-16" id="start"
+                   required style="max-width: 237px;">
+            <label for="start" class="mb-0 ml-5 mr-2">{{ $t('calendarEvent.end') }}</label>
+            <input :disabled="disabled" type="datetime-local"
+                   v-model="formData.assignmentDate" class="form-control form-control-disabled font-size-16" id="end"
+                   required style="max-width: 237px;">
           </div>
         </div>
        <div class="row align-items-center justify-content-between w-100 " :class="{'mb-3': !disabled}">
@@ -476,6 +482,7 @@ export default {
     },
     getDoctors () {
       getDoctorList().then((data) => {
+        console.log('fullCalendar', data)
         this.doctors = data
       })
     },

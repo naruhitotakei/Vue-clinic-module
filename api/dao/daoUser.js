@@ -155,7 +155,7 @@ const editProfile = ((request, response, profile) => {
 
 const getDentists = (request, response, prm_client_id) => {
   pool.query("SELECT u.id as code, concat(u.title, ' ', u.first_name , ' ', u.surname) AS label FROM users u " +
-      "WHERE function::text LIKE '%dentist%' AND active = true AND prm_client_id = " + prm_client_id, (error, results) => {
+      "WHERE function::text LIKE '%dentist%' AND active = true ", (error, results) => {
     if (error) {
       throw error
     }

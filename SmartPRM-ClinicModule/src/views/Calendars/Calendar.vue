@@ -281,6 +281,7 @@ export default {
     },
     getDoctors () {
       getDoctorList().then((data) => {
+        console.log('Calendar', data)
         this.doctorsList = data
         // this.doctorsList.map(item => {
         //   this.resources.push({
@@ -321,6 +322,8 @@ export default {
             title: nameWithoutDr
           }
         })
+        this.resources.concat(this.doctorsList)
+        console.log('resource', this.resources)
         this.clonedResources = this.resources
         dataWithDoctor.map(item => {
           let patientAttended = item.patient_attended === 'true' ? 'attended' : item.patient_attended === 'null' ? 'unknown' : 'not_attended'

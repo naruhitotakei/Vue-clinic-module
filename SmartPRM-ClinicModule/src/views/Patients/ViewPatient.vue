@@ -802,7 +802,19 @@
           </div>
           <div class="col-md-12 mb-3">
             <label for="title">{{ $t('assignments.addAssignmentsModal.due_at') }} </label>
-            <b-form-input class="date" id="exampleInputdate" type="date" v-model="formData.due_at" ></b-form-input>
+            <b-form-datepicker
+                class="date"
+                id="exampleInputdate"
+                v-model="formData.due_at"
+                :min="new Date()"
+                :date-format-options="{ year: 'numeric', month: '2-digit', day: '2-digit' }"
+                placeholder="mm/dd/yyyy"
+            ></b-form-datepicker>
+<!--            <b-form-input-->
+<!--                class="date"-->
+<!--                id="exampleInputdate"-->
+<!--                type="date"-->
+<!--                :date-disabled-fn="dateDisabled" :min="'08.07.2021'" v-model="formData.due_at" ></b-form-input>-->
           </div>
         </div>
       </form>
@@ -1508,6 +1520,12 @@ export default {
     },
     cancelAssignments () {
       this.formData = this.defaultFormData()
+    },
+    dateDisabled (ymd, date) {
+      const weekday = date.getDay()
+      const day = date.getDate()
+      console.log(date)
+      return weekday === 0 || weekday === 6 || day === 13
     },
     addAssignments () {
       createAssignments(this.formData).then(() => {

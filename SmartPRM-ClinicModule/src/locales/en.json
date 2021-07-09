@@ -107,6 +107,7 @@
   },
   "calendarEvent": {
     "start": "Start",
+    "end": "End",
     "duration": "Duration",
     "note": "Note",
     "changeColor": "Change Color",
