@@ -47,8 +47,8 @@ export async function createEnquiryNotes (notes) {
   return rawResponse.json()
 }
 
-export async function getEnquiryAppointments (id) {
-  const rawResponse = await fetch(`/api/enquiries/${id}/appointments`, {
+export async function getEnquiryAppointments (id, locale) {
+  const rawResponse = await fetch(`/api/enquiries/${id}/${locale}/appointments`, {
     method: 'GET',
     credentials: 'same-origin',
     headers: {

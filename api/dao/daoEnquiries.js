@@ -187,10 +187,12 @@ const createEnquiryNotes = (request, response, notes) => {
     })
 }
 
-const getEnquiryAppointments = (request, response, enquiryId) => {
-    pool.query("SELECT appointments.*, enquiries.*  FROM appointments " +
+const getEnquiryAppointments = (request, response, enquiryId, locale) => {
+    pool.query("SELECT appointments.*, enquiries.*, prm_product_group_name.*  FROM appointments  " +
       "LEFT JOIN enquiries ON appointments.enquiry_id = enquiries.id  " +
-      "WHERE enquiry_id = $1 ORDER BY date ASC", [enquiryId] , (error, results) => {
+      "LEFT JOIN prm_product_group ON appointments.product_group_id = prm_product_group.product_group_id  " +
+      "LEFT JOIN prm_product_group_name ON prm_product_group_name.product_group_id = prm_product_group.product_group_id  " +
+       "WHERE enquiry_id = $1 AND prm_product_group_name.language = '" + locale + "' ORDER BY date ASC" , [enquiryId] , (error, results) => {
         console.log(error)
         if (error) {
             throw error

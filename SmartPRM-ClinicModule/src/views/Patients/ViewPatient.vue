@@ -377,7 +377,7 @@
                                          <ul class="iq-timeline">
                                            <li v-for="(item,index) in pastAppointments" :key="index">
                                              <div class="timeline-dots border-success"></div>
-                                             <h6>{{item.kind}}</h6>
+                                             <h6>{{item.note}}<span class="float-right">{{item.text}}</span></h6>
                                              <small class="mt-1">{{item.date | formatDate}}</small>
                                            </li>
                                          </ul>
@@ -877,7 +877,7 @@ export default {
     xray.index()
     this.getPatient(this.patientId)
     this.getPatientNotes(this.patientId)
-    this.getPatientAppointments(this.patientId)
+    this.getPatientAppointments(this.patientId, this.$i18n.locale)
     this.getPatientAssignments(this.patientId)
     this.getCountries()
     this.getRegions()
@@ -1238,6 +1238,7 @@ export default {
     },
     '$i18n.locale' () {
       this.getProductGroups(this.$i18n.locale)
+      this.getEnquiryAppointments(this.$i18n.locale)
     }
   },
   methods: {
@@ -1357,8 +1358,8 @@ export default {
       }
       )
     },
-    getPatientAppointments (id) {
-      getEnquiryAppointments(id).then(response => {
+    getPatientAppointments (id, lang) {
+      getEnquiryAppointments(id, lang).then(response => {
         this.appointments = response
         this.timeSinceFirstVisit = response.length && response[0].date
       }
