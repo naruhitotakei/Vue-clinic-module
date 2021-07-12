@@ -485,7 +485,7 @@
       "enquiry": "Pacient",
       "description": "Opis",
       "due_at": "Datum",
-      "users": "Zdravnik",
+      "users": "Uporabnik",
       "close": "Zapri",
       "save": "Shrani",
       "patientAttended": "Pacient se je udeležil",

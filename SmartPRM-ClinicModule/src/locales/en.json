@@ -485,7 +485,7 @@
       "enquiry": "Patient",
       "description": "Description",
       "due_at": "Date",
-      "users": "Doctor",
+      "users": "User",
       "close": "Close",
       "save": "Save",
       "patientAttended": "Patient Attended",

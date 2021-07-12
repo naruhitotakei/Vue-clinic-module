@@ -210,6 +210,22 @@ const updateUser = (req, res, id, user) => {
     res.status(200).json(user)
 }
 
+const getUsersForAssignments = (request, response, prm_client_id, scope) => {
+    let statement = "SELECT u.id as code, concat(u.title, ' ', u.first_name , ' ', u.surname) AS label FROM users u "
+    statement += "WHERE active = true "
+    statement += "AND prm_role_id != 11 "
+    if (scope == "All") {
+    } else if (scope == 'PrmClient') {
+        statement += "AND prm_client_id=" + prm_client_id;
+    }
+    pool.query(statement, (error, results) => {
+        if (error) {
+            throw error
+        }
+        response.status(200).json(results.rows)
+    })
+}
+
 module.exports = {
   loginUser,
   getUserById,
@@ -222,4 +238,5 @@ module.exports = {
   getUsers,
   getRoles,
   updateUser,
+  getUsersForAssignments
 }

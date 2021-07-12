@@ -253,9 +253,9 @@
                                                   }"
                                            >
                                              <div class="w-100">
-                                               <p class="pl-2 pr-2 mb-0">{{item.description}}</p>
-                                               <div class="row justify-content-between p-1 w-100 ml-0 pl-2 pr-2 line-height">
-                                                 <h6>{{item.name}}</h6>
+                                                 <h6>{{item.description}}</h6>
+                                               <div class="row justify-content-between pt-1 w-100 ml-0 line-height">
+                                                 <p class="mb-0">{{item.name}}</p>
                                                  <p class="mb-0">{{item.due_at | formatDate}}</p>
                                                </div>
                                              </div>
@@ -283,20 +283,19 @@
                                            </div>
                                          </div>
                                          <ul class="list-inline m-0 overflow-y-scroll" style="max-height: 300px;">
-                                           <li v-for="(item,index) in assignments" :key="index + item.due_at"
-                                               class="d-flex align-items-center justify-content-between mb-3  "
-                                               :style="{
+                                             <li v-for="(item,index) in assignments" :key="index + item.due_at"
+                                                 class="d-flex align-items-center justify-content-between mb-3  "
+                                                 :style="{
                                                   'background': index === 0 && '#c3e6cb'
-                                                  }"
-                                           >
-                                             <div class="w-100">
-                                               <p class="pl-2 pr-2 mb-0">{{item.description}}</p>
-                                               <div class="row justify-content-between p-1 w-100 ml-0 pl-2 pr-2 line-height">
-                                                 <h6>{{item.name}}</h6>
-                                                 <p class="mb-0">{{item.due_at | formatDate}}</p>
-                                               </div>
-                                             </div>
-                                           </li>
+                                                  }">
+                                                 <div class="w-100">
+                                                     <h6>{{item.description}}</h6>
+                                                     <div class="row justify-content-between pt-1 w-100 ml-0 line-height">
+                                                         <p class="mb-0">{{item.name}}</p>
+                                                         <p class="mb-0">{{item.due_at | formatDate}}</p>
+                                                     </div>
+                                                 </div>
+                                             </li>
                                          </ul>
                                        </template>
                                      </iq-card>
@@ -333,20 +332,19 @@
                                            </div>
                                          </div>
                                          <ul class="list-inline m-0 overflow-y-scroll" style="max-height: 300px;">
-                                           <li v-for="(item,index) in assignments" :key="index + item.due_at"
-                                               class="d-flex align-items-center justify-content-between mb-3  "
-                                               :style="{
+                                             <li v-for="(item,index) in assignments" :key="index + item.due_at"
+                                                 class="d-flex align-items-center justify-content-between mb-3  "
+                                                 :style="{
                                                   'background': index === 0 && '#c3e6cb'
-                                                  }"
-                                           >
-                                             <div class="w-100">
-                                               <p class="pl-2 pr-2 mb-0">{{item.description}}</p>
-                                               <div class="row justify-content-between p-1 w-100 ml-0 pl-2 pr-2 line-height">
-                                                 <h6>{{item.name}}</h6>
-                                                 <p class="mb-0">{{item.due_at | formatDate}}</p>
-                                               </div>
-                                             </div>
-                                           </li>
+                                                  }">
+                                                 <div class="w-100">
+                                                     <h6>{{item.description}}</h6>
+                                                     <div class="row justify-content-between pt-1 w-100 ml-0 line-height">
+                                                         <p class="mb-0">{{item.name}}</p>
+                                                         <p class="mb-0">{{item.due_at | formatDate}}</p>
+                                                     </div>
+                                                 </div>
+                                             </li>
                                          </ul>
                                        </template>
                                      </iq-card>
@@ -793,7 +791,6 @@
                 class="style-chooser"
                 :options="users"
                 v-model="formData.user"
-                @input="selectedUser"
             >
             </v-select>
           </div>
@@ -869,7 +866,7 @@ import {
   createEnquiryNotes,
   trashEnquiry
 } from '../../services/enquiry'
-import { getDentists, getSurgeons, sso } from '../../services/userService'
+import { getDentists, getSurgeons, getUsersForAssignments, sso } from '../../services/userService'
 import { getCountriesList, getRegionsList, getLocationsList } from '../../services/commonCodeLists'
 import moment from 'moment'
 import { createAssignments } from '@/services/assignmentsService'
@@ -893,7 +890,7 @@ export default {
     this.getPatientInvoices(this.patientId, 'ASC')
     this.getPatientOffers(this.patientId)
     this.getPatientServices(this.patientId)
-    this.getUsers()
+    this.getUsersForAssignments()
     this.getFiles()
     this.getLocations()
     this.getUserLogin()
@@ -1481,14 +1478,10 @@ export default {
       let array = [value]
       this.sortOn = array
     },
-    getUsers () {
-      getDentists().then(response => {
+    getUsersForAssignments () {
+      getUsersForAssignments().then(response => {
         this.users = response
       })
-      // getUsers().then(response => {
-      //   console.log(response)
-      //   this.users = response.filter(item => item.prm_role_id === 4)
-      // })
     },
     defaultFormData () {
       return {
@@ -1518,7 +1511,7 @@ export default {
     },
     addAssignments () {
       createAssignments(this.formData).then(() => {
-        this.getPatientAssignments()
+        this.getPatientAssignments(this.patientId)
         this.formData = this.defaultFormData()
       })
     },
