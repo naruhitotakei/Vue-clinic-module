@@ -697,7 +697,7 @@ app.get('/api/invoice/premises/:premiseId', (req, res) => {
 
 app.get('/api/invoices', (req, res) => {
     if (req.session.prm_user && req.session.prm_user.permissions && checkPermission(req.session.prm_user.permissions, invoicesPermission))
-        daoInvoices.getInvoices(req, res)
+        daoInvoices.getInvoices(req, res, req.session.prm_user.id, req.session.prm_user.accessible_user_ids, req.session.prm_user.prm_client_id, getScope (req.session.prm_user.permissions, invoicesPermission))
     else
         res.status(401).json("OK: user unauthorized")
 });
@@ -770,14 +770,14 @@ app.get('/api/invoices/:id/payment-items', (req, res) => {
 
 app.get('/api/advPayments', (req, res) => {
     if (req.session.prm_user && req.session.prm_user.permissions && checkPermission(req.session.prm_user.permissions, advPaymentsPermission))
-        daoAdvPayments.getAdvPayments(req, res)
+        daoAdvPayments.getAdvPayments(req, res, req.session.prm_user.id, req.session.prm_user.accessible_user_ids, req.session.prm_user.prm_client_id, getScope(req.session.prm_user.permissions, advPaymentsPermission))
     else
         res.status(401).json("OK: user unauthorized")
 });
 
 app.get('/api/offers', (req, res) => {
     if (req.session.prm_user && req.session.prm_user.permissions && checkPermission(req.session.prm_user.permissions, offersPermission))
-        daoOffers.getOffers(req, res)
+        daoOffers.getOffers(req, res, req.session.prm_user.id, req.session.prm_user.accessible_user_ids, req.session.prm_user.prm_client_id, getScope(req.session.prm_user.permissions, offersPermission))
     else
         res.status(401).json("OK: user unauthorized")
 });
