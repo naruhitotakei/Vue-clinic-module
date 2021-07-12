@@ -130,11 +130,10 @@
                         </b-col>
                     </b-row>
                     <b-row>
-                      <b-col>
-                        <b-form-group class="col-md-4" :label="$t('advPayments.newAdvPayment.dateOfAdvPayment')" style="color:black">
-                          <b-form-input v-model="dateOfAdvPayment" type="datetime-local" step="1"></b-form-input>
-                        </b-form-group>
-                      </b-col>
+                        <b-col lg="4" class="mt-3 ml-3 mb-3">
+                            <label style="color:black"> {{ $t('advPayments.newAdvPayment.dateOfAdvPayment') }}</label>
+                            <span class="text-black mt-5 ml-5">{{ new Date() | formatInvoiceDate }}</span>
+                        </b-col>
                     </b-row>
                     <b-row>
                         <b-col lg="8">

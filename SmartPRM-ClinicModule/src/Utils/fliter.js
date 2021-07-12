@@ -18,6 +18,12 @@ Vue.filter('formatDate', function (value) {
   }
 })
 
+Vue.filter('formatInvoiceDate', function (value) {
+  if (value) {
+    return moment(String(value)).format('DD/MM/YYYY')
+  }
+})
+
 Vue.filter('formatDateAssignments', function (value, lang) {
   if (value) {
     switch (lang) {

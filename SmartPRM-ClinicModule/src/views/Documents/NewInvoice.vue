@@ -136,9 +136,8 @@
                     </b-row>
                     <b-row class="mt-3">
                       <b-col lg="4">
-                        <b-form-group :label="$t('invoices.newInvoice.dateOfInvoice')" style="color:black">
-                          <b-form-input v-model="dateOfInvoice" type="datetime-local" step="1"></b-form-input>
-                        </b-form-group>
+                              <label style="color:black"> {{ $t('invoices.newInvoice.dateOfInvoice') }}</label>
+                              <p class="text-black mt-2 ml-2">{{ new Date() | formatInvoiceDate }}</p>
                       </b-col>
                       <b-col lg="4">
                         <b-form-group :label="$t('invoices.newInvoice.dateOfService')" style="color:black">

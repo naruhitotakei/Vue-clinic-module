@@ -65,7 +65,7 @@ const createInvoices = (request, response, invoice) => {
     statement = statement.slice(0, -1)
     statement+= ") VALUES ("
     if (invoice.invoice_type) statement += "'" + invoice.invoice_type + "',"
-    if (invoice.invoice_time) statement += "'" + invoice.invoice_time + "',"
+    if (invoice.invoice_time) statement += "NOW(),"
     if (invoice.invoice_numbering_structure) statement += "'" + invoice.invoice_numbering_structure + "',"
     if (invoice.invoice_number) statement += "'" + invoice.invoice_number + "',"
     if (invoice.invoice_number_furs) statement += "'" + invoice.invoice_number_furs + "',"
