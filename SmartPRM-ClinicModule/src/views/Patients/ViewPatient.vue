@@ -367,27 +367,34 @@
                                        </template>
                                      </iq-card>
                                      <iq-card>
-                                       <template v-slot:body>
-                                         <div class="iq-card-header d-flex justify-content-between">
-                                           <div class="iq-header-title">
-                                             <h4 class="card-title">{{ $t('EPR.overview.pastAppointments') }}</h4>
-                                             <hr />
-                                           </div>
-                                         </div>
-                                         <ul class="iq-timeline">
-                                           <li v-for="(item,index) in pastAppointments" :key="index">
-                                             <div class="timeline-dots border-success"></div>
-                                             <h6>{{item.note}}<span class="float-right">{{item.text}}</span></h6>
-                                             <small class="mt-1">{{item.date | formatDate}}</small>
-                                           </li>
-                                         </ul>
-                                       </template>
+                                         <template v-slot:body>
+                                             <div class="iq-card-header d-flex justify-content-between">
+                                                 <div class="iq-header-title">
+                                                     <h4 class="card-title">{{ $t('EPR.overview.pastAppointments') }}</h4>
+                                                     <hr />
+                                                 </div>
+                                             </div>
+                                             <ul class="iq-timeline" id="pastAppointments" :per-page="pastAppointmentsPerPage" :current-page="pastAppointmentsCurrentPage">
+                                                 <li v-for="(item,index) in pastAppointments[pastAppointmentsCurrentPage]" :key="index">
+                                                     <div class="timeline-dots border-success"></div>
+                                                     <h6>{{item.note}}<span class="float-right">{{item.text}}</span></h6>
+                                                     <small class="mt-1">{{item.date | formatDate}}</small>
+                                                 </li>
+                                             </ul>
+                                         </template>
+                                         <template>
+                                             <div class="mt-2 ml-4 pb-1">
+                                                 <b-pagination size="sm"
+                                                               v-if="pastAppointmentsRows > 5"
+                                                               v-model="pastAppointmentsCurrentPage"
+                                                               :total-rows="pastAppointmentsRows"
+                                                               :per-page="pastAppointmentsPerPage"
+                                                               aria-controls="pastAppointments"></b-pagination>
+                                             </div>
+                                         </template>
                                      </iq-card>
                                    </b-col>
                                  </div>
-                                  <b-row>
-
-                                  </b-row>
                               </b-col>
                           </b-row>
                       </iq-card>
@@ -1230,7 +1237,10 @@ export default {
         },
         { label: this.$t('EPR.offersColumn.issuedBy'), key: 'operator_name', class: 'text-left' },
         { label: this.$t('EPR.offersColumn.amount'), key: 'total_with_vat', class: 'text-left' }
-      ]
+      ],
+      pastAppointmentsRows: 0,
+      pastAppointmentsCurrentPage: 1,
+      pastAppointmentsPerPage: 5
     }
   },
   watch: {
@@ -1360,7 +1370,12 @@ export default {
     },
     getPatientAppointments (id, lang) {
       getEnquiryAppointments(id, lang).then(response => {
-        this.appointments = response
+        let res = []
+        for (let i = 0; i < response.length; i += 3) {
+          res = [...res, response.slice(i, i + 5)]
+        }
+        this.appointments = res
+        this.pastAppointmentsRows = response.length
         this.timeSinceFirstVisit = response.length && response[0].date
       }
       )
