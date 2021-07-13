@@ -11,7 +11,17 @@
           <template v-slot:body>
           <div class="row justify-content-between align-items-center">
         <div class="row align-items-center">
-          <div class="calendar-doctor-slider">
+          <b-dropdown id="dropdown-offset" variant="primary" text="Select doctors" class="m-2">
+            <b-dropdown-form style="width: 220px;">
+              <b-checkbox  name="check-button" v-model="allDoctorCheck" @change="allDoctorFun(allDoctorCheck)"  inline>{{ $t('calendar.selectAll') }}</b-checkbox>
+              <b-dropdown-group v-for="(item,index) in doctors" :key="index" >
+                <b-checkbox href="#" class="custom-switch-color" :color="item.color" @change="checkData(item)" v-model="item.checked" :ref="'doctor_'+index" name="check-button" inline >
+                  {{ item.title }}
+                </b-checkbox>
+              </b-dropdown-group>
+            </b-dropdown-form>
+          </b-dropdown>
+          <div class="calendar-doctor-slider d-none">
             <button @click="scroll_left" class="nav-btn btn-primary mr-1"><i class="ri-arrow-left-s-line"></i></button>
             <VueSlickCarousel
                 v-bind="optionSlider"
@@ -37,7 +47,6 @@
 <!--            </div>-->
 <!--          </div>-->
 <!--          <button @click="scroll_right" class="nav-btn btn-primary ml-5"><i class="ri-arrow-right-s-line"></i></button>-->
-          <b-checkbox style="margin-left: 30px" name="check-button" v-model="allDoctorCheck" @change="allDoctorFun(allDoctorCheck)"  inline>{{ $t('calendar.selectAll') }}</b-checkbox>
         </div>
             <b-button
                 @click="addAppointment"
@@ -474,6 +483,10 @@ export default {
 .calendar-doctor-slider .slick-slider .slick-slide div div {
   display: flex;
   justify-content: center;
+}
+
+body #dropdown-offset__BV_toggle_ {
+  background: #089bab !important;
 }
 
 </style>

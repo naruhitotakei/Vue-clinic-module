@@ -397,6 +397,7 @@ export default {
         this.disabled = false
         this.formData = this.defaultAppointment()
         this.formData.doctorId = this.selectDoctor.title
+        this.formData.assignmentDate = moment(new Date()).format('YYYY-MM-DDTHH:mm')
       }
       this.showModal = this.modalShow.show
     },
