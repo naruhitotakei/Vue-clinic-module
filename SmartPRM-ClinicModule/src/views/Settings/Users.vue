@@ -48,7 +48,7 @@
                                 class="profile-pic height-150 width-150 object-fit"
                                 style="object-fit: cover"
                                 fluid
-                                :src="'/api/files/avatar-' + formData.id"
+                                :src="'/api/files/avatar/' + formData.id"
                                 alt="profile-pic" />
                             <input type="hidden" v-model="formData.img">
                             <div class="p-image">
