@@ -118,10 +118,10 @@
             <input :disabled="disabled" type="datetime-local" :min="'2021-07-08T10:38'"
                    v-model="formData.assignmentDate" class="form-control form-control-disabled font-size-16" id="start"
                    required style="max-width: 237px;">
-            <label for="start" class="mb-0 ml-5 mr-2">{{ $t('calendarEvent.end') }}</label>
-            <input :disabled="disabled" type="datetime-local"
-                   v-model="formData.assignmentDate" class="form-control form-control-disabled font-size-16" id="end"
-                   required style="max-width: 237px;">
+<!--            <label for="start" class="mb-0 ml-5 mr-2">{{ $t('calendarEvent.end') }}</label>-->
+<!--            <input :disabled="disabled" type="datetime-local"-->
+<!--                   v-model="formData.assignmentDate" class="form-control form-control-disabled font-size-16" id="end"-->
+<!--                   required style="max-width: 237px;">-->
           </div>
         </div>
        <div class="row align-items-center justify-content-between w-100 " :class="{'mb-3': !disabled}">
@@ -255,7 +255,8 @@ export default {
   props: {
     resourcesOuter: Array,
     events: Array,
-    modalShow: Object
+    modalShow: Object,
+    selectDoctor: Object
   },
   data () {
     return {
@@ -395,6 +396,7 @@ export default {
       if (!this.formData.id) {
         this.disabled = false
         this.formData = this.defaultAppointment()
+        this.formData.doctorId = this.selectDoctor.title
       }
       this.showModal = this.modalShow.show
     },
@@ -407,6 +409,13 @@ export default {
       if (this.formData.appointment_canceled_in_advance_by_patient) {
         this.formData.appointment_canceled_in_advance_by_clinic = false
       }
+    },
+    'selectDoctor' () {
+      this.$nextTick(() => {
+        this.formData.doctorId = this.selectDoctor.title
+      })
+      console.log('watch', this.selectDoctor)
+      console.log('watch doctorid', this.formData.doctorId)
     }
   },
   mounted () {
@@ -545,7 +554,7 @@ export default {
         disabled: false,
         checked: true
       }
-      console.log('check doctor', doctor)
+      console.log('checkData', doctor)
       this.$emit('checkData', doctor)
       return doctor
     },
@@ -582,8 +591,6 @@ export default {
           this.formData.product_groups = this.formData.product_groups.product_group_id
         }
 
-        this.checkDoctorAuto(this.formData.doctorId)
-
         if (!this.formData.id) {
           this.calendarApi.addEvent({
             id: id,
@@ -605,6 +612,7 @@ export default {
             doctorId: this.formData.doctorId,
             locationId: this.formData.locationId
           })
+          // this.checkDoctorAuto(this.formData.doctorId)
           createCalendar(this.formData).then((data) => {
             createCalendarLabel(data[0].id, this.formData).then(() => {
               this.formData = this.defaultAppointment()
@@ -636,6 +644,7 @@ export default {
       // this.$emit('setModalShow', false)
     },
     openCreateModal (selectionInfo) {
+      console.log('open create modal', selectionInfo)
       this.disabled = false
       this.formData = this.defaultAppointment()
       this.modalTitle = ''
@@ -671,6 +680,7 @@ export default {
       }
     },
     openUpdateModal (selectionInfo) {
+      console.log('open update modal', selectionInfo)
       // this.modalShow = true
       this.$emit('setModalShow', true)
       this.disabled = true

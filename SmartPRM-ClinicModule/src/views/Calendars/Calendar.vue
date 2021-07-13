@@ -120,7 +120,8 @@
           </template>
           <template  v-slot:body>
             <FullCalendar :resourcesOuter="getResources" :events="getEvents" @updateApp="updateApp"
-                          :checkData="checkData" @setModalShow="setModalShow" :modalShow="modalShow"
+                          @checkData="checkData" @setModalShow="setModalShow" :modalShow="modalShow"
+                          :selectDoctor="selectDoctor"
                           style="width: 100%; height: 100%;"/>
           </template>
         </iq-card>
@@ -144,6 +145,7 @@ export default {
     return {
       allDoctorCheck: true,
       checkedListArray: [],
+      selectDoctor: {},
       slideCount: 0,
       optionSlider: {
         'centerMode': true,
@@ -381,11 +383,14 @@ export default {
     },
     checkData (item) {
       console.log(item, 'ITEM')
+      this.selectDoctor = item
       this.doctors.map(doctor => {
         if (doctor.title === item.title) {
           if (item.checked) {
             this.check.push(item)
+            doctor.checked = true
           } else {
+            doctor.checked = false
             this.check.map((i, index) => {
               if (i.title === item.title) {
                 this.check.splice(index, 1)
@@ -401,6 +406,7 @@ export default {
       } else {
         this.$nextTick(() => {
           this.allDoctorCheck = true
+          this.selectDoctor = {}
         })
       }
     },
