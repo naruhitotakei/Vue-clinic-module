@@ -1015,7 +1015,6 @@ app.post('/api/files/avatar/:id', async function(req, res) {
 });
 
 app.get('/api/files/avatar/:id', async function (req, res) {
-  console.log("test")
   let id = req.params.id
   if(req.session.prm_user) {
     const rv = await awsS3.download('avatar-' + id + '/')
