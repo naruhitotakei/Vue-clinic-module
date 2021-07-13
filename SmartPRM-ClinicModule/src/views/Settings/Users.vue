@@ -5,7 +5,7 @@
                 <iq-card body-class="text-center">
                     <template v-slot:body>
                         <div class="doc-profile">
-                            <img class="rounded-circle img-fluid avatar-80" :src="'/api/files/avatar-' + user.id + '?' + avatar_version" alt="profile">
+                            <img class="rounded-circle img-fluid avatar-80" :src="'/api/files/avatar/' + user.id + '?' + Math.random()" alt="profile">
                         </div>
                         <div class="iq-doc-info mt-3">
                             <h4> {{user.title}} {{user.name}} {{user.surname}} </h4>
@@ -48,7 +48,7 @@
                                 class="profile-pic height-150 width-150 object-fit"
                                 style="object-fit: cover"
                                 fluid
-                                :src="'/api/files/avatar-' + formData.id + '?' + avatar_version"
+                                :src="'/api/files/avatar-' + formData.id"
                                 alt="profile-pic" />
                             <input type="hidden" v-model="formData.img">
                             <div class="p-image">
@@ -136,7 +136,6 @@ export default {
       roles: [],
       profile: { image: require('../../assets/images/user/placeholder.png') },
       editProfileShowModal: false,
-      avatar_version: Math.random(),
       formData: {
         id: '',
         title: '',
@@ -196,10 +195,8 @@ export default {
     async onFileChanged (e) {
       this.selectedFile = e.target.files[0]
       // todo check size
-      await userAvatarUpload(this.selectedFile, this.formData.id)
+      await userAvatarUpload(this.selectedFile, this.formData.id, Math.random())
       await this.sleep(1000)
-      // this will couse avatar to be dowloaded again
-      this.avatar_version = Math.random()
     },
     sleep (ms) {
       return new Promise((resolve) => {
@@ -210,9 +207,6 @@ export default {
   computed: {
     isEditDisabled () {
       return !this.formData.name || !this.formData.mail || !this.formData.surname
-    },
-    getAvatarUrl: function () {
-      return '/api/files/avatar?' + this.avatar_version
     }
   }
 }
