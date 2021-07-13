@@ -119,7 +119,9 @@
           </form>
           </template>
           <template  v-slot:body>
-            <FullCalendar :resourcesOuter="getResources" :events="getEvents" @updateApp="updateApp" @setModalShow="setModalShow" :modalShow="modalShow" style="width: 100%; height: 100%;"/>
+            <FullCalendar :resourcesOuter="getResources" :events="getEvents" @updateApp="updateApp"
+                          :checkData="checkData" @setModalShow="setModalShow" :modalShow="modalShow"
+                          style="width: 100%; height: 100%;"/>
           </template>
         </iq-card>
       </b-col>
@@ -281,14 +283,19 @@ export default {
     },
     getDoctors () {
       getDoctorList().then((data) => {
-        console.log('Calendar', data)
         this.doctorsList = data
-        // this.doctorsList.map(item => {
-        //   this.resources.push({
-        //     id: item.id,
-        //     title: item.name
-        //   })
-        // })
+        this.doctorsList.map(item => {
+          this.resources.push({
+            id: item.id,
+            title: item.name
+          })
+          this.doctors.push({
+            id: Date.now(),
+            title: item.name,
+            disabled: false,
+            checked: false
+          })
+        })
       })
     },
     async updateApp () {
@@ -299,31 +306,30 @@ export default {
       getCalendar('2021-01-01', '2021-12-31', '', this.$i18n.locale).then(data => {
         let dataWithDoctor = data.filter(item => {
           if (item.doctor_user_id !== null) {
-            this.doctors.push({
-              id: Date.now(),
-              title: item.doctor_name.split(',')[0],
-              disabled: false,
-              checked: false
-            })
-            this.resources.push({
-              id: item.doctor_user_id,
-              title: item.doctor_name
-            })
+            // this.doctors.push({
+            //   id: Date.now(),
+            //   title: item.doctor_name.split(',')[0],
+            //   disabled: false,
+            //   checked: false
+            // })
+            // this.resources.push({
+            //   id: item.doctor_user_id,
+            //   title: item.doctor_name
+            // })
           }
           return item
         })
         this.doctors = _.uniqBy(this.doctors, 'title')
+
         this.resources = _.uniqBy(this.resources, 'id')
-        this.resources = this.resources.map(item => {
-          let name = item.title.split(',')[0]
-          let nameWithoutDr = name.split('Dr.')[0].length ? name.split('Dr.')[0] : name.split('Dr.')[1]
-          return {
-            id: item.id,
-            title: nameWithoutDr
-          }
-        })
-        this.resources.concat(this.doctorsList)
-        console.log('resource', this.resources)
+        // this.resources = this.resources.map(item => {
+        //   let name = item.title.split(',')[0]
+        //   let nameWithoutDr = name.split('Dr.')[0].length ? name.split('Dr.')[0] : name.split('Dr.')[1]
+        //   return {
+        //     id: item.id,
+        //     title: nameWithoutDr
+        //   }
+        // })
         this.clonedResources = this.resources
         dataWithDoctor.map(item => {
           let patientAttended = item.patient_attended === 'true' ? 'attended' : item.patient_attended === 'null' ? 'unknown' : 'not_attended'
@@ -372,21 +378,9 @@ export default {
       this.doctors.map(item => {
         item.checked = false
       })
-      // console.log('before THIS.CLONEDRESOURCES:', this.clonedResources)
-      // if (value) {
-      //   this.clonedResources.map((x) => {
-      //     x.checked = true
-      //   })
-      //   console.log('THIS.CLONEDRESOURCES:', this.clonedResources)
-      // }
-      // this.resources = value ? this.clonedResources : this.checkedListArray
     },
     checkData (item) {
-      // let check = this.checkedListArray.includes(item)
-      // let tempArray = this.checkedListArray
-      // let resourcesArrayCloned = this.resources
-      // let tempArray1 = []
-
+      console.log(item, 'ITEM')
       this.doctors.map(doctor => {
         if (doctor.title === item.title) {
           if (item.checked) {
@@ -400,7 +394,6 @@ export default {
           }
         }
       })
-
       if (this.check.length) {
         this.$nextTick(() => {
           this.allDoctorCheck = false
@@ -410,64 +403,6 @@ export default {
           this.allDoctorCheck = true
         })
       }
-      // console.log('DOCTORS', this.doctors)
-      // if (item.checked) {
-      //   this.check = item
-      //   this.allDoctorCheck = false
-      // } else {
-      //   this.check = null
-      //   this.allDoctorCheck = true
-      // }
-      if (!item) {
-
-      } else {
-        // console.log(item)
-        // console.log('before', this.events)
-        // this.events = this.events.filter(event => event.doctorId === item.title)
-        // console.log('after', this.events)
-      }
-      // if (!check) {
-      //   tempArray.push(item)
-      //   for (var i = 0; i < tempArray.length; i++) {
-      //     for (var j = 0; j < this.clonedResources.length; j++) {
-      //       if (tempArray[i].id === this.clonedResources[j].id) {
-      //         tempArray1.push(this.clonedResources[j])
-      //       }
-      //     }
-      //   }
-      // } else {
-      //   tempArray.filter((data, index) => {
-      //     if (data.id === item.id) {
-      //       tempArray.splice(index, 1)
-      //     }
-      //   })
-      //   resourcesArrayCloned.filter((data) => {
-      //     if (data.id === item.id) {
-      //       tempArray1 = resourcesArrayCloned.filter((o) => {
-      //         if (o.id !== item.id) {
-      //           return o
-      //         }
-      //       })
-      //     }
-      //   })
-      // }
-      // this.checkedListArray = tempArray
-      // if (tempArray1.length < this.clonedResources.length && tempArray1.length !== 0) {
-      //   this.resources = tempArray1
-      //   this.allDoctorCheck = false
-      // } else {
-      //   if (tempArray1.length === 0 || tempArray1.length === this.clonedResources.length) {
-      //     this.resources = this.clonedResources
-      //     this.allDoctorCheck = true
-      //   }
-      // }
-      // console.log('cloned array length:', this.clonedResources.length)
-      // console.log('temparray1 array length:', tempArray1.length)
-      // console.log('ALL DOCTOR CHECK', this.allDoctorCheck)
-      // this.resources = tempArray1.length > 0 ? (tempArray1, this.allDoctorCheck = false) : this.clonedResources
-      // console.log('TEMARRAY1:', tempArray1)
-      // console.log('TEMARRAY:', tempArray)
-      // console.log('ITEM:', item)
     },
     submitFormData () {
       appointmentBook(this.formData)

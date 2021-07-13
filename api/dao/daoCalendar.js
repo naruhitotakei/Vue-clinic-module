@@ -104,7 +104,6 @@ const createAppointment = (request, response, appointments) => {
     if (appointments.notes) statement += "note,"
     if (appointments.patientId) statement += "enquiry_id,"
     if (appointments.patient_attended) statement += "patient_attended,"
-    if (appointments.patient_attended) statement += "patient_attended,"
     if (appointments.product_groups) statement += "product_group_id,"
     if (appointments.assignmentDate) statement += "date,"
     if (appointments.hours) statement += "hours,"

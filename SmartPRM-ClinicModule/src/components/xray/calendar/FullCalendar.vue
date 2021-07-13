@@ -482,7 +482,6 @@ export default {
     },
     getDoctors () {
       getDoctorList().then((data) => {
-        console.log('fullCalendar', data)
         this.doctors = data
       })
     },
@@ -538,6 +537,18 @@ export default {
     calculateEndDate (startDate, hours, minutes) {
       return moment(startDate).add(hours, 'hours').add(minutes, 'minutes').format('YYYY-MM-DDTHH:mm')
     },
+    checkDoctorAuto (checkDoctor) {
+      let doctor = this.doctors.find(doctor => doctor.name === checkDoctor)
+      doctor = {
+        id: doctor.id,
+        title: doctor.name,
+        disabled: false,
+        checked: true
+      }
+      console.log('check doctor', doctor)
+      this.$emit('checkData', doctor)
+      return doctor
+    },
     saveAppointment () {
       if (this.formData.patientId && this.formData.doctorId && this.formData.assignmentDate) {
         this.disabled = true
@@ -552,7 +563,6 @@ export default {
         if (!this.formData.appointment_canceled_in_advance_by_patient) {
           this.formData.appointment_canceled_in_advance_by_patient = false
         }
-        console.log(this.formData)
         if (typeof this.formData.patientId === 'object') {
           this.formData.patientId = this.formData.patientId.id
         } else {
@@ -571,6 +581,8 @@ export default {
         if (typeof this.formData.product_groups === 'object') {
           this.formData.product_groups = this.formData.product_groups.product_group_id
         }
+
+        this.checkDoctorAuto(this.formData.doctorId)
 
         if (!this.formData.id) {
           this.calendarApi.addEvent({
