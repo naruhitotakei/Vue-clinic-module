@@ -1269,7 +1269,9 @@ export default {
           canvas = tiff.toCanvas()
           if (canvas) {
             if (preview) {
-              document.querySelector(`.tiff-block-${index}-preview`).append(canvas)
+              setTimeout(() => {
+                document.querySelector(`.tiff-block-${index}-preview`).append(canvas)
+              }, 1000)
             }
             document.querySelector(`.tiff-block-${index}`).append(canvas)
           }
