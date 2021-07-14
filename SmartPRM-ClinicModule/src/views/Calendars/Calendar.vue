@@ -1,19 +1,16 @@
 <template>
-  <b-container fluid>
+  <b-container fluid class="calendar-page">
     <b-row>
       <b-col md="12">
         <iq-card>
           <template v-slot:headerTitle>
           <iq-card>
-<!--          <template v-slot:headerTitle>-->
-<!--              <h4 class="card-title">{{ $t('calendar.selectDoctor') }}</h4>-->
-<!--          </template>-->
           <template v-slot:body>
           <div class="row justify-content-between align-items-center">
         <div class="row align-items-center">
-          <b-dropdown id="dropdown-offset" variant="primary" text="Select doctors" class="m-2">
-            <b-dropdown-form style="width: 220px;">
-              <b-checkbox  name="check-button" v-model="allDoctorCheck" @change="allDoctorFun(allDoctorCheck)"  inline>{{ $t('calendar.selectAll') }}</b-checkbox>
+          <b-dropdown id="dropdown-aria" variant="primary" text="Select doctors" class="m-2">
+            <b-checkbox name="check-button" v-model="allDoctorCheck" @change="allDoctorFun(allDoctorCheck)"  inline>{{ $t('calendar.selectAll') }}</b-checkbox>
+            <b-dropdown-form >
               <b-dropdown-group v-for="(item,index) in doctors" :key="index" >
                 <b-checkbox href="#" class="custom-switch-color" :color="item.color" @change="checkData(item)" v-model="item.checked" :ref="'doctor_'+index" name="check-button" inline >
                   {{ item.title }}
@@ -431,62 +428,67 @@ export default {
   }
 }
 </script>
-<style scoped>
+<style  lang="scss">
+.calendar-page {
+  .main-wrapper {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+    width: 50%;
+    margin-left: -15px;
+  }
+  .wrapper-box {
+    max-width: 250px;
+    /* overflow: auto; */
+    overflow: hidden;
+  }
+  .nav-btn {
+    border-radius: 25px;
+    border: none;
+    height: 30px;
+    width: 30px;
+  }
+  #box {
+    width: max-content;
+    /* height: 200px;
+    border: 1px solid black; */
+    position: relative;
+  }
+  #box b-checkbox{
+    position: absolute;
+    height: 100%;
+    width: 50px;
+  }
+  #box .left {
+    left: 0;
+  }
 
-.main-wrapper {
-  display: flex;
-  flex-direction: row;
-  justify-content: space-around;
-  width: 50%;
-  margin-left: -15px;
-}
-.wrapper-box {
-  max-width: 250px;
-  /* overflow: auto; */
-  overflow: hidden;
-}
-.nav-btn {
-  border-radius: 25px;
-  border: none;
-  height: 30px;
-  width: 30px;
-}
-#box {
-  width: max-content;
-  /* height: 200px;
-  border: 1px solid black; */
-  position: relative;
-}
-#box b-checkbox{
-  position: absolute;
-  height: 100%;
-  width: 50px;
-}
-#box .left {
-  left: 0;
-}
+  #box .right {
+    right: 0;
+  }
 
-#box .right {
-  right: 0;
-}
+  #box .center {
+    left: calc(50% - 25px);
+  }
+  .calendar-doctor-slider {
+    display: flex;
+  }
+  .calendar-doctor-slider .slick-slider {
+    max-width: 300px;
+  }
 
-#box .center {
-  left: calc(50% - 25px);
-}
-.calendar-doctor-slider {
-  display: flex;
-}
-.calendar-doctor-slider .slick-slider {
-  max-width: 300px;
-}
+  .calendar-doctor-slider .slick-slider .slick-slide div div {
+    display: flex;
+    justify-content: center;
+  }
 
-.calendar-doctor-slider .slick-slider .slick-slide div div {
-  display: flex;
-  justify-content: center;
-}
+  body #dropdown-offset__BV_toggle_ {
+    background: #089bab !important;
+  }
 
-body #dropdown-offset__BV_toggle_ {
-  background: #089bab !important;
+  .custom-switch-color  .custom-control-label {
+    width: max-content !important;
+  }
 }
 
 </style>
