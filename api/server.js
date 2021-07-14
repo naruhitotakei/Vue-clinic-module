@@ -849,6 +849,10 @@ app.get('/api/codelist/regions', (req, res) => {
     daoCodeLists.getRegionsList(req, res)
 });
 
+app.get('/api/codelist/municipalities', (req, res) => {
+    daoCodeLists.getMunicipalitiesList(req, res)
+});
+
 app.get('/api/codelist/locations', (req, res) => {
     daoCodeLists.getLocationsList(req, res)
 });
@@ -857,6 +861,7 @@ app.get('/api/codelist/country/:id/tax-rate', (req, res) => {
     const id = req.params.id
     daoCodeLists.getTaxRateList(req, res, id)
 });
+
 app.get('/api/codelist/clients', (req, res) => {
     daoCodeLists.getClients(req, res)
 });

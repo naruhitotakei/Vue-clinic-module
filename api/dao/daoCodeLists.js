@@ -26,6 +26,15 @@ const getRegionsList = (request, response) => {
     })
 }
 
+const getMunicipalitiesList = (request, response) => {
+    pool.query("SELECT m.id AS municipality_id, m.name AS name, r.id AS region_id, r.country_id, r.name AS region_name FROM municipalities m LEFT JOIN regions r ON m.region_id = r.id ORDER BY name ASC", (error, results) => {
+        if (error) {
+            throw error
+        }
+        response.status(200).json(results.rows)
+    })
+}
+
 const getLocationsList = (request, response) => {
     pool.query("SELECT id, city FROM locations WHERE prm_client_id = 1 AND active = true", (error, results) => {
         if (error) {
@@ -56,6 +65,7 @@ const getClients = (request, response) => {
 module.exports = {
   getCountriesList,
   getRegionsList,
+  getMunicipalitiesList,
   getLocationsList,
   getTaxRateList,
   getClients

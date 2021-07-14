@@ -56,3 +56,15 @@ export async function getTaxRateList (id) {
   })
   return rawResponse.json()
 }
+
+export async function getMunicipalitiesList () {
+  const rawResponse = await fetch('/api/codelist/municipalities', {
+    method: 'GET',
+    credentials: 'same-origin',
+    headers: {
+      'Accept': 'application/json',
+      'Content-Type': 'application/json'
+    }
+  })
+  return rawResponse.json()
+}
