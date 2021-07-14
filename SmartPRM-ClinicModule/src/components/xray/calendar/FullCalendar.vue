@@ -613,6 +613,26 @@ export default {
             doctorId: this.formData.doctorId,
             locationId: this.formData.locationId
           })
+          console.log({
+            id: id,
+            title: this.formData.title,
+            assignmentDate: this.formData.assignmentDate,
+            start: this.formData.assignmentDate,
+            end: endDate,
+            hours: this.formData.hours,
+            minutes: this.formData.minutes,
+            notes: this.formData.notes,
+            product_groups: this.formData.product_groups,
+            appointment_canceled_in_advance_by_clinic: this.formData.appointment_canceled_in_advance_by_clinic,
+            appointment_canceled_in_advance_by_patient: this.formData.appointment_canceled_in_advance_by_patient,
+            patient_attended: this.formData.patient_attended,
+            backgroundColor: this.formData.backgroundColor,
+            resourceId: this.formData.resourceId,
+            eventResourceId: this.formData.resourceId,
+            patientId: this.formData.patientId,
+            doctorId: this.formData.doctorId,
+            locationId: this.formData.locationId
+          })
           // this.checkDoctorAuto(this.formData.doctorId)
           createCalendar(this.formData).then((data) => {
             createCalendarLabel(data[0].id, this.formData).then(() => {
@@ -645,7 +665,6 @@ export default {
       // this.$emit('setModalShow', false)
     },
     openCreateModal (selectionInfo) {
-      console.log('open create modal', selectionInfo)
       this.disabled = false
       this.formData = this.defaultAppointment()
       this.modalTitle = ''
@@ -681,7 +700,6 @@ export default {
       }
     },
     openUpdateModal (selectionInfo) {
-      console.log('open update modal', selectionInfo)
       // this.modalShow = true
       this.$emit('setModalShow', true)
       this.disabled = true

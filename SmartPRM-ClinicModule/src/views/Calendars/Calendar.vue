@@ -265,12 +265,13 @@ export default {
       return events
     },
     getResources () {
+      console.log(this.resources)
       if (!this.check.length) {
         return this.resources
       }
       let resources = []
       this.resources.map(e => {
-        return this.check.map(c => {
+        this.check.map(c => {
           if (e.title === c.title) {
             resources.push(e)
           }
@@ -341,10 +342,12 @@ export default {
         //   }
         // })
         this.clonedResources = this.resources
+        console.log(dataWithDoctor.find(item => item.id === 41535))
         dataWithDoctor.map(item => {
           let patientAttended = item.patient_attended === 'true' ? 'attended' : item.patient_attended === 'null' ? 'unknown' : 'not_attended'
           // let productGroups = this.product_groups && this.product_groups.find(productName => productName.product_group_id === item.prm_pr_group_name_id)
           let endDay = this.calculateEndDate(moment(item.date).format('YYYY-MM-DD') + 'T' + item.time, 0, 15)
+          let doctor = this.doctorsList.find(doc => doc.title === item.doctor_name ? item.doctor_name : item.app_doctor_name)
           this.events.push({
             id: item.id,
             title: item.name + ' ' + item.last_name,
@@ -354,8 +357,8 @@ export default {
             patient_attended: patientAttended,
             appointment_canceled_in_advance_by_patient: item.appointment_canceled_in_advance_by_patient,
             appointment_canceled_in_advance_by_clinic: item.appointment_canceled_in_advance_by_clinic,
-            resourceId: item.doctor_user_id,
-            eventResourceId: item.doctor_user_id,
+            resourceId: doctor && doctor.id,
+            eventResourceId: doctor && doctor.id,
             locationId: item.location ? item.location : item.app_location,
             product_groups: item.product_group_id,
             hours: 0,

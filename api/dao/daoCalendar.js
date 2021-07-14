@@ -10,7 +10,7 @@ const pool = new Pool({
 var moment = require('moment');
 
 const getApontments = (request, response, from, to, user_id, accessible_user_ids, selctedIds, prm_client_id, scope, lang ) => {
-    var statement = "SELECT app.id, app.date, app.note, app.product_group_id, app.enquiry_id as app_enquiry_id, app.kind, app.patient_attended, app.appointment_canceled_in_advance_by_clinic, " +
+    var statement = "SELECT app.id, app.date, app.created_at, app.note, app.product_group_id, app.enquiry_id as app_enquiry_id, app.kind, app.patient_attended, app.appointment_canceled_in_advance_by_clinic, " +
         "app.appointment_canceled_in_advance_by_patient, app.time, app.location as app_location, app.doctor_name as app_doctor_name, app.enquiry_id, enq.name, enq.last_name, " +
         "app.attendance, app.product_id, app_s.location as app_s_location, app_s.doctor_name, us.id as doctor_user_id, pcl.id as prm_client_id, " +
         "pcl.client_name as prm_client_name, prd.name as prd_name, prd.group as prd_group, prd.category as prd_category, " +
@@ -20,7 +20,7 @@ const getApontments = (request, response, from, to, user_id, accessible_user_ids
         "prm_pr_group_name.text as prm_pr_group_name_text, prm_pr_group_name.id as prm_pr_group_name_id "
     statement += "FROM appointments app "
     statement += "LEFT JOIN appointment_slots app_s ON app.id = app_s.appointment_id "
-    statement += "LEFT JOIN users us ON app_s.doctor_name = us.name "
+    statement += "LEFT JOIN users us ON app.doctor_name = us.name "
     statement += "LEFT JOIN clients cl ON app_s.client_id = cl.id "
     statement += "LEFT JOIN prm_client pcl ON cl.id = pcl.id "
     statement += "LEFT JOIN enquiries enq ON app.enquiry_id = enq.id "
@@ -84,7 +84,6 @@ const updateAppointments = (request, response, id, appointments) => {
     if (appointments.assignmentDate) statement += "date='" + appointments.assignmentDate + "',"
     if (appointments.time) statement += "time='" + time + "'"
     statement += " WHERE id = " + id
-    console.log("==========================================================")
     console.log(statement)
     pool.query(statement , (error, results) => {
         console.log(error)
