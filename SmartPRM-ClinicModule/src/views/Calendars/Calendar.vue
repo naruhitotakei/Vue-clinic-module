@@ -4,127 +4,129 @@
       <b-col md="12">
         <iq-card>
           <template v-slot:headerTitle>
-          <iq-card>
-          <template v-slot:body>
-          <div class="row justify-content-between align-items-center">
-        <div class="row align-items-center">
-          <b-dropdown id="dropdown-aria" variant="primary" text="Select doctors" class="m-2">
-            <b-checkbox name="check-button" v-model="allDoctorCheck" @change="allDoctorFun(allDoctorCheck)"  inline>{{ $t('calendar.selectAll') }}</b-checkbox>
-            <b-dropdown-form >
-              <b-dropdown-group v-for="(item,index) in doctors" :key="index" >
-                <b-checkbox href="#" class="custom-switch-color" :color="item.color" @change="checkData(item)" v-model="item.checked" :ref="'doctor_'+index" name="check-button" inline >
-                  {{ item.title }}
-                </b-checkbox>
-              </b-dropdown-group>
-            </b-dropdown-form>
-          </b-dropdown>
-          <div class="calendar-doctor-slider d-none">
-            <button @click="scroll_left" class="nav-btn btn-primary mr-1"><i class="ri-arrow-left-s-line"></i></button>
-            <VueSlickCarousel
-                v-bind="optionSlider"
-                v-if="doctors.length"
-                ref="carousel"
-            >
-              <div v-for="(item,index) in doctors" :key="index" >
-                <b-checkbox class="custom-switch-color" :color="item.color" @change="checkData(item)" v-model="item.checked" :ref="'doctor_'+index" name="check-button" inline >
-                  {{ item.title }}
-                </b-checkbox>
-              </div>
-            </VueSlickCarousel>
-            <button @click="scroll_right" class="nav-btn btn-primary ml-1"><i class="ri-arrow-right-s-line"></i></button>
-          </div>
-<!--          <button @click="scroll_left" class="nav-btn btn-primary mr-5"><i class="ri-arrow-left-s-line"></i></button>-->
-<!--          <div class="wrapper-box" >-->
-<!--            <div id="box">-->
-<!--              <template v-for="(item,index) in doctors">-->
-<!--                <b-checkbox class="custom-switch-color" :color="item.color" @change="checkData(item)" v-model="item.checked" :ref="'doctor_'+index" name="check-button" inline :key="index">-->
-<!--                  {{ item.title }}-->
-<!--                </b-checkbox>-->
-<!--              </template>-->
-<!--            </div>-->
-<!--          </div>-->
-<!--          <button @click="scroll_right" class="nav-btn btn-primary ml-5"><i class="ri-arrow-right-s-line"></i></button>-->
-        </div>
-            <b-button
-                @click="addAppointment"
-                variant="primary"
-                class="btn-add-patient mt-0"
-                style="width: 190px;"
-            >
-              <i class="ri-add-line mr-2"></i>
-              {{ $t('calendar.addAppointment') }}
-            </b-button>
+            <iq-card>
+              <template v-slot:body>
+                <div class="row justify-content-between align-items-center">
+                  <div class="row align-items-center">
+                    <b-dropdown id="dropdown-aria" variant="primary" text="Select doctors" class="m-2">
+                      <b-dropdown-group class="pl-4 pr-2 pb-0">
+                        <b-checkbox name="check-button" v-model="allDoctorCheck" @change="allDoctorFun(allDoctorCheck)"
+                                    inline>{{ $t('calendar.selectAll') }}
+                        </b-checkbox>
+                      </b-dropdown-group>
+                      <b-dropdown-form>
+                        <b-dropdown-group v-for="(item,index) in doctors" :key="index">
+                          <b-checkbox href="#" class="custom-switch-color" :color="item.color" @change="checkData(item)"
+                                      v-model="item.checked" :ref="'doctor_'+index" name="check-button" inline>
+                            {{ item.title }}
+                          </b-checkbox>
+                        </b-dropdown-group>
+                      </b-dropdown-form>
+                    </b-dropdown>
+                    <div class="calendar-doctor-slider d-none">
+                      <button @click="scroll_left" class="nav-btn btn-primary mr-1"><i class="ri-arrow-left-s-line"></i>
+                      </button>
+                      <VueSlickCarousel
+                          v-bind="optionSlider"
+                          v-if="doctors.length"
+                          ref="carousel"
+                      >
+                        <div v-for="(item,index) in doctors" :key="index">
+                          <b-checkbox class="custom-switch-color" :color="item.color" @change="checkData(item)"
+                                      v-model="item.checked" :ref="'doctor_'+index" name="check-button" inline>
+                            {{ item.title }}
+                          </b-checkbox>
+                        </div>
+                      </VueSlickCarousel>
+                      <button @click="scroll_right" class="nav-btn btn-primary ml-1"><i
+                          class="ri-arrow-right-s-line"></i></button>
+                    </div>
+                  </div>
+                  <b-button
+                      @click="addAppointment"
+                      variant="primary"
+                      class="btn-add-patient mt-0"
+                      style="width: 190px;"
+                  >
+                    <i class="ri-add-line mr-2"></i>
+                    {{ $t('calendar.addAppointment') }}
+                  </b-button>
 
-          </div>
-          </template>
-        </iq-card>
+                </div>
+              </template>
+            </iq-card>
           </template>
           <template v-slot:headerAction>
             <form class="mt-4" novalidate @submit="submitFormData()">
               <b-modal id="modal-1" title="Appointment details" hide-footer>
-              <form @submit="submitFormData()">
-              <div class="form-row">
-                <div class="col-md-12 mb-3">
-                  <label for="validationDefault01">Appointment name</label>
-                  <input type="text" v-model="formData.appName" class="form-control" id="validationDefault01" required>
-                </div>
-                <div class="col-md-12 mb-3">
-                  <label for="validationDefault02">Date and Time</label>
-                  <input type="datetime-local" placeholder="2021-01-01T13:45:00" v-model="formData.dateTime" class="form-control" id="validationDefault02" required>
-                </div>
-                <div class="col-md-12 mb-3">
-                  <label for="validationDefault03">Regarding</label>
-                  <input type="text" v-model="formData.regarding" class="form-control" id="validationDefault02" required>
-                </div>
-                <div class="col-md-12 mb-3">
-                  <label for="validationDefault04">Type</label>
-                  <select class="form-control" v-model="formData.type" id="validationDefault04" required>
-                    <option selected disabled value="type">Choose...</option>
-                    <option>...</option>
-                  </select>
-                </div>
-                <div class="col-md-12 mb-3">
-                  <label for="validationDefault05">Name of Doctor</label>
-                  <select class="form-control" v-model="formData.doctorList" id="validationDefault05" required>
-                    <option selected disabled value="doctor_name">Choose...</option>
-                    <option>...</option>
-                  </select>
-                </div>
-                <div class="col-md-12 mb-3">
-                  <label for="validationDefault06">Name of Patient</label>
-                  <select class="form-control" v-model="formData.patientName" id="validationDefault06" required>
-                    <option selected disabled value="patient_name">Choose...</option>
-                    <option>...</option>
-                  </select>
-                </div>
-                <div class="col-md-12 mb-3">
-                  <label for="validationDefault06">Location</label>
-                  <select class="form-control" v-model="formData.location" id="validationDefault06" required>
-                    <option selected disabled value="location">Choose...</option>
-                    <option>...</option>
-                  </select>
-                </div>
-                <div class="col-md-12 mb-3">
-                  <label for="validationDefault05">Telephone Input</label>
-                  <input type="tel" class="form-control" v-model="formData.phone" id="validationDefault05" required>
-                </div>
-              <div class="col-md-12 mb-3">
-                  <label for="validationDefault05">Answered by</label>
-                  <input type="tel" v-model="formData.answeredBy" class="form-control" id="validationDefault05" required>
-              </div>
-              <div class="col-md-12 mb-3">
-                  <label for="validationDefault05">Presence</label>
-                  <input type="tel" v-model="formData.presence" class="form-control" id="validationDefault05" required>
-              </div>
-              </div>
-              <div class="form-group">
-                <button class="btn btn-primary" type="submit">Submit form</button>
-              </div>
+                <form @submit="submitFormData()">
+                  <div class="form-row">
+                    <div class="col-md-12 mb-3">
+                      <label for="validationDefault01">Appointment name</label>
+                      <input type="text" v-model="formData.appName" class="form-control" id="validationDefault01"
+                             required>
+                    </div>
+                    <div class="col-md-12 mb-3">
+                      <label for="validationDefault02">Date and Time</label>
+                      <input type="datetime-local" placeholder="2021-01-01T13:45:00" v-model="formData.dateTime"
+                             class="form-control" id="validationDefault02" required>
+                    </div>
+                    <div class="col-md-12 mb-3">
+                      <label for="validationDefault03">Regarding</label>
+                      <input type="text" v-model="formData.regarding" class="form-control" id="validationDefault02"
+                             required>
+                    </div>
+                    <div class="col-md-12 mb-3">
+                      <label for="validationDefault04">Type</label>
+                      <select class="form-control" v-model="formData.type" id="validationDefault04" required>
+                        <option selected disabled value="type">Choose...</option>
+                        <option>...</option>
+                      </select>
+                    </div>
+                    <div class="col-md-12 mb-3">
+                      <label for="validationDefault05">Name of Doctor</label>
+                      <select class="form-control" v-model="formData.doctorList" id="validationDefault05" required>
+                        <option selected disabled value="doctor_name">Choose...</option>
+                        <option>...</option>
+                      </select>
+                    </div>
+                    <div class="col-md-12 mb-3">
+                      <label for="validationDefault06">Name of Patient</label>
+                      <select class="form-control" v-model="formData.patientName" id="validationDefault06" required>
+                        <option selected disabled value="patient_name">Choose...</option>
+                        <option>...</option>
+                      </select>
+                    </div>
+                    <div class="col-md-12 mb-3">
+                      <label for="validationDefault06">Location</label>
+                      <select class="form-control" v-model="formData.location" id="validationDefault06" required>
+                        <option selected disabled value="location">Choose...</option>
+                        <option>...</option>
+                      </select>
+                    </div>
+                    <div class="col-md-12 mb-3">
+                      <label for="validationDefault05">Telephone Input</label>
+                      <input type="tel" class="form-control" v-model="formData.phone" id="validationDefault05" required>
+                    </div>
+                    <div class="col-md-12 mb-3">
+                      <label for="validationDefault05">Answered by</label>
+                      <input type="tel" v-model="formData.answeredBy" class="form-control" id="validationDefault05"
+                             required>
+                    </div>
+                    <div class="col-md-12 mb-3">
+                      <label for="validationDefault05">Presence</label>
+                      <input type="tel" v-model="formData.presence" class="form-control" id="validationDefault05"
+                             required>
+                    </div>
+                  </div>
+                  <div class="form-group">
+                    <button class="btn btn-primary" type="submit">Submit form</button>
+                  </div>
+                </form>
+              </b-modal>
             </form>
-          </b-modal>
-          </form>
           </template>
-          <template  v-slot:body>
+          <template v-slot:body>
             <FullCalendar :resourcesOuter="getResources" :events="getEvents" @updateApp="updateApp"
                           @checkData="checkData" @setModalShow="setModalShow" :modalShow="modalShow"
                           :selectDoctor="selectDoctor"
@@ -488,6 +490,15 @@ export default {
 
   .custom-switch-color  .custom-control-label {
     width: max-content !important;
+  }
+
+  .b-dropdown-form {
+    flex-wrap: wrap;
+    display: flex;
+    flex-direction: column;
+    max-height: 140px;
+    width: 400px;
+    padding-top: 0;
   }
 }
 
