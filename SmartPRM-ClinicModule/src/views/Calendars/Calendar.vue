@@ -342,12 +342,14 @@ export default {
         //   }
         // })
         this.clonedResources = this.resources
-        console.log(dataWithDoctor.find(item => item.id === 41535))
         dataWithDoctor.map(item => {
           let patientAttended = item.patient_attended === 'true' ? 'attended' : item.patient_attended === 'null' ? 'unknown' : 'not_attended'
           // let productGroups = this.product_groups && this.product_groups.find(productName => productName.product_group_id === item.prm_pr_group_name_id)
           let endDay = this.calculateEndDate(moment(item.date).format('YYYY-MM-DD') + 'T' + item.time, 0, 15)
           let doctor = this.doctorsList.find(doc => doc.title === item.doctor_name ? item.doctor_name : item.app_doctor_name)
+          if (item === 41535) {
+            console.log(item)
+          }
           this.events.push({
             id: item.id,
             title: item.name + ' ' + item.last_name,
