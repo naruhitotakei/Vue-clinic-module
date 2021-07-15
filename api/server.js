@@ -13,6 +13,35 @@ var cors = require('cors')
 const app = express(),
       bodyParser = require("body-parser");
       port = 3080;
+      
+///////////////////////////////////
+//
+// brute force attack configuration
+//
+///////////////////////////////////
+const ExpressBrute = require('express-brute');
+const store = new ExpressBrute.MemoryStore();
+const moment = require('moment');
+const failCallback = function (req, res, next, nextValidRequestDate) {
+    res.status(429).json("NOK: Too many failed attempts in a short period of time, please try again later")
+};
+// Start slowing requests after 5 failed attempts for the same user
+const userBruteforce = new ExpressBrute(store, {
+    freeRetries: 5,
+    minWait: 10*1000, // 10 seconds
+    maxWait: 60*1000, // 1 minute
+    failCallback: failCallback
+});
+// No more than 1000 login attempts per day per IP
+const globalBruteforce = new ExpressBrute(store, {
+    freeRetries: 1000,
+    attachResetToRequest: false,
+    refreshTimeoutOnRequest: false,
+    minWait: 25*60*60*1000, // 1 day 1 hour (should never reach this wait time)
+    maxWait: 25*60*60*1000, // 1 day 1 hour (should never reach this wait time)
+    lifetime: 24*60*60, // 1 day (seconds not milliseconds)
+    failCallback: failCallback
+});
 
 const daoUser = require('./dao/daoUser')
 const daoEnquiries = require('./dao/daoEnquiries')
@@ -65,12 +94,20 @@ const usersPermission = "Users"
 ///////////////////////////////////
 // user login, logout, ...
 ///////////////////////////////////
-
+app.set('trust proxy', 1);
 // login - email and password in body
-app.post('/api/login', async function(req, res) {
-   const credentials = req.body
-   req.session.prm_user = await daoUser.loginUser(req, res, credentials.loginEmail, credentials.loginPassword)
-});
+app.post('/api/login', 
+    globalBruteforce.prevent,
+    userBruteforce.getMiddleware({
+        key: function(req, res, next) {
+            next('req.body.loginEmail');
+        } 
+    }),       
+    async function(req, res) {
+        const credentials = req.body
+        req.session.prm_user = await daoUser.loginUser(req, res, credentials.loginEmail, credentials.loginPassword)
+    }
+);
 
 // get loged user data
 app.get('/api/login', (req, res) => {
