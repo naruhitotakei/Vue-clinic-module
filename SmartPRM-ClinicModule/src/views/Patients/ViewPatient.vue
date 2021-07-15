@@ -412,7 +412,7 @@
                                               </b-form-group>
                                               <b-form-group class="col-md-12 align-items-center" :class="{'mb-0': disabled}" style="justify-content: space-between;" label-cols-sm="4" label-for="city" :label="$t('EPR.personalInfo.postCodeCity')">
                                                   <b-form-input :disabled="disabled" class="col-md-4 form-control-disabled" style="float: left;" v-model="patient.post_code" type="text"></b-form-input>
-                                                  <b-form-input :disabled="disabled" class="col-md-6 form-control-disabled" style="float: right;" v-model="patient.city" type="text"></b-form-input>
+                                                  <v-select :disabled="disabled" class="col-md-8 form-control-disabled style-chooser" style="float: right;" v-model="patient.city" :clearable="false" :options="filteredMunicipalities" :getOptionLabel="getMunicipalityLabel" :reduce="city => city.municipality_name" @input="onCityChange"></v-select>
                                               </b-form-group>
                                               <b-form-group class="col-md-12 align-items-center" :class="{'mb-0': disabled}" label-cols-sm="4" label-for="country" :label="$t('EPR.personalInfo.country')">
                                                   <v-select :disabled="disabled" label="name" :clearable="false" :reduce="country => country.id" class="style-chooser form-control-disabled" v-model="patient.country_id" :options="countries"></v-select>
@@ -827,7 +827,7 @@ import {
   trashEnquiry
 } from '../../services/enquiry'
 import { getDentists, getSurgeons, getUsersForAssignments, sso } from '../../services/userService'
-import { getCountriesList, getRegionsList, getLocationsList } from '../../services/commonCodeLists'
+import { getCountriesList, getRegionsList, getLocationsList, getMunicipalitiesList } from '../../services/commonCodeLists'
 import moment from 'moment'
 import { createAssignments } from '@/services/assignmentsService'
 import { fileUpload, getFiles } from '@/services/upDownLoad'
@@ -845,6 +845,7 @@ export default {
     this.getPatientAssignments(this.patientId)
     this.getCountries()
     this.getRegions()
+    this.getMunicipalities()
     this.getDentists()
     this.getSurgeons()
     this.getPatientInvoices(this.patientId, 'ASC')
@@ -872,6 +873,16 @@ export default {
         return item.country_id === this.patient.country_id
       })
     },
+    filteredMunicipalities () {
+      return this.municipalities.filter(item => {
+        return item.country_id === this.patient.country_id
+      })
+    },
+    /* onCityChange () {
+      return this.municipalities.filter(item => {
+        return this.patient.region_id === this.item.region_id
+      })
+    }, */
     patientsDentist: function () {
       return this.dentists.find((item) => {
         return item.code === this.patient.prm_dentist_user_id
@@ -1137,6 +1148,7 @@ export default {
       },
       countries: [],
       regions: [],
+      municipalities: [],
       columnsInvoices: [
         { label: this.$t('EPR.invoicesColumn.type'), key: 'invoice_type', class: 'text-left' },
         { label: this.$t('EPR.invoicesColumn.no'), key: 'invoice_number', class: 'text-left' },
@@ -1287,6 +1299,9 @@ export default {
     getOptionLabel (option) {
       return (option && option.label) || ''
     },
+    getMunicipalityLabel (city) {
+      return (city && city.municipality_name)
+    },
     createBillingDetails () {
       let details = ''
       if (this.patient.name) details += this.patient.name
@@ -1377,6 +1392,11 @@ export default {
     getRegions () {
       getRegionsList().then(response => {
         this.regions = response
+      })
+    },
+    getMunicipalities () {
+      getMunicipalitiesList().then(response => {
+        this.municipalities = response
       })
     },
     invoiceSelected (item) {
