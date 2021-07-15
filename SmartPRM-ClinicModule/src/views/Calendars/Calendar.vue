@@ -346,8 +346,14 @@ export default {
           let patientAttended = item.patient_attended === 'true' ? 'attended' : item.patient_attended === 'null' ? 'unknown' : 'not_attended'
           // let productGroups = this.product_groups && this.product_groups.find(productName => productName.product_group_id === item.prm_pr_group_name_id)
           let endDay = this.calculateEndDate(moment(item.date).format('YYYY-MM-DD') + 'T' + item.time, 0, 15)
-          let doctor = this.doctorsList.find(doc => doc.title === item.doctor_name ? item.doctor_name : item.app_doctor_name)
-          if (item === 41535) {
+          let doctor = this.doctorsList.find(doc => {
+            // console.log('doc NAME', doc.title)
+            // if (item.doctor_name !== null) {
+            //   return doc.title === item.doctor_name
+            // }
+            return doc.name === item.app_doctor_name
+          })
+          if (item.id === 41540) {
             console.log(item)
           }
           this.events.push({
@@ -383,6 +389,7 @@ export default {
           })
         })
         this.events = _.uniqBy(this.events, 'id')
+        console.log(this.events.find(ev => ev.id === 41540))
       })
     },
     calculateEndDate (startDate, hours, minutes) {
