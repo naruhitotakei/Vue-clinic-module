@@ -108,6 +108,7 @@ const createAppointment = (request, response, appointments) => {
     if (appointments.hours) statement += "hours,"
     if (appointments.minutes) statement += "minutes,"
     statement += "time,"
+    statement += "created_at,"
     statement += "kind"
     statement += ") VALUES ("
     if (appointments.doctorId) statement += "'"+ appointments.doctorId +"',"
@@ -120,6 +121,7 @@ const createAppointment = (request, response, appointments) => {
     if (appointments.hours) statement += ""+ appointments.hours +","
     if (appointments.minutes) statement += ""+ appointments.minutes +","
     statement += "'"+ time +"',"
+    statement += "NOW(),"
     statement += "'Posvet')"
     console.log(statement)
     pool.query(statement , (error, results) => {
