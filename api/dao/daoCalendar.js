@@ -10,7 +10,7 @@ const pool = new Pool({
 var moment = require('moment');
 
 const getApontments = (request, response, from, to, user_id, accessible_user_ids, selctedIds, prm_client_id, scope, lang ) => {
-    var statement = "SELECT app.id, app.date, app.created_at, app.note, app.product_group_id, app.enquiry_id as app_enquiry_id, app.kind, app.patient_attended, app.appointment_canceled_in_advance_by_clinic, " +
+    var statement = "SELECT app.id, app.date, app.end_time, app.created_at, app.note, app.product_group_id, app.enquiry_id as app_enquiry_id, app.kind, app.patient_attended, app.appointment_canceled_in_advance_by_clinic, " +
         "app.appointment_canceled_in_advance_by_patient, app.time, app.location as app_location, app.doctor_name as app_doctor_name, app.enquiry_id, enq.name, enq.last_name, " +
         "app.attendance, app.product_id, app_s.location as app_s_location, app_s.doctor_name, us.id as doctor_user_id, pcl.id as prm_client_id, " +
         "pcl.client_name as prm_client_name, prd.name as prd_name, prd.group as prd_group, prd.category as prd_category, " +
@@ -82,6 +82,7 @@ const updateAppointments = (request, response, id, appointments) => {
     statement += "appointment_canceled_in_advance_by_clinic=" + appointments.appointment_canceled_in_advance_by_clinic + ","
     if (appointments.product_groups) statement += "product_group_id='" + appointments.product_groups + "',"
     if (appointments.assignmentDate) statement += "date='" + appointments.assignmentDate + "',"
+    if (appointments.end) statement += "end_time='" + appointments.end + "',"
     if (appointments.time) statement += "time='" + time + "'"
     statement += " WHERE id = " + id
     console.log(statement)
@@ -105,6 +106,7 @@ const createAppointment = (request, response, appointments) => {
     if (appointments.patient_attended) statement += "patient_attended,"
     if (appointments.product_groups) statement += "product_group_id,"
     if (appointments.assignmentDate) statement += "date,"
+    if (appointments.end) statement += "end_time,"
     if (appointments.hours) statement += "hours,"
     if (appointments.minutes) statement += "minutes,"
     statement += "time,"
@@ -118,6 +120,7 @@ const createAppointment = (request, response, appointments) => {
     if (appointments.patient_attended) statement += "'"+patient_attended +"',"
     if (appointments.product_groups) statement += ""+ appointments.product_groups +","
     if (appointments.assignmentDate) statement += "'"+ appointments.assignmentDate +"',"
+    if (appointments.end) statement += "'"+ appointments.end +"',"
     if (appointments.hours) statement += ""+ appointments.hours +","
     if (appointments.minutes) statement += ""+ appointments.minutes +","
     statement += "'"+ time +"',"

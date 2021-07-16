@@ -115,30 +115,52 @@
           <label for="start" class="mb-0">{{ $t('calendarEvent.start') }}</label>
         </div>
           <div class="col-md-9 d-flex align-items-center">
-            <input :disabled="disabled" type="datetime-local" :min="'2021-07-08T10:38'"
-                   v-model="formData.assignmentDate" class="form-control form-control-disabled font-size-16" id="start"
-                   required style="max-width: 237px;">
-<!--            <label for="start" class="mb-0 ml-5 mr-2">{{ $t('calendarEvent.end') }}</label>-->
-<!--            <input :disabled="disabled" type="datetime-local"-->
-<!--                   v-model="formData.assignmentDate" class="form-control form-control-disabled font-size-16" id="end"-->
+<!--            <input :disabled="disabled" type="datetime-local" step="120"-->
+<!--                   v-model="formData.assignmentDate" class="form-control form-control-disabled font-size-16" id="start"-->
 <!--                   required style="max-width: 237px;">-->
+            <date-picker
+                :disabled="disabled"
+                class="form-control form-control-disabled font-size-16"
+                v-model="formData.assignmentDate"
+                type="datetime"
+                :minute-step="5"
+                :show-second="false"
+                :lang="'en'"
+                :format="'DD.MM.YYYY HH.mm'"
+            ></date-picker>
+            <label for="start" class="mb-0 ml-5 mr-2">{{ $t('calendarEvent.end') }}</label>
+            <date-picker
+                :disabled="disabled"
+                required
+                class="form-control form-control-disabled font-size-16"
+                v-model="formData.end"
+                type="datetime"
+                :minute-step="5"
+                :show-second="false"
+                :lang="'en'"
+                :format="'DD.MM.YYYY HH.mm'"
+            ></date-picker>
           </div>
         </div>
-       <div class="row align-items-center justify-content-between w-100 " :class="{'mb-3': !disabled}">
-        <div class="col-md-3">
-          <label for="duration" class="mb-0">{{ $t('calendarEvent.duration') }}</label>
-        </div>
-        <div class="col-md-9">
-          <div style="display: flex;">
-            <div class="calendar-modal-input__hour mr-4">
-              <input :disabled="disabled" type="number" v-model="formData.hours" class="form-control col-md-6 form-control-disabled font-size-16" min="0" max="9" placeholder="Hours" required style="max-width: 150px;">
-            </div>
-            <div class="calendar-modal-input__minutes">
-              <input :disabled="disabled" type="number" v-model="formData.minutes" min="0" max="59" class="form-control col-md-6 offset-1 font-size-16 form-control-disabled" step="5" placeholder="Minutes" required style="max-width: 150px;">
-            </div>
-          </div>
-        </div>
-       </div>
+<!--       <div class="row align-items-center justify-content-between w-100 " :class="{'mb-3': !disabled}">-->
+<!--        <div class="col-md-3">-->
+<!--          <label for="duration" class="mb-0">{{ $t('calendarEvent.duration') }}</label>-->
+<!--        </div>-->
+<!--        <div class="col-md-9">-->
+<!--          <div style="display: flex;">-->
+<!--            <div class="calendar-modal-input__hour mr-4">-->
+<!--              <input :disabled="disabled" type="number" v-model="formData.hours"-->
+<!--                     class="form-control col-md-6 form-control-disabled font-size-16" min="0" max="9"-->
+<!--                     placeholder="Hours" required style="max-width: 150px;">-->
+<!--            </div>-->
+<!--            <div class="calendar-modal-input__minutes">-->
+<!--              <input :disabled="disabled" type="number" v-model="formData.minutes" min="0" max="59"-->
+<!--                     class="form-control col-md-6 offset-1 font-size-16 form-control-disabled" step="5"-->
+<!--                     placeholder="Minutes" required style="max-width: 150px;">-->
+<!--            </div>-->
+<!--          </div>-->
+<!--        </div>-->
+<!--       </div>-->
         <div class="row align-items-center justify-content-between w-100 " :class="{'mb-3': !disabled}">
          <div class="col-md-3">
            <label for="color" class="mb-0">{{ $t('calendarEvent.patient_attended') }}</label><br>
@@ -235,14 +257,16 @@ import listPlugin from '@fullcalendar/list'
 import moment from 'moment'
 import { xray } from '../../../config/pluginInit'
 import { getPatients } from '../../../services/enquiry'
-// import { getDentists } from '../../../services/userService'
 import { getLocationsList } from '../../../services/commonCodeLists'
 import { getProductGroups } from '@/services/products'
 import { createCalendar, getDoctorList, updateCalendar, updateCalendarLabel, createCalendarLabel } from '@/services/calendarService'
+// import { getDentists } from '../../../services/userService'
+import DatePicker from 'vue2-datepicker'
+import 'vue2-datepicker/index.css'
 
 export default {
   components: {
-    calendar
+    calendar, DatePicker
   },
   computed: {
     isSelectable () {
@@ -444,9 +468,6 @@ export default {
       })
     },
     checkRadio () {
-      console.log('1')
-      console.log(this.formData.appointment_canceled_in_advance_by_patient)
-      console.log(this.formData.appointment_canceled_in_advance_by_clinic)
       if (this.formData.appointment_canceled_in_advance_by_patient) {
         this.formData.appointment_canceled_in_advance_by_clinic = ''
       } else {
@@ -455,7 +476,6 @@ export default {
     },
     showProps (item, prop) {
       if (this.disabled && prop === item.value) {
-        console.log(prop)
         return true
       } else if (!this.disabled) {
         return true
@@ -508,10 +528,10 @@ export default {
     },
     eventDrop (info) {
       let event = this.calendarApi.getEventById(info.event.id)
-      console.log('res pre: ' + JSON.stringify(event.extendedProps.eventResourceId))
-      console.log('doc pre: ' + JSON.stringify(event.extendedProps.doctorId))
-      console.log('novi res id je: ' + JSON.stringify(info.event.extendedProps.eventResourceId))
-      console.log('novi doctor id je: ' + JSON.stringify(info.event.extendedProps.doctorId))
+      // console.log('res pre: ' + JSON.stringify(event.extendedProps.eventResourceId))
+      // console.log('doc pre: ' + JSON.stringify(event.extendedProps.doctorId))
+      // console.log('novi res id je: ' + JSON.stringify(info.event.extendedProps.eventResourceId))
+      // console.log('novi doctor id je: ' + JSON.stringify(info.event.extendedProps.doctorId))
       this.setAssignmentDateAndDuration(info.event.start, info.event.end)
       event.setExtendedProp('assignmentDate', this.formData.assignmentDate)
       event.setStart(this.formData.start)
@@ -539,31 +559,14 @@ export default {
         enquiry_id: ''
       }
     },
-    createCalendar (appointment) {
-      createCalendar(appointment).then(() => {
-
-      })
-    },
     calculateEndDate (startDate, hours, minutes) {
       return moment(startDate).add(hours, 'hours').add(minutes, 'minutes').format('YYYY-MM-DDTHH:mm')
-    },
-    checkDoctorAuto (checkDoctor) {
-      let doctor = this.doctors.find(doctor => doctor.name === checkDoctor)
-      doctor = {
-        id: doctor.id,
-        title: doctor.name,
-        disabled: false,
-        checked: true
-      }
-      console.log('checkData', doctor)
-      this.$emit('checkData', doctor)
-      return doctor
     },
     saveAppointment () {
       if (this.formData.patientId && this.formData.doctorId && this.formData.assignmentDate) {
         this.disabled = true
         let id = this.calendarApi.getEvents().length + 1
-        let endDate = this.calculateEndDate(this.formData.assignmentDate, this.formData.hours, this.formData.minutes)
+        // let endDate = this.calculateEndDate(this.formData.assignmentDate, this.formData.hours, this.formData.minutes)
         // let title = this.patients.find(item => item.id === this.formData.patientId)
         // this.modalTitle = title.full_name
         this.formData.resourceId = this.formData.doctorId
@@ -598,7 +601,7 @@ export default {
             title: this.formData.title,
             assignmentDate: this.formData.assignmentDate,
             start: this.formData.assignmentDate,
-            end: endDate,
+            end: this.formData.end,
             hours: this.formData.hours,
             minutes: this.formData.minutes,
             notes: this.formData.notes,
@@ -613,27 +616,6 @@ export default {
             doctorId: this.formData.doctorId,
             locationId: this.formData.locationId
           })
-          console.log({
-            id: id,
-            title: this.formData.title,
-            assignmentDate: this.formData.assignmentDate,
-            start: this.formData.assignmentDate,
-            end: endDate,
-            hours: this.formData.hours,
-            minutes: this.formData.minutes,
-            notes: this.formData.notes,
-            product_groups: this.formData.product_groups,
-            appointment_canceled_in_advance_by_clinic: this.formData.appointment_canceled_in_advance_by_clinic,
-            appointment_canceled_in_advance_by_patient: this.formData.appointment_canceled_in_advance_by_patient,
-            patient_attended: this.formData.patient_attended,
-            backgroundColor: this.formData.backgroundColor,
-            resourceId: this.formData.resourceId,
-            eventResourceId: this.formData.resourceId,
-            patientId: this.formData.patientId,
-            doctorId: this.formData.doctorId,
-            locationId: this.formData.locationId
-          })
-          // this.checkDoctorAuto(this.formData.doctorId)
           createCalendar(this.formData).then((data) => {
             createCalendarLabel(data[0].id, this.formData).then(() => {
               this.formData = this.defaultAppointment()
@@ -646,7 +628,7 @@ export default {
           event.setProp('backgroundColor', this.formData.backgroundColor)
           event.setProp('resourceId', this.formData.resourceId)
           event.setStart(this.formData.assignmentDate)
-          event.setEnd(endDate)
+          event.setEnd(this.formData.end)
           event.setExtendedProp('assignmentDate', this.formData.assignmentDate)
           event.setExtendedProp('start', this.formData.assignmentDate)
           event.setExtendedProp('hours', this.formData.hours)
@@ -656,19 +638,18 @@ export default {
           event.setExtendedProp('patientId', this.formData.patientId)
           event.setExtendedProp('doctorId', this.formData.doctorId)
           event.setExtendedProp('locationId', this.formData.locationId)
+          console.log('updated', this.formData)
           this.updateCalendar(this.formData.id, this.formData)
           this.updateCalendarLabel(this.formData.id, this.formData)
           this.formData = this.defaultAppointment()
           this.$emit('setModalShow', false)
         }
       }
-      // this.$emit('setModalShow', false)
     },
     openCreateModal (selectionInfo) {
       this.disabled = false
       this.formData = this.defaultAppointment()
       this.modalTitle = ''
-      // this.modalShow = true
       this.$emit('setModalShow', true)
       this.formData.resourceId = selectionInfo.resource.id
       this.formData.doctorId = +this.formData.resourceId
@@ -714,7 +695,9 @@ export default {
         backgroundColor: event.backgroundColor,
         resourceId: event.extendedProps.eventResourceId,
         locationId: location,
-        ...event.extendedProps
+        ...event.extendedProps,
+        assignmentDate: new Date(event.extendedProps.assignmentDate)
+
       }
       this.modalTitle = this.formData.title
     }
@@ -789,10 +772,10 @@ body .wrapper .custom-control-label::after {
 .calendar-modal .form-control-disabled{
   &:disabled {
     background-color: transparent !important;
-    border: none;
+    border: none !important;
     &>div {
       background-color: transparent !important;
-      border: none;
+      border: none !important;
     }
 
     &::placeholder {
@@ -818,6 +801,11 @@ body .wrapper .custom-control-label::after {
     }
   }
 }
+
+ .form-control .mx-input {
+   border: none;
+   box-shadow: none;
+ }
 
  .fc-widget-content .fc-scroller {
    overflow: visible !important;
