@@ -347,10 +347,6 @@ export default {
           // let productGroups = this.product_groups && this.product_groups.find(productName => productName.product_group_id === item.prm_pr_group_name_id)
           let endDay = this.calculateEndDate(moment(item.date).format('YYYY-MM-DD') + 'T' + item.time, 0, 15)
           let doctor = this.doctorsList.find(doc => {
-            // console.log('doc NAME', doc.title)
-            // if (item.doctor_name !== null) {
-            //   return doc.title === item.doctor_name
-            // }
             return doc.name === item.app_doctor_name
           })
           if (item.id === 41540) {
@@ -360,7 +356,7 @@ export default {
             id: item.id,
             title: item.name + ' ' + item.last_name,
             start: moment(item.date).format('YYYY-MM-DD') + 'T' + item.time,
-            end: endDay,
+            end: !item.end_time && endDay,
             backgroundColor: item.app_lb_color ? item.app_lb_color : '#64D6E8',
             patient_attended: patientAttended,
             appointment_canceled_in_advance_by_patient: item.appointment_canceled_in_advance_by_patient,
