@@ -412,13 +412,26 @@
                                               </b-form-group>
                                               <b-form-group class="col-md-12 align-items-center" :class="{'mb-0': disabled}" style="justify-content: space-between;" label-cols-sm="4" label-for="city" :label="$t('EPR.personalInfo.postCodeCity')">
                                                   <b-form-input :disabled="disabled" class="col-md-4 form-control-disabled" style="float: left;" v-model="patient.post_code" type="text"></b-form-input>
-                                                  <v-select :disabled="disabled" class="col-md-8 form-control-disabled style-chooser" style="float: right;" v-model="patient.city" :clearable="false" :options="filteredMunicipalities" :getOptionLabel="getMunicipalityLabel" :reduce="city => city.municipality_name" @input="onCityChange"></v-select>
+                                                <v-select :disabled="disabled"
+                                                          class="col-md-8 form-control-disabled style-chooser"
+                                                          style="float: right;" v-model="patient.city"
+                                                          :clearable="false" :options="filteredMunicipalities"
+                                                          :getOptionLabel="getMunicipalityLabel"
+                                                          :reduce="city => city.municipality_name"
+                                                ></v-select>
                                               </b-form-group>
                                               <b-form-group class="col-md-12 align-items-center" :class="{'mb-0': disabled}" label-cols-sm="4" label-for="country" :label="$t('EPR.personalInfo.country')">
-                                                  <v-select :disabled="disabled" label="name" :clearable="false" :reduce="country => country.id" class="style-chooser form-control-disabled" v-model="patient.country_id" :options="countries"></v-select>
+                                                <v-select :disabled="disabled" label="name" :clearable="false"
+                                                          :reduce="country => country.id"
+                                                          class="style-chooser form-control-disabled"
+                                                          v-model="patient.country_id" :options="countries"
+                                                ></v-select>
                                               </b-form-group>
                                               <b-form-group class="col-md-12 align-items-center" :class="{'mb-0': disabled}" label-cols-sm="4" label-for="region" :label="$t('EPR.personalInfo.region')">
-                                                  <v-select class="style-chooser form-control-disabled" :clearable="false" :reduce="region => region.code" :disabled="disabled" v-model="patient.region_id" :options="filteredRegions"> </v-select>
+                                                <v-select class="style-chooser form-control-disabled" :clearable="false"
+                                                          :reduce="region => region.code" :disabled="disabled"
+                                                          v-model="patient.region_id"
+                                                          :options="filteredRegions"></v-select>
                                               </b-form-group>
                                               <b-form-group class="col-md-12 align-items-center" :class="{'mb-0': disabled}" label-cols-sm="4" label-for="insurance" :label="$t('EPR.personalInfo.insurance')">
                                                   <b-form-input :disabled="disabled" class="col-md-5 form-control-disabled" style="float: left;" name="insurance_no" type="text" v-model="patient.insurance_no"></b-form-input>
@@ -878,11 +891,11 @@ export default {
         return item.country_id === this.patient.country_id
       })
     },
-    /* onCityChange () {
-      return this.municipalities.filter(item => {
-        return this.patient.region_id === this.item.region_id
+    onCityChange () {
+      return this.regions.filter((item) => {
+        return item.region_id === this.patient.region_id
       })
-    }, */
+    },
     patientsDentist: function () {
       return this.dentists.find((item) => {
         return item.code === this.patient.prm_dentist_user_id

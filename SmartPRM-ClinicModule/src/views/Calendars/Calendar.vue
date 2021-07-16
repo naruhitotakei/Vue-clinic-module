@@ -349,14 +349,14 @@ export default {
           let doctor = this.doctorsList.find(doc => {
             return doc.name === item.app_doctor_name
           })
-          if (item.id === 41540) {
+          if (item.id === 41547) {
             console.log(item)
           }
           this.events.push({
             id: item.id,
             title: item.name + ' ' + item.last_name,
             start: moment(item.date).format('YYYY-MM-DD') + 'T' + item.time,
-            end: !item.end_time && endDay,
+            end: !item.end_time ? endDay : item.end_time,
             backgroundColor: item.app_lb_color ? item.app_lb_color : '#64D6E8',
             patient_attended: patientAttended,
             appointment_canceled_in_advance_by_patient: item.appointment_canceled_in_advance_by_patient,
@@ -385,7 +385,7 @@ export default {
           })
         })
         this.events = _.uniqBy(this.events, 'id')
-        console.log(this.events.find(ev => ev.id === 41540))
+        console.log(this.events.find(ev => ev.id === 41547))
       })
     },
     calculateEndDate (startDate, hours, minutes) {
