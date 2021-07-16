@@ -134,7 +134,7 @@
                 required
                 class="form-control form-control-disabled font-size-16"
                 v-model="formData.end"
-                type="datetime"
+                type="time"
                 :minute-step="5"
                 :show-second="false"
                 :lang="'en'"
