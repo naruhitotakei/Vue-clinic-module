@@ -418,6 +418,7 @@
                                                           :clearable="false" :options="filteredMunicipalities"
                                                           :getOptionLabel="getMunicipalityLabel"
                                                           :reduce="city => city.municipality_name"
+                                                          @input="onCityChange"
                                                 ></v-select>
                                               </b-form-group>
                                               <b-form-group class="col-md-12 align-items-center" :class="{'mb-0': disabled}" label-cols-sm="4" label-for="country" :label="$t('EPR.personalInfo.country')">
@@ -887,14 +888,13 @@ export default {
       })
     },
     filteredMunicipalities () {
-      return this.municipalities.filter(item => {
-        return item.country_id === this.patient.country_id
-      })
-    },
-    onCityChange () {
-      return this.regions.filter((item) => {
-        return item.region_id === this.patient.region_id
-      })
+      if (this.patient.country_id) {
+        return this.municipalities.filter(item => {
+          return item.country_id === this.patient.country_id
+        })
+      } else {
+        return this.municipalities
+      }
     },
     patientsDentist: function () {
       return this.dentists.find((item) => {
@@ -1234,6 +1234,11 @@ export default {
     }
   },
   methods: {
+    onCityChange () {
+      this.municipalities.find(item => {
+        return item.region_id === this.patient.region_id
+      })
+    },
     sortSelectedInvoice () {
       this.getPatientInvoices(this.patientId, this.sortByInvoice.sort.toUpperCase())
     },
