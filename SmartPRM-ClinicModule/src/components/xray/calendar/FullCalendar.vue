@@ -413,15 +413,18 @@ export default {
     }
   },
   watch: {
+    'formData.assignmentDate' () {
+      this.formData.end = this.formData.assignmentDate
+    },
     '$i18n.locale' () {
       this.getProductGroups(this.$i18n.locale)
     },
     'modalShow.show' () {
       if (!this.formData.id) {
         this.disabled = false
-        this.formData = this.defaultAppointment()
-        this.formData.doctorId = this.selectDoctor.title
-        this.formData.assignmentDate = moment(new Date()).format('YYYY-MM-DDTHH:mm')
+        // this.formData.doctorId = this.selectDoctor.title
+        console.log(111)
+        // this.formData.assignmentDate = moment(new Date()).format('YYYY-MM-DDTHH:mm')
       }
       this.showModal = this.modalShow.show
     },
@@ -520,7 +523,7 @@ export default {
     },
     eventResize (info) {
       let event = this.calendarApi.getEventById(info.event.id)
-      this.setAssignmentDateAndDuration(info.event.start, info.event.end)
+      // this.setAssignmentDateAndDuration(info.event.start, info.event.end)
       event.setStart(this.formData.start)
       event.setEnd(this.formData.end)
       event.setExtendedProp('hours', this.formData.hours)
@@ -532,7 +535,7 @@ export default {
       // console.log('doc pre: ' + JSON.stringify(event.extendedProps.doctorId))
       // console.log('novi res id je: ' + JSON.stringify(info.event.extendedProps.eventResourceId))
       // console.log('novi doctor id je: ' + JSON.stringify(info.event.extendedProps.doctorId))
-      this.setAssignmentDateAndDuration(info.event.start, info.event.end)
+      // this.setAssignmentDateAndDuration(info.event.start, info.event.end)
       event.setExtendedProp('assignmentDate', this.formData.assignmentDate)
       event.setStart(this.formData.start)
       event.setEnd(this.formData.end)
@@ -647,14 +650,17 @@ export default {
       }
     },
     openCreateModal (selectionInfo) {
+      console.log(selectionInfo)
       this.disabled = false
       this.formData = this.defaultAppointment()
       this.modalTitle = ''
       this.$emit('setModalShow', true)
       this.formData.resourceId = selectionInfo.resource.id
-      this.formData.doctorId = +this.formData.resourceId
+      // this.formData.doctorId = +this.formData.resourceId
+      this.formData.doctorId = selectionInfo.resource.title
       this.formData.eventResourceId = selectionInfo.resource.id
-      this.setAssignmentDateAndDuration(selectionInfo.start, selectionInfo.end)
+      this.formData.assignmentDate = new Date(selectionInfo.startStr)
+      // this.setAssignmentDateAndDuration(selectionInfo.start, selectionInfo.end)
     },
     setAssignmentDateAndDuration (start, end) {
       this.formData.assignmentDate = moment(start).format('YYYY-MM-DDTHH:mm')
