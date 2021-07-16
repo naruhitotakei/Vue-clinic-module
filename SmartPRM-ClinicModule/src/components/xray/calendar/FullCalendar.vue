@@ -414,7 +414,9 @@ export default {
   },
   watch: {
     'formData.assignmentDate' () {
-      this.formData.end = this.formData.assignmentDate
+      if (!this.formData.id) {
+        this.formData.end = this.formData.assignmentDate
+      }
     },
     '$i18n.locale' () {
       this.getProductGroups(this.$i18n.locale)
