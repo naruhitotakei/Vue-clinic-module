@@ -43,7 +43,7 @@
             </div>
             <div class="col-md-9">
               <v-select
-                  :disabled="disabled"
+                  :disabled="formData.id"
                   :clearable="false"
                   label="full_name"
                   :reduce="patient => patient.id"
@@ -425,7 +425,6 @@ export default {
       if (!this.formData.id) {
         this.disabled = false
         // this.formData.doctorId = this.selectDoctor.title
-        console.log(111)
         // this.formData.assignmentDate = moment(new Date()).format('YYYY-MM-DDTHH:mm')
       }
       this.showModal = this.modalShow.show
