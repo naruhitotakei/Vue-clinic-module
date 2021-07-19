@@ -389,17 +389,22 @@
                                                   </ValidationProvider>
                                               </b-form-group>
                                               <b-form-group class="col-md-12 align-items-center" :class="{'mb-0': disabled}" label-cols-sm="4" label-for="dob" :label="$t('EPR.personalInfo.dob')">
-<!--                                                  <ValidationProvider name="dob" rules="required" v-slot="{ errors }">-->
-                                                      <b-form-input
-                                                          :disabled="disabled"
-                                                          v-model="patient.date_of_birth"
-                                                          type="date"
-                                                          class="form-control-disabled"
-                                                      ></b-form-input>
-                                                      <div class="invalid-feedback">
-<!--                                                          <span>{{ errors[0] }}</span>-->
-                                                      </div>
-<!--                                                  </ValidationProvider>-->
+                                                  <!--                                                  <ValidationProvider name="dob" rules="required" v-slot="{ errors }">-->
+                                                  <b-form-input v-if="!patient.date_of_birth"
+                                                                :disabled="disabled"
+                                                                v-model="patient.date_of_birth"
+                                                                type="date"
+                                                                class="form-control-disabled"
+                                                                id="dateInput"></b-form-input>
+                                                  <b-form-input v-else
+                                                                :disabled="disabled"
+                                                                v-model="patient.date_of_birth"
+                                                                type="date"
+                                                                class="form-control-disabled"></b-form-input>
+                                                  <div class="invalid-feedback">
+                                                      <!--                                                          <span>{{ errors[0] }}</span>-->
+                                                  </div>
+                                                  <!--                                                  </ValidationProvider>-->
                                               </b-form-group>
                                               <b-form-group class="col-md-12  row align-items-center custom-radio-st" :class="{'mb-0': disabled}" label-cols-sm="4" label-for="gender" label-class="d-block" :label="$t('EPR.personalInfo.gender')">
                                                   <b-form-radio inline v-model="patient.gender" :disabled="disabled" value="male">{{ $t('EPR.personalInfo.male') }}</b-form-radio>
@@ -1603,6 +1608,10 @@ export default {
 </script>
 
 <style lang="scss">
+#dateInput {
+    color: transparent !important;
+}
+
 .upload-image {
     margin-left: -25px;
     opacity: 0;
