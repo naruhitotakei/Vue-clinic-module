@@ -565,7 +565,6 @@ export default {
         invoice_time: this.dateOfAdvPayment,
         invoice_number: this.invoiceNumber,
         invoice_number_furs: this.invoiceNumberFurs,
-        invoice_numbering_structure: '{c}',
         issued_in: this.issuedIn.premise_name,
         lines_sum: this.advPayments[0].amount,
         discount_sum: 0,

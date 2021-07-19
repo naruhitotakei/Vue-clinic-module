@@ -743,7 +743,6 @@ export default {
         invoice_time: moment(this.dateOfInvoice).format('YYYY MM DD HH:MM:SS'),
         invoice_number: this.invoiceNumber,
         invoice_number_furs: this.invoiceNumberFurs,
-        invoice_numbering_structure: '{c}',
         issued_in: this.issuedIn.premise_name,
         lines_sum: this.subTotal,
         discount_sum: this.discount,
