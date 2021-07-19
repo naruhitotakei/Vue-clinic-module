@@ -111,7 +111,7 @@
                                 </b-thead>
                                 <b-tbody>
                                   <b-tr>
-                                    <b-td colspan="2">{{ usersCompany.company_name }}</b-td>
+                                    <b-td colspan="2">{{ logedInUser.first_name }} {{logedInUser.surname}}</b-td>
                                     <b-td colspan="3" v-html="billingDetails"></b-td>
                                     <b-td colspan="4">
                                       <span v-if="isInvoiceStatusIssued">
