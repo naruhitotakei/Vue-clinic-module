@@ -108,7 +108,7 @@ const updateEnquiry = (req, res, id, enquiry) => {
         if (enquiry.gender !== currentEnquiry.gender) statement += "gender='"+ enquiry.gender + "',"
         if (enquiry.address_line_1 !== currentEnquiry.address_line_1) statement += "address_line_1='" + enquiry.address_line_1 + "',"
         if (enquiry.post_code !== currentEnquiry.post_code) statement += "post_code='" + enquiry.post_code + "',"
-        if (enquiry.city !== currentEnquiry.city) statement += "city='" + enquiry.city + "',"
+        if (enquiry.city !== currentEnquiry.city) statement += "city='" + enquiry.city.municipality_name + "',"
         if (enquiry.country_id !== currentEnquiry.country_id) statement += "country_id='" + enquiry.country_id + "',"
         if (enquiry.region_id !== currentEnquiry.region_id) statement += "region_id='" + enquiry.region_id + "', "
         if (enquiry.phone !== currentEnquiry.phone) statement += "phone='" + enquiry.phone + "', "

@@ -422,7 +422,6 @@
                                                           style="float: right;" v-model="patient.city"
                                                           :clearable="false" :options="filteredMunicipalities"
                                                           :getOptionLabel="getMunicipalityLabel"
-                                                          :reduce="city => city.municipality_name"
                                                           @input="onCityChange"
                                                 ></v-select>
                                               </b-form-group>
@@ -430,6 +429,7 @@
                                                 <v-select :disabled="disabled" label="name" :clearable="false"
                                                           :reduce="country => country.id"
                                                           class="style-chooser form-control-disabled"
+                                                          @input="() => isCityFilter = false"
                                                           v-model="patient.country_id" :options="countries"
                                                 ></v-select>
                                               </b-form-group>
@@ -437,7 +437,7 @@
                                                 <v-select class="style-chooser form-control-disabled" :clearable="false"
                                                           :reduce="region => region.code" :disabled="disabled"
                                                           v-model="patient.region_id"
-                                                          :options="filteredRegions"></v-select>
+                                                          :options="!isCityFilter ? filteredRegionsCountry : filteredRegionsCity"></v-select>
                                               </b-form-group>
                                               <b-form-group class="col-md-12 align-items-center" :class="{'mb-0': disabled}" label-cols-sm="4" label-for="insurance" :label="$t('EPR.personalInfo.insurance')">
                                                   <b-form-input :disabled="disabled" class="col-md-5 form-control-disabled" style="float: left;" name="insurance_no" type="text" v-model="patient.insurance_no"></b-form-input>
@@ -887,9 +887,20 @@ export default {
     fullName () {
       return this.patient.name + ' ' + this.patient.last_name
     },
-    filteredRegions () {
+    filteredRegionsCountry () {
+      console.log('filteredRegionsCountry', this.patient.country_id, this.regions.filter((item) => {
+        return item.country_id === this.patient.country_id
+      }))
       return this.regions.filter((item) => {
         return item.country_id === this.patient.country_id
+      })
+    },
+    filteredRegionsCity () {
+      console.log('filteredRegionsCity', this.patient.city.region_id, this.regions.filter((item) => {
+        return item.code === this.patient.city.region_id
+      }))
+      return this.regions.filter((item) => {
+        return item.code === this.patient.city.region_id
       })
     },
     filteredMunicipalities () {
@@ -1004,6 +1015,7 @@ export default {
   },
   data () {
     return {
+      isCityFilter: false,
       logedInUser: {},
       calendarApi: null,
       patientId: this.$route.params.patientId,
@@ -1240,9 +1252,10 @@ export default {
   },
   methods: {
     onCityChange () {
-      this.municipalities.find(item => {
-        return item.region_id === this.patient.region_id
-      })
+      this.isCityFilter = true
+      // this.municipalities.find(item => {
+      //   return item.region_id === this.patient.region_id
+      // })
     },
     sortSelectedInvoice () {
       this.getPatientInvoices(this.patientId, this.sortByInvoice.sort.toUpperCase())
