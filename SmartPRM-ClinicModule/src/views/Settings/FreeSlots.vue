@@ -128,7 +128,7 @@
                     <template v-slot:body>
                         <FullCalendar :resourcesOuter="getResources" :events="getEvents" @updateApp="updateApp"
                                       @checkData="checkData" @setModalShow="setModalShow" :modalShow="modalShow"
-                                      :selectDoctor="selectDoctor"
+                                      :selectDoctor="selectDoctor" :businessHours="emazingSlots"
                                       style="width: 100%; height: 100%;" />
                     </template>
                 </iq-card>
