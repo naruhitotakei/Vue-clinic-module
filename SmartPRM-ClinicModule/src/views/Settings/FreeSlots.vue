@@ -182,6 +182,11 @@ export default {
           doctorId: 28
         }
       ],
+      emazingSlots: [
+        { daysOfWeek: [1], startTime: '09:30', endTime: '12:00' },
+        { daysOfWeek: [4], startTime: '14:00', endTime: '19:00' },
+        { daysOfWeek: [6], startTime: '12:00', endTime: '14:00' }
+      ],
       modalShow: {
         show: false,
         default: false
@@ -310,7 +315,6 @@ export default {
           return item
         })
         this.doctors = _.uniqBy(this.doctors, 'title')
-
         this.resources = _.uniqBy(this.resources, 'id')
         // this.resources = this.resources.map(item => {
         //   let name = item.title.split(',')[0]
