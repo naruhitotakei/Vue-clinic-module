@@ -269,14 +269,6 @@ export default {
   components: {
     calendar, DatePicker
   },
-  computed: {
-    isSelectable () {
-      return !this.viewName.includes('dayGridMonth')
-    },
-    getEvents () {
-      return this.events
-    }
-  },
   props: {
     resourcesOuter: Array,
     events: Array,
@@ -417,7 +409,7 @@ export default {
   watch: {
     'formData.assignmentDate' () {
       if (!this.formData.id) {
-        this.formData.end = this.formData.assignmentDate
+        // this.formData.end = this.formData.assignmentDate
       }
     },
     '$i18n.locale' () {
@@ -445,13 +437,21 @@ export default {
       this.$nextTick(() => {
         this.formData.doctorId = this.selectDoctor.title
       })
-      console.log('watch', this.selectDoctor)
-      console.log('watch doctorid', this.formData.doctorId)
+    }
+  },
+  computed: {
+    isSelectable () {
+      return !this.viewName.includes('dayGridMonth')
+    },
+    getEvents () {
+      return this.events
     }
   },
   mounted () {
-    this.calendarApi = this.$refs.calendar.getApi()
-    this.calendarOptions.events = this.events
+    setTimeout(() => {
+      this.calendarApi = this.$refs.calendar.getApi()
+      this.calendarOptions.events = this.events
+    }, 2000)
     this.getPatients()
     this.getDoctors()
     this.getLocations()
@@ -527,23 +527,33 @@ export default {
     eventResize (info) {
       let event = this.calendarApi.getEventById(info.event.id)
       // this.setAssignmentDateAndDuration(info.event.start, info.event.end)
+      this.formData.assignmentDate = event.start
+      this.formData.end = event.end
       event.setStart(this.formData.start)
       event.setEnd(this.formData.end)
       event.setExtendedProp('hours', this.formData.hours)
       event.setExtendedProp('minutes', this.formData.minutes)
+      this.updateCalendar(this.formData.id, this.formData)
     },
     eventDrop (info) {
+      console.log('eventDrop', info)
       let event = this.calendarApi.getEventById(info.event.id)
+      console.log('event', event)
       // console.log('res pre: ' + JSON.stringify(event.extendedProps.eventResourceId))
       // console.log('doc pre: ' + JSON.stringify(event.extendedProps.doctorId))
       // console.log('novi res id je: ' + JSON.stringify(info.event.extendedProps.eventResourceId))
       // console.log('novi doctor id je: ' + JSON.stringify(info.event.extendedProps.doctorId))
       // this.setAssignmentDateAndDuration(info.event.start, info.event.end)
+      this.formData.assignmentDate = event.start
+      this.formData.end = event.end
+      this.formData.time = new Date(event.start).toTimeString()
+      console.log(this.formData.time)
       event.setExtendedProp('assignmentDate', this.formData.assignmentDate)
       event.setStart(this.formData.start)
       event.setEnd(this.formData.end)
-      event.setExtendedProp('eventResourceId', +info.newResource.id)
-      event.setExtendedProp('doctorId', +info.newResource.id)
+      event.setExtendedProp('eventResourceId', info.newResource && +info.newResource.id)
+      event.setExtendedProp('doctorId', info.newResource && +info.newResource.id)
+      this.updateCalendar(+event.id, this.formData)
     },
     defaultAppointment () {
       return {
@@ -653,16 +663,17 @@ export default {
       }
     },
     openCreateModal (selectionInfo) {
-      console.log(selectionInfo)
+      console.log('openCreateModal', selectionInfo)
       this.disabled = false
       this.formData = this.defaultAppointment()
       this.modalTitle = ''
       this.$emit('setModalShow', true)
+      console.log(this.formData.id)
       this.formData.resourceId = selectionInfo.resource.id
-      // this.formData.doctorId = +this.formData.resourceId
       this.formData.doctorId = selectionInfo.resource.title
       this.formData.eventResourceId = selectionInfo.resource.id
       this.formData.assignmentDate = new Date(selectionInfo.startStr)
+      this.formData.end = new Date(selectionInfo.endStr)
       // this.setAssignmentDateAndDuration(selectionInfo.start, selectionInfo.end)
     },
     setAssignmentDateAndDuration (start, end) {

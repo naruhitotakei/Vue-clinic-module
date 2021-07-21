@@ -265,7 +265,6 @@ export default {
       return events
     },
     getResources () {
-      console.log(this.resources)
       if (!this.check.length) {
         return this.resources
       }
@@ -350,7 +349,7 @@ export default {
             return doc.name === item.app_doctor_name
           })
           if (item.id === 41547) {
-            console.log(item)
+            // console.log(item)
           }
           this.events.push({
             id: item.id,
@@ -385,7 +384,7 @@ export default {
           })
         })
         this.events = _.uniqBy(this.events, 'id')
-        console.log(this.events.find(ev => ev.id === 41547))
+        // console.log(this.events.find(ev => ev.id === 41547))
       })
     },
     calculateEndDate (startDate, hours, minutes) {
@@ -398,7 +397,7 @@ export default {
       })
     },
     checkData (item) {
-      console.log(item, 'ITEM')
+      // console.log(item, 'ITEM')
       this.selectDoctor = item
       this.doctors.map(doctor => {
         if (doctor.title === item.title) {
