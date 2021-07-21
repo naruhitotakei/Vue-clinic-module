@@ -475,14 +475,14 @@
   },
   "assignments": {
     "assignmentsHeader": "My Assignments",
-    "addAssignments": "New Assignments",
+    "addAssignments": "New Assignment",
     "todaysAssignments": "Today's Assignments",
     "overdueAssignments": "Overdue Assignments",
     "futureAssignments": "Future Assignments",
     "completedAssignments": "Completed Assignments",
     "addAssignmentsModal" : {
-      "addAssignments": "New Assignments",
-      "editAssignments": "Edit Assignments",
+      "addAssignments": "New Assignment",
+      "editAssignments": "Edit Assignment",
       "enquiry": "Patient",
       "description": "Description",
       "due_at": "Date",
