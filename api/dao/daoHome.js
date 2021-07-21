@@ -54,7 +54,6 @@ const getAssignmentsForUser = (request, response, userId) => {
     statement += "LEFT JOIN users ON todos.user_id = users.id "
     statement += "WHERE todos.completed = false "
     statement += "AND users.id = $1 "
-    console.log("Fetching assignments for users homepage: " + statement)
     pool.query(statement, [userId], (error, results) => {
         if (error) {
             throw error
