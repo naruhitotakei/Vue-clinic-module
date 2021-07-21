@@ -405,7 +405,7 @@ export default {
         defaultView: 'resourceTimeGridWeek',
         resources: this.resourcesOuter,
         minTime: '09:00:00',
-        maxTime: '19:00:00',
+        maxTime: '21:30:00',
         slotDuration: '00:15:00',
         allDaySlot: false,
         editable: true,
