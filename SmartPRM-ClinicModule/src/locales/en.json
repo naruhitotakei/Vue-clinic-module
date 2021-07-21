@@ -64,12 +64,12 @@
     }
   },
   "home": {
-    "newAppointments": "New Appointments",
-    "newAppointmentsColumn": {
+    "todaysAppointments": "Today's appointments",
+    "noAppointmentsToday": "No scheduled appointments today",
+    "todaysAppointmentsColumn": {
       "patient": "Patient",
       "doctor": "Doctor",
-      "date": "Date",
-      "timing": "Timing",
+      "time": "Time",
       "contact": "Contact"
     },
     "newAppointmentsDropDown": {

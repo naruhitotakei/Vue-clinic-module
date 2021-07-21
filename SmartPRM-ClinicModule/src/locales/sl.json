@@ -64,12 +64,12 @@
     }
   },
   "home": {
-    "newAppointments": "Novi Termini",
-    "newAppointmentsColumn": {
+    "todaysAppointments": "Današnji termini",
+    "noAppointmentsToday": "Danes ni dogovorjenih terminov",
+    "todaysAppointmentsColumn": {
       "patient": "Pacient",
       "doctor": "Zdravnik",
-      "date": "Datum",
-      "timing": "Čas",
+      "time": "Čas",
       "contact": "Kontakt"
     },
     "newAppointmentsDropDown": {

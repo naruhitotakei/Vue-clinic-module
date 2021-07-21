@@ -2,12 +2,12 @@
   <b-container fluid>
     <b-row>
       <b-col lg="8">
-        <iq-card class-name="iq-card-block iq-card-stretch iq-card-height">
+        <iq-card class-name="iq-card-block iq-card-stretch iq-card-height" style="height: auto !important;">
           <template v-slot:headerTitle>
-              <h4 class="card-title">{{ $t('home.newAppointments') }}</h4>
+              <h4 class="card-title">{{ $t('home.todaysAppointments') }}</h4>
           </template>
           <template v-slot:headerAction>
-            <b-dropdown size="lg p-0"  variant="link" toggle-class="text-decoration-none" no-caret>
+           <!-- <b-dropdown size="lg p-0"  variant="link" toggle-class="text-decoration-none" no-caret>
               <template v-slot:button-content>
                     <span class="dropdown-toggle p-0" id="dropdownMenuButton5" data-toggle="dropdown">
                       <i class="ri-more-fill m-0 text-primary"></i>
@@ -18,31 +18,28 @@
               <b-dropdown-item href="#"><i class="ri-pencil-fill mr-2"></i>{{ $t('home.newAppointmentsDropDown.edit') }}</b-dropdown-item>
               <b-dropdown-item href="#"><i class="ri-printer-fill mr-2"></i>{{ $t('home.newAppointmentsDropDown.print') }}</b-dropdown-item>
               <b-dropdown-item href="#"><i class="ri-file-download-fill mr-2"></i>{{ $t('home.newAppointmentsDropDown.download') }}</b-dropdown-item>
-            </b-dropdown>
+            </b-dropdown> -->
           </template>
-          <template v-slot:body>
-            <div class="table-responsive">
-              <table class="table mb-0 table-borderless">
-                <thead>
-                <tr>
-                  <th scope="col">{{ $t('home.newAppointmentsColumn.patient') }}</th>
-                  <th scope="col">{{ $t('home.newAppointmentsColumn.doctor') }}</th>
-                  <th scope="col">{{ $t('home.newAppointmentsColumn.date') }}</th>
-                  <th scope="col">{{ $t('home.newAppointmentsColumn.timing') }}</th>
-                  <th scope="col">{{ $t('home.newAppointmentsColumn.contact') }}</th>
-                </tr>
-                </thead>
-                <tbody v-for="appointment in appointments" :key="appointment.id">
-                <tr>
-                  <td>{{appointment.patient}}</td>
-                  <td>{{appointment.doctor}}</td>
-                  <td>{{appointment.date}}</td>
-                  <td style="min-width: 100px;">{{appointment.timing}}</td>
-                  <td>{{appointment.contact}}</td>
-                </tr>
-                </tbody>
-              </table>
-            </div>
+              <template v-slot:body>
+                  <b-table v-if="todaysAppointments.length > 0"
+                           bordered
+                           id="todaysAppointmentsTable"
+                           :items="todaysAppointments"
+                           :fields="todaysAppointmentsColumns"
+                           :per-page="todaysAppointmentsPerPage"
+                           :current-page="currentTodaysAppointmentsPage"></b-table>
+                  <p v-else>{{ $t('home.noAppointmentsToday') }}</p>
+              </template>
+              <template>
+                  <b-collapse id="collapse-6" class="mb-2"> </b-collapse>
+                  <div class="ml-4 pb-2">
+                      <b-pagination v-if="hideTodaysAppointmentsPagination"
+                                    v-model="currentTodaysAppointmentsPage"
+                                    :total-rows="todaysAppointments.length"
+                                    :per-page="todaysAppointmentsPerPage"
+                                    aria-controls="todaysAppointmentsTable">
+                      </b-pagination>
+                  </div>
           </template>
         </iq-card>
       </b-col>
@@ -248,6 +245,7 @@
 <script>
 import IqCard from '../../components/xray/cards/iq-card'
 import { xray } from '../../config/pluginInit'
+import { getTodaysAppointments } from '../../services/homeService'
 const body = document.getElementsByTagName('body')
 export default {
   name: 'Home',
@@ -319,23 +317,36 @@ export default {
         { name: 'Dr. Sebastjan Bras', img: require('../../assets/images/user/10.jpg'), degree: 'MBBS, MD' }
 
       ],
-      appointments: [
-        { patient: 'Martina Dolar', doctor: 'Dr. Martin Sever', date: '20/02/2021', timing: '8:00 AM', contact: '+38651982340' },
-        { patient: 'Marko Engelman', doctor: 'Dr. Sebastjan Bras', date: '25/02/2021', timing: '8:30 AM', contact: '+38640923721' },
-        { patient: 'Lana Ekart', doctor: 'Dr. Suzana Zgonc', date: '20/02/2021', timing: '9:45 AM', contact: '+38631239343' },
-        { patient: 'Goran Drobne', doctor: 'Dr. Martin Sever', date: '27/02/2021', timing: '11:30 AM', contact: '+38651843249' },
-        { patient: 'Igor Destovnik', doctor: 'Dr. Irma Medved', date: '28/02/2021', timing: '3:30 AM', contact: '+38640539821' },
-        { patient: 'Linda Darovec', doctor: 'Dr. Miha Vozelj', date: '28/02/2021', timing: '4:30 PM', contact: '+38631344357' },
-        { patient: 'Maj Pavlin', doctor: 'Dr. Janez Veble', date: '29/02/2021', timing: '5:00 AM', contact: '+38641234932' }
-      ]
+      todaysAppointments: [],
+      todaysAppointmentsColumns: [
+        { label: this.$t('home.todaysAppointmentsColumn.patient'), key: 'patient_name', class: 'text-left' },
+        { label: this.$t('home.todaysAppointmentsColumn.doctor'), key: 'doctor_name', class: 'text-left' },
+        { label: this.$t('home.todaysAppointmentsColumn.time'), key: 'time', class: 'text-left' },
+        { label: this.$t('home.todaysAppointmentsColumn.contact'), key: 'patient_phone', class: 'text-left' }
+      ],
+      todaysAppointmentsPerPage: 10,
+      currentTodaysAppointmentsPage: 1
     }
   },
   mounted () {
     xray.index()
+    this.getTodaysAppointmentsList()
     body[0].classList.add('sidebar-main-menu')
+  },
+  computed: {
+    hideTodaysAppointmentsPagination () {
+      return Math.floor(this.todaysAppointments.length / this.todaysAppointmentsPerPage) !== 0
+    }
   },
   destroyed () {
     body[0].classList.remove('sidebar-main-menu')
+  },
+  methods: {
+    getTodaysAppointmentsList () {
+      getTodaysAppointments().then(response => {
+        this.todaysAppointments = response
+      })
+    }
   }
 }
 </script>

@@ -33,6 +33,7 @@ const userBruteforce = new ExpressBrute(store, {
 });
 
 const daoUser = require('./dao/daoUser')
+const daoHome = require('./dao/daoHome')
 const daoEnquiries = require('./dao/daoEnquiries')
 const daoAssignments = require('./dao/daoAssignments')
 const daoStatistics = require('./dao/daoStatistics')
@@ -68,6 +69,7 @@ app.use(rollbar.errorHandler());
 // REST SERVER
 //
 ///////////////////////////////////
+const homePermission = "Home"
 const enquiriesPermission = "Patients"
 const assignmentsPermission = "Assignments"
 const clinicStatisticsPermission = "Statistics For Clinic"
@@ -161,6 +163,17 @@ app.get('/api/surgeons', async function (req, res) {
     } else {
         res.status(200).json("NOK: user not logged in")
     }
+});
+
+///////////////////////////////////
+// home
+///////////////////////////////////
+
+app.get('/api/home/todays-appointments', (req, res) => {
+    if (req.session.prm_user && req.session.prm_user.permissions && checkPermission(req.session.prm_user.permissions, homePermission))
+        daoHome.getTodaysAppointments(req, res, req.session.prm_user.id, req.session.prm_user.prm_client_id, getScope(req.session.prm_user.permissions, homePermission))
+    else
+        res.status(401).json("OK: user unauthorized")
 });
 
 ///////////////////////////////////
