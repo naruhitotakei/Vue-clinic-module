@@ -116,9 +116,6 @@
           <label for="start" class="mb-0">{{ $t('calendarEvent.start') }}</label>
         </div>
           <div class="col-md-9 d-flex align-items-center">
-<!--            <input :disabled="disabled" type="datetime-local" step="120"-->
-<!--                   v-model="formData.assignmentDate" class="form-control form-control-disabled font-size-16" id="start"-->
-<!--                   required style="max-width: 237px;">-->
             <date-picker
                 :disabled="disabled"
                 class="form-control form-control-disabled font-size-16"
@@ -143,25 +140,6 @@
             ></date-picker>
           </div>
         </div>
-<!--       <div class="row align-items-center justify-content-between w-100 " :class="{'mb-3': !disabled}">-->
-<!--        <div class="col-md-3">-->
-<!--          <label for="duration" class="mb-0">{{ $t('calendarEvent.duration') }}</label>-->
-<!--        </div>-->
-<!--        <div class="col-md-9">-->
-<!--          <div style="display: flex;">-->
-<!--            <div class="calendar-modal-input__hour mr-4">-->
-<!--              <input :disabled="disabled" type="number" v-model="formData.hours"-->
-<!--                     class="form-control col-md-6 form-control-disabled font-size-16" min="0" max="9"-->
-<!--                     placeholder="Hours" required style="max-width: 150px;">-->
-<!--            </div>-->
-<!--            <div class="calendar-modal-input__minutes">-->
-<!--              <input :disabled="disabled" type="number" v-model="formData.minutes" min="0" max="59"-->
-<!--                     class="form-control col-md-6 offset-1 font-size-16 form-control-disabled" step="5"-->
-<!--                     placeholder="Minutes" required style="max-width: 150px;">-->
-<!--            </div>-->
-<!--          </div>-->
-<!--        </div>-->
-<!--       </div>-->
         <div class="row align-items-center justify-content-between w-100 " :class="{'mb-3': !disabled}">
          <div class="col-md-3">
            <label for="color" class="mb-0">{{ $t('calendarEvent.patient_attended') }}</label><br>
@@ -582,9 +560,6 @@ export default {
       if (this.formData.patientId && this.formData.doctorId && this.formData.assignmentDate) {
         this.disabled = true
         let id = this.calendarApi.getEvents().length + 1
-        // let endDate = this.calculateEndDate(this.formData.assignmentDate, this.formData.hours, this.formData.minutes)
-        // let title = this.patients.find(item => item.id === this.formData.patientId)
-        // this.modalTitle = title.full_name
         this.formData.resourceId = this.formData.doctorId
         if (!this.formData.appointment_canceled_in_advance_by_clinic) {
           this.formData.appointment_canceled_in_advance_by_clinic = false

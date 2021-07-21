@@ -137,29 +137,34 @@
                                                                 :options="product_groups"></v-select>
                                                   </div>
                                               </div>
-                                              <div class="row align-items-center justify-content-between w-100 mb-3">
-                                                  <div class="col-md-3">
-                                                      <label for="start" class="mb-0">{{ $t('calendarEvent.start') }}</label>
-                                                  </div>
-                                                  <div class="col-md-9">
-                                                      <input type="datetime-local" v-model="formAppointments.assignmentDate" class="form-control form-control-disabled" id="start" required style="max-width: 227px;">
-                                                  </div>
+                                            <div class="row align-items-center justify-content-between w-100 " :class="{'mb-3': !disabled}">
+                                              <div class="col-md-3">
+                                                <label for="start" class="mb-0">{{ $t('calendarEvent.start') }}</label>
                                               </div>
-                                              <div class="row align-items-center justify-content-between w-100 mb-3">
-                                                  <div class="col-md-3">
-                                                      <label for="duration" class="mb-0">{{ $t('calendarEvent.duration') }}</label>
-                                                  </div>
-                                                  <div class="col-md-9">
-                                                      <div style="display: flex;">
-                                                          <div class="calendar-modal-input__hour mr-4">
-                                                              <input type="number" v-model="formAppointments.hours" class="form-control col-md-6 form-control-disabled" min="0" max="9" required style="max-width: 150px;">
-                                                          </div>
-                                                          <div class="calendar-modal-input__minutes">
-                                                              <input type="number" v-model="formAppointments.minutes" min="0" max="59" class="form-control col-md-6 offset-1 form-control-disabled" step="5" required style="max-width: 150px;">
-                                                          </div>
-                                                      </div>
-                                                  </div>
+                                              <div class="col-md-9 d-flex align-items-center">
+                                                <date-picker
+                                                    class="form-control form-control-disabled font-size-16"
+                                                    v-model="formAppointments.assignmentDate"
+                                                    type="datetime"
+                                                    :minute-step="5"
+                                                    :show-second="false"
+                                                    :lang="'en'"
+                                                    :format="'DD.MM.YYYY HH.mm'"
+                                                ></date-picker>
+                                                <label for="start" class="mb-0 ml-5 mr-2">{{ $t('calendarEvent.end') }}</label>
+                                                <date-picker
+                                                    required
+                                                    class="form-control form-control-disabled font-size-16"
+                                                    v-model="formAppointments.end"
+                                                    type="time"
+                                                    :minute-step="5"
+                                                    :show-second="false"
+                                                    :lang="'en'"
+                                                    :format="'DD.MM.YYYY HH.mm'"
+                                                ></date-picker>
                                               </div>
+                                            </div>
+                                            <br>
                                               <div class="row align-items-center justify-content-between w-100 mb-3">
                                                   <div class="col-md-3">
                                                       <label for="color" >{{ $t('calendarEvent.labels') }}</label><br>
@@ -853,9 +858,13 @@ import { fileUpload, getFiles } from '@/services/upDownLoad'
 import { createCalendar, createCalendarLabel, getDoctorList } from '@/services/calendarService'
 import { getProductGroups } from '@/services/products'
 import Tiff from 'tiff.js'
+import DatePicker from 'vue2-datepicker'
 
 export default {
   name: 'ViewPatient',
+  components: {
+    DatePicker
+  },
   mounted () {
     xray.index()
     this.getPatient(this.patientId)
@@ -1103,7 +1112,7 @@ export default {
         assignmentDate: '',
         hours: '',
         minutes: '',
-        backgroundColor: '',
+        backgroundColor: '#64D6E8',
         description: '',
         product_groups: ''
       },
@@ -1583,6 +1592,7 @@ export default {
       if (typeof this.formAppointments.product_groups === 'object') {
         this.formAppointments.product_groups = this.formAppointments.product_groups.product_group_id
       }
+      console.log(this.formAppointments)
       createCalendar(this.formAppointments).then((data) => {
         createCalendarLabel(data[0].id, this.formAppointments).then(() => {
           this.formAppointments = this.defaultFormAppointment()
