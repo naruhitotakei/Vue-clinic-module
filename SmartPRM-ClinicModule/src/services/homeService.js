@@ -9,3 +9,15 @@ export async function getTodaysAppointments () {
   })
   return rawResponse.json()
 }
+
+export async function getStaff () {
+  const rawResponse = await fetch('/api/home/staff', {
+    method: 'GET',
+    credentials: 'same-origin',
+    headers: {
+      'Accept': 'application/json',
+      'Content-Type': 'application/json'
+    }
+  })
+  return rawResponse.json()
+}

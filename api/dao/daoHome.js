@@ -31,6 +31,24 @@ const getTodaysAppointments = (request, response, user_id, prm_client_id, scope)
     })
 }
 
+const getStaff = (request, response, prm_client_id, scope) => {
+    let statement = "SELECT id, concat(title, ' ', first_name, ' ', surname) AS name, specialization FROM users "
+    statement += "WHERE active = true "
+    statement += "AND prm_role_id IN (1, 3, 6, 7, 8, 9, 10) "
+    if (scope == 'All') {
+    } else if (scope == 'PrmClient') {
+        statement += "AND prm_client_id = " + prm_client_id
+    }
+    console.log("Fetching Staff: " + statement)
+    pool.query(statement, (error, results) => {
+        if (error) {
+            throw error
+        }
+        response.status(200).json(results.rows)
+    })
+}
+
 module.exports = {
-    getTodaysAppointments
+    getTodaysAppointments,
+    getStaff
 }

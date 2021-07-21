@@ -50,14 +50,14 @@
           </template>
           <template v-slot:body>
             <ul class="doctors-lists m-0 p-0">
-              <li class="d-flex mb-4 align-items-center" v-for="doctor in doctors" :key="doctor.name">
-                <div class="user-img img-fluid"><img :src="doctor.img" alt="story-img" class="rounded-circle avatar-40"></div>
+              <li class="d-flex mb-4 align-items-center" v-for="member in staff" :key="member.id">
+                <div class="user-img img-fluid"><img :src="'/api/files/avatar/' + member.id + '?' + Math.random()" alt="story-img" class="rounded-circle avatar-40"></div>
                 <div class="media-support-info ml-3">
-                  <h6>{{doctor.name}}</h6>
-                  <p class="mb-0 font-size-12">{{doctor.degree}}</p>
+                  <h6>{{member.name}}</h6>
+                  <p class="mb-0 font-size-12">{{member.specialization}}</p>
                 </div>
                 <div class="iq-card-header-toolbar d-flex align-items-center">
-                  <b-dropdown size="lg"  variant="link" toggle-class="p-0 text-decoration-none" no-caret>
+                  <!--<b-dropdown size="lg"  variant="link" toggle-class="p-0 text-decoration-none" no-caret>
                     <template v-slot:button-content class="p-0">
                     <span class="dropdown-toggle p-0" id="dropdownMenuButton6" data-toggle="dropdown">
                       <i class="ri-more-2-line"></i>
@@ -65,7 +65,7 @@
                     </template>
                     <b-dropdown-item href="#"><i class="ri-eye-line mr-2"></i>{{ $t('home.doctorsListDropDown.view') }}</b-dropdown-item>
                     <b-dropdown-item href="#"><i class="ri-bookmark-line mr-2"></i>{{ $t('home.doctorsListDropDown.appointment') }}</b-dropdown-item>
-                  </b-dropdown>
+                  </b-dropdown> -->
                 </div>
               </li>
             </ul>
@@ -245,7 +245,7 @@
 <script>
 import IqCard from '../../components/xray/cards/iq-card'
 import { xray } from '../../config/pluginInit'
-import { getTodaysAppointments } from '../../services/homeService'
+import { getTodaysAppointments, getStaff } from '../../services/homeService'
 const body = document.getElementsByTagName('body')
 export default {
   name: 'Home',
@@ -304,19 +304,7 @@ export default {
           opacity: 1
         }
       },
-      doctors: [
-        { name: 'Dr. Bojan Jernejc', img: require('../../assets/images/user/01.jpg'), degree: 'MBBS, MD' },
-        { name: 'Dr. Silvija Lenart', img: require('../../assets/images/user/02.jpg'), degree: 'MD' },
-        { name: 'Dr. Irma Medved', img: require('../../assets/images/user/03.jpg'), degree: 'MBBS' },
-        { name: 'Dr. Petra Maver', img: require('../../assets/images/user/04.jpg'), degree: 'MBBS, MD' },
-        { name: 'Dr. Damjan Ahlin', img: require('../../assets/images/user/05.jpg'), degree: 'BAMS' },
-        { name: 'Dr. Martin Sever', img: require('../../assets/images/user/06.jpg'), degree: 'MS, MD' },
-        { name: 'Dr. Tanja Perme', img: require('../../assets/images/user/07.jpg'), degree: 'MBBS, MD' },
-        { name: 'Dr. Matic Erjavec', img: require('../../assets/images/user/08.jpg'), degree: 'MD' },
-        { name: 'Dr. Peter Berlot', img: require('../../assets/images/user/09.jpg'), degree: 'MBBS' },
-        { name: 'Dr. Sebastjan Bras', img: require('../../assets/images/user/10.jpg'), degree: 'MBBS, MD' }
-
-      ],
+      staff: [],
       todaysAppointments: [],
       todaysAppointmentsColumns: [
         { label: this.$t('home.todaysAppointmentsColumn.patient'), key: 'patient_name', class: 'text-left' },
@@ -331,6 +319,7 @@ export default {
   mounted () {
     xray.index()
     this.getTodaysAppointmentsList()
+    this.getStaffList()
     body[0].classList.add('sidebar-main-menu')
   },
   computed: {
@@ -345,6 +334,11 @@ export default {
     getTodaysAppointmentsList () {
       getTodaysAppointments().then(response => {
         this.todaysAppointments = response
+      })
+    },
+    getStaffList () {
+      getStaff().then(response => {
+        this.staff = response
       })
     }
   }

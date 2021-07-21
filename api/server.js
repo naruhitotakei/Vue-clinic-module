@@ -176,6 +176,13 @@ app.get('/api/home/todays-appointments', (req, res) => {
         res.status(401).json("OK: user unauthorized")
 });
 
+app.get('/api/home/staff', (req, res) => {
+    if (req.session.prm_user && req.session.prm_user.permissions && checkPermission(req.session.prm_user.permissions, homePermission))
+        daoHome.getStaff(req, res, req.session.prm_user.prm_client_id, getScope(req.session.prm_user.permissions, homePermission))
+    else
+        res.status(401).json("OK: user unauthorized")
+});
+
 ///////////////////////////////////
 // calendar
 ///////////////////////////////////
