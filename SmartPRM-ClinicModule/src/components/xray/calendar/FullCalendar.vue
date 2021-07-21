@@ -553,7 +553,7 @@ export default {
       event.setEnd(this.formData.end)
       event.setExtendedProp('eventResourceId', info.newResource && +info.newResource.id)
       event.setExtendedProp('doctorId', info.newResource && +info.newResource.id)
-      this.updateCalendar(+event.id, this.formData)
+      // this.updateCalendar(+event.id, this.formData)
     },
     defaultAppointment () {
       return {

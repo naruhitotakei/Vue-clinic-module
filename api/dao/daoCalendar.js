@@ -76,7 +76,10 @@ const updateAppointments = (request, response, id, appointments) => {
     if (appointments.doctorId) statement += "doctor_name='" + appointments.doctorId + "',"
     if (appointments.locationId) statement += "location='" + appointments.locationId + "',"
     if (appointments.notes) statement += "note='" + appointments.notes + "',"
-    if (appointments.patientId) statement += "enquiry_id='" + appointments.patientId + "',"
+    if (appointments.patientId) {
+        if (typeof appointments.patientId == 'object')
+        statement += "enquiry_id='" + appointments.patientId.full_name + "',"
+    }
     if (appointments.patient_attended) statement += "patient_attended=" + patient_attended + ","
     statement += "appointment_canceled_in_advance_by_patient=" + appointments.appointment_canceled_in_advance_by_patient + ","
     statement += "appointment_canceled_in_advance_by_clinic=" + appointments.appointment_canceled_in_advance_by_clinic + ","
