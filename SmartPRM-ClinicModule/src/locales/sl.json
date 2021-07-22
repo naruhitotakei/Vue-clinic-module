@@ -79,20 +79,19 @@
       "print": "Natisni",
       "download": "Prenesi"
     },
-    "doctorsList": "Seznam Zdravnikov",
+    "staffList": "Seznam osebja",
     "doctorsListDropDown": {
       "view": "Poglej",
       "appointment": "Termin"
     },
-    "doctorsListBtn": "Poglej Vse Zdravnike",
-    "operations": "Posegi",
-    "operationsColumn": {
-      "patient": "Pacient",
-      "patientName": "Ime",
-      "doctorsTeam": "Zdravniška ekipa",
-      "dateOfOperation": "Datum posega",
-      "report": "Poročilo",
-      "diseases": "Bolezni"
+    "staffListBtn": "Poglej osebje",
+    "openAssignments": "Odprte naloge",
+    "noOpenAssignments": "Nimate odprtih nalog",
+    "openAssignmentsColumn": {
+      "description": "Opis",
+      "patientName": "Ime pacienta",
+      "assignedTo": "Zadolžen",
+      "dueAt": "Opraviti do"
     },
     "operationsDropDown": {
       "view": "Poglej"

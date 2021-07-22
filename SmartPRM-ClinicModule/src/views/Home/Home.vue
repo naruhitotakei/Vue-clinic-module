@@ -22,7 +22,7 @@
           </template>
               <template v-slot:body>
                   <b-table v-if="todaysAppointments.length > 0"
-                           bordered
+                           borderless outlined
                            id="todaysAppointmentsTable"
                            :items="todaysAppointments"
                            :fields="todaysAppointmentsColumns"
@@ -42,11 +42,47 @@
                   </div>
           </template>
         </iq-card>
+          <iq-card class-name="iq-card-block iq-card-stretch" style="margin-top: 0 !important">
+              <template v-slot:headerTitle>
+                <h4 class="card-title">{{ $t('home.openAssignments') }}</h4>
+              </template>
+              <template v-slot:headerAction>
+                <div class="iq-card-header-toolbar d-flex align-items-center">
+                  <b-dropdown size="lg"  variant="link" toggle-class="text-decoration-none" no-caret>
+                    <template v-slot:button-content>
+                      <i class="ri-more-fill"></i>
+                    </template>
+                    <b-dropdown-item href="#"><i class="ri-eye-fill mr-2"></i>{{ $t('home.operationsDropDown.view') }}</b-dropdown-item>
+                  </b-dropdown>
+                </div>
+              </template>
+              <template v-slot:body>
+                      <b-table v-if="openAssignments.length > 0"
+                               borderless outlined
+                               id="openAssignmentsTable"
+                               :items="openAssignments"
+                               :fields="openAssignmentsColumns"
+                               :per-page="openAssignmentsPerPage"
+                               :current-page="currentOpenAssignmentsPage"></b-table>
+                      <p v-else>{{ $t('home.noOpenAssignments') }}</p>
+                  </template>
+                  <template>
+                      <b-collapse id="collapse-6" class="mb-2"> </b-collapse>
+                      <div class="ml-4 pb-2">
+                          <b-pagination v-if="hideOpenAssignmentsPagination"
+                                        v-model="currentOpenAssignmentsPage"
+                                        :total-rows="openAssignments.length"
+                                        :per-page="openAssignmentsPerPage"
+                                        aria-controls="openAssignmentsTable">
+                          </b-pagination>
+                      </div>
+              </template>
+            </iq-card>
       </b-col>
       <b-col lg="4">
         <iq-card class-name="iq-card-block iq-card-stretch iq-card-height">
           <template v-slot:headerTitle>
-            <h4 class="card-title">{{ $t('home.doctorsList') }}</h4>
+            <h4 class="card-title">{{ $t('home.staffList') }}</h4>
           </template>
           <template v-slot:body>
             <ul class="doctors-lists m-0 p-0">
@@ -69,147 +105,12 @@
                 </div>
               </li>
             </ul>
-            <a href="javascript:void(0);" class="btn btn-primary d-block mt-3"><i class="ri-add-line"></i>{{ $t('home.doctorsListBtn') }}</a>
+            <a href="javascript:void(0);" class="btn btn-primary d-block mt-3"><i class="ri-add-line"></i>{{ $t('home.staffListBtn') }}</a>
           </template>
         </iq-card>
       </b-col>
-      <b-col lg="9">
-            <iq-card class-name="iq-card-block iq-card-stretch iq-card-height" body-class="">
-              <template v-slot:headerTitle>
-                <h4 class="card-title">{{ $t('home.operations') }}</h4>
-              </template>
-              <template v-slot:headerAction>
-                <div class="iq-card-header-toolbar d-flex align-items-center">
-                  <b-dropdown size="lg"  variant="link" toggle-class="text-decoration-none" no-caret>
-                    <template v-slot:button-content>
-                      <i class="ri-more-fill"></i>
-                    </template>
-                    <b-dropdown-item href="#"><i class="ri-eye-fill mr-2"></i>{{ $t('home.operationsDropDown.view') }}</b-dropdown-item>
-                  </b-dropdown>
-                </div>
-              </template>
-              <template v-slot:body>
-                <div class="table-responsive">
-                  <table class="table mb-0 table-borderless">
-                    <thead>
-                    <tr>
-                      <th scope="col">{{ $t('home.operationsColumn.patient') }}</th>
-                      <th scope="col">{{ $t('home.operationsColumn.patientName') }}</th>
-                      <th scope="col">{{ $t('home.operationsColumn.doctorsTeam') }}</th>
-                      <th scope="col">{{ $t('home.operationsColumn.dateOfOperation') }}</th>
-                      <th scope="col">{{ $t('home.operationsColumn.report') }}</th>
-                      <th scope="col">{{ $t('home.operationsColumn.diseases') }}</th>
-                    </tr>
-                    </thead>
-                    <tbody>
-                    <tr>
-                      <td class="text-center"><img class="rounded-circle img-fluid avatar-40" src="../../assets/images/user/01.jpg" alt="profile"></td>
-                      <td>Viktor Jereb</td>
-                      <td>
-                        <div class="iq-media-group" style="min-width: 100px;">
-                          <a href="#" class="iq-media">
-                            <img class="img-fluid avatar-40 rounded-circle" src="../../assets/images/user/05.jpg" alt="">
-                          </a>
-                          <a href="#" class="iq-media">
-                            <img class="img-fluid avatar-40 rounded-circle" src="../../assets/images/user/06.jpg" alt="">
-                          </a>
-                          <a href="#" class="iq-media">
-                            <img class="img-fluid avatar-40 rounded-circle" src="../../assets/images/user/07.jpg" alt="">
-                          </a>
-                        </div>
-                      </td>
-                      <td style="min-width: 100px;">12-02-2020</td>
-                      <td><i class="ri-file-pdf-line font-size-16 text-danger"></i></td>
-                      <td>Zalivka</td>
-                    </tr>
-                    <tr>
-                      <td class="text-center"><img class="rounded-circle img-fluid avatar-40" src="../../assets/images/user/02.jpg" alt="profile"></td>
-                      <td>Simona Majcen</td>
-                      <td>
-                        <div class="iq-media-group">
-                          <a href="#" class="iq-media">
-                            <img class="img-fluid avatar-40 rounded-circle" src="../../assets/images/user/05.jpg" alt="">
-                          </a>
-                          <a href="#" class="iq-media">
-                            <img class="img-fluid avatar-40 rounded-circle" src="../../assets/images/user/06.jpg" alt="">
-                          </a>
-                          <a href="#" class="iq-media">
-                            <img class="img-fluid avatar-40 rounded-circle" src="../../assets/images/user/07.jpg" alt="">
-                          </a>
-                        </div>
-                      </td>
-                      <td>14-02-2020</td>
-                      <td><i class="ri-file-pdf-line font-size-16 text-danger"></i></td>
-                      <td>Implantat</td>
-                    </tr>
-                    <tr>
-                      <td class="text-center"><img class="rounded-circle img-fluid avatar-40" src="../../assets/images/user/03.jpg" alt="profile"></td>
-                      <td>Kaja Novak</td>
-                      <td>
-                        <div class="iq-media-group">
-                          <a href="#" class="iq-media">
-                            <img class="img-fluid avatar-40 rounded-circle" src="../../assets/images/user/05.jpg" alt="">
-                          </a>
-                          <a href="#" class="iq-media">
-                            <img class="img-fluid avatar-40 rounded-circle" src="../../assets/images/user/06.jpg" alt="">
-                          </a>
-                          <a href="#" class="iq-media">
-                            <img class="img-fluid avatar-40 rounded-circle" src="../../assets/images/user/07.jpg" alt="">
-                          </a>
-                        </div>
-                      </td>
-                      <td>14-02-2020</td>
-                      <td><i class="ri-file-pdf-line font-size-16 text-danger"></i></td>
-                      <td>Odstranitev zobnega kamna</td>
-                    </tr>
-                    <tr>
-                      <td class="text-center"><img class="rounded-circle img-fluid avatar-40" src="../../assets/images/user/04.jpg" alt="profile"></td>
-                      <td>Elizabeta Kralj</td>
-                      <td>
-                        <div class="iq-media-group">
-                          <a href="#" class="iq-media">
-                            <img class="img-fluid avatar-40 rounded-circle" src="../../assets/images/user/05.jpg" alt="">
-                          </a>
-                          <a href="#" class="iq-media">
-                            <img class="img-fluid avatar-40 rounded-circle" src="../../assets/images/user/06.jpg" alt="">
-                          </a>
-                          <a href="#" class="iq-media">
-                            <img class="img-fluid avatar-40 rounded-circle" src="../../assets/images/user/07.jpg" alt="">
-                          </a>
-                        </div>
-                      </td>
-                      <td>16-02-2020</td>
-                      <td><i class="ri-file-pdf-line font-size-16 text-danger"></i></td>
-                      <td>Peskanje</td>
-                    </tr>
-                    <tr>
-                      <td class="text-center"><img class="rounded-circle img-fluid avatar-40" src="../../assets/images/user/05.jpg" alt="profile"></td>
-                      <td>Damjan Rupnik</td>
-                      <td>
-                        <div class="iq-media-group">
-                          <a href="#" class="iq-media">
-                            <img class="img-fluid avatar-40 rounded-circle" src="../../assets/images/user/05.jpg" alt="">
-                          </a>
-                          <a href="#" class="iq-media">
-                            <img class="img-fluid avatar-40 rounded-circle" src="../../assets/images/user/06.jpg" alt="">
-                          </a>
-                          <a href="#" class="iq-media">
-                            <img class="img-fluid avatar-40 rounded-circle" src="../../assets/images/user/07.jpg" alt="">
-                          </a>
-                        </div>
-                      </td>
-                      <td>18-02-2020</td>
-                      <td><i class="ri-file-pdf-line font-size-16 text-danger"></i></td>
-                      <td>Invisalign</td>
-                    </tr>
-                    </tbody>
-                  </table>
-                </div>
-              </template>
-            </iq-card>
-          </b-col>
     <b-col lg="3">
-        <iq-card>
+        <!--<iq-card>
           <template v-slot:headerTitle>
               <h4 class="card-title">{{ $t('home.todaysSchedule') }}</h4>
           </template>
@@ -227,7 +128,7 @@
               </li>
             </ul>
           </template>
-        </iq-card>
+        </iq-card>-->
       </b-col>
     <b-col lg="12">
       <iq-card>
@@ -245,7 +146,8 @@
 <script>
 import IqCard from '../../components/xray/cards/iq-card'
 import { xray } from '../../config/pluginInit'
-import { getTodaysAppointments, getStaff } from '../../services/homeService'
+import { getTodaysAppointments, getStaff, getAssignmentsForUser } from '../../services/homeService'
+import moment from 'moment'
 const body = document.getElementsByTagName('body')
 export default {
   name: 'Home',
@@ -304,7 +206,6 @@ export default {
           opacity: 1
         }
       },
-      staff: [],
       todaysAppointments: [],
       todaysAppointmentsColumns: [
         { label: this.$t('home.todaysAppointmentsColumn.patient'), key: 'patient_name', class: 'text-left' },
@@ -312,19 +213,37 @@ export default {
         { label: this.$t('home.todaysAppointmentsColumn.time'), key: 'time', class: 'text-left' },
         { label: this.$t('home.todaysAppointmentsColumn.contact'), key: 'patient_phone', class: 'text-left' }
       ],
+      staff: [],
+      openAssignments: [],
+      openAssignmentsColumns: [
+        { label: this.$t('home.openAssignmentsColumn.description'), key: 'description', class: 'text-left' },
+        { label: this.$t('home.openAssignmentsColumn.patientName'), key: 'patient_name', class: 'text-left' },
+        {
+          label: this.$t('home.openAssignmentsColumn.dueAt'),
+          key: 'due_at',
+          class: 'text-center',
+          formatter: value => { return moment(value).format('ddd, D MMM') }
+        }
+      ],
       todaysAppointmentsPerPage: 10,
-      currentTodaysAppointmentsPage: 1
+      currentTodaysAppointmentsPage: 1,
+      openAssignmentsPerPage: 5,
+      currentOpenAssignmentsPage: 1
     }
   },
   mounted () {
     xray.index()
     this.getTodaysAppointmentsList()
     this.getStaffList()
+    this.getAssignmentsForUserList()
     body[0].classList.add('sidebar-main-menu')
   },
   computed: {
     hideTodaysAppointmentsPagination () {
       return Math.floor(this.todaysAppointments.length / this.todaysAppointmentsPerPage) !== 0
+    },
+    hideOpenAssignmentsPagination () {
+      return Math.floor(this.openAssignments.length / this.openAssignmentsPerPage) !== 0
     }
   },
   destroyed () {
@@ -340,7 +259,16 @@ export default {
       getStaff().then(response => {
         this.staff = response
       })
+    },
+    getAssignmentsForUserList () {
+      getAssignmentsForUser().then(response => {
+        this.openAssignments = response
+      })
     }
   }
 }
 </script>
+
+<style scoped>
+
+</style>

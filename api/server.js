@@ -183,10 +183,10 @@ app.get('/api/home/staff', (req, res) => {
         res.status(401).json("OK: user unauthorized")
 });
 
-app.get('/api/home/assignments/:id', (req, res) => {
-    const id = req.params.id
+app.get('/api/home/open-assignments', (req, res) => {
+    const id = req.session.prm_user.id
     if (req.session.prm_user && req.session.prm_user.permissions && checkPermission(req.session.prm_user.permissions, homePermission))
-        daoHome.getAssignmentsForUser(req, res, req.session.prm_user.id)
+        daoHome.getAssignmentsForUser(req, res, id)
     else
         res.status(401).json("OK: user unauthorized")
 });

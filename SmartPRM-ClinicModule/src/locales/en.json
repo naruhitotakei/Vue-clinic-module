@@ -79,20 +79,19 @@
       "print": "Print",
       "download": "Download"
     },
-    "doctorsList": "Doctors List",
+    "staffList": "Staff List",
     "doctorsListDropDown": {
       "view": "View",
       "appointment": "Appointment"
     },
-    "doctorsListBtn": "View All Doctors",
-    "operations": "Operations",
-    "operationsColumn": {
-      "patient": "Patient",
-      "patientName": "Name",
-      "doctorsTeam": "Doctors Team",
-      "dateOfOperation": "Date of Surgery",
-      "report": "Report",
-      "diseases": "Diseases"
+    "staffListBtn": "View staff",
+    "openAssignments": "Open assignments",
+    "noOpenAssignments": "You have no open assignments",
+    "openAssignmentsColumn": {
+      "description": "Description",
+      "patientName": "Patient name",
+      "assignedTo": "Assigned name",
+      "dueAt": "Due at"
     },
     "operationsDropDown": {
       "view": "View"

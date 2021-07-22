@@ -47,14 +47,14 @@ const getStaff = (request, response, prm_client_id, scope) => {
     })
 }
 
-const getAssignmentsForUser = (request, response, userId) => {
-    let statement = "SELECT description, concat(enquiries.name, ' ', enquiries.last_name) AS patient_name, " +
-        "concat(users.first_name, ' ', users.surname) AS assigned_name, due_at FROM todos "
+const getAssignmentsForUser = (request, response, user_id) => {
+    let statement = "SELECT description, concat(enquiries.name, ' ', enquiries.last_name) AS patient_name, due_at FROM todos " 
     statement += "LEFT JOIN enquiries ON todos.enquiry_id = enquiries.id "
     statement += "LEFT JOIN users ON todos.user_id = users.id "
     statement += "WHERE todos.completed = false "
-    statement += "AND users.id = $1 "
-    pool.query(statement, [userId], (error, results) => {
+    statement += "AND users.id = " + user_id
+    statement += "ORDER BY due_at ASC "
+    pool.query(statement, (error, results) => {
         if (error) {
             throw error
         }

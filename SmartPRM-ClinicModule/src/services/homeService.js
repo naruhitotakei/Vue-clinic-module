@@ -22,8 +22,8 @@ export async function getStaff () {
   return rawResponse.json()
 }
 
-export async function getAssignmentsForUser (id) {
-  const rawResponse = await fetch(`/api/home/assignments/${id}`, {
+export async function getAssignmentsForUser () {
+  const rawResponse = await fetch(`/api/home/open-assignments`, {
     method: 'GET',
     credentials: 'same-origin',
     headers: {
