@@ -80,7 +80,7 @@
             </iq-card>
       </b-col>
       <b-col lg="4">
-        <iq-card class-name="iq-card-block iq-card-stretch iq-card-height">
+        <iq-card class-name="iq-card-block iq-card-stretch iq-card-height" style="height: auto;">
           <template v-slot:headerTitle>
             <h4 class="card-title">{{ $t('home.staffList') }}</h4>
           </template>
