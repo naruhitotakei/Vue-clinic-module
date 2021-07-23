@@ -609,6 +609,7 @@ export default {
           })
           createCalendar(this.formData).then((data) => {
             createCalendarLabel(data[0].id, this.formData).then(() => {
+              this.$emit('updateApp')
               this.formData = this.defaultAppointment()
               this.$emit('setModalShow', false)
             })
@@ -643,7 +644,6 @@ export default {
       this.formData = this.defaultAppointment()
       this.modalTitle = ''
       this.$emit('setModalShow', true)
-      console.log(this.formData.id)
       this.formData.resourceId = selectionInfo.resource.id
       this.formData.doctorId = selectionInfo.resource.title
       this.formData.eventResourceId = selectionInfo.resource.id

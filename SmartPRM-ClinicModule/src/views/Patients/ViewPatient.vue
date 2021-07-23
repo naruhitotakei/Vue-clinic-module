@@ -165,7 +165,7 @@
                                               </div>
                                             </div>
                                             <br>
-                                              <div class="row align-items-center justify-content-between w-100 mb-3">
+                                              <div class="row align-items-center justify-content-between w-100 mb-3 mt-2">
                                                   <div class="col-md-3">
                                                       <label for="color" >{{ $t('calendarEvent.labels') }}</label><br>
                                                   </div>
@@ -885,6 +885,7 @@ export default {
     this.getUserLogin()
     this.getDoctors()
     this.getProductGroups(this.$i18n.locale)
+    this.formAppointments.assignmentDate = new Date()
   },
   computed: {
     isOkDisabled () {
@@ -1252,7 +1253,8 @@ export default {
     }
   },
   watch: {
-    'patient.notes_general' () {
+    'formAppointments.assignmentDate' () {
+      this.formAppointments.end = this.formAppointments.assignmentDate
     },
     '$i18n.locale' () {
       this.getProductGroups(this.$i18n.locale)
