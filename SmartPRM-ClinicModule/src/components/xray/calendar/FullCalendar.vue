@@ -14,7 +14,7 @@
   :businessHours="businessHours"
   editable="true"
   :header="calendarOptions.header"
-  :allDayDefault="true"
+  :allDayDefault="false"
   @select="openCreateModal"
   @eventClick="openUpdateModal"
   @datesRender="onViewChange"
@@ -22,7 +22,7 @@
   @eventDrop="eventDrop"
   id="calendar"
   ref="calendar"
-  v-if="getEvents.length"
+  v-if="isDataLoaded"
   />
   <img v-else src="../../../assets/css/ajax-loader.gif" alt="Smart PRM" class="d-block m-auto"/>
 
@@ -325,38 +325,8 @@ export default {
           checked: false
         }
       ],
-      colors: [
-        // {
-        //   label: 'Default',
-        //   color: 'default',
-        //   value: '#64D6E8'
-        // },
-        // {
-        //   label: 'Label 1',
-        //   color: 'label1',
-        //   value: '#F54E65 '
-        // },
-        // {
-        //   label: 'Label 2',
-        //   color: 'label2',
-        //   value: '#9E1729'
-        // },
-        // {
-        //   label: 'Label 3',
-        //   color: 'label3',
-        //   value: '#148A9C'
-        // },
-        // {
-        //   label: 'Label 4',
-        //   color: 'label4',
-        //   value: '#E8C007'
-        // },
-        // {
-        //   label: 'Label 5',
-        //   color: 'label5',
-        //   value: '#9E8205'
-        // }
-      ],
+      isDataLoaded: false,
+      colors: [],
       formData: {
         title: '',
         assignmentDate: '',
@@ -411,6 +381,7 @@ export default {
     },
     '$i18n.locale' () {
       this.getProductGroups(this.$i18n.locale)
+      this.getLabels(this.$i18n.locale)
     },
     'modalShow.show' () {
       if (!this.formData.id) {
@@ -437,7 +408,17 @@ export default {
     },
     'colorsLabel' () {
       this.colors = this.colorsLabel
-      console.log('FULL CALENDAR COLORS', this.colors)
+    },
+    'events' () {
+      if (this.events.length) {
+        this.isDataLoaded = true
+        this.$nextTick(() => {
+          this.calendarApi = this.$refs.calendar.getApi()
+          console.log('API', this.calendarApi)
+        })
+      }
+    },
+    '$refs.calendar' () {
     }
   },
   computed: {
@@ -452,7 +433,6 @@ export default {
     }
   },
   mounted () {
-    this.calendarApi = this.$refs.calendar.getApi()
     this.$nextTick(() => {
       this.$forceUpdate()
       this.$emit('updateApp')
@@ -461,12 +441,12 @@ export default {
     this.getDoctors()
     this.getLocations()
     this.getProductGroups(this.$i18n.locale)
-    this.getLabels()
+    this.getLabels(this.$i18n.locale)
     xray.index()
   },
   methods: {
-    getLabels () {
-      getLabels().then(data => {
+    getLabels (lang) {
+      getLabels(lang).then(data => {
         data.map(label => {
           this.colors.push({
             id: label.id,
@@ -724,8 +704,8 @@ export default {
       this.$emit('setModalShow', true)
       this.disabled = true
       let event = this.calendarApi.getEventById(selectionInfo.event.id)
-      let location = this.locations.find(item => item.city === event.location)
       console.log('openUpdateModal', event)
+      let location = this.locations.find(item => item.city === event.location)
       this.formData = {
         id: event.id,
         title: event.title,

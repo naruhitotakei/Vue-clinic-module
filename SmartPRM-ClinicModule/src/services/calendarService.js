@@ -75,8 +75,8 @@ export async function getDoctorList () {
   return rawResponse.json()
 }
 
-export async function getLabels () {
-  const rawResponse = await fetch('/api/calendar/labels', {
+export async function getLabels (lang) {
+  const rawResponse = await fetch('/api/calendar/labels/' + lang, {
     credentials: 'same-origin',
     headers: {
       'Accept': 'application/json'

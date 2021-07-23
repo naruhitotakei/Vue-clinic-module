@@ -141,8 +141,12 @@ const createAppointment = (request, response, appointments) => {
     })
 }
 
-const getLabels = (request, response) => {
-    pool.query("SELECT * FROM appointments_label" , (err, res) => {
+const getLabels = (request, response, lang) => {
+    let statement = `SELECT appointments_label.*, app_lb_name.language, app_lb_name.text  FROM appointments_label 
+    LEFT JOIN appointments_label_name as app_lb_name ON appointments_label.id = app_lb_name.appointment_label_id 
+    WHERE app_lb_name.language = '${lang}'`
+    console.log(statement)
+    pool.query(statement , (err, res) => {
         console.log(err)
         response.status(200).json(res.rows)
     })
