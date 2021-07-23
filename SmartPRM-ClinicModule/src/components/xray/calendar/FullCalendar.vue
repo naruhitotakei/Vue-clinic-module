@@ -14,7 +14,7 @@
   :businessHours="businessHours"
   editable="true"
   :header="calendarOptions.header"
-  :allDayDefault="false"
+  :allDayDefault="true"
   @select="openCreateModal"
   @eventClick="openUpdateModal"
   @datesRender="onViewChange"
@@ -22,7 +22,10 @@
   @eventDrop="eventDrop"
   id="calendar"
   ref="calendar"
+  v-if="getEvents.length"
   />
+  <img v-else src="../../../assets/css/ajax-loader.gif" alt="Smart PRM" class="d-block m-auto"/>
+
   <!-- Event description modal -->
   <b-modal
       v-model="showModal"
@@ -450,7 +453,10 @@ export default {
   },
   mounted () {
     this.calendarApi = this.$refs.calendar.getApi()
-    this.calendarOptions.events = this.events
+    this.$nextTick(() => {
+      this.$forceUpdate()
+      this.$emit('updateApp')
+    })
     this.getPatients()
     this.getDoctors()
     this.getLocations()
@@ -469,7 +475,6 @@ export default {
             value: label.color
           })
         })
-        console.log('DATA LABELS', this.colors)
       })
     },
     closeModal () {

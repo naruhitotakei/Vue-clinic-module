@@ -909,17 +909,11 @@ export default {
       return this.patient.name + ' ' + this.patient.last_name
     },
     filteredRegionsCountry () {
-      console.log('filteredRegionsCountry', this.patient.country_id, this.regions.filter((item) => {
-        return item.country_id === this.patient.country_id
-      }))
       return this.regions.filter((item) => {
         return item.country_id === this.patient.country_id
       })
     },
     filteredRegionsCity () {
-      console.log('filteredRegionsCity', this.patient.city.region_id, this.regions.filter((item) => {
-        return item.code === this.patient.city.region_id
-      }))
       return this.regions.filter((item) => {
         return item.code === this.patient.city.region_id
       })
@@ -1622,7 +1616,6 @@ export default {
         this.formAppointments.backgroundColor = this.colors.find(label => {
           return label.value === this.formAppointments.backgroundColor
         })
-        console.log('FORM DATA SAVE', this.formAppointments.backgroundColor)
       }
       createCalendar(this.formAppointments).then((data) => {
         this.formData = this.defaultAppointment()
