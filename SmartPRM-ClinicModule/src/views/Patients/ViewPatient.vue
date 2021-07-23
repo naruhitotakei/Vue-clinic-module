@@ -170,8 +170,18 @@
                                                       <label for="color" >{{ $t('calendarEvent.labels') }}</label><br>
                                                   </div>
                                                   <div class="col-md-9">
-                                                      <template v-for="(item,index) in color">
-                                                          <b-form-radio class="custom-radio-color" inline v-model="formAppointments.backgroundColor" :color="item.color" :value="item.value" :key="index">{{ item.label }}</b-form-radio>
+                                                    {{formAppointments.backgroundColor}}
+                                                      <template v-for="(item,index) in colors">
+                                                          <b-form-radio
+                                                              class="custom-radio-color"
+                                                              inline
+                                                              v-model="formAppointments.backgroundColor"
+                                                              :color="item.color"
+                                                              :value="item.value"
+                                                              :key="index"
+                                                          >
+                                                            {{ item.label }}
+                                                          </b-form-radio>
                                                       </template>
                                                   </div>
                                               </div>
@@ -855,7 +865,7 @@ import { getCountriesList, getRegionsList, getLocationsList, getMunicipalitiesLi
 import moment from 'moment'
 import { createAssignments } from '@/services/assignmentsService'
 import { fileUpload, getFiles } from '@/services/upDownLoad'
-import { createCalendar, createCalendarLabel, getDoctorList } from '@/services/calendarService'
+import { createCalendar, getDoctorList, getLabels } from '@/services/calendarService'
 import { getProductGroups } from '@/services/products'
 import Tiff from 'tiff.js'
 import DatePicker from 'vue2-datepicker'
@@ -885,6 +895,7 @@ export default {
     this.getUserLogin()
     this.getDoctors()
     this.getProductGroups(this.$i18n.locale)
+    this.getLabels()
     this.formAppointments.assignmentDate = new Date()
   },
   computed: {
@@ -1066,37 +1077,37 @@ export default {
           value: 'offer'
         }
       ],
-      color: [
-        {
-          label: 'Default',
-          color: 'default',
-          value: '#64D6E8'
-        },
-        {
-          label: 'Label 1',
-          color: 'label1',
-          value: '#F54E65'
-        },
-        {
-          label: 'Label 2',
-          color: 'label2',
-          value: '#9E1729'
-        },
-        {
-          label: 'Label 3',
-          color: 'label3',
-          value: '#148A9C'
-        },
-        {
-          label: 'Label 4',
-          color: 'label4',
-          value: '#E8C007'
-        },
-        {
-          label: 'Label 5',
-          color: 'label5',
-          value: '#9E8205'
-        }
+      colors: [
+        // {
+        //   label: 'Default',
+        //   color: 'default',
+        //   value: '#64D6E8'
+        // },
+        // {
+        //   label: 'Label 1',
+        //   color: 'label1',
+        //   value: '#F54E65'
+        // },
+        // {
+        //   label: 'Label 2',
+        //   color: 'label2',
+        //   value: '#9E1729'
+        // },
+        // {
+        //   label: 'Label 3',
+        //   color: 'label3',
+        //   value: '#148A9C'
+        // },
+        // {
+        //   label: 'Label 4',
+        //   color: 'label4',
+        //   value: '#E8C007'
+        // },
+        // {
+        //   label: 'Label 5',
+        //   color: 'label5',
+        //   value: '#9E8205'
+        // }
       ],
       formData: {
         enquiry: {
@@ -1262,6 +1273,19 @@ export default {
     }
   },
   methods: {
+    getLabels () {
+      getLabels().then(data => {
+        data.map(label => {
+          this.colors.push({
+            id: label.id,
+            label: label.type,
+            color: label.type.split(' ').join(''),
+            value: label.color
+          })
+        })
+        console.log('DATA LABELS', this.colors)
+      })
+    },
     onCityChange () {
       this.isCityFilter = true
       // this.municipalities.find(item => {
@@ -1594,12 +1618,15 @@ export default {
       if (typeof this.formAppointments.product_groups === 'object') {
         this.formAppointments.product_groups = this.formAppointments.product_groups.product_group_id
       }
-      console.log(this.formAppointments)
-      createCalendar(this.formAppointments).then((data) => {
-        createCalendarLabel(data[0].id, this.formAppointments).then(() => {
-          this.formAppointments = this.defaultFormAppointment()
-          this.$emit('setModalShow', false)
+      if (typeof this.formAppointments.backgroundColor === 'string') {
+        this.formAppointments.backgroundColor = this.colors.find(label => {
+          return label.value === this.formAppointments.backgroundColor
         })
+        console.log('FORM DATA SAVE', this.formAppointments.backgroundColor)
+      }
+      createCalendar(this.formAppointments).then((data) => {
+        this.formData = this.defaultAppointment()
+        this.$emit('setModalShow', false)
       })
     },
     getLocations () {

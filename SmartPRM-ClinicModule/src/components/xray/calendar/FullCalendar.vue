@@ -44,7 +44,7 @@
             </div>
             <div class="col-md-9">
               <v-select
-                  :disabled="formData.id"
+                  :disabled="disabled"
                   :clearable="false"
                   label="full_name"
                   :reduce="patient => patient.id"
