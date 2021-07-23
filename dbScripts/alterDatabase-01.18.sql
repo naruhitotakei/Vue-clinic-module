@@ -178,6 +178,18 @@ UPDATE users SET prm_company_id = 1 WHERE id IN (39, 147, 148, 149, 151, 152, 15
 ALTER TABLE invoice DROP COLUMN invoice_numbering_structure;
 
 --############################################################
+--# Naming appointment labels
+--############################################################
+
+INSERT INTO appointments_label_name (appointment_label_id, language, text) VALUES
+(136, 'sl', 'Običajna'), (136, 'en', 'Default'), (136, 'it', 'Di solito'),
+(137, 'sl', 'Oznaka 1'), (137, 'en', 'Label 1'), (137, 'it', 'Etichetta 1'),
+(138, 'sl', 'Oznaka 2'), (138, 'en', 'Label 2'), (138, 'it', 'Etichetta 2'),
+(139, 'sl', 'Oznaka 3'), (139, 'en', 'Label 3'), (139, 'it', 'Etichetta 3'),
+(140, 'sl', 'Oznaka 4'), (140, 'en', 'Label 4'), (140, 'it', 'Etichetta 4'),
+(141, 'sl', 'Oznaka 5'), (140, 'en', 'Label 5'), (140, 'it', 'Etichetta 5');
+
+--############################################################
 --# update version
 --############################################################
 
