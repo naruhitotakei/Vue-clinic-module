@@ -20,6 +20,7 @@
                     id="patients-table"
                     bordered
                     hover
+                    @row-clicked="onLabelClick"
                     :busy="!isDataLoaded"
                     style="cursor: pointer;"
                     :items="labels"
@@ -62,7 +63,7 @@
       <form>
         <div class="form-row">
           <div class="col-md-12 mb-3">
-            <label for="title">Text *</label>
+            <label for="title">Text </label>
             <b-form-input class="date" id="exampleInputdate" type="text" v-model="formData.text" ></b-form-input>
           </div>
           <div class="col-md-12 mb-3">
@@ -128,6 +129,16 @@ export default {
     },
     deleteItem (item) {
       console.log(item)
+    },
+    onLabelClick (item) {
+      console.log(item)
+      this.formData = {
+        id: item.id,
+        type: item.type,
+        text: item.text,
+        color: item.color
+      }
+      this.modalLabelsShow = true
     }
   }
 }
