@@ -152,13 +152,15 @@ const getLabels = (request, response, lang) => {
     })
 }
 
-const createAppointmentsLabel = (request, response, id, appointmentsLabel) => {
+const createAppointmentsLabel = (request, response, label) => {
+    console.log(label)
     let statement = "INSERT INTO appointments_label ("
-    statement += "appointment_id,"
-    if (appointmentsLabel.backgroundColor) statement += "color"
+    if (label.color) statement += "color,"
+    if (label.type) statement += "type"
     statement += ") VALUES ("
-    statement += "" + id + ","
-    if (appointmentsLabel.backgroundColor) statement += "'" + appointmentsLabel.backgroundColor + "')"
+    if (label.color) statement += "'" + label.color.hex + "',"
+    if (label.type) statement += "'" + label.type + "')"
+    statement+= " RETURNING id"
 
     console.log(statement)
     pool.query(statement , (error, results) => {
@@ -166,15 +168,45 @@ const createAppointmentsLabel = (request, response, id, appointmentsLabel) => {
         if (error) {
             throw error
         }
+        let label_id = results.rows[0].id;
+        console.log('label_id', label_id)
+        createAppointmentsLabelName(label_id, label.lang, label.text)
         response.status(200).json(results)
+    })
+}
+
+const createAppointmentsLabelName = (label_id, lang, text) => {
+    let statement = `INSERT INTO appointments_label_name (appointment_label_id, language, text) VALUES (${label_id}, '${lang}', '${text}')`
+    console.log(statement)
+    pool.query(statement , (error, results) => {
+        console.log(error)
+        if (error) {
+            throw error
+        }
+    })
+}
+
+const updateAppointmentsLabelName = (label_id, lang, text) => {
+    let statement = "UPDATE appointments_label_name SET "
+    if (lang) statement += "language='" + lang + "',"
+    if (text) statement += "text='" + text + "'"
+    statement += " WHERE appointment_label_id = " + label_id + " AND language = " + `'${lang}'`
+
+    console.log(statement)
+    pool.query(statement , (error, results) => {
+        console.log(error)
+        if (error) {
+            throw error
+        }
     })
 }
 
 
 const updateAppointmentsLabel = (request, response, id, appointmentsLabel) => {
     let statement = "UPDATE appointments_label SET "
-    if (appointmentsLabel.backgroundColor) statement += "color='" + appointmentsLabel.backgroundColor + "'"
-    statement += " WHERE id = " + appointmentsLabel.app_lb_id
+    if (appointmentsLabel.color) statement += "color='" + appointmentsLabel.color.hex + "',"
+    if (appointmentsLabel.type) statement += "type='" + appointmentsLabel.type + "'"
+    statement += " WHERE id = " + appointmentsLabel.id
 
     console.log(statement)
     pool.query(statement , (error, results) => {
@@ -182,7 +214,30 @@ const updateAppointmentsLabel = (request, response, id, appointmentsLabel) => {
         if (error) {
             throw error
         }
+        updateAppointmentsLabelName(appointmentsLabel.id, appointmentsLabel.lang, appointmentsLabel.text)
         response.status(200).json(results)
+    })
+}
+
+const deleteAppointmentsLabel = (request, response, id) => {
+    console.log('del id', id)
+    let statement = `DELETE FROM appointments_label WHERE id = ${id}`
+    let statement_name =  `DELETE FROM appointments_label_name WHERE appointment_label_id = ${id}`
+
+    console.log(statement)
+    pool.query(statement_name, (error, results) => {
+        console.log(error)
+        if (error) {
+            throw error
+        }
+        console.log(statement_name)
+        pool.query(statement, (error, results) => {
+            console.log(error)
+            if (error) {
+                throw error
+            }
+        })
+        response.status(200).json("OK")
     })
 }
 
@@ -218,5 +273,6 @@ module.exports = {
     updateAppointmentsLabel,
     createAppointment,
     createAppointmentsLabel,
-    getLabels
+    getLabels,
+    deleteAppointmentsLabel
 }

@@ -52,8 +52,20 @@ export async function updateCalendarLabel (id, appointment) {
   return rawResponse.json()
 }
 
-export async function createCalendarLabel (id, appointment) {
+export async function deleteCalendarLabel (id) {
   const rawResponse = await fetch('/api/calendar/label/' + id, {
+    method: 'DELETE',
+    credentials: 'same-origin',
+    headers: {
+      'Accept': 'application/json',
+      'Content-Type': 'application/json'
+    }
+  })
+  return rawResponse.json()
+}
+
+export async function createCalendarLabel (appointment) {
+  const rawResponse = await fetch('/api/calendar/label/', {
     method: 'POST',
     credentials: 'same-origin',
     headers: {

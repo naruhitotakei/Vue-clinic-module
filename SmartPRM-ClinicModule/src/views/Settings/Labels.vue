@@ -54,11 +54,15 @@
     </b-row>
     <b-modal
         v-model="modalLabelsShow"
+        :ok-disabled="isDisabled"
         no-close-on-backdrop
         size="md"
         :title="'New Label'"
         :ok-title="$t('assignments.addAssignmentsModal.save')"
         :cancel-title="$t('assignments.addAssignmentsModal.close')"
+        @ok="addLabel"
+        @close="cancelLabel"
+        @cancel="cancelLabel"
     >
       <form>
         <div class="form-row">
@@ -82,7 +86,7 @@
 
 <script>
 import { xray } from '../../config/pluginInit'
-import { getLabels } from '@/services/calendarService'
+import { createCalendarLabel, deleteCalendarLabel, getLabels, updateCalendarLabel } from '@/services/calendarService'
 import { Chrome } from 'vue-color'
 
 export default {
@@ -107,7 +111,7 @@ export default {
       isDataLoaded: false,
       modalLabelsShow: false,
       formData: {
-        id: 0,
+        id: null,
         text: '',
         type: '',
         color: ''
@@ -119,6 +123,11 @@ export default {
       this.getLabels(this.$i18n.locale)
     }
   },
+  computed: {
+    isDisabled () {
+      return !this.formData.text || !this.formData.type || !this.formData.color
+    }
+  },
   methods: {
     getLabels (lang) {
       this.isDataLoaded = false
@@ -128,17 +137,47 @@ export default {
       })
     },
     deleteItem (item) {
-      console.log(item)
+      deleteCalendarLabel(item.id).then(data => {
+        this.getLabels(this.$i18n.locale)
+      })
     },
     onLabelClick (item) {
-      console.log(item)
       this.formData = {
         id: item.id,
         type: item.type,
         text: item.text,
-        color: item.color
+        color: item.color,
+        lang: item.language
       }
       this.modalLabelsShow = true
+    },
+    addLabel () {
+      this.formData.lang = this.$i18n.locale
+      console.log(this.formData)
+      if (!this.formData.id) {
+        createCalendarLabel(this.formData).then(data => {
+          this.getLabels(this.$i18n.locale)
+          this.modalLabelsShow = false
+          this.formData = this.defaultFormData()
+        })
+      } else {
+        updateCalendarLabel(this.formData.id, this.formData).then(data => {
+          this.getLabels(this.$i18n.locale)
+          this.modalLabelsShow = false
+          this.formData = this.defaultFormData()
+        })
+      }
+    },
+    cancelLabel () {
+      this.formData = this.defaultFormData()
+    },
+    defaultFormData () {
+      return {
+        id: null,
+        text: '',
+        type: '',
+        color: ''
+      }
     }
   }
 }

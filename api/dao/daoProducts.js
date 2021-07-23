@@ -74,6 +74,7 @@ const createProduct = (req, res, products) => {
             throw error
         } 
         var productId = results.rows[0].product_id;
+      console.log('productId', productId)
         
         if (products.slovenian) createNameStatement('prm_product_name', 'product_id', productId, 'sl', products.slovenian)
         if (products.english) createNameStatement('prm_product_name', 'product_id', productId, 'en', products.english)
