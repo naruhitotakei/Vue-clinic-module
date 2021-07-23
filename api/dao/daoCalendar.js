@@ -15,7 +15,7 @@ const getApontments = (request, response, from, to, user_id, accessible_user_ids
         "app.attendance, app.product_id, app_s.location as app_s_location, app_s.doctor_name, us.id as doctor_user_id, pcl.id as prm_client_id, " +
         "pcl.client_name as prm_client_name, prd.name as prd_name, prd.group as prd_group, prd.category as prd_category, " +
         "prd.fee as prd_fee, prd.price_adjustment as prd_price_adjustment, prd.fee_type as prd_fee_type,  " +
-        "app_lb.type as app_lb_type, app_lb.color as app_lb_color, " +
+        "app_lb.type as app_lb_type, app_lb.color as app_lb_color, app_lb.id as app_lb_id, " +
         "prm_pr_group.product_group_code, prm_pr_group.fee as prm_pr_group_fee, " +
         "prm_pr_group_name.text as prm_pr_group_name_text, prm_pr_group_name.id as prm_pr_group_name_id "
     statement += "FROM appointments app "
@@ -25,7 +25,7 @@ const getApontments = (request, response, from, to, user_id, accessible_user_ids
     statement += "LEFT JOIN prm_client pcl ON cl.id = pcl.id "
     statement += "LEFT JOIN enquiries enq ON app.enquiry_id = enq.id "
     statement += "LEFT JOIN products prd ON app.product_id = prd.id "
-    statement += "LEFT JOIN appointments_label app_lb ON app.id = app_lb.appointment_id "
+    statement += "LEFT JOIN appointments_label app_lb ON app.label_id = app_lb.id "
     statement += "LEFT JOIN prm_product_group prm_pr_group ON app.product_group_id = prm_pr_group.product_group_id "
     statement += "LEFT JOIN prm_product_group_name prm_pr_group_name ON prm_pr_group.product_group_id = prm_pr_group_name.product_group_id "
     statement += "WHERE app.trashed = false "
@@ -85,6 +85,7 @@ const updateAppointments = (request, response, id, appointments) => {
     statement += "appointment_canceled_in_advance_by_clinic=" + appointments.appointment_canceled_in_advance_by_clinic + ","
     if (appointments.product_groups) statement += "product_group_id='" + appointments.product_groups + "',"
     if (appointments.assignmentDate) statement += "date='" + appointments.assignmentDate + "',"
+    if (appointments.backgroundColor) statement += "label_id='" + appointments.backgroundColor.id + "',"
     if (appointments.end) statement += "end_time='" + appointments.end + "',"
     if (appointments.time) statement += "time='" + time + "'"
     statement += " WHERE id = " + id
@@ -109,6 +110,7 @@ const createAppointment = (request, response, appointments) => {
     if (appointments.patient_attended) statement += "patient_attended,"
     if (appointments.product_groups) statement += "product_group_id,"
     if (appointments.assignmentDate) statement += "date,"
+    if (appointments.backgroundColor) statement += "label_id,"
     if (appointments.end) statement += "end_time,"
     statement += "time,"
     statement += "created_at,"
@@ -121,6 +123,7 @@ const createAppointment = (request, response, appointments) => {
     if (appointments.patient_attended) statement += "'"+patient_attended +"',"
     if (appointments.product_groups) statement += ""+ appointments.product_groups +","
     if (appointments.assignmentDate) statement += "'"+ appointments.assignmentDate +"',"
+    if (appointments.backgroundColor) statement += "'"+ appointments.backgroundColor.id +"',"
     if (appointments.end) statement += "'"+ appointments.end +"',"
     statement += "'"+ time +"',"
     statement += "NOW(),"
@@ -135,6 +138,13 @@ const createAppointment = (request, response, appointments) => {
             console.log(err)
             response.status(200).json(res.rows)
         })
+    })
+}
+
+const getLabels = (request, response) => {
+    pool.query("SELECT * FROM appointments_label" , (err, res) => {
+        console.log(err)
+        response.status(200).json(res.rows)
     })
 }
 
@@ -160,7 +170,7 @@ const createAppointmentsLabel = (request, response, id, appointmentsLabel) => {
 const updateAppointmentsLabel = (request, response, id, appointmentsLabel) => {
     let statement = "UPDATE appointments_label SET "
     if (appointmentsLabel.backgroundColor) statement += "color='" + appointmentsLabel.backgroundColor + "'"
-    statement += " WHERE appointment_id = " + id
+    statement += " WHERE id = " + appointmentsLabel.app_lb_id
 
     console.log(statement)
     pool.query(statement , (error, results) => {
@@ -203,5 +213,6 @@ module.exports = {
     updateAppointments,
     updateAppointmentsLabel,
     createAppointment,
-    createAppointmentsLabel
+    createAppointmentsLabel,
+    getLabels
 }

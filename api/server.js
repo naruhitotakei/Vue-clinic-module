@@ -208,6 +208,13 @@ app.get('/api/calendar/:statrtdate/:enddate/:lang', (req, res) => {
         res.status(401).json("OK: user unauthorized")
 });
 
+app.get('/api/calendar/labels', (req, res) => {
+  if(req.session.prm_user && req.session.prm_user.permissions && checkPermission(req.session.prm_user.permissions, productsPermission))
+    daoCalendar.getLabels(req, res)
+  else
+    res.status(401).json("OK: user unauthorized")
+});
+
 app.post('/api/calendar', (req, res) => {
   const appointment = req.body
   if(req.session.prm_user && req.session.prm_user.permissions && checkPermission(req.session.prm_user.permissions, productsPermission))

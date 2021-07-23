@@ -140,7 +140,7 @@
 <script>
 import { xray } from '../../config/pluginInit'
 import appointmentBook from '../../services/appointbook'
-import { getCalendar, getDoctorList } from '@/services/calendarService'
+import { getCalendar, getDoctorList, getLabels } from '@/services/calendarService'
 import _ from 'lodash'
 import moment from 'moment'
 import { getProductGroups } from '@/services/products'
@@ -236,7 +236,8 @@ export default {
         dateFormat: 'Y-m-d',
         inline: true
       },
-      check: []
+      check: [],
+      colors: []
     }
   },
   mounted () {
@@ -244,6 +245,7 @@ export default {
     this.getApontments()
     this.getDoctors()
     this.getProductGroups(this.$i18n.locale)
+    this.getLabels()
   },
   watch: {
     'allDoctorCheck' () {
@@ -280,6 +282,19 @@ export default {
     }
   },
   methods: {
+    getLabels () {
+      getLabels().then(data => {
+        data.map(label => {
+          this.colors.push({
+            id: label.id,
+            label: label.type,
+            color: label.type.split(' ').join(''),
+            value: label.color
+          })
+        })
+        console.log('DATA LABELS', this.colors)
+      })
+    },
     addAppointment () {
       this.setModalShow(true)
     },
@@ -343,11 +358,8 @@ export default {
         this.clonedResources = this.resources
         dataWithDoctor.map(item => {
           let patientAttended = item.patient_attended === 'true' ? 'attended' : item.patient_attended === 'null' ? 'unknown' : 'not_attended'
-          // let productGroups = this.product_groups && this.product_groups.find(productName => productName.product_group_id === item.prm_pr_group_name_id)
           let endDay = this.calculateEndDate(moment(item.date).format('YYYY-MM-DD') + 'T' + item.time, 0, 15)
-          let doctor = this.doctorsList.find(doc => {
-            return doc.name === item.app_doctor_name
-          })
+          let doctor = this.doctorsList.find(doc => doc.name === item.app_doctor_name)
           if (item.id === 41547) {
             // console.log(item)
           }
@@ -374,6 +386,7 @@ export default {
             notes: item.note,
             doctorId: item.doctor_name ? item.doctor_name : item.app_doctor_name,
             enquiry_id: item.enquiry_id,
+            label_id: item.app_lb_id,
             patientId: {
               id: item.enquiry_id,
               full_name: item.name + ' ' + item.last_name

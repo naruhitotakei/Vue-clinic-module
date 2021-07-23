@@ -205,8 +205,18 @@
               <label for="color">{{ $t('calendarEvent.labels') }}</label><br>
             </div>
             <div class="col-md-9">
-              <template v-for="(item,index) in color">
-                <b-form-radio class="custom-radio-color font-size-16" inline v-model="formData.backgroundColor" :color="item.color" :value="item.value" :key="index" v-if="showLabels(item)">{{ item.label }}</b-form-radio>
+              <template v-for="(item,index) in colors">
+                <b-form-radio
+                    class="custom-radio-color font-size-16"
+                    inline
+                    v-model="formData.backgroundColor"
+                    :color="item.color"
+                    :value="item.value"
+                    :key="index"
+                    v-if="showLabels(item)"
+                >
+                  {{ item.label }}
+                </b-form-radio>
               </template>
             </div>
           </div>
@@ -238,7 +248,13 @@ import { xray } from '../../../config/pluginInit'
 import { getPatients } from '../../../services/enquiry'
 import { getLocationsList } from '../../../services/commonCodeLists'
 import { getProductGroups } from '@/services/products'
-import { createCalendar, getDoctorList, updateCalendar, updateCalendarLabel, createCalendarLabel } from '@/services/calendarService'
+import {
+  createCalendar,
+  getDoctorList,
+  updateCalendar,
+  updateCalendarLabel,
+  getLabels
+} from '@/services/calendarService'
 // import { getDentists } from '../../../services/userService'
 import DatePicker from 'vue2-datepicker'
 import 'vue2-datepicker/index.css'
@@ -306,37 +322,37 @@ export default {
           checked: false
         }
       ],
-      color: [
-        {
-          label: 'Default',
-          color: 'default',
-          value: '#64D6E8'
-        },
-        {
-          label: 'Label 1',
-          color: 'label1',
-          value: '#F54E65'
-        },
-        {
-          label: 'Label 2',
-          color: 'label2',
-          value: '#9E1729'
-        },
-        {
-          label: 'Label 3',
-          color: 'label3',
-          value: '#148A9C'
-        },
-        {
-          label: 'Label 4',
-          color: 'label4',
-          value: '#E8C007'
-        },
-        {
-          label: 'Label 5',
-          color: 'label5',
-          value: '#9E8205'
-        }
+      colors: [
+        // {
+        //   label: 'Default',
+        //   color: 'default',
+        //   value: '#64D6E8'
+        // },
+        // {
+        //   label: 'Label 1',
+        //   color: 'label1',
+        //   value: '#F54E65 '
+        // },
+        // {
+        //   label: 'Label 2',
+        //   color: 'label2',
+        //   value: '#9E1729'
+        // },
+        // {
+        //   label: 'Label 3',
+        //   color: 'label3',
+        //   value: '#148A9C'
+        // },
+        // {
+        //   label: 'Label 4',
+        //   color: 'label4',
+        //   value: '#E8C007'
+        // },
+        // {
+        //   label: 'Label 5',
+        //   color: 'label5',
+        //   value: '#9E8205'
+        // }
       ],
       formData: {
         title: '',
@@ -415,6 +431,10 @@ export default {
       this.$nextTick(() => {
         this.formData.doctorId = this.selectDoctor.title
       })
+    },
+    'colorsLabel' () {
+      this.colors = this.colorsLabel
+      console.log('FULL CALENDAR COLORS', this.colors)
     }
   },
   computed: {
@@ -423,20 +443,35 @@ export default {
     },
     getEvents () {
       return this.events
+    },
+    getColors () {
+      return this.colorsLabel
     }
   },
   mounted () {
-    setTimeout(() => {
-      this.calendarApi = this.$refs.calendar.getApi()
-      this.calendarOptions.events = this.events
-    }, 2000)
+    this.calendarApi = this.$refs.calendar.getApi()
+    this.calendarOptions.events = this.events
     this.getPatients()
     this.getDoctors()
     this.getLocations()
     this.getProductGroups(this.$i18n.locale)
+    this.getLabels()
     xray.index()
   },
   methods: {
+    getLabels () {
+      getLabels().then(data => {
+        data.map(label => {
+          this.colors.push({
+            id: label.id,
+            label: label.type,
+            color: label.type.split(' ').join(''),
+            value: label.color
+          })
+        })
+        console.log('DATA LABELS', this.colors)
+      })
+    },
     closeModal () {
       this.$emit('setModalShow', false)
       this.formData = this.defaultAppointment()
@@ -466,7 +501,7 @@ export default {
       }
     },
     showLabels (item) {
-      if (this.disabled && this.formData.backgroundColor === item.value) {
+      if (this.disabled && this.formData.label_id === item.id) {
         return true
       } else if (!this.disabled) {
         return true
@@ -585,6 +620,12 @@ export default {
         if (typeof this.formData.product_groups === 'object') {
           this.formData.product_groups = this.formData.product_groups.product_group_id
         }
+        if (typeof this.formData.backgroundColor === 'string') {
+          let label = this.colors.find(label => {
+            return label.value === this.formData.backgroundColor
+          })
+          this.formData.backgroundColor = label
+        }
 
         if (!this.formData.id) {
           this.calendarApi.addEvent({
@@ -608,11 +649,9 @@ export default {
             locationId: this.formData.locationId
           })
           createCalendar(this.formData).then((data) => {
-            createCalendarLabel(data[0].id, this.formData).then(() => {
-              this.$emit('updateApp')
-              this.formData = this.defaultAppointment()
-              this.$emit('setModalShow', false)
-            })
+            this.$emit('updateApp')
+            this.formData = this.defaultAppointment()
+            this.$emit('setModalShow', false)
           })
         } else {
           let event = this.calendarApi.getEventById(this.formData.id)
@@ -632,7 +671,7 @@ export default {
           event.setExtendedProp('locationId', this.formData.locationId)
           console.log('updated', this.formData)
           this.updateCalendar(this.formData.id, this.formData)
-          this.updateCalendarLabel(this.formData.id, this.formData)
+          // this.updateCalendarLabel(this.formData.id, this.formData)
           this.formData = this.defaultAppointment()
           this.$emit('setModalShow', false)
         }
