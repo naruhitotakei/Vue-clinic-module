@@ -1,62 +1,62 @@
 <template>
   <b-container fluid>
-    <b-row>
-      <b-col lg="8">
-        <iq-card class-name="iq-card-block iq-card-stretch iq-card-height" style="height: auto !important;">
-          <template v-slot:headerTitle>
-              <h4 class="card-title">{{ $t('home.todaysAppointments') }}</h4>
-          </template>
-          <template v-slot:headerAction>
-           <!-- <b-dropdown size="lg p-0"  variant="link" toggle-class="text-decoration-none" no-caret>
-              <template v-slot:button-content>
-                    <span class="dropdown-toggle p-0" id="dropdownMenuButton5" data-toggle="dropdown">
-                      <i class="ri-more-fill m-0 text-primary"></i>
-                    </span>
-              </template>
-              <b-dropdown-item href="#"><i class="ri-eye-fill mr-2"></i>{{ $t('home.newAppointmentsDropDown.view') }}</b-dropdown-item>
-              <b-dropdown-item href="#"><i class="ri-delete-bin-6-fill mr-2"></i>{{ $t('home.newAppointmentsDropDown.delete') }}</b-dropdown-item>
-              <b-dropdown-item href="#"><i class="ri-pencil-fill mr-2"></i>{{ $t('home.newAppointmentsDropDown.edit') }}</b-dropdown-item>
-              <b-dropdown-item href="#"><i class="ri-printer-fill mr-2"></i>{{ $t('home.newAppointmentsDropDown.print') }}</b-dropdown-item>
-              <b-dropdown-item href="#"><i class="ri-file-download-fill mr-2"></i>{{ $t('home.newAppointmentsDropDown.download') }}</b-dropdown-item>
-            </b-dropdown> -->
-          </template>
-              <template v-slot:body>
-                  <b-table v-if="todaysAppointments.length > 0"
-                           borderless outlined
-                           id="todaysAppointmentsTable"
-                           :items="todaysAppointments"
-                           :fields="todaysAppointmentsColumns"
-                           :per-page="todaysAppointmentsPerPage"
-                           :current-page="currentTodaysAppointmentsPage"></b-table>
-                  <p v-else>{{ $t('home.noAppointmentsToday') }}</p>
-              </template>
-              <template>
-                  <b-collapse id="collapse-6" class="mb-2"> </b-collapse>
-                  <div class="ml-4 pb-2">
-                      <b-pagination v-if="hideTodaysAppointmentsPagination"
-                                    v-model="currentTodaysAppointmentsPage"
-                                    :total-rows="todaysAppointments.length"
-                                    :per-page="todaysAppointmentsPerPage"
-                                    aria-controls="todaysAppointmentsTable">
-                      </b-pagination>
-                  </div>
-          </template>
-        </iq-card>
-          <iq-card class-name="iq-card-block iq-card-stretch" style="margin-top: 0 !important">
-              <template v-slot:headerTitle>
-                <h4 class="card-title">{{ $t('home.openAssignments') }}</h4>
-              </template>
-              <template v-slot:headerAction>
-                <div class="iq-card-header-toolbar d-flex align-items-center">
-                  <b-dropdown size="lg"  variant="link" toggle-class="text-decoration-none" no-caret>
-                    <template v-slot:button-content>
-                      <i class="ri-more-fill"></i>
-                    </template>
-                    <b-dropdown-item href="#"><i class="ri-eye-fill mr-2"></i>{{ $t('home.operationsDropDown.view') }}</b-dropdown-item>
-                  </b-dropdown>
-                </div>
-              </template>
-              <template v-slot:body>
+      <b-row>
+          <b-col lg="8">
+              <iq-card class-name="iq-card-block iq-card-stretch iq-card-height" style="height: auto !important;">
+                  <template v-slot:headerTitle>
+                      <h4 class="card-title">{{ $t('home.todaysAppointments') }}</h4>
+                  </template>
+                  <template v-slot:headerAction>
+                      <!-- <b-dropdown size="lg p-0"  variant="link" toggle-class="text-decoration-none" no-caret>
+                   <template v-slot:button-content>
+                         <span class="dropdown-toggle p-0" id="dropdownMenuButton5" data-toggle="dropdown">
+                           <i class="ri-more-fill m-0 text-primary"></i>
+                         </span>
+                   </template>
+                   <b-dropdown-item href="#"><i class="ri-eye-fill mr-2"></i>{{ $t('home.newAppointmentsDropDown.view') }}</b-dropdown-item>
+                   <b-dropdown-item href="#"><i class="ri-delete-bin-6-fill mr-2"></i>{{ $t('home.newAppointmentsDropDown.delete') }}</b-dropdown-item>
+                   <b-dropdown-item href="#"><i class="ri-pencil-fill mr-2"></i>{{ $t('home.newAppointmentsDropDown.edit') }}</b-dropdown-item>
+                   <b-dropdown-item href="#"><i class="ri-printer-fill mr-2"></i>{{ $t('home.newAppointmentsDropDown.print') }}</b-dropdown-item>
+                   <b-dropdown-item href="#"><i class="ri-file-download-fill mr-2"></i>{{ $t('home.newAppointmentsDropDown.download') }}</b-dropdown-item>
+                 </b-dropdown> -->
+                  </template>
+                  <template v-slot:body>
+                      <b-table v-if="todaysAppointments.length > 0"
+                               borderless outlined
+                               id="todaysAppointmentsTable"
+                               :items="todaysAppointments"
+                               :fields="todaysAppointmentsColumns"
+                               :per-page="todaysAppointmentsPerPage"
+                               :current-page="currentTodaysAppointmentsPage"></b-table>
+                      <p v-else>{{ $t('home.noAppointmentsToday') }}</p>
+                  </template>
+                  <template>
+                      <b-collapse id="collapse-6" class="mb-2"> </b-collapse>
+                      <div class="ml-4 pb-2">
+                          <b-pagination v-if="hideTodaysAppointmentsPagination"
+                                        v-model="currentTodaysAppointmentsPage"
+                                        :total-rows="todaysAppointments.length"
+                                        :per-page="todaysAppointmentsPerPage"
+                                        aria-controls="todaysAppointmentsTable">
+                          </b-pagination>
+                      </div>
+                  </template>
+              </iq-card>
+              <iq-card class-name="iq-card-block iq-card-stretch" style="margin-top: 0 !important">
+                  <template v-slot:headerTitle>
+                      <h4 class="card-title">{{ $t('home.openAssignments') }}</h4>
+                  </template>
+                  <template v-slot:headerAction>
+                      <div class="iq-card-header-toolbar d-flex align-items-center">
+                          <b-dropdown size="lg" variant="link" toggle-class="text-decoration-none" no-caret>
+                              <template v-slot:button-content>
+                                  <i class="ri-more-fill"></i>
+                              </template>
+                              <b-dropdown-item href="#"><i class="ri-eye-fill mr-2"></i>{{ $t('home.operationsDropDown.view') }}</b-dropdown-item>
+                          </b-dropdown>
+                      </div>
+                  </template>
+                  <template v-slot:body>
                       <b-table v-if="openAssignments.length > 0"
                                borderless outlined
                                id="openAssignmentsTable"
@@ -76,41 +76,41 @@
                                         aria-controls="openAssignmentsTable">
                           </b-pagination>
                       </div>
-              </template>
-            </iq-card>
-      </b-col>
-      <b-col lg="4">
-        <iq-card class-name="iq-card-block iq-card-stretch iq-card-height" style="height: auto;">
-          <template v-slot:headerTitle>
-            <h4 class="card-title">{{ $t('home.staffList') }}</h4>
-          </template>
-          <template v-slot:body>
-            <ul class="doctors-lists m-0 p-0">
-              <li class="d-flex mb-4 align-items-center" v-for="member in staff" :key="member.id">
-                <div class="user-img img-fluid"><img :src="'/api/files/avatar/' + member.id + '?' + Math.random()" alt="story-img" class="rounded-circle avatar-40"></div>
-                <div class="media-support-info ml-3">
-                  <h6>{{member.name}}</h6>
-                  <p class="mb-0 font-size-12">{{member.specialization}}</p>
-                </div>
-                <div class="iq-card-header-toolbar d-flex align-items-center">
-                  <!--<b-dropdown size="lg"  variant="link" toggle-class="p-0 text-decoration-none" no-caret>
-                    <template v-slot:button-content class="p-0">
-                    <span class="dropdown-toggle p-0" id="dropdownMenuButton6" data-toggle="dropdown">
-                      <i class="ri-more-2-line"></i>
-                    </span>
-                    </template>
-                    <b-dropdown-item href="#"><i class="ri-eye-line mr-2"></i>{{ $t('home.doctorsListDropDown.view') }}</b-dropdown-item>
-                    <b-dropdown-item href="#"><i class="ri-bookmark-line mr-2"></i>{{ $t('home.doctorsListDropDown.appointment') }}</b-dropdown-item>
-                  </b-dropdown> -->
-                </div>
-              </li>
-            </ul>
-            <a href="javascript:void(0);" class="btn btn-primary d-block mt-3"><i class="ri-add-line"></i>{{ $t('home.staffListBtn') }}</a>
-          </template>
-        </iq-card>
-      </b-col>
-    <b-col lg="3">
-        <!--<iq-card>
+                  </template>
+              </iq-card>
+          </b-col>
+          <b-col lg="4">
+              <iq-card class-name="iq-card-block iq-card-stretch iq-card-height" style="height: auto;">
+                  <template v-slot:headerTitle>
+                      <h4 class="card-title">{{ $t('home.staffList') }}</h4>
+                  </template>
+                  <template v-slot:body>
+                      <ul class="doctors-lists m-0 p-0">
+                          <li class="d-flex mb-4 align-items-center" v-for="member in staff" :key="member.id">
+                              <div class="user-img img-fluid"><img :src="'/api/files/avatar/' + member.id + '?' + Math.random()" alt="story-img" class="rounded-circle avatar-40"></div>
+                              <div class="media-support-info ml-3">
+                                  <h6>{{member.name}}</h6>
+                                  <p class="mb-0 font-size-12">{{member.specialization}}</p>
+                              </div>
+                              <div class="iq-card-header-toolbar d-flex align-items-center">
+                                  <!--<b-dropdown size="lg"  variant="link" toggle-class="p-0 text-decoration-none" no-caret>
+                              <template v-slot:button-content class="p-0">
+                              <span class="dropdown-toggle p-0" id="dropdownMenuButton6" data-toggle="dropdown">
+                                <i class="ri-more-2-line"></i>
+                              </span>
+                              </template>
+                              <b-dropdown-item href="#"><i class="ri-eye-line mr-2"></i>{{ $t('home.doctorsListDropDown.view') }}</b-dropdown-item>
+                              <b-dropdown-item href="#"><i class="ri-bookmark-line mr-2"></i>{{ $t('home.doctorsListDropDown.appointment') }}</b-dropdown-item>
+                            </b-dropdown> -->
+                              </div>
+                          </li>
+                      </ul>
+                      <a href="javascript:void(0);" class="btn btn-primary d-block mt-3"><i class="ri-add-line"></i>{{ $t('home.staffListBtn') }}</a>
+                  </template>
+              </iq-card>
+          </b-col>
+          <b-col lg="3">
+              <!--<iq-card>
           <template v-slot:headerTitle>
               <h4 class="card-title">{{ $t('home.todaysSchedule') }}</h4>
           </template>
@@ -129,8 +129,8 @@
             </ul>
           </template>
         </iq-card>-->
-      </b-col>
-    <b-col lg="12">
+          </b-col>
+          <!--<b-col lg="12">
       <iq-card>
         <template v-slot:headerTitle>
           <h4 class="card-title">{{ $t('home.activityStatistics') }}</h4>
@@ -139,8 +139,8 @@
           <ApexChart element="patient-chart-01" :chartOption="chart5"/>
         </template>
       </iq-card>
-    </b-col>
-    </b-row>
+    </b-col>-->
+      </b-row>
   </b-container>
 </template>
 <script>
