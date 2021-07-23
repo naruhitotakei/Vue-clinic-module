@@ -31,6 +31,16 @@
                       <strong class="loading">Loading...</strong>
                     </div>
                   </template>
+                  <template v-slot:cell(color)="data">
+                    <span v-if="data.item.color" class="d-flex">
+                       <span
+                           class="mr-2"
+                           style="width: 20px; height: 20px; display:block;"
+                           :style="{'background': data.item.color}"
+                       ></span>
+                       {{ data.item.color }}
+                    </span>
+                  </template>
                   <template v-slot:cell(action)="data">
                     <b-button variant=" iq-bg-danger mr-1 mb-1" size="sm" @click="deleteItem(data.item)"><i class="ri-close-circle-fill m-0"></i></b-button>
                   </template>
@@ -41,15 +51,43 @@
         </iq-card>
       </b-col>
     </b-row>
+    <b-modal
+        v-model="modalLabelsShow"
+        no-close-on-backdrop
+        size="md"
+        :title="'New Label'"
+        :ok-title="$t('assignments.addAssignmentsModal.save')"
+        :cancel-title="$t('assignments.addAssignmentsModal.close')"
+    >
+      <form>
+        <div class="form-row">
+          <div class="col-md-12 mb-3">
+            <label for="title">Text *</label>
+            <b-form-input class="date" id="exampleInputdate" type="text" v-model="formData.text" ></b-form-input>
+          </div>
+          <div class="col-md-12 mb-3">
+            <label for="title">Type </label>
+            <b-form-input class="date" id="exampleInputdate" type="text" v-model="formData.type" ></b-form-input>
+          </div>
+          <div class="col-md-12 mb-3">
+            <label for="title">Color </label>
+            <chrome-picker v-model="formData.color" />
+          </div>
+        </div>
+      </form>
+    </b-modal>
     </b-container>
 </template>
 
 <script>
 import { xray } from '../../config/pluginInit'
 import { getLabels } from '@/services/calendarService'
+import { Chrome } from 'vue-color'
 
 export default {
-  components: {},
+  components: {
+    'chrome-picker': Chrome
+  },
   name: 'Labels',
   mounted () {
     xray.index()
@@ -59,13 +97,20 @@ export default {
     return {
       columns: [
         { label: 'ID', key: 'id', class: 'text-left' },
-        { label: 'Text', key: 'color', class: 'text-left' },
+        { label: 'Text', key: 'text', class: 'text-left' },
         { label: 'Type', key: 'type', class: 'text-left' },
         { label: 'Color', key: 'color', class: 'text-left' },
         { label: 'Action', key: 'action', class: 'text-center action-column' }
       ],
       labels: [],
-      isDataLoaded: false
+      isDataLoaded: false,
+      modalLabelsShow: false,
+      formData: {
+        id: 0,
+        text: '',
+        type: '',
+        color: ''
+      }
     }
   },
   watch: {
