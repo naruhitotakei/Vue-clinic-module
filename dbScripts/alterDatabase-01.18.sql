@@ -187,7 +187,7 @@ INSERT INTO appointments_label_name (appointment_label_id, language, text) VALUE
 (138, 'sl', 'Oznaka 2'), (138, 'en', 'Label 2'), (138, 'it', 'Etichetta 2'),
 (139, 'sl', 'Oznaka 3'), (139, 'en', 'Label 3'), (139, 'it', 'Etichetta 3'),
 (140, 'sl', 'Oznaka 4'), (140, 'en', 'Label 4'), (140, 'it', 'Etichetta 4'),
-(141, 'sl', 'Oznaka 5'), (140, 'en', 'Label 5'), (140, 'it', 'Etichetta 5');
+(141, 'sl', 'Oznaka 5'), (141, 'en', 'Label 5'), (141, 'it', 'Etichetta 5');
 
 --############################################################
 --# update version
