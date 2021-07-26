@@ -50,6 +50,7 @@ const daoCalendar = require('./dao/daoCalendar')
 const daoCompanies = require('./dao/daoCompanies')
 const daoLocations = require('./dao/daoLocations')
 const daoCompanyPremises = require('./dao/daoCompanyPremises')
+const daoAppointmentSlots = require('./dao/daoAppointmentSlots')
 const awsS3 = require('./services/awsS3')
 
 app.use(fileUpload({
@@ -80,6 +81,7 @@ const offersPermission = "Offers"
 const productsPermission = "Services and Products"
 const calendarPermission = "Calendar"
 const locationsPermission = "Locations"
+const appointmentSlotsPermission = "Free Slots"
 const usersPermission = "Users"
 
 ///////////////////////////////////
@@ -248,7 +250,6 @@ app.put('/api/calendar/label/:id', (req, res) => {
   else
     res.status(401).json("OK: user unauthorized")
 });
-
 app.post('/api/calendar/label', (req, res) => {
   const appointmentLabel = req.body
   if(req.session.prm_user && req.session.prm_user.permissions && checkPermission(req.session.prm_user.permissions, productsPermission))
@@ -257,17 +258,18 @@ app.post('/api/calendar/label', (req, res) => {
     res.status(401).json("OK: user unauthorized")
 });
 
-app.delete('/api/free-slots', (req, res) => {
+app.delete('/api/calendar/label/:id', (req, res) => {
+  const id = req.params.id
+  console.log('label id', id)
   if(req.session.prm_user && req.session.prm_user.permissions && checkPermission(req.session.prm_user.permissions, productsPermission))
-      daoCalendar.getAppointmentSlots(req, resreq.session.prm_user.prm_client_id, getScope(req.session.prm_user.permissions, calendarPermission))
+    daoCalendar.deleteAppointmentsLabel(req, res, id)
   else
     res.status(401).json("OK: user unauthorized")
 });
 
-app.get('/api/calendar/labels/:lang', (req, res) => {
-    let lang = req.params.lang;
-    if (req.session.prm_user && req.session.prm_user.permissions && checkPermission(req.session.prm_user.permissions, productsPermission))
-        daoCalendar.getLabels(req, res, lang)
+app.get('/api/calendar/free-slots', (req, res) => {
+    if (req.session.prm_user && req.session.prm_user.permissions && checkPermission(req.session.prm_user.permissions, appointmentSlotsPermission))
+        daoAppointmentSlots.getAppointmentSlots(req, res, req.session.prm_user.prm_client_id, getScope(req.session.prm_user.permissions, appointmentSlotsPermission))
     else
         res.status(401).json("OK: user unauthorized")
 });
