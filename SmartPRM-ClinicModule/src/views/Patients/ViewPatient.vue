@@ -3,19 +3,19 @@
     <form>
       <b-row>
         <b-col lg="12">
-          <iq-card body-class="p-0">
-            <template v-slot:body>
-              <div class="iq-edit-list">
-                  <tab-nav :pills="true" class="iq-edit-profile d-flex">
-                      <a id="myTab" class="nav-link show col-12 col-sm-1 col-md-2 p-0 ri-arrow-left-line" style="padding: 10px 0px !important; font-size: x-large;" @click="$router.push('/patients')" :active="false"></a>
-                      <tab-nav-items class="col-12 col-sm-2 col-md-2 p-0" :active="true" href="#overview" :title="$t('EPR.overviewTab')" />
-                      <tab-nav-items class="col-12 col-sm-4 col-md-2 p-0" :active="false" href="#info" :title="$t('EPR.personalInfoTab')" />
-                      <tab-nav-items class="col-12 col-sm-1 col-md-2 p-0" :active="false" href="#files" :title="$t('EPR.filesTab')" />
-                      <tab-nav-items class="col-12 col-sm-2 col-md-2 p-0" :active="false" href="#invoices" :title="$t('EPR.invoicesTab')" />
-                  </tab-nav>
-              </div>
-            </template>
-          </iq-card>
+            <iq-card body-class="p-0">
+                <template v-slot:body>
+                    <div class="iq-edit-list">
+                        <tab-nav :pills="true" class="iq-edit-profile d-flex">
+                            <a id="myTab" class="nav-link show col-12 col-sm-1 col-md-2 p-0 ri-arrow-left-line" style="padding: 10px 0px !important; font-size: x-large;" @click="$router.push('/patients')" :active="false"></a>
+                            <tab-nav-items class="col-12 col-sm-2 col-md-2 p-0" :active="true" href="#overview" :title="$t('EPR.overviewTab')" />
+                            <tab-nav-items class="col-12 col-sm-4 col-md-2 p-0" :active="false" href="#info" :title="$t('EPR.personalInfoTab')" />
+                            <tab-nav-items class="col-12 col-sm-1 col-md-2 p-0" :active="false" href="#files" :title="$t('EPR.filesTab')" />
+                            <tab-nav-items class="col-12 col-sm-2 col-md-2 p-0" :active="false" href="#invoices" :title="$t('EPR.invoicesTab')" />
+                        </tab-nav>
+                    </div>
+                </template>trash
+            </iq-card>
         </b-col>
         <b-col lg="12">
           <div class="iq-edit-list-data">
@@ -27,6 +27,12 @@
                                   <iq-card>
                                       <template v-slot:body>
                                           <div class="user-details-block">
+                                              <b-col class="text-right">
+                                                  <b-button type="button" variant=" iq-bg-danger mr-1 mb-1" size="sm" @click="modalTrashPatient = true"><i class="ri-delete-bin-7-fill m-0"></i></b-button>
+                                              </b-col>
+                                              <b-modal v-model="modalTrashPatient" ok-title="OK" cancel-title="Cancel" @ok="trashPatient" @cancel="modalTrashPatient = false">
+                                                  <h4 class="my-4 card-title text-center">Are you sure you want to delete the patient?</h4>
+                                              </b-modal>
                                               <div class="user-profile text-center">
                                                   <img v-if="patient.gender == 'female'" src="../../assets/images/user/11.png" alt="profile-img" class="avatar-130 img-fluid">
                                                   <img v-else src="../../assets/images/user/08.png" alt="profile-img" class="avatar-130 img-fluid">
@@ -66,16 +72,6 @@
                                               </div>
                                           </div>
                                       </template>
-                                      <div class="bg-primary pb-2 p-1" style="border-radius: 0 0 25px 25px;">
-                                          <b-col md="14" class="d-flex justify-content-center">
-                                              <button type="button" class="btn btn-light m-1" @click="addAppointment">{{ $t('EPR.overview.addAppointment') }}</button>&nbsp;
-                                              <button type="" class="btn btn-light m-1" @click.prevent="modalAssigmentShow = true">{{ $t('EPR.overview.addAssignment') }}</button>&nbsp;
-                                              <button type="button" @click="addInvoice" class="btn btn-light m-1">{{ $t('EPR.overview.addInvoice') }}</button>
-                                          </b-col>
-                                          <b-col class="text-center">
-                                              <button type="button" class="btn btn-danger mt-3" @click="trashPatient">{{ $t('EPR.overview.deletePatient') }}</button>
-                                          </b-col>
-                                      </div>
                                   </iq-card>
                                   <b-modal v-model="addAppointmentModal" no-close-on-esc no-close-on-backdrop size="lg" title="Appointment Details" ok-title="Save Changes" @ok="addAppointmentModal = false" @close="addAppointmentModal = false" cancel-title="Close" hide-footer>
                                       <form class="calendar-modal">
@@ -269,7 +265,7 @@
                                                   <div class="iq-header-title">
                                                       <div class="row justify-content-between align-items-center">
                                                           <h4 class="card-title">{{ $t('EPR.overview.patientNotes') }}</h4>
-                                                          <button type="button" class="btn btn-primary" @click="modalNotesShow = true">New Note</button>
+                                                          <button type="button" class="btn btn-primary" @click="modalNotesShow = true">{{ $t('EPR.overview.add') }}</button>
                                                       </div>
                                                       <hr />
                                                   </div>
@@ -292,9 +288,13 @@
                                               <template v-slot:body>
                                                   <div class="iq-card-header d-flex justify-content-between">
                                                       <div class="iq-header-title">
-                                                          <h4 class="card-title">{{ $t('EPR.overview.openAssignments') }}</h4><hr />
+                                                          <div class="row justify-content-between align-items-center">
+                                                              <h4 class="card-title">{{ $t('EPR.overview.openAssignments') }}</h4>
+                                                              <button type="" class="btn btn-primary" @click.prevent="modalAssigmentShow = true">{{ $t('EPR.overview.add') }}</button>
+                                                              </div>
+                                                              <hr />
+                                                          </div>
                                                       </div>
-                                                  </div>
                                                   <ul class="list-inline m-0 overflow-y-scroll" style="max-height: 300px;">
                                                       <li v-for="(item,index) in assignments" :key="index + item.due_at"
                                                           class="d-flex align-items-center justify-content-between mb-3  "
@@ -316,7 +316,11 @@
                                               <template v-slot:body>
                                                   <div class="iq-card-header d-flex justify-content-between">
                                                       <div class="iq-header-title">
-                                                          <h4 class="card-title">{{ $t('EPR.overview.futureAppointments') }}</h4><hr />
+                                                          <div class="row justify-content-between align-items-center">
+                                                          <h4 class="card-title">{{ $t('EPR.overview.futureAppointments') }}</h4>
+                                                          <button type="button" class="btn btn-primary" @click="addAppointment">{{ $t('EPR.overview.add') }}</button>
+                                                          </div>
+                                                          <hr />
                                                       </div>
                                                   </div>
                                                   <ul class="iq-timeline">
@@ -436,6 +440,7 @@
                                                           class="col-md-8 form-control-disabled style-chooser"
                                                           style="float: right;" v-model="patient.city"
                                                           :clearable="false" :options="filteredMunicipalities"
+                                                          :reduce="city => city.municipality_name"
                                                           :getOptionLabel="getMunicipalityLabel"
                                                           @input="onCityChange"
                                                 ></v-select>
@@ -444,7 +449,6 @@
                                                 <v-select :disabled="disabled" label="name" :clearable="false"
                                                           :reduce="country => country.id"
                                                           class="style-chooser form-control-disabled"
-                                                          @input="() => isCityFilter = false"
                                                           v-model="patient.country_id" :options="countries"
                                                 ></v-select>
                                               </b-form-group>
@@ -452,7 +456,7 @@
                                                 <v-select class="style-chooser form-control-disabled" :clearable="false"
                                                           :reduce="region => region.code" :disabled="disabled"
                                                           v-model="patient.region_id"
-                                                          :options="!isCityFilter ? filteredRegionsCountry : filteredRegionsCity"></v-select>
+                                                          :options="filteredRegions"></v-select>
                                               </b-form-group>
                                               <b-form-group class="col-md-12 align-items-center" :class="{'mb-0': disabled}" label-cols-sm="4" label-for="insurance" :label="$t('EPR.personalInfo.insurance')">
                                                   <b-form-input :disabled="disabled" class="col-md-5 form-control-disabled" style="float: left;" name="insurance_no" type="text" v-model="patient.insurance_no"></b-form-input>
@@ -908,7 +912,7 @@ export default {
     fullName () {
       return this.patient.name + ' ' + this.patient.last_name
     },
-    filteredRegionsCountry () {
+    filteredRegions () {
       return this.regions.filter((item) => {
         return item.country_id === this.patient.country_id
       })
@@ -1030,7 +1034,6 @@ export default {
   },
   data () {
     return {
-      isCityFilter: false,
       logedInUser: {},
       calendarApi: null,
       patientId: this.$route.params.patientId,
@@ -1038,6 +1041,7 @@ export default {
       modalNotesShow: false,
       modalInvoiceShow: false,
       addAppointmentModal: false,
+      modalTrashPatient: false,
       generalNotes: '',
       notesGeneral: '',
       users: [],
@@ -1281,10 +1285,6 @@ export default {
       })
     },
     onCityChange () {
-      this.isCityFilter = true
-      // this.municipalities.find(item => {
-      //   return item.region_id === this.patient.region_id
-      // })
     },
     sortSelectedInvoice () {
       this.getPatientInvoices(this.patientId, this.sortByInvoice.sort.toUpperCase())
