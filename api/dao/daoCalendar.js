@@ -274,5 +274,5 @@ module.exports = {
     createAppointment,
     createAppointmentsLabel,
     getLabels,
-    deleteAppointmentsLabel,
+    deleteAppointmentsLabel
 }
