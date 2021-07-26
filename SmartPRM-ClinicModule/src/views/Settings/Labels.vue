@@ -36,7 +36,7 @@
                     <span v-if="data.item.color" class="d-flex">
                        <span
                            class="mr-2"
-                           style="width: 20px; height: 20px; display:block;"
+                           style="width: 50px; height: 20px; display:block;"
                            :style="{'background': data.item.color}"
                        ></span>
                        {{ data.item.color }}
@@ -76,7 +76,7 @@
           </div>
           <div class="col-md-12 mb-3">
             <label for="title">Color </label>
-            <chrome-picker v-model="formData.color" />
+            <chrome-picker v-model="formData.color"/>
           </div>
         </div>
       </form>
@@ -101,7 +101,6 @@ export default {
   data: function () {
     return {
       columns: [
-        { label: 'ID', key: 'id', class: 'text-left' },
         { label: 'Text', key: 'text', class: 'text-left' },
         { label: 'Type', key: 'type', class: 'text-left' },
         { label: 'Color', key: 'color', class: 'text-left' },
