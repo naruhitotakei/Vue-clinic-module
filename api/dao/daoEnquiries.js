@@ -186,18 +186,32 @@ const createEnquiryNotes = (request, response, notes) => {
     })
 }
 
-const getEnquiryAppointments = (request, response, enquiryId, locale) => {
+const getEnquiryPastAppointments = (request, response, enquiryId, locale) => {
     pool.query("SELECT appointments.*, enquiries.*, prm_product_group_name.*  FROM appointments  " +
       "LEFT JOIN enquiries ON appointments.enquiry_id = enquiries.id  " +
       "LEFT JOIN prm_product_group ON appointments.product_group_id = prm_product_group.product_group_id  " +
       "LEFT JOIN prm_product_group_name ON prm_product_group_name.product_group_id = prm_product_group.product_group_id  " +
-       "WHERE enquiry_id = $1 AND prm_product_group_name.language = '" + locale + "' ORDER BY date ASC" , [enquiryId] , (error, results) => {
+      "WHERE enquiry_id = $1 AND prm_product_group_name.language = '" + locale + "' AND date < now():: date ORDER BY date ASC" , [enquiryId] , (error, results) => {
         console.log(error)
         if (error) {
             throw error
         }
         response.status(200).json(results.rows)
     })
+}
+
+const getEnquiryFutureAppointments = (request, response, enquiryId, locale) => {
+    pool.query("SELECT appointments.*, enquiries.*, prm_product_group_name.*  FROM appointments  " +
+        "LEFT JOIN enquiries ON appointments.enquiry_id = enquiries.id  " +
+        "LEFT JOIN prm_product_group ON appointments.product_group_id = prm_product_group.product_group_id  " +
+        "LEFT JOIN prm_product_group_name ON prm_product_group_name.product_group_id = prm_product_group.product_group_id  " +
+        "WHERE enquiry_id = $1 AND prm_product_group_name.language = '" + locale + "' AND date >= now():: date ORDER BY date ASC", [enquiryId], (error, results) => {
+            console.log(error)
+            if (error) {
+                throw error
+            }
+            response.status(200).json(results.rows)
+        })
 }
 
 const getEnquiryAssignments = (request, response, enquiryId) => {
@@ -262,7 +276,8 @@ module.exports = {
   updateEnquiry,
   trashEnquiry,
   getEnquiryNotes,
-  getEnquiryAppointments,
+  getEnquiryPastAppointments,
+  getEnquiryFutureAppointments,
   getEnquiryAssignments,
   getEnquiryInvoices,
   getEnquiryOffers,

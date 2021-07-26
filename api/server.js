@@ -586,11 +586,20 @@ app.post('/api/enquiries/notes', (req, res) => {
     res.status(401).json("OK: user unauthorized")
 });
 
-app.get('/api/enquiries/:id/:locale/appointments', (req, res) => {
+app.get('/api/enquiries/:id/:locale/past-appointments', (req, res) => {
     const id = req.params.id
     const locale = req.params.locale
     if(req.session.prm_user && req.session.prm_user.permissions && checkPermission(req.session.prm_user.permissions, enquiriesPermission))
-        daoEnquiries.getEnquiryAppointments(req, res, id, locale)
+        daoEnquiries.getEnquiryPastAppointments(req, res, id, locale)
+    else
+        res.status(401).json("OK: user unauthorized")
+});
+
+app.get('/api/enquiries/:id/:locale/future-appointments', (req, res) => {
+    const id = req.params.id
+    const locale = req.params.locale
+    if (req.session.prm_user && req.session.prm_user.permissions && checkPermission(req.session.prm_user.permissions, enquiriesPermission))
+        daoEnquiries.getEnquiryFutureAppointments(req, res, id, locale)
     else
         res.status(401).json("OK: user unauthorized")
 });

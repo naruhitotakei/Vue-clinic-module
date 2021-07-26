@@ -43,7 +43,7 @@
                                               <hr>
                                               <ul class="doctoe-sedual d-flex align-items-center justify-content-between p-0 m-0">
                                                   <li class="text-center">
-                                                      <h4 class="counter">{{pastAppointments.length}}</h4>
+                                                      <h4 class="counter">{{pastAppointmentsRows}}</h4>
                                                       <span>{{ $t('EPR.overview.numberOfVisits') }}</span>
                                                   </li>
                                                   <li class="text-center">
@@ -326,7 +326,7 @@
                                                   <ul class="iq-timeline">
                                                       <li v-for="(item,index) in futureAppointments" :key="index + item.date">
                                                           <div class="timeline-dots border-success"></div>
-                                                          <h6 class="">{{item.kind}}</h6>
+                                                          <h6>{{item.note}}<span class="float-right">{{item.text}}</span></h6>
                                                           <small class="mt-1">{{item.date | formatDate}}</small>
                                                       </li>
                                                   </ul>
@@ -341,7 +341,7 @@
                                                       </div>
                                                   </div>
                                                   <ul class="iq-timeline" id="pastAppointments" :per-page="pastAppointmentsPerPage" :current-page="pastAppointmentsCurrentPage">
-                                                      <li v-for="(item,index) in pastAppointments[pastAppointmentsCurrentPage]" :key="index">
+                                                      <li v-for="(item, index) in pastAppointments[pastAppointmentsCurrentPage]" :key="index">
                                                           <div class="timeline-dots border-success"></div>
                                                           <h6>{{item.note}}<span class="float-right">{{item.text}}</span></h6>
                                                           <small class="mt-1">{{item.date | formatDate}}</small>
@@ -857,7 +857,8 @@ import {
   getEnquiryById,
   updateEnquiry,
   getEnquiryNotes,
-  getEnquiryAppointments,
+  getEnquiryPastAppointments,
+  getEnquiryFutureAppointments,
   getEnquiryAssignments,
   getEnquiryInvoices,
   getEnquiryOffers,
@@ -884,7 +885,8 @@ export default {
     xray.index()
     this.getPatient(this.patientId)
     this.getPatientNotes(this.patientId)
-    this.getPatientAppointments(this.patientId, this.$i18n.locale)
+    this.getPatientPastAppointments(this.patientId, this.$i18n.locale)
+    this.getPatientFutureAppointments(this.patientId, this.$i18n.locale)
     this.getPatientAssignments(this.patientId)
     this.getCountries()
     this.getRegions()
@@ -945,16 +947,6 @@ export default {
     openAssignments: function () {
       let assignments = [...this.assignments]
       return assignments.reverse()
-    },
-    futureAppointments: function () {
-      return this.appointments && this.appointments.filter((item) => {
-        return this.filterAppointments(item)
-      })
-    },
-    pastAppointments: function () {
-      return this.appointments && this.appointments.filter((item) => {
-        return !this.filterAppointments(item)
-      }).reverse()
     },
     hideInvoicesPagination () {
       return Math.floor(this.invoices.length / this.invoicesPerPage) !== 0
@@ -1050,7 +1042,8 @@ export default {
       tempPatient: {},
       notes: [],
       assignments: [],
-      appointments: [],
+      pastAppointments: [],
+      futureAppointments: [],
       timeSinceFirstVisit: '',
       dentists: [],
       surgeons: [],
@@ -1268,7 +1261,8 @@ export default {
     },
     '$i18n.locale' () {
       this.getProductGroups(this.$i18n.locale)
-      this.getEnquiryAppointments(this.$i18n.locale)
+      this.getEnquiryPastAppointments(this.$i18n.locale)
+      this.getEnquiryFutureAppointments(this.$i18n.locale)
     }
   },
   methods: {
@@ -1382,14 +1376,6 @@ export default {
       if (this.patient.email) details += 'Email: ' + this.patient.email
       return details
     },
-    filterAppointments (appointment) {
-      let currentDate = moment()
-      let date = moment(appointment.date).format('YYYY-MM-DD')
-      if (appointment.time !== null) {
-        date += ' ' + appointment.time
-      }
-      return moment(date).isAfter(currentDate)
-    },
     getPatient (id) {
       getEnquiryById(id).then(response => {
         this.patient = response[0]
@@ -1408,17 +1394,22 @@ export default {
       }
       )
     },
-    getPatientAppointments (id, lang) {
-      getEnquiryAppointments(id, lang).then(response => {
+    getPatientPastAppointments (id, lang) {
+      getEnquiryPastAppointments(id, lang).then(response => {
         let res = []
         for (let i = 0; i < response.length; i += 3) {
           res = [...res, response.slice(i, i + 5)]
         }
-        this.appointments = res
+        this.pastAppointments = res
         this.pastAppointmentsRows = response.length
         this.timeSinceFirstVisit = response.length && response[0].date
       }
       )
+    },
+    getPatientFutureAppointments (id, lang) {
+      getEnquiryFutureAppointments(id, lang).then(response => {
+        this.futureAppointments = response
+      })
     },
     getPatientAssignments (id) {
       getEnquiryAssignments(id).then(response => {
@@ -1622,6 +1613,7 @@ export default {
         this.formData = this.defaultAppointment()
         this.$emit('setModalShow', false)
       })
+      this.getPatientFutureAppointments(this.patientId, this.$i18n.locale)
     },
     getLocations () {
       getLocationsList().then(response => {
