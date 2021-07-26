@@ -14,7 +14,7 @@
                             <tab-nav-items class="col-12 col-sm-2 col-md-2 p-0" :active="false" href="#invoices" :title="$t('EPR.invoicesTab')" />
                         </tab-nav>
                     </div>
-                </template>trash
+                </template>
             </iq-card>
         </b-col>
         <b-col lg="12">
@@ -361,23 +361,24 @@
                                           </iq-card>
                                       </b-col>
                                   </b-col>
-</b-row>
+                              </b-row>
                       </iq-card>
                   </tab-content-item>
                   <tab-content-item :active="false" id="info">
                       <iq-card style="background: none;">
                           <b-form-group class="row align-items-center /*justify-content-center*/">
                               <b-col md="12">
-                                <div class="profile-img-edit">
-                                    <b-img :src="user.profile_image" class="profile-pic height-150 width-150 object-fit" alt="profile-pic" />
-                                    <input type="hidden" v-model="user.profile_image">
-                                    <div class="p-image">
-                                        <div class="position-relative">
-                                            <i class="ri-camera-line upload-button"></i>
-                                            <b-form-file class="h-100 position-absolute upload-image" accept="image/*" @change="previewImage"></b-form-file>
-                                        </div>
-                                    </div>
-                                </div>
+                                  <div class="profile-img-edit">
+                                      <b-img v-if="patient.gender == 'female'" src="../../assets/images/user/11.png" class="profile-pic height-150 width-150 object-fit" alt="profile-pic" />
+                                      <b-img v-else src="../../assets/images/user/08.png" class="profile-pic height-150 width-150 object-fit" alt="profile-pic" />
+                                      <input type="hidden" v-model="user.profile_image">
+                                      <div class="p-image">
+                                          <div class="position-relative">
+                                              <i class="ri-camera-line upload-button"></i>
+                                              <b-form-file class="h-100 position-absolute upload-image" accept="image/*" @change="previewImage"></b-form-file>
+                                          </div>
+                                      </div>
+                                  </div>
                                 <b-button variant="primary" :disabled="!disabled" @click="editPatient" class="edit-btn">{{ $t('EPR.personalInfo.edit') }}</b-button>
                               </b-col>
                           </b-form-group>
