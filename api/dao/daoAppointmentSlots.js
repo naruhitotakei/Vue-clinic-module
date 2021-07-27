@@ -8,11 +8,10 @@ const pool = new Pool({
     port: process.env.POSTGRES_PORT || 5432,
 })
 
-const getAppointmentSlots = (request, response, prm_client_id, scope) => {
+const getAppointmentSlots = (request, response) => {
     let statement = "SELECT * FROM appointment_slots "
-    if (scope != 'PrmClient' || !prm_client_id) {
-        response.status(401).json("NOK: user has wrong privileges " + scope)
-    }
+    /* statement += "WHERE '[:from, :to]':: daterange @> starts_at:: date "
+    statement = statement.replace(":from", from).replace(":to", to) */
     pool.query(statement, (error, results) => {
         if (error) {
             throw error

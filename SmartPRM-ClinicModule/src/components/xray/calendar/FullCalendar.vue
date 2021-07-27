@@ -11,7 +11,6 @@
   :allDaySlot="calendarOptions.allDaySlot"
   :slotDuration="calendarOptions.slotDuration"
   :selectable="isSelectable"
-  :businessHours="businessHours"
   editable="true"
   :header="calendarOptions.header"
   :allDayDefault="false"
@@ -270,8 +269,7 @@ export default {
     resourcesOuter: Array,
     events: Array,
     modalShow: Object,
-    selectDoctor: Object,
-    businessHours: Array
+    selectDoctor: Object
   },
   data () {
     return {

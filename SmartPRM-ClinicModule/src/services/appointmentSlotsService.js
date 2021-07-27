@@ -1,5 +1,5 @@
 export async function getFreeSlots () {
-  const rawResponse = await fetch('/api/calendar/free-slots', {
+  const rawResponse = await fetch(`/api/calendar/free-slots/`, {
     credentials: 'same-origin',
     headers: {
       'Accept': 'application/json',

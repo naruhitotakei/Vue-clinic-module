@@ -8,22 +8,6 @@
                             <template v-slot:body>
                                 <div class="row justify-content-between align-items-center">
                                     <div class="row align-items-center">
-                                        <b-dropdown id="dropdown-aria" variant="primary" text="Select doctors" class="m-2">
-                                            <b-dropdown-group class="pl-4 pr-2 pb-0">
-                                                <b-checkbox name="check-button" v-model="allDoctorCheck" @change="allDoctorFun(allDoctorCheck)"
-                                                            inline>
-                                                    {{ $t('calendar.selectAll') }}
-                                                </b-checkbox>
-                                            </b-dropdown-group>
-                                            <b-dropdown-form>
-                                                <b-dropdown-group v-for="(item,index) in doctors" :key="index">
-                                                    <b-checkbox href="#" class="custom-switch-color" :color="item.color" @change="checkData(item)"
-                                                                v-model="item.checked" :ref="'doctor_'+index" name="check-button" inline>
-                                                        {{ item.title }}
-                                                    </b-checkbox>
-                                                </b-dropdown-group>
-                                            </b-dropdown-form>
-                                        </b-dropdown>
                                         <div class="calendar-doctor-slider d-none">
                                             <button @click="scroll_left" class="nav-btn btn-primary mr-1">
                                                 <i class="ri-arrow-left-s-line"></i>
@@ -43,92 +27,14 @@
                                             </button>
                                         </div>
                                     </div>
-                                    <b-button @click="addAppointment"
-                                              variant="primary"
-                                              class="btn-add-patient mt-0"
-                                              style="width: 190px;">
-                                        <i class="ri-add-line mr-2"></i>
-                                        {{ $t('calendar.addAppointment') }}
-                                    </b-button>
-
                                 </div>
                             </template>
                         </iq-card>
                     </template>
-                    <template v-slot:headerAction>
-                        <form class="mt-4" novalidate @submit="submitFormData()">
-                            <b-modal id="modal-1" title="Appointment details" hide-footer>
-                                <form @submit="submitFormData()">
-                                    <div class="form-row">
-                                        <div class="col-md-12 mb-3">
-                                            <label for="validationDefault01">Appointment name</label>
-                                            <input type="text" v-model="formData.appName" class="form-control" id="validationDefault01"
-                                                   required>
-                                        </div>
-                                        <div class="col-md-12 mb-3">
-                                            <label for="validationDefault02">Date and Time</label>
-                                            <input type="datetime-local" placeholder="2021-01-01T13:45:00" v-model="formData.dateTime"
-                                                   class="form-control" id="validationDefault02" required>
-                                        </div>
-                                        <div class="col-md-12 mb-3">
-                                            <label for="validationDefault03">Regarding</label>
-                                            <input type="text" v-model="formData.regarding" class="form-control" id="validationDefault02"
-                                                   required>
-                                        </div>
-                                        <div class="col-md-12 mb-3">
-                                            <label for="validationDefault04">Type</label>
-                                            <select class="form-control" v-model="formData.type" id="validationDefault04" required>
-                                                <option selected disabled value="type">Choose...</option>
-                                                <option>...</option>
-                                            </select>
-                                        </div>
-                                        <div class="col-md-12 mb-3">
-                                            <label for="validationDefault05">Name of Doctor</label>
-                                            <select class="form-control" v-model="formData.doctorList" id="validationDefault05" required>
-                                                <option selected disabled value="doctor_name">Choose...</option>
-                                                <option>...</option>
-                                            </select>
-                                        </div>
-                                        <div class="col-md-12 mb-3">
-                                            <label for="validationDefault06">Name of Patient</label>
-                                            <select class="form-control" v-model="formData.patientName" id="validationDefault06" required>
-                                                <option selected disabled value="patient_name">Choose...</option>
-                                                <option>...</option>
-                                            </select>
-                                        </div>
-                                        <div class="col-md-12 mb-3">
-                                            <label for="validationDefault06">Location</label>
-                                            <select class="form-control" v-model="formData.location" id="validationDefault06" required>
-                                                <option selected disabled value="location">Choose...</option>
-                                                <option>...</option>
-                                            </select>
-                                        </div>
-                                        <div class="col-md-12 mb-3">
-                                            <label for="validationDefault05">Telephone Input</label>
-                                            <input type="tel" class="form-control" v-model="formData.phone" id="validationDefault05" required>
-                                        </div>
-                                        <div class="col-md-12 mb-3">
-                                            <label for="validationDefault05">Answered by</label>
-                                            <input type="tel" v-model="formData.answeredBy" class="form-control" id="validationDefault05"
-                                                   required>
-                                        </div>
-                                        <div class="col-md-12 mb-3">
-                                            <label for="validationDefault05">Presence</label>
-                                            <input type="tel" v-model="formData.presence" class="form-control" id="validationDefault05"
-                                                   required>
-                                        </div>
-                                    </div>
-                                    <div class="form-group">
-                                        <button class="btn btn-primary" type="submit">Submit form</button>
-                                    </div>
-                                </form>
-                            </b-modal>
-                        </form>
-                    </template>
                     <template v-slot:body>
                         <FullCalendar :resourcesOuter="getResources" :events="getEvents" @updateApp="updateApp"
                                       @checkData="checkData" @setModalShow="setModalShow" :modalShow="modalShow"
-                                      :selectDoctor="selectDoctor" :businessHours="emazingSlots"
+                                      :selectDoctor="selectDoctor"
                                       style="width: 100%; height: 100%;" />
                     </template>
                 </iq-card>
@@ -140,7 +46,8 @@
 <script>
 import { xray } from '../../config/pluginInit'
 import appointmentBook from '../../services/appointbook'
-import { getCalendar, getDoctorList } from '@/services/calendarService'
+import { getFreeSlots } from '@/services/appointmentSlotsService'
+import { getDoctorList } from '@/services/calendarService'
 import _ from 'lodash'
 import moment from 'moment'
 import { getProductGroups } from '@/services/products'
@@ -182,26 +89,13 @@ export default {
           doctorId: 28
         }
       ],
-      emazingSlots: [
-        { daysOfWeek: [1], startTime: '09:30', endTime: '12:00' },
-        { daysOfWeek: [4], startTime: '14:00', endTime: '19:00' },
-        { daysOfWeek: [6], startTime: '12:00', endTime: '14:00' }
-      ],
       modalShow: {
         show: false,
         default: false
       },
       product_groups: [],
-      resources: [
-        // { id: 2, title: 'Dr. Katic22222', time: '2021-06-3' },
-        // { id: 7, title: 'Dr. Fabjan' },
-        // { id: 24, title: 'Dr. Kržič' }
-      ],
-      clonedResources: [
-        // { id: 'a', title: 'Doctor 1', eventColor: 'sandybrown' },
-        // { id: 'b', title: 'Doctor 2', eventColor: 'blue' },
-        // { id: 'c', title: 'Doctor 3', eventColor: 'red' }
-      ],
+      resources: [],
+      clonedResources: [],
       formData: {
         appName: '',
         dateTime: '',
@@ -225,7 +119,7 @@ export default {
   },
   mounted () {
     xray.index()
-    this.getApontments()
+    this.getSlots()
     this.getDoctors()
     this.getProductGroups(this.$i18n.locale)
   },
@@ -249,7 +143,7 @@ export default {
       return events
     },
     getResources () {
-      console.log(this.resources)
+      console.log('Console logging resources, whatever the hell that is: ' + this.resources)
       if (!this.check.length) {
         return this.resources
       }
@@ -294,11 +188,11 @@ export default {
       })
     },
     async updateApp () {
-      await this.getApontments()
+      await this.getSlots()
     },
-    getApontments () {
+    getSlots () {
       this.events = []
-      getCalendar('2021-01-01', '2021-12-31', '', this.$i18n.locale).then(data => {
+      getFreeSlots('2021-01-01', '2021-12-31', '', this.$i18n.locale).then(data => {
         let dataWithDoctor = data.filter(item => {
           if (item.doctor_user_id !== null) {
             // this.doctors.push({
@@ -326,7 +220,6 @@ export default {
         // })
         this.clonedResources = this.resources
         dataWithDoctor.map(item => {
-          let patientAttended = item.patient_attended === 'true' ? 'attended' : item.patient_attended === 'null' ? 'unknown' : 'not_attended'
           // let productGroups = this.product_groups && this.product_groups.find(productName => productName.product_group_id === item.prm_pr_group_name_id)
           let endDay = this.calculateEndDate(moment(item.date).format('YYYY-MM-DD') + 'T' + item.time, 0, 15)
           let doctor = this.doctorsList.find(doc => {
@@ -334,32 +227,14 @@ export default {
           })
           this.events.push({
             id: item.id,
-            title: item.name + ' ' + item.last_name,
-            start: moment(item.date).format('YYYY-MM-DD') + 'T' + item.time,
+            start: moment(item.starts_at).format('YYYY-MM-DD HH:MM'),
             end: !item.end_time ? endDay : item.end_time,
-            backgroundColor: item.app_lb_color ? item.app_lb_color : '#64D6E8',
-            patient_attended: patientAttended,
-            appointment_canceled_in_advance_by_patient: item.appointment_canceled_in_advance_by_patient,
-            appointment_canceled_in_advance_by_clinic: item.appointment_canceled_in_advance_by_clinic,
+            backgroundColor: '#64D6E8',
             resourceId: doctor && doctor.id,
             eventResourceId: doctor && doctor.id,
-            locationId: item.location ? item.location : item.app_location,
-            product_groups: item.product_group_id,
-            assignmentDate: moment(item.date).format('YYYY-MM-DD') + 'T' + item.time,
-            last_name: item.last_name,
-            prm_client_id: item.prm_client_id,
-            prm_client_name: item.prm_client_name,
-            time: item.time,
-            notes: item.note,
-            doctorId: item.doctor_name ? item.doctor_name : item.app_doctor_name,
-            enquiry_id: item.enquiry_id,
-            patientId: {
-              id: item.enquiry_id,
-              full_name: item.name + ' ' + item.last_name
-            },
-            allDay: false,
-            app_lb_color: item.app_lb_color,
-            app_lb_type: item.app_lb_type
+            locationId: item.location ? item.location : '',
+            doctorId: item.doctor_name ? item.doctor_name : '',
+            allDay: false
           })
         })
         this.events = _.uniqBy(this.events, 'id')
