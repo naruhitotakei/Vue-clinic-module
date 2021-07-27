@@ -1,371 +1,86 @@
 ﻿<template>
-    <b-container fluid class="calendar-page">
-        <b-row>
-            <b-col md="12">
-                <iq-card>
-                    <template v-slot:headerTitle>
-                        <iq-card>
-                            <template v-slot:body>
-                                <div class="row justify-content-between align-items-center">
-                                    <div class="row align-items-center">
-                                        <div class="calendar-doctor-slider d-none">
-                                            <button @click="scroll_left" class="nav-btn btn-primary mr-1">
-                                                <i class="ri-arrow-left-s-line"></i>
-                                            </button>
-                                            <VueSlickCarousel v-bind="optionSlider"
-                                                              v-if="doctors.length"
-                                                              ref="carousel">
-                                                <div v-for="(item,index) in doctors" :key="index">
-                                                    <b-checkbox class="custom-switch-color" :color="item.color" @change="checkData(item)"
-                                                                v-model="item.checked" :ref="'doctor_'+index" name="check-button" inline>
-                                                        {{ item.title }}
-                                                    </b-checkbox>
-                                                </div>
-                                            </VueSlickCarousel>
-                                            <button @click="scroll_right" class="nav-btn btn-primary ml-1">
-                                                <i class="ri-arrow-right-s-line"></i>
-                                            </button>
-                                        </div>
-                                    </div>
-                                </div>
-                            </template>
-                        </iq-card>
-                    </template>
-                    <template v-slot:body>
-                        <FullCalendar :resourcesOuter="getResources" :events="getEvents" @updateApp="updateApp"
-                                      @checkData="checkData" @setModalShow="setModalShow" :modalShow="modalShow"
-                                      :selectDoctor="selectDoctor"
-                                      style="width: 100%; height: 100%;" />
-                    </template>
-                </iq-card>
-            </b-col>
-        </b-row>
-    </b-container>
+    <iq-card>
+        <VueFullCalendar defaultView="timeGridWeek"
+                         :header="header"
+                         :plugins="calendarPlugins"
+                         :events="calendarEvents"
+                         time-zone="UTC"
+                         :allDaySlot="calendarOptions.allDaySlot"
+                         :minTime="calendarOptions.minTime"
+                         :maxTime="calendarOptions.maxTime"
+                         :slotDuration="calendarOptions.slotDuration"
+                         />
+    </iq-card>
 </template>
-
 <script>
-import { xray } from '../../config/pluginInit'
-import appointmentBook from '../../services/appointbook'
-import { getFreeSlots } from '@/services/appointmentSlotsService'
-import { getDoctorList } from '@/services/calendarService'
-import _ from 'lodash'
-import moment from 'moment'
-import { getProductGroups } from '@/services/products'
-import VueSlickCarousel from 'vue-slick-carousel'
-
+import VueFullCalendar from '@fullcalendar/vue'
+import dayGridPlugin from '@fullcalendar/daygrid'
+import timeGridPlugin from '@fullcalendar/timegrid'
+import interactionPlugin from '@fullcalendar/interaction'
+import listPlugin from '@fullcalendar/list'
 export default {
-  name: 'FreeSlots',
-  components: { VueSlickCarousel },
+  name: 'FullCalendar',
+  props: {
+    // eslint-disable-next-line vue/require-valid-default-prop
+    calendarEvents: { type: Array, default: [] },
+    header: { type: Object,
+      // eslint-disable-next-line vue/require-valid-default-prop
+      default () {
+        return {
+          left: 'prev,next today',
+          center: 'title',
+          right: 'dayGridMonth,timeGridWeek,timeGridDay'
+        }
+      }
+    }
+  },
   data () {
     return {
-      allDoctorCheck: true,
-      checkedListArray: [],
-      selectDoctor: {},
-      slideCount: 0,
-      optionSlider: {
-        'centerMode': true,
-        'centerPadding': '0',
-        'focusOnSelect': true,
-        'slidesToShow': 1,
-        'slidesToScroll': 1,
-        'arrows': false,
-        'dots': false,
-        'infinite': false
-      },
-      events: [
-        {
-          id: 340,
-          title: '',
-          start: '2021-06-07T07:30:00.000Z',
-          end: '2021-06-07T07:45:00.000Z',
-          backgroundColor: '#64D6E8',
-          patient_attended: 'unknown',
-          resourceId: 28,
-          eventResourceId: 28,
-          locationId: '',
-          assignmentDate: '2021-06-07T10:30',
-          notes: '',
-          patientId: '',
-          doctorId: 28
-        }
+      calendarPlugins: [
+        dayGridPlugin,
+        timeGridPlugin,
+        interactionPlugin,
+        listPlugin
       ],
-      modalShow: {
-        show: false,
-        default: false
-      },
-      product_groups: [],
-      resources: [],
-      clonedResources: [],
-      formData: {
-        appName: '',
-        dateTime: '',
-        regarding: '',
-        type: '',
-        doctorList: '',
-        patientName: '',
-        location: '',
-        phone: '',
-        answeredBy: '',
-        presence: ''
-      },
-      doctorsList: [],
-      doctors: [],
-      config: {
-        dateFormat: 'Y-m-d',
-        inline: true
-      },
-      check: []
+      calendarOptions: {
+        allDaySlot: false,
+        minTime: '09:00:00',
+        maxTime: '21:30:00',
+        slotDuration: '00:15:00'
+      }
     }
+  },
+  components: {
+    VueFullCalendar // make the <VueFullCalendar> tag available
   },
   mounted () {
-    xray.index()
-    this.getSlots()
-    this.getDoctors()
-    this.getProductGroups(this.$i18n.locale)
-  },
-  watch: {
-    'allDoctorCheck' () {
-    }
   },
   computed: {
-    getEvents () {
-      if (!this.check.length) {
-        return this.events
-      }
-      let events = []
-      this.events.map(e => {
-        return this.check.map(c => {
-          if (e.doctorId === c.title) {
-            events.push(e)
-          }
-        })
-      })
-      return events
-    },
-    getResources () {
-      console.log('Console logging resources, whatever the hell that is: ' + this.resources)
-      if (!this.check.length) {
-        return this.resources
-      }
-      let resources = []
-      this.resources.map(e => {
-        this.check.map(c => {
-          if (e.title === c.title) {
-            resources.push(e)
-          }
-        })
-      })
-      return resources
-    }
   },
   methods: {
-    addAppointment () {
-      this.setModalShow(true)
-    },
-    setModalShow (bool) {
-      this.modalShow.show = bool
-    },
-    getProductGroups (lang) {
-      getProductGroups(lang).then(response => {
-        this.product_groups = response
-      })
-    },
-    getDoctors () {
-      getDoctorList().then((data) => {
-        this.doctorsList = data
-        this.doctorsList.map(item => {
-          this.resources.push({
-            id: item.id,
-            title: item.name
-          })
-          this.doctors.push({
-            id: Date.now(),
-            title: item.name,
-            disabled: false,
-            checked: false
-          })
-        })
-      })
-    },
-    async updateApp () {
-      await this.getSlots()
-    },
-    getSlots () {
-      this.events = []
-      getFreeSlots('2021-01-01', '2021-12-31', '', this.$i18n.locale).then(data => {
-        let dataWithDoctor = data.filter(item => {
-          if (item.doctor_user_id !== null) {
-            // this.doctors.push({
-            //   id: Date.now(),
-            //   title: item.doctor_name.split(',')[0],
-            //   disabled: false,
-            //   checked: false
-            // })
-            // this.resources.push({
-            //   id: item.doctor_user_id,
-            //   title: item.doctor_name
-            // })
-          }
-          return item
-        })
-        this.doctors = _.uniqBy(this.doctors, 'title')
-        this.resources = _.uniqBy(this.resources, 'id')
-        // this.resources = this.resources.map(item => {
-        //   let name = item.title.split(',')[0]
-        //   let nameWithoutDr = name.split('Dr.')[0].length ? name.split('Dr.')[0] : name.split('Dr.')[1]
-        //   return {
-        //     id: item.id,
-        //     title: nameWithoutDr
-        //   }
-        // })
-        this.clonedResources = this.resources
-        dataWithDoctor.map(item => {
-          // let productGroups = this.product_groups && this.product_groups.find(productName => productName.product_group_id === item.prm_pr_group_name_id)
-          let endDay = this.calculateEndDate(moment(item.date).format('YYYY-MM-DD') + 'T' + item.time, 0, 15)
-          let doctor = this.doctorsList.find(doc => {
-            return doc.name === item.app_doctor_name
-          })
-          this.events.push({
-            id: item.id,
-            start: moment(item.starts_at).format('YYYY-MM-DD HH:MM'),
-            end: !item.end_time ? endDay : item.end_time,
-            backgroundColor: '#64D6E8',
-            resourceId: doctor && doctor.id,
-            eventResourceId: doctor && doctor.id,
-            locationId: item.location ? item.location : '',
-            doctorId: item.doctor_name ? item.doctor_name : '',
-            allDay: false
-          })
-        })
-        this.events = _.uniqBy(this.events, 'id')
-        console.log(this.events.find(ev => ev.id === 41547))
-      })
-    },
-    calculateEndDate (startDate, hours, minutes) {
-      return moment(startDate).add(hours, 'hours').add(minutes, 'minutes').toISOString()
-    },
-    allDoctorFun (value) {
-      this.check = []
-      this.doctors.map(item => {
-        item.checked = false
-      })
-    },
-    checkData (item) {
-      this.selectDoctor = item
-      this.doctors.map(doctor => {
-        if (doctor.title === item.title) {
-          if (item.checked) {
-            this.check.push(item)
-            doctor.checked = true
-          } else {
-            doctor.checked = false
-            this.check.map((i, index) => {
-              if (i.title === item.title) {
-                this.check.splice(index, 1)
-              }
-            })
-          }
-        }
-      })
-      if (this.check.length) {
-        this.$nextTick(() => {
-          this.allDoctorCheck = false
-        })
-      } else {
-        this.$nextTick(() => {
-          this.allDoctorCheck = true
-          this.selectDoctor = {}
-        })
-      }
-    },
-    submitFormData () {
-      appointmentBook(this.formData)
-    },
-    scroll_left () {
-      this.$refs.carousel.prev()
-    },
-    scroll_right () {
-      this.$refs.carousel.next()
-    }
   }
 }
 </script>
-<style lang="scss">
-.calendar-page {
-  .main-wrapper {
-    display: flex;
-    flex-direction: row;
-    justify-content: space-around;
-    width: 50%;
-    margin-left: -15px;
+
+<style lang='scss'>
+.fc-event, .fc-event:hover{
+color: #ffffff !important;
 }
 
-.wrapper-box {
-    max-width: 250px;
-    /* overflow: auto; */
-    overflow: hidden;
+.fc-head {
+    text-align: center;
 }
 
-.nav-btn {
-    border-radius: 25px;
-    border: none;
-    height: 30px;
-    width: 30px;
+.fc-time {
+    width: 59px !important;
 }
 
-#box {
-    width: max-content;
-    /* height: 200px;
-border: 1px solid black; */
-    position: relative;
+.fc-axis {
+    width: 59px !important;
 }
 
-#box b-checkbox {
-    position: absolute;
-    height: 100%;
-    width: 50px;
-}
-
-#box .left {
-    left: 0;
-}
-
-#box .right {
-    right: 0;
-}
-
-#box .center {
-    left: calc(50% - 25px);
-}
-
-.calendar-doctor-slider {
-    display: flex;
-}
-
-.calendar-doctor-slider .slick-slider {
-    max-width: 300px;
-}
-
-.calendar-doctor-slider .slick-slider .slick-slide div div {
-    display: flex;
-    justify-content: center;
-}
-
-body #dropdown-offset__BV_toggle_ {
-    background: #089bab !important;
-}
-
-.custom-switch-color .custom-control-label {
-    width: max-content !important;
-}
-
-.b-dropdown-form {
-    flex-wrap: wrap;
-    display: flex;
-    flex-direction: column;
-    max-height: 140px;
-    width: 400px;
-    padding-top: 0;
-}
-}
+@import '~@fullcalendar/core/main.css';
+@import '~@fullcalendar/daygrid/main.css';
+@import '~@fullcalendar/timegrid/main.css';
+@import '~@fullcalendar/list/main.min.css';
 </style>
