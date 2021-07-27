@@ -1,10 +1,9 @@
 ﻿<template>
-    <iq-card>
+    <iq-card class="p-3">
         <VueFullCalendar defaultView="timeGridWeek"
                          :header="header"
                          :plugins="calendarPlugins"
-                         :events="calendarEvents"
-                         time-zone="UTC"
+                         :events="getEvents"
                          :allDaySlot="calendarOptions.allDaySlot"
                          :minTime="calendarOptions.minTime"
                          :maxTime="calendarOptions.maxTime"
@@ -18,11 +17,11 @@ import dayGridPlugin from '@fullcalendar/daygrid'
 import timeGridPlugin from '@fullcalendar/timegrid'
 import interactionPlugin from '@fullcalendar/interaction'
 import listPlugin from '@fullcalendar/list'
+import { getFreeSlots } from '@/services/appointmentSlotsService.js'
 export default {
   name: 'FullCalendar',
   props: {
     // eslint-disable-next-line vue/require-valid-default-prop
-    calendarEvents: { type: Array, default: [] },
     header: { type: Object,
       // eslint-disable-next-line vue/require-valid-default-prop
       default () {
@@ -36,6 +35,7 @@ export default {
   },
   data () {
     return {
+      slots: [],
       calendarPlugins: [
         dayGridPlugin,
         timeGridPlugin,
@@ -54,29 +54,42 @@ export default {
     VueFullCalendar // make the <VueFullCalendar> tag available
   },
   mounted () {
+    this.getFreeSlotsList()
   },
   computed: {
+    getEvents () {
+      return this.slots
+    }
   },
   methods: {
+    getFreeSlotsList () {
+      getFreeSlots().then(response => {
+        this.slots = response
+      })
+    }
   }
 }
 </script>
 
 <style lang='scss'>
 .fc-event, .fc-event:hover{
-color: #ffffff !important;
+  color: #ffffff !important;
 }
 
 .fc-head {
-    text-align: center;
+  text-align: center;
 }
 
 .fc-time {
-    width: 59px !important;
+  width: 59px !important;
 }
 
 .fc-axis {
-    width: 59px !important;
+  width: 59px !important;
+}
+
+VueFullCalendar {
+  padding: 1rem;
 }
 
 @import '~@fullcalendar/core/main.css';
