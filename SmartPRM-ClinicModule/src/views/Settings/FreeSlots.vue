@@ -18,6 +18,7 @@ import timeGridPlugin from '@fullcalendar/timegrid'
 import interactionPlugin from '@fullcalendar/interaction'
 import listPlugin from '@fullcalendar/list'
 import { getFreeSlots } from '@/services/appointmentSlotsService.js'
+import moment from 'moment'
 export default {
   name: 'FullCalendar',
   props: {
@@ -64,7 +65,15 @@ export default {
   methods: {
     getFreeSlotsList () {
       getFreeSlots().then(response => {
-        this.slots = response
+        response.map(item => {
+          this.slots.push({
+            id: item.id,
+            title: item.location,
+            start: moment(item.starts_at).format('YYYY-MM-DDTHH:mm'),
+            end: moment(item.starts_at).add('0', 'hours').add('15', 'minutes').format('YYYY-MM-DDTHH:mm'),
+            backgroundColor: item.appointment_id ? '#F1773A' : '#64D6E8'
+          })
+        })
       })
     }
   }
