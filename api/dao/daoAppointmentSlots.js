@@ -9,7 +9,7 @@ const pool = new Pool({
 })
 
 const getAppointmentSlots = (request, response) => {
-    let statement = "SELECT * FROM appointment_slots "
+    let statement = "SELECT * FROM appointment_slots WHERE client_id IN (10, 23) "
     /* statement += "WHERE '[:from, :to]':: daterange @> starts_at:: date "
     statement = statement.replace(":from", from).replace(":to", to) */
     pool.query(statement, (error, results) => {
