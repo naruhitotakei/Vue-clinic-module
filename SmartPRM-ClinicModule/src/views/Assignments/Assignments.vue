@@ -23,7 +23,7 @@
                                 >
                                     <div class="assignments-container row align-items-center flex-nowrap justify-content-between w-100" :class="{ 'taskIsActive' : !item.completed}">
                                        <div class="row align-items-center flex-nowrap w-40">
-                                         <b-checkbox v-model="item.completed" :disabled="item.disabled" name="check-button" inline :key="index" class="completed-assignment ml-3 mr-0" @change="finishAssignment(item.id, $event)"></b-checkbox>
+                                         <b-checkbox v-model="item.completed" :disabled="item.disabled" name="check-button" inline :key="index" class="checkbox-assignment" @change="finishAssignment(item.id, $event)"></b-checkbox>
                                          <span class="assignments-descriptions w-100 text-break">{{ item.description }}</span>
                                        </div>
                                        <div class="w-60 row justify-content-end flex-nowrap">
@@ -69,7 +69,7 @@
                              :class="{ 'taskIsActive' : !item.completed}">
                            <div class="w-40 flex-nowrap row">
                              <b-checkbox v-model="item.completed" :disabled="item.disabled" name="check-button" inline
-                                         :key="index" class="completed-assignment ml-3 mr-0"
+                                         :key="index" class="checkbox-assignment"
                                          @change="finishAssignment(item.id, $event)"></b-checkbox>
                              <span class="assignments-descriptions  w-100 text-break">{{ item.description }}</span>
                            </div>
@@ -113,7 +113,7 @@
                             >
                                 <div class="assignments-container row align-items-center flex-nowrap justify-content-between w-100" :class="{ 'taskIsActive' : !item.completed}">
                                     <div class="w-40 flex-nowrap row">
-                                      <b-checkbox v-model="item.completed" :disabled="item.disabled" name="check-button" inline :key="index" class="completed-assignment ml-3 mr-0" @change="finishAssignment(item.id, $event)"></b-checkbox>
+                                      <b-checkbox v-model="item.completed" :disabled="item.disabled" name="check-button" inline :key="index" class="checkbox-assignment" @change="finishAssignment(item.id, $event)"></b-checkbox>
                                       <span class="assignments-description  w-100 text-break">{{ item.description }}</span>
                                     </div>
                                   <div class="w-60 row justify-content-end flex-nowrap">
@@ -153,7 +153,7 @@
                         <b-list-group class="list-group-flush" id="completedAssignments" :per-page="completedPerPage" :current-page="completedCurrentPage">
                             <b-list-group-item v-for="(item, index) in completedAssigments[completedCurrentPage]" :key="index">
                                 <div class="assignments-container row align-items-center flex-nowrap" :class="{ 'taskIsActive' : !item.completed}">
-                                    <b-checkbox v-model="item.completed" :disabled="item.disabled" name="check-button" inline :key="index" class="completed-assignment" @change="finishAssignment(item.id, $event)"></b-checkbox>
+                                    <b-checkbox v-model="item.completed" :disabled="item.disabled" name="check-button" inline :key="index" class="checkbox-assignment" @change="finishAssignment(item.id, $event)"></b-checkbox>
                                     <span class="assignments-description">{{ item.description }}</span>
                                     <router-link tag="span" :to="'/patients/'+ item.enquiry_id" class="pl-5" style="cursor:pointer;">{{ item.patientname }} {{ item.patientlastname }}</router-link>
                                   <span class="pl-5">{{ patientsDentist(item) }}</span>
@@ -227,6 +227,10 @@
 
 .taskIsActive {
     color: black;
+}
+
+.checkbox-assignment {
+    margin-left: 2rem;
 }
 
 .custom-control-label {
