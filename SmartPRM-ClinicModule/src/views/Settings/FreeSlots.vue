@@ -54,10 +54,9 @@ export default {
     VueFullCalendar // make the <VueFullCalendar> tag available
   },
   mounted () {
-    this.getFreeSlotsList()
-    this.$nextTick(() => {
+    this.getFreeSlotsList(() => {
       this.$forceUpdate()
-      this.$emit('updateApp')
+      this.updateApp()
     })
   },
   computed: {
