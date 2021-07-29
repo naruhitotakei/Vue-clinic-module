@@ -4,12 +4,12 @@
       <b-col md="12">
         <iq-card>
           <template v-slot:headerTitle>
-            <iq-card>
+            <iq-card class="mb-0">
               <template v-slot:body>
-                <div class="row justify-content-between align-items-center">
+                <div class="row justify-content-between align-items-center m-0">
                   <div class="row align-items-center">
-                    <b-dropdown id="dropdown-aria" variant="primary" text="Select doctors" class="m-2">
-                      <b-dropdown-group class="pl-4 pr-2 pb-0">
+                    <b-dropdown id="dropdown-aria" variant="primary" text="Select doctors" class="ml-2">
+                      <b-dropdown-group>
                         <b-checkbox name="check-button" v-model="allDoctorCheck" @change="allDoctorFun(allDoctorCheck)"
                                     inline>{{ $t('calendar.selectAll') }}
                         </b-checkbox>
