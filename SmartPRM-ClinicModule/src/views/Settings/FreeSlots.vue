@@ -1,14 +1,17 @@
 ﻿<template>
     <iq-card class="p-3">
         <VueFullCalendar defaultView="timeGridWeek"
-                         :header="header"
+                         :header="calendarOptions.header"
                          :plugins="calendarPlugins"
                          :events="getEvents"
                          :allDaySlot="calendarOptions.allDaySlot"
                          :minTime="calendarOptions.minTime"
                          :maxTime="calendarOptions.maxTime"
                          :slotDuration="calendarOptions.slotDuration"
-                         />
+                         @updateApp="updateApp"
+                         ref="calendar"
+                         v-if="isDataLoaded" />
+        <img v-else src="../../assets/css/ajax-loader.gif" alt="Smart PRM" class="d-block m-auto" />
     </iq-card>
 </template>
 <script>
@@ -22,17 +25,6 @@ import moment from 'moment'
 export default {
   name: 'FullCalendar',
   props: {
-    // eslint-disable-next-line vue/require-valid-default-prop
-    header: { type: Object,
-      // eslint-disable-next-line vue/require-valid-default-prop
-      default () {
-        return {
-          left: 'prev,next today',
-          center: 'title',
-          right: 'dayGridMonth,timeGridWeek,timeGridDay'
-        }
-      }
-    }
   },
   data () {
     return {
@@ -47,8 +39,15 @@ export default {
         allDaySlot: false,
         minTime: '09:00:00',
         maxTime: '21:30:00',
-        slotDuration: '00:15:00'
-      }
+        slotDuration: '00:15:00',
+        header: {
+          left: 'prev,next today',
+          center: 'title',
+          right: 'dayGridMonth,timeGridWeek,timeGridDay'
+        }
+      },
+      calendarApi: null,
+      isDataLoaded: false
     }
   },
   components: {
@@ -56,6 +55,10 @@ export default {
   },
   mounted () {
     this.getFreeSlotsList()
+    this.$nextTick(() => {
+      this.$forceUpdate()
+      this.$emit('updateApp')
+    })
   },
   computed: {
     getEvents () {
@@ -65,16 +68,32 @@ export default {
   methods: {
     getFreeSlotsList () {
       getFreeSlots().then(response => {
-        response.map(item => {
+        response.map(slot => {
           this.slots.push({
-            id: item.id,
-            title: item.location,
-            start: moment(item.starts_at).format('YYYY-MM-DDTHH:mm'),
-            end: moment(item.starts_at).add('0', 'hours').add('15', 'minutes').format('YYYY-MM-DDTHH:mm'),
-            backgroundColor: item.appointment_id ? '#F1773A' : '#64D6E8'
+            id: slot.id,
+            title: slot.location,
+            start: moment(slot.starts_at).format('YYYY-MM-DDTHH:mm'),
+            end: moment(slot.starts_at).add('0', 'hours').add('15', 'minutes').format('YYYY-MM-DDTHH:mm'),
+            backgroundColor: slot.appointment_id ? '#F1773A' : '#64D6E8'
           })
         })
       })
+    },
+    async updateApp () {
+      await this.getFreeSlotsList()
+    }
+  },
+  watch: {
+    'slots' () {
+      if (this.slots.length) {
+        this.isDataLoaded = true
+        this.$nextTick(() => {
+          this.calendarApi = this.$refs.calendar.getApi()
+          console.log('API', this.calendarApi)
+        })
+      }
+    },
+    '$refs.calendar' () {
     }
   }
 }
