@@ -249,8 +249,8 @@ a:hover { text-decoration: none; color: #02818f; }
 .iq-sidebar-menu { position: relative; }
 .iq-sidebar-menu .iq-menu { margin: 0 15px; padding: 0; list-style-type: none; }
 .iq-sidebar-menu .iq-menu li { list-style-type: none; position: relative; white-space: nowrap; }
-.iq-sidebar-menu .iq-menu li a { font-size: 14px; white-space: nowrap; display: block; color: #ffffff; position: relative; padding: 15px; line-height: 17px; display: -webkit-box; display: -ms-flexbox; display: flex; -webkit-box-align: center; -ms-flex-align: center; align-items: center; overflow: hidden; border-radius: 15px; text-transform: capitalize; }
-.iq-sidebar-menu .iq-menu li li a { font-size: 14px; }
+.iq-sidebar-menu .iq-menu li a { font-size: 13px; white-space: nowrap; display: block; color: #ffffff; position: relative; padding: 15px; line-height: 17px; display: -webkit-box; display: -ms-flexbox; display: flex; -webkit-box-align: center; -ms-flex-align: center; align-items: center; overflow: hidden; border-radius: 15px; text-transform: capitalize; }
+.iq-sidebar-menu .iq-menu li li a { font-size: 13px; }
 .iq-sidebar-menu .iq-menu li a i { font-size: 20px; margin-right: 10px; vertical-align: middle; width: 20px; display: inline-block; float: left; }
 .iq-sidebar-menu .iq-menu li li a i { font-size: 16px; }
 .iq-sidebar-menu .iq-menu li a span { white-space: nowrap; padding: 0; display: inline-block; float: left; -webkit-transition: all 0.3s ease-out 0s; -moz-transition: all 0.3s ease-out 0s; -ms-transition: all 0.3s ease-out 0s; -o-transition: all 0.3s ease-out 0s; transition: all 0.3s ease-out 0s; transition: none; }
