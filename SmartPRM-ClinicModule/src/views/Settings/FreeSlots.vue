@@ -1,18 +1,34 @@
 ﻿<template>
-    <iq-card class="p-3">
-        <VueFullCalendar defaultView="timeGridWeek"
-                         :header="calendarOptions.header"
-                         :plugins="calendarPlugins"
-                         :events="getEvents"
-                         :allDaySlot="calendarOptions.allDaySlot"
-                         :minTime="calendarOptions.minTime"
-                         :maxTime="calendarOptions.maxTime"
-                         :slotDuration="calendarOptions.slotDuration"
-                         @updateApp="updateApp"
-                         ref="calendar"
-                         v-if="isDataLoaded" />
-        <img v-else src="../../assets/css/ajax-loader.gif" alt="Smart PRM" class="d-block m-auto" />
-    </iq-card>
+    <b-container fluid class="calendar-page">
+        <iq-card class="p-3">
+            <b-dropdown id="dropdown-aria" variant="primary" text="Select doctors" class="ml-2 mb-1">
+                <b-dropdown-group class="select-checkbox">
+                    <b-checkbox name="check-button" v-model="allDoctorsCheck" @change="allDoctorsFunc(allDoctorsCheck)"
+                                inline>
+                        {{ $t('calendar.selectAll') }}
+                    </b-checkbox>
+                </b-dropdown-group>
+                <b-dropdown-form class="dropdown-list">
+                    <b-dropdown-group v-for="(doctor,index) in doctors" :key="index">
+                        <b-checkbox href="#" class="custom-switch-color" :color="doctor.color" @change="checkData(doctor)"
+                                    v-model="doctor.checked" :ref="'doctor_'+index" name="check-button" inline>
+                            {{ doctor.name }}
+                        </b-checkbox>
+                    </b-dropdown-group>
+                </b-dropdown-form>
+            </b-dropdown>
+            <hr />
+            <VueFullCalendar defaultView="timeGridWeek"
+                             :header="calendarOptions.header"
+                             :plugins="calendarPlugins"
+                             :events="slots"
+                             :allDaySlot="calendarOptions.allDaySlot"
+                             :minTime="calendarOptions.minTime"
+                             :maxTime="calendarOptions.maxTime"
+                             :slotDuration="calendarOptions.slotDuration"
+                             :key="reFetchSlots" />
+        </iq-card>
+    </b-container>
 </template>
 <script>
 import VueFullCalendar from '@fullcalendar/vue'
@@ -20,7 +36,8 @@ import dayGridPlugin from '@fullcalendar/daygrid'
 import timeGridPlugin from '@fullcalendar/timegrid'
 import interactionPlugin from '@fullcalendar/interaction'
 import listPlugin from '@fullcalendar/list'
-import { getFreeSlots } from '@/services/appointmentSlotsService.js'
+import { getFreeSlots } from '@/services/appointmentSlotsService'
+import { getDoctorList } from '@/services/calendarService'
 import moment from 'moment'
 export default {
   name: 'FullCalendar',
@@ -28,7 +45,12 @@ export default {
   },
   data () {
     return {
+      allDoctorsCheck: true,
       slots: [],
+      reFetchSlots: 0,
+      doctors: [],
+      check: [],
+      selectDoctor: {},
       calendarPlugins: [
         dayGridPlugin,
         timeGridPlugin,
@@ -45,24 +67,17 @@ export default {
           center: 'title',
           right: 'dayGridMonth,timeGridWeek,timeGridDay'
         }
-      },
-      calendarApi: null,
-      isDataLoaded: false
+      }
     }
   },
   components: {
     VueFullCalendar // make the <VueFullCalendar> tag available
   },
   mounted () {
-    this.getFreeSlotsList(() => {
-      this.$forceUpdate()
-      this.updateApp()
-    })
+    this.getFreeSlotsList()
+    this.getDoctors()
   },
   computed: {
-    getEvents () {
-      return this.slots
-    }
   },
   methods: {
     getFreeSlotsList () {
@@ -76,29 +91,57 @@ export default {
             backgroundColor: slot.appointment_id ? '#F1773A' : '#64D6E8'
           })
         })
+        this.reFetchSlots++
       })
     },
-    async updateApp () {
-      await this.getFreeSlotsList()
+    getDoctors () {
+      getDoctorList().then(response => {
+        this.doctors = response
+      })
+    },
+    allDoctorsFunc () {
+      this.check = []
+      this.doctors.map(doctor => {
+        doctor.checked = false
+      })
+    },
+    checkData (item) {
+      this.selectDoctor = item
+      this.doctors.map(doctor => {
+        if (doctor.name === item.name) {
+          if (item.checked) {
+            this.check.push(item)
+            doctor.checked = true
+          } else {
+            doctor.checked = false
+            this.check.map((i, index) => {
+              if (i.name === item.name) {
+                this.check.splice(index, 1)
+              }
+            })
+          }
+        }
+      })
+      if (this.check.length) {
+        this.$nextTick(() => {
+          this.allDoctorsCheck = false
+        })
+      } else {
+        this.$nextTick(() => {
+          this.allDoctorsCheck = true
+          this.selectDoctor = {}
+        })
+      }
     }
   },
   watch: {
-    'slots' () {
-      if (this.slots.length) {
-        this.isDataLoaded = true
-        this.$nextTick(() => {
-          this.calendarApi = this.$refs.calendar.getApi()
-          console.log('API', this.calendarApi)
-        })
-      }
-    },
-    '$refs.calendar' () {
+    'allDoctorsCheck' () {
     }
   }
 }
 </script>
 
-<style lang='scss'>
+<style>
 .fc-event, .fc-event:hover{
   color: #ffffff !important;
 }
@@ -117,6 +160,20 @@ export default {
 
 VueFullCalendar {
   padding: 1rem;
+}
+
+.select-checkbox {
+    font-size: 13px;
+}
+
+.dropdown-list {
+  flex-wrap: wrap;
+  display: flex;
+  flex-direction: column;
+  max-height: 140px;
+  width: 400px;
+  padding-top: 0;
+  font-size: 13px;
 }
 
 @import '~@fullcalendar/core/main.css';
