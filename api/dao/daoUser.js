@@ -226,6 +226,16 @@ const getUsersForAssignments = (request, response, prm_client_id, scope) => {
     })
 }
 
+const recordSignInTime = (request, response, user_id) => {
+    let statement = "UPDATE users SET last_sign_in_at = NOW() WHERE id = " + user_id
+    pool.query(statement, (error, results) => {
+        if (error) {
+            throw error
+        }
+        response.status(200).json("OK")
+    })
+}
+
 module.exports = {
   loginUser,
   getUserById,
@@ -238,5 +248,6 @@ module.exports = {
   getUsers,
   getRoles,
   updateUser,
-  getUsersForAssignments
+  getUsersForAssignments,
+  recordSignInTime
 }

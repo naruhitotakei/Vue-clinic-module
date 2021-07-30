@@ -51,7 +51,7 @@
 
 <script>
 // import SocialLoginForm from './SocialLoginForm'
-import { login, sso } from '../../../services/userService'
+import { login, sso, recordSignInTime } from '../../../services/userService'
 import { mapGetters } from 'vuex'
 export default {
   name: 'SignIn1Form',
@@ -82,11 +82,12 @@ export default {
           alert(response)
         } else {
           this.data = response
-          this.$i18n.locale = this.data.locale
-          if (this.data.locale) {
+          this.$i18n.locale = this.data.prm_locale
+          if (this.data.prm_locale) {
             sso().then(response1 => {
               this.$emit('logedIn', this.data)
               this.$router.push({ name: 'dashboard.home' })
+              recordSignInTime()
             })
           }
         }

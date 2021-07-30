@@ -142,6 +142,7 @@ app.post('/api/profile', async function(req, res) {
     }    
 });
 
+// /change locale
 app.post('/api/profile/change-lang', async function(req, res) {
   const data = req.body
   if (req.session.prm_user) {
@@ -149,6 +150,15 @@ app.post('/api/profile/change-lang', async function(req, res) {
   } else {
     res.status(200).json("NOK: user not logged in")
   }
+});
+
+// record sign in time
+app.put('/api/sign-in-time', (req, res) => {
+    const id = req.session.prm_user.id
+    if (req.session.prm_user)
+        daoUser.recordSignInTime(req, res, id)
+    else
+        res.status(401).json("OK: user unauthorized")
 });
 
 app.get('/api/dentists', async function(req, res) {

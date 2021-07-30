@@ -39,6 +39,7 @@ const getStaff = (request, response, prm_client_id, scope) => {
     } else if (scope == 'PrmClient') {
         statement += "AND prm_client_id = " + prm_client_id
     }
+    statement += "ORDER BY last_sign_in_at DESC "
     pool.query(statement, (error, results) => {
         if (error) {
             throw error

@@ -141,3 +141,15 @@ export async function updateUser (id, user) {
   })
   return rawResponse.json()
 }
+
+export async function recordSignInTime () {
+  const rawResponse = await fetch('/api/sign-in-time', {
+    method: 'PUT',
+    credentials: 'same-origin',
+    headers: {
+      'Accept': 'application/json',
+      'Content-Type': 'application/json'
+    }
+  })
+  return rawResponse.json()
+}
