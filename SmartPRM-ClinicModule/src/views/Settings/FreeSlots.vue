@@ -21,7 +21,8 @@
             <VueFullCalendar defaultView="timeGridWeek"
                              :header="calendarOptions.header"
                              :plugins="calendarPlugins"
-                             :events="slots"
+                             :resources="getResources"
+                             :events="getSlots"
                              :allDaySlot="calendarOptions.allDaySlot"
                              :minTime="calendarOptions.minTime"
                              :maxTime="calendarOptions.maxTime"
@@ -47,8 +48,10 @@ export default {
     return {
       allDoctorsCheck: true,
       slots: [],
+      resources: [],
       reFetchSlots: 0,
       doctors: [],
+      doctorsList: [],
       check: [],
       selectDoctor: {},
       calendarPlugins: [
@@ -78,6 +81,34 @@ export default {
     this.getDoctors()
   },
   computed: {
+    getSlots () {
+      if (!this.check.length) {
+        return this.slots
+      }
+      let slots = []
+      this.slots.map(event => {
+        return this.check.map(checked => {
+          if (event.doctorId === checked.title) {
+            slots.push(event)
+          }
+        })
+      })
+      return slots
+    },
+    getResources () {
+      if (!this.check.length) {
+        return this.resources
+      }
+      let resources = []
+      this.resources.map(event => {
+        this.check.map(checked => {
+          if (event.title === checked.title) {
+            resources.push(event)
+          }
+        })
+      })
+      return resources
+    }
   },
   methods: {
     getFreeSlotsList () {
@@ -85,10 +116,13 @@ export default {
         response.map(slot => {
           this.slots.push({
             id: slot.id,
-            title: slot.location,
+            title: slot.doctor_name,
             start: moment(slot.starts_at).format('YYYY-MM-DDTHH:mm'),
             end: moment(slot.starts_at).add('0', 'hours').add('15', 'minutes').format('YYYY-MM-DDTHH:mm'),
-            backgroundColor: slot.appointment_id ? '#F1773A' : '#64D6E8'
+            backgroundColor: slot.appointment_id ? '#F1773A' : '#64D6E8',
+            resourceId: slot && slot.id,
+            eventResourceId: slot && slot.id,
+            doctorId: slot.doctor_name
           })
         })
         this.reFetchSlots++
@@ -97,6 +131,12 @@ export default {
     getDoctors () {
       getDoctorList().then(response => {
         this.doctors = response
+        this.doctors.map(doctor => {
+          this.resources.push({
+            id: doctor.id,
+            title: doctor.name
+          })
+        })
       })
     },
     allDoctorsFunc () {
