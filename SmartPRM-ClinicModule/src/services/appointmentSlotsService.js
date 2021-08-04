@@ -8,3 +8,16 @@ export async function getFreeSlots () {
   })
   return rawResponse.json()
 }
+
+export async function createFreeSlots (slot) {
+  const rawResponse = await fetch('/api/calendar/create-free-slots', {
+    method: 'POST',
+    credentials: 'same-origin',
+    headers: {
+      'Accept': 'application/json',
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify(slot)
+  })
+  return rawResponse.json()
+}

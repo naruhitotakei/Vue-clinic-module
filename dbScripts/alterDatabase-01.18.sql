@@ -190,6 +190,13 @@ INSERT INTO appointments_label_name (appointment_label_id, language, text) VALUE
 (141, 'sl', 'Oznaka 5'), (141, 'en', 'Label 5'), (141, 'it', 'Etichetta 5');
 
 --############################################################
+--# Adding prm_client_id column to appointment_slots table
+--############################################################
+
+ALTER TABLE appointment_slots ADD COLUMN prm_client_id INT
+CONSTRAINT appointment_slots_prm_client_fk REFERENCES prm_client (id);
+
+--############################################################
 --# update version
 --############################################################
 

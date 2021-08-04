@@ -1,6 +1,7 @@
 ﻿<template>
     <b-container fluid class="calendar-page">
         <iq-card class="p-3">
+            <!-- Free Slots Header -->
             <b-dropdown id="dropdown-aria" variant="primary" text="Select doctors" class="ml-2 mb-1">
                 <b-dropdown-group class="select-checkbox">
                     <b-checkbox name="check-button" v-model="allDoctorsCheck" @change="allDoctorsFunc(allDoctorsCheck)"
@@ -18,6 +19,7 @@
                 </b-dropdown-form>
             </b-dropdown>
             <hr />
+            <!-- Free Slots Calendar -->
             <VueFullCalendar defaultView="timeGridWeek"
                              :header="calendarOptions.header"
                              :plugins="calendarPlugins"
@@ -27,7 +29,75 @@
                              :minTime="calendarOptions.minTime"
                              :maxTime="calendarOptions.maxTime"
                              :slotDuration="calendarOptions.slotDuration"
+                             @dateClick="createFreeSlots"
                              :key="reFetchSlots" />
+            <!--Add Free Slots Modal-->
+            <b-modal v-model="openFreeSlotsModal"
+                     no-close-on-esc
+                     no-close-on-backdrop
+                     size="lg"
+                     title="Slots Details"
+                     ok-title="Confirm"
+                     @ok="addFreeSlots"
+                     @close="openFreeSlotsModal = false"
+                     cancel-title="Close">
+                <form class="calendar-modal">
+                    <div class="form-row">
+                        <div class="row align-items-center justify-content-between w-100 mb-3">
+                            <div class="col-md-3">
+                                <label for="location" class="ml-0 mb-0 font-size-16">{{ $t('calendarEvent.location') }}</label>
+                            </div>
+                            <div class="col-md-9">
+                                <v-select :clearable="false"
+                                          label="city"
+                                          :reduce="location => location.city"
+                                          class="style-chooser form-control-disabled font-size-16"
+                                          v-model="slotData.location"
+                                          :options="locations"
+                                          style="min-width:305px;"></v-select>
+                            </div>
+                        </div>
+                        <div class="row align-items-center justify-content-between w-100 mb-3">
+                            <div class="col-md-3">
+                                <label for="doctor" class="mr-2 mb-0 font-size-16">{{ $t('calendarEvent.doctor') }}</label>
+                            </div>
+                            <div class="col-md-9">
+                                <v-select :clearable="false"
+                                          label="doctor"
+                                          :reduce="doctor => doctor.name"
+                                          class="style-chooser form-control-disabled font-size-16"
+                                          v-model="slotData.doctor"
+                                          :options="doctors"
+                                          :getOptionLabel="getDoctorLabel"
+                                          style="min-width: 305px;"></v-select>
+                            </div>
+                        </div>
+                        <div class="row align-items-center justify-content-between w-100 mb-3">
+                            <div class="col-md-3">
+                                <label for="start" class="mb-0 font-size-16">{{ $t('calendarEvent.start') }}</label>
+                            </div>
+                            <div class="col-md-9 d-flex align-items-center">
+                                <date-picker class="form-control form-control-disabled font-size-16"
+                                             v-model="slotData.start"
+                                             type="datetime"
+                                             :minute-step="15"
+                                             :show-second="false"
+                                             :lang="'en'"
+                                             :format="'DD.MM.YYYY HH.mm'"></date-picker>
+                                <label for="end" class="mb-0 ml-5 mr-2 font-size-16">{{ $t('calendarEvent.end') }}</label>
+                                <date-picker required
+                                             class="form-control form-control-disabled font-size-16"
+                                             v-model="slotData.end"
+                                             type="time"
+                                             :minute-step="15"
+                                             :show-second="false"
+                                             :lang="'en'"
+                                             :format="'DD.MM.YYYY HH.mm'"></date-picker>
+                            </div>
+                        </div>
+                    </div>
+                 </form>
+            </b-modal>
         </iq-card>
     </b-container>
 </template>
@@ -37,8 +107,10 @@ import dayGridPlugin from '@fullcalendar/daygrid'
 import timeGridPlugin from '@fullcalendar/timegrid'
 import interactionPlugin from '@fullcalendar/interaction'
 import listPlugin from '@fullcalendar/list'
-import { getFreeSlots } from '@/services/appointmentSlotsService'
+import { getFreeSlots, createFreeSlots } from '@/services/appointmentSlotsService'
 import { getDoctorList } from '@/services/calendarService'
+import { getLocationsList } from '@/services/commonCodeLists'
+import DatePicker from 'vue2-datepicker'
 import moment from 'moment'
 export default {
   name: 'FullCalendar',
@@ -70,15 +142,25 @@ export default {
           center: 'title',
           right: 'dayGridMonth,timeGridWeek,timeGridDay'
         }
+      },
+      openFreeSlotsModal: false,
+      locations: [],
+      slotData: {
+        location: '',
+        doctor: '',
+        start: '',
+        end: ''
       }
     }
   },
   components: {
-    VueFullCalendar // make the <VueFullCalendar> tag available
+    VueFullCalendar, // make the <VueFullCalendar> tag available
+    DatePicker
   },
   mounted () {
     this.getFreeSlotsList()
     this.getDoctors()
+    this.getLocations()
   },
   computed: {
     getSlots () {
@@ -139,6 +221,11 @@ export default {
         })
       })
     },
+    getLocations () {
+      getLocationsList().then(response => {
+        this.locations = response
+      })
+    },
     allDoctorsFunc () {
       this.check = []
       this.doctors.map(doctor => {
@@ -172,6 +259,18 @@ export default {
           this.selectDoctor = {}
         })
       }
+    },
+    createFreeSlots () {
+      this.openFreeSlotsModal = true
+    },
+    getDoctorLabel (doctor) {
+      return (doctor && doctor.name)
+    },
+    addFreeSlots () {
+      createFreeSlots(this.slotData).then(() => {
+        this.openFreeSlotsModal = false
+        this.getFreeSlotsList()
+      })
     }
   },
   watch: {
