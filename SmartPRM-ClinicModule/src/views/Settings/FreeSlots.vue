@@ -30,6 +30,7 @@
                              :maxTime="calendarOptions.maxTime"
                              :slotDuration="calendarOptions.slotDuration"
                              @dateClick="createFreeSlots"
+                             @eventClick="createAppointmentSlot"
                              :key="reFetchSlots" />
             <!--Add Free Slots Modal-->
             <b-modal v-model="openFreeSlotsModal"
@@ -39,7 +40,7 @@
                      title="Slots Details"
                      ok-title="Confirm"
                      @ok="addFreeSlots"
-                     @close="openFreeSlotsModal = false"
+                     @close="openFreeSlotsModal = false, slotData = defaultSlotData"
                      cancel-title="Close">
                 <form class="calendar-modal">
                     <div class="form-row">
@@ -98,6 +99,74 @@
                     </div>
                  </form>
             </b-modal>
+            <!--Open appointment modal on clicked event-->
+            <b-modal v-model="openAppointmentModal"
+                     no-close-on-esc
+                     no-close-on-backdrop
+                     size="lg"
+                     title="Set appointment"
+                     ok-title="Confirm"
+                     @ok="addAppointment"
+                     @close="openAppointmentModal = false"
+                     cancel-title="Close">
+                <form class="calendar-modal">
+                    <div class="form-row">
+                        <div class="row align-items-center justify-content-between w-100 mb-3">
+                            <div class="col-md-3">
+                                <label for="patient" class="ml-0 mb-0 font-size-16">{{ $t('calendarEvent.patient') }}</label>
+                            </div>
+                            <div class="col-md-9">
+                                <v-select :clearable="false"
+                                          label="patient"
+                                          :reduce="patient => patient.id"
+                                          class="style-chooser form-control-disabled font-size-16"
+                                          v-model="appointmentData.patient"
+                                          :options="patients"
+                                          :getOptionLabel="getPatientLabel"
+                                          style="min-width:305px;"></v-select>
+                            </div>
+                        </div>
+                        <div class="row align-items-center justify-content-between w-100">
+                            <div class="col-md-3">
+                                <label for="notes" class="ml-0 mb-0 font-size-16">{{ $t('calendarEvent.note') }}</label>
+                            </div>
+                            <div class="col-md-9">
+                                <textarea row="2" v-model="appointmentData.note" class="form-control form-control-disabled font-size-16" placeholder="Add your note here for event!" id="note" required></textarea>
+                            </div>
+                        </div>
+                        <div class="row align-items-center justify-content-between w-100 mb-3 mt-3">
+                            <div class="col-md-3">
+                                <label for="doctor" class="mr-2 mb-0 font-size-16">{{ $t('calendarEvent.doctor') }}</label>
+                            </div>
+                            <div class="col-md-9">
+                                <v-select :clearable="false"
+                                          label="doctor"
+                                          :reduce="doctor => doctor.name"
+                                          class="style-chooser form-control-disabled font-size-16"
+                                          v-model="appointmentData.doctor"
+                                          :options="doctors"
+                                          :getOptionLabel="getDoctorLabel"
+                                          style="min-width: 305px;"></v-select>
+                            </div>
+                        </div>
+                        <div class="row align-items-center justify-content-between w-100 mb-3">
+                            <div class="col-md-3">
+                                <label for="product_group" class="mr-2 mb-0 font-size-16">{{ $t('calendarEvent.product_group') }}</label>
+                            </div>
+                            <div class="col-md-9">
+                                <v-select :clearable="false"
+                                          label="product_group_name"
+                                          :reduce="product_group => product_group.product_group_id"
+                                          class="style-chooser form-control-disabled font-size-16"
+                                          v-model="appointmentData.productGroup"
+                                          :options="productGroups"
+                                          :getOptionLabel="getProductGroupLabel"
+                                          style="min-width: 305px;"></v-select>
+                            </div>
+                        </div>
+                    </div>
+                 </form>
+            </b-modal>
         </iq-card>
     </b-container>
 </template>
@@ -110,6 +179,8 @@ import listPlugin from '@fullcalendar/list'
 import { getFreeSlots, createFreeSlots } from '@/services/appointmentSlotsService'
 import { getDoctorList } from '@/services/calendarService'
 import { getLocationsList } from '@/services/commonCodeLists'
+import { getPatients } from '@/services/enquiry'
+import { getProductGroups } from '@/services/products'
 import DatePicker from 'vue2-datepicker'
 import moment from 'moment'
 export default {
@@ -144,10 +215,22 @@ export default {
         }
       },
       openFreeSlotsModal: false,
+      openAppointmentModal: false,
       locations: [],
+      patients: [],
+      productGroups: [],
       slotData: {
         location: '',
         doctor: '',
+        start: '',
+        end: ''
+      },
+      appointmentData: {
+        patient: '',
+        note: '',
+        location: '',
+        doctor: '',
+        productGroup: '',
         start: '',
         end: ''
       }
@@ -161,6 +244,8 @@ export default {
     this.getFreeSlotsList()
     this.getDoctors()
     this.getLocations()
+    this.getPatientsList()
+    this.getProductGroupsList(this.$i18n.locale)
   },
   computed: {
     getSlots () {
@@ -170,7 +255,7 @@ export default {
       let slots = []
       this.slots.map(event => {
         return this.check.map(checked => {
-          if (event.doctorId === checked.title) {
+          if (event.title === checked.name) {
             slots.push(event)
           }
         })
@@ -226,6 +311,16 @@ export default {
         this.locations = response
       })
     },
+    getPatientsList () {
+      getPatients().then(response => {
+        this.patients = response
+      })
+    },
+    getProductGroupsList (lang) {
+      getProductGroups(lang).then(response => {
+        this.productGroups = response
+      })
+    },
     allDoctorsFunc () {
       this.check = []
       this.doctors.map(doctor => {
@@ -263,18 +358,39 @@ export default {
     createFreeSlots () {
       this.openFreeSlotsModal = true
     },
+    createAppointmentSlot () {
+      this.openAppointmentModal = true
+    },
     getDoctorLabel (doctor) {
       return (doctor && doctor.name)
+    },
+    getPatientLabel (patient) {
+      return (patient && patient.full_name)
+    },
+    getProductGroupLabel (productGroup) {
+      return (productGroup && productGroup.product_group_name)
     },
     addFreeSlots () {
       createFreeSlots(this.slotData).then(() => {
         this.openFreeSlotsModal = false
+        this.slotData = this.defaultSlotData()
         this.getFreeSlotsList()
       })
+    },
+    defaultSlotData () {
+      return {
+        location: '',
+        doctor: '',
+        start: '',
+        end: ''
+      }
     }
   },
   watch: {
     'allDoctorsCheck' () {
+    },
+    '$i18n.locale' () {
+      this.getProductGroupsList(this.$i18n.locale)
     }
   }
 }

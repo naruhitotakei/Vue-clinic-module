@@ -283,7 +283,7 @@ app.delete('/api/calendar/label/:id', (req, res) => {
 
 app.get('/api/calendar/free-slots', (req, res) => {
     if (req.session.prm_user && req.session.prm_user.permissions && checkPermission(req.session.prm_user.permissions, appointmentSlotsPermission))
-        daoAppointmentSlots.getAppointmentSlots(req, res)
+        daoAppointmentSlots.getFreeSlots(req, res)
     else
         res.status(401).json("OK: user unauthorized")
 });
@@ -291,7 +291,7 @@ app.get('/api/calendar/free-slots', (req, res) => {
 app.post('/api/calendar/create-free-slots', (req, res) => {
     const slot = req.body
     if (req.session.prm_user && req.session.prm_user.permissions && checkPermission(req.session.prm_user.permissions, appointmentSlotsPermission))
-        daoAppointmentSlots.createAppointmentSlots(req, res, slot)
+        daoAppointmentSlots.createFreeSlots(req, res, slot)
     else
         res.status(401).json("OK: user unauthorized")
 });
