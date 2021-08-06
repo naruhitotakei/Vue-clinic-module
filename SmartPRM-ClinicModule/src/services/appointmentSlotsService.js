@@ -21,3 +21,15 @@ export async function createFreeSlots (slot) {
   })
   return rawResponse.json()
 }
+
+export async function deleteFreeSlot (id) {
+  const rawResponse = await fetch(`/api/calendar/delete-free-slot/${id}`, {
+    method: 'DELETE',
+    credentials: 'same-origin',
+    headers: {
+      'Accept': 'application/json',
+      'Content-Type': 'application/json'
+    }
+  })
+  return rawResponse.json()
+}

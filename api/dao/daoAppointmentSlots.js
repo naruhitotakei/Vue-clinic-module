@@ -41,9 +41,18 @@ const createFreeSlots = (request, response, slot) => {
  })
 }
 
+const deleteFreeSlot = (request, response, id) => {
+    pool.query("DELETE FROM appointment_slots WHERE id = $1", [id], (error, results) => {
+      if (error) {
+        throw error
+      }
+      response.status(200).json("OK")
+    })
+}
 
 
 module.exports = {
     getFreeSlots,
-    createFreeSlots
+    createFreeSlots,
+    deleteFreeSlot
 }

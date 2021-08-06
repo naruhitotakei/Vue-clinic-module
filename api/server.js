@@ -296,6 +296,14 @@ app.post('/api/calendar/create-free-slots', (req, res) => {
         res.status(401).json("OK: user unauthorized")
 });
 
+app.delete('/api/calendar/delete-free-slot/:id', (req, res) => {
+    const id = req.params.id
+    if (req.session.prm_user && req.session.prm_user.permissions && checkPermission(req.session.prm_user.permissions, appointmentSlotsPermission))
+        daoAppointmentSlots.deleteFreeSlot(req, res, id)
+    else
+        res.status(401).json("OK: user unauthorized")
+});
+
 ///////////////////////////////////
 // products
 ///////////////////////////////////
