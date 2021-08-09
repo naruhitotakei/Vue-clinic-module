@@ -109,7 +109,7 @@
                      size="lg"
                      title="Slots Details"
                      ok-title="Delete"
-                     @ok="deleteSlot"
+                     @ok="deleteSlot(slot)"
                      @close="viewFreeSlotModal = false"
                      cancel-title="Close">
                 <form class="calendar-modal">
@@ -220,6 +220,7 @@ export default {
       openFreeSlotsModal: false,
       viewFreeSlotModal: false,
       locations: [],
+      slot: {},
       slotData: {
         id: '',
         location: '',
@@ -350,7 +351,7 @@ export default {
     deleteSlot (slot) {
       let index = this.slots.indexOf(slot)
       this.slots.splice(index, 1)
-      deleteFreeSlot(slot.id)
+      deleteFreeSlot(this.slotData.id)
       this.viewFreeSlotModal = false
       this.getFreeSlotsList()
     }
