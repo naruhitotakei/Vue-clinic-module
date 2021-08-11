@@ -28,8 +28,11 @@
                              :minTime="calendarOptions.minTime"
                              :maxTime="calendarOptions.maxTime"
                              :slotDuration="calendarOptions.slotDuration"
+                             editable="true"
                              @dateClick="createFreeSlots"
                              @eventClick="showFreeSlot"
+                             @eventDrop="eventDrop"
+                             @eventResize="eventResize"
                              :key="reFetchSlots" />
             <!--Add Free Slots Modal-->
             <b-modal v-model="openFreeSlotsModal"
@@ -228,6 +231,7 @@ export default {
         start: '',
         end: ''
       },
+      editable: true,
       disabled: false,
       calendarApi: null
     }
@@ -354,6 +358,15 @@ export default {
       deleteFreeSlot(this.slotData.id)
       this.viewFreeSlotModal = false
       this.getFreeSlotsList()
+    },
+    eventDrop (event) {
+      console.log('event drop test:' + event)
+    },
+    eventResize (event) {
+      console.log('event resize test:' + event)
+    },
+    eventDragStart (event) {
+      console.log('event dragging begins:' + event)
     }
   },
   watch: {

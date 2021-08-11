@@ -10,7 +10,7 @@ const pool = new Pool({
 let moment = require('moment');
 
 const getFreeSlots = (request, response) => {
-    let statement = "SELECT * FROM appointment_slots "
+    let statement = "SELECT * FROM appointment_slots WHERE prm_client_id = 1"
     /* statement += "WHERE '[:from, :to]':: daterange @> starts_at:: date "
     statement = statement.replace(":from", from).replace(":to", to) */
     pool.query(statement, (error, results) => {
@@ -21,18 +21,19 @@ const getFreeSlots = (request, response) => {
     })
 }
 
-const createFreeSlots = (request, response, slot) => {
+const createFreeSlots = (request, response, slot, prm_client_id) => {
     let time = moment(slot.start).format('YYYY-MM-DDTHH:mm')
     let statement = "INSERT INTO appointment_slots ("
     if(slot.location) statement += "location,"
     statement += "doctor_name,"
     if(slot.start) statement += "starts_at,"
-    statement += "created_at) VALUES ("
+    statement += "created_at, prm_client_id) VALUES ("
     if(slot.location) statement += "'" + slot.location + "',"
     if (slot.doctor) statement += "'" + slot.doctor + "',"
     else statement += "'Vsi zdravniki',"
     if(slot.start) statement += "'" + time + "',"
-    statement += "NOW() )"
+    statement += "NOW(), " + prm_client_id + ")"
+    console.log("Creating free slot: " + statement)
     pool.query(statement, (error, results) => {
     if (error) {
         throw error

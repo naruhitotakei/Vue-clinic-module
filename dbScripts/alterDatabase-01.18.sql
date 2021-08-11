@@ -191,10 +191,13 @@ INSERT INTO appointments_label_name (appointment_label_id, language, text) VALUE
 
 --############################################################
 --# Adding prm_client_id column to appointment_slots table
+--# and assigning proper prm_client_id to the slots
 --############################################################
 
 ALTER TABLE appointment_slots ADD COLUMN prm_client_id INT
 CONSTRAINT appointment_slots_prm_client_fk REFERENCES prm_client (id);
+
+UPDATE TABLE appointment_slots SET prm_client_id = 1 WHERE client_id IN (10, 23);
 
 --############################################################
 --# update version
