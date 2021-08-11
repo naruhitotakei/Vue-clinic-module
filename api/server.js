@@ -283,7 +283,7 @@ app.delete('/api/calendar/label/:id', (req, res) => {
 
 app.get('/api/calendar/free-slots', (req, res) => {
     if (req.session.prm_user && req.session.prm_user.permissions && checkPermission(req.session.prm_user.permissions, appointmentSlotsPermission))
-        daoAppointmentSlots.getFreeSlots(req, res)
+        daoAppointmentSlots.getFreeSlots(req, res, req.session.prm_user.prm_client_id)
     else
         res.status(401).json("OK: user unauthorized")
 });
