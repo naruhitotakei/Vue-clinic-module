@@ -58,9 +58,7 @@ const getApontments = (request, response, from, to, user_id, accessible_user_ids
     statement += "AND '[:from, :to]'::daterange @> app.date "
         
     statement = statement.replace(":from",from).replace(":to",to)
-    console.log(statement)
     pool.query(statement , (error, results) => {
-        console.log(error)
         if (error) {
             throw error
         }
@@ -69,7 +67,6 @@ const getApontments = (request, response, from, to, user_id, accessible_user_ids
 }
 
 const updateAppointments = (request, response, id, appointments) => {
-    console.log(appointments)
     let patient_attended = appointments.patient_attended === 'attended' ? true : appointments.patient_attended === 'not_attended' ? false : null;
     let time = moment(appointments.assignmentDate).format('HH:mm');
     let statement = "UPDATE appointments SET "
@@ -89,9 +86,7 @@ const updateAppointments = (request, response, id, appointments) => {
     if (appointments.end) statement += "end_time='" + appointments.end + "',"
     if (appointments.time) statement += "time='" + time + "'"
     statement += " WHERE id = " + id
-    console.log(statement)
     pool.query(statement , (error, results) => {
-        console.log(error)
         if (error) {
             throw error
         }
@@ -128,14 +123,11 @@ const createAppointment = (request, response, appointments) => {
     statement += "'"+ time +"',"
     statement += "NOW(),"
     statement += "'Posvet')"
-    console.log(statement)
     pool.query(statement , (error, results) => {
-        console.log(error)
         if (error) {
             throw error
         }
         pool.query("SELECT * FROM appointments WHERE id=(SELECT max(id) FROM appointments)" , (err, res) => {
-            console.log(err)
             response.status(200).json(res.rows)
         })
     })
@@ -145,15 +137,12 @@ const getLabels = (request, response, lang) => {
     let statement = `SELECT appointments_label.*, app_lb_name.language, app_lb_name.text  FROM appointments_label 
     LEFT JOIN appointments_label_name as app_lb_name ON appointments_label.id = app_lb_name.appointment_label_id 
     WHERE app_lb_name.language = '${lang}'`
-    console.log(statement)
     pool.query(statement , (err, res) => {
-        console.log(err)
         response.status(200).json(res.rows)
     })
 }
 
 const createAppointmentsLabel = (request, response, label) => {
-    console.log(label)
     let statement = "INSERT INTO appointments_label ("
     if (label.color) statement += "color,"
     if (label.type) statement += "type"
@@ -161,15 +150,12 @@ const createAppointmentsLabel = (request, response, label) => {
     if (label.color) statement += "'" + label.color.hex + "',"
     if (label.type) statement += "'" + label.type + "')"
     statement+= " RETURNING id"
-
-    console.log(statement)
+    
     pool.query(statement , (error, results) => {
-        console.log(error)
         if (error) {
             throw error
         }
         let label_id = results.rows[0].id;
-        console.log('label_id', label_id)
         createAppointmentsLabelName(label_id, label.lang, label.text)
         response.status(200).json(results)
     })
@@ -177,9 +163,7 @@ const createAppointmentsLabel = (request, response, label) => {
 
 const createAppointmentsLabelName = (label_id, lang, text) => {
     let statement = `INSERT INTO appointments_label_name (appointment_label_id, language, text) VALUES (${label_id}, '${lang}', '${text}')`
-    console.log(statement)
     pool.query(statement , (error, results) => {
-        console.log(error)
         if (error) {
             throw error
         }
@@ -191,10 +175,8 @@ const updateAppointmentsLabelName = (label_id, lang, text) => {
     if (lang) statement += "language='" + lang + "',"
     if (text) statement += "text='" + text + "'"
     statement += " WHERE appointment_label_id = " + label_id + " AND language = " + `'${lang}'`
-
-    console.log(statement)
+    
     pool.query(statement , (error, results) => {
-        console.log(error)
         if (error) {
             throw error
         }
@@ -207,10 +189,8 @@ const updateAppointmentsLabel = (request, response, id, appointmentsLabel) => {
     if (appointmentsLabel.color) statement += "color='" + appointmentsLabel.color.hex + "',"
     if (appointmentsLabel.type) statement += "type='" + appointmentsLabel.type + "'"
     statement += " WHERE id = " + appointmentsLabel.id
-
-    console.log(statement)
+    
     pool.query(statement , (error, results) => {
-        console.log(error)
         if (error) {
             throw error
         }
@@ -220,19 +200,14 @@ const updateAppointmentsLabel = (request, response, id, appointmentsLabel) => {
 }
 
 const deleteAppointmentsLabel = (request, response, id) => {
-    console.log('del id', id)
     let statement = `DELETE FROM appointments_label WHERE id = ${id}`
     let statement_name =  `DELETE FROM appointments_label_name WHERE appointment_label_id = ${id}`
-
-    console.log(statement)
+    
     pool.query(statement_name, (error, results) => {
-        console.log(error)
         if (error) {
             throw error
         }
-        console.log(statement_name)
         pool.query(statement, (error, results) => {
-            console.log(error)
             if (error) {
                 throw error
             }
@@ -258,7 +233,6 @@ const getDoctors = (request, response, user_id, accessible_user_ids, prm_client_
        }
     }         
     pool.query(statement , (error, results) => {
-        console.log(error)
         if (error) {
             throw error
         }

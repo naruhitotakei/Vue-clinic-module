@@ -98,7 +98,6 @@ const createPremise = (req, res, premise) => {
     if (premise.business_premise_id) premiseStatement += "'" + premise.business_premise_id + "',"
     if (premise.validity_date) premiseStatement += "'" + premise.validity_date + "',"
     premiseStatement +="NOW())"
-    console.log(premiseStatement)
 
     pool.query(premiseStatement , (error, results) => {
         if (error) {
@@ -114,7 +113,6 @@ const checkBusinessIdUniquness = (request, response, data) => {
         if (error) {
             throw error
         }
-        console.log(statement)
         response.status(200).json(results.rows)
     })
 }
@@ -137,7 +135,6 @@ const updatePremise = (req, res, id, premise) => {
     if (premise.validity_date) premiseStatement += "validity_date='" + premise.validity_date + "',"
     premiseStatement = premiseStatement.slice(0, -1)
     premiseStatement +=" WHERE premise_id=" + id
-    console.log(premiseStatement)
 
     pool.query(premiseStatement , (error, results) => {
         if (error) {
@@ -149,7 +146,6 @@ const updatePremise = (req, res, id, premise) => {
 
 const deletePremise = (req, res, id) => {
     var premiseStatement = "UPDATE prm_company_premise SET premise_deleted = true WHERE premise_id=" + id
-    console.log(premiseStatement)
 
     pool.query(premiseStatement , (error, results) => {
         if (error) {
@@ -169,7 +165,6 @@ const createPremiseDevice = (req, res, premiseDevice) => {
     if (premiseDevice.device_name) premiseDeviceStatement += "'" + premiseDevice.device_name + "',"
     if (premiseDevice.company_premise_id) premiseDeviceStatement += "'" + premiseDevice.company_premise_id + "',"
     premiseDeviceStatement +="NOW())"
-    console.log(premiseDeviceStatement)
 
     pool.query(premiseDeviceStatement , (error, results) => {
         if (error) {
@@ -185,7 +180,6 @@ const updatePremiseDevice = (req, res, id, premiseDevice) => {
     if (premiseDevice.company_premise_id) premiseDeviceStatement += "company_premise_id='" + premiseDevice.company_premise_id + "',"
     premiseDeviceStatement = premiseDeviceStatement.slice(0, -1)
     premiseDeviceStatement +=" WHERE device_id='" + id + "'"
-    console.log(premiseDeviceStatement)
 
     pool.query(premiseDeviceStatement , (error, results) => {
         if (error) {
@@ -197,7 +191,6 @@ const updatePremiseDevice = (req, res, id, premiseDevice) => {
 
 const deletePremiseDevice = (req, res, id) => {
     var premiseStatement = "UPDATE prm_company_premise_device SET device_deleted = true, deleted_at = NOW() WHERE premise_id=" + id
-    console.log(premiseStatement)
 
     pool.query(premiseStatement , (error, results) => {
         if (error) {
@@ -213,7 +206,6 @@ const checkElectronicDeviceIdUniquness = (request, response, data) => {
         if (error) {
             throw error
         }
-        console.log(statement)
         response.status(200).json(results.rows)
     })
 }

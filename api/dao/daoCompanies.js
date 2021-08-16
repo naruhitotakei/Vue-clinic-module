@@ -66,7 +66,6 @@ const createCompany = (req, res, company) => {
     if (company.prm_client_id) companyStatement += "'" + company.prm_client_id + "',"
     if (company.vat_payer) companyStatement += "'" + company.vat_payer + "',"
     companyStatement +="NOW())"
-    console.log(companyStatement)
 
     pool.query(companyStatement , (error, results) => {
         if (error) {
@@ -97,7 +96,6 @@ const updateCompany = (req, res, id, company) => {
     if (company.vat_payer) companyStatement += "vat_payer='" + company.vat_payer + "',"
     companyStatement = companyStatement.slice(0, -1)
     companyStatement +=" WHERE company_id=" + id
-    console.log(companyStatement)
 
     pool.query(companyStatement , (error, results) => {
         if (error) {
@@ -109,7 +107,6 @@ const updateCompany = (req, res, id, company) => {
 
 const deleteCompany = (req, res, id) => {
     var companyStatement = "UPDATE prm_company SET company_deleted = true WHERE company_id=" + id
-    console.log(companyStatement)
 
     pool.query(companyStatement , (error, results) => {
         if (error) {

@@ -33,9 +33,7 @@ const getEnquiries = (request, response, user_id, accessible_user_ids, prm_clien
         statement += ") ";    
     }
     statement += "ORDER BY last_name ASC"
-    console.log('statement>>>>>>>', statement)
     pool.query(statement, (error, results) => {
-        console.log(error)
         if (error) {
             throw error
         }
@@ -86,7 +84,6 @@ const createEnquiry = (req, res, enquiry) => {
     statement += "NOW(),NOW()," 
     statement += "false,false"    
     statement +=")"
-    console.log(statement)
     pool.query(statement , (error, results) => {
         if (error) {
             throw error
@@ -136,9 +133,7 @@ const updateEnquiry = (req, res, id, enquiry) => {
         if (statement.length !== initialUpdateStatement.length) {
             statement = statement.slice(0, -1)
             statement += " WHERE id=" + id
-            console.log("Updating patient = " + statement)
             pool.query(statement , (error, results) => {
-                console.log(error)
                 if (error) {
                     throw error
                 }
@@ -192,7 +187,6 @@ const getEnquiryPastAppointments = (request, response, enquiryId, locale) => {
       "LEFT JOIN prm_product_group ON appointments.product_group_id = prm_product_group.product_group_id  " +
       "LEFT JOIN prm_product_group_name ON prm_product_group_name.product_group_id = prm_product_group.product_group_id  " +
       "WHERE enquiry_id = $1 AND prm_product_group_name.language = '" + locale + "' AND date < now():: date ORDER BY date ASC" , [enquiryId] , (error, results) => {
-        console.log(error)
         if (error) {
             throw error
         }
@@ -206,7 +200,6 @@ const getEnquiryFutureAppointments = (request, response, enquiryId, locale) => {
         "LEFT JOIN prm_product_group ON appointments.product_group_id = prm_product_group.product_group_id  " +
         "LEFT JOIN prm_product_group_name ON prm_product_group_name.product_group_id = prm_product_group.product_group_id  " +
         "WHERE enquiry_id = $1 AND prm_product_group_name.language = '" + locale + "' AND date >= now():: date ORDER BY date ASC", [enquiryId], (error, results) => {
-            console.log(error)
             if (error) {
                 throw error
             }
@@ -221,7 +214,6 @@ const getEnquiryAssignments = (request, response, enquiryId) => {
                      "WHERE completed = FALSE and enquiries.id = $1",
                      "ORDER BY due_at ASC"].join('\n')
     pool.query(statement, [enquiryId], (error, results) => {
-        console.log(error)
         if (error) {
             throw error
         }
@@ -232,8 +224,6 @@ const getEnquiryAssignments = (request, response, enquiryId) => {
 const getEnquiryInvoices = (request, response, enquiryId, sortBy) => {
     let statement = `SELECT * FROM invoice WHERE enquiries_id = ${enquiryId} ORDER BY invoice_type ${sortBy}`
     pool.query(statement, (error, results) => {
-        console.log(statement)
-        console.log(error)
         if (error) {
             throw error
         }
@@ -261,7 +251,6 @@ const getEnquiryServices = (request, response, enquiryId) => {
 
 const getPatients = (request, response) => {
     pool.query("SELECT enquiries.*, CONCAT_WS(' ', enquiries.name, enquiries.last_name) AS full_name FROM enquiries JOIN clients ON enquiries.client_id = clients.id WHERE enquiries.trashed IS FALSE AND clients.slug = 'primadent_si'", (error, results) => {
-        console.log(error)
         if (error) {
             throw error
         }

@@ -13,7 +13,6 @@ const getFreeSlots = (request, response, prm_client_id) => {
     let statement = "SELECT * FROM appointment_slots WHERE prm_client_id = " + prm_client_id
     /* statement += "WHERE '[:from, :to]':: daterange @> starts_at:: date "
     statement = statement.replace(":from", from).replace(":to", to) */
-    console.log("Fetching free slots:" + statement)
     pool.query(statement, (error, results) => {
         if (error) {
             throw error

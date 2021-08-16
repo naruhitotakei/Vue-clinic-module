@@ -67,14 +67,12 @@ const createProduct = (req, res, products) => {
     productStatement += "" + products.tax_rate + "," + calculateTaxAmount(products.product_price, products.tax_rate) + ","
     productStatement += "NOW()" 
     productStatement +=") RETURNING product_id"
-    console.log(productStatement)
 
     pool.query(productStatement , (error, results) => {
         if (error) {
             throw error
         } 
         var productId = results.rows[0].product_id;
-      console.log('productId', productId)
         
         if (products.slovenian) createNameStatement('prm_product_name', 'product_id', productId, 'sl', products.slovenian)
         if (products.english) createNameStatement('prm_product_name', 'product_id', productId, 'en', products.english)
@@ -87,7 +85,6 @@ const createProduct = (req, res, products) => {
 
 createNameStatement = (table, idName, id, language, text) => {
     let statement = "INSERT INTO " + table + " (" + idName + ",language, text, created_date) VALUES (" + id + ",'" + language + "','" + text + "',NOW())"
-    console.log(statement)
     pool.query(statement, (error, results) => {
         if (error) {
             throw error
@@ -97,7 +94,6 @@ createNameStatement = (table, idName, id, language, text) => {
 
 updateNameStatement = (table, idName, id, language, text) => {
     let statement = "UPDATE " + table + " SET text='" + text + "' WHERE " + idName + "=" + id + "AND language ='" + language + "'"
-    console.log(statement)
     pool.query(statement, (error, results) => {
         if (error) {
             throw error
@@ -113,7 +109,6 @@ const updateProduct = (req, res, id, product) => {
         statement += "vat_tax_rate="+ product.tax_rate + ",tax_amount=" + calculateTaxAmount(product.product_price, product.tax_rate) + ","
         statement = statement.slice(0, -1)
         statement +=" WHERE product_id=" + id
-        console.log(statement)
         if (product.slovenian) updateNameStatement('prm_product_name', 'product_id', id, 'sl', product.slovenian)
         if (product.english) updateNameStatement('prm_product_name', 'product_id', id, 'en', product.english)
         if (product.italian) updateNameStatement('prm_product_name', 'product_id', id, 'it', product.italian)
@@ -159,7 +154,6 @@ const createProductGroup = (req, res, productGroup) => {
     if (productGroup.category_id) statement += "'" + productGroup.category_id + "',"
     if (productGroup.fee) statement += "'" + productGroup.fee + "',"
     statement += "NOW()) RETURNING product_group_id" 
-    console.log(statement)
     pool.query(statement , (error, results) => {
         if (error) {
             throw error
@@ -181,7 +175,6 @@ const updateProductGroup = (req, res, id, productGroup) => {
     if (productGroup.fee) statement += "fee='" + productGroup.fee + "',"
     statement = statement.slice(0, -1)
     statement +=" WHERE product_group_id=" + id
-    console.log(statement)
     if (product.slovenian) updateNameStatement('prm_product_group_name', 'product_group_id', id, 'sl', product.slovenian)
     if (product.english) updateNameStatement('prm_product_group_name', 'product_group_id', id, 'en', product.english)
     if (product.italian) updateNameStatement('prm_product_group_name', 'product_group_id', id, 'it', product.italian)
@@ -210,7 +203,6 @@ const createProductCategory = (req, res, productCategory) => {
     statement += ") VALUES ("
     statement += "false," 
     statement += "NOW()) RETURNING category_id" 
-    console.log(statement)
     pool.query(statement , (error, results) => {
         if (error) {
             throw error
@@ -232,7 +224,6 @@ const updateProductCategory = (req, res, id, productCategory) => {
         statement +=  "' updated_at= NOW()"
     }
     statement +=" WHERE category_id=" + id
-    console.log(statement)
     pool.query(statement , (error, results) => {
         if (error) {
             throw error

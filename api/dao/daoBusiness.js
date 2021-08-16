@@ -45,9 +45,7 @@ const createBusiness = (req, res, business) => {
   if (business.city) businessStatement += "'" + business.city + "',"
   if (business.country_code) businessStatement += "'" + business.country_code.id  + "'"
   businessStatement += ")";
-  console.log(businessStatement)
   pool.query(businessStatement , (error, results) => {
-    console.log(error)
     if (error) {
       throw error
     }
@@ -56,8 +54,6 @@ const createBusiness = (req, res, business) => {
 }
 
 const updateBusiness = (req, res, id, business) => {
-  console.log(id)
-  console.log(business)
   var businessStatement = "UPDATE business_customer SET "
   if (business.name) businessStatement += "name='" + business.name + "',"
   if (business.email) businessStatement += "email='" + business.email + "',"
@@ -66,9 +62,7 @@ const updateBusiness = (req, res, id, business) => {
   if (business.country_code) businessStatement += "country_id='" + business.country_code.id  + "',"
   if (business.zip_code) businessStatement += "post_code='" + business.zip_code + "'"
   businessStatement +=" WHERE business_customer.id=" + id
-  console.log(businessStatement)
   pool.query(businessStatement , (error, results) => {
-    console.log(error)
     if (error) {
       throw error
     }

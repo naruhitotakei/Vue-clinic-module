@@ -38,7 +38,6 @@ const getAssignments = (request, response, scope, userid, accessible_user_ids, p
                          condition,
                          "ORDER BY todos.due_at ASC"].join('\n') 
         pool.query(statement, (error, results) => {
-          console.log(error)
             if (error) {
                 throw error
             }
@@ -73,7 +72,6 @@ const getAssignments = (request, response, scope, userid, accessible_user_ids, p
                          "AND users.id=" + userid,
                          "ORDER BY todos.due_at ASC"].join('\n') 
         pool.query(statement, [userid], (error, results) => {
-          console.log(error)
             if (error) {
                 throw error
             }
@@ -98,7 +96,6 @@ const getAssignments = (request, response, scope, userid, accessible_user_ids, p
                          condition,
                          conditionScope,
                          "ORDER BY todos.due_at ASC"].join('\n') 
-        console.log(statement)
         pool.query(statement, (error, results) => {
             if (error) {
                 throw error
@@ -129,9 +126,7 @@ const createAssignment = (req, res, assignment) => {
   if (assignment.user_id && assignment.user) assignmentStatement += "'" + assignment.user_id + "',"
   if (assignment.user) assignmentStatement += "'" + assignment.user.code + "'"
   assignmentStatement += ")";
-  console.log(assignmentStatement)
   pool.query(assignmentStatement , (error, results) => {
-    console.log(error)
     if (error) {
       throw error
     }
@@ -146,10 +141,8 @@ const updateAssignment = (req, res, id, assignment) => {
   if (assignment.due_at) assignmentStatement += "due_at='" + assignment.due_at + "',"
   if (assignment.user_id) assignmentStatement += "user_id='" + assignment.user_id + "'"
   assignmentStatement +=" WHERE todos.id=" + id
-  console.log(assignmentStatement)
 
   pool.query(assignmentStatement , (error, results) => {
-    console.log(error)
     if (error) {
       throw error
     }

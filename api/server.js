@@ -270,7 +270,6 @@ app.post('/api/calendar/label', (req, res) => {
 
 app.delete('/api/calendar/label/:id', (req, res) => {
   const id = req.params.id
-  console.log('label id', id)
   if(req.session.prm_user && req.session.prm_user.permissions && checkPermission(req.session.prm_user.permissions, productsPermission))
     daoCalendar.deleteAppointmentsLabel(req, res, id)
   else
@@ -812,7 +811,6 @@ app.delete('/api/companies/:id', (req, res) => {
 ///////////////////////////////////
 app.get('/api/invoice/premises/:premiseId', (req, res) => {
   const premiseId = req.params.premiseId
-  console.log('GET: api/invoice/premises called for ', premiseId)
   // todo which permission?
   // todo which company (cert, vat)
 
@@ -1069,7 +1067,6 @@ app.get('/api/files/', async function(req, res) {
 });
 app.post('/api/files/upload/:id', async function(req, res) {
   let id = req.params.id
-  console.log(req.files.file)
   if(req.session.prm_user) {
     const rv = await awsS3.fileUpload( id, id +'-picture-' + Date.now() , req.files.file.data, req.files.file.mimetype)
     res.status(200).json(rv)

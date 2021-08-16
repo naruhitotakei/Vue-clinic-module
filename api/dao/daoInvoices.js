@@ -116,7 +116,6 @@ const createInvoices = (request, response, invoice) => {
     statement = statement.slice(0, -1)
     statement += ") RETURNING invoice_id"
     
-    console.log(statement)
     pool.query(statement, (error, results) => {
         if (error) {
             throw error
@@ -190,8 +189,7 @@ const updateInvoices = (request, response, id, invoice) => {
     if (invoice.reference_code_furs) statement += "reference_code_furs='" + invoice.reference_code_furs + "',"
     statement = statement.slice(0, -1)
     statement += " WHERE invoice_id = " + id
-
-    console.log(statement)
+    
     pool.query(statement, (error, results) => {
         if (error) {
             throw error
@@ -223,7 +221,6 @@ const updateInvoices = (request, response, id, invoice) => {
 const createPaymentMethod = (invoiceId, paymentMethod, amount, paid) => {
     let statement = "INSERT INTO payment_item(invoice_id, amount, type, paid, created_at"
     statement+= ") VALUES (" + invoiceId + "," + amount + ",'" + paymentMethod + "'," + paid + ",NOW())"
-    console.log(statement)
     pool.query(statement, (error, results) => {
         if (error) {
             throw error
@@ -237,7 +234,6 @@ const updatePaymentMethod = (id, paymentMethod, amount, paid) => {
     if (amount) statement += "amount='" + amount + "',"
     statement = statement.slice(0, -1)
     statement += " WHERE id = " + id
-    console.log(statement)
     pool.query(statement, (error, results) => {
         if (error) {
             throw error
@@ -248,7 +244,6 @@ const updatePaymentMethod = (id, paymentMethod, amount, paid) => {
 const createInoviceItem = (item, id) => {
     let net_amount = item.item.tax_amount ? parseFloat(item.item.product_price) + parseFloat(item.item.tax_amount) : parseFloat(item.item.product_price)
     let statement = "INSERT INTO invoice_item(invoice_id, product_id, product_name, product_price, invoiced_quantity, discount, product_vat_tax_rate, product_tax_amount, net_amount, created_date) VALUES (" + id + "," + item.item.product_id + ",'" + item.item.product_name + "'," + item.item.product_price + "," + item.quantity + ","+ item.discount + "," + item.item.tax_rate + "," + item.item.tax_amount + "," + net_amount + ",NOW())"
-    console.log(statement)
     pool.query(statement, (error, results) => {
         if (error) {
             throw error
@@ -268,7 +263,6 @@ const updateInoviceItem = (item, id) => {
     if (item.item.tax_rate) statement += "product_vat_tax_rate='" + item.item.tax_rate + "',"
     if (item.item.tax_amount) statement += "product_tax_amount='" + item.item.tax_amount + "',"
     statement += "net_amount='" + net_amount + "' WHERE id = " + id
-    console.log(statement)
     pool.query(statement, (error, results) => {
         if (error) {
             throw error
@@ -316,7 +310,6 @@ const getInvoiceById = (request, response, id) => {
 
 const getItemsOfInvoiceById = (request, response, id) => {
     let statement = "SELECT * FROM invoice_item WHERE invoice_id = " + id
-    console.log(statement)
     pool.query(statement, (error, results) => {
         if (error) {
             throw error
@@ -327,7 +320,6 @@ const getItemsOfInvoiceById = (request, response, id) => {
 
 const getPaymentItemsOfInvoiceById = (request, response, id) => {
     let statement = "SELECT * FROM payment_item WHERE invoice_id = " + id
-    console.log(statement)
     pool.query(statement, (error, results) => {
         if (error) {
             throw error
@@ -347,7 +339,6 @@ const getConsecutiveInvoiceNumberForCompany = (request, response, id) => {
 
 const getSerialForInvoiceNumberBasedOnType = (request, response, data) => {
     let statement = "SELECT COUNT(invoice_number) FROM invoice WHERE invoice_type !='Offer' and invoice_number !='" + data.draft + "'"
-    console.log(statement)
     pool.query(statement, (error, results) => {
         if (error) {
             throw error
@@ -358,7 +349,6 @@ const getSerialForInvoiceNumberBasedOnType = (request, response, data) => {
 
 const getSerialForFursInvoiceNumberBasedOnType = (request, response, data) => {
     let statement = "SELECT COUNT(invoice_number_furs) FROM invoice WHERE invoice_type !='Offer' AND invoice_number_furs LIKE '" + data.business_premise_id + "%'"
-    console.log(statement)
     pool.query(statement, (error, results) => {
         if (error) {
             throw error

@@ -126,7 +126,6 @@ const changeLang = ((req, res, profile) => {
   if (profile.prm_locale) statement += "prm_locale='" + profile.prm_locale + "'"
   statement += " WHERE email='" + profile.email + "'"
   pool.query(statement, (error, results) => {
-      console.log(error)
     if (error) {
       throw error
     }
@@ -144,7 +143,6 @@ const editProfile = ((request, response, profile) => {
   statement += "title='" + profile.title + "',"
   statement = statement.slice(0, -1)
   statement += " WHERE email='" + profile.email + "'"
-  console.log('stat: ' + statement)
   pool.query(statement, (error, results) => {
     if (error) {
       throw error
@@ -201,7 +199,6 @@ const getRoles = (request, response) => {
 
 const updateUser = (req, res, id, user) => {
     let statement = "UPDATE users SET " + "title='" + user.title + "'," + "first_name='" + user.name + "'," + "surname='" + user.surname + "'," + "specialization='" + user.specialization + "'," + "position='" + user.position + "'," + "prm_role_id=" + user.role_id + "," + "email='" + user.mail + "'," + "phone_number='" + user.phone + "' WHERE id = " + id
-    console.log('stat: ' + statement)
     pool.query(statement, (error, results) => {
         if (error) {
             throw error
