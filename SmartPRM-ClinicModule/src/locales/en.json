@@ -102,7 +102,13 @@
   "calendar": {
     "selectDoctor": "Select Doctor",
     "selectAll": "Select All",
-    "addAppointment": "New Appointment"
+    "addAppointment": "New Appointment",
+    "appointmentDetails": "Appointment details",
+    "btnClose": "Close",
+    "btnEdit": "Edit Appointment",
+    "btnEPR": "View patient record",
+    "btnSave": "Save",
+    "btnCancel": "Cancel"
   },
   "calendarEvent": {
     "start": "Start",

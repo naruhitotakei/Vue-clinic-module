@@ -31,11 +31,11 @@
       no-close-on-esc
       no-close-on-backdrop
       size="lg"
-      title="Appointment Details"
-      ok-title="Save Changes"
+      :title="$t('calendar.appointmentDetails')"
+      :ok-title="$t('calendar.btnSave')"
       @ok="saveAppointment"
       @close="closeModal"
-      cancel-title="Close"
+      cancel-title="$t('calendar.btnCancel')"
       hide-footer
       >
     <form class="calendar-modal">
@@ -224,13 +224,13 @@
           </div>
        <div class="modal-footer modal-footer-bt" style="width: 100%;">
          <template v-if="disabled">
-           <button type="button" class="btn btn-secondary" @click="$emit('setModalShow', false), formData = defaultAppointment">Close</button>
-           <button type="button" class="btn btn-secondary" @click="editMode">Edit Appointment</button>
-           <button type="button" class="btn btn-primary" @click="viewPatient(formData.enquiry_id)">View Patient Record</button>
+           <button type="button" class="btn btn-secondary" @click="$emit('setModalShow', false), formData = defaultAppointment">{{ $t('calendar.btnClose') }}</button>
+           <button type="button" class="btn btn-secondary" @click="editMode">{{ $t('calendar.btnEdit') }}</button>
+           <button type="button" class="btn btn-primary" @click="viewPatient(formData.enquiry_id)">{{ $t('calendar.btnEPR') }}</button>
          </template>
          <template v-if="!disabled">
-           <button type="button" class="btn btn-secondary" @click="$emit('setModalShow', false), formData = defaultAppointment">Close</button>
-           <button type="button" class="btn btn-primary"   @click="saveAppointment">Save Changes</button>
+           <button type="button" class="btn btn-secondary" @click="$emit('setModalShow', false), formData = defaultAppointment">{{ $t('calendar.btnClose') }}</button>
+           <button type="button" class="btn btn-primary" @click="saveAppointment">{{ $t('calendar.btnSave') }}</button>
          </template>
        </div>
       </div>

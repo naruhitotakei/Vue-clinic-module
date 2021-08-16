@@ -102,7 +102,13 @@
   "calendar": {
     "selectDoctor": "Izberi zdravnika",
     "selectAll": "Izberi vse",
-    "addAppointment": "Nov termin"
+    "addAppointment": "Nov termin",
+    "appointmentDetails": "Podatki o terminu",
+    "btnClose": "Zapri",
+    "btnEdit": "Uredi termin",
+    "btnEPR": "Kartoteka pacienta",
+    "btnSave": "Shrani",
+    "btnCancel": "Prekliči"
   },
   "calendarEvent": {
     "start": "Začetek",
