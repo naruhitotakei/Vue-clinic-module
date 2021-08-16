@@ -321,7 +321,6 @@ export default {
   },
   methods: {
     editAssignments (assignment) {
-      console.log(assignment)
       let enquiry = this.enquires.find(item => item.id === assignment.enquiry_id)
       this.formData = {
         id: assignment.id,

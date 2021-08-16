@@ -168,7 +168,6 @@ export default {
       let table = this.$refs[tableName]
       let euro = /€/gi
       let html = table.$el.outerHTML.replace(euro, '&nbsp &euro;')
-      console.log(html)
       this.$refs[`excel-${tableName}`].href = 'data:application/vnd.ms-excel,' + encodeURIComponent(html)
       let documentName = ''
       let date = new Date().toLocaleString()
@@ -283,7 +282,6 @@ export default {
               this.servicesListTotalFee += Number(item.fee)
             })
           }
-          console.log(res)
           this.servicesListItems = res
         } else {
           console.error(response)

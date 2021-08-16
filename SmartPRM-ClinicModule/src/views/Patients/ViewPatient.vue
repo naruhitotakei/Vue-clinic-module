@@ -1276,7 +1276,6 @@ export default {
             value: label.color
           })
         })
-        console.log('DATA LABELS', this.colors)
       })
     },
     onCityChange () {
@@ -1285,7 +1284,6 @@ export default {
       this.getPatientInvoices(this.patientId, this.sortByInvoice.sort.toUpperCase())
     },
     uploadFile (e) {
-      console.log(e)
       fileUpload(e.target.files[0], this.$route.params.patientId).then(data => {
         let reader = new FileReader()
         reader.readAsDataURL(e.target.files[0])
@@ -1304,7 +1302,6 @@ export default {
         let file = {
           image: `/api/files/${img}`
         }
-        console.log(this.files.length + 1)
         if (type === 'tiff') {
           this.tiffConvertToCanvas(file, this.files.length)
         }
@@ -1473,7 +1470,6 @@ export default {
     updatePatient () {
       this.patient.general_notes = this.generalNotes
       updateEnquiry(this.patientId, this.patient).then((response) => {
-        console.log('Successful update')
         this.patient = response
         this.$bvToast.show('b-toaster-bottom-right')
       }).catch(errorMsg => {
@@ -1551,7 +1547,6 @@ export default {
     dateDisabled (ymd, date) {
       const weekday = date.getDay()
       const day = date.getDate()
-      console.log(date)
       return weekday === 0 || weekday === 6 || day === 13
     },
     addAssignments () {

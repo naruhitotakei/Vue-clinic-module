@@ -198,7 +198,6 @@ export default {
       this.isDataLoaded = false
       getEnquires(sort).then(response => {
         this.isDataLoaded = true
-        console.log(response)
         this.patients = response.map(obj => (
           { ...obj,
             editable: false,

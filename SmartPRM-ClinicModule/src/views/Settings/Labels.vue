@@ -152,7 +152,6 @@ export default {
     },
     addLabel () {
       this.formData.lang = this.$i18n.locale
-      console.log(this.formData)
       if (!this.formData.id) {
         createCalendarLabel(this.formData).then(data => {
           this.getLabels(this.$i18n.locale)

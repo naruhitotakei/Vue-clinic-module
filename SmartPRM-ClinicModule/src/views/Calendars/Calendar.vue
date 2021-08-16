@@ -292,7 +292,6 @@ export default {
             value: label.color
           })
         })
-        console.log('DATA LABELS', this.colors)
       })
     },
     addAppointment () {

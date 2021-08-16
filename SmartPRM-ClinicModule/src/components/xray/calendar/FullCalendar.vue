@@ -412,7 +412,6 @@ export default {
         this.isDataLoaded = true
         this.$nextTick(() => {
           this.calendarApi = this.$refs.calendar.getApi()
-          console.log('API', this.calendarApi)
         })
       }
     },
@@ -532,9 +531,7 @@ export default {
       this.updateCalendar(this.formData.id, this.formData)
     },
     eventDrop (info) {
-      console.log('eventDrop', info)
       let event = this.calendarApi.getEventById(info.event.id)
-      console.log('event', event)
       // console.log('res pre: ' + JSON.stringify(event.extendedProps.eventResourceId))
       // console.log('doc pre: ' + JSON.stringify(event.extendedProps.doctorId))
       // console.log('novi res id je: ' + JSON.stringify(info.event.extendedProps.eventResourceId))
@@ -543,7 +540,6 @@ export default {
       this.formData.assignmentDate = event.start
       this.formData.end = event.end
       this.formData.time = new Date(event.start).toTimeString()
-      console.log(this.formData.time)
       event.setExtendedProp('assignmentDate', this.formData.assignmentDate)
       event.setStart(this.formData.start)
       event.setEnd(this.formData.end)
@@ -652,7 +648,6 @@ export default {
           event.setExtendedProp('patientId', this.formData.patientId)
           event.setExtendedProp('doctorId', this.formData.doctorId)
           event.setExtendedProp('locationId', this.formData.locationId)
-          console.log('updated', this.formData)
           this.updateCalendar(this.formData.id, this.formData)
           // this.updateCalendarLabel(this.formData.id, this.formData)
           this.formData = this.defaultAppointment()
@@ -661,7 +656,6 @@ export default {
       }
     },
     openCreateModal (selectionInfo) {
-      console.log('openCreateModal', selectionInfo)
       this.disabled = false
       this.formData = this.defaultAppointment()
       this.modalTitle = ''
@@ -702,7 +696,6 @@ export default {
       this.$emit('setModalShow', true)
       this.disabled = true
       let event = this.calendarApi.getEventById(selectionInfo.event.id)
-      console.log('openUpdateModal', event)
       let location = this.locations.find(item => item.city === event.location)
       this.formData = {
         id: event.id,

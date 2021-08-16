@@ -476,13 +476,11 @@ export default {
       }
       getSerialForInvoiceNumberBasedOnType(data).then(response => {
         let number = parseInt(response[0].count) + 1
-        console.log('inv_num: ' + number)
         this.invoiceNumber = number
         this.generateReferenceCode()
         getSerialForFursInvoiceNumberBasedOnType(data).then(furs => {
           let number = parseInt(furs[0].count) + 1
           this.invoiceNumberFurs = this.issuedIn.business_premise_id + '-' + this.device.electronic_device_id + '-' + number
-          console.log('furs: ' + this.invoiceNumberFurs)
 
           this.prepareInvoice()
           if (this.isInoiceValid()) this.createInvoice()
@@ -525,7 +523,6 @@ export default {
           this.$bvToast.show('b-toaster-bottom-right')
           if (this.isInvoiceStatusIssued) this.redirectToDetailsPage()
         }).catch(errorMsg => {
-          console.log('Error: ' + errorMsg)
           this.$bvToast.show('bottom-right-danger')
         })
       } else {

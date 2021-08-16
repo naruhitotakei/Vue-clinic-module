@@ -78,7 +78,6 @@ export default {
       console.log(this.user.email, this.user.password)
       login(this.user.email, this.user.password).then(response => {
         if (typeof response === 'string' && response.startsWith('NOK')) {
-          console.log('response', response)
           alert(response)
         } else {
           this.data = response
@@ -95,16 +94,13 @@ export default {
     },
     sso: function () {
       sso().then(response => {
-        console.log('LOGIN RESPONSE:', response)
         if (typeof response !== 'string') {
-          console.log('tayyab')
           this.data = response
           this.$emit('logedIn', this.data)
         }
       })
     },
     created () {
-      console.log('created')
       this.sso()
     }
   }
