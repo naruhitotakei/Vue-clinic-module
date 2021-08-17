@@ -40,200 +40,185 @@
       >
     <form class="calendar-modal">
         <div class="form-row">
-          <div class="row align-items-center justify-content-between w-100 " :class="{'mb-3': !disabled}">
-            <div class="col-md-3">
-              <label for="patient" class="mb-0">{{ $t('calendarEvent.patient') }}</label>
-            </div>
-            <div class="col-md-9">
-              <v-select
-                  :disabled="disabled"
-                  :clearable="false"
-                  label="full_name"
-                  :reduce="patient => patient.id"
-                  class="style-chooser form-control-disabled font-size-16"
-                  v-model="formData.patientId"
-                  :options="patients"
-                  style="max-height: 400px;"
-              >
-              </v-select>
-            </div>
-          </div>
-       <div class="row align-items-center justify-content-between w-100 " :class="{'mb-3': !disabled}">
-         <div class="col-md-3">
-         <label for="notes">{{ $t('calendarEvent.note') }}</label>
-         </div>
-         <div class="col-md-9">
-           <textarea :disabled="disabled" row="2" v-model="formData.notes" class="form-control form-control-disabled font-size-16" placeholder="Add your note here for event!" id="note" required ></textarea>
-         </div>
-       </div>
-       <div class="row align-items-center justify-content-between w-100 " :class="{'mb-3': !disabled}">
-         <div class="col-md-3">
-           <label for="location" class="ml-0 mb-0">{{ $t('calendarEvent.location') }}</label>
-         </div>
-         <div class="col-md-9">
-                 <v-select :disabled="disabled"
-                           :clearable="false"
-                           label="city"
-                           :reduce="location => location.id"
-                           class="style-chooser form-control-disabled font-size-16"
-                           v-model="formData.locationId"
-                           :options="locations"
-                           style="min-width:305px;"></v-select>
-         </div>
-       </div>
-          <div class="row align-items-center justify-content-between w-100 " :class="{'mb-3': !disabled}">
-           <div class="col-md-3">
-             <label for="doctor" class="mr-2 mb-0">{{ $t('calendarEvent.doctor') }}</label>
-           </div>
-           <div class="col-md-9">
-             <v-select
-                 :disabled="disabled"
-                 :clearable="false"
-                 label="name"
-                 :reduce="doctor => doctor.id"
-                 class="style-chooser form-control-disabled font-size-16"
-                 v-model="formData.doctorId"
-                 :options="doctors"
-                 style="min-width: 305px;"
-             ></v-select>
-           </div>
-         </div>
-       <div class="row align-items-center justify-content-between w-100 " :class="{'mb-3': !disabled}">
-        <div class="col-md-3 pl-3 pr-0">
-          <label for="patient" class="mb-0">{{ $t('calendarEvent.product_group') }}</label>
-        </div>
-         <div class="col-md-9">
-           <v-select
-               :disabled="disabled"
-               :clearable="false"
-               label="product_group_name"
-               :reduce="product_group => product_group.product_group_id"
-               class="style-chooser form-control-disabled font-size-16"
-               v-model="formData.product_groups"
-               :options="product_groups"></v-select>
-         </div>
-       </div>
-        <div class="row align-items-center justify-content-between w-100 " :class="{'mb-3': !disabled}">
-        <div class="col-md-3">
-          <label for="start" class="mb-0">{{ $t('calendarEvent.start') }}</label>
-        </div>
-          <div class="col-md-9 d-flex align-items-center">
-            <date-picker
-                :disabled="disabled"
-                class="form-control form-control-disabled font-size-16"
-                v-model="formData.assignmentDate"
-                type="datetime"
-                :minute-step="5"
-                :show-second="false"
-                :lang="'en'"
-                :format="'DD.MM.YYYY HH.mm'"
-            ></date-picker>
-            <label for="start" class="mb-0 ml-5 mr-2">{{ $t('calendarEvent.end') }}</label>
-            <date-picker
-                :disabled="disabled"
-                required
-                class="form-control form-control-disabled font-size-16"
-                v-model="formData.end"
-                type="time"
-                :minute-step="5"
-                :show-second="false"
-                :lang="'en'"
-                :format="'DD.MM.YYYY HH.mm'"
-            ></date-picker>
-          </div>
-        </div>
-        <div class="row align-items-center justify-content-between w-100 " :class="{'mb-3': !disabled}">
-         <div class="col-md-3">
-           <label for="color" class="mb-0">{{ $t('calendarEvent.patient_attended') }}</label><br>
-         </div>
-         <div class="col-md-9">
-           <template v-for="(item,index) in patient_attend">
-             <b-form-radio
-                 class="custom-radio-patient font-size-16"
-                 inline
-                 v-model="formData.patient_attended"
-                 :value="item.value"
-                 :key="index"
-                 v-if="showProps(item, formData.patient_attended)"
-             >
-               {{ item.label }}
-             </b-form-radio>
-           </template>
-         </div>
-        </div>
-          <template v-if="formData.id">
-            <div class="row align-items-center justify-content-between w-100" :class="{'mb-3': !disabled}">
-              <div class="col-md-3">
-                <label for="title">{{ $t('assignments.addAssignmentsModal.appointmentCanceledInAdvanceByClinic') }} </label>
-              </div>
-              <div class="col-md-9">
-                <template v-for="(item,index) in appointment_canceled_in_advance_by_clinic">
-                  <b-form-radio
-                      class="custom-radio-patient font-size-16"
-                      inline
-                      v-model="formData.appointment_canceled_in_advance_by_clinic"
-                      :value="item.value"
-                      :key="index"
-                      v-if="showProps(item, formData.appointment_canceled_in_advance_by_clinic)"
-                  >
-                    {{ item.label }}
-                  </b-form-radio>
-                </template>
-              </div>
+            <div class="row align-items-center justify-content-between w-100 " :class="{'mb-3': !disabled}">
+                <div class="col-md-3">
+                    <label for="patient" class="mb-0">{{ $t('calendarEvent.patient') }}</label>
+                </div>
+                <div class="col-md-9">
+                    <v-select :disabled="disabled"
+                              :clearable="false"
+                              label="full_name"
+                              :reduce="patient => patient.id"
+                              class="style-chooser form-control-disabled font-size-16"
+                              v-model="formData.patientId"
+                              :options="patients"
+                              style="max-height: 400px;">
+                    </v-select>
+                </div>
             </div>
             <div class="row align-items-center justify-content-between w-100 " :class="{'mb-3': !disabled}">
-              <div class="col-md-3">
-                <label for="title">{{ $t('assignments.addAssignmentsModal.appointmentCanceledInAdvanceByPatient') }} </label>
-              </div>
-              <div class="col-md-9">
-                <template v-for="(item,index) in appointment_canceled_in_advance_by_patient">
-                  <b-form-radio
-                      class="custom-radio-patient font-size-16"
-                      inline
-                      v-model="formData.appointment_canceled_in_advance_by_patient"
-                      :value="item.value"
-                      :key="index"
-                      :click="checkRadio"
-                      v-if="showProps(item, formData.appointment_canceled_in_advance_by_patient)"
-                  >
-                    {{ item.label }}
-                  </b-form-radio>
+                <div class="col-md-3">
+                    <label for="notes">{{ $t('calendarEvent.note') }}</label>
+                </div>
+                <div class="col-md-9">
+                    <textarea :disabled="disabled" row="2" v-model="formData.notes" class="form-control form-control-disabled font-size-16" placeholder="Add your note here for event!" id="note" required></textarea>
+                </div>
+            </div>
+            <div class="row align-items-center justify-content-between w-100 " :class="{'mb-3': !disabled}">
+                <div class="col-md-3">
+                    <label for="location" class="ml-0 mb-0">{{ $t('calendarEvent.location') }}</label>
+                </div>
+                <div class="col-md-9">
+                    <v-select :disabled="disabled"
+                              :clearable="false"
+                              label="city"
+                              :reduce="location => location.id"
+                              class="style-chooser form-control-disabled font-size-16"
+                              v-model="formData.locationId"
+                              :options="locations"
+                              style="min-width:305px;"></v-select>
+                </div>
+            </div>
+            <div class="row align-items-center justify-content-between w-100 " :class="{'mb-3': !disabled}">
+                <div class="col-md-3">
+                    <label for="doctor" class="mr-2 mb-0">{{ $t('calendarEvent.doctor') }}</label>
+                </div>
+                <div class="col-md-9">
+                    <v-select :disabled="disabled"
+                              :clearable="false"
+                              label="name"
+                              :reduce="doctor => doctor.id"
+                              class="style-chooser form-control-disabled font-size-16"
+                              v-model="formData.doctorId"
+                              :options="doctors"
+                              style="min-width: 305px;"></v-select>
+                </div>
+            </div>
+            <div class="row align-items-center justify-content-between w-100 " :class="{'mb-3': !disabled}">
+                <div class="col-md-3 pl-3 pr-0">
+                    <label for="patient" class="mb-0">{{ $t('calendarEvent.product_group') }}</label>
+                </div>
+                <div class="col-md-9">
+                    <v-select :disabled="disabled"
+                              :clearable="false"
+                              label="product_group_name"
+                              :reduce="product_group => product_group.product_group_id"
+                              class="style-chooser form-control-disabled font-size-16"
+                              v-model="formData.product_groups"
+                              :options="product_groups"></v-select>
+                </div>
+            </div>
+            <div class="row align-items-center justify-content-between w-100 " :class="{'mb-3': !disabled}">
+                <div class="col-md-3">
+                    <label for="start" class="mb-0">{{ $t('calendarEvent.start') }}</label>
+                </div>
+                <div class="col-md-9 d-flex align-items-center">
+                    <date-picker :disabled="disabled"
+                                 class="form-control form-control-disabled font-size-16"
+                                 v-model="formData.assignmentDate"
+                                 type="datetime"
+                                 :minute-step="5"
+                                 :show-second="false"
+                                 :lang="'en'"
+                                 :format="'DD.MM.YYYY HH.mm'"></date-picker>
+                    <label for="start" class="mb-0 ml-5 mr-2">{{ $t('calendarEvent.end') }}</label>
+                    <date-picker :disabled="disabled"
+                                 required
+                                 class="form-control form-control-disabled font-size-16"
+                                 v-model="formData.end"
+                                 type="time"
+                                 :minute-step="5"
+                                 :show-second="false"
+                                 :lang="'en'"
+                                 :format="'DD.MM.YYYY HH.mm'"></date-picker>
+                </div>
+            </div>
+            <template v-if="formData.id">
+                <div class="row align-items-center justify-content-between w-100 " :class="{'mb-3': !disabled}">
+                    <div class="col-md-3">
+                        <label for="color" class="mb-0">{{ $t('calendarEvent.patient_attended') }}</label><br>
+                    </div>
+                    <div class="col-md-9">
+                        <template v-for="(item,index) in patient_attend">
+                            <b-form-radio class="custom-radio-patient font-size-16"
+                                          inline
+                                          v-model="formData.patient_attended"
+                                          :value="item.value"
+                                          :key="index"
+                                          v-if="showProps(item, formData.patient_attended)">
+                                {{ item.label }}
+                            </b-form-radio>
+                        </template>
+                    </div>
+                </div>
                 </template>
-              </div>
-            </div>
-          </template>
-          <div class="row align-items-center justify-content-between w-100 mb-3" >
-            <div class="col-md-3">
-              <label for="color">{{ $t('calendarEvent.labels') }}</label><br>
-            </div>
-            <div class="col-md-9">
-              <template v-for="(item,index) in colors">
-                <b-form-radio
-                    class="custom-radio-color font-size-16"
-                    inline
-                    v-model="formData.backgroundColor"
-                    :color="item.color"
-                    :value="item.value"
-                    :key="index"
-                    v-if="showLabels(item)"
-                >
-                  {{ item.label }}
-                </b-form-radio>
-              </template>
-            </div>
-          </div>
-       <div class="modal-footer modal-footer-bt" style="width: 100%;">
-         <template v-if="disabled">
-           <button type="button" class="btn btn-secondary" @click="$emit('setModalShow', false), formData = defaultAppointment">{{ $t('calendar.btnClose') }}</button>
-           <button type="button" class="btn btn-secondary" @click="editMode">{{ $t('calendar.btnEdit') }}</button>
-           <button type="button" class="btn btn-primary" @click="viewPatient(formData.enquiry_id)">{{ $t('calendar.btnEPR') }}</button>
-         </template>
-         <template v-if="!disabled">
-           <button type="button" class="btn btn-secondary" @click="$emit('setModalShow', false), formData = defaultAppointment">{{ $t('calendar.btnClose') }}</button>
-           <button type="button" class="btn btn-primary" @click="saveAppointment">{{ $t('calendar.btnSave') }}</button>
-         </template>
-       </div>
-      </div>
+                <template v-if="formData.id">
+                    <div class="row align-items-center justify-content-between w-100" :class="{'mb-3': !disabled}">
+                        <div class="col-md-3">
+                            <label for="title">{{ $t('assignments.addAssignmentsModal.appointmentCanceledInAdvanceByClinic') }} </label>
+                        </div>
+                        <div class="col-md-9">
+                            <template v-for="(item,index) in appointment_canceled_in_advance_by_clinic">
+                                <b-form-radio class="custom-radio-patient font-size-16"
+                                              inline
+                                              v-model="formData.appointment_canceled_in_advance_by_clinic"
+                                              :value="item.value"
+                                              :key="index"
+                                              v-if="showProps(item, formData.appointment_canceled_in_advance_by_clinic)">
+                                    {{ item.label }}
+                                </b-form-radio>
+                            </template>
+                        </div>
+                    </div>
+                    <div class="row align-items-center justify-content-between w-100 " :class="{'mb-3': !disabled}">
+                        <div class="col-md-3">
+                            <label for="title">{{ $t('assignments.addAssignmentsModal.appointmentCanceledInAdvanceByPatient') }} </label>
+                        </div>
+                        <div class="col-md-9">
+                            <template v-for="(item,index) in appointment_canceled_in_advance_by_patient">
+                                <b-form-radio class="custom-radio-patient font-size-16"
+                                              inline
+                                              v-model="formData.appointment_canceled_in_advance_by_patient"
+                                              :value="item.value"
+                                              :key="index"
+                                              :click="checkRadio"
+                                              v-if="showProps(item, formData.appointment_canceled_in_advance_by_patient)">
+                                    {{ item.label }}
+                                </b-form-radio>
+                            </template>
+                        </div>
+                    </div>
+                </template>
+                <div class="row align-items-center justify-content-between w-100 mb-3">
+                    <div class="col-md-3">
+                        <label for="color">{{ $t('calendarEvent.labels') }}</label><br>
+                    </div>
+                    <div class="col-md-9">
+                        <template v-for="(item,index) in colors">
+                            <b-form-radio class="custom-radio-color font-size-16"
+                                          inline
+                                          v-model="formData.backgroundColor"
+                                          :color="item.color"
+                                          :value="item.value"
+                                          :key="index"
+                                          v-if="showLabels(item)">
+                                {{ item.label }}
+                            </b-form-radio>
+                        </template>
+                    </div>
+                </div>
+                <div class="modal-footer modal-footer-bt" style="width: 100%;">
+                    <template v-if="disabled">
+                        <button type="button" class="btn btn-secondary" @click="$emit('setModalShow', false), formData = defaultAppointment">{{ $t('calendar.btnClose') }}</button>
+                        <button type="button" class="btn btn-secondary" @click="editMode">{{ $t('calendar.btnEdit') }}</button>
+                        <button type="button" class="btn btn-primary" @click="viewPatient(formData.enquiry_id)">{{ $t('calendar.btnEPR') }}</button>
+                    </template>
+                    <template v-if="!disabled">
+                        <button type="button" class="btn btn-secondary" @click="$emit('setModalShow', false), formData = defaultAppointment">{{ $t('calendar.btnClose') }}</button>
+                        <button type="button" class="btn btn-primary" @click="saveAppointment">{{ $t('calendar.btnSave') }}</button>
+                    </template>
+                </div>
+        </div>
     </form>
   </b-modal>
 </b-container>
