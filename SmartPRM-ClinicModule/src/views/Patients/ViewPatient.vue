@@ -1114,6 +1114,7 @@ export default {
         locationId: '',
         doctor_id: '',
         assignmentDate: '',
+        end: '',
         hours: '',
         minutes: '',
         backgroundColor: '#64D6E8',
@@ -1534,6 +1535,7 @@ export default {
         location_id: location.city,
         doctor_id: '',
         assignmentDate: '',
+        end: '',
         hours: '',
         minutes: '',
         backgroundColor: '',
@@ -1604,11 +1606,11 @@ export default {
           return label.value === this.formAppointments.backgroundColor
         })
       }
-      createCalendar(this.formAppointments).then((data) => {
-        this.formData = this.defaultAppointment()
+      createCalendar(this.formAppointments).then(() => {
+        this.formAppointments = this.defaultFormAppointment()
         this.$emit('setModalShow', false)
+        this.getPatientFutureAppointments(this.patientId, this.$i18n.locale)
       })
-      this.getPatientFutureAppointments(this.patientId, this.$i18n.locale)
     },
     getLocations () {
       getLocationsList().then(response => {

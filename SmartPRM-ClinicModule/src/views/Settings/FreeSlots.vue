@@ -29,10 +29,9 @@
                              :maxTime="calendarOptions.maxTime"
                              :slotDuration="calendarOptions.slotDuration"
                              editable="true"
-                             @dateClick="createFreeSlots"
+                             selectable="true"
+                             @select="createFreeSlots"
                              @eventClick="showFreeSlot"
-                             @eventDrop="eventDrop"
-                             @eventResize="eventResize"
                              :key="reFetchSlots" />
             <!--Add Free Slots Modal-->
             <b-modal v-model="openFreeSlotsModal"
@@ -320,8 +319,11 @@ export default {
         })
       }
     },
-    createFreeSlots () {
+    createFreeSlots (slotsInfo) {
       this.openFreeSlotsModal = true
+      this.slotData = this.defaultSlotData()
+      this.slotData.start = new Date(slotsInfo.startStr)
+      this.slotData.end = new Date(slotsInfo.endStr)
     },
     getDoctorLabel (doctor) {
       return (doctor && doctor.name)
@@ -358,15 +360,6 @@ export default {
       deleteFreeSlot(this.slotData.id)
       this.viewFreeSlotModal = false
       this.getFreeSlotsList()
-    },
-    eventDrop (event) {
-      console.log('event drop test:' + event)
-    },
-    eventResize (event) {
-      console.log('event resize test:' + event)
-    },
-    eventDragStart (event) {
-      console.log('event dragging begins:' + event)
     }
   },
   watch: {
