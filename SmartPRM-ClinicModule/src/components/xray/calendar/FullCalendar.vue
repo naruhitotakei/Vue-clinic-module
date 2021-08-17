@@ -202,7 +202,7 @@
                                       :value="item.value"
                                       :key="index"
                                       v-if="showLabels(item)">
-                            {{ item.label }}
+                            {{ item.text }}
                         </b-form-radio>
                     </template>
                 </div>
@@ -434,7 +434,8 @@ export default {
             id: label.id,
             label: label.type,
             color: label.type.split(' ').join(''),
-            value: label.color
+            value: label.color,
+            text: label.text
           })
         })
       })

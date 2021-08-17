@@ -112,7 +112,7 @@
   },
   "calendarEvent": {
     "start": "Začetek",
-    "duration": "Trajanje",
+    "end": "Konec",
     "note": "Opombe",
     "changeColor": "Spremeni barvo",
     "labels": "Oznaka",
