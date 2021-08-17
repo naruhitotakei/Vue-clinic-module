@@ -123,6 +123,7 @@ const createAppointment = (request, response, appointments) => {
     statement += "'"+ time +"',"
     statement += "NOW(),"
     statement += "'Posvet')"
+    console.log("Deployment test: " + statement)
     pool.query(statement , (error, results) => {
         if (error) {
             throw error
