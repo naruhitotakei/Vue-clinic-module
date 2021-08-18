@@ -165,25 +165,7 @@ export default {
         'dots': false,
         'infinite': false
       },
-      events: [
-        {
-          id: 340,
-          title: '',
-          start: '2021-06-07T07:30:00.000Z',
-          end: '2021-06-07T07:45:00.000Z',
-          backgroundColor: '#64D6E8',
-          patient_attended: 'unknown',
-          resourceId: 28,
-          eventResourceId: 28,
-          locationId: '',
-          assignmentDate: '2021-06-07T10:30',
-          hours: 0,
-          minutes: 15,
-          notes: '',
-          patientId: '',
-          doctorId: 28
-        }
-      ],
+      events: [],
       modalShow: {
         show: false,
         default: false
@@ -245,7 +227,7 @@ export default {
     this.getApontments()
     this.getDoctors()
     this.getProductGroups(this.$i18n.locale)
-    this.getLabels()
+    this.getLabels(this.$i18n.locale)
   },
   watch: {
     'allDoctorCheck' () {
@@ -282,8 +264,8 @@ export default {
     }
   },
   methods: {
-    getLabels () {
-      getLabels().then(data => {
+    getLabels (lang) {
+      getLabels(lang).then(data => {
         data.map(label => {
           this.colors.push({
             id: label.id,
@@ -396,7 +378,6 @@ export default {
           })
         })
         this.events = _.uniqBy(this.events, 'id')
-        // console.log(this.events.find(ev => ev.id === 41547))
       })
     },
     calculateEndDate (startDate, hours, minutes) {

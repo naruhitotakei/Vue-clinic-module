@@ -13,7 +13,7 @@
   :selectable="isSelectable"
   editable="true"
   :header="calendarOptions.header"
-  :allDayDefault="false"
+  :allDayDefault="calendarOptions.allDayDefault"
   @select="openCreateModal"
   @eventClick="openUpdateModal"
   @datesRender="onViewChange"
@@ -520,7 +520,6 @@ export default {
       event.setExtendedProp('hours', this.formData.hours)
       event.setExtendedProp('minutes', this.formData.minutes)
       this.updateCalendar(this.formData.id, this.formData)
-      console.log('Resizing an event: ' + info)
     },
     eventDrop (info) {
       let event = this.calendarApi.getEventById(info.event.id)
