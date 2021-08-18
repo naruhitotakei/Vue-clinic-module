@@ -222,7 +222,7 @@ app.get('/api/calendar/:statrtdate/:enddate/:lang', (req, res) => {
 
 app.get('/api/calendar/labels/:lang', (req, res) => {
   let lang = req.params.lang;
-  if(req.session.prm_user && req.session.prm_user.permissions && checkPermission(req.session.prm_user.permissions, productsPermission))
+  if(req.session.prm_user && req.session.prm_user.permissions && checkPermission(req.session.prm_user.permissions, calendarPermission))
     daoCalendar.getLabels(req, res, lang)
   else
     res.status(401).json("OK: user unauthorized")
@@ -230,7 +230,7 @@ app.get('/api/calendar/labels/:lang', (req, res) => {
 
 app.post('/api/calendar', (req, res) => {
   const appointment = req.body
-  if(req.session.prm_user && req.session.prm_user.permissions && checkPermission(req.session.prm_user.permissions, productsPermission))
+  if(req.session.prm_user && req.session.prm_user.permissions && checkPermission(req.session.prm_user.permissions, calendarPermission))
     daoCalendar.createAppointment(req, res, appointment)
   else
     res.status(401).json("OK: user unauthorized")
@@ -246,7 +246,7 @@ app.get('/api/calendar/doctors', (req, res) => {
 app.put('/api/calendar/:id', (req, res) => {
   const id = req.params.id
   const appointment = req.body
-  if(req.session.prm_user && req.session.prm_user.permissions && checkPermission(req.session.prm_user.permissions, productsPermission))
+  if(req.session.prm_user && req.session.prm_user.permissions && checkPermission(req.session.prm_user.permissions, calendarPermission))
     daoCalendar.updateAppointments(req, res, id, appointment)
   else
     res.status(401).json("OK: user unauthorized")
@@ -255,14 +255,14 @@ app.put('/api/calendar/:id', (req, res) => {
 app.put('/api/calendar/label/:id', (req, res) => {
   const id = req.params.id
   const appointmentLabel = req.body
-  if(req.session.prm_user && req.session.prm_user.permissions && checkPermission(req.session.prm_user.permissions, productsPermission))
+  if(req.session.prm_user && req.session.prm_user.permissions && checkPermission(req.session.prm_user.permissions, calendarPermission))
     daoCalendar.updateAppointmentsLabel(req, res, id, appointmentLabel)
   else
     res.status(401).json("OK: user unauthorized")
 });
 app.post('/api/calendar/label', (req, res) => {
   const appointmentLabel = req.body
-  if(req.session.prm_user && req.session.prm_user.permissions && checkPermission(req.session.prm_user.permissions, productsPermission))
+  if(req.session.prm_user && req.session.prm_user.permissions && checkPermission(req.session.prm_user.permissions, calendarPermission))
     daoCalendar.createAppointmentsLabel(req, res, appointmentLabel)
   else
     res.status(401).json("OK: user unauthorized")
@@ -270,7 +270,7 @@ app.post('/api/calendar/label', (req, res) => {
 
 app.delete('/api/calendar/label/:id', (req, res) => {
   const id = req.params.id
-  if(req.session.prm_user && req.session.prm_user.permissions && checkPermission(req.session.prm_user.permissions, productsPermission))
+    if (req.session.prm_user && req.session.prm_user.permissions && checkPermission(req.session.prm_user.permissions, calendarPermission))
     daoCalendar.deleteAppointmentsLabel(req, res, id)
   else
     res.status(401).json("OK: user unauthorized")

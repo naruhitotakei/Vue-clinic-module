@@ -42,7 +42,7 @@
         <div class="form-row">
             <div class="row align-items-center justify-content-between w-100 " :class="{'mb-3': !disabled}">
                 <div class="col-md-3">
-                    <label for="patient" class="pt-1 mb-0">{{ $t('calendarEvent.patient') }}</label>
+                    <label for="patient" class="pt-1 mb-0">{{ $t('calendarEvent.patient') }} *</label>
                 </div>
                 <div class="col-md-9">
                     <v-select :disabled="disabled"
@@ -58,7 +58,7 @@
             </div>
             <div class="row align-items-center justify-content-between w-100 " :class="{'mb-3': !disabled}">
                 <div class="col-md-3">
-                    <label for="location" class="ml-0 mb-0 pt-1">{{ $t('calendarEvent.location') }}</label>
+                    <label for="location" class="ml-0 mb-0 pt-1">{{ $t('calendarEvent.location') }} *</label>
                 </div>
                 <div class="col-md-9">
                     <v-select :disabled="disabled"
@@ -73,7 +73,7 @@
             </div>
             <div class="row align-items-center justify-content-between w-100 " :class="{'mb-3': !disabled}">
                 <div class="col-md-3">
-                    <label for="doctor" class="mr-2 mb-0 pt-1">{{ $t('calendarEvent.doctor') }}</label>
+                    <label for="doctor" class="mr-2 mb-0 pt-1">{{ $t('calendarEvent.doctor') }} *</label>
                 </div>
                 <div class="col-md-9">
                     <v-select :disabled="disabled"
@@ -88,7 +88,7 @@
             </div>
             <div class="row align-items-center justify-content-between w-100 " :class="{'mb-3': !disabled}">
                 <div class="col-md-3 pl-3 pr-0">
-                    <label for="patient" class="mb-0 pt-1">{{ $t('calendarEvent.product_group') }}</label>
+                    <label for="patient" class="mb-0 pt-1">{{ $t('calendarEvent.product_group') }} *</label>
                 </div>
                 <div class="col-md-9">
                     <v-select :disabled="disabled"
@@ -102,7 +102,7 @@
             </div>
             <div class="row align-items-center justify-content-between w-100 pt-2 " :class="{'mb-3': !disabled}">
                 <div class="col-md-3">
-                    <label for="start" class="mb-0">{{ $t('calendarEvent.start') }}</label>
+                    <label for="start" class="mb-0">{{ $t('calendarEvent.start') }} *</label>
                 </div>
                 <div class="col-md-9 d-flex align-items-center">
                     <date-picker :disabled="disabled"
@@ -113,7 +113,7 @@
                                  :show-second="false"
                                  :lang="'en'"
                                  :format="'DD.MM.YYYY HH.mm'"></date-picker>
-                    <label for="start" class="mb-0 ml-5 mr-2">{{ $t('calendarEvent.end') }}</label>
+                    <label for="start" class="mb-0 ml-3 mr-4">{{ $t('calendarEvent.end') }}*</label>
                     <date-picker :disabled="disabled"
                                  required
                                  class="form-control form-control-disabled font-size-16"
@@ -311,6 +311,7 @@ export default {
       isDataLoaded: false,
       colors: [],
       formData: {
+        id: '',
         title: '',
         assignmentDate: '',
         start: '',
@@ -413,6 +414,9 @@ export default {
     getColors () {
       return this.colorsLabel
     }
+    /* isSaveAppointmentDisabled () {
+        return !this.formData.patientId || !this.formData.locationId || !this.formData.doctorId || !this.formData.product_groups || !this.formData.assignmentDate || !this.formData.end
+    } */
   },
   mounted () {
     this.$nextTick(() => {
@@ -508,6 +512,7 @@ export default {
     eventResize (info) {
       let event = this.calendarApi.getEventById(info.event.id)
       // this.setAssignmentDateAndDuration(info.event.start, info.event.end)
+      this.formData.id = event.id
       this.formData.assignmentDate = event.start
       this.formData.end = event.end
       event.setStart(this.formData.start)
@@ -515,6 +520,7 @@ export default {
       event.setExtendedProp('hours', this.formData.hours)
       event.setExtendedProp('minutes', this.formData.minutes)
       this.updateCalendar(this.formData.id, this.formData)
+      console.log('Resizing an event: ' + info)
     },
     eventDrop (info) {
       let event = this.calendarApi.getEventById(info.event.id)

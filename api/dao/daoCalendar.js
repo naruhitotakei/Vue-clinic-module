@@ -85,7 +85,9 @@ const updateAppointments = (request, response, id, appointments) => {
     if (appointments.backgroundColor) statement += "label_id='" + appointments.backgroundColor.id + "',"
     if (appointments.end) statement += "end_time='" + appointments.end + "',"
     if (appointments.time) statement += "time='" + time + "'"
+    statement = statement.slice(0, -1)
     statement += " WHERE id = " + id
+    console.log("BE of updating an event: " + statement)
     pool.query(statement , (error, results) => {
         if (error) {
             throw error
