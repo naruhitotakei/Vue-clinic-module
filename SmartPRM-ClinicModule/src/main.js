@@ -16,7 +16,7 @@ global.Raphael = Raphael
 Vue.config.productionTip = false
 
 Vue.prototype.$rollbar = new Rollbar({
-  accessToken: 'b4f975b7b8cd4107ac1b6fce59b1b774',
+  accessToken: '0c806b765a5343cc8e9fd0f85cc3899a',
   captureUncaught: true,
   captureUnhandledRejections: true
 })
