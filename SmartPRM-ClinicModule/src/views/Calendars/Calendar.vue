@@ -378,6 +378,7 @@ export default {
           })
         })
         this.events = _.uniqBy(this.events, 'id')
+        console.log('Fetching calendar events: ' + JSON.stringify(this.events))
       })
     },
     calculateEndDate (startDate, hours, minutes) {

@@ -359,7 +359,7 @@ export default {
   },
   watch: {
     'formData.assignmentDate' () {
-      if (!this.formData.id) {
+      if (!this.formData.id && !this.formData.end) {
         this.formData.end = this.formData.assignmentDate
       }
     },
@@ -511,7 +511,6 @@ export default {
     },
     eventResize (info) {
       let event = this.calendarApi.getEventById(info.event.id)
-      // this.setAssignmentDateAndDuration(info.event.start, info.event.end)
       this.formData.id = event.id
       this.formData.assignmentDate = event.start
       this.formData.end = event.end
@@ -523,20 +522,17 @@ export default {
     },
     eventDrop (info) {
       let event = this.calendarApi.getEventById(info.event.id)
-      // console.log('res pre: ' + JSON.stringify(event.extendedProps.eventResourceId))
-      // console.log('doc pre: ' + JSON.stringify(event.extendedProps.doctorId))
-      // console.log('novi res id je: ' + JSON.stringify(info.event.extendedProps.eventResourceId))
-      // console.log('novi doctor id je: ' + JSON.stringify(info.event.extendedProps.doctorId))
-      // this.setAssignmentDateAndDuration(info.event.start, info.event.end)
+      console.log('Info of event: ' + event)
+      this.formData.id = event.id
       this.formData.assignmentDate = event.start
       this.formData.end = event.end
+      this.formData.doctorId = event.doctorId
       this.formData.time = new Date(event.start).toTimeString()
       event.setExtendedProp('assignmentDate', this.formData.assignmentDate)
       event.setStart(this.formData.start)
       event.setEnd(this.formData.end)
-      event.setExtendedProp('eventResourceId', info.newResource && +info.newResource.id)
-      event.setExtendedProp('doctorId', info.newResource && +info.newResource.id)
-      // this.updateCalendar(+event.id, this.formData)
+      event.setProp('doctorId', this.formData.doctorId)
+      this.updateCalendar(this.formData.id, this.formData)
     },
     defaultAppointment () {
       return {
