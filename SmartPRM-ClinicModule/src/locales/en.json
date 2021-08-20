@@ -151,7 +151,7 @@
       "email": "Email",
       "address": "Address",
       "addressUnknown": "Unknown",
-      "add": "Add",
+      "add": "New",
       "addInvoice": "New invoice",
       "deletePatient": "Delete patient",
       "personalDoctors": "Personal doctors",
@@ -631,6 +631,15 @@
       "countries": "Countries",
       "close": "Close",
       "save": "Save"
+    }
+  },
+  "labels": {
+    "labelsHeader": "Labels",
+    "newLabel": "New label",
+    "labelsColumns": {
+      "labelText": "Name",
+      "labelColor": "Color",
+      "labelAction": "Action"
     }
   },
   "dashboard2": {

@@ -147,13 +147,11 @@ const getLabels = (request, response, lang) => {
 
 const createAppointmentsLabel = (request, response, label) => {
     let statement = "INSERT INTO appointments_label ("
-    if (label.color) statement += "color,"
-    if (label.type) statement += "type"
+    if (label.color) statement += "color"
     statement += ") VALUES ("
-    if (label.color) statement += "'" + label.color.hex + "',"
-    if (label.type) statement += "'" + label.type + "')"
+    if (label.color) statement += "'" + label.color.hex + "')"
     statement+= " RETURNING id"
-    
+    console.log("Creating label on the BE: " + statement)
     pool.query(statement , (error, results) => {
         if (error) {
             throw error
@@ -166,6 +164,7 @@ const createAppointmentsLabel = (request, response, label) => {
 
 const createAppointmentsLabelName = (label_id, lang, text) => {
     let statement = `INSERT INTO appointments_label_name (appointment_label_id, language, text) VALUES (${label_id}, '${lang}', '${text}')`
+    console.log("Creating labels name on the BE: " + statement)
     pool.query(statement , (error, results) => {
         if (error) {
             throw error
@@ -178,7 +177,7 @@ const updateAppointmentsLabelName = (label_id, lang, text) => {
     if (lang) statement += "language='" + lang + "',"
     if (text) statement += "text='" + text + "'"
     statement += " WHERE appointment_label_id = " + label_id + " AND language = " + `'${lang}'`
-    
+    console.log("Updating labels name on the BE: " + statement)
     pool.query(statement , (error, results) => {
         if (error) {
             throw error
@@ -190,9 +189,10 @@ const updateAppointmentsLabelName = (label_id, lang, text) => {
 const updateAppointmentsLabel = (request, response, id, appointmentsLabel) => {
     let statement = "UPDATE appointments_label SET "
     if (appointmentsLabel.color) statement += "color='" + appointmentsLabel.color.hex + "',"
-    if (appointmentsLabel.type) statement += "type='" + appointmentsLabel.type + "'"
+    if (appointmentsLabel.type) statement += "type='" + appointmentsLabel.type + "' "
+    statement = statement.slice(0, -1)
     statement += " WHERE id = " + appointmentsLabel.id
-    
+    console.log("Updating label on the BE: " + statement)
     pool.query(statement , (error, results) => {
         if (error) {
             throw error
@@ -205,7 +205,8 @@ const updateAppointmentsLabel = (request, response, id, appointmentsLabel) => {
 const deleteAppointmentsLabel = (request, response, id) => {
     let statement = `DELETE FROM appointments_label WHERE id = ${id}`
     let statement_name =  `DELETE FROM appointments_label_name WHERE appointment_label_id = ${id}`
-    
+    console.log("Deleting label on the BE: " + statement)
+    console.log("Deleting labels name on the BE: " + statement_name)
     pool.query(statement_name, (error, results) => {
         if (error) {
             throw error

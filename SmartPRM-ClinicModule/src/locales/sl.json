@@ -632,54 +632,63 @@
       "save": "Shrani"
     }
   },
-  "dashboard2": {
-    "card1": "AVG Impressions",
-    "card2": "AVG Engagements Rate",
-    "card3": "AVG Reach",
-    "card4": "AVG Transport",
-    "featureTableTitle": "Frequent Post List",
-    "summary": "Post Summary",
-    "totalLikeComment": "Total of Likes $ Comments",
-    "bestPost": "Best Performing Posts"
+  "labels": {
+    "labelsHeader": "Oznake",
+    "newLabel": "Nova oznaka",
+    "labelsColumns": {
+      "labelText": "Ime",
+      "labelColor": "Barva",
+      "labelAction": "Urejaj"
+    }
   },
-  "dashboard1": {
-    "card1": "Invoice Sent",
-    "card2": "Credited From Accounts",
-    "card3": "AVG Employee Costs",
-    "card4": "Average payment delay",
-    "invoice": "invoice",
-    "invoiceState": "Invoice Stats",
-    "openInvoice": "Open Invoices",
-    "monthlyInvoice": "Monthly Invoices",
-    "exchangeRates": "Exchange Rates",
-    "paymentHistory": "Payment History",
-    "lastCosts": "Last Costs",
-    "efficiency": "Efficiency"
-  },
-  "rightSide": {
-    "customerDistribution": "Customer Distribution",
-    "projectStatistic": "Project Statistic",
-    "countries": "Countries"
-  },
-  "dropdown": {
-    "view": "Poglej",
-    "delete": "Izbriši",
-    "edit": "Uredi",
-    "print": "Natisni",
-    "download": "Prenesi",
-    "unfollow": "Prenehaj spremljati",
-    "follow": "Spremljaj",
-    "block": "Blokiraj"
-  },
-  "customizer": {
-    "colorCustomizer": "Color Customizer",
-    "themeColor": "Theme Color",
-    "colorMode": "Color Mode",
-    "sidebar": "Sidebar",
-    "sidebarMini": "Sidebar Mini",
-    "routeAnimation": "Route Animation",
-    "rtlMode": "RTL Mode",
-    "rtl": "RTL",
-    "reset": "Reset"
+    "dashboard2": {
+      "card1": "AVG Impressions",
+      "card2": "AVG Engagements Rate",
+      "card3": "AVG Reach",
+      "card4": "AVG Transport",
+      "featureTableTitle": "Frequent Post List",
+      "summary": "Post Summary",
+      "totalLikeComment": "Total of Likes $ Comments",
+      "bestPost": "Best Performing Posts"
+    },
+    "dashboard1": {
+      "card1": "Invoice Sent",
+      "card2": "Credited From Accounts",
+      "card3": "AVG Employee Costs",
+      "card4": "Average payment delay",
+      "invoice": "invoice",
+      "invoiceState": "Invoice Stats",
+      "openInvoice": "Open Invoices",
+      "monthlyInvoice": "Monthly Invoices",
+      "exchangeRates": "Exchange Rates",
+      "paymentHistory": "Payment History",
+      "lastCosts": "Last Costs",
+      "efficiency": "Efficiency"
+    },
+    "rightSide": {
+      "customerDistribution": "Customer Distribution",
+      "projectStatistic": "Project Statistic",
+      "countries": "Countries"
+    },
+    "dropdown": {
+      "view": "Poglej",
+      "delete": "Izbriši",
+      "edit": "Uredi",
+      "print": "Natisni",
+      "download": "Prenesi",
+      "unfollow": "Prenehaj spremljati",
+      "follow": "Spremljaj",
+      "block": "Blokiraj"
+    },
+    "customizer": {
+      "colorCustomizer": "Color Customizer",
+      "themeColor": "Theme Color",
+      "colorMode": "Color Mode",
+      "sidebar": "Sidebar",
+      "sidebarMini": "Sidebar Mini",
+      "routeAnimation": "Route Animation",
+      "rtlMode": "RTL Mode",
+      "rtl": "RTL",
+      "reset": "Reset"
+    }
   }
-}

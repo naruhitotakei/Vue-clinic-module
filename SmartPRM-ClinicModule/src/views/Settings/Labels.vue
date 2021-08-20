@@ -5,10 +5,10 @@
         <iq-card class-name="iq-card-block iq-card-stretch iq-card-height todaysAssignments-body">
           <template v-slot:headerTitle>
             <div class="row justify-content-between pl-3 pr-3">
-              <h4 class="card-title">Labels</h4>
+              <h4 class="card-title">{{ $t('labels.labelsHeader') }}</h4>
               <div class="btn-add-patient  mt-0">
                 <b-button variant="primary" @click="modalLabelsShow = true"><i
-                    class="ri-add-line mr-2"></i>New Label
+                    class="ri-add-line mr-2"></i>{{ $t('labels.newLabel') }}
                 </b-button>
               </div>
             </div>
@@ -57,7 +57,7 @@
         :ok-disabled="isDisabled"
         no-close-on-backdrop
         size="md"
-        :title="'New Label'"
+        :title="$t('labels.newLabel')"
         :ok-title="$t('assignments.addAssignmentsModal.save')"
         :cancel-title="$t('assignments.addAssignmentsModal.close')"
         @ok="addLabel"
@@ -67,15 +67,11 @@
       <form>
         <div class="form-row">
           <div class="col-md-12 mb-3">
-            <label for="title">Text </label>
+            <label for="title">{{ $t('labels.labelsColumns.labelText') }}</label>
             <b-form-input class="date" id="exampleInputdate" type="text" v-model="formData.text" ></b-form-input>
           </div>
           <div class="col-md-12 mb-3">
-            <label for="title">Type </label>
-            <b-form-input class="date" id="exampleInputdate" type="text" v-model="formData.type" ></b-form-input>
-          </div>
-          <div class="col-md-12 mb-3">
-            <label for="title">Color </label>
+            <label for="title">{{ $t('labels.labelsColumns.labelColor') }} </label>
             <chrome-picker v-model="formData.color"/>
           </div>
         </div>
@@ -101,18 +97,16 @@ export default {
   data: function () {
     return {
       columns: [
-        { label: 'Text', key: 'text', class: 'text-left' },
-        { label: 'Type', key: 'type', class: 'text-left' },
-        { label: 'Color', key: 'color', class: 'text-left' },
-        { label: 'Action', key: 'action', class: 'text-center action-column' }
+        { label: this.$t('labels.labelsColumns.labelText'), key: 'text', class: 'text-left' },
+        { label: this.$t('labels.labelsColumns.labelColor'), key: 'color', class: 'text-left' },
+        { label: this.$t('labels.labelsColumns.labelAction'), key: 'action', class: 'text-center action-column' }
       ],
       labels: [],
       isDataLoaded: false,
       modalLabelsShow: false,
       formData: {
-        id: null,
+        id: '',
         text: '',
-        type: '',
         color: ''
       }
     }
@@ -124,7 +118,7 @@ export default {
   },
   computed: {
     isDisabled () {
-      return !this.formData.text || !this.formData.type || !this.formData.color
+      return !this.formData.text || !this.formData.color
     }
   },
   methods: {
@@ -137,13 +131,13 @@ export default {
     },
     deleteItem (item) {
       deleteCalendarLabel(item.id).then(data => {
+        console.log('Deleting label on the FE:' + data)
         this.getLabels(this.$i18n.locale)
       })
     },
     onLabelClick (item) {
       this.formData = {
         id: item.id,
-        type: item.type,
         text: item.text,
         color: item.color,
         lang: item.language
@@ -154,12 +148,14 @@ export default {
       this.formData.lang = this.$i18n.locale
       if (!this.formData.id) {
         createCalendarLabel(this.formData).then(data => {
+          console.log('Creating a new label on the FE: ' + data)
           this.getLabels(this.$i18n.locale)
           this.modalLabelsShow = false
           this.formData = this.defaultFormData()
         })
       } else {
         updateCalendarLabel(this.formData.id, this.formData).then(data => {
+          console.log('Updating label on the FE: ' + data)
           this.getLabels(this.$i18n.locale)
           this.modalLabelsShow = false
           this.formData = this.defaultFormData()
@@ -171,9 +167,7 @@ export default {
     },
     defaultFormData () {
       return {
-        id: null,
         text: '',
-        type: '',
         color: ''
       }
     }
