@@ -281,31 +281,31 @@ export default {
       ],
       patient_attend: [
         {
-          label: 'Unknown',
+          label: this.$t('calendarEvent.unknown'),
           value: 'unknown',
           checked: true
         },
         {
-          label: 'Attended',
+          label: this.$t('calendarEvent.attended'),
           value: 'attended',
           checked: false
         },
         {
-          label: 'Not Attended',
+          label: this.$t('calendarEvent.notAttended'),
           value: 'not_attended',
           checked: false
         }
       ],
       appointment_canceled_in_advance_by_clinic: [
         {
-          label: 'Canceled',
+          label: this.$t('calendarEvent.canceled'),
           value: true,
           checked: false
         }
       ],
       appointment_canceled_in_advance_by_patient: [
         {
-          label: 'Canceled',
+          label: this.$t('calendarEvent.canceled'),
           value: true,
           checked: false
         }
