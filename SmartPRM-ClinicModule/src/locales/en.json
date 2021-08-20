@@ -112,7 +112,8 @@
     "btnEdit": "Edit Appointment",
     "btnEPR": "View patient record",
     "btnSave": "Save",
-    "btnCancel": "Cancel"
+    "btnCancel": "Cancel",
+    "btnCancelation": "Cancel appointment"
   },
   "calendarEvent": {
     "start": "Start",
@@ -132,7 +133,9 @@
     "doctor": "Doctor",
     "location": "Location",
     "patient_attended": "Patient attended",
-    "product_group": "Product Group"
+    "product_group": "Product Group",
+    "appointmentCanceledInAdvanceByClinic": "Appointment canceled by clinic",
+    "appointmentCanceledInAdvanceByPatient": "Appointment canceled by patient"
   },
   "patients": {
     "patientsHeader": "Patients",
@@ -501,9 +504,7 @@
       "users": "User",
       "close": "Close",
       "save": "Save",
-      "patientAttended": "Patient Attended",
-      "appointmentCanceledInAdvanceByClinic": "Appointment canceled by clinic",
-      "appointmentCanceledInAdvanceByPatient": "Appointment canceled by patient"
+      "patientAttended": "Patient Attended"
     }
   },
   "statisticsForClinic": {

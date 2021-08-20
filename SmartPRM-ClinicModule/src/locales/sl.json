@@ -112,7 +112,8 @@
     "btnEdit": "Uredi termin",
     "btnEPR": "Kartoteka pacienta",
     "btnSave": "Shrani",
-    "btnCancel": "Prekliči"
+    "btnCancel": "Prekliči",
+    "btnCancelation": "Preklic termina"
   },
   "calendarEvent": {
     "start": "Začetek",
@@ -131,7 +132,9 @@
     "doctor": "Zdravnik",
     "location": "Lokacije",
     "patient_attended": "Pacient je prišel na termin",
-    "product_group": "Skupina produkta"
+    "product_group": "Skupina produkta",
+    "appointmentCanceledInAdvanceByClinic": "Klinika je preklicala termin",
+    "appointmentCanceledInAdvanceByPatient": "Pacient je preklical termin"
   },
   "patients": {
     "patientsHeader": "Pacienti",
@@ -158,7 +161,7 @@
       "email": "Email",
       "address": "Naslov",
       "addressUnknown": "Neznano",
-      "add": "Dodaj",
+      "add": "Novo",
       "addInvoice": "Nov Račun",
       "deletePatient": "Izbriši pacienta",
       "personalDoctors": "Osebni zdravniki",
@@ -500,9 +503,7 @@
       "users": "Uporabnik",
       "close": "Zapri",
       "save": "Shrani",
-      "patientAttended": "Pacient se je udeležil",
-      "appointmentCanceledInAdvanceByClinic": "Klinika je preklicala termin",
-      "appointmentCanceledInAdvanceByPatient": "Pacient je preklical termin"
+      "patientAttended": "Pacient se je udeležil"
     }
   },
   "statisticsForClinic": {
