@@ -162,14 +162,14 @@
                     </div>
                     <div class="col-md-9">
                         <template v-for="(item,index) in appointment_canceled_in_advance_by_clinic">
-                            <b-form-radio class="custom-radio-patient font-size-16"
+                            <b-checkbox class="custom-radio-patient font-size-16"
                                           inline
                                           v-model="formData.appointment_canceled_in_advance_by_clinic"
                                           :value="item.value"
                                           :key="index"
                                           v-if="showProps(item, formData.appointment_canceled_in_advance_by_clinic)">
                                 {{ item.label }}
-                            </b-form-radio>
+                            </b-checkbox>
                         </template>
                     </div>
                 </div>
@@ -179,7 +179,7 @@
                     </div>
                     <div class="col-md-9">
                         <template v-for="(item,index) in appointment_canceled_in_advance_by_patient">
-                            <b-form-radio class="custom-radio-patient font-size-16"
+                            <b-checkbox class="custom-radio-patient font-size-16"
                                           inline
                                           v-model="formData.appointment_canceled_in_advance_by_patient"
                                           :value="item.value"
@@ -187,7 +187,7 @@
                                           :click="checkRadio"
                                           v-if="showProps(item, formData.appointment_canceled_in_advance_by_patient)">
                                 {{ item.label }}
-                            </b-form-radio>
+                            </b-checkbox>
                         </template>
                     </div>
                 </div>
