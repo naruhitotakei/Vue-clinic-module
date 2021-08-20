@@ -260,10 +260,11 @@ app.put('/api/calendar/label/:id', (req, res) => {
   else
     res.status(401).json("OK: user unauthorized")
 });
+
 app.post('/api/calendar/label', (req, res) => {
   const appointmentLabel = req.body
   if(req.session.prm_user && req.session.prm_user.permissions && checkPermission(req.session.prm_user.permissions, calendarPermission))
-    daoCalendar.createAppointmentsLabel(req, res, appointmentLabel)
+    daoCalendar.createAppointmentsLabel(req, res, appointmentLabel, req.session.prm_user.prm_client_id)
   else
     res.status(401).json("OK: user unauthorized")
 });

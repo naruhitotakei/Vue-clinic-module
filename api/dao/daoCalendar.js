@@ -145,10 +145,10 @@ const getLabels = (request, response, lang) => {
     })
 }
 
-const createAppointmentsLabel = (request, response, label) => {
-    let statement = "INSERT INTO appointments_label ("
+const createAppointmentsLabel = (request, response, label, prm_client_id) => {
+    let statement = "INSERT INTO appointments_label (prm_client_id, "
     if (label.color) statement += "color"
-    statement += ") VALUES ("
+    statement += ") VALUES (" + prm_client_id + ", "
     if (label.color) statement += "'" + label.color.hex + "')"
     statement+= " RETURNING id"
     console.log("Creating label on the BE: " + statement)
