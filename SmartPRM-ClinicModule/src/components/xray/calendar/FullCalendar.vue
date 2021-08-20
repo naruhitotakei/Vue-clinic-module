@@ -45,7 +45,9 @@
                     <label for="patient" class="pt-1 mb-0">{{ $t('calendarEvent.patient') }} *</label>
                 </div>
                 <div class="col-md-9">
-                    <v-select :disabled="disabled"
+                    <router-link v-if="disabled" tag="span" :to="'/patients/'+ formData.enquiry_id" style="cursor:pointer;" class="ml-2 text-black style-chooser form-control-disabled font-size-16">{{ formData.title }}</router-link>
+                    <v-select v-else
+                              :disabled="disabled"
                               :clearable="false"
                               label="full_name"
                               :reduce="patient => patient.id"
@@ -58,14 +60,14 @@
             </div>
             <div class="row align-items-center justify-content-between w-100 " :class="{'mb-3': !disabled}">
                 <div class="col-md-3">
-                    <label for="location" class="ml-0 mb-0 pt-1">{{ $t('calendarEvent.location') }} *</label>
+                    <label for="location" class="mb-0 mt-2">{{ $t('calendarEvent.location') }} *</label>
                 </div>
                 <div class="col-md-9">
                     <v-select :disabled="disabled"
                               :clearable="false"
                               label="city"
                               :reduce="location => location.id"
-                              class="style-chooser form-control-disabled font-size-16"
+                              class="style-chooser form-control-disabled font-size-16 ml-0 mt-1"
                               v-model="formData.locationId"
                               :options="locations"
                               style="min-width:305px;"></v-select>
