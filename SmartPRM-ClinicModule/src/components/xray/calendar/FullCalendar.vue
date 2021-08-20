@@ -21,6 +21,7 @@
   @eventDrop="eventDrop"
   id="calendar"
   ref="calendar"
+  :locale="$i18n.locale"
   v-if="isDataLoaded"
   />
   <img v-else src="../../../assets/css/ajax-loader.gif" alt="Smart PRM" class="d-block m-auto"/>
@@ -244,7 +245,6 @@ import {
   updateCalendarLabel,
   getLabels
 } from '@/services/calendarService'
-// import { getDentists } from '../../../services/userService'
 import DatePicker from 'vue2-datepicker'
 import 'vue2-datepicker/index.css'
 

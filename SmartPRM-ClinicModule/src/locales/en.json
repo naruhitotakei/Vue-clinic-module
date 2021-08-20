@@ -100,10 +100,14 @@
     "activityStatistics": "Activity Statistics"
   },
   "calendar": {
-    "selectDoctor": "Select Doctor",
+    "selectDoctor": "Select Doctor ",
     "selectAll": "Select All",
     "addAppointment": "New Appointment",
     "appointmentDetails": "Appointment details",
+    "today": "Today",
+    "month": "Month",
+    "week": "Week",
+    "day": "Day",
     "btnClose": "Close",
     "btnEdit": "Edit Appointment",
     "btnEPR": "View patient record",

@@ -100,10 +100,14 @@
     "activityStatistics": "Statistika aktivnosti"
   },
   "calendar": {
-    "selectDoctor": "Izberi zdravnika",
+    "selectDoctor": "Izberi zdravnika ",
     "selectAll": "Izberi vse",
     "addAppointment": "Nov termin",
     "appointmentDetails": "Podatki o terminu",
+    "today": "Danes",
+    "month": "Mesec",
+    "week": "Teden",
+    "day": "Dan",
     "btnClose": "Zapri",
     "btnEdit": "Uredi termin",
     "btnEPR": "Kartoteka pacienta",
