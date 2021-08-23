@@ -211,7 +211,7 @@
     "filesHeader": "Files",
     "files": {
       "sortBy": "Sort by",
-      "addFile": "Add file",
+      "addFile": "New file",
       "fileName": "File name",
       "fileType": "File type",
       "fileCreatedAt": "Date",
