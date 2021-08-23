@@ -379,190 +379,227 @@
                                           </div>
                                       </div>
                                   </div>
-                                <b-button variant="primary" :disabled="!disabled" @click="editPatient" class="edit-btn">{{ $t('EPR.personalInfo.edit') }}</b-button>
                               </b-col>
                           </b-form-group>
                           <b-row>
                               <b-col lg="6">
                                   <iq-card>
                                       <template v-slot:body>
-                                          <div class="pl-0 iq-card-header d-flex justify-content-between">
-                                              <div class="iq-header-title">
-                                                  <h4 class="card-title">{{ $t('EPR.personalInfo.personalInformation') }}</h4>
+                                          <div class="pl-0 iq-card-header d-flex justify-content-between margin-top">
+                                              <div class="iq-header-title mt-0">
+                                                  <h4 class="card-title">{{ $t('EPR.personalInfo.personalInformation') }}<span><b-button v-if="disabledData" variant="primary" :disabled="!disabledData" @click="editPatientData" class="float-right margin-top-edit-btn">{{ $t('EPR.personalInfo.editBtn') }}</b-button></span></h4>
                                               </div>
                                           </div>
                                           <b-row align-v="center">
-                                              <b-form-group class="col-md-12 align-items-center" :class="{'mb-0': disabled}" label-cols-sm="4" label-for="fname" :label="$t('EPR.personalInfo.firstName')">
+                                              <b-form-group class="col-md-12 align-items-center" :class="{'mb-0': disabledData}" label-cols-sm="4" label-for="fname" :label="$t('EPR.personalInfo.firstName')">
                                                   <ValidationProvider name="fname" rules="required" v-slot="{ errors }">
-                                                      <b-form-input :disabled="disabled" v-model="patient.name" type="text" class="form-control-disabled" :class="(errors.length > 0 ? ' is-invalid' : '')"></b-form-input>
+                                                      <b-form-input :disabled="disabledData" v-model="patient.name" type="text" class="form-control-disabled font-size-12" :class="(errors.length > 0 ? ' is-invalid' : '')"></b-form-input>
                                                       <div class="invalid-feedback">
                                                           <span>{{ errors[0] }}</span>
                                                       </div>
                                                   </ValidationProvider>
                                               </b-form-group>
-                                              <b-form-group class="col-md-12 align-items-center" :class="{'mb-0': disabled}" label-cols-sm="4" label-for="lname" :label="$t('EPR.personalInfo.lastName')">
+                                              <b-form-group class="col-md-12 align-items-center" :class="{'mb-0': disabledData}" label-cols-sm="4" label-for="lname" :label="$t('EPR.personalInfo.lastName')">
                                                   <ValidationProvider name="lname" rules="required" v-slot="{ errors }">
-                                                      <b-form-input :disabled="disabled" v-model="patient.last_name" type="text" class="form-control-disabled" :class="(errors.length > 0 ? ' is-invalid' : '')"></b-form-input>
+                                                      <b-form-input :disabled="disabledData" v-model="patient.last_name" type="text" class="form-control-disabled font-size-12" :class="(errors.length > 0 ? ' is-invalid' : '')"></b-form-input>
                                                       <div class="invalid-feedback">
                                                           <span>{{ errors[0] }}</span>
                                                       </div>
                                                   </ValidationProvider>
                                               </b-form-group>
-                                              <b-form-group class="col-md-12 align-items-center" :class="{'mb-0': disabled}" label-cols-sm="4" label-for="dob" :label="$t('EPR.personalInfo.dob')">
+                                              <b-form-group class="col-md-12 align-items-center" :class="{'mb-0': disabledData}" label-cols-sm="4" label-for="dob" :label="$t('EPR.personalInfo.dob')">
                                                   <!--                                                  <ValidationProvider name="dob" rules="required" v-slot="{ errors }">-->
                                                   <b-form-input v-if="!patient.date_of_birth"
-                                                                :disabled="disabled"
+                                                                :disabled="disabledData"
                                                                 v-model="patient.date_of_birth"
                                                                 type="date"
-                                                                class="form-control-disabled"
+                                                                class="form-control-disabled font-size-12 mt-0 mr-2"
                                                                 id="dateInput"></b-form-input>
                                                   <b-form-input v-else
-                                                                :disabled="disabled"
+                                                                :disabled="disabledData"
                                                                 v-model="patient.date_of_birth"
                                                                 type="date"
-                                                                class="form-control-disabled"></b-form-input>
+                                                                class="form-control-disabled font-size-12 mt-0 mr-2"></b-form-input>
                                                   <div class="invalid-feedback">
                                                       <!--                                                          <span>{{ errors[0] }}</span>-->
                                                   </div>
                                                   <!--                                                  </ValidationProvider>-->
                                               </b-form-group>
-                                              <b-form-group class="col-md-12  row align-items-center custom-radio-st" :class="{'mb-0': disabled}" label-cols-sm="4" label-for="gender" label-class="d-block" :label="$t('EPR.personalInfo.gender')">
-                                                  <b-form-radio inline v-model="patient.gender" :disabled="disabled" value="male">{{ $t('EPR.personalInfo.male') }}</b-form-radio>
-                                                  <b-form-radio inline v-model="patient.gender" :disabled="disabled" value="female">{{ $t('EPR.personalInfo.female') }}</b-form-radio>
-                                                  <b-form-radio inline v-model="patient.gender" :disabled="disabled" value="unspecified">{{ $t('EPR.personalInfo.unspecified') }}</b-form-radio>
+                                              <b-form-group class="col-md-12 align-items-center pt-2 pb-2" :class="{'mb-0': disabledData}" label-cols-sm="4" label-for="gender" :label="$t('EPR.personalInfo.gender')">
+                                                  <b-form-radio inline v-model="patient.gender" :disabled="disabledData" value="male" class="ml-2">{{ $t('EPR.personalInfo.male') }}</b-form-radio>
+                                                  <b-form-radio inline v-model="patient.gender" :disabled="disabledData" value="female">{{ $t('EPR.personalInfo.female') }}</b-form-radio>
+                                                  <b-form-radio inline v-model="patient.gender" :disabled="disabledData" value="unspecified">{{ $t('EPR.personalInfo.unspecified') }}</b-form-radio>
                                               </b-form-group>
-                                              <b-form-group class="col-md-12 align-items-center" :class="{'mb-0': disabled}" label-cols-sm="4" label-for="address" :label="$t('EPR.personalInfo.address')">
-                                                  <b-form-input :disabled="disabled" name="address" class="form-control-disabled" v-model="patient.address_line_1" style="line-height: 22px;">
+                                              <b-form-group class="col-md-12 align-items-center" :class="{'mb-0': disabledData}" label-cols-sm="4" label-for="address" :label="$t('EPR.personalInfo.address')">
+                                                  <b-form-input :disabled="disabledData" name="address" class="form-control-disabled font-size-12" v-model="patient.address_line_1" style="line-height: 22px;">
                                                   </b-form-input>
                                               </b-form-group>
-                                              <b-form-group class="col-md-12 align-items-center" :class="{'mb-0': disabled}" style="justify-content: space-between;" label-cols-sm="4" label-for="city" :label="$t('EPR.personalInfo.postCodeCity')">
-                                                  <b-form-input :disabled="disabled" class="col-md-4 form-control-disabled" style="float: left;" v-model="patient.post_code" type="text"></b-form-input>
-                                                <v-select :disabled="disabled"
-                                                          class="col-md-8 form-control-disabled style-chooser"
-                                                          style="float: right;" v-model="patient.city"
-                                                          :clearable="false" :options="filteredMunicipalities"
-                                                          :reduce="city => city.municipality_name"
-                                                          :getOptionLabel="getMunicipalityLabel"
-                                                          @input="onCityChange"
-                                                ></v-select>
+                                              <b-form-group class="col-md-12 align-items-center mt-1" :class="{'mb-0': disabledData}" style="justify-content: space-between;" label-cols-sm="4" label-for="city" :label="$t('EPR.personalInfo.postCodeCity')">
+                                                  <b-form-input :disabled="disabledData" class="col-md-4 form-control-disabled font-size-12 mt-1" style="float: left;" v-model="patient.post_code" type="text"></b-form-input>
+                                                  <v-select :disabled="disabledData"
+                                                            class="col-md-8 form-control-disabled style-chooser"
+                                                            :class="{'margin-top-city': disabledData}"
+                                                            style="float: right;" v-model="patient.city"
+                                                            :clearable="false" :options="filteredMunicipalities"
+                                                            :reduce="city => city.municipality_name"
+                                                            :getOptionLabel="getMunicipalityLabel"
+                                                            @input="onCityChange"></v-select>
                                               </b-form-group>
-                                              <b-form-group class="col-md-12 align-items-center" :class="{'mb-0': disabled}" label-cols-sm="4" label-for="country" :label="$t('EPR.personalInfo.country')">
-                                                <v-select :disabled="disabled" label="name" :clearable="false"
-                                                          :reduce="country => country.id"
-                                                          class="style-chooser form-control-disabled"
-                                                          v-model="patient.country_id" :options="countries"
-                                                ></v-select>
+                                              <b-form-group class="col-md-12 align-items-center " :class="{'mb-0': disabledData}" label-cols-sm="4" label-for="country" :label="$t('EPR.personalInfo.country')">
+                                                  <v-select :disabled="disabledData" label="name" :clearable="false"
+                                                            :reduce="country => country.id"
+                                                            class="style-chooser form-control-disabled font-size-12"
+                                                            v-model="patient.country_id" :options="countries"></v-select>
                                               </b-form-group>
-                                              <b-form-group class="col-md-12 align-items-center" :class="{'mb-0': disabled}" label-cols-sm="4" label-for="region" :label="$t('EPR.personalInfo.region')">
-                                                <v-select class="style-chooser form-control-disabled" :clearable="false"
-                                                          :reduce="region => region.code" :disabled="disabled"
-                                                          v-model="patient.region_id"
-                                                          :options="filteredRegions"></v-select>
+                                              <b-form-group class="col-md-12 align-items-center" :class="{'mb-0': disabledData}" label-cols-sm="4" label-for="region" :label="$t('EPR.personalInfo.region')">
+                                                  <v-select class="style-chooser form-control-disabled font-size-12" :clearable="false"
+                                                            :reduce="region => region.code" :disabled="disabledData"
+                                                            v-model="patient.region_id"
+                                                            :options="filteredRegions"></v-select>
                                               </b-form-group>
-                                              <b-form-group class="col-md-12 align-items-center" :class="{'mb-0': disabled}" label-cols-sm="4" label-for="insurance" :label="$t('EPR.personalInfo.insurance')">
-                                                  <b-form-input :disabled="disabled" class="col-md-5 form-control-disabled" style="float: left;" name="insurance_no" type="text" v-model="patient.insurance_no"></b-form-input>
-                                                  <b-form-input :disabled="disabled" class="col-md-5 form-control-disabled" style="float: right;" name="insured_at" type="text" v-model="patient.insured_at"></b-form-input>
+                                              <b-form-group class="col-md-12 align-items-center" :class="{'mb-0': disabledData}" label-cols-sm="4" label-for="insurance" :label="$t('EPR.personalInfo.insurance')">
+                                                  <b-form-input :disabled="disabledData" class="col-md-5 form-control-disabled font-size-12" style="float: left;" name="insurance_no" type="text" v-model="patient.insurance_no"></b-form-input>
+                                                  <b-form-input :disabled="disabledData" class="col-md-5 form-control-disabled font-size-12" style="float: right;" name="insured_at" type="text" v-model="patient.insured_at"></b-form-input>
                                               </b-form-group>
-                                              <b-form-group class="col-md-12 align-items-center" :class="{'mb-0': disabled}" label-cols-sm="4" label-for="mobile_no" :label="$t('EPR.personalInfo.phone')">
-                                                  <b-form-input :disabled="disabled" name="mobile_no" type="text" class="form-control-disabled" v-model="patient.phone"></b-form-input>
+                                              <b-form-group class="col-md-12 align-items-center" :class="{'mb-0': disabledData}" label-cols-sm="4" label-for="mobile_no" :label="$t('EPR.personalInfo.phone')">
+                                                  <b-form-input :disabled="disabledData" name="mobile_no" type="text" class="form-control-disabled font-size-12" v-model="patient.phone"></b-form-input>
                                               </b-form-group>
-                                              <b-form-group class="col-md-12 align-items-center" :class="{'mb-0': disabled}" label-cols-sm="4" label-for="email" :label="$t('EPR.personalInfo.email')">
-                                                  <b-form-input :disabled="disabled" name="email" type="text" class="form-control-disabled" v-model="patient.email"></b-form-input>
+                                              <b-form-group class="col-md-12 align-items-center" :class="{'mb-0': disabledData}" label-cols-sm="4" label-for="email" :label="$t('EPR.personalInfo.email')">
+                                                  <b-form-input :disabled="disabledData" name="email" type="text" class="form-control-disabled font-size-12" v-model="patient.email"></b-form-input>
                                               </b-form-group>
-                                              <b-form-group class="col-md-12 align-items-center" :class="{'mb-0': disabled}" label-cols-sm="4" label-for="tax_no" :label="$t('EPR.personalInfo.taxNumber')">
-                                                  <b-form-input :disabled="disabled" name="tax_no" type="text" class="form-control-disabled" v-model="patient.tax_registration_number"></b-form-input>
+                                              <b-form-group class="col-md-12 align-items-center" :class="{'mb-0': disabledData}" label-cols-sm="4" label-for="tax_no" :label="$t('EPR.personalInfo.taxNumber')">
+                                                  <b-form-input :disabled="disabledData" name="tax_no" type="text" class="form-control-disabled font-size-12" v-model="patient.tax_registration_number"></b-form-input>
                                               </b-form-group>
                                           </b-row>
+                                          <div class="text-center p-1" v-if="!disabledData">
+                                              <b-button style="padding: 5px 25px;" v-b-modal.modal-1 variant="none" class="iq-bg-secondary mr-2">Cancel</b-button>
+                                              <b-button style="padding: 5px 25px;" @click="submitData()" variant="primary">Save</b-button>
+                                              <b-modal id="modal-1" ok-title="OK" cancel-title="Cancel" @ok="cancelEditingPatientData">
+                                                  <h4 class="my-4 card-title text-center">Are you sure you want to the<br>discard changes?</h4>
+                                              </b-modal>
+                                              <b-modal ref="my-modal" ok-only ok-variant="primary" ok-title="OK">
+                                                  <div class="text-center">
+                                                      <i class="ri-error-warning-fill ri-4x" style="color: #d84a45;"></i>
+                                                      <h4 class="my-4 card-title text-center">Unable to save changes, please try again</h4>
+                                                  </div>
+                                              </b-modal>
+                                          </div>
                                       </template>
                                   </iq-card>
                               </b-col>
                               <b-col lg="6">
                                   <iq-card>
                                       <template v-slot:body>
-                                          <div class="pl-0 iq-card-header d-flex justify-content-between">
-                                              <h4>{{ $t('EPR.personalInfo.generalNotes') }}</h4>
-                                          </div>
-                                          <div class="iq-card-body p-0">
-                                              <textarea
-                                                  :disabled="disabled"
-                                                  style="line-height: 30px;"
-                                                  class="textarea form-control form-control-disabled"
-                                                  rows="7"
-                                                  ref="textareaGeneralNotes"
-                                                  wrap="hard"
-                                                  v-model="notesGeneral"
-                                                  @change="changeGeneralNotes"
-                                                  v-html="patient.general_notes"
-                                              ></textarea>
-                                          </div>
-                                      </template>
-                                  </iq-card>
-                                <iq-card>
-                                  <template v-slot:body>
-                                    <div class="pl-0 iq-card-header d-flex justify-content-between">
-                                      <h4>{{ $t('EPR.personalInfo.allergiesAndSensitivites') }}</h4>
-                                    </div>
-                                    <div class="iq-card-body p-0">
-                                      <textarea
-                                          :disabled="disabled"
-                                          style="line-height: 30px;"
-                                          v-model="patient.allergies"
-                                          class="textarea form-control form-control-disabled"
-                                          rows="3"
-                                         ></textarea>
-                                    </div>
-                                  </template>
-                                </iq-card>
-                                  <iq-card>
-                                      <template v-slot:body>
-                                          <div class="pl-0 iq-card-header d-flex justify-content-between">
-                                              <h4>{{ $t('EPR.personalInfo.personalDoctors') }}</h4>
-                                              <hr />
+                                          <div class="pl-0 iq-card-header d-flex justify-content-between margin-top">
+                                              <div class="iq-header-title mt-0">
+                                                  <h4 class="card-title">{{ $t('EPR.personalInfo.personalDoctors') }}<span><b-button v-if="disabledDoctors" variant="primary" :disabled="!disabledDoctors" @click="editPatientDoctors" class="float-right margin-top-edit-btn">{{ $t('EPR.personalInfo.editBtn') }}</b-button></span></h4>
+                                              </div>
                                           </div>
                                           <div class="iq-card-body" style="margin-top: -1rem;">
                                               <div class="row">
-                                                <b-form-group class="col-md-8 align-items-center" label-cols-sm="3" label-for="region">
-                                                  <template slot="label" >
-                                                    <span style="height: 45px; display: flex; align-items: center">
-                                                      {{ $t('EPR.personalInfo.personalDentist') }}:
-                                                    </span>
-                                                  </template>
-                                                <v-select
-                                                    :disabled="disabled"
-                                                    :clearable="false"
-                                                    :reduce="dentist => dentist.code"
-                                                    class="style-chooser form-control-disabled mb-1"
-                                                    v-model="patient.prm_dentist_user_id"
-                                                    :options="dentists">
-                                                </v-select>
-                                                </b-form-group>
-                                                <b-form-group class="col-md-8 align-items-center" label-cols-sm="3" label-for="region" style="margin-top: -1.5rem;">
-                                                  <template slot="label">
-                                                    <span style="height: 45px; display: flex; align-items: center">
-                                                     {{ $t('EPR.personalInfo.personalSurgeon') }}:
-                                                    </span>
-                                                  </template>
-                                                <v-select :disabled="disabled" :clearable="false" :reduce="dentist => dentist.code" class="style-chooser form-control-disabled mb-1" v-model="patient.prm_surgeon_user_id" :options="surgeons"></v-select>
-                                                </b-form-group>
+                                                  <b-form-group class="col-md-8 align-items-center" label-cols-sm="3" label-for="region">
+                                                      <template slot="label">
+                                                          <span style="height: 45px; display: flex; align-items: center">
+                                                              {{ $t('EPR.personalInfo.personalDentist') }}:
+                                                          </span>
+                                                      </template>
+                                                      <v-select :disabled="disabledDoctors"
+                                                                :clearable="false"
+                                                                :reduce="dentist => dentist.code"
+                                                                class="style-chooser form-control-disabled mb-1"
+                                                                v-model="patient.prm_dentist_user_id"
+                                                                :options="dentists">
+                                                      </v-select>
+                                                  </b-form-group>
+                                                  <b-form-group class="col-md-8 align-items-center" label-cols-sm="3" label-for="region" style="margin-top: -1.5rem;">
+                                                      <template slot="label">
+                                                          <span style="height: 45px; display: flex; align-items: center">
+                                                              {{ $t('EPR.personalInfo.personalSurgeon') }}:
+                                                          </span>
+                                                      </template>
+                                                      <v-select :disabled="disabledDoctors" :clearable="false" :reduce="dentist => dentist.code" class="style-chooser form-control-disabled mb-1" v-model="patient.prm_surgeon_user_id" :options="surgeons"></v-select>
+                                                  </b-form-group>
                                               </div>
+                                          </div>
+                                          <div class="text-center p-1" v-if="!disabledDoctors">
+                                              <b-button style="padding: 5px 25px;" v-b-modal.modal-1 variant="none" class="iq-bg-secondary mr-2">Cancel</b-button>
+                                              <b-button style="padding: 5px 25px;" @click="submitDoctors()" variant="primary">Save</b-button>
+                                              <b-modal id="modal-1" ok-title="OK" cancel-title="Cancel" @ok="cancelEditingPatientDoctors">
+                                                  <h4 class="my-4 card-title text-center">Are you sure you want to the<br>discard changes?</h4>
+                                              </b-modal>
+                                              <b-modal ref="my-modal" ok-only ok-variant="primary" ok-title="OK">
+                                                  <div class="text-center">
+                                                      <i class="ri-error-warning-fill ri-4x" style="color: #d84a45;"></i>
+                                                      <h4 class="my-4 card-title text-center">Unable to save changes, please try again</h4>
+                                                  </div>
+                                              </b-modal>
+                                          </div>
+                                      </template>
+                                  </iq-card>
+                                  <iq-card>
+                                      <template v-slot:body>
+                                          <div class="pl-0 iq-card-header d-flex justify-content-between margin-top">
+                                              <div class="iq-header-title mt-0">
+                                                  <h4 class="card-title">{{ $t('EPR.personalInfo.generalNotes') }}<span><b-button v-if="disabledNotes" variant="primary" :disabled="!disabledNotes" @click="editPatientNotes" class="float-right margin-top-edit-btn">{{ $t('EPR.personalInfo.editBtn') }}</b-button></span></h4>
+                                              </div>
+                                          </div>
+                                          <div class="iq-card-body p-0">
+                                              <textarea :disabled="disabledNotes"
+                                                        style="line-height: 30px;"
+                                                        class="textarea form-control form-control-disabled font-size-12"
+                                                        rows="7"
+                                                        ref="textareaGeneralNotes"
+                                                        wrap="hard"
+                                                        v-model="notesGeneral"
+                                                        @change="changeGeneralNotes"
+                                                        v-html="patient.general_notes"></textarea>
+                                          </div>
+                                          <div class="text-center p-1" v-if="!disabledNotes">
+                                              <b-button style="padding: 5px 25px;" v-b-modal.modal-1 variant="none" class="iq-bg-secondary mr-2">Cancel</b-button>
+                                              <b-button style="padding: 5px 25px;" @click="submitNotes()" variant="primary">Save</b-button>
+                                              <b-modal id="modal-1" ok-title="OK" cancel-title="Cancel" @ok="cancelEditingPatientNotes">
+                                                  <h4 class="my-4 card-title text-center">Are you sure you want to the<br>discard changes?</h4>
+                                              </b-modal>
+                                              <b-modal ref="my-modal" ok-only ok-variant="primary" ok-title="OK">
+                                                  <div class="text-center">
+                                                      <i class="ri-error-warning-fill ri-4x" style="color: #d84a45;"></i>
+                                                      <h4 class="my-4 card-title text-center">Unable to save changes, please try again</h4>
+                                                  </div>
+                                              </b-modal>
+                                          </div>
+                                      </template>
+                                  </iq-card>
+                                  <iq-card>
+                                      <template v-slot:body>
+                                          <div class="pl-0 iq-card-header d-flex justify-content-between margin-top">
+                                              <div class="iq-header-title mt-0">
+                                                  <h4 class="card-title">{{ $t('EPR.personalInfo.allergiesAndSensitivites') }}<span><b-button v-if="disabledAllergies" variant="primary" :disabled="!disabledAllergies" @click="editPatientAllergies" class="float-right margin-top-edit-btn">{{ $t('EPR.personalInfo.editBtn') }}</b-button></span></h4>
+                                              </div>
+                                          </div>
+                                          <div class="iq-card-body p-0">
+                                              <textarea :disabled="disabledAllergies"
+                                                        style="line-height: 30px;"
+                                                        v-model="patient.allergies"
+                                                        class="textarea form-control form-control-disabled font-size-12"
+                                                        rows="3"></textarea>
+                                          </div>
+                                          <div class="text-center p-1" v-if="!disabledAllergies">
+                                              <b-button style="padding: 5px 25px;" v-b-modal.modal-1 variant="none" class="iq-bg-secondary mr-2">Cancel</b-button>
+                                              <b-button style="padding: 5px 25px;" @click="submitAllergies()" variant="primary">Save</b-button>
+                                              <b-modal id="modal-1" ok-title="OK" cancel-title="Cancel" @ok="cancelEditingPatientAllergies">
+                                                  <h4 class="my-4 card-title text-center">Are you sure you want to the<br>discard changes?</h4>
+                                              </b-modal>
+                                              <b-modal ref="my-modal" ok-only ok-variant="primary" ok-title="OK">
+                                                  <div class="text-center">
+                                                      <i class="ri-error-warning-fill ri-4x" style="color: #d84a45;"></i>
+                                                      <h4 class="my-4 card-title text-center">Unable to save changes, please try again</h4>
+                                                  </div>
+                                              </b-modal>
                                           </div>
                                       </template>
                                   </iq-card>
                               </b-col>
                           </b-row>
-                          <div class="text-center p-1" v-if="!disabled">
-                              <b-button style="padding: 5px 25px;" v-b-modal.modal-1 variant="none" class="iq-bg-secondary mr-2">Cancel</b-button>
-                            <b-button style="padding: 5px 25px;" @click="submitData()" variant="primary" >Save</b-button>
-                            <b-modal id="modal-1" ok-title="OK" cancel-title="Cancel" @ok="cancelEditingPatient">
-                                  <h4 class="my-4 card-title text-center">Are you sure you want to the<br>discard changes?</h4>
-                              </b-modal>
-                              <b-modal ref="my-modal" ok-only ok-variant="primary" ok-title="OK">
-                                  <div class="text-center">
-                                      <i class="ri-error-warning-fill ri-4x" style="color: #d84a45;"></i>
-                                      <h4 class="my-4 card-title text-center">Unable to save changes, please try again</h4>
-                                  </div>
-                              </b-modal>
-                          </div>
                       </iq-card>
                   </tab-content-item>
                       <tab-content-item :active="false" id="files">
@@ -1159,7 +1196,10 @@ export default {
         // { image: require('../../assets/images/login/2.png'), name: 'File 3', type: 'Anamneza', created_at: '12.03.2021' },
         // { image: require('../../assets/images/login/3.png'), name: 'File 8', type: 'Rentgen', created_at: '08.03.2021' }
       ],
-      disabled: true,
+      disabledData: true,
+      disabledNotes: true,
+      disabledAllergies: true,
+      disabledDoctors: true,
       doctor: {
         profile: require('../../assets/images/user/1.jpg')
       },
@@ -1460,12 +1500,36 @@ export default {
     addInvoice () {
       this.modalInvoiceShow = true
     },
-    editPatient () {
-      this.disabled = !this.disabled
+    editPatientData () {
+      this.disabledData = !this.disabledData
       this.tempPatient = Object.assign({}, this.patient)
     },
-    cancelEditingPatient () {
-      this.disabled = !this.disabled
+    editPatientNotes () {
+      this.disabledNotes = !this.disabledNotes
+      this.tempPatient = Object.assign({}, this.patient)
+    },
+    editPatientAllergies () {
+      this.disabledAllergies = !this.disabledAllergies
+      this.tempPatient = Object.assign({}, this.patient)
+    },
+    editPatientDoctors () {
+      this.disabledDoctors = !this.disabledDoctors
+      this.tempPatient = Object.assign({}, this.patient)
+    },
+    cancelEditingPatientData () {
+      this.disabledData = !this.disabledData
+      this.patient = this.tempPatient
+    },
+    cancelEditingPatientNotes () {
+      this.disabledNotes = !this.disabledNotes
+      this.patient = this.tempPatient
+    },
+    cancelEditingPatientAllergies () {
+      this.disabledAllergies = !this.disabledAllergies
+      this.patient = this.tempPatient
+    },
+    cancelEditingPatientDoctors () {
+      this.disabledDoctors = !this.disabledDoctors
       this.patient = this.tempPatient
     },
     updatePatient () {
@@ -1496,9 +1560,21 @@ export default {
       }
     },
     submitData () {
-      this.disabled = true
+      this.disabledData = true
       this.updatePatient()
       // this.$refs['my-modal'].show() prikazi modal ukoliko dodje do greske neke
+    },
+    submitNotes () {
+      this.disabledNotes = true
+      this.updatePatient()
+    },
+    submitAllergies () {
+      this.disabledAllergies = true
+      this.updatePatient()
+    },
+    submitDoctors () {
+      this.disabledDoctors = true
+      this.updatePatient()
     },
     previewImage: function (event) {
       const input = event.target
@@ -1655,10 +1731,16 @@ export default {
     cursor: pointer;
 }
 
-.edit-btn {
-    float: right;
-    margin-top: 6.825rem !important;
-    margin-left: 50px !important;
+.margin-top {
+    margin-top: -0.5rem !important;
+}
+
+.margin-top-edit-btn {
+    margin-top: -0.225rem !important;
+}
+
+.margin-top-city {
+    margin-top: -0.05rem !important;
 }
 
 .style-chooser .vs__search::placeholder,

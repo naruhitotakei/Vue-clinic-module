@@ -183,7 +183,7 @@
     },
     "personalInfoTab": "Osebni podatki",
     "personalInfo": {
-      "edit": "Uredi podatke",
+      "editBtn": "Uredi",
       "personalInformation": "Osebni podatki",
       "firstName": "Ime",
       "lastName": "Priimek",

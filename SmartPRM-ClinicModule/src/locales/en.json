@@ -184,7 +184,7 @@
     },
     "personalInfoTab": "Personal Information",
     "personalInfo": {
-      "edit": "Edit data",
+      "editBtn": "Edit",
       "personalInformation": "Personal Information",
       "firstName": "First name",
       "lastName": "Last name",
