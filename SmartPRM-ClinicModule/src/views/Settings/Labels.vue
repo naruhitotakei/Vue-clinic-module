@@ -42,9 +42,11 @@
                        {{ data.item.color }}
                     </span>
                   </template>
+                    <!--        FUNCTIONALITY FOR DELETING LABELS DISABLED FOR NOW
                   <template v-slot:cell(action)="data">
                     <b-button variant=" iq-bg-danger mr-1 mb-1" size="sm" @click="deleteItem(data.item)"><i class="ri-close-circle-fill m-0"></i></b-button>
                   </template>
+                        -->
                 </b-table>
               </b-col>
             </b-row>
@@ -98,8 +100,8 @@ export default {
     return {
       columns: [
         { label: this.$t('labels.labelsColumns.labelText'), key: 'text', class: 'text-left' },
-        { label: this.$t('labels.labelsColumns.labelColor'), key: 'color', class: 'text-left' },
-        { label: this.$t('labels.labelsColumns.labelAction'), key: 'action', class: 'text-center action-column' }
+        { label: this.$t('labels.labelsColumns.labelColor'), key: 'color', class: 'text-left' }
+        // { label: this.$t('labels.labelsColumns.labelAction'), key: 'action', class: 'text-center action-column' }
       ],
       labels: [],
       isDataLoaded: false,
