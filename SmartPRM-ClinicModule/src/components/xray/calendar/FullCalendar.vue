@@ -110,16 +110,18 @@
                 <div class="col-md-9 d-flex align-items-center">
                     <date-picker :disabled="disabled"
                                  class="form-control form-control-disabled font-size-16"
+                                 :class="{'no-border margin-left': disabled}"
                                  v-model="formData.assignmentDate"
                                  type="datetime"
                                  :minute-step="5"
                                  :show-second="false"
                                  :lang="'en'"
                                  :format="'DD.MM.YYYY HH.mm'"></date-picker>
-                    <label for="start" class="mb-0 ml-3 mr-4">{{ $t('calendarEvent.end') }}*</label>
+                    <label for="start" class="mb-0">{{ $t('calendarEvent.end') }}*</label>
                     <date-picker :disabled="disabled"
                                  required
                                  class="form-control form-control-disabled font-size-16"
+                                 :class="{'no-border': disabled}"
                                  v-model="formData.end"
                                  type="time"
                                  :minute-step="5"
@@ -174,14 +176,14 @@
                 </div>
             </div>
             <template>
-                <div class="text-black font-size-18 mt-4">
+                <div class="cancelation-text font-size-18 mt-3 mb-1 row align-items-center justify-content-center w-100">
                     <p v-if="formData.appointment_canceled_in_advance_by_clinic === true">{{ $t('calendarEvent.appointmentCanceledInAdvanceByClinic') }}</p>
                     <p v-if="formData.appointment_canceled_in_advance_by_patient === true">{{ $t('calendarEvent.appointmentCanceledInAdvanceByPatient') }}</p>
                 </div>
             </template>
             <div class="modal-footer modal-footer-bt" style="width: 100%;">
                 <template v-if="disabled">
-                    <button v-if="formData.appointment_canceled_in_advance_by_clinic === false && formData.appointment_canceled_in_advance_by_patient === false" type="button" class="btn btn-secondary" @click="openCancelationModal = true">{{ $t('calendar.btnCancelation') }}</button>
+                    <button v-if="formData.appointment_canceled_in_advance_by_clinic === false && formData.appointment_canceled_in_advance_by_patient === false || openCancelationModal === true" type="button" class="btn btn-secondary" @click="openCancelationModal = true">{{ $t('calendar.btnCancelation') }}</button>
                     <button type="button" class="btn btn-secondary" @click="$emit('setModalShow', false), formData = defaultAppointment">{{ $t('calendar.btnClose') }}</button>
                     <button type="button" class="btn btn-secondary" @click="editMode">{{ $t('calendar.btnEdit') }}</button>
                     <button type="button" class="btn btn-primary" @click="viewPatient(formData.enquiry_id)">{{ $t('calendar.btnEPR') }}</button>
@@ -814,6 +816,18 @@ body .wrapper .custom-control-label::after {
  .vs__dropdown-menu {
    max-height: 300px !important;
  }
+
+ .no-border {
+     border: none !important;
+ }
+
+.margin-left {
+    margin-left: -0.775rem !important;
+}
+
+.cancelation-text {
+    color: red;
+}
 
   @import '~@fullcalendar/core/main.css';
   @import '~@fullcalendar/daygrid/main.css';
