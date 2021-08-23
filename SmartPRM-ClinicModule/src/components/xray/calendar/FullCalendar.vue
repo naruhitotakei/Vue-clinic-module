@@ -526,7 +526,7 @@ export default {
     },
     eventDrop (info) {
       let event = this.calendarApi.getEventById(info.event.id)
-      let newResource = this.calendarApi.getResourceById(info.newResource.id)        
+      let newResource = this.calendarApi.getResourceById(info.newResource.id)
       console.log('Info of event: ' + event)
       this.formData.id = event.id
       this.formData.assignmentDate = event.start
