@@ -205,7 +205,7 @@
                                       label="product_group_name"
                                       :reduce="product_group => product_group.product_group_id"
                                       class="style-chooser form-control-disabled font-size-16"
-                                      v-model="appointmentData.product_group"
+                                      v-model="appointmentData.product_group_name"
                                       :options="product_groups"></v-select>
                         </div>
                     </div>
@@ -435,7 +435,7 @@ export default {
         doctor_name: '',
         location: '',
         patient_id: '',
-        product_group: '',
+        product_group_name: '',
         appointment_canceled_in_advance_by_clinic: false,
         appointment_canceled_in_advance_by_patient: false
       },
