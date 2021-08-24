@@ -68,6 +68,7 @@
     "noAppointmentsToday": "No scheduled appointments today",
     "todaysAppointmentsColumn": {
       "patient": "Patient",
+      "productGroup": "Product Group",
       "doctor": "Doctor",
       "time": "Time",
       "contact": "Contact"

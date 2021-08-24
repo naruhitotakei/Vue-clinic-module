@@ -68,6 +68,7 @@
     "noAppointmentsToday": "Danes ni dogovorjenih terminov",
     "todaysAppointmentsColumn": {
       "patient": "Pacient",
+      "productGroup": "Produktna skupina",
       "doctor": "Zdravnik",
       "time": "Čas",
       "contact": "Kontakt"

@@ -327,10 +327,7 @@ export default {
         enquiry: enquiry,
         description: assignment.description,
         due_at: moment(assignment.due_at).format('YYYY-MM-DD'),
-        user_id: assignment.user_id,
-        patient_attended: assignment.patient_attended,
-        appointment_canceled_in_advance_by_clinic: assignment.appointment_canceled_in_advance_by_clinic,
-        appointment_canceled_in_advance_by_patient: assignment.appointment_canceled_in_advance_by_patient
+        user_id: assignment.user_id
 
       }
       this.modalAssigmentShow = true

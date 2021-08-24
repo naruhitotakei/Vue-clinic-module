@@ -181,9 +181,10 @@ app.get('/api/surgeons', async function (req, res) {
 // home
 ///////////////////////////////////
 
-app.get('/api/home/todays-appointments', (req, res) => {
+app.get('/api/home/todays-appointments/:locale', (req, res) => {
+    const locale = req.params.locale
     if (req.session.prm_user && req.session.prm_user.permissions && checkPermission(req.session.prm_user.permissions, homePermission))
-        daoHome.getTodaysAppointments(req, res, req.session.prm_user.id, req.session.prm_user.prm_client_id, getScope(req.session.prm_user.permissions, homePermission))
+        daoHome.getTodaysAppointments(req, res, req.session.prm_user.id, req.session.prm_user.prm_client_id, locale, getScope(req.session.prm_user.permissions, homePermission))
     else
         res.status(401).json("OK: user unauthorized")
 });

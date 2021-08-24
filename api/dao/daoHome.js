@@ -8,12 +8,15 @@ const pool = new Pool({
   port: process.env.POSTGRES_PORT || 5432,
 })
 
-const getTodaysAppointments = (request, response, user_id, prm_client_id, scope) => {
-    let statement = "SELECT concat(enquiries.name, ' ', enquiries.last_name) AS patient_name, doctor_name, " +
-        "appointments.time AS time, enquiries.phone AS patient_phone FROM appointments "
+const getTodaysAppointments = (request, response, user_id, prm_client_id, locale, scope) => {
+    let statement = "SELECT appointments.*, concat(enquiries.name, ' ', enquiries.last_name) AS patient_name, doctor_name, " +
+        "appointments.time AS time, enquiries.phone AS patient_phone, enquiries.id AS patient_id, " +
+        "prm_product_group_name.text AS product_group_name, prm_product_group_name.language AS language FROM appointments "
     statement += "LEFT JOIN enquiries ON appointments.enquiry_id = enquiries.id "
     statement += "LEFT JOIN users ON enquiries.prm_dentist_user_id = users.id "
-    statement += "WHERE date = CURRENT_DATE "
+    statement += "LEFT JOIN prm_product_group ON appointments.product_group_id = prm_product_group.product_group_id "
+    statement += "LEFT JOIN prm_product_group_name ON prm_product_group.product_group_id = prm_product_group_name.product_group_id "
+    statement += "WHERE date = CURRENT_DATE AND language = '" + locale + "' "
     statement += "AND appointments.appointment_canceled_in_advance_by_patient = FALSE "
     statement += "AND appointments.appointment_canceled_in_advance_by_clinic = FALSE "
     if (scope == 'All') {

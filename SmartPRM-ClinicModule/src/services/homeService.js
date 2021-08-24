@@ -1,5 +1,5 @@
-export async function getTodaysAppointments () {
-  const rawResponse = await fetch('/api/home/todays-appointments', {
+export async function getTodaysAppointments (locale) {
+  const rawResponse = await fetch('/api/home/todays-appointments/' + locale, {
     method: 'GET',
     credentials: 'same-origin',
     headers: {
