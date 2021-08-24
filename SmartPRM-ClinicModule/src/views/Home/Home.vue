@@ -29,10 +29,10 @@
                                  :per-page="todaysAppointmentsPerPage"
                                  :current-page="currentTodaysAppointmentsPage">
                             <template v-slot:cell(patient_name)="data">
-                                <router-link tag="span" :to="'/patients/'+ appointmentData.patient_id" style="cursor:pointer;" class="style-chooser form-control-disabled">{{ data.item.patient_name }}</router-link>
+                                <router-link tag="span" :to="'/patients/' + data.item.patient_id" style="cursor:pointer;" class="style-chooser form-control-disabled">{{ data.item.patient_name }}</router-link>
                             </template>
                             <template v-slot:cell(product_group_name)="data">
-                                <p @click="openAppointment(appointment)" style="cursor: pointer;" class="p-0 m-0">{{ data.item.product_group_name }}</p>
+                                <p @click="openAppointmentModal(data.item)" style="cursor: pointer;" class="p-0 m-0">{{ data.item.product_group_name }}</p>
                             </template>
                         </b-table>
                         <p v-else>{{ $t('home.noAppointmentsToday') }}</p>
@@ -162,7 +162,7 @@
                             <label for="patient" class="pt-1 mb-0">{{ $t('calendarEvent.patient') }} *</label>
                         </div>
                         <div class="col-md-9">
-                            <router-link tag="span" :to="'/patients/'+ appointmentData.patient_id" style="cursor:pointer;" class="ml-2 text-black style-chooser form-control-disabled font-size-16">{{ appointmentData.patient_name }}</router-link>
+                            <router-link tag="span" :to="'/patients/' + appointmentData.patient_id" style="cursor:pointer;" class="ml-2 text-black style-chooser form-control-disabled font-size-16">{{ appointmentData.patient_name }}</router-link>
                         </div>
                     </div>
                     <div class="row align-items-center justify-content-between w-100 " :class="{'mb-3': !disabled}">
@@ -217,7 +217,7 @@
                             <date-picker :disabled="disabled"
                                          class="form-control form-control-disabled font-size-16"
                                          :class="{'no-border margin-left': disabled}"
-                                         v-model="appointmentData.date"
+                                         v-model="appointmentData.time"
                                          type="datetime"
                                          :minute-step="5"
                                          :show-second="false"
@@ -294,12 +294,16 @@
                             <button type="button" class="btn btn-secondary" @click="editMode">{{ $t('calendar.btnEdit') }}</button>
                             <button type="button" class="btn btn-primary" @click="viewPatient(appointmentData.enquiry_id)">{{ $t('calendar.btnEPR') }}</button>
                         </template>
+                        <template v-if="!disabled">
+                            <button type="button" class="btn btn-secondary" @click="appointmentModal = false">{{ $t('calendar.btnClose') }}</button>
+                            <button type="button" class="btn btn-primary" @click="updateAppointment">{{ $t('calendar.btnSave') }}</button>
+                        </template>
                     </div>
                     <b-modal v-model="openCancelationModal"
                              :ok-title="$t('calendar.btnSave')"
                              :cancel-title="$t('calendar.btnCancel')"
                              :title="$t('calendar.btnCancelation')"
-                             @ok="updateCalendar"
+                             @ok="updateAppointment"
                              @close="closeCancelation"
                              @cancel="closeCancelation">
                         <div class="col-md-12 mb-2">
@@ -329,11 +333,11 @@
 <script>
 import IqCard from '../../components/xray/cards/iq-card'
 import { xray } from '../../config/pluginInit'
-import { getTodaysAppointments, getStaff, getAssignmentsForUser } from '../../services/homeService'
+import { getTodaysAppointments, getStaff, getAssignmentsForUser, updateAppointment } from '../../services/homeService'
 import moment from 'moment'
 import { getLocationsList } from '../../services/commonCodeLists'
 import { getProductGroups } from '@/services/products'
-import { getDoctorList, updateCalendar, getLabels } from '@/services/calendarService'
+import { getDoctorList, getLabels } from '@/services/calendarService'
 import DatePicker from 'vue2-datepicker'
 import 'vue2-datepicker/index.css'
 
@@ -441,7 +445,24 @@ export default {
       doctors: [],
       colors: [],
       appointmentModal: false,
-      openCancelationModal: false
+      openCancelationModal: false,
+      patient_attend: [
+        {
+          label: this.$t('calendarEvent.unknown'),
+          value: 'unknown',
+          checked: true
+        },
+        {
+          label: this.$t('calendarEvent.attended'),
+          value: 'attended',
+          checked: false
+        },
+        {
+          label: this.$t('calendarEvent.notAttended'),
+          value: 'not_attended',
+          checked: false
+        }
+      ]
     }
   },
   mounted () {
@@ -498,8 +519,10 @@ export default {
         this.doctors = data
       })
     },
-    updateCalendar (id, appointment) {
-      updateCalendar(id, appointment).then(() => {
+    updateAppointment () {
+      updateAppointment(this.appointmentData.id, this.appointmentData).then(() => {
+        console.log('updating event on home page: ' + this.appointmentData.id + ' ' + JSON.stringify(this.appointmentData))
+        this.appointmentModal = false
         this.getTodaysAppointmentsList()
       })
     },
@@ -525,6 +548,13 @@ export default {
       e.preventDefault()
       this.disabled = false
     },
+    checkRadio () {
+      if (this.appointmentData.appointment_canceled_in_advance_by_patient) {
+        this.appointmentData.appointment_canceled_in_advance_by_clinic = ''
+      } else {
+        this.appointmentData.appointment_canceled_in_advance_by_patient = ''
+      }
+    },
     showLabels (item) {
       if (this.disabled && this.appointmentData.label_id === item.id) {
         return true
@@ -532,8 +562,15 @@ export default {
         return true
       }
     },
-    openAppointment (appointment) {
-      this.appointmentData.id = appointment
+    showProps (item, prop) {
+      if (this.disabled && prop === item.value) {
+        return true
+      } else if (!this.disabled) {
+        return true
+      }
+    },
+    openAppointmentModal (item) {
+      this.appointmentData = item
       this.appointmentModal = true
       console.log('appointment data:' + JSON.stringify(this.appointmentData))
     }

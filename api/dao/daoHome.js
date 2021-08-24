@@ -7,11 +7,12 @@ const pool = new Pool({
   password: process.env.POSTGRES_PASSWORD,
   port: process.env.POSTGRES_PORT || 5432,
 })
+var moment = require('moment');
 
 const getTodaysAppointments = (request, response, user_id, prm_client_id, locale, scope) => {
     let statement = "SELECT appointments.*, concat(enquiries.name, ' ', enquiries.last_name) AS patient_name, doctor_name, " +
-        "appointments.time AS time, enquiries.phone AS patient_phone, enquiries.id AS patient_id, " +
-        "prm_product_group_name.text AS product_group_name, prm_product_group_name.language AS language FROM appointments "
+        "enquiries.phone AS patient_phone, enquiries.id AS patient_id, prm_product_group_name.text AS product_group_name, " +
+        "prm_product_group_name.language AS language FROM appointments "
     statement += "LEFT JOIN enquiries ON appointments.enquiry_id = enquiries.id "
     statement += "LEFT JOIN users ON enquiries.prm_dentist_user_id = users.id "
     statement += "LEFT JOIN prm_product_group ON appointments.product_group_id = prm_product_group.product_group_id "
@@ -66,8 +67,35 @@ const getAssignmentsForUser = (request, response, user_id) => {
     })
 }
 
+const updateAppointment = (request, response, id, appointment) => {
+    let patient_attended = appointment.patient_attended === 'attended' ? true : appointment.patient_attended === 'not_attended' ? false : null
+    let time = moment(appointment.date).format('HH:mm')
+    let statement = "UPDATE appointments SET "
+    if (appointment.location) statement += "location='" + appointment.location + "',"
+    if (appointment.doctor_name) statement += "doctor_name='" + appointment.doctor_name + "',"
+    if (appointment.product_group_name) statement += "product_group_id=" + appointment.product_group + ","
+    if (appointment.date) statement += "date='" + appointment.date + "',"
+    if (appointment.time) statement += "time='" + time + "',"
+    if (appointment.end_time) statement += "end_time='" + appointment.end_time + "',"
+    if (appointment.note) statement += "note='" + appointment.note + "',"
+    if (appointment.patient_attended) statement += "patient_attended=" + patient_attended + ","
+    statement += "appointment_canceled_in_advance_by_patient=" + appointment.appointment_canceled_in_advance_by_patient + ","
+    statement += "appointment_canceled_in_advance_by_clinic=" + appointment.appointment_canceled_in_advance_by_clinic + ","
+    if (appointment.label) statement += "label_id='" + appointment.label.id + ","
+    statement = statement.slice(0, -1)
+    statement += " WHERE id = " + id
+    console.log("Updating event via homepage: " + statement)
+    pool.query(statement, (error, results) => {
+        if (error) {
+            throw error
+        }
+        response.status(200).json(results)
+    })
+}
+
 module.exports = {
     getTodaysAppointments,
     getStaff,
-    getAssignmentsForUser
+    getAssignmentsForUser,
+    updateAppointment
 }

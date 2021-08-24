@@ -204,6 +204,15 @@ app.get('/api/home/open-assignments', (req, res) => {
         res.status(401).json("OK: user unauthorized")
 });
 
+app.put('/api/home/appointment/:id', (req, res) => {
+    const id = req.params.id
+    const appointment = req.body
+    if (req.session.prm_user && req.session.prm_user.permissions && checkPermission(req.session.prm_user.permissions, homePermission))
+        daoHome.updateAppointment(req, res, id, appointment)
+    else
+        res.status(401).json("OK: user unauthorized")
+});
+
 ///////////////////////////////////
 // calendar
 ///////////////////////////////////
