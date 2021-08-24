@@ -526,11 +526,12 @@ export default {
     },
     eventDrop (info) {
       let event = this.calendarApi.getEventById(info.event.id)
+      let newResource = this.calendarApi.getResourceById(info.newResource.id)
       console.log('Info of event: ' + event)
       this.formData.id = event.id
       this.formData.assignmentDate = event.start
       this.formData.end = event.end
-      this.formData.doctorId = event.doctorId
+      this.formData.doctorId = newResource.title
       this.formData.time = new Date(event.start).toTimeString()
       event.setExtendedProp('assignmentDate', this.formData.assignmentDate)
       event.setStart(this.formData.start)
