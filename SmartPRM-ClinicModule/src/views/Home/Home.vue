@@ -436,6 +436,7 @@ export default {
         location: '',
         patient_id: '',
         product_group_name: '',
+        product_group: '',
         appointment_canceled_in_advance_by_clinic: false,
         appointment_canceled_in_advance_by_patient: false
       },
