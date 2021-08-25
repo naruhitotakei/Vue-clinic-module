@@ -182,11 +182,13 @@ const createEnquiryNotes = (request, response, notes) => {
 }
 
 const getEnquiryPastAppointments = (request, response, enquiryId, locale) => {
-    pool.query("SELECT appointments.*, enquiries.*, prm_product_group_name.*  FROM appointments  " +
+    pool.query("SELECT appointments.*, enquiries.*, prm_product_group_name.*, appointments_label.*, appointments_label_name.*, prm_product_group_name.text AS product_group_text, appointments_label_name.text AS label_text FROM appointments " +
       "LEFT JOIN enquiries ON appointments.enquiry_id = enquiries.id  " +
       "LEFT JOIN prm_product_group ON appointments.product_group_id = prm_product_group.product_group_id  " +
       "LEFT JOIN prm_product_group_name ON prm_product_group_name.product_group_id = prm_product_group.product_group_id  " +
-      "WHERE enquiry_id = $1 AND prm_product_group_name.language = '" + locale + "' AND date < now():: date ORDER BY date ASC" , [enquiryId] , (error, results) => {
+      "LEFT JOIN appointments_label ON appointments.label_id = appointments_label.id  " +
+      "LEFT JOIN appointments_label_name ON appointments_label.id = appointments_label_name.appointment_label_id  " +
+      "WHERE enquiry_id = $1 AND prm_product_group_name.language = '" + locale + "' AND appointments_label_name.language = '" + locale + "' AND date < now():: date ORDER BY date ASC" , [enquiryId] , (error, results) => {
         if (error) {
             throw error
         }
@@ -195,11 +197,13 @@ const getEnquiryPastAppointments = (request, response, enquiryId, locale) => {
 }
 
 const getEnquiryFutureAppointments = (request, response, enquiryId, locale) => {
-    pool.query("SELECT appointments.*, enquiries.*, prm_product_group_name.*  FROM appointments  " +
+    pool.query("SELECT appointments.*, enquiries.*, prm_product_group_name.*, appointments_label.*, appointments_label_name.*, prm_product_group_name.text AS product_group_text, appointments_label_name.text AS label_text FROM appointments " +
         "LEFT JOIN enquiries ON appointments.enquiry_id = enquiries.id  " +
         "LEFT JOIN prm_product_group ON appointments.product_group_id = prm_product_group.product_group_id  " +
         "LEFT JOIN prm_product_group_name ON prm_product_group_name.product_group_id = prm_product_group.product_group_id  " +
-        "WHERE enquiry_id = $1 AND prm_product_group_name.language = '" + locale + "' AND date >= now():: date ORDER BY date ASC", [enquiryId], (error, results) => {
+        "LEFT JOIN appointments_label ON appointments.label_id = appointments_label.id  " +
+        "LEFT JOIN appointments_label_name ON appointments_label.id = appointments_label_name.appointment_label_id  " +
+        "WHERE enquiry_id = $1 AND prm_product_group_name.language = '" + locale + "' AND appointments_label_name.language = '" + locale + "' AND date >= now():: date ORDER BY date ASC", [enquiryId], (error, results) => {
             if (error) {
                 throw error
             }

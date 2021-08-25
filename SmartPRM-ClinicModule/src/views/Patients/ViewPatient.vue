@@ -81,7 +81,7 @@
                                                       <label for="patient" class="mb-0">{{ $t('calendarEvent.patient') }}</label>
                                                   </div>
                                                   <div class="col-md-9">
-                                                      <p class="text-black mb-0">{{ patient.name }} {{patient.last_name}}</p>
+                                                      <p class="text-black mb-0 ml-2">{{ patient.name }} {{patient.last_name}}</p>
                                                   </div>
                                               </div>
                                               <div class="row align-items-center justify-content-between w-100 mb-3">
@@ -90,6 +90,7 @@
                                                   </div>
                                                   <div class="col-md-9">
                                                       <v-select :clearable="false"
+                                                                :disabled="disabled"
                                                                 label="city"
                                                                 :reduce="location => location.id"
                                                                 class="style-chooser form-control-disabled font-size-15"
@@ -104,6 +105,7 @@
                                                   </div>
                                                   <div class="col-md-9">
                                                       <v-select :clearable="false"
+                                                                :disabled="disabled"
                                                                 label="name"
                                                                 :reduce="doctor => doctor.id"
                                                                 class="style-chooser form-control-disabled font-size-15"
@@ -118,6 +120,7 @@
                                                   </div>
                                                   <div class="col-md-9">
                                                       <v-select :clearable="false"
+                                                                :disabled="disabled"
                                                                 label="product_group_name"
                                                                 :reduce="product_group => product_group.product_group_id"
                                                                 class="style-chooser form-control-disabled font-size-15"
@@ -130,7 +133,9 @@
                                                       <label for="start" class="mb-0">{{ $t('calendarEvent.start') }}</label>
                                                   </div>
                                                   <div class="col-md-9 d-flex align-items-center mb-3">
-                                                      <date-picker class="form-control form-control-disabled font-size-16"
+                                                      <date-picker class="form-control form-control-disabled font-size-15"
+                                                                   :class="{'no-border margin-left': disabled}"
+                                                                   :disabled="disabled"
                                                                    v-model="formAppointments.assignmentDate"
                                                                    type="datetime"
                                                                    :minute-step="5"
@@ -139,7 +144,9 @@
                                                                    :format="'DD.MM.YYYY HH.mm'"></date-picker>
                                                       <label for="start" class="mb-0 ml-5 mr-2">{{ $t('calendarEvent.end') }}</label>
                                                       <date-picker required
-                                                                   class="form-control form-control-disabled font-size-16"
+                                                                   :disabled="disabled"
+                                                                   :class="{'no-border': disabled}"
+                                                                   class="form-control form-control-disabled font-size-15"
                                                                    v-model="formAppointments.end"
                                                                    type="time"
                                                                    :minute-step="5"
@@ -154,7 +161,7 @@
                                                       <label for="notes">{{ $t('calendarEvent.note') }}</label>
                                                   </div>
                                                   <div class="col-md-9">
-                                                      <textarea row="2" v-model="formAppointments.notes" class="form-control form-control-disabled font-size-15" placeholder="Add your note here for event!" id="note" required></textarea>
+                                                      <textarea :disabled="disabled" row="2" v-model="formAppointments.notes" class="form-control form-control-disabled font-size-15" placeholder="Add your note here for event!" id="note" required></textarea>
                                                   </div>
                                               </div>
                                               <div class="row align-items-center justify-content-between w-100 mb-3 mt-2">
@@ -168,19 +175,50 @@
                                                                         v-model="formAppointments.backgroundColor"
                                                                         :color="item.color"
                                                                         :value="item.value"
-                                                                        :key="index">
+                                                                        :key="index"
+                                                                        v-if="showLabels(item)">
                                                               {{ item.label }}
                                                           </b-form-radio>
                                                       </template>
                                                   </div>
                                               </div>
-
                                               <div class="modal-footer modal-footer-bt" style="width: 100%;">
                                                   <template v-if="disabled">
-                                                      <button type="button" class="btn btn-secondary" @click="addAppointmentModal = false">Cancel</button>
-                                                      <button type="button" class="btn btn-primary" @click="saveAppointment">Save Appointment</button>
+                                                      <button v-if="formAppointments.appointment_canceled_in_advance_by_clinic === false && formAppointments.appointment_canceled_in_advance_by_patient === false || openCancelationModal === true" type="button" class="btn btn-secondary" @click="openCancelationModal = true">{{ $t('calendar.btnCancelation') }}</button>
+                                                      <button type="button" class="btn btn-secondary" @click="addAppointmentModal = false, formAppointments = defaultFormAppointment">{{ $t('calendar.btnClose') }}</button>
+                                                      <button type="button" class="btn btn-secondary" @click="editMode">{{ $t('calendar.btnEdit') }}</button>
+                                                  </template>
+                                                  <template v-if="!disabled">
+                                                      <button type="button" class="btn btn-secondary" @click="addAppointmentModal = false, formAppointments = defaultFormAppointment, disabled = true">{{ $t('calendar.btnClose') }}</button>
+                                                      <button type="button" class="btn btn-primary" @click="saveAppointment">{{ $t('calendar.btnSave') }}</button>
                                                   </template>
                                               </div>
+                                              <b-modal v-model="openCancelationModal"
+                                                       :ok-title="$t('calendar.btnSave')"
+                                                       :cancel-title="$t('calendar.btnCancel')"
+                                                       :title="$t('calendar.btnCancelation')"
+                                                       @ok="saveAppointment"
+                                                       @close="closeCancelation"
+                                                       @cancel="closeCancelation">
+                                                  <div class="col-md-12 mb-2">
+                                                      <div class="d-flex justify-content-around mt-2">
+                                                          <b-form-radio class="custom-radio-color"
+                                                                        inline
+                                                                        v-model="formAppointments.appointment_canceled_in_advance_by_patient"
+                                                                        value="true"
+                                                                        name="cancelation">
+                                                              {{ $t('calendarEvent.appointmentCanceledInAdvanceByPatient') }}
+                                                          </b-form-radio>
+                                                          <b-form-radio class="custom-radio-color"
+                                                                        inline
+                                                                        v-model="formAppointments.appointment_canceled_in_advance_by_clinic"
+                                                                        value="true"
+                                                                        name="cancelation">
+                                                              {{ $t('calendarEvent.appointmentCanceledInAdvanceByClinic') }}
+                                                          </b-form-radio>
+                                                      </div>
+                                                  </div>
+                                              </b-modal>
                                           </div>
                                       </form>
                                   </b-modal>
@@ -319,8 +357,10 @@
                                                   <ul class="iq-timeline">
                                                       <li v-for="(item,index) in futureAppointments" :key="index + item.date">
                                                           <div class="timeline-dots border-success"></div>
-                                                          <h6>{{item.text}}<span class="float-right">{{item.note}}</span></h6>
-                                                          <small class="mt-1">{{item.date | formatDate}}</small>
+                                                          <div @click="openAppointmentModal(item)" style="cursor: pointer;">
+                                                              <h6>{{item.product_group_text}}<span class="float-right">{{item.note}}</span></h6>
+                                                              <small class="mt-1">{{item.date | formatDate}}</small>
+                                                          </div>
                                                       </li>
                                                   </ul>
                                               </template>
@@ -336,7 +376,7 @@
                                                   <ul class="iq-timeline" id="pastAppointments" :per-page="pastAppointmentsPerPage" :current-page="pastAppointmentsCurrentPage">
                                                       <li v-for="(item, index) in pastAppointments[pastAppointmentsCurrentPage]" :key="index">
                                                           <div class="timeline-dots border-success"></div>
-                                                          <h6>{{item.text}}<span class="float-right">{{item.note}}</span></h6>
+                                                          <h6>{{item.product_group_text}}<span class="float-right">{{item.note}}</span></h6>
                                                           <small class="mt-1">{{item.date | formatDate}}</small>
                                                       </li>
                                                   </ul>
@@ -1065,6 +1105,7 @@ export default {
       modalInvoiceShow: false,
       addAppointmentModal: false,
       modalTrashPatient: false,
+      openCancelationModal: false,
       generalNotes: '',
       notesGeneral: '',
       users: [],
@@ -1108,17 +1149,18 @@ export default {
         user: {}
       },
       formAppointments: {
+        id: '',
         patientId: null,
         notes: '',
         locationId: '',
-        doctor_id: '',
+        doctorId: '',
         assignmentDate: '',
         end: '',
-        hours: '',
-        minutes: '',
         backgroundColor: '#64D6E8',
         description: '',
-        product_groups: ''
+        product_groups: '',
+        appointment_canceled_in_advance_by_clinic: false,
+        appointment_canceled_in_advance_by_patient: false
       },
       notesFormData: {
         enquiry_id: +this.$route.params.patientId,
@@ -1261,7 +1303,9 @@ export default {
   },
   watch: {
     'formAppointments.assignmentDate' () {
-      this.formAppointments.end = this.formAppointments.assignmentDate
+      if (!this.formAppointments.id && !this.formAppointments.end) {
+        this.formAppointments.end = this.formAppointments.assignmentDate
+      }
     },
     '$i18n.locale' () {
       this.getProductGroups(this.$i18n.locale)
@@ -1570,6 +1614,7 @@ export default {
     },
     defaultFormAppointment () {
       return {
+        id: '',
         notes: '',
         location_id: location.city,
         doctor_id: '',
@@ -1579,7 +1624,9 @@ export default {
         minutes: '',
         backgroundColor: '',
         description: '',
-        product_groups: ''
+        product_groups: '',
+        appointment_canceled_in_advance_by_clinic: false,
+        appointment_canceled_in_advance_by_patient: false
       }
     },
     cancelAssignments () {
@@ -1676,12 +1723,53 @@ export default {
       getProductGroups(lang).then((response) => {
         this.product_groups = response
       })
+    },
+    openAppointmentModal (appointment) {
+      this.formAppointments = {
+        id: appointment.id,
+        locationId: appointment.location,
+        doctorId: appointment.doctor_name,
+        notes: appointment.note,
+        product_groups: appointment.product_group_text,
+        assignmentDate: new Date(moment(appointment.date).format('YYYY-MM-DD') + 'T' + appointment.time),
+        end: new Date(appointment.end_time),
+        backgroundColor: appointment.label_text,
+        appointment_canceled_in_advance_by_patient: false,
+        appointment_canceled_in_advance_by_clinic: false
+      }
+      this.addAppointmentModal = true
+      console.log('Data of appointment in EPR: ' + JSON.stringify(appointment))
+    },
+    showLabels (item) {
+      if (this.disabled && this.formAppointments.label_id === item.id) {
+        return true
+      } else if (!this.disabled) {
+        return true
+      }
+    },
+    editMode (e) {
+      e.preventDefault()
+      this.disabled = false
+    },
+    closeCancelation () {
+      this.openCancelationModal = false
+      this.formAppointments.appointment_canceled_in_advance_by_clinic = false
+      this.formAppointments.appointment_canceled_in_advance_by_patient = false
     }
   }
 }
 </script>
 
 <style lang="scss">
+
+.no-border {
+    border: none !important;
+}
+
+.margin-left {
+    margin-left: -0.775rem !important;
+}
+
 #dateInput {
     color: transparent !important;
 }

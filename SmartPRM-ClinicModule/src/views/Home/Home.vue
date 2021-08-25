@@ -498,10 +498,11 @@ export default {
             doctor_name: appointment.doctor_name,
             product_group_id: appointment.product_group_id,
             product_group_name: appointment.product_group_name,
-            date: moment(appointment.date).format('YYYY-MM-DD') + 'T' + appointment.time,
+            date: new Date(moment(appointment.date).format('YYYY-MM-DD') + 'T' + appointment.time),
             time: appointment.time,
-            end_time: appointment.end_time,
-            patient_phone: appointment.patient_phone
+            end_time: new Date(appointment.end_time),
+            patient_phone: appointment.patient_phone,
+            patient_id: appointment.patient_id
             // backgroundColor: slot.appointment_id ? '#F1773A' : '#64D6E8'
           })
         })
