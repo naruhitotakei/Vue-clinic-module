@@ -188,7 +188,7 @@
                             <v-select :disabled="disabled"
                                       :clearable="false"
                                       label="name"
-                                      :reduce="doctor => doctor.id"
+                                      :reduce="doctor => doctor.name"
                                       class="style-chooser form-control-disabled font-size-16"
                                       v-model="appointmentData.doctor_name"
                                       :options="doctors"
@@ -205,7 +205,7 @@
                                       label="product_group_name"
                                       :reduce="product_group => product_group.product_group_id"
                                       class="style-chooser form-control-disabled font-size-16"
-                                      v-model="appointmentData.product_group_name"
+                                      v-model="appointmentData.product_groups"
                                       :options="product_groups"></v-select>
                         </div>
                     </div>
@@ -245,7 +245,7 @@
                         </div>
                     </div>
                     <template v-if="appointmentData.id">
-                        <div class="row align-items-center justify-content-between w-100 pt-1" :class="{'mb-3': !disabled}">
+                        <div class="row align-items-center justify-content-between w-100 pt-1 mb-3" :class="{'mb-3': !disabled}">
                             <div class="col-md-3">
                                 <label for="color" class="mb-0">{{ $t('calendarEvent.patient_attended') }}</label><br>
                             </div>
@@ -261,30 +261,6 @@
                                     </b-form-radio>
                                 </template>
                             </div>
-                        </div>
-                    </template>
-                    <div class="row align-items-center justify-content-between w-100 pt-3 mb-3">
-                        <div class="col-md-3">
-                            <label for="color" class="mt-1 ml-1">{{ $t('calendarEvent.labels') }}</label><br>
-                        </div>
-                        <div class="col-md-9 mb-1">
-                            <template v-for="(item,index) in colors">
-                                <b-form-radio class="custom-radio-color font-size-16"
-                                              inline
-                                              v-model="appointmentData.label"
-                                              :color="item.color"
-                                              :value="item.value"
-                                              :key="index"
-                                              v-if="showLabels(item)">
-                                    {{ item.text }}
-                                </b-form-radio>
-                            </template>
-                        </div>
-                    </div>
-                    <template>
-                        <div class="cancelation-text font-size-18 mt-3 mb-1 row align-items-center justify-content-center w-100">
-                            <p v-if="appointmentData.appointment_canceled_in_advance_by_clinic === true">{{ $t('calendarEvent.appointmentCanceledInAdvanceByClinic') }}</p>
-                            <p v-if="appointmentData.appointment_canceled_in_advance_by_patient === true">{{ $t('calendarEvent.appointmentCanceledInAdvanceByPatient') }}</p>
                         </div>
                     </template>
                     <div class="modal-footer modal-footer-bt" style="width: 100%;">
@@ -337,7 +313,7 @@ import { getTodaysAppointments, getStaff, getAssignmentsForUser, updateAppointme
 import moment from 'moment'
 import { getLocationsList } from '../../services/commonCodeLists'
 import { getProductGroups } from '@/services/products'
-import { getDoctorList, getLabels } from '@/services/calendarService'
+import { getDoctorList } from '@/services/calendarService'
 import DatePicker from 'vue2-datepicker'
 import 'vue2-datepicker/index.css'
 
@@ -429,13 +405,11 @@ export default {
         date: '',
         end_time: '',
         note: '',
-        label: '',
         patient_attended: '',
         doctor_name: '',
         location: '',
         patient_id: '',
-        product_group_name: '',
-        product_group_id: '',
+        product_groups: '',
         appointment_canceled_in_advance_by_clinic: false,
         appointment_canceled_in_advance_by_patient: false
       },
@@ -473,7 +447,6 @@ export default {
     this.getLocations()
     this.getProductGroups(this.$i18n.locale)
     this.getDoctors()
-    this.getLabels(this.$i18n.locale)
     body[0].classList.add('sidebar-main-menu')
   },
   computed: {
@@ -491,22 +464,25 @@ export default {
     getTodaysAppointmentsList (locale) {
       getTodaysAppointments(locale).then(response => {
         response.map(appointment => {
+          let patientAttended = appointment.patient_attended === 'true' ? 'attended' : appointment.patient_attended === 'false' ? 'not_attended' : 'unknown'
           this.todaysAppointments.push({
             id: appointment.id,
             patient_name: appointment.patient_name,
             location: appointment.location,
             doctor_name: appointment.doctor_name,
+            product_groups: appointment.product_group_id,
             product_group_id: appointment.product_group_id,
             product_group_name: appointment.product_group_name,
             date: new Date(moment(appointment.date).format('YYYY-MM-DD') + 'T' + appointment.time),
             time: appointment.time,
             end_time: new Date(appointment.end_time),
             patient_phone: appointment.patient_phone,
-            patient_id: appointment.patient_id
-            // backgroundColor: slot.appointment_id ? '#F1773A' : '#64D6E8'
+            patient_id: appointment.patient_id,
+            patient_attended: patientAttended,
+            appointment_canceled_in_advance_by_clinic: false,
+            appointment_canceled_in_advance_by_patient: false
           })
         })
-        console.log('Fetching todays appointments on FE: ' + JSON.stringify(response[0]))
       })
     },
     getStaffList () {
@@ -535,23 +511,11 @@ export default {
       })
     },
     updateAppointment () {
+      this.todaysAppointments.splice(0, this.todaysAppointments.length)
       updateAppointment(this.appointmentData.id, this.appointmentData).then(() => {
-        console.log('updating event on home page: ' + this.appointmentData.id + ' ' + JSON.stringify(this.appointmentData))
+        this.disabled = true
         this.appointmentModal = false
-        this.getTodaysAppointmentsList()
-      })
-    },
-    getLabels (lang) {
-      getLabels(lang).then(data => {
-        data.map(label => {
-          this.colors.push({
-            id: label.id,
-            label: label.type,
-            color: label.type.split(' ').join(''),
-            value: label.color,
-            text: label.text
-          })
-        })
+        this.getTodaysAppointmentsList(this.$i18n.locale)
       })
     },
     closeCancelation () {
@@ -568,13 +532,6 @@ export default {
         this.appointmentData.appointment_canceled_in_advance_by_clinic = ''
       } else {
         this.appointmentData.appointment_canceled_in_advance_by_patient = ''
-      }
-    },
-    showLabels (item) {
-      if (this.disabled && this.appointmentData.label_id === item.id) {
-        return true
-      } else if (!this.disabled) {
-        return true
       }
     },
     showProps (item, prop) {
@@ -594,7 +551,6 @@ export default {
     '$i18n.locale' () {
       this.getTodaysAppointmentsList(this.$i18n.locale)
       this.getProductGroups(this.$i18n.locale)
-      this.getLabels(this.$i18n.locale)
     }
   }
 }
