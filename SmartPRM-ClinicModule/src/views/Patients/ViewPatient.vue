@@ -86,14 +86,6 @@
                                               </div>
                                               <div class="row align-items-center justify-content-between w-100 mb-3">
                                                   <div class="col-md-3">
-                                                      <label for="notes">{{ $t('calendarEvent.note') }}</label>
-                                                  </div>
-                                                  <div class="col-md-9">
-                                                      <textarea row="2" v-model="formAppointments.notes" class="form-control form-control-disabled font-size-15" placeholder="Add your note here for event!" id="note" required></textarea>
-                                                  </div>
-                                              </div>
-                                              <div class="row align-items-center justify-content-between w-100 mb-3">
-                                                  <div class="col-md-3">
                                                       <label for="location" class="ml-0 mb-0">{{ $t('calendarEvent.location') }}</label>
                                                   </div>
                                                   <div class="col-md-9">
@@ -120,7 +112,7 @@
                                                                 style="min-width: 305px;"></v-select>
                                                   </div>
                                               </div>
-                                             <div class="row align-items-center justify-content-between w-100 mb-3">
+                                              <div class="row align-items-center justify-content-between w-100 mb-3">
                                                   <div class="col-md-3 pl-3 pr-0">
                                                       <label for="product_group" class="mb-0">{{ $t('calendarEvent.product_group') }}</label>
                                                   </div>
@@ -133,50 +125,51 @@
                                                                 :options="product_groups"></v-select>
                                                   </div>
                                               </div>
-                                            <div class="row align-items-center justify-content-between w-100 " :class="{'mb-3': !disabled}">
-                                              <div class="col-md-3">
-                                                <label for="start" class="mb-0">{{ $t('calendarEvent.start') }}</label>
-                                              </div>
-                                              <div class="col-md-9 d-flex align-items-center">
-                                                <date-picker
-                                                    class="form-control form-control-disabled font-size-16"
-                                                    v-model="formAppointments.assignmentDate"
-                                                    type="datetime"
-                                                    :minute-step="5"
-                                                    :show-second="false"
-                                                    :lang="'en'"
-                                                    :format="'DD.MM.YYYY HH.mm'"
-                                                ></date-picker>
-                                                <label for="start" class="mb-0 ml-5 mr-2">{{ $t('calendarEvent.end') }}</label>
-                                                <date-picker
-                                                    required
-                                                    class="form-control form-control-disabled font-size-16"
-                                                    v-model="formAppointments.end"
-                                                    type="time"
-                                                    :minute-step="5"
-                                                    :show-second="false"
-                                                    :lang="'en'"
-                                                    :format="'DD.MM.YYYY HH.mm'"
-                                                ></date-picker>
-                                              </div>
-                                            </div>
-                                            <br>
-                                              <div class="row align-items-center justify-content-between w-100 mb-3 mt-2">
+                                              <div class="row align-items-center justify-content-between w-100 " :class="{'mb-3': !disabled}">
                                                   <div class="col-md-3">
-                                                      <label for="color" >{{ $t('calendarEvent.labels') }}</label><br>
+                                                      <label for="start" class="mb-0">{{ $t('calendarEvent.start') }}</label>
+                                                  </div>
+                                                  <div class="col-md-9 d-flex align-items-center mb-3">
+                                                      <date-picker class="form-control form-control-disabled font-size-16"
+                                                                   v-model="formAppointments.assignmentDate"
+                                                                   type="datetime"
+                                                                   :minute-step="5"
+                                                                   :show-second="false"
+                                                                   :lang="'en'"
+                                                                   :format="'DD.MM.YYYY HH.mm'"></date-picker>
+                                                      <label for="start" class="mb-0 ml-5 mr-2">{{ $t('calendarEvent.end') }}</label>
+                                                      <date-picker required
+                                                                   class="form-control form-control-disabled font-size-16"
+                                                                   v-model="formAppointments.end"
+                                                                   type="time"
+                                                                   :minute-step="5"
+                                                                   :show-second="false"
+                                                                   :lang="'en'"
+                                                                   :format="'DD.MM.YYYY HH.mm'"></date-picker>
+                                                  </div>
+                                              </div>
+                                              <br>
+                                              <div class="row align-items-center justify-content-between w-100 mb-3">
+                                                  <div class="col-md-3">
+                                                      <label for="notes">{{ $t('calendarEvent.note') }}</label>
                                                   </div>
                                                   <div class="col-md-9">
-                                                    {{formAppointments.backgroundColor}}
+                                                      <textarea row="2" v-model="formAppointments.notes" class="form-control form-control-disabled font-size-15" placeholder="Add your note here for event!" id="note" required></textarea>
+                                                  </div>
+                                              </div>
+                                              <div class="row align-items-center justify-content-between w-100 mb-3 mt-2">
+                                                  <div class="col-md-3">
+                                                      <label for="color">{{ $t('calendarEvent.labels') }}</label><br>
+                                                  </div>
+                                                  <div class="col-md-9">
                                                       <template v-for="(item,index) in colors">
-                                                          <b-form-radio
-                                                              class="custom-radio-color"
-                                                              inline
-                                                              v-model="formAppointments.backgroundColor"
-                                                              :color="item.color"
-                                                              :value="item.value"
-                                                              :key="index"
-                                                          >
-                                                            {{ item.label }}
+                                                          <b-form-radio class="custom-radio-color"
+                                                                        inline
+                                                                        v-model="formAppointments.backgroundColor"
+                                                                        :color="item.color"
+                                                                        :value="item.value"
+                                                                        :key="index">
+                                                              {{ item.label }}
                                                           </b-form-radio>
                                                       </template>
                                                   </div>
@@ -326,7 +319,7 @@
                                                   <ul class="iq-timeline">
                                                       <li v-for="(item,index) in futureAppointments" :key="index + item.date">
                                                           <div class="timeline-dots border-success"></div>
-                                                          <h6>{{item.note}}<span class="float-right">{{item.text}}</span></h6>
+                                                          <h6>{{item.text}}<span class="float-right">{{item.note}}</span></h6>
                                                           <small class="mt-1">{{item.date | formatDate}}</small>
                                                       </li>
                                                   </ul>
@@ -343,7 +336,7 @@
                                                   <ul class="iq-timeline" id="pastAppointments" :per-page="pastAppointmentsPerPage" :current-page="pastAppointmentsCurrentPage">
                                                       <li v-for="(item, index) in pastAppointments[pastAppointmentsCurrentPage]" :key="index">
                                                           <div class="timeline-dots border-success"></div>
-                                                          <h6>{{item.note}}<span class="float-right">{{item.text}}</span></h6>
+                                                          <h6>{{item.text}}<span class="float-right">{{item.note}}</span></h6>
                                                           <small class="mt-1">{{item.date | formatDate}}</small>
                                                       </li>
                                                   </ul>
@@ -939,7 +932,7 @@ export default {
     this.getUserLogin()
     this.getDoctors()
     this.getProductGroups(this.$i18n.locale)
-    this.getLabels()
+    this.getLabels(this.$i18n.locale)
     this.formAppointments.assignmentDate = new Date()
   },
   computed: {
@@ -1106,38 +1099,7 @@ export default {
           value: 'offer'
         }
       ],
-      colors: [
-        // {
-        //   label: 'Default',
-        //   color: 'default',
-        //   value: '#64D6E8'
-        // },
-        // {
-        //   label: 'Label 1',
-        //   color: 'label1',
-        //   value: '#F54E65'
-        // },
-        // {
-        //   label: 'Label 2',
-        //   color: 'label2',
-        //   value: '#9E1729'
-        // },
-        // {
-        //   label: 'Label 3',
-        //   color: 'label3',
-        //   value: '#148A9C'
-        // },
-        // {
-        //   label: 'Label 4',
-        //   color: 'label4',
-        //   value: '#E8C007'
-        // },
-        // {
-        //   label: 'Label 5',
-        //   color: 'label5',
-        //   value: '#9E8205'
-        // }
-      ],
+      colors: [],
       formData: {
         enquiry: {
           id: +this.$route.params.patientId
@@ -1196,6 +1158,7 @@ export default {
         // { image: require('../../assets/images/login/2.png'), name: 'File 3', type: 'Anamneza', created_at: '12.03.2021' },
         // { image: require('../../assets/images/login/3.png'), name: 'File 8', type: 'Rentgen', created_at: '08.03.2021' }
       ],
+      disabled: true,
       disabledData: true,
       disabledNotes: true,
       disabledAllergies: true,
@@ -1307,8 +1270,8 @@ export default {
     }
   },
   methods: {
-    getLabels () {
-      getLabels().then(data => {
+    getLabels (lang) {
+      getLabels(lang).then(data => {
         data.map(label => {
           this.colors.push({
             id: label.id,
