@@ -217,7 +217,7 @@
                             <date-picker :disabled="disabled"
                                          class="form-control form-control-disabled font-size-16"
                                          :class="{'no-border margin-left': disabled}"
-                                         v-model="appointmentData.time"
+                                         v-model="appointmentData.date"
                                          type="datetime"
                                          :minute-step="5"
                                          :show-second="false"
@@ -295,7 +295,7 @@
                             <button type="button" class="btn btn-primary" @click="viewPatient(appointmentData.enquiry_id)">{{ $t('calendar.btnEPR') }}</button>
                         </template>
                         <template v-if="!disabled">
-                            <button type="button" class="btn btn-secondary" @click="appointmentModal = false">{{ $t('calendar.btnClose') }}</button>
+                            <button type="button" class="btn btn-secondary" @click="appointmentModal = false, disabled = true">{{ $t('calendar.btnClose') }}</button>
                             <button type="button" class="btn btn-primary" @click="updateAppointment">{{ $t('calendar.btnSave') }}</button>
                         </template>
                     </div>
@@ -427,7 +427,6 @@ export default {
         id: '',
         patient_name: '',
         date: '',
-        time: '',
         end_time: '',
         note: '',
         label: '',
@@ -436,7 +435,7 @@ export default {
         location: '',
         patient_id: '',
         product_group_name: '',
-        product_group: '',
+        product_group_id: '',
         appointment_canceled_in_advance_by_clinic: false,
         appointment_canceled_in_advance_by_patient: false
       },
@@ -491,8 +490,22 @@ export default {
   methods: {
     getTodaysAppointmentsList (locale) {
       getTodaysAppointments(locale).then(response => {
-        this.todaysAppointments = response
-        console.log('Fetching todays appointments: ' + JSON.stringify(response))
+        response.map(appointment => {
+          this.todaysAppointments.push({
+            id: appointment.id,
+            patient_name: appointment.patient_name,
+            location: appointment.location,
+            doctor_name: appointment.doctor_name,
+            product_group_id: appointment.product_group_id,
+            product_group_name: appointment.product_group_name,
+            date: moment(appointment.date).format('YYYY-MM-DD') + 'T' + appointment.time,
+            time: appointment.time,
+            end_time: appointment.end_time,
+            patient_phone: appointment.patient_phone
+            // backgroundColor: slot.appointment_id ? '#F1773A' : '#64D6E8'
+          })
+        })
+        console.log('Fetching todays appointments on FE: ' + JSON.stringify(response[0]))
       })
     },
     getStaffList () {
