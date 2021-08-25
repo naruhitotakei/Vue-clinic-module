@@ -544,7 +544,6 @@ export default {
     openAppointmentModal (item) {
       this.appointmentData = item
       this.appointmentModal = true
-      console.log('appointment data:' + JSON.stringify(this.appointmentData))
     }
   },
   watch: {

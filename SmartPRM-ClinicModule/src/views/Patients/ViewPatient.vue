@@ -73,7 +73,7 @@
                                           </div>
                                       </template>
                                   </iq-card>
-                                  <b-modal v-model="addAppointmentModal" no-close-on-esc no-close-on-backdrop size="lg" title="Appointment Details" ok-title="Save Changes" @ok="addAppointmentModal = false" @close="addAppointmentModal = false" cancel-title="Close" hide-footer>
+                                  <b-modal v-model="addAppointmentModal" no-close-on-esc no-close-on-backdrop size="lg" :title="$t('calendar.appointmentDetails')" ok-title="Save Changes" @ok="addAppointmentModal = false" @close="addAppointmentModal = false" cancel-title="Close" hide-footer>
                                       <form class="calendar-modal">
                                           <div class="form-row">
                                               <div class="row align-items-center justify-content-between w-100 mb-3">
@@ -119,8 +119,8 @@
                                                       <label for="product_group" class="mb-0">{{ $t('calendarEvent.product_group') }}</label>
                                                   </div>
                                                   <div class="col-md-9">
-                                                      <v-select :clearable="false"
-                                                                :disabled="disabled"
+                                                      <v-select :disabled="disabled"
+                                                                :clearable="false"
                                                                 label="product_group_name"
                                                                 :reduce="product_group => product_group.product_group_id"
                                                                 class="style-chooser form-control-disabled font-size-15"
@@ -189,7 +189,7 @@
                                                       <button type="button" class="btn btn-secondary" @click="editMode">{{ $t('calendar.btnEdit') }}</button>
                                                   </template>
                                                   <template v-if="!disabled">
-                                                      <button type="button" class="btn btn-secondary" @click="addAppointmentModal = false, formAppointments = defaultFormAppointment, disabled = true">{{ $t('calendar.btnClose') }}</button>
+                                                      <button type="button" class="btn btn-secondary" @click="closeAppointmentModal">{{ $t('calendar.btnClose') }}</button>
                                                       <button type="button" class="btn btn-primary" @click="saveAppointment">{{ $t('calendar.btnSave') }}</button>
                                                   </template>
                                               </div>
@@ -941,7 +941,7 @@ import { getCountriesList, getRegionsList, getLocationsList, getMunicipalitiesLi
 import moment from 'moment'
 import { createAssignments } from '@/services/assignmentsService'
 import { fileUpload, getFiles } from '@/services/upDownLoad'
-import { createCalendar, getDoctorList, getLabels } from '@/services/calendarService'
+import { createCalendar, getDoctorList, getLabels, updateCalendar } from '@/services/calendarService'
 import { getProductGroups } from '@/services/products'
 import Tiff from 'tiff.js'
 import DatePicker from 'vue2-datepicker'
@@ -1303,7 +1303,7 @@ export default {
   },
   watch: {
     'formAppointments.assignmentDate' () {
-      if (!this.formAppointments.id && !this.formAppointments.end) {
+      if (!this.formAppointments.id) {
         this.formAppointments.end = this.formAppointments.assignmentDate
       }
     },
@@ -1670,11 +1670,23 @@ export default {
     },
     addAppointment () {
       this.addAppointmentModal = true
+      this.disabled = false
     },
-    saveAppointment  () {
+    closeAppointmentModal () {
+      this.addAppointmentModal = false
+      this.formAppointments = this.defaultFormAppointment()
+      this.disabled = true
+    },
+    updateCalendar (id, appointment) {
+      updateCalendar(id, appointment).then(() => {
+        this.addAppointmentModal = false
+        this.getPatientPastAppointments(this.patientId, this.$i18n.locale)
+        this.getPatientFutureAppointments(this.patientId, this.$i18n.locale)
+      })
+    },
+    saveAppointment () {
       this.addAppointmentModal = false
       this.formAppointments.resourceId = this.formAppointments.doctorId
-
       this.formAppointments.patientId = this.patient.id
       if (typeof this.formAppointments.doctorId === 'number') {
         let doctor = this.doctors.find(doctor => doctor.id === this.formAppointments.doctorId)
@@ -1692,11 +1704,16 @@ export default {
           return label.value === this.formAppointments.backgroundColor
         })
       }
-      createCalendar(this.formAppointments).then(() => {
+      if (!this.formAppointments.id) {
+        createCalendar(this.formAppointments).then(() => {
+          this.formAppointments = this.defaultFormAppointment()
+          this.getPatientFutureAppointments(this.patientId, this.$i18n.locale)
+        })
+      } else {
+        this.updateCalendar(this.formAppointments.id, this.formAppointments)
         this.formAppointments = this.defaultFormAppointment()
-        this.$emit('setModalShow', false)
         this.getPatientFutureAppointments(this.patientId, this.$i18n.locale)
-      })
+      }
     },
     getLocations () {
       getLocationsList().then(response => {
