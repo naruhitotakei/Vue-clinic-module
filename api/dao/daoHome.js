@@ -58,7 +58,7 @@ const getAssignmentsForUser = (request, response, user_id) => {
     statement += "LEFT JOIN users ON todos.user_id = users.id "
     statement += "WHERE todos.completed = false "
     statement += "AND users.id = " + user_id
-    statement += "ORDER BY due_at ASC "
+    statement += " ORDER BY due_at ASC "
     pool.query(statement, (error, results) => {
         if (error) {
             throw error
