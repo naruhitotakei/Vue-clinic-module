@@ -1460,7 +1460,6 @@ export default {
     getPatientFutureAppointments (id, lang) {
       getEnquiryFutureAppointments(id, lang).then(response => {
         this.futureAppointments = response
-        console.log('getting patients future appointments on FE: ' + JSON.stringify(response))
       })
     },
     getPatientAssignments (id) {
@@ -1761,7 +1760,6 @@ export default {
         appointment_canceled_in_advance_by_clinic: false
       }
       this.addAppointmentModal = true
-      console.log('Data of appointment in EPR: ' + JSON.stringify(appointment))
     },
     showLabels (item) {
       if (this.disabled && this.formAppointments.label_id === item.id) {

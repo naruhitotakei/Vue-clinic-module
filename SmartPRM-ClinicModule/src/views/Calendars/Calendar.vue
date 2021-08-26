@@ -140,7 +140,7 @@
 <script>
 import { xray } from '../../config/pluginInit'
 import appointmentBook from '../../services/appointbook'
-import { getCalendar, getDoctorList, getLabels } from '@/services/calendarService'
+import { getCalendar, getDoctorList } from '@/services/calendarService'
 import _ from 'lodash'
 import moment from 'moment'
 import { getProductGroups } from '@/services/products'
@@ -171,16 +171,8 @@ export default {
         default: false
       },
       product_groups: [],
-      resources: [
-        // { id: 2, title: 'Dr. Katic22222', time: '2021-06-3' },
-        // { id: 7, title: 'Dr. Fabjan' },
-        // { id: 24, title: 'Dr. Kržič' }
-      ],
-      clonedResources: [
-        // { id: 'a', title: 'Doctor 1', eventColor: 'sandybrown' },
-        // { id: 'b', title: 'Doctor 2', eventColor: 'blue' },
-        // { id: 'c', title: 'Doctor 3', eventColor: 'red' }
-      ],
+      resources: [],
+      clonedResources: [],
       formData: {
         appName: '',
         dateTime: '',
@@ -194,32 +186,12 @@ export default {
         presence: ''
       },
       doctorsList: [],
-      doctors: [
-        // {
-        //   id: 'a',
-        //   title: 'Doctor 1',
-        //   checked: false,
-        //   disabled: false
-        // },
-        // {
-        //   id: 'b',
-        //   title: 'Doctor 2',
-        //   checked: false,
-        //   disabled: false
-        // },
-        // {
-        //   id: 'c',
-        //   title: 'Doctor 3',
-        //   checked: false,
-        //   disabled: false
-        // }
-      ],
+      doctors: [],
       config: {
         dateFormat: 'Y-m-d',
         inline: true
       },
-      check: [],
-      colors: []
+      check: []
     }
   },
   mounted () {
@@ -227,7 +199,6 @@ export default {
     this.getApontments()
     this.getDoctors()
     this.getProductGroups(this.$i18n.locale)
-    this.getLabels(this.$i18n.locale)
   },
   watch: {
     'allDoctorCheck' () {
@@ -264,18 +235,6 @@ export default {
     }
   },
   methods: {
-    getLabels (lang) {
-      getLabels(lang).then(data => {
-        data.map(label => {
-          this.colors.push({
-            id: label.id,
-            label: label.type,
-            color: label.type.split(' ').join(''),
-            value: label.color
-          })
-        })
-      })
-    },
     addAppointment () {
       this.setModalShow(true)
     },
@@ -311,39 +270,16 @@ export default {
       this.events = []
       getCalendar('2021-01-01', '2021-12-31', '', this.$i18n.locale).then(data => {
         let dataWithDoctor = data.filter(item => {
-          if (item.doctor_user_id !== null) {
-            // this.doctors.push({
-            //   id: Date.now(),
-            //   title: item.doctor_name.split(',')[0],
-            //   disabled: false,
-            //   checked: false
-            // })
-            // this.resources.push({
-            //   id: item.doctor_user_id,
-            //   title: item.doctor_name
-            // })
-          }
           return item
         })
         this.doctors = _.uniqBy(this.doctors, 'title')
 
         this.resources = _.uniqBy(this.resources, 'id')
-        // this.resources = this.resources.map(item => {
-        //   let name = item.title.split(',')[0]
-        //   let nameWithoutDr = name.split('Dr.')[0].length ? name.split('Dr.')[0] : name.split('Dr.')[1]
-        //   return {
-        //     id: item.id,
-        //     title: nameWithoutDr
-        //   }
-        // })
         this.clonedResources = this.resources
         dataWithDoctor.map(item => {
           let patientAttended = item.patient_attended === 'true' ? 'attended' : item.patient_attended === 'null' ? 'unknown' : 'not_attended'
           let endDay = this.calculateEndDate(moment(item.date).format('YYYY-MM-DD') + 'T' + item.time, 0, 15)
           let doctor = this.doctorsList.find(doc => doc.name === item.app_doctor_name)
-          if (item.id === 41547) {
-            // console.log(item)
-          }
           this.events.push({
             id: item.id,
             title: item.name + ' ' + item.last_name,
@@ -378,7 +314,6 @@ export default {
           })
         })
         this.events = _.uniqBy(this.events, 'id')
-        // console.log('Fetching calendar events: ' + JSON.stringify(this.events))
       })
     },
     calculateEndDate (startDate, hours, minutes) {
@@ -391,7 +326,6 @@ export default {
       })
     },
     checkData (item) {
-      // console.log(item, 'ITEM')
       this.selectDoctor = item
       this.doctors.map(doctor => {
         if (doctor.title === item.title) {
