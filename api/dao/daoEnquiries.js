@@ -182,7 +182,9 @@ const createEnquiryNotes = (request, response, notes) => {
 }
 
 const getEnquiryPastAppointments = (request, response, enquiryId, locale) => {
-    pool.query("SELECT appointments.*, enquiries.*, prm_product_group_name.*, appointments_label.*, appointments_label_name.*, prm_product_group_name.text AS product_group_text, appointments_label_name.text AS label_text FROM appointments " +
+    pool.query("SELECT appointments.*, enquiries.*, prm_product_group_name.*, appointments_label.*, appointments_label_name.*, " +
+      "appointments.id AS appointment_id, prm_product_group_name.text AS product_group_text, " +
+      "appointments_label_name.text AS label_text FROM appointments " +
       "LEFT JOIN enquiries ON appointments.enquiry_id = enquiries.id  " +
       "LEFT JOIN prm_product_group ON appointments.product_group_id = prm_product_group.product_group_id  " +
       "LEFT JOIN prm_product_group_name ON prm_product_group_name.product_group_id = prm_product_group.product_group_id  " +
@@ -197,7 +199,9 @@ const getEnquiryPastAppointments = (request, response, enquiryId, locale) => {
 }
 
 const getEnquiryFutureAppointments = (request, response, enquiryId, locale) => {
-    pool.query("SELECT appointments.*, enquiries.*, prm_product_group_name.*, appointments_label.*, appointments_label_name.*, prm_product_group_name.text AS product_group_text, appointments_label_name.text AS label_text FROM appointments " +
+    pool.query("SELECT appointments.*, enquiries.*, prm_product_group_name.*, appointments_label.*, appointments_label_name.*, " +
+        "appointments.id AS appointment_id, prm_product_group_name.text AS product_group_text, " +
+        "appointments_label_name.text AS label_text FROM appointments " +
         "LEFT JOIN enquiries ON appointments.enquiry_id = enquiries.id  " +
         "LEFT JOIN prm_product_group ON appointments.product_group_id = prm_product_group.product_group_id  " +
         "LEFT JOIN prm_product_group_name ON prm_product_group_name.product_group_id = prm_product_group.product_group_id  " +

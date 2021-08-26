@@ -182,6 +182,12 @@
                                                       </template>
                                                   </div>
                                               </div>
+                                              <template>
+                                                  <div class="cancelation-text font-size-18 mt-3 mb-1 row align-items-center justify-content-center w-100">
+                                                      <p v-if="formAppointments.appointment_canceled_in_advance_by_clinic === true">{{ $t('calendarEvent.appointmentCanceledInAdvanceByClinic') }}</p>
+                                                      <p v-if="formAppointments.appointment_canceled_in_advance_by_patient === true">{{ $t('calendarEvent.appointmentCanceledInAdvanceByPatient') }}</p>
+                                                  </div>
+                                              </template>
                                               <div class="modal-footer modal-footer-bt" style="width: 100%;">
                                                   <template v-if="disabled">
                                                       <button v-if="formAppointments.appointment_canceled_in_advance_by_clinic === false && formAppointments.appointment_canceled_in_advance_by_patient === false || openCancelationModal === true" type="button" class="btn btn-secondary" @click="openCancelationModal = true">{{ $t('calendar.btnCancelation') }}</button>
@@ -1309,8 +1315,8 @@ export default {
     },
     '$i18n.locale' () {
       this.getProductGroups(this.$i18n.locale)
-      this.getEnquiryPastAppointments(this.$i18n.locale)
-      this.getEnquiryFutureAppointments(this.$i18n.locale)
+      this.getPatientPastAppointments(this.patientId, this.$i18n.locale)
+      this.getPatientFutureAppointments(this.patientId, this.$i18n.locale)
     }
   },
   methods: {
@@ -1454,6 +1460,7 @@ export default {
     getPatientFutureAppointments (id, lang) {
       getEnquiryFutureAppointments(id, lang).then(response => {
         this.futureAppointments = response
+        console.log('getting patients future appointments on FE: ' + JSON.stringify(response))
       })
     },
     getPatientAssignments (id) {
@@ -1684,7 +1691,7 @@ export default {
         this.getPatientFutureAppointments(this.patientId, this.$i18n.locale)
       })
     },
-    saveAppointment () {
+    saveAppointment  () {
       this.addAppointmentModal = false
       this.formAppointments.resourceId = this.formAppointments.doctorId
       this.formAppointments.patientId = this.patient.id
@@ -1707,12 +1714,11 @@ export default {
       if (!this.formAppointments.id) {
         createCalendar(this.formAppointments).then(() => {
           this.formAppointments = this.defaultFormAppointment()
+          this.$emit('setModalShow', false)
           this.getPatientFutureAppointments(this.patientId, this.$i18n.locale)
         })
       } else {
         this.updateCalendar(this.formAppointments.id, this.formAppointments)
-        this.formAppointments = this.defaultFormAppointment()
-        this.getPatientFutureAppointments(this.patientId, this.$i18n.locale)
       }
     },
     getLocations () {
@@ -1743,7 +1749,7 @@ export default {
     },
     openAppointmentModal (appointment) {
       this.formAppointments = {
-        id: appointment.id,
+        id: appointment.appointment_id,
         locationId: appointment.location,
         doctorId: appointment.doctor_name,
         notes: appointment.note,
