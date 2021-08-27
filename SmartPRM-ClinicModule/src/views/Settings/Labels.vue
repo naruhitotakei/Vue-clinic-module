@@ -35,11 +35,9 @@
                   <template v-slot:cell(color)="data">
                     <span v-if="data.item.color" class="d-flex">
                        <span
-                           class="mr-2"
-                           style="width: 50px; height: 20px; display:block;"
+                           class="mr-2 label-display"
                            :style="{'background': data.item.color}"
                        ></span>
-                       {{ data.item.color }}
                     </span>
                   </template>
                     <!--        FUNCTIONALITY FOR DELETING LABELS DISABLED FOR NOW
@@ -176,3 +174,12 @@ export default {
   }
 }
 </script>
+
+<style scoped>
+.label-display {
+    width: 75px;
+    height: 20px;
+    display: block;
+    border-radius: 20px 0 20px 0;
+}
+</style>
