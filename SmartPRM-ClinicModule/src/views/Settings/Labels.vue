@@ -131,7 +131,6 @@ export default {
     },
     deleteItem (item) {
       deleteCalendarLabel(item.id).then(data => {
-        console.log('Deleting label on the FE:' + data)
         this.getLabels(this.$i18n.locale)
       })
     },
@@ -148,14 +147,12 @@ export default {
       this.formData.lang = this.$i18n.locale
       if (!this.formData.id) {
         createCalendarLabel(this.formData).then(data => {
-          console.log('Creating a new label on the FE: ' + data)
           this.getLabels(this.$i18n.locale)
           this.modalLabelsShow = false
           this.formData = this.defaultFormData()
         })
       } else {
         updateCalendarLabel(this.formData.id, this.formData).then(data => {
-          console.log('Updating label on the FE: ' + data)
           this.getLabels(this.$i18n.locale)
           this.modalLabelsShow = false
           this.formData = this.defaultFormData()
