@@ -21,7 +21,7 @@
   @eventDrop="eventDrop"
   id="calendar"
   ref="calendar"
-  :locale="$i18n.locale"
+  :locale="calendarOptions.locale"
   v-if="isDataLoaded"
   />
   <img v-else src="../../../assets/css/ajax-loader.gif" alt="Smart PRM" class="d-block m-auto"/>
@@ -232,6 +232,7 @@ import timeGridPlugin from '@fullcalendar/timegrid'
 import interactionPlugin from '@fullcalendar/interaction'
 import listPlugin from '@fullcalendar/list'
 import moment from 'moment'
+import slLocale from '@fullcalendar/core/locales/sl'
 import { xray } from '../../../config/pluginInit'
 import { getPatients } from '../../../services/enquiry'
 import { getLocationsList } from '../../../services/commonCodeLists'
@@ -352,7 +353,8 @@ export default {
         allDaySlot: false,
         editable: true,
         selectable: true,
-        events: []
+        events: [],
+        locale: ((this.$i18n.locale === 'sl') ? slLocale : null)
       }
     }
   },
