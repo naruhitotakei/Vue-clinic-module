@@ -172,12 +172,13 @@
                                                       <template v-for="(item,index) in colors">
                                                           <b-form-radio class="custom-radio-color"
                                                                         inline
-                                                                        v-model="formAppointments.backgroundColor"
+                                                                        v-model="formData.backgroundColor"
                                                                         :color="item.color"
                                                                         :value="item.value"
                                                                         :key="index"
+                                                                        name="labels"
                                                                         v-if="showLabels(item)">
-                                                              {{ item.label }}
+                                                              {{ item.text }}
                                                           </b-form-radio>
                                                       </template>
                                                   </div>
@@ -1321,15 +1322,8 @@ export default {
   },
   methods: {
     getLabels (lang) {
-      getLabels(lang).then(data => {
-        data.map(label => {
-          this.colors.push({
-            id: label.id,
-            label: label.type,
-            color: label.type.split(' ').join(''),
-            value: label.color
-          })
-        })
+      getLabels(lang).then(response => {
+        this.colors = response
       })
     },
     onCityChange () {

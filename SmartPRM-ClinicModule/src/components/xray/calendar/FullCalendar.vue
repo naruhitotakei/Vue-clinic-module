@@ -169,6 +169,7 @@
                                       :color="item.color"
                                       :value="item.value"
                                       :key="index"
+                                      name="labels"
                                       v-if="showLabels(item)">
                             {{ item.text }}
                         </b-form-radio>
@@ -438,16 +439,8 @@ export default {
       this.formData.appointment_canceled_in_advance_by_patient = false
     },
     getLabels (lang) {
-      getLabels(lang).then(data => {
-        data.map(label => {
-          this.colors.push({
-            id: label.id,
-            label: label.type,
-            color: label.type.split(' ').join(''),
-            value: label.color,
-            text: label.text
-          })
-        })
+      getLabels(lang).then(response => {
+        this.colors = response
       })
     },
     closeModal () {
