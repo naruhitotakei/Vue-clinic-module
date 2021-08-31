@@ -136,7 +136,8 @@
     "patient_attended": "Patient attended",
     "product_group": "Product Group",
     "appointmentCanceledInAdvanceByClinic": "Appointment canceled by clinic",
-    "appointmentCanceledInAdvanceByPatient": "Appointment canceled by patient"
+    "appointmentCanceledInAdvanceByPatient": "Appointment canceled by patient",
+    "requiredFields": "Fields marked with * have to be filled"
   },
   "patients": {
     "patientsHeader": "Patients",

@@ -37,6 +37,7 @@
       @ok="saveAppointment"
       @close="closeModal"
       cancel-title="$t('calendar.btnCancel')"
+      :ok-disabled="isSaveDisabled"
       hide-footer
       >
     <form class="calendar-modal">
@@ -117,7 +118,7 @@
                                  :show-second="false"
                                  :lang="'en'"
                                  :format="'DD.MM.YYYY HH.mm'"></date-picker>
-                    <label for="start" class="mb-0">{{ $t('calendarEvent.end') }}*</label>
+                    <label for="start" class="mb-0 mr-3 ml-4">{{ $t('calendarEvent.end') }}*</label>
                     <date-picker :disabled="disabled"
                                  required
                                  class="form-control form-control-disabled font-size-16"
@@ -177,6 +178,8 @@
                 </div>
             </div>
             <template>
+            </template>
+            <template>
                 <div class="cancelation-text font-size-18 mt-3 mb-1 row align-items-center justify-content-center w-100">
                     <p v-if="formData.appointment_canceled_in_advance_by_clinic === true">{{ $t('calendarEvent.appointmentCanceledInAdvanceByClinic') }}</p>
                     <p v-if="formData.appointment_canceled_in_advance_by_patient === true">{{ $t('calendarEvent.appointmentCanceledInAdvanceByPatient') }}</p>
@@ -190,6 +193,7 @@
                     <button type="button" class="btn btn-primary" @click="viewPatient(formData.enquiry_id)">{{ $t('calendar.btnEPR') }}</button>
                 </template>
                 <template v-if="!disabled">
+                    <p v-if="isSaveDisabled" class="mt-1 mr-4 text-black">{{ $t('calendarEvent.requiredFields') }}</p>
                     <button type="button" class="btn btn-secondary" @click="$emit('setModalShow', false), formData = defaultAppointment">{{ $t('calendar.btnClose') }}</button>
                     <button type="button" class="btn btn-primary" @click="saveAppointment">{{ $t('calendar.btnSave') }}</button>
                 </template>
@@ -415,10 +419,10 @@ export default {
     },
     getColors () {
       return this.colorsLabel
+    },
+    isSaveDisabled () {
+      return !this.formData.patientId || !this.formData.locationId || !this.formData.doctorId || !this.formData.product_groups || !this.formData.assignmentDate || !this.formData.end
     }
-    /* isSaveAppointmentDisabled () {
-        return !this.formData.patientId || !this.formData.locationId || !this.formData.doctorId || !this.formData.product_groups || !this.formData.assignmentDate || !this.formData.end
-    } */
   },
   mounted () {
     this.$nextTick(() => {

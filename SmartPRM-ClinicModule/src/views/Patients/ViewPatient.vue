@@ -73,12 +73,12 @@
                                           </div>
                                       </template>
                                   </iq-card>
-                                  <b-modal v-model="addAppointmentModal" no-close-on-esc no-close-on-backdrop size="lg" :title="$t('calendar.appointmentDetails')" ok-title="Save Changes" @ok="addAppointmentModal = false" @close="addAppointmentModal = false" cancel-title="Close" hide-footer>
+                                  <b-modal v-model="addAppointmentModal" no-close-on-esc no-close-on-backdrop size="lg" :title="$t('calendar.appointmentDetails')" ok-title="Save Changes" @ok="addAppointmentModal = false" @close="addAppointmentModal = false" cancel-title="Close" :ok-disabled="isSaveDisabled" hide-footer>
                                       <form class="calendar-modal">
                                           <div class="form-row">
                                               <div class="row align-items-center justify-content-between w-100 mb-3">
                                                   <div class="col-md-3">
-                                                      <label for="patient" class="mb-0">{{ $t('calendarEvent.patient') }}</label>
+                                                      <label for="patient" class="mb-0">{{ $t('calendarEvent.patient') }} *</label>
                                                   </div>
                                                   <div class="col-md-9">
                                                       <p class="text-black mb-0 ml-2">{{ patient.name }} {{patient.last_name}}</p>
@@ -86,7 +86,7 @@
                                               </div>
                                               <div class="row align-items-center justify-content-between w-100 mb-3">
                                                   <div class="col-md-3">
-                                                      <label for="location" class="ml-0 mb-0">{{ $t('calendarEvent.location') }}</label>
+                                                      <label for="location" class="ml-0 mb-0">{{ $t('calendarEvent.location') }} *</label>
                                                   </div>
                                                   <div class="col-md-9">
                                                       <v-select :clearable="false"
@@ -101,7 +101,7 @@
                                               </div>
                                               <div class="row align-items-center justify-content-between w-100 mb-3">
                                                   <div class="col-md-3">
-                                                      <label for="doctor" class="mr-2 mb-0">{{ $t('calendarEvent.doctor') }}</label>
+                                                      <label for="doctor" class="mr-2 mb-0">{{ $t('calendarEvent.doctor') }} *</label>
                                                   </div>
                                                   <div class="col-md-9">
                                                       <v-select :clearable="false"
@@ -116,7 +116,7 @@
                                               </div>
                                               <div class="row align-items-center justify-content-between w-100 mb-3">
                                                   <div class="col-md-3 pl-3 pr-0">
-                                                      <label for="product_group" class="mb-0">{{ $t('calendarEvent.product_group') }}</label>
+                                                      <label for="product_group" class="mb-0">{{ $t('calendarEvent.product_group') }} *</label>
                                                   </div>
                                                   <div class="col-md-9">
                                                       <v-select :disabled="disabled"
@@ -130,7 +130,7 @@
                                               </div>
                                               <div class="row align-items-center justify-content-between w-100 " :class="{'mb-3': !disabled}">
                                                   <div class="col-md-3">
-                                                      <label for="start" class="mb-0">{{ $t('calendarEvent.start') }}</label>
+                                                      <label for="start" class="mb-0">{{ $t('calendarEvent.start') }} *</label>
                                                   </div>
                                                   <div class="col-md-9 d-flex align-items-center mb-3">
                                                       <date-picker class="form-control form-control-disabled font-size-15"
@@ -142,7 +142,7 @@
                                                                    :show-second="false"
                                                                    :lang="'en'"
                                                                    :format="'DD.MM.YYYY HH.mm'"></date-picker>
-                                                      <label for="start" class="mb-0 ml-5 mr-2">{{ $t('calendarEvent.end') }}</label>
+                                                      <label for="start" class="mb-0 mr-3 ml-4">{{ $t('calendarEvent.end') }}*</label>
                                                       <date-picker required
                                                                    :disabled="disabled"
                                                                    :class="{'no-border': disabled}"
@@ -196,6 +196,7 @@
                                                       <button type="button" class="btn btn-secondary" @click="editMode">{{ $t('calendar.btnEdit') }}</button>
                                                   </template>
                                                   <template v-if="!disabled">
+                                                      <p v-if="isSaveDisabled" class="mt-1 mr-4 text-black">{{ $t('calendarEvent.requiredFields') }}</p>
                                                       <button type="button" class="btn btn-secondary" @click="closeAppointmentModal">{{ $t('calendar.btnClose') }}</button>
                                                       <button type="button" class="btn btn-primary" @click="saveAppointment">{{ $t('calendar.btnSave') }}</button>
                                                   </template>
@@ -983,6 +984,9 @@ export default {
     this.formAppointments.assignmentDate = new Date()
   },
   computed: {
+    isSaveDisabled () {
+      return !this.formAppointments.patientId || !this.formAppointments.locationId || !this.formAppointments.doctorId || !this.formAppointments.product_groups || !this.formAppointments.assignmentDate || !this.formAppointments.end
+    },
     isOkDisabled () {
       return !this.formData.due_at || !this.formData.description
     },

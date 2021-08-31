@@ -135,7 +135,8 @@
     "patient_attended": "Pacient je prišel na termin",
     "product_group": "Skupina produkta",
     "appointmentCanceledInAdvanceByClinic": "Klinika je preklicala termin",
-    "appointmentCanceledInAdvanceByPatient": "Pacient je preklical termin"
+    "appointmentCanceledInAdvanceByPatient": "Pacient je preklical termin",
+    "requiredFields": "Polja označena z * morajo biti izpolnjena"
   },
   "patients": {
     "patientsHeader": "Pacienti",
