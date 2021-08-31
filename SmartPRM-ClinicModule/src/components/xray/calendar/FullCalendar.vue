@@ -194,7 +194,7 @@
                 </template>
                 <template v-if="!disabled">
                     <p v-if="isSaveDisabled" class="mt-1 mr-4 text-black">{{ $t('calendarEvent.requiredFields') }}</p>
-                    <button type="button" class="btn btn-secondary" @click="$emit('setModalShow', false), formData = defaultAppointment">{{ $t('calendar.btnClose') }}</button>
+                    <button type="button" class="btn btn-secondary" @click="$emit('setModalShow', false), formData = defaultAppointment, appointmentHandlerClose">{{ $t('calendar.btnClose') }}</button>
                     <button type="button" class="btn btn-primary" @click="saveAppointment">{{ $t('calendar.btnSave') }}</button>
                 </template>
             </div>
@@ -274,6 +274,7 @@ export default {
       openCancelationModal: false,
       locations: [],
       doctors: [],
+      cachedAppointmentData: null,
       state: [
         {
           label: 'Attended',
@@ -422,6 +423,9 @@ export default {
     },
     isSaveDisabled () {
       return !this.formData.patientId || !this.formData.locationId || !this.formData.doctorId || !this.formData.product_groups || !this.formData.assignmentDate || !this.formData.end
+    },
+    hasAppointmentDataChanged () {
+      return this.cachedAppointmentData !== this.appointmentDataComparison()
     }
   },
   mounted () {
@@ -526,7 +530,6 @@ export default {
     eventDrop (info) {
       let event = this.calendarApi.getEventById(info.event.id)
       let newResource = this.calendarApi.getResourceById(info.newResource.id)
-      console.log('Info of event: ' + event)
       this.formData.id = event.id
       this.formData.assignmentDate = event.start
       this.formData.end = event.end
@@ -701,7 +704,28 @@ export default {
 
       }
       this.modalTitle = this.formData.title
+    },
+    appointmentDataComparison () {
+      return JSON.stringify({
+        patientId: this.formData.patientId,
+        locationId: this.formData.locationId,
+        doctorId: this.formData.doctorId,
+        product_groups: this.formData.product_groups,
+        assignmentDate: this.formData.assignmentDate,
+        end: this.formData.end,
+        notes: this.formData.notes,
+        backgroundColor: this.formData.backgroundColor
+      })
+    },
+    appointmentHandlerClose () {
+      if (this.hasAppointmentDataChanged) {
+        console.log('Changes not saved: ' + this.hasAppointmentDataChanged)
+      }
     }
+  },
+  created: function () {
+    this.cachedAppointmentData = this.appointmentDataComparison()
+    document.addEventListener('beforeunload', this.appointmentHandlerClose)
   }
 }
 </script>
