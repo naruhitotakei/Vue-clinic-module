@@ -194,7 +194,7 @@
                 </template>
                 <template v-if="!disabled">
                     <p v-if="isSaveDisabled" class="mt-1 mr-4 text-black">{{ $t('calendarEvent.requiredFields') }}</p>
-                    <button type="button" class="btn btn-secondary" @click="$emit('setModalShow', false), formData = defaultAppointment, appointmentHandlerClose">{{ $t('calendar.btnClose') }}</button>
+                    <button type="button" class="btn btn-secondary" @click="$emit('setModalShow', false), formData = defaultAppointment">{{ $t('calendar.btnClose') }}</button>
                     <button type="button" class="btn btn-primary" @click="saveAppointment">{{ $t('calendar.btnSave') }}</button>
                 </template>
             </div>
@@ -350,7 +350,6 @@ export default {
           center: 'title',
           right: 'dayGridMonth,resourceTimeGridWeek,resourceTimeGridDay'
         },
-        timeZone: 'UTC',
         defaultView: 'resourceTimeGridWeek',
         resources: this.resourcesOuter,
         minTime: '09:00:00',
@@ -412,6 +411,15 @@ export default {
     }
   },
   computed: {
+    /* detectMinTime () {
+      return this.events.filter(event => {
+        if (new Date(moment(event.time).format('HH:mm:ss')) < '09:00:00') {
+          return event.time
+        } else {
+          return '09:00:00'
+        }
+      })
+    }, */
     isSelectable () {
       return !this.viewName.includes('dayGridMonth')
     },
