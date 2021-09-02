@@ -68,7 +68,7 @@ const getApontments = (request, response, from, to, user_id, accessible_user_ids
 
 const updateAppointments = (request, response, id, appointments) => {
     let patient_attended = appointments.patient_attended === 'attended' ? true : appointments.patient_attended === 'not_attended' ? false : null;
-    let time = moment(appointments.assignmentDate).format('HH:mm');
+    let time = moment(appointments.assignmentDate).format('HH:mm').toTimeString();
     let statement = "UPDATE appointments SET "
     if (appointments.doctorId) statement += "doctor_name='" + appointments.doctorId + "',"
     if (appointments.locationId) statement += "location='" + appointments.locationId + "',"
@@ -97,7 +97,7 @@ const updateAppointments = (request, response, id, appointments) => {
 
 const createAppointment = (request, response, appointments) => {
     let patient_attended = appointments.patient_attended === 'attended' ? true : appointments.patient_attended === 'not_attended' ? false : null;
-    let time = moment(appointments.assignmentDate).format('HH:mm');
+    let time = moment(appointments.assignmentDate).format('HH:mm').toTimeString();
     let statement = "INSERT INTO appointments ("
     if (appointments.doctorId) statement += "doctor_name,"
     if (appointments.locationId) statement += "location,"
