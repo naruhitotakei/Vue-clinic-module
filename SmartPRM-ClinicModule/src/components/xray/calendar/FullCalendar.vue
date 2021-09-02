@@ -542,7 +542,7 @@ export default {
       this.formData.assignmentDate = event.start
       this.formData.end = event.end
       this.formData.doctorId = newResource.title
-      this.formData.time = new Date(event.start)
+      this.formData.time = new Date(event.start).toTimeString()
       event.setExtendedProp('assignmentDate', this.formData.assignmentDate)
       event.setStart(this.formData.start)
       event.setEnd(this.formData.end)
