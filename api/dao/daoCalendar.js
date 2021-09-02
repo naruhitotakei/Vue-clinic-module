@@ -84,7 +84,7 @@ const updateAppointments = (request, response, id, appointments) => {
     if (appointments.assignmentDate) statement += "date='" + appointments.assignmentDate + "',"
     if (appointments.backgroundColor) statement += "label_id='" + appointments.backgroundColor.id + "',"
     if (appointments.end) statement += "end_time='" + appointments.end + "',"
-    if (appointments.time) statement += "time='" + time.toLocaleString() + "' "
+    if (appointments.time) statement += "time='" + time + "' "
     statement = statement.slice(0, -1)
     statement += " WHERE id = " + id
     pool.query(statement , (error, results) => {
@@ -121,7 +121,7 @@ const createAppointment = (request, response, appointments) => {
     if (appointments.assignmentDate) statement += "'"+ appointments.assignmentDate +"',"
     if (appointments.backgroundColor) statement += "'"+ appointments.backgroundColor.id +"',"
     if (appointments.end) statement += "'"+ appointments.end +"',"
-    statement += "'"+ time.toLocaleString() +"',"
+    statement += "'"+ time +"',"
     statement += "NOW(),"
     statement += "'Posvet')"
     pool.query(statement , (error, results) => {
