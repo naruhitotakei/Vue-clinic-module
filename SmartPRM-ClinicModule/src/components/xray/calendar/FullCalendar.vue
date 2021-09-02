@@ -527,7 +527,7 @@ export default {
     eventResize (info) {
       let event = this.calendarApi.getEventById(info.event.id)
       this.formData.id = event.id
-      this.formData.assignmentDate = event.start.toISOString()
+      this.formData.assignmentDate = event.start
       this.formData.end = event.end
       event.setStart(this.formData.start)
       event.setEnd(this.formData.end)
@@ -539,7 +539,7 @@ export default {
       let event = this.calendarApi.getEventById(info.event.id)
       let newResource = this.calendarApi.getResourceById(info.newResource.id)
       this.formData.id = event.id
-      this.formData.assignmentDate = event.start.toISOString()
+      this.formData.assignmentDate = event.start
       this.formData.end = event.end
       this.formData.doctorId = newResource.title
       this.formData.time = new Date(event.start).toTimeString()
@@ -613,7 +613,7 @@ export default {
             id: id,
             title: this.formData.title,
             assignmentDate: this.formData.assignmentDate,
-            start: this.formData.assignmentDate.toISOString(),
+            start: this.formData.assignmentDate,
             end: this.formData.end,
             hours: this.formData.hours,
             minutes: this.formData.minutes,
@@ -639,7 +639,7 @@ export default {
           event.setProp('title', this.formData.title)
           event.setProp('backgroundColor', this.formData.backgroundColor)
           event.setProp('resourceId', this.formData.resourceId)
-          event.setStart(this.formData.assignmentDate.toISOString())
+          event.setStart(this.formData.assignmentDate)
           event.setEnd(this.formData.end)
           event.setExtendedProp('assignmentDate', this.formData.assignmentDate)
           event.setExtendedProp('start', this.formData.assignmentDate)
