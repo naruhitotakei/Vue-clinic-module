@@ -413,7 +413,7 @@ export default {
   computed: {
     /* detectMinTime () {
       return this.events.filter(event => {
-        if (new Date(moment(event.time).format('HH:mm:ss')) < '09:00:00') {
+        if (new Date(moment(event.time).format('HH:mm:ss')) < new Date('09:00:00')) {
           return event.time
         } else {
           return '09:00:00'
@@ -633,6 +633,7 @@ export default {
             this.$emit('updateApp')
             this.formData = this.defaultAppointment()
             this.$emit('setModalShow', false)
+            console.log('Saving appointment data on FE: ' + JSON.stringify(data))
           })
         } else {
           let event = this.calendarApi.getEventById(this.formData.id)
