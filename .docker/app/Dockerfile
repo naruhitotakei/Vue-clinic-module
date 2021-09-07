@@ -1,6 +1,6 @@
 # ### STAGE 1: Build ###
 FROM node:lts as builder
-ENV NODE_ENV=development
+# ENV NODE_ENV=development
 
 WORKDIR /app
 
