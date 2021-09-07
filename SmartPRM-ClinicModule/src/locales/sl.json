@@ -11,6 +11,11 @@
     "callCenter": "Klicni Center",
     "settings": "Nastavitve"
   },
+  "shared": {
+    "search": "Iskanje",
+    "searchBy": "Išči po",
+    "sortBy": "Razvrsti po"
+  },
   "documents": {
     "offers": "Ponudbe",
     "invoices": "Računi",
