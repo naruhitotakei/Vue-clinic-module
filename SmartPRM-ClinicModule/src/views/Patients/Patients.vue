@@ -11,12 +11,12 @@
                         <div class="iq-card-header-toolbar d-sm-flex align-items-center col-12 col-sm-9 col-md-10" style="margin-top: -10px;">
                             <div class="iq-search-bar">
                                 <form action="#" class="searchbox">
-                                    <input type="search" class="text search-input" v-model="filter" placeholder="Search">
+                                    <input type="search" class="text search-input" v-model="filter" :placeholder="$t('shared.search')">
                                     <a class="search-link" href="#"><i class="ri-search-line"></i></a>
                                 </form>
                             </div>
                             <iq-card class="mt-4 mt-sm-0">
-                                <b-form-group label-for="searchOptions" label="Search By:">
+                                <b-form-group label-for="searchOptions" :label="$t('shared.searchBy')">
                                   <v-select class="patients" label="text"
                                     :clearable="false" :reduce="filter => filter.value"
                                     :options="searchOptions" @input="filterSelected">
@@ -24,7 +24,7 @@
                                 </b-form-group>
                             </iq-card>
                           <iq-card class="mt-4 ml-3 mt-sm-0">
-                            <b-form-group label-for="searchOptions" label="Sort By:">
+                            <b-form-group label-for="searchOptions" :label="$t('shared.sortBy')">
                               <v-select class="patients" label="text"
                                         :clearable="false"
                                         :options="sortOptions"

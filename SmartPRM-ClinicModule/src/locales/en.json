@@ -11,6 +11,11 @@
     "callCenter": "Call Center",
     "settings": "Settings"
   },
+  "shared": {
+    "search": "Search",
+    "searchBy": "Search By",
+    "sortBy": "Sort By"
+  },
   "documents": {
     "offers": "Offers",
     "invoices": "Invoices",
