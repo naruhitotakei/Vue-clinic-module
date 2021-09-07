@@ -8,8 +8,8 @@
                    :ok-disabled="!selectedPatient"
                    :ok-title="$t('invoices.addNewInvoice.create')"
                    @ok="addInvoice"
-                   @close="selectedPatient = null; selectedInvoices = ''"
-                   @cancel="selectedPatient = null; selectedInvoices = ''"
+                   @close="selectedPatient = null"
+                   @cancel="selectedPatient = null"
                    :cancel-title="$t('invoices.addNewInvoice.close')">
             <form>
               <div class="form-row">
@@ -91,33 +91,6 @@
         </iq-card>
       </b-col>
     </b-row>
-      <b-modal
-          v-model="modalInvoiceShow"
-          ok-title="Continue"
-          cancel-title="Cancel"
-          :ok-disabled="!selectedInvoices"
-          title="Choose invoices"
-          @ok="chooseInvoice"
-          @close="cancelInvoices"
-          @cancel="cancelInvoices"
-      >
-        <div class="col-md-12 mb-3">
-          <label for="title">Invoices *</label>
-          <div style="display: flex; flex-direction: column">
-            <template v-for="(item) in invoicesType">
-              <b-form-radio
-                  class="custom-radio-color"
-                  inline
-                  v-model="selectedInvoices"
-                  :name="item.value"
-                  :value="item.value"
-                  :key="item.value"
-              >{{ item.label }}
-              </b-form-radio>
-            </template>
-          </div>
-        </div>
-      </b-modal>
   </b-container>
 </template>
 
@@ -143,7 +116,6 @@ export default {
       modalShow: false,
       selectedPatient: null,
       patients: [],
-      modalInvoiceShow: false,
       searchOptions: [
         { value: 'invoice_number', text: 'Number' },
         { value: 'patient_name', text: 'Patient Name' },
@@ -197,25 +169,11 @@ export default {
       filter: '',
       filterOn: [],
       isDataLoaded: false,
-      totalRows: 1
+      totalRows: 1,
+      selectedInvoices: ''
     }
   },
   methods: {
-    chooseInvoice () {
-      switch (this.selectedInvoices) {
-        case 'new-invoice':
-          return this.$router.push({ path: `/documents/invoices/${this.patient.id}/${this.selectedInvoices}` })
-        case 'new-adv-payment':
-          return this.$router.push({ path: `/documents/advance-payments/${this.patient.id}/${this.selectedInvoices}` })
-        case 'offer':
-          return this.$router.push({ path: `/documents/offer/${this.patient.id}/${this.selectedInvoices}` })
-        default:
-      }
-    },
-    cancelInvoices () {
-      this.modalInvoiceShow = false
-      this.selectedInvoices = ''
-    },
     getPatients () {
       getPatients().then(response => {
         this.patients = response
