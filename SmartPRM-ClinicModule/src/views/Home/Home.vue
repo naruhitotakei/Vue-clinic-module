@@ -217,7 +217,7 @@
                             <date-picker :disabled="disabled"
                                          class="form-control form-control-disabled font-size-16"
                                          :class="{'no-border margin-left': disabled}"
-                                         v-model="appointmentData.date"
+                                         v-model="appointmentData.start_time"
                                          type="datetime"
                                          :minute-step="5"
                                          :show-second="false"
@@ -402,7 +402,7 @@ export default {
       appointmentData: {
         id: '',
         patient_name: '',
-        date: '',
+        start_time: '',
         end_time: '',
         note: '',
         patient_attended: '',
@@ -473,9 +473,9 @@ export default {
             product_groups: appointment.product_group_id,
             product_group_id: appointment.product_group_id,
             product_group_name: appointment.product_group_name,
-            date: new Date(moment(appointment.date).format('YYYY-MM-DD') + 'T' + appointment.time),
+            start_time: new Date(appointment.starts_at),
             time: appointment.time,
-            end_time: new Date(appointment.end_time),
+            end_time: new Date(appointment.ends_at),
             patient_phone: appointment.patient_phone,
             patient_id: appointment.patient_id,
             patient_attended: patientAttended,

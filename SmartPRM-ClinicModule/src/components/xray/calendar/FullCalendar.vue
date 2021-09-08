@@ -274,7 +274,6 @@ export default {
       openCancelationModal: false,
       locations: [],
       doctors: [],
-      cachedAppointmentData: null,
       state: [
         {
           label: 'Attended',
@@ -322,8 +321,6 @@ export default {
         assignmentDate: '',
         start: '',
         end: '',
-        hours: '',
-        minutes: '',
         notes: '',
         backgroundColor: '',
         patient_attended: '',
@@ -431,9 +428,6 @@ export default {
     },
     isSaveDisabled () {
       return !this.formData.patientId || !this.formData.locationId || !this.formData.doctorId || !this.formData.product_groups || !this.formData.assignmentDate || !this.formData.end
-    },
-    hasAppointmentDataChanged () {
-      return this.cachedAppointmentData !== this.appointmentDataComparison()
     }
   },
   mounted () {
@@ -531,8 +525,6 @@ export default {
       this.formData.end = event.end
       event.setStart(this.formData.start)
       event.setEnd(this.formData.end)
-      event.setExtendedProp('hours', this.formData.hours)
-      event.setExtendedProp('minutes', this.formData.minutes)
       this.updateCalendar(this.formData.id, this.formData)
     },
     eventDrop (info) {
@@ -556,8 +548,6 @@ export default {
         assignmentDate: '',
         start: '',
         end: '',
-        hours: '0',
-        minutes: '15',
         notes: '',
         backgroundColor: '#64D6E8',
         patient_attended: 'unknown',
@@ -615,8 +605,6 @@ export default {
             assignmentDate: this.formData.assignmentDate,
             start: this.formData.assignmentDate,
             end: this.formData.end,
-            hours: this.formData.hours,
-            minutes: this.formData.minutes,
             notes: this.formData.notes,
             product_groups: this.formData.product_groups,
             appointment_canceled_in_advance_by_clinic: this.formData.appointment_canceled_in_advance_by_clinic,
@@ -633,7 +621,6 @@ export default {
             this.$emit('updateApp')
             this.formData = this.defaultAppointment()
             this.$emit('setModalShow', false)
-            console.log('Saving appointment data on FE: ' + JSON.stringify(data))
           })
         } else {
           let event = this.calendarApi.getEventById(this.formData.id)
@@ -644,8 +631,6 @@ export default {
           event.setEnd(this.formData.end)
           event.setExtendedProp('assignmentDate', this.formData.assignmentDate)
           event.setExtendedProp('start', this.formData.assignmentDate)
-          event.setExtendedProp('hours', this.formData.hours)
-          event.setExtendedProp('minutes', this.formData.minutes)
           event.setExtendedProp('notes', this.formData.notes)
           event.setExtendedProp('eventResourceId', this.formData.resourceId)
           event.setExtendedProp('patientId', this.formData.patientId)
@@ -713,28 +698,7 @@ export default {
 
       }
       this.modalTitle = this.formData.title
-    },
-    appointmentDataComparison () {
-      return JSON.stringify({
-        patientId: this.formData.patientId,
-        locationId: this.formData.locationId,
-        doctorId: this.formData.doctorId,
-        product_groups: this.formData.product_groups,
-        assignmentDate: this.formData.assignmentDate,
-        end: this.formData.end,
-        notes: this.formData.notes,
-        backgroundColor: this.formData.backgroundColor
-      })
-    },
-    appointmentHandlerClose () {
-      if (this.hasAppointmentDataChanged) {
-        console.log('Changes not saved: ' + this.hasAppointmentDataChanged)
-      }
     }
-  },
-  created: function () {
-    this.cachedAppointmentData = this.appointmentDataComparison()
-    document.addEventListener('beforeunload', this.appointmentHandlerClose)
   }
 }
 </script>
