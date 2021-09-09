@@ -283,7 +283,7 @@ export default {
             id: item.id,
             title: item.name + ' ' + item.last_name,
             start: moment(item.starts_at).format('YYYY-MM-DDTHH:mm'),
-            end: moment(item.ends_at).format('YYYY-MM-DDTHH:mm'),
+            end: item.ends_at ? moment(item.ends_at).format('YYYY-MM-DDTHH:mm') : moment(item.starts_at).add('0', 'hours').add('15', 'minutes').format('YYYY-MM-DDTHH:mm'),
             backgroundColor: item.app_lb_color ? item.app_lb_color : '#64D6E8',
             patient_attended: patientAttended,
             appointment_canceled_in_advance_by_patient: item.appointment_canceled_in_advance_by_patient,
