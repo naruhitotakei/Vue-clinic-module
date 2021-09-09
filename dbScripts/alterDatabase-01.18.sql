@@ -211,7 +211,7 @@ ADD COLUMN ends_at TIMESTAMP;
 
 UPDATE appointments SET starts_at = date + cast(time as time) WHERE time IS NOT NULL;
 
-ALTER TABLE appointments DROP end_time;
+ALTER TABLE appointments DROP COLUMN end_time;
 
 --############################################################
 --# update version
