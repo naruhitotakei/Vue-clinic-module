@@ -46,7 +46,6 @@
                       @click="addAppointment"
                       variant="primary"
                       class="btn-add-patient mt-0"
-                      style="width: 190px;"
                   >
                     <i class="ri-add-line mr-2"></i>
                     {{ $t('calendar.addAppointment') }}
