@@ -318,6 +318,9 @@
       "amount": "Amount",
       "status": "Status"
     },
+    "paid": "Paid",
+    "unpaid": "Unpaid",
+    "partiallyPaid": "Partially paid",
     "addNewInvoice": {
       "selectPatient": "Select patient",
       "patient": "Patient",
