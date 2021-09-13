@@ -981,7 +981,7 @@ export default {
     this.getDoctors()
     this.getProductGroups(this.$i18n.locale)
     this.getLabels(this.$i18n.locale)
-    this.formAppointments.assignmentDate = new Date()
+    this.formAppointments.assignmentDate = this.roundUpStartTime()
   },
   computed: {
     isSaveDisabled () {
@@ -1315,7 +1315,7 @@ export default {
   watch: {
     'formAppointments.assignmentDate' () {
       if (!this.formAppointments.id) {
-        this.formAppointments.end = this.formAppointments.assignmentDate
+        this.formAppointments.end = new Date(moment(this.formAppointments.assignmentDate).add('0', 'hours').add('15', 'minutes'))
       }
     },
     '$i18n.locale' () {
@@ -1774,6 +1774,12 @@ export default {
       this.openCancelationModal = false
       this.formAppointments.appointment_canceled_in_advance_by_clinic = false
       this.formAppointments.appointment_canceled_in_advance_by_patient = false
+    },
+    roundUpStartTime () {
+      let startTime = new Date()
+      startTime.setHours(startTime.getHours() + Math.ceil(startTime.getMinutes() / 60))
+      startTime.setMinutes(0, 0, 0)
+      return startTime
     }
   }
 }
