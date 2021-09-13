@@ -22,6 +22,7 @@
   id="calendar"
   ref="calendar"
   :locale="calendarOptions.locale"
+  :displayEventTime="calendarOptions.displayEventTime"
   v-if="isDataLoaded"
   />
   <img v-else src="../../../assets/css/ajax-loader.gif" alt="Smart PRM" class="d-block m-auto"/>
@@ -356,7 +357,8 @@ export default {
         editable: true,
         selectable: true,
         events: [],
-        locale: ((this.$i18n.locale === 'sl') ? slLocale : null)
+        locale: ((this.$i18n.locale === 'sl') ? slLocale : null),
+        displayEventTime: false
       }
     }
   },
