@@ -309,7 +309,6 @@ export default {
             app_lb_type: item.app_lb_type
           })
         })
-        this.events = _.uniqBy(this.events, 'id')
       })
     },
     calculateEndDate (startDate, hours, minutes) {
