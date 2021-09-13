@@ -152,7 +152,7 @@
                                                                    :minute-step="5"
                                                                    :show-second="false"
                                                                    :lang="'en'"
-                                                                   :format="'DD.MM.YYYY HH.mm'"></date-picker>
+                                                                   :format="'HH.mm'"></date-picker>
                                                   </div>
                                               </div>
                                               <br>
