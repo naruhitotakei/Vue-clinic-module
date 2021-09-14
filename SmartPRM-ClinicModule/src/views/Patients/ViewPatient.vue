@@ -170,15 +170,14 @@
                                                   </div>
                                                   <div class="col-md-9">
                                                       <template v-for="(item,index) in colors">
-                                                          <b-form-radio class="custom-radio-color"
+                                                          <b-form-radio class="custom-radio-color font-size-16 labels"
                                                                         inline
                                                                         v-model="formData.backgroundColor"
-                                                                        :color="item.color"
-                                                                        :value="item.value"
                                                                         :key="index"
+                                                                        :style="{'background': item.color}"
                                                                         name="labels"
                                                                         v-if="showLabels(item)">
-                                                              {{ item.text }}
+                                                              <p class="text-white m-0 py-1 pr-2">{{ item.text }}</p>
                                                           </b-form-radio>
                                                       </template>
                                                   </div>
@@ -1786,6 +1785,11 @@ export default {
 </script>
 
 <style lang="scss">
+
+.labels {
+    border-radius: 10px !important;
+    margin: .225rem !important;
+}
 
 .no-border {
     border: none !important;

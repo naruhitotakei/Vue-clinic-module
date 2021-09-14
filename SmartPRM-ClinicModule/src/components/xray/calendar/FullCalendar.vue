@@ -165,15 +165,14 @@
                 </div>
                 <div class="col-md-9 mb-1">
                     <template v-for="(item,index) in colors">
-                        <b-form-radio class="custom-radio-color font-size-16"
+                        <b-form-radio class="custom-radio-color font-size-16 labels"
                                       inline
                                       v-model="formData.backgroundColor"
-                                      :color="item.color"
-                                      :value="item.value"
                                       :key="index"
+                                      :style="{'background': item.color}"
                                       name="labels"
                                       v-if="showLabels(item)">
-                            {{ item.text }}
+                            <p class="text-white m-0 py-1 pr-2">{{ item.text }}</p>
                         </b-form-radio>
                     </template>
                 </div>
@@ -826,6 +825,11 @@ body .wrapper .custom-control-label::after {
 
 .cancelation-text {
     color: red;
+}
+
+.labels {
+    border-radius: 10px !important;
+    margin: .225rem !important;
 }
 
   @import '~@fullcalendar/core/main.css';
