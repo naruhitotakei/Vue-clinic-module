@@ -17,7 +17,7 @@ const getTodaysAppointments = (request, response, user_id, prm_client_id, locale
     statement += "LEFT JOIN users ON enquiries.prm_dentist_user_id = users.id "
     statement += "LEFT JOIN prm_product_group ON appointments.product_group_id = prm_product_group.product_group_id "
     statement += "LEFT JOIN prm_product_group_name ON prm_product_group.product_group_id = prm_product_group_name.product_group_id "
-    statement += "WHERE date = CURRENT_DATE AND language = '" + locale + "' "
+    statement += "WHERE starts_at::DATE = CURRENT_DATE AND language = '" + locale + "' "
     statement += "AND appointments.appointment_canceled_in_advance_by_patient = FALSE "
     statement += "AND appointments.appointment_canceled_in_advance_by_clinic = FALSE "
     if (scope == 'All') {
@@ -69,13 +69,13 @@ const getAssignmentsForUser = (request, response, user_id) => {
 
 const updateAppointment = (request, response, id, appointment) => {
     let patient_attended = appointment.patient_attended === 'attended' ? true : appointment.patient_attended === 'not_attended' ? false : null
-    let time = moment(appointment.date).format('HH:mm')
+    let time = moment(appointment.starts_at).format('HH:mm')
     let statement = "UPDATE appointments SET "
     if (appointment.location) statement += "location='" + appointment.location + "',"
     if (appointment.doctor_name) statement += "doctor_name='" + appointment.doctor_name + "',"
     if (appointment.product_groups) statement += "product_group_id=" + appointment.product_groups + ","
-    if (appointment.date) statement += "date='" + appointment.date + "',"
-    if (appointment.end_time) statement += "end_time='" + appointment.end_time + "',"
+    if (appointment.start_time) statement += "starts_at='" + appointment.start_time + "',"
+    if (appointment.end_time) statement += "ends_at='" + appointment.end_time + "',"
     if (appointment.note) statement += "note='" + appointment.note + "',"
     if (appointment.patient_attended) statement += "patient_attended=" + patient_attended + ","
     statement += "time='"+ time + "',"

@@ -317,6 +317,9 @@
       "amount": "Znesek",
       "status": "Status"
     },
+    "paid": "Plačan",
+    "unpaid": "Neplačan",
+    "partiallyPaid": "Delno plačan",
     "addNewInvoice": {
       "selectPatient": "Izberi pacienta",
       "patient": "Pacient",

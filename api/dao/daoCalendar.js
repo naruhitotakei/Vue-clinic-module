@@ -10,7 +10,7 @@ const pool = new Pool({
 var moment = require('moment');
 
 const getApontments = (request, response, from, to, user_id, accessible_user_ids, selctedIds, prm_client_id, scope, lang ) => {
-    var statement = "SELECT app.id, app.date, app.end_time, app.created_at, app.note, app.product_group_id, app.enquiry_id as app_enquiry_id, app.kind, app.patient_attended, app.appointment_canceled_in_advance_by_clinic, " +
+    var statement = "SELECT app.id, app.starts_at, app.ends_at, app.created_at, app.note, app.product_group_id, app.enquiry_id as app_enquiry_id, app.kind, app.patient_attended, app.appointment_canceled_in_advance_by_clinic, " +
         "app.appointment_canceled_in_advance_by_patient, app.time, app.location as app_location, app.doctor_name as app_doctor_name, app.enquiry_id, enq.name, enq.last_name, " +
         "app.attendance, app.product_id, app_s.location as app_s_location, app_s.doctor_name, us.id as doctor_user_id, pcl.id as prm_client_id, " +
         "pcl.client_name as prm_client_name, prd.name as prd_name, prd.group as prd_group, prd.category as prd_category, " +
@@ -29,8 +29,8 @@ const getApontments = (request, response, from, to, user_id, accessible_user_ids
     statement += "LEFT JOIN prm_product_group prm_pr_group ON app.product_group_id = prm_pr_group.product_group_id "
     statement += "LEFT JOIN prm_product_group_name prm_pr_group_name ON prm_pr_group.product_group_id = prm_pr_group_name.product_group_id "
     statement += "WHERE app.trashed = false "
+    statement += `AND prm_pr_group_name.language = '${lang}' `
     // statement += "AND pcl.client_deleted = false "
-    // statement += `AND prm_pr_group_name.language = '${lang}' `
     if (scope=='All') {
     } else if (scope=='PrmClient') {
         statement += "AND enq.prm_client_id=" + prm_client_id;             
@@ -55,7 +55,7 @@ const getApontments = (request, response, from, to, user_id, accessible_user_ids
     statement += ") ";  
     } 
 
-    statement += "AND '[:from, :to]'::daterange @> app.date "
+    statement += "AND '[:from, :to]'::tsrange @> app.starts_at "
         
     statement = statement.replace(":from",from).replace(":to",to)
     pool.query(statement , (error, results) => {
@@ -81,9 +81,9 @@ const updateAppointments = (request, response, id, appointments) => {
     statement += "appointment_canceled_in_advance_by_patient=" + appointments.appointment_canceled_in_advance_by_patient + ","
     statement += "appointment_canceled_in_advance_by_clinic=" + appointments.appointment_canceled_in_advance_by_clinic + ","
     if (appointments.product_groups) statement += "product_group_id='" + appointments.product_groups + "',"
-    if (appointments.assignmentDate) statement += "date='" + appointments.assignmentDate + "',"
+    if (appointments.assignmentDate) statement += "starts_at='" + moment(appointments.assignmentDate).format('YYYY-MM-DDTHH:mm') + "',"
     if (appointments.backgroundColor) statement += "label_id='" + appointments.backgroundColor.id + "',"
-    if (appointments.end) statement += "end_time='" + appointments.end + "',"
+    if (appointments.end) statement += "ends_at='" + moment(appointments.end).format('YYYY-MM-DDTHH:mm') + "',"
     if (appointments.time) statement += "time='" + time + "' "
     statement = statement.slice(0, -1)
     statement += " WHERE id = " + id
@@ -105,9 +105,9 @@ const createAppointment = (request, response, appointments) => {
     if (appointments.patientId) statement += "enquiry_id,"
     if (appointments.patient_attended) statement += "patient_attended,"
     if (appointments.product_groups) statement += "product_group_id,"
-    if (appointments.assignmentDate) statement += "date,"
+    if (appointments.assignmentDate) statement += "starts_at,"
     if (appointments.backgroundColor) statement += "label_id,"
-    if (appointments.end) statement += "end_time,"
+    if (appointments.end) statement += "ends_at,"
     statement += "time,"
     statement += "created_at,"
     statement += "kind"
@@ -118,9 +118,9 @@ const createAppointment = (request, response, appointments) => {
     if (appointments.patientId) statement += "'"+ appointments.patientId +"',"
     if (appointments.patient_attended) statement += "'"+patient_attended +"',"
     if (appointments.product_groups) statement += ""+ appointments.product_groups +","
-    if (appointments.assignmentDate) statement += "'"+ appointments.assignmentDate +"',"
+    if (appointments.assignmentDate) statement += "'"+ moment(appointments.assignmentDate).format('YYYY-MM-DDTHH:mm') +"',"
     if (appointments.backgroundColor) statement += "'"+ appointments.backgroundColor.id +"',"
-    if (appointments.end) statement += "'"+ appointments.end +"',"
+    if (appointments.end) statement += "'"+ moment(appointments.end).format('YYYY-MM-DDTHH:mm') +"',"
     statement += "'"+ time +"',"
     statement += "NOW(),"
     statement += "'Posvet')"
@@ -137,7 +137,7 @@ const createAppointment = (request, response, appointments) => {
 const getLabels = (request, response, lang) => {
     let statement = `SELECT appointments_label.*, app_lb_name.language, app_lb_name.text  FROM appointments_label 
     LEFT JOIN appointments_label_name as app_lb_name ON appointments_label.id = app_lb_name.appointment_label_id 
-    WHERE app_lb_name.language = '${lang}'`
+    WHERE app_lb_name.language = '${lang}' ORDER BY id`
     pool.query(statement , (err, res) => {
         response.status(200).json(res.rows)
     })
@@ -182,8 +182,14 @@ const updateAppointmentsLabelName = (label_id, lang, text) => {
 
 
 const updateAppointmentsLabel = (request, response, id, appointmentsLabel) => {
+    pool.query("SELECT * FROM appointments_label WHERE id = $1", [id], (error, results) => {
+    let currentLabel = results.rows[0]
     let statement = "UPDATE appointments_label SET "
-    if (appointmentsLabel.color) statement += "color='" + appointmentsLabel.color.hex + "',"
+    if (appointmentsLabel.color !== currentLabel.color) {
+        statement += "color='" + appointmentsLabel.color.hex + "',"
+    } else {
+        statement += "color='" + appointmentsLabel.color + "',"
+    }
     if (appointmentsLabel.type) statement += "type='" + appointmentsLabel.type + "' "
     statement = statement.slice(0, -1)
     statement += " WHERE id = " + appointmentsLabel.id
@@ -194,6 +200,7 @@ const updateAppointmentsLabel = (request, response, id, appointmentsLabel) => {
         updateAppointmentsLabelName(appointmentsLabel.id, appointmentsLabel.lang, appointmentsLabel.text)
         response.status(200).json(results)
     })
+  })
 }
 
 const deleteAppointmentsLabel = (request, response, id) => {

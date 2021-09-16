@@ -46,7 +46,6 @@
                       @click="addAppointment"
                       variant="primary"
                       class="btn-add-patient mt-0"
-                      style="width: 190px;"
                   >
                     <i class="ri-add-line mr-2"></i>
                     {{ $t('calendar.addAppointment') }}
@@ -278,14 +277,14 @@ export default {
         this.clonedResources = this.resources
         dataWithDoctor.map(item => {
           let patientAttended = item.patient_attended === 'true' ? 'attended' : item.patient_attended === 'null' ? 'unknown' : 'not_attended'
-          let endDay = this.calculateEndDate(moment(item.date).format('YYYY-MM-DD') + 'T' + item.time, 0, 15)
           let doctor = this.doctorsList.find(doc => doc.name === item.app_doctor_name)
           this.events.push({
             id: item.id,
             title: item.name + ' ' + item.last_name,
-            start: moment(item.date).format('YYYY-MM-DD') + 'T' + item.time,
-            end: !item.end_time ? endDay : item.end_time,
+            start: moment(item.starts_at).format('YYYY-MM-DDTHH:mm'),
+            end: item.ends_at ? moment(item.ends_at).format('YYYY-MM-DDTHH:mm') : moment(item.starts_at).add('0', 'hours').add('15', 'minutes').format('YYYY-MM-DDTHH:mm'),
             backgroundColor: item.app_lb_color ? item.app_lb_color : '#64D6E8',
+            assignmentDate: moment(item.starts_at).format('YYYY-MM-DDTHH:mm'),
             patient_attended: patientAttended,
             appointment_canceled_in_advance_by_patient: item.appointment_canceled_in_advance_by_patient,
             appointment_canceled_in_advance_by_clinic: item.appointment_canceled_in_advance_by_clinic,
@@ -293,9 +292,6 @@ export default {
             eventResourceId: doctor && doctor.id,
             locationId: item.location ? item.location : item.app_location,
             product_groups: item.product_group_id,
-            hours: 0,
-            minutes: 15,
-            assignmentDate: moment(item.date).format('YYYY-MM-DD') + 'T' + item.time,
             last_name: item.last_name,
             prm_client_id: item.prm_client_id,
             prm_client_name: item.prm_client_name,
@@ -313,7 +309,6 @@ export default {
             app_lb_type: item.app_lb_type
           })
         })
-        this.events = _.uniqBy(this.events, 'id')
       })
     },
     calculateEndDate (startDate, hours, minutes) {

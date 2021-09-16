@@ -22,6 +22,7 @@
   id="calendar"
   ref="calendar"
   :locale="calendarOptions.locale"
+  :displayEventTime="calendarOptions.displayEventTime"
   v-if="isDataLoaded"
   />
   <img v-else src="../../../assets/css/ajax-loader.gif" alt="Smart PRM" class="d-block m-auto"/>
@@ -128,7 +129,7 @@
                                  :minute-step="5"
                                  :show-second="false"
                                  :lang="'en'"
-                                 :format="'DD.MM.YYYY HH.mm'"></date-picker>
+                                 :format="'HH.mm'"></date-picker>
                 </div>
             </div>
             <div class="row align-items-center justify-content-between w-100 " :class="{'mb-3': !disabled}">
@@ -164,15 +165,14 @@
                 </div>
                 <div class="col-md-9 mb-1">
                     <template v-for="(item,index) in colors">
-                        <b-form-radio class="custom-radio-color font-size-16"
+                        <b-form-radio class="custom-radio-color font-size-16 labels"
                                       inline
                                       v-model="formData.backgroundColor"
-                                      :color="item.color"
-                                      :value="item.value"
                                       :key="index"
+                                      :style="{'background': item.color}"
                                       name="labels"
                                       v-if="showLabels(item)">
-                            {{ item.text }}
+                            <p class="text-white m-0 py-1 pr-2">{{ item.text }}</p>
                         </b-form-radio>
                     </template>
                 </div>
@@ -194,7 +194,7 @@
                 </template>
                 <template v-if="!disabled">
                     <p v-if="isSaveDisabled" class="mt-1 mr-4 text-black">{{ $t('calendarEvent.requiredFields') }}</p>
-                    <button type="button" class="btn btn-secondary" @click="$emit('setModalShow', false), formData = defaultAppointment">{{ $t('calendar.btnClose') }}</button>
+                    <button type="button" class="btn btn-secondary" @click="$emit('setModalShow', false), formData = defaultAppointment">{{ $t('calendar.btnCancel') }}</button>
                     <button type="button" class="btn btn-primary" @click="saveAppointment">{{ $t('calendar.btnSave') }}</button>
                 </template>
             </div>
@@ -274,7 +274,6 @@ export default {
       openCancelationModal: false,
       locations: [],
       doctors: [],
-      cachedAppointmentData: null,
       state: [
         {
           label: 'Attended',
@@ -322,8 +321,6 @@ export default {
         assignmentDate: '',
         start: '',
         end: '',
-        hours: '',
-        minutes: '',
         notes: '',
         backgroundColor: '',
         patient_attended: '',
@@ -359,7 +356,8 @@ export default {
         editable: true,
         selectable: true,
         events: [],
-        locale: ((this.$i18n.locale === 'sl') ? slLocale : null)
+        locale: ((this.$i18n.locale === 'sl') ? slLocale : null),
+        displayEventTime: false
       }
     }
   },
@@ -431,9 +429,6 @@ export default {
     },
     isSaveDisabled () {
       return !this.formData.patientId || !this.formData.locationId || !this.formData.doctorId || !this.formData.product_groups || !this.formData.assignmentDate || !this.formData.end
-    },
-    hasAppointmentDataChanged () {
-      return this.cachedAppointmentData !== this.appointmentDataComparison()
     }
   },
   mounted () {
@@ -531,8 +526,6 @@ export default {
       this.formData.end = event.end
       event.setStart(this.formData.start)
       event.setEnd(this.formData.end)
-      event.setExtendedProp('hours', this.formData.hours)
-      event.setExtendedProp('minutes', this.formData.minutes)
       this.updateCalendar(this.formData.id, this.formData)
     },
     eventDrop (info) {
@@ -556,8 +549,6 @@ export default {
         assignmentDate: '',
         start: '',
         end: '',
-        hours: '0',
-        minutes: '15',
         notes: '',
         backgroundColor: '#64D6E8',
         patient_attended: 'unknown',
@@ -615,8 +606,6 @@ export default {
             assignmentDate: this.formData.assignmentDate,
             start: this.formData.assignmentDate,
             end: this.formData.end,
-            hours: this.formData.hours,
-            minutes: this.formData.minutes,
             notes: this.formData.notes,
             product_groups: this.formData.product_groups,
             appointment_canceled_in_advance_by_clinic: this.formData.appointment_canceled_in_advance_by_clinic,
@@ -633,7 +622,6 @@ export default {
             this.$emit('updateApp')
             this.formData = this.defaultAppointment()
             this.$emit('setModalShow', false)
-            console.log('Saving appointment data on FE: ' + JSON.stringify(data))
           })
         } else {
           let event = this.calendarApi.getEventById(this.formData.id)
@@ -644,8 +632,6 @@ export default {
           event.setEnd(this.formData.end)
           event.setExtendedProp('assignmentDate', this.formData.assignmentDate)
           event.setExtendedProp('start', this.formData.assignmentDate)
-          event.setExtendedProp('hours', this.formData.hours)
-          event.setExtendedProp('minutes', this.formData.minutes)
           event.setExtendedProp('notes', this.formData.notes)
           event.setExtendedProp('eventResourceId', this.formData.resourceId)
           event.setExtendedProp('patientId', this.formData.patientId)
@@ -713,28 +699,7 @@ export default {
 
       }
       this.modalTitle = this.formData.title
-    },
-    appointmentDataComparison () {
-      return JSON.stringify({
-        patientId: this.formData.patientId,
-        locationId: this.formData.locationId,
-        doctorId: this.formData.doctorId,
-        product_groups: this.formData.product_groups,
-        assignmentDate: this.formData.assignmentDate,
-        end: this.formData.end,
-        notes: this.formData.notes,
-        backgroundColor: this.formData.backgroundColor
-      })
-    },
-    appointmentHandlerClose () {
-      if (this.hasAppointmentDataChanged) {
-        console.log('Changes not saved: ' + this.hasAppointmentDataChanged)
-      }
     }
-  },
-  created: function () {
-    this.cachedAppointmentData = this.appointmentDataComparison()
-    document.addEventListener('beforeunload', this.appointmentHandlerClose)
   }
 }
 </script>
@@ -860,6 +825,11 @@ body .wrapper .custom-control-label::after {
 
 .cancelation-text {
     color: red;
+}
+
+.labels {
+    border-radius: 10px !important;
+    margin: .225rem !important;
 }
 
   @import '~@fullcalendar/core/main.css';

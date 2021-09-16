@@ -152,7 +152,7 @@
                                                                    :minute-step="5"
                                                                    :show-second="false"
                                                                    :lang="'en'"
-                                                                   :format="'DD.MM.YYYY HH.mm'"></date-picker>
+                                                                   :format="'HH.mm'"></date-picker>
                                                   </div>
                                               </div>
                                               <br>
@@ -170,15 +170,14 @@
                                                   </div>
                                                   <div class="col-md-9">
                                                       <template v-for="(item,index) in colors">
-                                                          <b-form-radio class="custom-radio-color"
+                                                          <b-form-radio class="custom-radio-color font-size-16 labels"
                                                                         inline
                                                                         v-model="formData.backgroundColor"
-                                                                        :color="item.color"
-                                                                        :value="item.value"
                                                                         :key="index"
+                                                                        :style="{'background': item.color}"
                                                                         name="labels"
                                                                         v-if="showLabels(item)">
-                                                              {{ item.text }}
+                                                              <p class="text-white m-0 py-1 pr-2">{{ item.text }}</p>
                                                           </b-form-radio>
                                                       </template>
                                                   </div>
@@ -972,7 +971,7 @@ export default {
     this.getDoctors()
     this.getProductGroups(this.$i18n.locale)
     this.getLabels(this.$i18n.locale)
-    this.formAppointments.assignmentDate = new Date()
+    this.formAppointments.assignmentDate = this.roundUpStartTime()
   },
   computed: {
     isSaveDisabled () {
@@ -1304,7 +1303,7 @@ export default {
   watch: {
     'formAppointments.assignmentDate' () {
       if (!this.formAppointments.id) {
-        this.formAppointments.end = this.formAppointments.assignmentDate
+        this.formAppointments.end = new Date(moment(this.formAppointments.assignmentDate).add('0', 'hours').add('15', 'minutes'))
       }
     },
     '$i18n.locale' () {
@@ -1759,12 +1758,23 @@ export default {
       this.openCancelationModal = false
       this.formAppointments.appointment_canceled_in_advance_by_clinic = false
       this.formAppointments.appointment_canceled_in_advance_by_patient = false
+    },
+    roundUpStartTime () {
+      let startTime = new Date()
+      startTime.setHours(startTime.getHours() + Math.ceil(startTime.getMinutes() / 60))
+      startTime.setMinutes(0, 0, 0)
+      return startTime
     }
   }
 }
 </script>
 
 <style lang="scss">
+
+.labels {
+    border-radius: 10px !important;
+    margin: .225rem !important;
+}
 
 .no-border {
     border: none !important;

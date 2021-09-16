@@ -208,9 +208,11 @@ NOTE: This file contains the styling for responsive Template.
 	.wizard-step{width: 100%;}
 	.iq-search-bar {padding: 0 15px; width: 100%; margin: 15px 0 0;}
 	//.iq-top-navbar .navbar {display: block !important;}
-	// .iq-top-navbar .navbar-toggler, .iq-top-navbar .iq-navbar-custom .iq-menu-bt{top: 53px;}
+	//.iq-top-navbar .navbar-toggler, .iq-top-navbar .iq-navbar-custom .iq-menu-bt{top: 53px;}
 	.navbar-collapse{top: 110px;}
-	.content-page, body.sidebar-main .content-page{padding: 170px 0 0;}
+	body.sidebar-main .content-page{padding: 170px 0 0;}
 	.iq-top-navbar .iq-sub-dropdown{width: 240px;}
+    body {font-size: .45rem !important;} 
+    .btn {font-size: .475rem !important;}
 }
 @media(max-width:359px) { }

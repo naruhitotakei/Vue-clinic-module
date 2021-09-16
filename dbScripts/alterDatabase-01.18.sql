@@ -200,6 +200,20 @@ CONSTRAINT appointment_slots_prm_client_fk REFERENCES prm_client (id);
 UPDATE TABLE appointment_slots SET prm_client_id = 1 WHERE client_id IN (10, 23);
 
 --############################################################
+--# Adding starts_at and ends_at column to appointments table
+--# and transfering values from "date" and "time" to "starts_at"
+--# whilst dropping "end_time" column
+--############################################################
+
+ALTER TABLE appointments
+ADD COLUMN starts_at TIMESTAMP,
+ADD COLUMN ends_at TIMESTAMP;
+
+UPDATE appointments SET starts_at = date + cast(time as time) WHERE time IS NOT NULL;
+
+ALTER TABLE appointments DROP COLUMN end_time;
+
+--############################################################
 --# update version
 --############################################################
 
