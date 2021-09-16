@@ -43,7 +43,7 @@
                                               <hr>
                                               <ul class="doctoe-sedual d-flex align-items-center justify-content-between p-0 m-0">
                                                   <li class="text-center">
-                                                      <h4 class="counter">{{pastAppointmentsRows}}</h4>
+                                                      <h4 class="counter">{{numberOfVisits}}</h4>
                                                       <span>{{ $t('EPR.overview.numberOfVisits') }}</span>
                                                   </li>
                                                   <li class="text-center">
@@ -363,7 +363,7 @@
                                                       </div>
                                                   </div>
                                                   <ul class="iq-timeline">
-                                                      <li v-for="(item,index) in futureAppointments" :key="index + item.date">
+                                                      <li v-for="(item,index) in futureAppointments" :key="index">
                                                           <div class="timeline-dots border-success"></div>
                                                           <div @click="openAppointmentModal(item)" style="cursor: pointer;">
                                                               <h6>{{item.product_group_text}}<span class="float-right">{{item.note}}</span></h6>
@@ -381,23 +381,13 @@
                                                           <hr />
                                                       </div>
                                                   </div>
-                                                  <ul class="iq-timeline" id="pastAppointments" :per-page="pastAppointmentsPerPage" :current-page="pastAppointmentsCurrentPage">
-                                                      <li v-for="(item, index) in pastAppointments[pastAppointmentsCurrentPage]" :key="index">
+                                                  <ul class="iq-timeline" id="pastAppointments">
+                                                      <li v-for="(item, index) in pastAppointments" :key="index">
                                                           <div class="timeline-dots border-success"></div>
                                                           <h6>{{item.product_group_text}}<span class="float-right">{{item.note}}</span></h6>
                                                           <small class="mt-1">{{item.date | formatDate}}</small>
                                                       </li>
                                                   </ul>
-                                              </template>
-                                              <template>
-                                                  <div class="mt-2 ml-4 pb-1">
-                                                      <b-pagination size="sm"
-                                                                    v-if="pastAppointmentsRows > 5"
-                                                                    v-model="pastAppointmentsCurrentPage"
-                                                                    :total-rows="pastAppointmentsRows"
-                                                                    :per-page="pastAppointmentsPerPage"
-                                                                    aria-controls="pastAppointments"></b-pagination>
-                                                  </div>
                                               </template>
                                           </iq-card>
                                       </b-col>
@@ -953,6 +943,7 @@ import { createCalendar, getDoctorList, getLabels, updateCalendar } from '@/serv
 import { getProductGroups } from '@/services/products'
 import Tiff from 'tiff.js'
 import DatePicker from 'vue2-datepicker'
+import _ from 'lodash'
 
 export default {
   name: 'ViewPatient',
@@ -1307,9 +1298,7 @@ export default {
         { label: this.$t('EPR.offersColumn.issuedBy'), key: 'operator_name', class: 'text-left' },
         { label: this.$t('EPR.offersColumn.amount'), key: 'total_with_vat', class: 'text-left' }
       ],
-      pastAppointmentsRows: 0,
-      pastAppointmentsCurrentPage: 1,
-      pastAppointmentsPerPage: 5
+      numberOfVisits: 0
     }
   },
   watch: {
@@ -1445,19 +1434,15 @@ export default {
     },
     getPatientPastAppointments (id, lang) {
       getEnquiryPastAppointments(id, lang).then(response => {
-        let res = []
-        for (let i = 0; i < response.length; i += 3) {
-          res = [...res, response.slice(i, i + 5)]
-        }
-        this.pastAppointments = res
-        this.pastAppointmentsRows = response.length
+        this.pastAppointments = _.takeRight(response, 10)
+        this.numberOfVisits = response.length
         this.timeSinceFirstVisit = response.length && response[0].date
       }
       )
     },
     getPatientFutureAppointments (id, lang) {
       getEnquiryFutureAppointments(id, lang).then(response => {
-        this.futureAppointments = response
+        this.futureAppointments = _.takeRight(response, 10)
       })
     },
     getPatientAssignments (id) {
