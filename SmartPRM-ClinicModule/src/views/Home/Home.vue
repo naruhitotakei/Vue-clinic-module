@@ -314,6 +314,7 @@ import moment from 'moment'
 import { getLocationsList } from '../../services/commonCodeLists'
 import { getProductGroups } from '@/services/products'
 import { getDoctorList } from '@/services/calendarService'
+import { sso } from '@/services/userService'
 import DatePicker from 'vue2-datepicker'
 import 'vue2-datepicker/index.css'
 
@@ -441,12 +442,7 @@ export default {
   },
   mounted () {
     xray.index()
-    this.getTodaysAppointmentsList(this.$i18n.locale)
-    this.getStaffList()
-    this.getAssignmentsForUserList()
-    this.getLocations()
-    this.getProductGroups(this.$i18n.locale)
-    this.getDoctors()
+    this.getUserLogin()
     body[0].classList.add('sidebar-main-menu')
   },
   computed: {
@@ -461,53 +457,47 @@ export default {
     body[0].classList.remove('sidebar-main-menu')
   },
   methods: {
-    getTodaysAppointmentsList (locale) {
-      getTodaysAppointments(locale).then(response => {
-        response.map(appointment => {
-          let patientAttended = appointment.patient_attended === 'true' ? 'attended' : appointment.patient_attended === 'false' ? 'not_attended' : 'unknown'
-          this.todaysAppointments.push({
-            id: appointment.id,
-            patient_name: appointment.patient_name,
-            location: appointment.location,
-            doctor_name: appointment.doctor_name,
-            product_groups: appointment.product_group_id,
-            product_group_id: appointment.product_group_id,
-            product_group_name: appointment.product_group_name,
-            start_time: new Date(appointment.starts_at),
-            time: appointment.time,
-            end_time: new Date(appointment.ends_at),
-            patient_phone: appointment.patient_phone,
-            patient_id: appointment.patient_id,
-            patient_attended: patientAttended,
-            appointment_canceled_in_advance_by_clinic: false,
-            appointment_canceled_in_advance_by_patient: false
+    getUserLogin () {
+      sso().then(response => {
+        if (typeof response !== 'string') {
+          getTodaysAppointments(this.$i18n.locale).then(response => {
+            response.map(appointment => {
+              let patientAttended = appointment.patient_attended === 'true' ? 'attended' : appointment.patient_attended === 'false' ? 'not_attended' : 'unknown'
+              this.todaysAppointments.push({
+                id: appointment.id,
+                patient_name: appointment.patient_name,
+                location: appointment.location,
+                doctor_name: appointment.doctor_name,
+                product_groups: appointment.product_group_id,
+                product_group_id: appointment.product_group_id,
+                product_group_name: appointment.product_group_name,
+                start_time: new Date(appointment.starts_at),
+                time: appointment.time,
+                end_time: new Date(appointment.ends_at),
+                patient_phone: appointment.patient_phone,
+                patient_id: appointment.patient_id,
+                patient_attended: patientAttended,
+                appointment_canceled_in_advance_by_clinic: false,
+                appointment_canceled_in_advance_by_patient: false
+              })
+            })
           })
-        })
-      })
-    },
-    getStaffList () {
-      getStaff().then(response => {
-        this.staff = response
-      })
-    },
-    getAssignmentsForUserList () {
-      getAssignmentsForUser().then(response => {
-        this.openAssignments = response
-      })
-    },
-    getLocations () {
-      getLocationsList().then(response => {
-        this.locations = response
-      })
-    },
-    getProductGroups (lang) {
-      getProductGroups(lang).then(response => {
-        this.product_groups = response
-      })
-    },
-    getDoctors () {
-      getDoctorList().then((data) => {
-        this.doctors = data
+          getStaff().then(response => {
+            this.staff = response
+          })
+          getAssignmentsForUser().then(response => {
+            this.openAssignments = response
+          })
+          getLocationsList().then(response => {
+            this.locations = response
+          })
+          getProductGroups(this.$i18n.locale).then(response => {
+            this.product_groups = response
+          })
+          getDoctorList().then((data) => {
+            this.doctors = data
+          })
+        }
       })
     },
     updateAppointment () {
@@ -544,12 +534,6 @@ export default {
     openAppointmentModal (item) {
       this.appointmentData = item
       this.appointmentModal = true
-    }
-  },
-  watch: {
-    '$i18n.locale' () {
-      this.getTodaysAppointmentsList(this.$i18n.locale)
-      this.getProductGroups(this.$i18n.locale)
     }
   }
 }
