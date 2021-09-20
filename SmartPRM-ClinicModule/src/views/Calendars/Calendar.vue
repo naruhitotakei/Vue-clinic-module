@@ -55,76 +55,6 @@
               </template>
             </iq-card>
           </template>
-          <template v-slot:headerAction>
-            <form class="mt-4" novalidate @submit="submitFormData()">
-              <b-modal id="modal-1" title="Appointment details" hide-footer>
-                <form @submit="submitFormData()">
-                  <div class="form-row">
-                    <div class="col-md-12 mb-3">
-                      <label for="validationDefault01">Appointment name</label>
-                      <input type="text" v-model="formData.appName" class="form-control" id="validationDefault01"
-                             required>
-                    </div>
-                    <div class="col-md-12 mb-3">
-                      <label for="validationDefault02">Date and Time</label>
-                      <input type="datetime-local" placeholder="2021-01-01T13:45:00" v-model="formData.dateTime"
-                             class="form-control" id="validationDefault02" required>
-                    </div>
-                    <div class="col-md-12 mb-3">
-                      <label for="validationDefault03">Regarding</label>
-                      <input type="text" v-model="formData.regarding" class="form-control" id="validationDefault02"
-                             required>
-                    </div>
-                    <div class="col-md-12 mb-3">
-                      <label for="validationDefault04">Type</label>
-                      <select class="form-control" v-model="formData.type" id="validationDefault04" required>
-                        <option selected disabled value="type">Choose...</option>
-                        <option>...</option>
-                      </select>
-                    </div>
-                    <div class="col-md-12 mb-3">
-                      <label for="validationDefault05">Name of Doctor</label>
-                      <select class="form-control" v-model="formData.doctorList" id="validationDefault05" required>
-                        <option selected disabled value="doctor_name">Choose...</option>
-                        <option>...</option>
-                      </select>
-                    </div>
-                    <div class="col-md-12 mb-3">
-                      <label for="validationDefault06">Name of Patient</label>
-                      <select class="form-control" v-model="formData.patientName" id="validationDefault06" required>
-                        <option selected disabled value="patient_name">Choose...</option>
-                        <option>...</option>
-                      </select>
-                    </div>
-                    <div class="col-md-12 mb-3">
-                      <label for="validationDefault06">Location</label>
-                      <select class="form-control" v-model="formData.location" id="validationDefault06" required>
-                        <option selected disabled value="location">Choose...</option>
-                        <option>...</option>
-                      </select>
-                    </div>
-                    <div class="col-md-12 mb-3">
-                      <label for="validationDefault05">Telephone Input</label>
-                      <input type="tel" class="form-control" v-model="formData.phone" id="validationDefault05" required>
-                    </div>
-                    <div class="col-md-12 mb-3">
-                      <label for="validationDefault05">Answered by</label>
-                      <input type="tel" v-model="formData.answeredBy" class="form-control" id="validationDefault05"
-                             required>
-                    </div>
-                    <div class="col-md-12 mb-3">
-                      <label for="validationDefault05">Presence</label>
-                      <input type="tel" v-model="formData.presence" class="form-control" id="validationDefault05"
-                             required>
-                    </div>
-                  </div>
-                  <div class="form-group">
-                    <button class="btn btn-primary" type="submit">Submit form</button>
-                  </div>
-                </form>
-              </b-modal>
-            </form>
-          </template>
           <template v-slot:body>
             <FullCalendar :resourcesOuter="getResources" :events="getEvents" @updateApp="updateApp"
                           @checkData="checkData" @setModalShow="setModalShow" :modalShow="modalShow"
@@ -138,7 +68,6 @@
 </template>
 <script>
 import { xray } from '../../config/pluginInit'
-import appointmentBook from '../../services/appointbook'
 import { getCalendar, getDoctorList } from '@/services/calendarService'
 import _ from 'lodash'
 import moment from 'moment'
@@ -346,9 +275,6 @@ export default {
           this.selectDoctor = {}
         })
       }
-    },
-    submitFormData () {
-      appointmentBook(this.formData)
     },
     scroll_left () {
       this.$refs.carousel.prev()
