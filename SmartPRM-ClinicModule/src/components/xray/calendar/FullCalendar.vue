@@ -529,18 +529,30 @@ export default {
       this.updateCalendar(this.formData.id, this.formData)
     },
     eventDrop (info) {
-      let event = this.calendarApi.getEventById(info.event.id)
-      let newResource = this.calendarApi.getResourceById(info.newResource.id)
-      this.formData.id = event.id
-      this.formData.assignmentDate = event.start
-      this.formData.end = event.end
-      this.formData.doctorId = newResource.title
-      this.formData.time = new Date(event.start).toTimeString()
-      event.setExtendedProp('assignmentDate', this.formData.assignmentDate)
-      event.setStart(this.formData.start)
-      event.setEnd(this.formData.end)
-      event.setProp('doctorId', this.formData.doctorId)
-      this.updateCalendar(this.formData.id, this.formData)
+      if (info.view.type === 'dayGridMonth') {
+        let event = this.calendarApi.getEventById(info.event.id)
+        this.formData.id = event.id
+        this.formData.assignmentDate = event.start
+        this.formData.end = event.end
+        this.formData.time = new Date(event.start).toTimeString()
+        event.setExtendedProp('assignmentDate', this.formData.assignmentDate)
+        event.setStart(this.formData.start)
+        event.setEnd(this.formData.end)
+        this.updateCalendar(this.formData.id, this.formData)
+      } else {
+        let event = this.calendarApi.getEventById(info.event.id)
+        let newResource = this.calendarApi.getResourceById(info.newResource.id)
+        this.formData.id = event.id
+        this.formData.assignmentDate = event.start
+        this.formData.end = event.end
+        this.formData.doctorId = newResource.title
+        this.formData.time = new Date(event.start).toTimeString()
+        event.setExtendedProp('assignmentDate', this.formData.assignmentDate)
+        event.setStart(this.formData.start)
+        event.setEnd(this.formData.end)
+        event.setProp('doctorId', this.formData.doctorId)
+        this.updateCalendar(this.formData.id, this.formData)
+      }
     },
     defaultAppointment () {
       return {
