@@ -195,7 +195,6 @@ export default {
   },
   mounted () {
     xray.index()
-    this.getApontments()
     this.getDoctors()
     this.getProductGroups(this.$i18n.locale)
   },

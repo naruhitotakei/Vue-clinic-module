@@ -214,6 +214,14 @@ UPDATE appointments SET starts_at = date + cast(time as time) WHERE time IS NOT 
 ALTER TABLE appointments DROP COLUMN end_time;
 
 --############################################################
+--# Removing "last_visit" and "next_visit" columns from enquiries
+--############################################################
+
+ALTER TABLE enquiries 
+DROP COLUMN last_visit,
+DROP COLUMN next_visit;
+
+--############################################################
 --# update version
 --############################################################
 
