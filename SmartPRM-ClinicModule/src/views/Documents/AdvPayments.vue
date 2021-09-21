@@ -170,7 +170,7 @@ export default {
     },
     getAdvPayments () {
       getAdvPayments().then(response => {
-        this.advPayments = _.orderBy(response, ['invoice_time'], ['desc'])
+        this.advPayments = _.orderBy(response, ['invoice_time', 'invoice_number'], ['desc', 'desc'])
         this.setTotalRows(this.advPayments.length)
         this.toggleDataLoaded()
       })

@@ -193,7 +193,7 @@ export default {
     },
     getInvoices () {
       getInvoices().then(response => {
-        this.invoices = _.orderBy(response, ['invoice_time'], ['desc'])
+        this.invoices = _.orderBy(response, ['invoice_time', 'invoice_number'], ['desc', 'desc'])
         this.setTotalRows(this.invoices.length)
         this.toggleDataLoaded()
       })

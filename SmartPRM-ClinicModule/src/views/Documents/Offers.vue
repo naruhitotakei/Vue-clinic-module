@@ -103,7 +103,7 @@ export default {
     },
     getOffers () {
       getOffers().then(response => {
-        this.offers = _.orderBy(response, ['invoice_time'], ['desc'])
+        this.offers = _.orderBy(response, ['invoice_time', 'invoice_number'], ['desc', 'desc'])
         this.setTotalRows(this.offers.length)
         this.toggleDataLoaded()
       })
