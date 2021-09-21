@@ -23,10 +23,10 @@
                   <tab-content-item :active="true" id="overview">
                       <iq-card style="background: none;">
                           <b-row>
-                              <b-col lg="4" class="pr-0 col-lg-4">
+                              <b-col lg="4" class="pr-0 mt-4 pt-2 col-lg-4">
                                   <iq-card>
                                       <template v-slot:body>
-                                          <div>
+                                          <div class="user-details-block">
                                               <b-col class="text-right">
                                                   <b-button type="button" variant=" iq-bg-danger mr-1 mb-1" size="sm" @click="modalTrashPatient = true"><i class="ri-delete-bin-7-fill m-0"></i></b-button>
                                               </b-col>
