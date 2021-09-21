@@ -452,15 +452,14 @@
                                                                 v-model="patient.date_of_birth"
                                                                 type="date"
                                                                 class="form-control-disabled font-size-12 mt-0 mr-2"></b-form-input>
-                                                  <div class="invalid-feedback">
-                                                      <!--                                                          <span>{{ errors[0] }}</span>-->
-                                                  </div>
-                                                  <!--                                                  </ValidationProvider>-->
                                               </b-form-group>
-                                              <b-form-group class="col-md-12 align-items-center pt-2 pb-2" :class="{'mb-0': disabledData}" label-cols-sm="4" label-for="gender" :label="$t('EPR.personalInfo.gender')">
-                                                  <b-form-radio inline v-model="patient.gender" :disabled="disabledData" value="male" class="ml-2">{{ $t('EPR.personalInfo.male') }}</b-form-radio>
-                                                  <b-form-radio inline v-model="patient.gender" :disabled="disabledData" value="female">{{ $t('EPR.personalInfo.female') }}</b-form-radio>
-                                                  <b-form-radio inline v-model="patient.gender" :disabled="disabledData" value="unspecified">{{ $t('EPR.personalInfo.unspecified') }}</b-form-radio>
+                                              <b-form-group v-if="patient.gender && disabledData" class="col-md-12 align-items-center" :class="{'mb-0': disabledData}" label-cols-sm="4" label-for="gender" :label="$t('EPR.personalInfo.gender')">
+                                                      <b-form-input v-model="patient.gender" type="text" class="form-control-disabled font-size-12" :disabled="disabledData"></b-form-input>
+                                              </b-form-group>
+                                              <b-form-group v-else class="col-md-12 align-items-center pt-2 pb-2" :class="{'mb-0': disabledData}" label-cols-sm="4" label-for="gender" :label="$t('EPR.personalInfo.gender')">
+                                                  <b-form-radio inline v-model="patient.gender" :disabled="disabledData" value="Male" class="ml-2">{{ $t('EPR.personalInfo.male') }}</b-form-radio>
+                                                  <b-form-radio inline v-model="patient.gender" :disabled="disabledData" value="Female">{{ $t('EPR.personalInfo.female') }}</b-form-radio>
+                                                  <b-form-radio inline v-model="patient.gender" :disabled="disabledData" value="Unspecified">{{ $t('EPR.personalInfo.unspecified') }}</b-form-radio>
                                               </b-form-group>
                                               <b-form-group class="col-md-12 align-items-center" :class="{'mb-0': disabledData}" label-cols-sm="4" label-for="address" :label="$t('EPR.personalInfo.address')">
                                                   <b-form-input :disabled="disabledData" name="address" class="form-control-disabled font-size-12" v-model="patient.address_line_1" style="line-height: 22px;">
@@ -529,27 +528,27 @@
                                           </div>
                                           <div class="iq-card-body" style="margin-top: -1rem;">
                                               <div class="row">
-                                                  <b-form-group class="col-md-8 align-items-center" label-cols-sm="3" label-for="region">
+                                                  <b-form-group class="col-md-8 align-items-center pl-0" label-cols-sm="3" label-for="region">
                                                       <template slot="label">
-                                                          <span style="height: 45px; display: flex; align-items: center">
+                                                          <span>
                                                               {{ $t('EPR.personalInfo.personalDentist') }}:
                                                           </span>
                                                       </template>
                                                       <v-select :disabled="disabledDoctors"
                                                                 :clearable="false"
                                                                 :reduce="dentist => dentist.code"
-                                                                class="style-chooser form-control-disabled mb-1"
+                                                                class="style-chooser form-control-disabled mb-1 pl-2"
                                                                 v-model="patient.prm_dentist_user_id"
                                                                 :options="dentists">
                                                       </v-select>
                                                   </b-form-group>
-                                                  <b-form-group class="col-md-8 align-items-center" label-cols-sm="3" label-for="region" style="margin-top: -1.5rem;">
+                                                  <b-form-group class="col-md-8 align-items-center pl-0" label-cols-sm="3" label-for="region" style="margin-top: -1.5rem;">
                                                       <template slot="label">
-                                                          <span style="height: 45px; display: flex; align-items: center">
+                                                          <span>
                                                               {{ $t('EPR.personalInfo.personalSurgeon') }}:
                                                           </span>
                                                       </template>
-                                                      <v-select :disabled="disabledDoctors" :clearable="false" :reduce="dentist => dentist.code" class="style-chooser form-control-disabled mb-1" v-model="patient.prm_surgeon_user_id" :options="surgeons"></v-select>
+                                                      <v-select :disabled="disabledDoctors" :clearable="false" :reduce="dentist => dentist.code" class="style-chooser form-control-disabled mb-1 pl-2" v-model="patient.prm_surgeon_user_id" :options="surgeons"></v-select>
                                                   </b-form-group>
                                               </div>
                                           </div>
