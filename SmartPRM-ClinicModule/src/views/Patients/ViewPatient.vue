@@ -366,7 +366,7 @@
                                                           <div class="timeline-dots border-success"></div>
                                                           <div @click="openAppointmentModal(item)" style="cursor: pointer;">
                                                               <h6>{{item.product_group_text}}<span class="float-right">{{item.note}}</span></h6>
-                                                              <small class="mt-1">{{item.date | formatDate}}</small>
+                                                              <small class="mt-1">{{item.starts_at | formatDate}}</small>
                                                           </div>
                                                       </li>
                                                   </ul>
@@ -384,7 +384,7 @@
                                                       <li v-for="(item, index) in pastAppointments" :key="index">
                                                           <div class="timeline-dots border-success"></div>
                                                           <h6>{{item.product_group_text}}<span class="float-right">{{item.note}}</span></h6>
-                                                          <small class="mt-1">{{item.date | formatDate}}</small>
+                                                          <small class="mt-1">{{item.starts_at | formatDate}}</small>
                                                       </li>
                                                   </ul>
                                               </template>

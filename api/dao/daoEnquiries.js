@@ -190,7 +190,7 @@ const getEnquiryPastAppointments = (request, response, enquiryId, locale) => {
       "LEFT JOIN prm_product_group_name ON prm_product_group_name.product_group_id = prm_product_group.product_group_id  " +
       "LEFT JOIN appointments_label ON appointments.label_id = appointments_label.id  " +
       "LEFT JOIN appointments_label_name ON appointments_label.id = appointments_label_name.appointment_label_id  " +
-      "WHERE enquiry_id = $1 AND prm_product_group_name.language = '" + locale + "' AND appointments_label_name.language = '" + locale + "' AND date < now():: date ORDER BY date ASC" , [enquiryId] , (error, results) => {
+        "WHERE enquiry_id = $1 AND prm_product_group_name.language = '" + locale + "' AND starts_at < now()::date ORDER BY starts_at ASC" , [enquiryId] , (error, results) => {
         if (error) {
             throw error
         }
@@ -207,7 +207,7 @@ const getEnquiryFutureAppointments = (request, response, enquiryId, locale) => {
         "LEFT JOIN prm_product_group_name ON prm_product_group_name.product_group_id = prm_product_group.product_group_id  " +
         "LEFT JOIN appointments_label ON appointments.label_id = appointments_label.id  " +
         "LEFT JOIN appointments_label_name ON appointments_label.id = appointments_label_name.appointment_label_id  " +
-        "WHERE enquiry_id = $1 AND prm_product_group_name.language = '" + locale + "' AND appointments_label_name.language = '" + locale + "' AND date >= now():: date ORDER BY date ASC", [enquiryId], (error, results) => {
+        "WHERE enquiry_id = $1 AND prm_product_group_name.language = '" + locale + "' AND starts_at >= now()::date ORDER BY starts_at ASC", [enquiryId], (error, results) => {
             if (error) {
                 throw error
             }
