@@ -75,7 +75,6 @@ export default {
   },
   methods: {
     onSubmit () {
-      console.log(this.user.email, this.user.password)
       login(this.user.email, this.user.password).then(response => {
         if (typeof response === 'string' && response.startsWith('NOK')) {
           alert(response)

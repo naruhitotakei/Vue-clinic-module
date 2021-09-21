@@ -346,7 +346,6 @@ export default {
     },
     async onFileChanged (e) {
       this.selectedFile = e.target.files[0]
-      console.log(this.selectedFile.size)
       // todo check size
       uploadAvatar(this.selectedFile)
       await this.sleep(1000)
@@ -367,11 +366,8 @@ export default {
     },
     editProfile () {
       editProfile(this.logedInUser).then(() => {
-        console.log('Successful update')
         this.getUserLogin()
         // this.$bvToast.show('b-toaster-bottom-right')
-      }).catch(errorMsg => {
-        console.log('Error: ' + errorMsg)
       })
     },
     settingData () {
@@ -383,7 +379,6 @@ export default {
     },
     changeLang (profile) {
       changeLang(profile).then(() => {
-        console.log('Successful update')
         this.$bvToast.show('b-toaster-bottom-right')
       })
     },
@@ -425,7 +420,6 @@ export default {
       sso().then(response => {
         if (typeof response !== 'string') {
           this.logedInUser = response
-          console.log(this.logedInUser)
           this.$i18n.locale = this.logedInUser.prm_locale
           this.verticalMenu = this.filterMenu(SideBarItems)
         } else {
@@ -461,11 +455,9 @@ export default {
       for (var i = 0; i < this.logedInUser.permissions.length; i++) {
         if (this.logedInUser.permissions[i].resource_name === resourceName) return true
       }
-      console.log('User has no premission for ' + resourceName)
       return false
     },
     langChange (lang) {
-      console.log('lang', lang)
       this.langChangeState(lang)
       this.$i18n.locale = lang
       if (document.getElementsByClassName('iq-show').length) {

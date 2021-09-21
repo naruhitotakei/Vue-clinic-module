@@ -77,11 +77,8 @@ const getUserById = ((request, response, id) => {
 })
 
 const hash = ((request, response, password) => {
-  console.log("Hashing " + password)
   bcrypt.hash(password, 12).then(function (hash) {
-    console.log("Hash " + hash)
     bcrypt.compare(password, hash).then(function (result) {
-      console.log("Check Hash " + result)
       return res.status(200).json("OK:")
     });
   });
@@ -107,7 +104,6 @@ const changePassword = ((request, response, email, oldpasswordhash, credentials)
   bcrypt.compare(credentials.oldpassword, oldpasswordhash).then(function (result) {
     if (result) {
       bcrypt.hash(credentials.password1, 12).then(function (hash) {
-        console.log("sql " + hash + " " + email)
         pool.query("UPDATE users SET prm_password_hash = $1 WHERE email = $2", [hash, email], (error, qResult) => {
           request.session.prm_user.prm_password_hash = hash
           response.status(200).json("OK: Password changed")

@@ -1532,8 +1532,6 @@ export default {
       updateEnquiry(this.patientId, this.patient).then((response) => {
         this.patient = response
         this.$bvToast.show('b-toaster-bottom-right')
-      }).catch(errorMsg => {
-        console.log('Error: ' + errorMsg)
       })
     },
     trashPatient () {
@@ -1545,7 +1543,6 @@ export default {
 
     },
     add_file () {
-      console.log('Add file clicked')
     },
     resetForm () {
       this.user = {

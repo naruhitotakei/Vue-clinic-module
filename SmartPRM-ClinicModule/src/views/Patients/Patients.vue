@@ -192,7 +192,6 @@ export default {
       this.tempPatient ? this.patients.splice(index, 1, this.tempPatient) : this.patients.shift()
     },
     emailPatient (item) {
-      console.log('Email sent to patients address: ' + item.email)
     },
     async getPatients (sort) {
       this.isDataLoaded = false

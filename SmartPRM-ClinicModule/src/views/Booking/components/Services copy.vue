@@ -25,8 +25,7 @@ export default {
     return {
       checked: true,
       indeterminate: true,
-      serviceData: serviceData,
-      data: console.log(this.serviceData)
+      serviceData: serviceData
       // consultation: consultation,
       // services: services
     }

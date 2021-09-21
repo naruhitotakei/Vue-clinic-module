@@ -90,7 +90,6 @@ export default {
       }
     },
     add_offer () {
-      console.log('ADD NEW OFFER CLICKED')
     },
     filterSelected (value) {
       let array = [value]
