@@ -14,6 +14,7 @@
   editable="true"
   :header="calendarOptions.header"
   :allDayDefault="calendarOptions.allDayDefault"
+  :firstDay="calendarOptions.firstDay"
   @select="openCreateModal"
   @eventClick="openUpdateModal"
   @datesRender="onViewChange"
@@ -355,6 +356,7 @@ export default {
         allDaySlot: false,
         editable: true,
         selectable: true,
+        firstDay: 1,
         events: [],
         locale: ((this.$i18n.locale === 'sl') ? slLocale : null),
         displayEventTime: false
