@@ -1433,7 +1433,7 @@ export default {
     },
     getPatientPastAppointments (id, lang) {
       getEnquiryPastAppointments(id, lang).then(response => {
-        this.pastAppointments = _.takeRight(response, 10)
+        this.pastAppointments = _.takeRight(response, 5)
         this.numberOfVisits = response.length
         this.timeSinceFirstVisit = response.length && response[0].date
       }
@@ -1441,7 +1441,7 @@ export default {
     },
     getPatientFutureAppointments (id, lang) {
       getEnquiryFutureAppointments(id, lang).then(response => {
-        this.futureAppointments = _.takeRight(response, 10)
+        this.futureAppointments = _.takeRight(response, 5)
       })
     },
     getPatientAssignments (id) {
