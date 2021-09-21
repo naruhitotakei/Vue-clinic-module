@@ -75,6 +75,8 @@
 import { xray } from '../../config/pluginInit'
 import { getOffers } from '../../services/offers'
 import moment from 'moment'
+import _ from 'lodash'
+
 export default {
   components: {
   },
@@ -101,7 +103,7 @@ export default {
     },
     getOffers () {
       getOffers().then(response => {
-        this.offers = response
+        this.offers = _.orderBy(response, ['invoice_time'], ['desc'])
         this.setTotalRows(this.offers.length)
         this.toggleDataLoaded()
       })

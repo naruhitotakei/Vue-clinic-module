@@ -88,6 +88,8 @@ import { xray } from '../../config/pluginInit'
 import { getAdvPayments } from '../../services/advPayments'
 import { getPatients } from '../../services/enquiry'
 import moment from 'moment'
+import _ from 'lodash'
+
 export default {
   components: {
   },
@@ -168,7 +170,7 @@ export default {
     },
     getAdvPayments () {
       getAdvPayments().then(response => {
-        this.advPayments = response
+        this.advPayments = _.orderBy(response, ['invoice_time'], ['desc'])
         this.setTotalRows(this.advPayments.length)
         this.toggleDataLoaded()
       })

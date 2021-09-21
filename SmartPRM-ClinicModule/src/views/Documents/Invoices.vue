@@ -104,6 +104,7 @@ import { xray } from '../../config/pluginInit'
 import { getInvoices } from '../../services/invoice'
 import { getPatients } from '../../services/enquiry'
 import moment from 'moment'
+import _ from 'lodash'
 
 export default {
   components: {
@@ -192,7 +193,7 @@ export default {
     },
     getInvoices () {
       getInvoices().then(response => {
-        this.invoices = response
+        this.invoices = _.orderBy(response, ['invoice_time'], ['desc'])
         this.setTotalRows(this.invoices.length)
         this.toggleDataLoaded()
       })
