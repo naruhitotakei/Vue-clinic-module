@@ -82,7 +82,7 @@ const updateAppointments = (request, response, id, appointments) => {
     statement += "appointment_canceled_in_advance_by_clinic=" + appointments.appointment_canceled_in_advance_by_clinic + ","
     if (appointments.product_groups) statement += "product_group_id='" + appointments.product_groups + "',"
     if (appointments.assignmentDate) statement += "starts_at='" + moment(appointments.assignmentDate).format('YYYY-MM-DDTHH:mm') + "',"
-    if (appointments.backgroundColor) statement += "label_id='" + appointments.backgroundColor.id + "',"
+    if (appointments.backgroundColor) statement += "label_id='" + appointments.backgroundColor + "',"
     if (appointments.end) statement += "ends_at='" + moment(appointments.end).format('YYYY-MM-DDTHH:mm') + "',"
     if (appointments.time) statement += "time='" + time + "' "
     statement = statement.slice(0, -1)
@@ -119,7 +119,7 @@ const createAppointment = (request, response, appointments) => {
     if (appointments.patient_attended) statement += "'"+patient_attended +"',"
     if (appointments.product_groups) statement += ""+ appointments.product_groups +","
     if (appointments.assignmentDate) statement += "'"+ moment(appointments.assignmentDate).format('YYYY-MM-DDTHH:mm') +"',"
-    if (appointments.backgroundColor) statement += "'"+ appointments.backgroundColor.id +"',"
+    if (appointments.backgroundColor) statement += "'"+ appointments.backgroundColor +"',"
     if (appointments.end) statement += "'"+ moment(appointments.end).format('YYYY-MM-DDTHH:mm') +"',"
     statement += "'"+ time +"',"
     statement += "NOW(),"

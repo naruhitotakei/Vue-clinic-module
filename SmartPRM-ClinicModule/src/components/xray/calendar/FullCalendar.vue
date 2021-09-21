@@ -170,6 +170,8 @@
                                       inline
                                       v-model="formData.backgroundColor"
                                       :key="index"
+                                      :reduce="item => item.id"
+                                      :value="item.id"
                                       :style="{'background': item.color}"
                                       name="labels"
                                       v-if="showLabels(item)">

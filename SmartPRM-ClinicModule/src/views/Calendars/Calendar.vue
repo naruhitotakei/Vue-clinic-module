@@ -205,7 +205,7 @@ export default {
         this.resources = _.uniqBy(this.resources, 'id')
         this.clonedResources = this.resources
         dataWithDoctor.map(item => {
-          let patientAttended = item.patient_attended === 'true' ? 'attended' : item.patient_attended === 'null' ? 'unknown' : 'not_attended'
+          let patientAttended = item.patient_attended === 'true' ? 'attended' : item.patient_attended === 'false' ? 'not_attended' : 'unknown'
           let doctor = this.doctorsList.find(doc => doc.name === item.app_doctor_name)
           this.events.push({
             id: item.id,
