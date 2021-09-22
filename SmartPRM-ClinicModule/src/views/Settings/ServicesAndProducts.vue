@@ -623,6 +623,6 @@ export default {
 .drop-down .vs__dropdown-menu {
     border-radius: 10px;
     min-height: 45px;
-    min-width: 150px;
+    min-width: 150px !important;
 }
 </style>

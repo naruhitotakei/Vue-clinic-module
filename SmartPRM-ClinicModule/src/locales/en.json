@@ -645,7 +645,7 @@
       "email": "Email",
       "address": "Address",
       "city": "City",
-      "taxNumber": "Tax Number",
+      "vatNumber": "VAT number",
       "zipCode": "ZIP code",
       "countries": "Countries",
       "close": "Close",

@@ -36,15 +36,18 @@ const createBusiness = (req, res, business) => {
   if (business.address) businessStatement += "address_line_1,"
   if (business.zip_code) businessStatement += "post_code,"
   if (business.city) businessStatement += "city,"
-  if (business.country_code) businessStatement += "country_id "
+  if (business.country_code) businessStatement += "country_id,"
+  if (business.vat_number) businessStatement += "vat_number "
   businessStatement += ") VALUES ("
   if (business.name) businessStatement += "'" + business.name + "',"
   if (business.email) businessStatement += "'" + business.email + "',"
   if (business.address) businessStatement += "'" + business.address + "',"
   if (business.zip_code) businessStatement += "'" + business.zip_code + "',"
   if (business.city) businessStatement += "'" + business.city + "',"
-  if (business.country_code) businessStatement += "'" + business.country_code.id  + "'"
+  if (business.country_code) businessStatement += "'" + business.country_code.id  + "',"
+  if (business.vat_number) businessStatement += "'" + business.vat_number + "'"
   businessStatement += ")";
+  console.log(businessStatement)
   pool.query(businessStatement , (error, results) => {
     if (error) {
       throw error
@@ -60,8 +63,10 @@ const updateBusiness = (req, res, id, business) => {
   if (business.address) businessStatement += "address_line_1='" + business.address + "',"
   if (business.city) businessStatement += "city='" + business.city + "',"
   if (business.country_code) businessStatement += "country_id='" + business.country_code.id  + "',"
-  if (business.zip_code) businessStatement += "post_code='" + business.zip_code + "'"
+  if (business.zip_code) businessStatement += "post_code='" + business.zip_code + "',"
+  if (business.vat_number) businessStatement += "vat_number='" + business.vat_number + "'"
   businessStatement +=" WHERE business_customer.id=" + id
+  console.log(businessStatement)
   pool.query(businessStatement , (error, results) => {
     if (error) {
       throw error
