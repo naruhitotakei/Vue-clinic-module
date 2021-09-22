@@ -12,6 +12,7 @@
   :slotDuration="calendarOptions.slotDuration"
   :expandRows="calendarOptions.slotDuration"
   :selectable="isSelectable"
+  editable="true"
   :header="calendarOptions.header"
   :allDayDefault="calendarOptions.allDayDefault"
   :firstDay="calendarOptions.firstDay"
