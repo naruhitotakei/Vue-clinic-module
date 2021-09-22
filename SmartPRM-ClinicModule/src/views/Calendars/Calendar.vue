@@ -209,7 +209,7 @@ export default {
           let doctor = this.doctorsList.find(doc => doc.name === item.app_doctor_name)
           this.events.push({
             id: item.id,
-            title: item.name + ' ' + item.last_name,
+            title: item.note ? item.name + ' ' + item.last_name + ' - ' + item.prm_pr_group_name_text + '\n' + moment(item.starts_at).format('HH:mm') + ' - ' + moment(item.ends_at).format('HH:mm') + '\n' + item.note : item.name + ' ' + item.last_name + ' - ' + item.prm_pr_group_name_text + '\n' + moment(item.starts_at).format('HH:mm') + ' - ' + moment(item.ends_at).format('HH:mm'),
             start: moment(item.starts_at).format('YYYY-MM-DDTHH:mm'),
             end: item.ends_at ? moment(item.ends_at).format('YYYY-MM-DDTHH:mm') : moment(item.starts_at).add('0', 'hours').add('15', 'minutes').format('YYYY-MM-DDTHH:mm'),
             backgroundColor: item.app_lb_color ? item.app_lb_color : '#64D6E8',
@@ -225,7 +225,7 @@ export default {
             prm_client_id: item.prm_client_id,
             prm_client_name: item.prm_client_name,
             time: item.time,
-            notes: item.note,
+            notes: item.note ? item.note : '',
             doctorId: item.doctor_name ? item.doctor_name : item.app_doctor_name,
             enquiry_id: item.enquiry_id,
             label_id: item.app_lb_id,
