@@ -644,7 +644,7 @@
       "email": "Email",
       "address": "Naslov",
       "city": "Mesto",
-      "taxNumber": "Davčna številka",
+      "vatNumber": "Davčna številka",
       "zipCode": "Poštna številka",
       "countries": "Država",
       "close": "Zapri",

@@ -65,33 +65,38 @@
         <div class="col-md-12 mb-3">
           <label for="title">{{ $t('business.addBusinessModal.name') }} *</label>
           <div style="display: flex;">
-            <input type="text" v-model="formData.name" class="form-control" placeholder="Name">
+            <input type="text" v-model="formData.name" class="form-control" :placeholder="$t('business.addBusinessModal.name')">
           </div>
         </div>
         <div class="col-md-6 mb-3">
           <label for="title">{{ $t('business.addBusinessModal.email') }} </label>
-          <input type="email" v-model="formData.email" class="form-control" placeholder="Email" >
+          <input type="email" v-model="formData.email" class="form-control" :placeholder="$t('business.addBusinessModal.email')" >
         </div>
         <div class="col-md-6 mb-3">
           <label for="title">{{ $t('business.addBusinessModal.address') }} *</label>
-          <input type="text" v-model="formData.address" class="form-control" placeholder="Address" required>
+          <input type="text" v-model="formData.address" class="form-control" :placeholder="$t('business.addBusinessModal.address')" required>
         </div>
         <div class="col-md-6 mb-3">
           <label for="title">{{ $t('business.addBusinessModal.city') }} *</label>
-          <input type="text" v-model="formData.city" class="form-control" placeholder="City" required>
+          <input type="text" v-model="formData.city" class="form-control" :placeholder="$t('business.addBusinessModal.city')" required>
         </div>
         <div class="col-md-6 mb-3">
           <label for="title">{{ $t('business.addBusinessModal.zipCode') }} *</label>
-          <input type="text" v-model="formData.zip_code" class="form-control" placeholder="ZIP code" required>
+          <input type="number" v-model="formData.zip_code" class="form-control" :placeholder="$t('business.addBusinessModal.zipCode')" required>
+        </div>
+        <div class="col-md-6 mb-3">
+          <label for="title">{{ $t('business.addBusinessModal.vatNumber') }} *</label>
+          <input type="text" v-model="formData.vat_number" class="form-control" :placeholder="$t('business.addBusinessModal.vatNumber')" required>
         </div>
         <div class="col-md-6 mb-3" v-if="countries">
           <label for="title">{{ $t('business.addBusinessModal.countries') }} *</label>
           <v-select
-              taggable
-              :clearable="false"
-              label="name"
-              v-model="formData.country_code"
-              :options="countries">
+            class="drop-down"
+            taggable
+            :clearable="false"
+            label="name"
+            v-model="formData.country_code"
+            :options="countries">
             <template v-slot:option="option">
               {{ option.name }}
             </template>
@@ -134,6 +139,7 @@ export default {
         { label: this.$t('business.businessColumn.businessCity'), key: 'city', class: 'text-left' },
         { label: this.$t('business.businessColumn.businessZIPCode'), key: 'zip_code', class: 'text-left' },
         { label: this.$t('business.businessColumn.businessCountry'), key: 'countries_name', class: 'text-left' },
+        { label: this.$t('business.addBusinessModal.vatNumber'), key: 'vat_number', class: 'text-left' },
         { label: this.$t('business.businessColumn.businessAction'), key: 'action', class: 'text-center' }
       ],
       formData: {
@@ -143,7 +149,8 @@ export default {
         address: '',
         city: '',
         zip_code: '',
-        country_code: ''
+        country_code: '',
+        vat_number: ''
       }
     }
   },
@@ -174,6 +181,7 @@ export default {
         address: item.address_line_1,
         city: item.city,
         zip_code: item.post_code,
+        vat_number: item.vat_number,
         country_code: {
           id: item.countries_id,
           code: item.code,
@@ -205,7 +213,7 @@ export default {
         email: '',
         address: '',
         city: '',
-        tax_number: ''
+        vat_number: ''
       }
     },
     cancelBusiness () {
@@ -219,3 +227,13 @@ export default {
   }
 }
 </script>
+
+<style lang="scss">
+.drop-down .vs__search::placeholder,
+.drop-down .vs__dropdown-toggle,
+.drop-down .vs__dropdown-menu {
+    border-radius: 10px;
+    min-height: 45px;
+    min-width: 150px !important;
+}
+</style>
