@@ -10,9 +10,6 @@
   :maxTime="calendarOptions.maxTime"
   :allDaySlot="calendarOptions.allDaySlot"
   :slotDuration="calendarOptions.slotDuration"
-  :slotLabelInterval="calendarOptions.slotLabelInterval"
-  :aspectRatio="calendarOptions.saspectRatio"
-  :expandRows="calendarOptions.expandRows"
   :selectable="isSelectable"
   editable="true"
   :header="calendarOptions.header"
@@ -357,10 +354,7 @@ export default {
         resources: this.resourcesOuter,
         minTime: '09:00:00',
         maxTime: '21:30:00',
-        slotDuration: '00:30:00',
-        slotLabelInterval: '01:00:00'
-        aspectRatio: 0.618,
-        expandRows: true,
+        slotDuration: '00:15:00',
         allDaySlot: false,
         editable: true,
         selectable: true,
