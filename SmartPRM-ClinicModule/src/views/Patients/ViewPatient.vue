@@ -23,7 +23,7 @@
                   <tab-content-item :active="true" id="overview">
                       <iq-card style="background: none;">
                           <b-row>
-                              <b-col lg="4" class="pr-0 pt-2 mt-5 col-lg-4">
+                              <b-col lg="4" class="pr-0 mt-4 pt-2 col-lg-4">
                                   <iq-card>
                                       <template v-slot:body>
                                           <div class="user-details-block">
@@ -453,13 +453,15 @@
                                                                 type="date"
                                                                 class="form-control-disabled font-size-12 mt-0 mr-2"></b-form-input>
                                               </b-form-group>
-                                              <b-form-group v-if="patient.gender && disabledData" class="col-md-12 align-items-center" :class="{'mb-0': disabledData}" label-cols-sm="4" label-for="gender" :label="$t('EPR.personalInfo.gender')">
-                                                      <b-form-input v-model="patient.gender" type="text" class="form-control-disabled font-size-12" :disabled="disabledData"></b-form-input>
+                                              <b-form-group v-if="disabledData" class="col-md-12 align-items-center my-1" :class="{'mb-0': disabledData}" label-cols-sm="4" label-for="gender" :label="$t('EPR.personalInfo.gender')">
+                                                  <p v-if="patient.gender === 'male'" class="form-control-disabled font-size-12 text-black" :class="{'mb-1': disabledData}" :disabled="disabledData" style="padding-left: .75rem !important">{{ $t('EPR.personalInfo.male') }}</p>
+                                                  <p v-if="patient.gender === 'female'" class="form-control-disabled font-size-12 text-black" :class="{'mb-1': disabledData}" :disabled="disabledData" style="padding-left: .75rem !important">{{ $t('EPR.personalInfo.female') }}</p>
+                                                  <p v-if="!patient.gender || patient.gender === 'unspecified'" class="form-control-disabled font-size-12 text-black" :class="{'mb-1': disabledData}" :disabled="disabledData" style="padding-left: .75rem !important">{{ $t('EPR.personalInfo.unspecified') }}</p>
                                               </b-form-group>
                                               <b-form-group v-else class="col-md-12 align-items-center pt-2 pb-2" :class="{'mb-0': disabledData}" label-cols-sm="4" label-for="gender" :label="$t('EPR.personalInfo.gender')">
-                                                  <b-form-radio inline v-model="patient.gender" :disabled="disabledData" value="Male" class="ml-2">{{ $t('EPR.personalInfo.male') }}</b-form-radio>
-                                                  <b-form-radio inline v-model="patient.gender" :disabled="disabledData" value="Female">{{ $t('EPR.personalInfo.female') }}</b-form-radio>
-                                                  <b-form-radio inline v-model="patient.gender" :disabled="disabledData" value="Unspecified">{{ $t('EPR.personalInfo.unspecified') }}</b-form-radio>
+                                                  <b-form-radio inline v-model="patient.gender" :disabled="disabledData" value="male" class="ml-2">{{ $t('EPR.personalInfo.male') }}</b-form-radio>
+                                                  <b-form-radio inline v-model="patient.gender" :disabled="disabledData" value="female">{{ $t('EPR.personalInfo.female') }}</b-form-radio>
+                                                  <b-form-radio inline v-model="patient.gender" :disabled="disabledData" value="unspecified">{{ $t('EPR.personalInfo.unspecified') }}</b-form-radio>
                                               </b-form-group>
                                               <b-form-group class="col-md-12 align-items-center" :class="{'mb-0': disabledData}" label-cols-sm="4" label-for="address" :label="$t('EPR.personalInfo.address')">
                                                   <b-form-input :disabled="disabledData" name="address" class="form-control-disabled font-size-12" v-model="patient.address_line_1" style="line-height: 22px;">
