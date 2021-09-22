@@ -9,8 +9,7 @@
   :minTime="calendarOptions.minTime"
   :maxTime="calendarOptions.maxTime"
   :allDaySlot="calendarOptions.allDaySlot"
-  :slotDuration"calendarOptions.slotDuration"
-  :eventMinHeight"calendarOptions.eventMinHeight"
+  :slotDuration="calendarOptions.slotDuration"
   :expandRows="calendarOptions.slotDuration"
   :selectable="isSelectable"
   editable="true"
@@ -357,7 +356,6 @@ export default {
         minTime: '09:00:00',
         maxTime: '21:30:00',
         slotDuration: '00:30:00',
-        eventMinHeight: "00:05:00",
         allDaySlot: false,
         expandRows: true,
         editable: true,
