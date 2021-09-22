@@ -11,7 +11,6 @@
   :allDaySlot="calendarOptions.allDaySlot"
   :slotDuration="calendarOptions.slotDuration"
   :selectable="isSelectable"
-  editable="true"
   :header="calendarOptions.header"
   :allDayDefault="calendarOptions.allDayDefault"
   :firstDay="calendarOptions.firstDay"
@@ -354,7 +353,7 @@ export default {
         resources: this.resourcesOuter,
         minTime: '09:00:00',
         maxTime: '21:30:00',
-        slotDuration: '00:15:00',
+        slotDuration: '00:30:00',
         allDaySlot: false,
         editable: true,
         selectable: true,
