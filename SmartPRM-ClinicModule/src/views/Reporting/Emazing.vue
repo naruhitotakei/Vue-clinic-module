@@ -61,6 +61,7 @@
                 <td><span class="font-weight-bold"> Total: </span></td>
                 <td><span class="font-weight-bold">{{formatNumber(Math.trunc(servicesSummaryTotalCount))}}</span></td>
                 <td><span class="font-weight-bold">{{formatNumber(Math.trunc(servicesSummaryTotalAmount))}} &#8364;</span></td>
+                <td><span class="font-weight-bold">{{formatNumber(Math.trunc(servicesSummaryTotalFee))}} &#8364;</span></td>
               </tr>
               </tbody>
             </b-table-simple>
