@@ -102,7 +102,8 @@
         font-size: 13px;
     }
     .navbar {
-        justify-content: flex-end !important;
+       /* justify-content: flex-end !important; */
+       margin-left: .25rem;
     }
      .navbar .nav-responsive {
         order: 2;
