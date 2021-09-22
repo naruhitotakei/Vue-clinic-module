@@ -42,16 +42,18 @@
               </thead>
               <tbody>
               <template v-for="(body,bodyKey ) in getServicesSummary" >
-                <tr :key="bodyKey">
+                <tr :key="bodyKey" class="main-row">
                   <td style="max-width: 200px"><span class="font-weight-bold">{{ bodyKey }}</span></td>
                   <td><span class="font-weight-bold">&nbsp; {{ body.group_count }}&nbsp; </span></td>
                   <td><span class="font-weight-bold">{{ formatNumber(Math.trunc(body.group_amount)) }}   &#8364;</span></td>
+                  <td><span class="font-weight-bold">{{ formatNumber(Math.trunc(body.group_fee)) }}   &#8364;</span></td>
                 </tr>
                   <template v-for="(item, index) in body" >
                    <tr :key="Math.random(index + 1000)">
                      <td  style="max-width: 200px">{{ item.service_title }}</td>
                      <td class="td-count">&nbsp; {{ item.count }}&nbsp;  </td>
                      <td>{{ formatNumber(Math.trunc(item.sum)) }} &#8364;</td>
+                     <td>{{ formatNumber(Math.trunc(item.fee)) }} &#8364;</td>
                    </tr>
                   </template>
               </template>
@@ -79,7 +81,7 @@
               </thead>
               <tbody>
               <template v-for="(body, bodyKey) in servicesListItems" >
-                <tr :key="bodyKey">
+                <tr :key="bodyKey" class="main-row">
                   <td colspan="3"><span class="font-weight-bold">{{ bodyKey }}</span></td>
                   <td ><span class="font-weight-bold">{{formatNumber(Math.trunc(body.group_price))}} &#8364;</span></td>
                   <td  colspan="2"><span class="font-weight-bold">{{formatNumber(Math.trunc(body.group_fee))}} &#8364;</span></td>
@@ -142,7 +144,8 @@ export default {
       servicesSummaryColumns: [
         { label: this.$t('reportingEmazing.servicesSummaryColumn.serviceTitle'), key: 'service_title', class: 'text-left' },
         { label: this.$t('reportingEmazing.servicesSummaryColumn.serviceCount'), key: 'count', class: 'text-left' },
-        { label: this.$t('reportingEmazing.servicesSummaryColumn.serviceAmount'), key: 'sum', class: 'text-left' }
+        { label: this.$t('reportingEmazing.servicesSummaryColumn.serviceAmount'), key: 'sum', class: 'text-left' },
+        { label: this.$t('reportingEmazing.servicesSummaryColumn.serviceFee'), key: 'fee', class: 'text-left' }
       ],
       servicesSummaryItems: [],
       servicesListColumns: [
@@ -241,19 +244,24 @@ export default {
           let res = _.groupBy(response, 'group')
           let totalCount = 0
           let totalAmount = 0
+          let totalFee = 0
           for (let group in res) {
             res[`${group}`].group_count = 0
             res[`${group}`].group_amount = 0
+            res[`${group}`].group_fee = 0
             res[group].map(item => {
               res[`${group}`].group_count = res[`${group}`].group_count + Number(item.count)
               res[`${group}`].group_amount = res[`${group}`].group_amount + Number(item.sum)
+              res[`${group}`].group_fee = res[`${group}`].group_fee + Number(item.fee)
               totalCount += Number(item.count)
               totalAmount += Number(item.sum)
+              totalFee += Number(item.fee)
             })
           }
           this.servicesSummaryItems = res
           this.servicesSummaryTotalCount = totalCount
           this.servicesSummaryTotalAmount = totalAmount
+          this.servicesSummaryTotalFee = totalFee
 
           let arr = []
           if (this.servicesSummaryItems) {
@@ -261,6 +269,7 @@ export default {
               arr[group] = [...this.servicesSummaryItems[group]]
               arr[group].group_amount = this.servicesSummaryItems[group].group_amount
               arr[group].group_count = this.servicesSummaryItems[group].group_count
+              arr[group].group_fee = this.servicesSummaryItems[group].group_fee
             }
           }
         } else {
@@ -361,6 +370,10 @@ export default {
 }
 .date {
   height: 35px !important;
+}
+
+.main-row {
+    background-color: #F4F4F4;
 }
 
 @media(max-width: 701px) {
