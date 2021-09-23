@@ -851,7 +851,7 @@ body .wrapper .custom-control-label::after {
     margin: .225rem !important;
 }
 
-  @import '~@fullcalendar/core/main.css';
+  // @import '~@fullcalendar/core/main.css';
   @import '~@fullcalendar/daygrid/main.css';
   @import '~@fullcalendar/timegrid/main.css';
   @import '~@fullcalendar/list/main.min.css';
