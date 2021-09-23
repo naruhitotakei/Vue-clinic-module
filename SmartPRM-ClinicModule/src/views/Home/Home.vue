@@ -6,8 +6,8 @@
                     <template v-slot:headerTitle>
                         <h4 class="card-title">{{ $t('home.todaysAppointments') }}</h4>
                     </template>
-                    <template v-slot:headerAction>
-                        <!-- <b-dropdown size="lg p-0"  variant="link" toggle-class="text-decoration-none" no-caret>
+                    <!-- <template v-slot:headerAction>
+                        <b-dropdown size="lg p-0"  variant="link" toggle-class="text-decoration-none" no-caret>
                       <template v-slot:button-content>
                             <span class="dropdown-toggle p-0" id="dropdownMenuButton5" data-toggle="dropdown">
                               <i class="ri-more-fill m-0 text-primary"></i>
@@ -18,8 +18,8 @@
                       <b-dropdown-item href="#"><i class="ri-pencil-fill mr-2"></i>{{ $t('home.newAppointmentsDropDown.edit') }}</b-dropdown-item>
                       <b-dropdown-item href="#"><i class="ri-printer-fill mr-2"></i>{{ $t('home.newAppointmentsDropDown.print') }}</b-dropdown-item>
                       <b-dropdown-item href="#"><i class="ri-file-download-fill mr-2"></i>{{ $t('home.newAppointmentsDropDown.download') }}</b-dropdown-item>
-                    </b-dropdown> -->
-                    </template>
+                    </b-dropdown>
+                    </template> -->
                     <template v-slot:body>
                         <b-table v-if="todaysAppointments.length > 0"
                                  borderless

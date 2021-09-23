@@ -536,6 +536,7 @@
     "lastYear": "Lani",
     "countrySelect": "Vse države",
     "servicesSummaryColumn": {
+      "serviceFee": "Provizija",
       "serviceTitle": "Ime storitve",
       "serviceCount": "Število storitev",
       "serviceAmount": "Znesek"
