@@ -17,7 +17,6 @@
   :firstDay="calendarOptions.firstDay"
   @select="openCreateModal"
   @eventClick="openUpdateModal"
-  @datesRender="onViewChange"
   @eventResize="eventResize"
   @eventDrop="eventDrop"
   id="calendar"
@@ -519,9 +518,6 @@ export default {
       getDoctorList().then((data) => {
         this.doctors = data
       })
-    },
-    onViewChange (info) {
-      this.viewName = info.view.type
     },
     eventResize (info) {
       let event = this.calendarApi.getEventById(info.event.id)
