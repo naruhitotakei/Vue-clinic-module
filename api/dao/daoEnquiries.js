@@ -16,8 +16,8 @@ const getEnquiries = (request, response, user_id, accessible_user_ids, prm_clien
     statement +=    "LEFT JOIN users u ON u.id = enquiries.prm_dentist_user_id  "
     statement +=    "LEFT JOIN countries ON countries.id = enquiries.country_id  "
     statement +=    "LEFT JOIN regions r ON enquiries.region_id = r.id  "
-    statement +=    "LEFT JOIN LATERAL (SELECT starts_at AS last_visit, enquiry_id from appointments where starts_at < current_date AND enquiry_id = enquiries.id ORDER BY starts_at DESC LIMIT 1) past_d ON past_d.enquiry_id = enquiries.id  " 
-    statement +=    "LEFT JOIN LATERAL (SELECT starts_at AS next_visit, enquiry_id from appointments where starts_at > current_date AND enquiry_id = enquiries.id ORDER BY starts_at ASC LIMIT 1) future_d ON future_d.enquiry_id = enquiries.id  " 
+    statement +=    "LEFT JOIN LATERAL (SELECT MAX(starts_at) AS last_visit, enquiry_id from appointments where starts_at < current_date AND enquiry_id = enquiries.id GROUP BY enquiry_id) past_d ON past_d.enquiry_id = enquiries.id  " 
+    statement +=    "LEFT JOIN LATERAL (SELECT MIN(starts_at) AS next_visit, enquiry_id from appointments where starts_at > current_date AND enquiry_id = enquiries.id GROUP BY enquiry_id) future_d ON future_d.enquiry_id = enquiries.id  " 
     statement +=    "WHERE enquiries.trashed IS FALSE "
     statement +=    "AND prm_client.client_deleted IS FALSE "
     if (scope=='All') {        
@@ -155,7 +155,11 @@ const trashEnquiry = (request, response, id) => {
 }
 
 const getEnquiryNotes = (request, response, enquiryId) => {
-    pool.query("SELECT content, created_at, user_id FROM notes WHERE enquiry_id = $1 ORDER BY created_at", [enquiryId] , (error, results) => {
+    let statement = "SELECT content, notes.created_at, user_id, concat(users.title, ' ', users.first_name , ' ', users.surname) AS user_name FROM notes "
+    statement += "LEFT JOIN users ON notes.user_id = users.id "
+    statement += "WHERE enquiry_id = $1 "
+    statement += "ORDER BY created_at "
+    pool.query(statement, [enquiryId] , (error, results) => {
         if (error) {
             throw error
         }
@@ -174,7 +178,7 @@ const createEnquiryNotes = (request, response, notes) => {
     if (notes.enquiry_id) statement += "'" + notes.enquiry_id + "',"
     if (notes.user_id) statement += "'" + notes.user_id + "',"
     statement +="NOW()"
-    statement +=")"
+    statement += ")"
     pool.query(statement , (error, results) => {
         if (error) {
             throw error

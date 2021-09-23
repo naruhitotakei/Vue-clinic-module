@@ -314,7 +314,7 @@
                                                   <li v-for="(note,index) in notes" :key="index + note.created_at" class="d-flex align-items-center justify-content-between mb-3">
                                                       <div>
                                                           <h6>{{note.content}}</h6>
-                                                          <p class="mb-0">{{note.created_at | formatDate}}</p>
+                                                          <p class="mb-0">{{note.created_at | formatDate}} - <span class="ml-0">{{ note.user_name }}</span></p>
                                                       </div>
                                                   </li>
                                               </ul>
@@ -1632,7 +1632,7 @@ export default {
       })
     },
     addNotes () {
-      this.notesFormData.user_id = this.patient.user_id
+      this.notesFormData.user_id = this.logedInUser.id
       createEnquiryNotes(this.notesFormData).then(() => {
         this.getPatientNotes(this.patientId)
         this.cancelNotes()
