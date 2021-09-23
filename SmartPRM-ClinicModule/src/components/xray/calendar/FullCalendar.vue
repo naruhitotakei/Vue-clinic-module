@@ -10,7 +10,6 @@
   :maxTime="calendarOptions.maxTime"
   :allDaySlot="calendarOptions.allDaySlot"
   :slotDuration="calendarOptions.slotDuration"
-  :expandRows="calendarOptions.slotDuration"
   :selectable="isSelectable"
   editable="true"
   :header="calendarOptions.header"
@@ -18,11 +17,12 @@
   :firstDay="calendarOptions.firstDay"
   @select="openCreateModal"
   @eventClick="openUpdateModal"
+  @datesRender="onViewChange"
   @eventResize="eventResize"
   @eventDrop="eventDrop"
   id="calendar"
   ref="calendar"
-  :locale="calendarOptions.locale"
+  :locale="calendarLocale"
   :displayEventTime="calendarOptions.displayEventTime"
   v-if="isDataLoaded"
   />
@@ -241,6 +241,7 @@ import interactionPlugin from '@fullcalendar/interaction'
 import listPlugin from '@fullcalendar/list'
 import moment from 'moment'
 import slLocale from '@fullcalendar/core/locales/sl'
+import enLocale from '@fullcalendar/core/locales/en-gb'
 import { xray } from '../../../config/pluginInit'
 import { getPatients } from '../../../services/enquiry'
 import { getLocationsList } from '../../../services/commonCodeLists'
@@ -354,14 +355,12 @@ export default {
         resources: this.resourcesOuter,
         minTime: '09:00:00',
         maxTime: '21:30:00',
-        slotDuration: '00:30:00',
+        slotDuration: '00:15:00',
         allDaySlot: false,
-        expandRows: true,
         editable: true,
         selectable: true,
         firstDay: 1,
         events: [],
-        locale: ((this.$i18n.locale === 'sl') ? slLocale : null),
         displayEventTime: false
       }
     }
@@ -423,6 +422,9 @@ export default {
         }
       })
     }, */
+    calendarLocale () {
+      return this.$i18n.locale === 'sl' ? slLocale : enLocale
+    },
     isSelectable () {
       return !this.viewName.includes('dayGridMonth')
     },
@@ -520,6 +522,9 @@ export default {
       getDoctorList().then((data) => {
         this.doctors = data
       })
+    },
+    onViewChange (info) {
+      this.viewName = info.view.type
     },
     eventResize (info) {
       let event = this.calendarApi.getEventById(info.event.id)
