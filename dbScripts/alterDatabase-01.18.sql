@@ -222,6 +222,13 @@ DROP COLUMN last_visit,
 DROP COLUMN next_visit;
 
 --############################################################
+--# settings "ends_at" to "starts_at" value + 15 minutes
+--# in the appointments table
+--############################################################
+
+UPDATE appointments SET ends_at = starts_at + interval'15 minutes' WHERE ends_at IS NULL;
+
+--############################################################
 --# update version
 --############################################################
 
