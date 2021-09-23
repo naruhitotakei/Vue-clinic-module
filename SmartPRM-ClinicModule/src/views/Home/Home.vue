@@ -453,9 +453,6 @@ export default {
       return Math.floor(this.openAssignments.length / this.openAssignmentsPerPage) !== 0
     }
   },
-  destroyed () {
-    body[0].classList.remove('sidebar-main-menu')
-  },
   methods: {
     getUserLogin () {
       sso().then(response => {
