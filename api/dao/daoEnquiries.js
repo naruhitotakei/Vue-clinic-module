@@ -155,7 +155,11 @@ const trashEnquiry = (request, response, id) => {
 }
 
 const getEnquiryNotes = (request, response, enquiryId) => {
-    pool.query("SELECT content, created_at, user_id FROM notes WHERE enquiry_id = $1 ORDER BY created_at", [enquiryId] , (error, results) => {
+    let statement = "SELECT content, notes.created_at, user_id, concat(users.title, ' ', users.first_name , ' ', users.surname) AS user_name FROM notes "
+    statement += "LEFT JOIN users ON notes.user_id = users.id "
+    statement += "WHERE enquiry_id = $1 "
+    statement += "ORDER BY created_at "
+    pool.query(statement, [enquiryId] , (error, results) => {
         if (error) {
             throw error
         }
@@ -174,7 +178,7 @@ const createEnquiryNotes = (request, response, notes) => {
     if (notes.enquiry_id) statement += "'" + notes.enquiry_id + "',"
     if (notes.user_id) statement += "'" + notes.user_id + "',"
     statement +="NOW()"
-    statement +=")"
+    statement += ")"
     pool.query(statement , (error, results) => {
         if (error) {
             throw error
