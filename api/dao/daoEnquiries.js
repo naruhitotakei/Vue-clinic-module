@@ -16,8 +16,8 @@ const getEnquiries = (request, response, user_id, accessible_user_ids, prm_clien
     statement +=    "LEFT JOIN users u ON u.id = enquiries.prm_dentist_user_id  "
     statement +=    "LEFT JOIN countries ON countries.id = enquiries.country_id  "
     statement +=    "LEFT JOIN regions r ON enquiries.region_id = r.id  "
-    statement +=    "LEFT JOIN LATERAL (SELECT date AS last_visit, enquiry_id from appointments where  date < current_date AND enquiry_id = enquiries.id ORDER BY date DESC LIMIT 1) past_d ON past_d.enquiry_id = enquiries.id  " 
-    statement +=    "LEFT JOIN LATERAL (SELECT date AS next_visit, enquiry_id from appointments where  date > current_date AND enquiry_id = enquiries.id ORDER BY date ASC LIMIT 1) future_d ON future_d.enquiry_id = enquiries.id  " 
+    statement +=    "LEFT JOIN LATERAL (SELECT starts_at AS last_visit, enquiry_id from appointments where starts_at < current_date AND enquiry_id = enquiries.id ORDER BY starts_at DESC LIMIT 1) past_d ON past_d.enquiry_id = enquiries.id  " 
+    statement +=    "LEFT JOIN LATERAL (SELECT starts_at AS next_visit, enquiry_id from appointments where starts_at > current_date AND enquiry_id = enquiries.id ORDER BY starts_at ASC LIMIT 1) future_d ON future_d.enquiry_id = enquiries.id  " 
     statement +=    "WHERE enquiries.trashed IS FALSE "
     statement +=    "AND prm_client.client_deleted IS FALSE "
     if (scope=='All') {        
