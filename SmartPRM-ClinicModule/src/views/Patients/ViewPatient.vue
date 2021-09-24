@@ -731,6 +731,11 @@
                                                :fields="columnsInvoices"
                                                :per-page="invoicesPerPage"
                                                :current-page="currentInvoicePage">
+                                        <template v-slot:cell(charges_sum)="data">
+                                          <span>
+                                            {{ data.item.charges_sum | euro }}
+                                          </span>
+                                        </template>
                                       </b-table>
                                   </b-col>
                               </b-row>
@@ -1254,18 +1259,25 @@ export default {
           }
         },
         { label: this.$t('EPR.invoicesColumn.issuedBy'), key: 'operator_name', class: 'text-left' },
-        { label: this.$t('EPR.invoicesColumn.amount'), key: 'total_with_vat', class: 'text-left' },
+        { label: this.$t('EPR.invoicesColumn.amount'), key: 'charges_sum', class: 'text-left' },
         { label: this.$t('EPR.invoicesColumn.paymentStatus'),
           key: 'status',
           class: 'text-left',
           formatter: (value, key, item) => {
             if (item.paid_amount === '$0.00') {
-              return 'Unpaid'
+              return this.$t('invoices.unpaid')
             }
-            return item.total_with_vat === item.paid_amount ? 'Paid' : 'Partialy Paid'
-          }
+            return item.total_with_vat === item.paid_amount ? this.$t('invoices.paid') : this.$t('invoices.partiallyPaid')
+          },
+          filterByFormatted: true
         },
-        { label: this.$t('EPR.invoicesColumn.verificationStatus'), key: 'verification_status', class: 'text-left' }
+        { label: this.$t('EPR.invoicesColumn.verificationStatus'),
+          key: 'verification_status',
+          class: 'text-left',
+          formatter: (value, key, item) => {
+            return this.$t(item.verification_status)
+          }
+        }
       ],
       servicesSummaryColumns: [
         { label: this.$t('EPR.servicesSummaryColumn.serviceTitle'), key: 'name', class: 'text-left' },
