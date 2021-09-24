@@ -23,24 +23,6 @@
                         </b-dropdown-group>
                       </b-dropdown-form>
                     </b-dropdown>
-                    <div class="calendar-doctor-slider d-none">
-                      <button @click="scroll_left" class="nav-btn btn-primary mr-1"><i class="ri-arrow-left-s-line"></i>
-                      </button>
-                      <VueSlickCarousel
-                          v-bind="optionSlider"
-                          v-if="doctors.length"
-                          ref="carousel"
-                      >
-                        <div v-for="(item,index) in doctors" :key="index">
-                          <b-checkbox class="custom-switch-color" :color="item.color" @change="checkData(item)"
-                                      v-model="item.checked" :ref="'doctor_'+index" name="check-button" inline>
-                            {{ item.title }}
-                          </b-checkbox>
-                        </div>
-                      </VueSlickCarousel>
-                      <button @click="scroll_right" class="nav-btn btn-primary ml-1"><i
-                          class="ri-arrow-right-s-line"></i></button>
-                    </div>
                   </div>
                   <b-button
                       @click="addAppointment"
@@ -69,14 +51,11 @@
 <script>
 import { xray } from '../../config/pluginInit'
 import { getCalendar, getDoctorList } from '@/services/calendarService'
-import _ from 'lodash'
 import moment from 'moment'
 import { getProductGroups } from '@/services/products'
-import VueSlickCarousel from 'vue-slick-carousel'
 
 export default {
   name: 'GoogleCalendar',
-  components: { VueSlickCarousel },
   data () {
     return {
       allDoctorCheck: true,
@@ -200,9 +179,6 @@ export default {
         let dataWithDoctor = data.filter(item => {
           return item
         })
-        this.doctors = _.uniqBy(this.doctors, 'title')
-
-        this.resources = _.uniqBy(this.resources, 'id')
         this.clonedResources = this.resources
         dataWithDoctor.map(item => {
           let patientAttended = item.patient_attended === 'true' ? 'attended' : item.patient_attended === 'false' ? 'not_attended' : 'unknown'
@@ -237,6 +213,7 @@ export default {
             app_lb_color: item.app_lb_color,
             app_lb_type: item.app_lb_type
           })
+          /* console.log('Fetching events on the FE: ' + JSON.stringify(this.events[0])) */
         })
       })
     },
@@ -276,12 +253,6 @@ export default {
           this.selectDoctor = {}
         })
       }
-    },
-    scroll_left () {
-      this.$refs.carousel.prev()
-    },
-    scroll_right () {
-      this.$refs.carousel.next()
     }
   }
 }
