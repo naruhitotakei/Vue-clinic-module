@@ -266,6 +266,7 @@
                                                           alt="gallary-image"
                                                           class="img-fluid img-files"
                                                           v-if="file.type !== 'tiff'"
+                                                          @click="goToFiles"
                                                       >
                                                       <object :data="file.image" type="application/pdf" width="250px" height="auto" class="m-auto d-block" v-if="file.pdf">
                                                       </object>
@@ -951,6 +952,7 @@ import { getProductGroups } from '@/services/products'
 import Tiff from 'tiff.js'
 import DatePicker from 'vue2-datepicker'
 import _ from 'lodash'
+const $ = require('jquery')
 
 export default {
   name: 'ViewPatient',
@@ -1332,6 +1334,9 @@ export default {
       getLabels(lang).then(response => {
         this.colors = response
       })
+    },
+    goToFiles () {
+      $('#myTab a[href="#files"]').tab('show')
     },
     onCityChange () {
     },
