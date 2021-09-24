@@ -1505,7 +1505,7 @@ export default {
       })
     },
     invoiceSelected (item) {
-      this.$router.push({ path: `/documents/invoices/${item.invoice_number}` })
+      this.$router.push({ path: `/documents/invoices/${item.invoice_id}` })
     },
     addInvoice () {
       this.modalInvoiceShow = true
