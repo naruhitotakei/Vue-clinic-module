@@ -264,7 +264,7 @@
                                                       <img
                                                           :src="file.image"
                                                           alt="gallary-image"
-                                                          class="img-fluid img-files pointer"
+                                                          class="img-fluid img-files clickable"
                                                           v-if="file.type !== 'tiff'"
                                                           @click="goToFiles"
                                                       >
@@ -1787,7 +1787,7 @@ export default {
 </script>
 
 <style lang="scss">
-.pointer {
+.clickable {
   cursor: pointer !important;
 }
 .labels {
