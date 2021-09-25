@@ -1,20 +1,7 @@
 <template>
 <b-container fluid>
   <calendar
-  :datesAboveResources="true"
-  :defaultView="calendarOptions.defaultView"
-  :plugins="calendarOptions.plugins"
-  :events="getEvents"
-  :resources="resourcesOuter"
-  :minTime="calendarOptions.minTime"
-  :maxTime="calendarOptions.maxTime"
-  :allDaySlot="calendarOptions.allDaySlot"
-  :slotDuration="calendarOptions.slotDuration"
-  :selectable="isSelectable"
-  editable="true"
-  :header="calendarOptions.header"
-  :allDayDefault="calendarOptions.allDayDefault"
-  :firstDay="calendarOptions.firstDay"
+  :options="calendarOptions"
   @select="openCreateModal"
   @eventClick="openUpdateModal"
   @datesRender="onViewChange"
@@ -23,7 +10,6 @@
   id="calendar"
   ref="calendar"
   :locale="calendarLocale"
-  :displayEventTime="calendarOptions.displayEventTime"
   v-if="isDataLoaded"
   />
   <img v-else src="../../../assets/css/ajax-loader.gif" alt="Smart PRM" class="d-block m-auto"/>
@@ -345,23 +331,24 @@ export default {
       event: {},
       calendarOptions: {
         plugins: [dayGridPlugin, timeGridPlugin, interactionPlugin, resourceTimeGrid, listPlugin],
-        allDayDefault: false,
-        header: {
+        defaultAllDay: false,
+        headerToolbar: {
           left: 'prev,next today',
           center: 'title',
           right: 'dayGridMonth,resourceTimeGridWeek,resourceTimeGridDay'
         },
-        defaultView: 'resourceTimeGridWeek',
+        initialView: 'resourceTimeGridWeek',
         resources: this.resourcesOuter,
-        minTime: '09:00:00',
-        maxTime: '21:30:00',
+        slotMinTime: '09:00:00',
+        slotMaxTime: '21:30:00',
         slotDuration: '00:15:00',
         allDaySlot: false,
         editable: true,
         selectable: true,
         firstDay: 1,
         events: [],
-        displayEventTime: false
+        displayEventTime: false,
+        datesAboveResources: true
       }
     }
   },
@@ -406,6 +393,7 @@ export default {
         this.isDataLoaded = true
         this.$nextTick(() => {
           this.calendarApi = this.$refs.calendar.getApi()
+          /* console.log(this.calendarApi.getEvents()) */
         })
       }
     },
@@ -413,15 +401,6 @@ export default {
     }
   },
   computed: {
-    /* detectMinTime () {
-      return this.events.filter(event => {
-        if (new Date(moment(event.time).format('HH:mm:ss')) < new Date('09:00:00')) {
-          return event.time
-        } else {
-          return '09:00:00'
-        }
-      })
-    }, */
     calendarLocale () {
       return this.$i18n.locale === 'sl' ? slLocale : enLocale
     },
@@ -724,25 +703,34 @@ export default {
 </script>
 
 <style lang="scss">
-.fc-event{
+/*.fc-event{
   color: white !important;
   border: none !important;
   cursor: pointer;
-}
+} */
 .fc-license-message{
   display:none;
 }
-
+    /*
 ::-webkit-scrollbar {
     display: none;
+} */
+
+.fc-scroller {
+  min-height: 0 !important;
 }
-.fc-resourceTimeGridWeek-view .fc-resource-cell {
+
+th {
+  text-align: center !important;
+}
+
+.fc-col-header-cell.fc-resource {
   writing-mode:  vertical-lr !important;
   transform: rotate(180deg) !important;
   line-height: 13px !important;
-  vertical-align: middle;
+  vertical-align: middle !important;
 }
-
+    /*
 body .wrapper .custom-control-label::before {
   top:50% !important;
 }
@@ -851,8 +839,8 @@ body .wrapper .custom-control-label::after {
     margin: .225rem !important;
 }
 
-  // @import '~@fullcalendar/core/main.css';
+  /* @import '~@fullcalendar/core/main.css';
   @import '~@fullcalendar/daygrid/main.css';
-  @import '~@fullcalendar/timegrid/main.css';
+  @import '~@fullcalendar/timegrid/main.css'; */
   @import '~@fullcalendar/list/main.min.css';
 </style>
