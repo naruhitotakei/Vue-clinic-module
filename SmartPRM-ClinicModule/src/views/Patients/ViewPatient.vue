@@ -1282,7 +1282,7 @@ export default {
         }
       ],
       servicesSummaryColumns: [
-        { label: this.$t('EPR.servicesSummaryColumn.serviceTitle'), key: 'name', class: 'text-left' },
+        { label: this.$t('EPR.servicesSummaryColumn.serviceTitle'), key: 'product_name', class: 'text-left' },
         {
           label: this.$t('EPR.servicesSummaryColumn.serviceDate'),
           key: 'done_at',
@@ -1299,6 +1299,7 @@ export default {
             return value + '0 EUR'
           }
         },
+        { label: this.$t('reportingEmazing.servicesListColumn.serviceDoctor'), key: 'doctor', class: 'text-left' },
         { label: this.$t('EPR.servicesSummaryColumn.paymentMethod'), key: 'payment_method', class: 'text-left' }
       ],
       columnsOffers: [
