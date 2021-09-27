@@ -23,6 +23,17 @@ export async function getFiles () {
   return rawResponse.json()
 }
 
+export async function getFilesWithPrefix (prefix) {
+  const rawResponse = await fetch('/api/' + prefix + '/files', {
+    method: 'GET',
+    credentials: 'same-origin',
+    headers: {
+      'Accept': 'application/json'
+    }
+  })
+  return rawResponse.json()
+}
+
 export async function fileUpload (file, id) {
   let data = new FormData()
   data.append('file', file)

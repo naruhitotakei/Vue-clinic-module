@@ -1075,6 +1075,17 @@ app.get('/api/files/', async function(req, res) {
   else
     res.status(401).json("OK: user unauthorized")
 });
+
+app.get('/api/:prefix/files/', async function(req, res) {
+    let prefix = req.params.prefix
+    if(req.session.prm_user) {
+      const rv = await awsS3.listBucketObjectsWithPrefix(prefix)
+      res.status(200).json(rv)
+    }
+    else
+      res.status(401).json("OK: user unauthorized")
+});
+
 app.post('/api/files/upload/:id', async function(req, res) {
   let id = req.params.id
   if(req.session.prm_user) {

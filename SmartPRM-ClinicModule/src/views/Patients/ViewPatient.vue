@@ -957,7 +957,7 @@ import { getDentists, getSurgeons, getUsersForAssignments, sso } from '../../ser
 import { getCountriesList, getRegionsList, getLocationsList, getMunicipalitiesList } from '../../services/commonCodeLists'
 import moment from 'moment'
 import { createAssignments } from '@/services/assignmentsService'
-import { fileUpload, getFiles } from '@/services/upDownLoad'
+import { fileUpload, getFilesWithPrefix } from '@/services/upDownLoad'
 import { createCalendar, getDoctorList, getLabels, updateCalendar } from '@/services/calendarService'
 import { getProductGroups } from '@/services/products'
 import Tiff from 'tiff.js'
@@ -1211,17 +1211,7 @@ export default {
         { value: 'invoice_type', text: this.$t('EPR.invoices.filters.invoice_type'), sort: 'asc' },
         { value: 'invoice_type', text: this.$t('EPR.invoices.filters.invoice_type'), sort: 'desc' }
       ],
-      files: [
-        // { image: require('../../assets/images/login/1.png'), name: 'File 2', type: 'Rentgen', created_at: '21.04.2021' },
-        // { image: require('../../assets/images/login/2.png'), name: 'File 4', type: 'Krvna slika', created_at: '17.04.2021' },
-        // { image: require('../../assets/images/login/3.png'), name: 'File 5', type: 'Rentgen', created_at: '11.04.2021' },
-        // { image: require('../../assets/images/login/1.png'), name: 'File 1', type: 'Anamneza', created_at: '10.04.2021' },
-        // { image: require('../../assets/images/login/2.png'), name: 'File 9', type: 'Rentgen', created_at: '03.04.2021' },
-        // { image: require('../../assets/images/login/3.png'), name: 'File 7', type: 'Krvna Slika', created_at: '21.03.2021' },
-        // { image: require('../../assets/images/login/1.png'), name: 'File 6', type: 'Rentgen', created_at: '17.03.2021' },
-        // { image: require('../../assets/images/login/2.png'), name: 'File 3', type: 'Anamneza', created_at: '12.03.2021' },
-        // { image: require('../../assets/images/login/3.png'), name: 'File 8', type: 'Rentgen', created_at: '08.03.2021' }
-      ],
+      files: [],
       disabled: true,
       disabledData: true,
       disabledNotes: true,
@@ -1390,21 +1380,19 @@ export default {
       })
     },
     getFiles () {
-      getFiles().then(data => {
+      getFilesWithPrefix(this.$route.params.patientId).then(data => {
         for (let i = 0; i < data.data.Contents.length; i++) {
-          let key = data.data.Contents[i].Key.split('-')[0]
           let type = data.data.Contents[i].Key.split('.')[1]
           let image = '/api/files/' + data.data.Contents[i].Key
-          if (key === this.$route.params.patientId) {
-            this.files.push({
-              image: image,
-              name: data.data.Contents[i].Key,
-              type: type,
-              created_at: moment(data.data.Contents[i].LastModified).format('YYYY-MM-DD'),
-              pdf: type === 'pdf'
-            })
-          }
+          this.files.push({
+            image: image,
+            name: data.data.Contents[i].Key,
+            type: type,
+            created_at: moment(data.data.Contents[i].LastModified).format('YYYY-MM-DD'),
+            pdf: type === 'pdf'
+          })
         }
+        console.log(data)
       })
     },
     tiffConvertToCanvas (file, index, preview) {
