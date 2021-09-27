@@ -260,15 +260,20 @@
                                               <div class="iq-card-body p-0">
                                                   <ul class="profile-img-gallary profile-preview-gallery d-flex flex-wrap p-0 m-0 font-size-12 overflow-y-scroll" style="max-height: 230px;">
                                                     <li class="col-md-4 col-6 pb-3" v-for="(file, index) in filesSortBy" :key="index + file.created_at">
-                                                      <div v-html="tiffConvertToCanvas(file, index, true)" :class="`tiff-block-${index}-preview`"></div>
+                                                      <div v-html="tiffConvertToCanvas(file, index, true)" class="preview" :class="`tiff-block-${index}-preview`"></div>
                                                       <img
-                                                          :src="file.image"
-                                                          alt="gallary-image"
-                                                          class="img-fluid img-files clickable"
-                                                          v-if="file.type !== 'tiff'"
-                                                          @click="goToFiles"
-                                                      >
-                                                      <object :data="file.image" type="application/pdf" width="250px" height="auto" class="m-auto d-block" v-if="file.pdf">
+                                                        src="./photo.svg"
+                                                        alt="gallary-image"
+                                                        class="img-fluid dicom preview-file svg"
+                                                        v-if="checkIfOtherType(file.type)"
+                                                        @click="goToFiles">
+                                                      <img
+                                                        :src="file.image"
+                                                        alt="gallary-image"
+                                                        class="img-fluid preview-file"
+                                                        v-if="checkIfImageType(file.type)"
+                                                        @click="goToFiles">
+                                                      <object :data="file.image" type="application/pdf" width="250px" height="auto" class="m-auto d-block preview-file" v-if="file.pdf">
                                                       </object>
                                                       <div class="text-center">
                                                         <p class="mb-0"> {{file.name}}</p>
@@ -645,7 +650,7 @@
                                         <label for="upload-file" class="text-white m-0 p-0">
                                           <i class="ri-add-line mr-2"></i>
                                           {{ $t('EPR.files.addFile') }}
-                                          <input type="file" ref="file_upload" @change="uploadFile" id="upload-file" hidden accept="image/png, image/jpg, image/jpeg"/>
+                                          <input type="file" ref="file_upload" @change="uploadFile" id="upload-file" hidden accept="image/png, image/jpg, image/jpeg, .dicom, .pdf, .dcm, .tiff, .txt"/>
                                         </label>
                                       </b-button>
                                   </div>
@@ -672,10 +677,16 @@
                                           <li class="col-md-4 col-6 pb-3" v-for="(file, index) in filesSortBy" :key="index + file.created_at">
                                             <div v-html="tiffConvertToCanvas(file, index)" :class="`tiff-block-${index}`"></div>
                                               <img
+                                                  src="./photo.svg"
+                                                  alt="gallary-image"
+                                                  class="img-fluid img-files dicom"
+                                                  v-if="checkIfOtherType(file.type)"
+                                              >
+                                              <img
                                                   :src="file.image"
                                                   alt="gallary-image"
                                                   class="img-fluid img-files"
-                                                  v-if="file.type !== 'tiff'"
+                                                  v-if="checkIfImageType(file.type)"
                                               >
                                               <object :data="file.image" type="application/pdf" width="250px" height="auto" class="m-auto d-block" v-if="file.pdf">
                                               </object>
@@ -1331,6 +1342,16 @@ export default {
     }
   },
   methods: {
+    checkIfImageType (type) {
+      let imageTypes = ['jpg', 'png', 'jpeg']
+      let result = _.includes(imageTypes, type)
+      return result
+    },
+    checkIfOtherType (type) {
+      let otherTypes = ['dicom', 'txt', 'plain']
+      let showFileImage = _.includes(otherTypes, type)
+      return showFileImage
+    },
     getLabels (lang) {
       getLabels(lang).then(response => {
         this.colors = response
@@ -1788,6 +1809,15 @@ export default {
 </script>
 
 <style lang="scss">
+.preview-file {
+  max-width: 110px !important;
+  max-height: 110px !important;
+}
+
+.svg {
+  margin-top: -11px;
+}
+
 .clickable {
   cursor: pointer !important;
 }
@@ -1796,6 +1826,9 @@ export default {
     margin: .225rem !important;
 }
 
+.dicom {
+  max-height: 140px;
+}
 .no-border {
     border: none !important;
 }
@@ -1850,11 +1883,22 @@ export default {
   display: block;
   margin: 0 auto;
   max-width: 300px !important;
+  max-height: 150px !important;
 }
 
 .profile-preview-gallery {
   .img-files {
     max-width: 120px !important;
+  }
+}
+
+div.preview canvas{
+  max-width: 110px;
+  display: block;
+  margin: 0 auto;
+  &:not(:first-child)
+  {
+    display: none;
   }
 }
 
