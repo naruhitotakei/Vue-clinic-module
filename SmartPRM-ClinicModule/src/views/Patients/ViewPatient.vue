@@ -343,12 +343,9 @@
                                                       </div>
                                                   <ul class="list-inline m-0 overflow-y-scroll" style="max-height: 300px;">
                                                       <li v-for="(item,index) in assignments" :key="index + item.due_at"
-                                                          class="d-flex align-items-center justify-content-between mb-3  "
-                                                          :style="{
-                                                  'background': index === 0 && '#c3e6cb'
-                                                  }">
+                                                          class="d-flex align-items-center justify-content-between mb-3">
                                                           <div class="w-100">
-                                                              <h6>{{item.description}}</h6>
+                                                              <h6 :class="{'red-text': isItOverdue(item.due_at)}">{{item.description}}</h6>
                                                               <div class="row justify-content-between pt-1 w-100 ml-0 line-height">
                                                                   <p class="mb-0">{{item.name}}</p>
                                                                   <p class="mb-0">{{item.due_at | formatDate}}</p>
@@ -1332,6 +1329,9 @@ export default {
     }
   },
   methods: {
+    isItOverdue (date) {
+      return moment().isAfter(date)
+    },
     checkIfImageType (type) {
       let imageTypes = ['jpg', 'png', 'jpeg']
       let result = _.includes(imageTypes, type)
@@ -1797,6 +1797,10 @@ export default {
 </script>
 
 <style lang="scss">
+.red-text {
+  color: red !important;
+}
+
 .preview-file {
   max-width: 110px !important;
   max-height: 110px !important;
