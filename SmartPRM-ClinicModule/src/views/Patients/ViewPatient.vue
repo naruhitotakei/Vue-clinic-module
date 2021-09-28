@@ -327,6 +327,30 @@
                                           </template>
                                       </iq-card>
                                   </b-col>
+                                  <b-col md="14">
+                                      <iq-card>
+                                          <template v-slot:body>
+                                              <div class="iq-card-header d-flex justify-content-between">
+                                                  <div class="iq-header-title">
+                                                      <div class="row justify-content-between align-items-center">
+                                                          <h4 class="card-title">{{ $t('EPR.overview.sms') }}</h4>
+                                                          <!-- <button type="button" class="btn btn-primary" @click="modalNotesShow = true">{{ $t('EPR.overview.add') }}</button> -->
+                                                      </div>
+                                                      <hr />
+                                                  </div>
+                                              </div>
+                                              <ul class="list-inline m-0 overflow-y-scroll pl-2 pr-2" style="max-height: 300px;">
+                                                  <li v-for="(message,index) in smsMessages" :key="index + message.created_at" class="d-flex align-items-center justify-content-between mb-3">
+                                                      <div>
+                                                          <h6>{{message.content}}</h6>
+                                                          <!-- <p class="mb-0">{{note.created_at | formatDate}} - <span class="ml-0">{{ note.user_name }}</span></p> -->
+                                                      </div>
+                                                  </li>
+                                              </ul>
+                                          </template>
+                                      </iq-card>
+                                  </b-col>
+
                                   </b-col>
                                   <b-col>
                                       <b-col md="14">
@@ -954,6 +978,7 @@ import { getDentists, getSurgeons, getUsersForAssignments, sso } from '../../ser
 import { getCountriesList, getRegionsList, getLocationsList, getMunicipalitiesList } from '../../services/commonCodeLists'
 import moment from 'moment'
 import { createAssignments } from '@/services/assignmentsService'
+import { getEnquirySMS } from '@/services/enquiry'
 import { fileUpload, getFilesWithPrefix } from '@/services/upDownLoad'
 import { createCalendar, getDoctorList, getLabels, updateCalendar } from '@/services/calendarService'
 import { getProductGroups } from '@/services/products'
@@ -986,6 +1011,7 @@ export default {
     this.getFiles()
     this.getLocations()
     this.getUserLogin()
+    this.getSms()
     this.getDoctors()
     this.getProductGroups(this.$i18n.locale)
     this.getLabels(this.$i18n.locale)
@@ -1144,6 +1170,7 @@ export default {
       locations: [],
       doctors: [],
       product_groups: [],
+      smsMessages: [],
       selectedInvoices: '',
       invoicesType: [
         {
@@ -1331,6 +1358,11 @@ export default {
   methods: {
     isItOverdue (date) {
       return moment().isAfter(date)
+    },
+    getSms () {
+      getEnquirySMS(this.patientId).then(response => {
+        this.smsMessages = response
+      })
     },
     checkIfImageType (type) {
       let imageTypes = ['jpg', 'png', 'jpeg']

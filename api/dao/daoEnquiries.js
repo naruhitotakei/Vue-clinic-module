@@ -272,6 +272,16 @@ const getPatients = (request, response) => {
     })
 }
 
+const getEnquirySMS = (request, response, enquiryId) => {
+    let statement = `SELECT * FROM sms_messages WHERE enquiry_id = ${enquiryId}`
+    pool.query(statement, (error, results) => {
+        if (error) {
+            throw error
+        }
+        response.status(200).json(results.rows)
+    })
+}
+
 module.exports = {
   getEnquiries,
   getEnquiriesById,
@@ -286,5 +296,6 @@ module.exports = {
   getEnquiryOffers,
   getEnquiryServices,
   getPatients,
-  createEnquiryNotes
+  createEnquiryNotes,
+  getEnquirySMS
 }

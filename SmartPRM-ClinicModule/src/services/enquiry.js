@@ -95,6 +95,18 @@ export async function getEnquiryInvoices (id, sort) {
   return rawResponse.json()
 }
 
+export async function getEnquirySMS (id) {
+  const rawResponse = await fetch(`/api/enquiries/${id}/sms`, {
+    method: 'GET',
+    credentials: 'same-origin',
+    headers: {
+      'Accept': 'application/json',
+      'Content-Type': 'application/json'
+    }
+  })
+  return rawResponse.json()
+}
+
 export async function getEnquiryOffers (id) {
   const rawResponse = await fetch(`/api/enquiries/${id}/offers`, {
     method: 'GET',
