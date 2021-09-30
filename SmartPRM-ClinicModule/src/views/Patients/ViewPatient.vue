@@ -73,7 +73,7 @@
                                           </div>
                                       </template>
                                   </iq-card>
-                                  <b-modal v-model="addAppointmentModal" no-close-on-esc no-close-on-backdrop size="lg" :title="$t('calendar.appointmentDetails')" ok-title="Save Changes" @ok="addAppointmentModal = false" @close="addAppointmentModal = false" cancel-title="Close" :ok-disabled="isSaveDisabled" hide-footer>
+                                  <b-modal v-model="addAppointmentModal" no-close-on-esc no-close-on-backdrop size="lg" :title="$t('calendar.appointmentDetails')" @close="cancelAppointmentModal" hide-footer>
                                       <form class="calendar-modal">
                                           <div class="form-row">
                                               <div class="row align-items-center justify-content-between w-100 mb-3">
@@ -170,15 +170,15 @@
                                                   </div>
                                                   <div class="col-md-9">
                                                       <template v-for="(item,index) in colors">
-                                                          <b-form-radio class="custom-radio-color font-size-16 labels"
+                                                          <b-form-radio class="custom-radio-color font-size-15 labels"
                                                                         inline
-                                                                        v-model="formData.backgroundColor"
+                                                                        v-model="formAppointments.backgroundColor"
                                                                         :key="index"
                                                                         :reduce="item => item.id"
                                                                         :value="item.id"
                                                                         :style="{'background': item.color}"
-                                                                        name="labels"
-                                                                        v-if="showLabels(item)">
+                                                                        :disabled="disabled"
+                                                                        name="labels">
                                                               <p class="text-white m-0 py-1 pr-2">{{ item.text }}</p>
                                                           </b-form-radio>
                                                       </template>
@@ -199,7 +199,7 @@
                                                   <template v-if="!disabled">
                                                       <p v-if="isSaveDisabled" class="mt-1 mr-4 text-black">{{ $t('calendarEvent.requiredFields') }}</p>
                                                       <button type="button" class="btn btn-secondary" @click="closeAppointmentModal">{{ $t('calendar.btnClose') }}</button>
-                                                      <button type="button" class="btn btn-primary" @click="saveAppointment">{{ $t('calendar.btnSave') }}</button>
+                                                      <button type="button" :disabled="isSaveDisabled" class="btn btn-primary" @click="saveAppointment">{{ $t('calendar.btnSave') }}</button>
                                                   </template>
                                               </div>
                                               <b-modal v-model="openCancelationModal"
@@ -385,7 +385,7 @@
                                                       <div class="iq-header-title">
                                                           <div class="row justify-content-between align-items-center">
                                                           <h4 class="card-title">{{ $t('EPR.overview.futureAppointments') }}</h4>
-                                                          <button type="button" class="btn btn-primary" @click="addAppointment">{{ $t('EPR.overview.add') }}</button>
+                                                          <button type="button" class="btn btn-primary" @click="openAddAppointmentModal">{{ $t('EPR.overview.add') }}</button>
                                                           </div>
                                                           <hr />
                                                       </div>
@@ -393,7 +393,7 @@
                                                   <ul class="iq-timeline">
                                                       <li v-for="(item,index) in futureAppointments" :key="index">
                                                           <div class="timeline-dots border-success"></div>
-                                                          <div @click="openAppointmentModal(item)" style="cursor: pointer;">
+                                                          <div @click="openEditAppointmentModal(item)" style="cursor: pointer;">
                                                               <h6>{{item.product_group_text}}<span class="float-right">{{item.note}}</span></h6>
                                                               <small class="mt-1">{{item.starts_at | formatDate}}</small>
                                                           </div>
@@ -1015,7 +1015,6 @@ export default {
     this.getDoctors()
     this.getProductGroups(this.$i18n.locale)
     this.getLabels(this.$i18n.locale)
-    this.formAppointments.assignmentDate = this.roundUpStartTime()
   },
   computed: {
     isSaveDisabled () {
@@ -1202,7 +1201,7 @@ export default {
         doctorId: '',
         assignmentDate: '',
         end: '',
-        backgroundColor: '#64D6E8',
+        backgroundColor: '',
         description: '',
         product_groups: '',
         appointment_canceled_in_advance_by_clinic: false,
@@ -1356,6 +1355,10 @@ export default {
     }
   },
   methods: {
+    cancelAppointmentModal () {
+      this.formAppointments = this.defaultFormAppointment()
+      this.disabled = true
+    },
     isItOverdue (date) {
       return moment().isAfter(date)
     },
@@ -1663,7 +1666,7 @@ export default {
       return {
         id: '',
         notes: '',
-        location_id: location.city,
+        location_id: '',
         doctor_id: '',
         assignmentDate: '',
         end: '',
@@ -1715,8 +1718,13 @@ export default {
       this.modalInvoiceShow = false
       this.selectedInvoices = ''
     },
-    addAppointment () {
+    openAddAppointmentModal () {
       this.addAppointmentModal = true
+      this.formAppointments.backgroundColor = 136
+      this.formAppointments.patientId = this.patient.id
+      this.formAppointments.doctorId = this.patient.prm_dentist_user_id
+      this.formAppointments.locationId = this.locations[0].id
+      this.formAppointments.assignmentDate = this.roundUpStartTime()
       this.disabled = false
     },
     closeAppointmentModal () {
@@ -1746,20 +1754,16 @@ export default {
       if (typeof this.formAppointments.product_groups === 'object') {
         this.formAppointments.product_groups = this.formAppointments.product_groups.product_group_id
       }
-      if (typeof this.formAppointments.backgroundColor === 'string') {
-        this.formAppointments.backgroundColor = this.colors.find(label => {
-          return label.value === this.formAppointments.backgroundColor
-        })
-      }
       if (!this.formAppointments.id) {
         createCalendar(this.formAppointments).then(() => {
-          this.formAppointments = this.defaultFormAppointment()
           this.$emit('setModalShow', false)
           this.getPatientFutureAppointments(this.patientId, this.$i18n.locale)
         })
       } else {
         this.updateCalendar(this.formAppointments.id, this.formAppointments)
       }
+      this.disabled = true
+      this.formAppointments = this.defaultFormAppointment()
     },
     getLocations () {
       getLocationsList().then(response => {
@@ -1787,30 +1791,23 @@ export default {
         this.product_groups = response
       })
     },
-    openAppointmentModal (appointment) {
+    openEditAppointmentModal (appointment) {
       this.formAppointments = {
         id: appointment.appointment_id,
         locationId: appointment.location,
         doctorId: appointment.doctor_name,
+        patientId: this.patient.id,
         notes: appointment.note,
         product_groups: appointment.product_group_text,
-        assignmentDate: new Date(moment(appointment.date).format('YYYY-MM-DD') + 'T' + appointment.time),
-        end: new Date(appointment.end_time),
-        backgroundColor: appointment.label_text,
+        assignmentDate: moment(appointment.starts_at).toDate(),
+        end: moment(appointment.ends_at).toDate(),
+        backgroundColor: appointment.label_id,
         appointment_canceled_in_advance_by_patient: false,
         appointment_canceled_in_advance_by_clinic: false
       }
       this.addAppointmentModal = true
     },
-    showLabels (item) {
-      if (this.disabled && this.formAppointments.label_id === item.id) {
-        return true
-      } else if (!this.disabled) {
-        return true
-      }
-    },
-    editMode (e) {
-      e.preventDefault()
+    editMode () {
       this.disabled = false
     },
     closeCancelation () {
@@ -1848,6 +1845,7 @@ export default {
 .labels {
     border-radius: 10px !important;
     margin: .225rem !important;
+    padding-left: 30px !important;
 }
 
 .dicom {
