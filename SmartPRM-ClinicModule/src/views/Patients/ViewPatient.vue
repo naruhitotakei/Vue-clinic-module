@@ -983,7 +983,7 @@ import { getCountriesList, getRegionsList, getLocationsList, getMunicipalitiesLi
 import moment from 'moment'
 import { createAssignments } from '@/services/assignmentsService'
 import { getEnquirySMS } from '@/services/enquiry'
-import { fileUpload, getFilesWithPrefix } from '@/services/upDownLoad'
+import { fileUpload, getFilesWithPrefix, downloadFile } from '@/services/upDownLoad'
 import { createCalendar, getDoctorList, getLabels, updateCalendar } from '@/services/calendarService'
 import { getProductGroups } from '@/services/products'
 import Tiff from 'tiff.js'
@@ -1013,6 +1013,7 @@ export default {
     this.getPatientServices(this.patientId)
     this.getUsersForAssignments()
     this.getFiles()
+    this.downloadFile()
     this.getLocations()
     this.getUserLogin()
     this.getSms()
@@ -1432,7 +1433,18 @@ export default {
             pdf: type === 'pdf'
           })
         }
-        console.log(data)
+      })
+    },
+    downloadFile () {
+      let fileName = '82026-picture-1632561247764.pdf'
+      downloadFile(fileName).then(response => {
+        console.log(response)
+        var fileURL = window.URL.createObjectURL(new Blob([response]))
+        var fileLink = document.createElement('a')
+        fileLink.href = fileURL
+        fileLink.setAttribute('download', fileName)
+        document.body.appendChild(fileLink)
+        fileLink.click()
       })
     },
     tiffConvertToCanvas (file, index, preview) {

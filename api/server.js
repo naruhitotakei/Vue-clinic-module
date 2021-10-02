@@ -1094,6 +1094,16 @@ app.get('/api/:prefix/files/', async function(req, res) {
       res.status(401).json("OK: user unauthorized")
 });
 
+app.get('/api/files/:fileName/download', async function(req, res) {
+    let fileName = req.params.fileName
+    if(req.session.prm_user) {
+      const rv = await awsS3.download(fileName)
+      res.status(200).json(rv)
+    }
+    else
+      res.status(401).json("OK: user unauthorized")
+});
+
 app.post('/api/files/upload/:id', async function(req, res) {
   let id = req.params.id
   if(req.session.prm_user) {
