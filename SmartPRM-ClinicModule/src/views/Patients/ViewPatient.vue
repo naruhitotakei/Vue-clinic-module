@@ -74,7 +74,7 @@
                                       </template>
                                   </iq-card>
                                   <b-modal v-model="addAppointmentModal" no-close-on-esc no-close-on-backdrop size="lg" :title="$t('calendar.appointmentDetails')" @close="cancelAppointmentModal" hide-footer>
-                                      <form class="calendar-modal">
+                                      <form class="calendar-modal appointment-modal">
                                           <div class="form-row">
                                               <div class="row align-items-center justify-content-between w-100 mb-3">
                                                   <div class="col-md-3">
@@ -132,7 +132,7 @@
                                                   <div class="col-md-3">
                                                       <label for="start" class="mb-0">{{ $t('calendarEvent.start') }} *</label>
                                                   </div>
-                                                  <div class="col-md-9 d-flex align-items-center mb-3">
+                                                  <div class="col-md-9 d-flex align-items-center mb-3" :class="{'icon-disabled': disabled}">
                                                       <date-picker class="form-control form-control-disabled font-size-15 no-border date-picker"
                                                                    :disabled="disabled"
                                                                    v-model="formAppointments.assignmentDate"
@@ -159,7 +159,7 @@
                                                       <label for="notes">{{ $t('calendarEvent.note') }}</label>
                                                   </div>
                                                   <div class="col-md-9">
-                                                      <textarea :disabled="disabled" row="2" v-model="formAppointments.notes" class="form-control form-control-disabled font-size-15" placeholder="Add your note here for event!" id="note" required></textarea>
+                                                      <textarea :disabled="disabled" row="2" v-model="formAppointments.notes" :class="(disabled ? 'font-size-12' : 'font-size-15')" class="form-control form-control-disabled" placeholder="Add your note here for event!" id="note" required></textarea>
                                                   </div>
                                               </div>
                                               <div class="row align-items-center justify-content-between w-100 mb-3 mt-2">
@@ -1829,6 +1829,39 @@ export default {
 .preview-file {
   max-width: 110px !important;
   max-height: 110px !important;
+}
+
+.icon-disabled i.mx-icon-calendar {
+  display: none;
+}
+
+.appointment-modal .form-control-disabled{
+  &:disabled {
+    background-color: transparent !important;
+    border: none;
+    &>div {
+      background-color: transparent !important;
+      border: none;
+    }
+  }
+
+    input:disabled  {
+    background-color: transparent !important;
+    border:none;
+  }
+}
+
+.appointment-modal .vs--disabled {
+  &>div {
+    background-color: transparent !important;
+    border:none;
+    .vs__selected {
+      background: transparent !important;
+    }
+    .vs__actions {
+      display: none;
+    }
+  }
 }
 
 .svg {
