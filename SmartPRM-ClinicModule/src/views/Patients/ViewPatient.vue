@@ -133,8 +133,7 @@
                                                       <label for="start" class="mb-0">{{ $t('calendarEvent.start') }} *</label>
                                                   </div>
                                                   <div class="col-md-9 d-flex align-items-center mb-3">
-                                                      <date-picker class="form-control form-control-disabled font-size-15"
-                                                                   :class="{'no-border margin-left': disabled}"
+                                                      <date-picker class="form-control form-control-disabled font-size-15 no-border date-picker"
                                                                    :disabled="disabled"
                                                                    v-model="formAppointments.assignmentDate"
                                                                    type="datetime"
@@ -145,8 +144,7 @@
                                                       <label for="start" class="mb-0 mr-3 ml-4">{{ $t('calendarEvent.end') }}*</label>
                                                       <date-picker required
                                                                    :disabled="disabled"
-                                                                   :class="{'no-border': disabled}"
-                                                                   class="form-control form-control-disabled font-size-15"
+                                                                   class="form-control form-control-disabled font-size-15 no-border date-picker"
                                                                    v-model="formAppointments.end"
                                                                    type="time"
                                                                    :minute-step="5"
@@ -1837,9 +1835,19 @@ export default {
   margin-top: -11px;
 }
 
+.mx-input-wrapper input {
+  border-radius: 10px;
+  min-height: 45px;
+}
+
+.date-picker {
+  padding: 0.375rem 0rem !important;
+}
+
 .clickable {
   cursor: pointer !important;
 }
+
 .labels {
     border-radius: 10px !important;
     margin: .225rem !important;
@@ -1849,6 +1857,7 @@ export default {
 .dicom {
   max-height: 140px;
 }
+
 .no-border {
     border: none !important;
 }
