@@ -957,7 +957,7 @@ app.get('/api/report/emazing/serviceslist/:statrtdate/:enddate/:countrie', (req,
   const enddate = req.params.enddate
   const countrie = req.params.countrie
   if(req.session.prm_user && req.session.prm_user.permissions && checkPermission(req.session.prm_user.permissions, reportingEmazingPermission))
-      daoReporting.getServiceList(req, res, statrtdate, enddate, countrie)
+      daoReporting.getServiceList(req, res, statrtdate, enddate, countrie, req.session.prm_user.prm_client_id, getScope(req.session.prm_user.permissions, reportingEmazingPermission))
   else
       res.status(401).json("OK: user unauthorized")
 });
