@@ -34,6 +34,17 @@ export async function getFilesWithPrefix (prefix) {
   return rawResponse.json()
 }
 
+export async function downloadFile (fileName) {
+  const rawResponse = await fetch('/api/files/' + fileName + '/download', {
+    method: 'GET',
+    credentials: 'same-origin',
+    headers: {
+      'Accept': 'application/json'
+    }
+  })
+  return rawResponse.json()
+}
+
 export async function fileUpload (file, id) {
   let data = new FormData()
   data.append('file', file)

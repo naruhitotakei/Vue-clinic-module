@@ -76,7 +76,6 @@ const listBucketObjectsWithPrefix = async (prefix) => {
 
 const fileUpload = async (id, fileName, fileContent, mimeType) => {
   return new Promise((resolve, reject) => {
-
     var params = {
       Bucket: defaultBucketName,
       Key: fileName+ '.' + mimeType.split('/')[1],

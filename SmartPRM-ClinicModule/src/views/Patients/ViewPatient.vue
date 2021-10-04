@@ -716,7 +716,8 @@
                                               <div class="text-center">
                                                   <p class="mb-0">{{ $t('EPR.files.fileName') }}: {{file.name}}</p>
                                                   <p class="mb-0">{{ $t('EPR.files.fileType') }}: {{file.type}}</p>
-                                                  <p>{{ $t('EPR.files.fileAddedAt') }}: {{file.created_at}}</p>
+                                                  <p class="mb-0">{{ $t('EPR.files.fileAddedAt') }}: {{file.created_at}}</p>
+                                                  <p class="clickable mb-0" @click="downloadFile(file)"> {{ $t('EPR.files.downloadFile') }} <i style="font-size:20px" class="ri-file-download-line"></i></p>
                                               </div>
                                           </li>
                                       </ul>
@@ -981,7 +982,7 @@ import { getCountriesList, getRegionsList, getLocationsList, getMunicipalitiesLi
 import moment from 'moment'
 import { createAssignments } from '@/services/assignmentsService'
 import { getEnquirySMS } from '@/services/enquiry'
-import { fileUpload, getFilesWithPrefix } from '@/services/upDownLoad'
+import { fileUpload, getFilesWithPrefix, downloadFile } from '@/services/upDownLoad'
 import { createCalendar, getDoctorList, getLabels, updateCalendar } from '@/services/calendarService'
 import { getProductGroups } from '@/services/products'
 import Tiff from 'tiff.js'
@@ -1430,7 +1431,19 @@ export default {
             pdf: type === 'pdf'
           })
         }
-        console.log(data)
+      })
+    },
+    downloadFile (file) {
+      let fileName = file.name
+      downloadFile(fileName).then(response => {
+        console.log(response)
+        var bytes = new Uint8Array(response.data.Body.data)
+        var fileURL = window.URL.createObjectURL(new Blob([bytes]))
+        var fileLink = document.createElement('a')
+        fileLink.href = fileURL
+        fileLink.setAttribute('download', fileName)
+        document.body.appendChild(fileLink)
+        fileLink.click()
       })
     },
     tiffConvertToCanvas (file, index, preview) {
