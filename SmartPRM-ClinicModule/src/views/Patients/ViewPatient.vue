@@ -252,7 +252,7 @@
                                           <template v-slot:body>
                                               <div class="iq-card-header d-flex justify-content-between">
                                                   <div class="iq-header-title">
-                                                      <h4 class="card-title">{{ $t('EPR.overview.files') }} ({{filesSortBy.length}})</h4><hr />
+                                                      <h4 @click="goToFiles" class="card-title clickable">{{ $t('EPR.overview.files') }} ({{filesSortBy.length}})</h4><hr />
                                                   </div>
                                               </div>
                                               <div class="iq-card-body p-0">
@@ -291,12 +291,14 @@
                                           <b-card-text class="text-black" v-html="patient.general_notes"></b-card-text>
                                           <!-- <b-card-text><small class="text-muted">{{ $t('EPR.overview.generalNotesUpdated') }} {{patient.general_notes_updated_at | fromNowDate}}</small></b-card-text> -->
                                       </b-card>
+                                  </b-col>
+                                  <b-col md="14">
                                       <b-card text-variant="white"
                                               bg-variant="danger"
                                               class="iq-card">
                                           <b-card-title class="text-white">{{ $t('EPR.overview.allergies') }}</b-card-title>
                                           <blockquote class="blockquote mb-0">
-                                              <p v-if="patient.allergies" class="font-size-14">{{patient.allergies}}</p>
+                                              <p class="font-size-14">{{patient.allergies}}</p>
                                               <!--<footer class="blockquote-footer text-white font-size-12">{{ $t('EPR.overview.allergiesUpdated') }} {{patient.allergies_updated_at | fromNowDate}}</footer> -->
                                           </blockquote>
                                       </b-card>
