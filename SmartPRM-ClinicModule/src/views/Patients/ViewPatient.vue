@@ -293,11 +293,10 @@
                                       </b-card>
                                       <b-card text-variant="white"
                                               bg-variant="danger"
-                                              class="iq-card"
-                                              v-if="patient.allergies">
+                                              class="iq-card">
                                           <b-card-title class="text-white">{{ $t('EPR.overview.allergies') }}</b-card-title>
                                           <blockquote class="blockquote mb-0">
-                                              <p class="font-size-14">{{patient.allergies}}</p>
+                                              <p v-if="patient.allergies" class="font-size-14">{{patient.allergies}}</p>
                                               <!--<footer class="blockquote-footer text-white font-size-12">{{ $t('EPR.overview.allergiesUpdated') }} {{patient.allergies_updated_at | fromNowDate}}</footer> -->
                                           </blockquote>
                                       </b-card>
