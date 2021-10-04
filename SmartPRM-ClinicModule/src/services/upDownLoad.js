@@ -42,7 +42,7 @@ export async function downloadFile (fileName) {
       'Accept': 'application/json'
     }
   })
-  return rawResponse.blob()
+  return rawResponse.json()
 }
 
 export async function fileUpload (file, id) {

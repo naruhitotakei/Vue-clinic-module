@@ -718,7 +718,8 @@
                                               <div class="text-center">
                                                   <p class="mb-0">{{ $t('EPR.files.fileName') }}: {{file.name}}</p>
                                                   <p class="mb-0">{{ $t('EPR.files.fileType') }}: {{file.type}}</p>
-                                                  <p>{{ $t('EPR.files.fileAddedAt') }}: {{file.created_at}}</p>
+                                                  <p class="mb-0">{{ $t('EPR.files.fileAddedAt') }}: {{file.created_at}}</p>
+                                                  <p class="clickable mb-0" @click="downloadFile(file)"> {{ $t('EPR.files.downloadFile') }} <i style="font-size:20px" class="ri-file-download-line"></i></p>
                                               </div>
                                           </li>
                                       </ul>
@@ -1013,7 +1014,6 @@ export default {
     this.getPatientServices(this.patientId)
     this.getUsersForAssignments()
     this.getFiles()
-    this.downloadFile()
     this.getLocations()
     this.getUserLogin()
     this.getSms()
@@ -1435,11 +1435,12 @@ export default {
         }
       })
     },
-    downloadFile () {
-      let fileName = '82026-picture-1632561247764.pdf'
+    downloadFile (file) {
+      let fileName = file.name
       downloadFile(fileName).then(response => {
         console.log(response)
-        var fileURL = window.URL.createObjectURL(new Blob([response]))
+        var bytes = new Uint8Array(response.data.Body.data)
+        var fileURL = window.URL.createObjectURL(new Blob([bytes]))
         var fileLink = document.createElement('a')
         fileLink.href = fileURL
         fileLink.setAttribute('download', fileName)

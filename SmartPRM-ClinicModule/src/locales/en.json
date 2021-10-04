@@ -223,7 +223,8 @@
       "fileName": "File name",
       "fileType": "File type",
       "fileCreatedAt": "Date",
-      "fileAddedAt": "Added at"
+      "fileAddedAt": "Added at",
+      "downloadFile": "Download file"
     },
     "invoicesTab": "Invoices",
     "invoices": {
