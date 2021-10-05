@@ -689,7 +689,6 @@ export default {
       this.$emit('setModalShow', true)
       this.disabled = true
       let event = this.calendarApi.getEventById(selectionInfo.event.id)
-      console.log(event)
       let location = this.locations.find(item => item.city === event.location)
       this.formData = {
         id: event.id,

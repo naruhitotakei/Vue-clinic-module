@@ -258,7 +258,6 @@ export default {
           }
         })
       })
-      console.log(slots)
       return slots
     }
   },
