@@ -342,7 +342,7 @@
                                                   <li v-for="(message,index) in smsMessages" :key="index + message.created_at" class="d-flex align-items-center justify-content-between mb-3">
                                                       <div>
                                                           <h6>{{message.content}}</h6>
-                                                          <p class="mb-0">{{message.created_at | formatDate}}</p>
+                                                          <p class="mb-0">{{message.created_at | formatDateSms}}</p>
                                                       </div>
                                                   </li>
                                               </ul>
