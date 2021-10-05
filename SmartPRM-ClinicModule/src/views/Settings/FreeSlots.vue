@@ -20,19 +20,9 @@
             </b-dropdown>
             <hr />
             <!-- Free Slots Calendar -->
-            <VueFullCalendar defaultView="timeGridWeek"
-                             :header="calendarOptions.header"
-                             :plugins="calendarPlugins"
-                             :events="getSlots"
-                             :allDaySlot="calendarOptions.allDaySlot"
-                             :minTime="calendarOptions.minTime"
-                             :maxTime="calendarOptions.maxTime"
-                             :slotDuration="calendarOptions.slotDuration"
-                             editable="true"
-                             selectable="true"
-                             @select="createFreeSlots"
-                             @eventClick="showFreeSlot"
-                             :key="reFetchSlots" />
+            <VueFullCalendar
+                :options="calendarOptions"
+                :key="reFetchSlots" />
             <!--Add Free Slots Modal-->
             <b-modal v-model="openFreeSlotsModal"
                      no-close-on-esc
@@ -179,6 +169,7 @@
     </b-container>
 </template>
 <script>
+import '@fullcalendar/core/vdom'
 import VueFullCalendar from '@fullcalendar/vue'
 import dayGridPlugin from '@fullcalendar/daygrid'
 import timeGridPlugin from '@fullcalendar/timegrid'
@@ -209,15 +200,25 @@ export default {
         listPlugin
       ],
       calendarOptions: {
+        plugins: [dayGridPlugin, timeGridPlugin, interactionPlugin, listPlugin],
+        defaultAllDay: false,
         allDaySlot: false,
-        minTime: '09:00:00',
-        maxTime: '21:30:00',
+
+        slotMinTime: '09:00:00',
+        slotMaxTime: '21:30:00',
         slotDuration: '00:15:00',
-        header: {
+        initialView: 'timeGridWeek',
+        editable: true,
+        selectable: true,
+        firstDay: 1,
+        headerToolbar: {
           left: 'prev,next today',
           center: 'title',
           right: 'dayGridMonth,timeGridWeek,timeGridDay'
-        }
+        },
+        events: this.getSlots,
+        select: this.createFreeSlots,
+        eventClick: this.showFreeSlot
       },
       openFreeSlotsModal: false,
       viewFreeSlotModal: false,
@@ -257,6 +258,7 @@ export default {
           }
         })
       })
+      console.log(slots)
       return slots
     }
   },
@@ -364,13 +366,16 @@ export default {
   },
   watch: {
     'allDoctorsCheck' () {
+    },
+    'slots' () {
+      this.calendarOptions.events = this.slots
     }
   }
 }
 </script>
 
 <style>
-.fc-event, .fc-event:hover{
+.fc-event:hover{
   color: #ffffff !important;
 }
 
@@ -405,7 +410,7 @@ VueFullCalendar {
 }
 
 /* @import '~@fullcalendar/core/main.css'; */
-@import '~@fullcalendar/daygrid/main.css';
-@import '~@fullcalendar/timegrid/main.css';
-@import '~@fullcalendar/list/main.min.css';
+/* @import '~@fullcalendar/daygrid/main.css'; */
+/* @import '~@fullcalendar/timegrid/main.css'; */
+/* @import '~@fullcalendar/list/main.min.css'; */
 </style>

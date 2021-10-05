@@ -399,7 +399,7 @@ export default {
         this.isDataLoaded = true
         this.$nextTick(() => {
           this.calendarApi = this.$refs.calendar.getApi()
-          this.$refs.calendar.options.events = this.events
+          this.calendarOptions.events = this.events
         })
       }
     },
