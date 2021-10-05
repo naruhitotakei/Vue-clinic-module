@@ -12,7 +12,7 @@ Vue.filter('formatDate', function (value) {
   }
 })
 
-Vue.filter('formatDateSms', function (value) {
+Vue.filter('formatDateAndTime', function (value) {
   if (value) {
     return moment(String(value)).format('DD-MM-YYYY HH:mm')
   }

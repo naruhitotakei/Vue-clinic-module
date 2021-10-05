@@ -81,7 +81,7 @@
                                                       <label for="patient" class="mb-0">{{ $t('calendarEvent.patient') }} *</label>
                                                   </div>
                                                   <div class="col-md-9">
-                                                      <p class="text-black mb-0 ml-2">{{ patient.name }} {{patient.last_name}}</p>
+                                                      <p class="text-black mb-0 ml-2 font-size-15">{{ patient.name }} {{patient.last_name}}</p>
                                                   </div>
                                               </div>
                                               <div class="row align-items-center justify-content-between w-100 mb-3">
@@ -122,6 +122,7 @@
                                                       <v-select :disabled="disabled"
                                                                 :clearable="false"
                                                                 label="product_group_name"
+                                                                :class="{'font-size-15': disabled}"
                                                                 :reduce="product_group => product_group.product_group_id"
                                                                 class="style-chooser form-control-disabled font-size-15"
                                                                 v-model="formAppointments.product_groups"
@@ -159,7 +160,7 @@
                                                       <label for="notes">{{ $t('calendarEvent.note') }}</label>
                                                   </div>
                                                   <div class="col-md-9">
-                                                      <textarea :disabled="disabled" row="2" v-model="formAppointments.notes" :class="(disabled ? 'font-size-12' : 'font-size-15')" class="form-control form-control-disabled" placeholder="Add your note here for event!" id="note" required></textarea>
+                                                      <textarea :disabled="disabled" row="2" v-model="formAppointments.notes" class="form-control form-control-disabled font-size-15" placeholder="Add your note here for event!" id="note" required></textarea>
                                                   </div>
                                               </div>
                                               <div class="row align-items-center justify-content-between w-100 mb-3 mt-2">
@@ -168,7 +169,7 @@
                                                   </div>
                                                   <div class="col-md-9">
                                                       <template v-for="(item,index) in colors">
-                                                          <b-form-radio class="custom-radio-color font-size-15 labels"
+                                                          <b-form-radio class="custom-radio-color labels"
                                                                         inline
                                                                         v-model="formAppointments.backgroundColor"
                                                                         :key="index"
@@ -342,7 +343,7 @@
                                                   <li v-for="(message,index) in smsMessages" :key="index + message.created_at" class="d-flex align-items-center justify-content-between mb-3">
                                                       <div>
                                                           <h6>{{message.content}}</h6>
-                                                          <p class="mb-0">{{message.created_at | formatDateSms}}</p>
+                                                          <p class="mb-0">{{message.created_at | formatDateAndTime}}</p>
                                                       </div>
                                                   </li>
                                               </ul>
@@ -396,7 +397,7 @@
                                                           <div v-if="item.appointment_canceled_in_advance_by_patient" class="timeline-dots border-danger"></div>
                                                           <div @click="openEditAppointmentModal(item)" style="cursor: pointer;">
                                                               <h6>{{item.product_group_text}}<span class="float-right">{{item.note}}</span></h6>
-                                                              <small class="mt-1">{{item.starts_at | formatDate}}</small>
+                                                              <small class="mt-1">{{item.starts_at | formatDateAndTime}}</small>
                                                           </div>
                                                       </li>
                                                   </ul>
@@ -415,8 +416,8 @@
                                                           <div v-if="item.appointment_canceled_in_advance_by_clinic === false && item.appointment_canceled_in_advance_by_patient === false" class="timeline-dots border-success"></div>
                                                           <div v-if="item.appointment_canceled_in_advance_by_clinic" class="timeline-dots border-light"></div>
                                                           <div v-if="item.appointment_canceled_in_advance_by_patient" class="timeline-dots border-danger"></div>
-                                                          <h6>{{item.product_group_text}}<span class="float-right">{{item.note}}</span></h6>
-                                                          <small class="mt-1">{{item.starts_at | formatDate}}</small>
+                                                          <h6 @click="openEditAppointmentModal(item)" class="clickable">{{item.product_group_text}}<span class="float-right">{{item.note}}</span></h6>
+                                                          <small class="mt-1">{{item.starts_at | formatDateAndTime}}</small>
                                                       </li>
                                                   </ul>
                                               </template>
@@ -1847,6 +1848,10 @@ export default {
 
 .icon-disabled i.mx-icon-calendar {
   display: none;
+}
+
+.font-size-15 {
+  font-size: 15px !important;
 }
 
 .appointment-modal .form-control-disabled{
