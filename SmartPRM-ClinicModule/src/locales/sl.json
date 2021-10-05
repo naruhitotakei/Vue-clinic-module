@@ -184,6 +184,8 @@
       "patientNotes": "Opombe o pacientu",
       "patientNotesOpen": "Odpri",
       "sms": "Poslani SMSI",
+      "notDeliveredSms": "in čaka na potrdilo o dostavi",
+      "deliveredSms": "dostavljeno",
       "openAssignments": "Odprte naloge",
       "futureAppointments": "Bodoči termini",
       "pastAppointments": "Pretekli termini",

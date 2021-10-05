@@ -12,17 +12,6 @@ export async function uploadAvatar (file) {
   return rawResponse.json()
 }
 
-export async function getFiles () {
-  const rawResponse = await fetch('/api/files', {
-    method: 'GET',
-    credentials: 'same-origin',
-    headers: {
-      'Accept': 'application/json'
-    }
-  })
-  return rawResponse.json()
-}
-
 export async function getFilesWithPrefix (prefix) {
   const rawResponse = await fetch('/api/' + prefix + '/files', {
     method: 'GET',

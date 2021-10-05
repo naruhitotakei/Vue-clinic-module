@@ -1146,7 +1146,7 @@ app.get('/api/files/avatar', async function(req, res) {
 app.get('/api/files/:key', async function(req, res) {
   let key = req.params.key
   if(req.session.prm_user) {
-    const rv = await awsS3.fileDownload(key)
+    const rv = await awsS3.download(key)
     if (rv.status=='OK') {
       // res.writeHead(200, {
       //   'Content-Disposition': `attachment; filename=` + 'avatar-' + req.session.prm_user.id,

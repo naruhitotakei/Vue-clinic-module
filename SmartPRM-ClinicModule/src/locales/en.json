@@ -185,6 +185,8 @@
       "patientNotes": "Patient notes",
       "patientNotesOpen": "Open",
       "sms": "SMS Sent",
+      "notDeliveredSms": "awaiting confirmation of delivery",
+      "deliveredSms": "delivered",
       "openAssignments": "Open assignments",
       "futureAppointments": "Future appointments",
       "pastAppointments": "Past appointments",

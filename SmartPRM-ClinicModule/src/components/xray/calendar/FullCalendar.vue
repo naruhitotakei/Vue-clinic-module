@@ -2,14 +2,8 @@
 <b-container fluid>
   <calendar
   :options="calendarOptions"
-  @select="openCreateModal"
-  @eventClick="openUpdateModal"
-  @datesRender="onViewChange"
-  @eventResize="eventResize"
-  @eventDrop="eventDrop"
   id="calendar"
   ref="calendar"
-  :locale="calendarLocale"
   v-if="isDataLoaded"
   />
   <img v-else src="../../../assets/css/ajax-loader.gif" alt="Smart PRM" class="d-block m-auto"/>
@@ -410,6 +404,15 @@ export default {
     }
   },
   computed: {
+    /* detectMinTime () {
+      return this.events.filter(event => {
+        if (new Date(moment(event.time).format('HH:mm:ss')) < new Date('09:00:00')) {
+          return event.time
+        } else {
+          return '09:00:00'
+        }
+      })
+    }, */
     calendarLocale () {
       return this.$i18n.locale === 'sl' ? slLocale : enLocale
     },
@@ -730,7 +733,6 @@ export default {
 th {
   text-align: center !important;
 }
-
 .fc-col-header-cell.fc-resource {
   writing-mode:  vertical-lr !important;
   transform: rotate(180deg) !important;
