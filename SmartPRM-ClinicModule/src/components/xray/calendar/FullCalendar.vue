@@ -219,6 +219,7 @@
 </b-container>
 </template>
 <script>
+import '@fullcalendar/core/vdom'
 import calendar from '@fullcalendar/vue'
 import resourceTimeGrid from '@fullcalendar/resource-timegrid'
 import dayGridPlugin from '@fullcalendar/daygrid'
@@ -348,7 +349,12 @@ export default {
         firstDay: 1,
         events: [],
         displayEventTime: false,
-        datesAboveResources: true
+        datesAboveResources: true,
+        select: this.openCreateModal,
+        eventClick: this.openUpdateModal,
+        eventDrop: this.eventDrop,
+        eventResize: this.eventResize,
+        datesSet: this.onViewChange
       }
     }
   },
@@ -393,7 +399,7 @@ export default {
         this.isDataLoaded = true
         this.$nextTick(() => {
           this.calendarApi = this.$refs.calendar.getApi()
-          /* console.log(this.calendarApi.getEvents()) */
+          this.$refs.calendar.options.events = this.events
         })
       }
     },
@@ -683,6 +689,7 @@ export default {
       this.$emit('setModalShow', true)
       this.disabled = true
       let event = this.calendarApi.getEventById(selectionInfo.event.id)
+      console.log(event)
       let location = this.locations.find(item => item.city === event.location)
       this.formData = {
         id: event.id,
@@ -703,18 +710,16 @@ export default {
 </script>
 
 <style lang="scss">
-/*.fc-event{
-  color: white !important;
-  border: none !important;
+.fc-event{
   cursor: pointer;
-} */
+}
 .fc-license-message{
   display:none;
 }
-    /*
+
 ::-webkit-scrollbar {
     display: none;
-} */
+}
 
 .fc-scroller {
   min-height: 0 !important;
@@ -730,7 +735,6 @@ th {
   line-height: 13px !important;
   vertical-align: middle !important;
 }
-    /*
 body .wrapper .custom-control-label::before {
   top:50% !important;
 }
@@ -838,9 +842,8 @@ body .wrapper .custom-control-label::after {
     border-radius: 10px !important;
     margin: .225rem !important;
 }
-
-  /* @import '~@fullcalendar/core/main.css';
-  @import '~@fullcalendar/daygrid/main.css';
-  @import '~@fullcalendar/timegrid/main.css'; */
-  @import '~@fullcalendar/list/main.min.css';
+  @import '~@fullcalendar/common/main.css';
+  // @import '~@fullcalendar/daygrid/main.css';
+  // @import '~@fullcalendar/timegrid/main.css';
+  // @import '~@fullcalendar/list/main.min.css';
 </style>
