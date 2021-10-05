@@ -343,7 +343,7 @@
                                                   <li v-for="(message,index) in smsMessages" :key="index + message.created_at" class="d-flex align-items-center justify-content-between mb-3">
                                                       <div>
                                                           <h6>{{message.content}}</h6>
-                                                          <p class="mb-0">{{message.created_at | formatDateAndTime}}</p>
+                                                          <p class="mb-0">{{message.created_at | formatDateAndTime}} - {{ message.delivered_at ? $t('EPR.overview.deliveredSms') :  $t('EPR.overview.notDeliveredSms')}}</p>
                                                       </div>
                                                   </li>
                                               </ul>
