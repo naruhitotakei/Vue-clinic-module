@@ -366,8 +366,8 @@ export default {
   watch: {
     'allDoctorsCheck' () {
     },
-    'slots' () {
-      this.calendarOptions.events = this.slots
+    'getSlots' () {
+      this.calendarOptions.events = this.getSlots
     }
   }
 }

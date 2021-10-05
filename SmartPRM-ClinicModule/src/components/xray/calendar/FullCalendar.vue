@@ -328,7 +328,7 @@ export default {
       calendarApi: null,
       modalTitle: '',
       // modalShow: false,
-      viewName: 'dayGridMonth',
+      viewName: 'resourceTimeGridWeek',
       event: {},
       calendarOptions: {
         plugins: [dayGridPlugin, timeGridPlugin, interactionPlugin, resourceTimeGrid, listPlugin],
@@ -404,6 +404,9 @@ export default {
       }
     },
     '$refs.calendar' () {
+    },
+    'isSelectable' () {
+      if (this.calendarApi) this.calendarApi.setOption('selectable', this.isSelectable)
     }
   },
   computed: {
