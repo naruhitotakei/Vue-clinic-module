@@ -151,56 +151,6 @@ const download = async (fileName) => {
   })
 }
 
-const fileDownload = async (fileName) => {
-  return new Promise((resolve, reject) => {
-    var params = {
-      Bucket: defaultBucketName,
-      Key: fileName
-    }
-    s3.getObject(params, function (err, data) {
-      if (err) {
-        let rv = {
-          status: "NOK",
-          error: err
-        }
-        resolve(rv);
-      } else {
-        let rv = {
-          status: "OK",
-          data: data
-        }
-        resolve(rv);
-      }
-    })
-  })
-}
-
-const userUploadAvatar = async (fileName, fileContent, mimeType) => {
-  return new Promise((resolve, reject) => {
-    var params = {
-      Bucket: defaultBucketName,
-      Key: fileName,
-      Body: fileContent,
-      ContentType: mimeType
-    }
-    s3.upload(params, function (err, data) {
-      if (err) {
-        let rv = {
-          status: "NOK",
-          error: err
-        }
-        resolve(rv);
-      } else {
-        let rv = {
-          status: "OK",
-          data: data.Location
-        }
-        resolve(rv);
-      }
-    })
-  })
-}
-
 const remove = async (fileName) => {
   return new Promise((resolve, reject) => {
     var params = {
@@ -232,7 +182,5 @@ module.exports = {
   upload,
   download,
   remove,
-  fileUpload,
-  fileDownload,
-  userUploadAvatar
+  fileUpload
 }
