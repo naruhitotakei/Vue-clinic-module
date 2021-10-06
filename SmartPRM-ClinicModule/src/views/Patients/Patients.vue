@@ -121,7 +121,7 @@
                                     <template v-slot:cell(action)="data">
 <!--                                      <b-button variant=" iq-bg-success mr-1 mb-1" size="sm" @click="edit(data.item)" v-if="!data.item.editable">-->
 <!--                                          <i class="ri-ball-pen-fill m-0"></i>-->
-<!--                                      </b-button>-->
+<!--                                      </b-button>--><!---->
                                       <b-button variant=" iq-bg-primary mr-1 mb-1" size="sm" @click="emailPatient(data.item)" v-if="!data.item.editable">
                                           <i class="ri-mail-line m-0"></i>
                                       </b-button>
