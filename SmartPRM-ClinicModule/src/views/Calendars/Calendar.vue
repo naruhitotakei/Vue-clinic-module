@@ -69,7 +69,6 @@
 <script>
 import { xray } from '../../config/pluginInit'
 import { getCalendar, getDoctorList } from '@/services/calendarService'
-import _ from 'lodash'
 import moment from 'moment'
 import { getProductGroups } from '@/services/products'
 import VueSlickCarousel from 'vue-slick-carousel'
@@ -200,9 +199,6 @@ export default {
         let dataWithDoctor = data.filter(item => {
           return item
         })
-        this.doctors = _.uniqBy(this.doctors, 'title')
-
-        this.resources = _.uniqBy(this.resources, 'id')
         this.clonedResources = this.resources
         dataWithDoctor.map(item => {
           let patientAttended = item.patient_attended === 'true' ? 'attended' : item.patient_attended === 'false' ? 'not_attended' : 'unknown'
