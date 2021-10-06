@@ -1,7 +1,7 @@
 ﻿<template>
     <b-container fluid class="calendar-page">
         <iq-card class="p-3">
-            <!-- Free Slots Header -->
+            <!-- Free Slots Header --><!---->
             <b-dropdown id="dropdown-aria" variant="primary" text="Select doctors" class="ml-2 mb-1">
                 <b-dropdown-group class="select-checkbox">
                     <b-checkbox name="check-button" v-model="allDoctorsCheck" @change="allDoctorsFunc(allDoctorsCheck)"
