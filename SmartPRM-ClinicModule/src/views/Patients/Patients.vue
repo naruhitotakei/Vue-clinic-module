@@ -19,7 +19,7 @@
                                 <b-form-group label-for="searchOptions" :label="$t('shared.searchBy')">
                                   <v-select class="patients" label="text"
                                     :clearable="false" :reduce="filter => filter.value"
-                                    :options="searchOptions" @input="filterSelected">
+                                    :options="searchOptions" @input="filterSelected" v-model="searchBy">
                                   </v-select>
                                 </b-form-group>
                             </iq-card>
@@ -157,6 +157,8 @@ export default {
   async mounted () {
     xray.index()
     this.getPatients('ASC')
+    this.searchBy = 'last_name'
+    this.filterSelected(this.searchBy)
   },
   methods: {
     add () {
@@ -238,6 +240,7 @@ export default {
       totalRows: 1,
       filter: '',
       filterOn: [],
+      searchBy: '',
       searchOptions: [
         { value: 'name', text: 'Name' },
         { value: 'last_name', text: 'Last Name' },
