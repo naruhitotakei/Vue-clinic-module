@@ -348,7 +348,8 @@ export default {
         eventClick: this.openUpdateModal,
         eventDrop: this.eventDrop,
         eventResize: this.eventResize,
-        datesSet: this.onViewChange
+        datesSet: this.onViewChange,
+        slotLabelInterval: '01:00'
       }
     }
   },
