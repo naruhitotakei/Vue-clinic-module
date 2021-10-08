@@ -222,7 +222,7 @@ const deleteAppointmentsLabel = (request, response, id) => {
 
 
 const getDoctors = (request, response, user_id, accessible_user_ids, prm_client_id, scope ) => {
-    var statement = "SELECT id, concat(title, ' ', first_name , ' ', surname) AS name from users WHERE function::text LIKE '%dentist%' ";
+    var statement = "SELECT id, title, first_name, surname, concat(title, ' ', first_name , ' ', surname) AS name from users WHERE function::text LIKE '%dentist%' ";
     if (scope==='All') {
     } else if (scope==='PrmClient') {
        statement +=    "AND prm_client_id=" + prm_client_id;

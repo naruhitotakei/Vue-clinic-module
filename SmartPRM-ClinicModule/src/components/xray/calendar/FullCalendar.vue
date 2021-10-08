@@ -349,7 +349,9 @@ export default {
         eventDrop: this.eventDrop,
         eventResize: this.eventResize,
         datesSet: this.onViewChange,
-        slotLabelInterval: '01:00:00'
+        slotLabelInterval: '01:00:00',
+        eventMinHeight: 5,
+        expandRows: true
       }
     }
   },
@@ -721,6 +723,10 @@ export default {
 }
 .fc-license-message{
   display:none;
+}
+
+.fc-toolbar-title {
+    font-size: 1.625em !important;
 }
 
 ::-webkit-scrollbar {

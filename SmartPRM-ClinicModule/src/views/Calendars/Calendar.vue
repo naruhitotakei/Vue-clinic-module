@@ -179,7 +179,7 @@ export default {
         this.doctorsList.map(item => {
           this.resources.push({
             id: item.id,
-            title: item.name
+            title: item.first_name.charAt(0) + '. ' + item.surname
           })
           this.doctors.push({
             id: Date.now(),
