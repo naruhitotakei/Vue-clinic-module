@@ -404,9 +404,6 @@ export default {
     },
     'isSelectable' () {
       if (this.calendarApi) this.calendarApi.setOption('selectable', this.isSelectable)
-    },
-    'formData' () {
-      console.log('f', this.formData)
     }
   },
   computed: {
