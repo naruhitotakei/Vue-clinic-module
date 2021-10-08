@@ -194,7 +194,7 @@ const getEnquiryPastAppointments = (request, response, enquiryId, locale) => {
       "LEFT JOIN prm_product_group ON appointments.product_group_id = prm_product_group.product_group_id  " +
       "LEFT JOIN prm_product_group_name ON prm_product_group_name.product_group_id = prm_product_group.product_group_id  " +
       "LEFT JOIN appointments_label ON appointments.label_id = appointments_label.id  " +
-        "WHERE enquiry_id = $1 AND prm_product_group_name.language = '" + locale + "' AND starts_at < now()::date ORDER BY starts_at ASC" , [enquiryId] , (error, results) => {
+        "WHERE enquiry_id = $1 AND prm_product_group_name.language = '" + locale + "' AND starts_at < now()::date ORDER BY starts_at DESC" , [enquiryId] , (error, results) => {
         if (error) {
             throw error
         }
