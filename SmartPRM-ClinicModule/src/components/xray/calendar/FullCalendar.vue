@@ -541,8 +541,10 @@ export default {
         event.setEnd(this.formData.end)
         this.updateCalendar(this.formData.id, this.formData)
       } else {
+        console.log(info)
         let event = this.calendarApi.getEventById(info.event.id)
-        let newResource = this.calendarApi.getResourceById(info.newResource.id)
+        // newResource is null when you move within same resource
+        let newResource = info.newResource ? this.calendarApi.getResourceById(info.newResource.id) : event
         this.formData.id = event.id
         this.formData.assignmentDate = event.start
         this.formData.end = event.end
@@ -718,6 +720,10 @@ export default {
 </script>
 
 <style lang="scss">
+@import '~@fullcalendar/common/main.css';
+.fc-col-header, .fc-timegrid-body, .fc-timegrid-slots table {
+  min-width: 100%;
+}
 .fc-timegrid-slot {
     line-height: 0 !important;
 }
@@ -857,7 +863,6 @@ body .wrapper .custom-control-label::after {
     border-radius: 10px !important;
     margin: .225rem !important;
 }
-  @import '~@fullcalendar/common/main.css';
   /* @import '~@fullcalendar/daygrid/main.css';
   // @import '~@fullcalendar/timegrid/main.css';
   // @import '~@fullcalendar/list/main.min.css'; */
