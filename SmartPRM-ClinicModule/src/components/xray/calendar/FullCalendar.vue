@@ -397,6 +397,7 @@ export default {
         this.$nextTick(() => {
           this.calendarApi = this.$refs.calendar.getApi()
           this.calendarOptions.events = this.events
+          this.calendarApi.render()
         })
       }
     },
@@ -565,7 +566,7 @@ export default {
         end: '',
         notes: '',
         backgroundColor: '#64D6E8',
-        patient_attended: 'unknown',
+        patient_attended: '',
         resourceId: '',
         eventResourceId: '',
         patientId: '',
@@ -614,7 +615,6 @@ export default {
         }
         if (!this.formData.id) {
           createCalendar(this.formData).then(([data]) => {
-            this.$emit('updateApp')
             this.calendarApi.addEvent({
               id: data.id ? data.id : id,
               title: this.formData.title,
@@ -633,6 +633,7 @@ export default {
               doctorId: this.formData.doctorId,
               locationId: this.formData.locationId
             })
+            this.$emit('updateApp')
             this.formData = this.defaultAppointment()
             this.$emit('setModalShow', false)
           })

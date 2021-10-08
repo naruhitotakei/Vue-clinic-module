@@ -200,10 +200,10 @@ export default {
           return item
         })
         this.clonedResources = this.resources
-        dataWithDoctor.map(item => {
+        this.events = dataWithDoctor.map(item => {
           let patientAttended = item.patient_attended === 'true' ? 'attended' : item.patient_attended === 'false' ? 'not_attended' : 'unknown'
           let doctor = this.doctorsList.find(doc => doc.name === item.app_doctor_name)
-          this.events.push({
+          return {
             id: item.id,
             title: item.note ? item.name + ' ' + item.last_name + ' - ' + item.prm_pr_group_name_text + '\n' + moment(item.starts_at).format('HH:mm') + ' - ' + moment(item.ends_at).format('HH:mm') + '\n' + item.note : item.name + ' ' + item.last_name + ' - ' + item.prm_pr_group_name_text + '\n' + moment(item.starts_at).format('HH:mm') + ' - ' + moment(item.ends_at).format('HH:mm'),
             start: moment(item.starts_at).format('YYYY-MM-DDTHH:mm'),
@@ -233,7 +233,7 @@ export default {
             allDay: false,
             app_lb_color: item.app_lb_color,
             app_lb_type: item.app_lb_type
-          })
+          }
         })
       })
     },
