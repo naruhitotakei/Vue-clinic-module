@@ -374,6 +374,9 @@ export default {
 </script>
 
 <style>
+.fc-col-header, .fc-timegrid-body, .fc-timegrid-slots table {
+  min-width: 100%;
+}
 .fc-event:hover{
   color: #ffffff !important;
 }
@@ -407,9 +410,4 @@ VueFullCalendar {
   padding-top: 0;
   font-size: 13px;
 }
-
-/* @import '~@fullcalendar/core/main.css'; */
-/* @import '~@fullcalendar/daygrid/main.css'; */
-/* @import '~@fullcalendar/timegrid/main.css'; */
-/* @import '~@fullcalendar/list/main.min.css'; */
 </style>
