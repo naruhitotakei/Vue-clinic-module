@@ -225,6 +225,7 @@ export default {
             doctorId: item.doctor_name ? item.doctor_name : item.app_doctor_name,
             enquiry_id: item.enquiry_id,
             label_id: item.app_lb_id,
+            display: 'block',
             patientId: {
               id: item.enquiry_id,
               full_name: item.name + ' ' + item.last_name

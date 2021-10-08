@@ -404,6 +404,9 @@ export default {
     },
     'isSelectable' () {
       if (this.calendarApi) this.calendarApi.setOption('selectable', this.isSelectable)
+    },
+    'formData' () {
+      console.log('f', this.formData)
     }
   },
   computed: {
@@ -541,7 +544,6 @@ export default {
         event.setEnd(this.formData.end)
         this.updateCalendar(this.formData.id, this.formData)
       } else {
-        console.log(info)
         let event = this.calendarApi.getEventById(info.event.id)
         // newResource is null when you move within same resource
         let newResource = info.newResource ? this.calendarApi.getResourceById(info.newResource.id) : event
@@ -559,7 +561,7 @@ export default {
     },
     defaultAppointment () {
       return {
-        id: null,
+        id: '',
         title: '',
         assignmentDate: '',
         start: '',
@@ -613,28 +615,27 @@ export default {
           })
           this.formData.backgroundColor = label
         }
-
         if (!this.formData.id) {
-          this.calendarApi.addEvent({
-            id: id,
-            title: this.formData.title,
-            assignmentDate: this.formData.assignmentDate,
-            start: this.formData.assignmentDate,
-            end: this.formData.end,
-            notes: this.formData.notes,
-            product_groups: this.formData.product_groups,
-            appointment_canceled_in_advance_by_clinic: this.formData.appointment_canceled_in_advance_by_clinic,
-            appointment_canceled_in_advance_by_patient: this.formData.appointment_canceled_in_advance_by_patient,
-            patient_attended: this.formData.patient_attended,
-            backgroundColor: this.formData.backgroundColor,
-            resourceId: this.formData.resourceId,
-            eventResourceId: this.formData.resourceId,
-            patientId: this.formData.patientId,
-            doctorId: this.formData.doctorId,
-            locationId: this.formData.locationId
-          })
-          createCalendar(this.formData).then((data) => {
+          createCalendar(this.formData).then(([data]) => {
             this.$emit('updateApp')
+            this.calendarApi.addEvent({
+              id: data.id ? data.id : id,
+              title: this.formData.title,
+              assignmentDate: this.formData.assignmentDate,
+              start: this.formData.assignmentDate,
+              end: this.formData.end,
+              notes: this.formData.notes,
+              product_groups: this.formData.product_groups,
+              appointment_canceled_in_advance_by_clinic: this.formData.appointment_canceled_in_advance_by_clinic,
+              appointment_canceled_in_advance_by_patient: this.formData.appointment_canceled_in_advance_by_patient,
+              patient_attended: this.formData.patient_attended,
+              backgroundColor: this.colors.find(c => c.id === this.formData.backgroundColor).color,
+              resourceId: this.formData.resourceId,
+              eventResourceId: this.formData.resourceId,
+              patientId: this.formData.patientId,
+              doctorId: this.formData.doctorId,
+              locationId: this.formData.locationId
+            })
             this.formData = this.defaultAppointment()
             this.$emit('setModalShow', false)
           })
@@ -730,6 +731,7 @@ export default {
 
 .fc-event{
   cursor: pointer;
+  white-space: pre;
 }
 .fc-license-message{
   display:none;
