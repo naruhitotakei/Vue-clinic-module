@@ -718,6 +718,10 @@ export default {
 </script>
 
 <style lang="scss">
+.fc-timegrid-slot {
+    line-height: 0 !important;
+}
+
 .fc-event{
   cursor: pointer;
 }
