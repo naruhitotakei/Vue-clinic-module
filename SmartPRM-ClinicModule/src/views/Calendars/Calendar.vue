@@ -26,18 +26,6 @@
                     <div class="calendar-doctor-slider d-none">
                       <button @click="scroll_left" class="nav-btn btn-primary mr-1"><i class="ri-arrow-left-s-line"></i>
                       </button>
-                      <VueSlickCarousel
-                          v-bind="optionSlider"
-                          v-if="doctors.length"
-                          ref="carousel"
-                      >
-                        <div v-for="(item,index) in doctors" :key="index">
-                          <b-checkbox class="custom-switch-color" :color="item.color" @change="checkData(item)"
-                                      v-model="item.checked" :ref="'doctor_'+index" name="check-button" inline>
-                            {{ item.title }}
-                          </b-checkbox>
-                        </div>
-                      </VueSlickCarousel>
                       <button @click="scroll_right" class="nav-btn btn-primary ml-1"><i
                           class="ri-arrow-right-s-line"></i></button>
                     </div>
@@ -71,11 +59,9 @@ import { xray } from '../../config/pluginInit'
 import { getCalendar, getDoctorList } from '@/services/calendarService'
 import moment from 'moment'
 import { getProductGroups } from '@/services/products'
-import VueSlickCarousel from 'vue-slick-carousel'
 
 export default {
   name: 'GoogleCalendar',
-  components: { VueSlickCarousel },
   data () {
     return {
       allDoctorCheck: true,
