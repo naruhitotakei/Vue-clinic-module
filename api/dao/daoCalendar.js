@@ -11,8 +11,8 @@ var moment = require('moment');
 
 const getApontments = (request, response, from, to, user_id, accessible_user_ids, selctedIds, prm_client_id, scope, lang ) => {
     var statement = "SELECT app.id, app.starts_at, app.ends_at, app.created_at, app.note, app.product_group_id, app.enquiry_id as app_enquiry_id, app.kind, app.patient_attended, app.appointment_canceled_in_advance_by_clinic, " +
-        "app.appointment_canceled_in_advance_by_patient, app.time, app.location as app_location, app.doctor_name as app_doctor_name, app.enquiry_id, enq.name, enq.last_name, " +
-        "app.attendance, app.product_id, app_s.location as app_s_location, app_s.doctor_name, us.id as doctor_user_id, pcl.id as prm_client_id, " +
+        "app.appointment_canceled_in_advance_by_patient, app.time, app.location as app_location, app.doctor_name, app.enquiry_id, enq.name, enq.last_name, " +
+        "app.attendance, app.product_id, app_s.location as app_s_location, app_s.doctor_name AS slot_doctor_name, us.id as doctor_user_id, pcl.id as prm_client_id, " +
         "pcl.client_name as prm_client_name, prd.name as prd_name, prd.group as prd_group, prd.category as prd_category, " +
         "prd.fee as prd_fee, prd.price_adjustment as prd_price_adjustment, prd.fee_type as prd_fee_type,  " +
         "app_lb.type as app_lb_type, app_lb.color as app_lb_color, app_lb.id as app_lb_id, " +
@@ -70,8 +70,8 @@ const updateAppointments = (request, response, id, appointments) => {
     // let patient_attended = appointments.patient_attended === 'attended' ? true : appointments.patient_attended === 'not_attended' ? false : null;
     let time = moment(appointments.assignmentDate).format('HH:mm');
     let statement = "UPDATE appointments SET "
-    if (appointments.doctorName) statement += "doctor_name='" + appointments.doctorName + "',"
-    if (appointments.locationName) statement += "location='" + appointments.locationName + "',"
+    if (appointments.doctorId) statement += "doctor_name='" + appointments.doctorId + "',"
+    if (appointments.locationId) statement += "location='" + appointments.locationId + "',"
     if (appointments.notes) statement += "note='" + appointments.notes + "',"
     if (appointments.patientId) {
         if (typeof appointments.patientId == 'object')
@@ -100,8 +100,8 @@ const createAppointment = (request, response, appointments) => {
     let patient_attended = appointments.patient_attended === 'attended' ? true : appointments.patient_attended === 'not_attended' ? false : null;
     let time = moment(appointments.assignmentDate).format('HH:mm');
     let statement = "INSERT INTO appointments ("
-    if (appointments.doctorName) statement += "doctor_name,"
-    if (appointments.locationName) statement += "location,"
+    if (appointments.doctorId) statement += "doctor_name,"
+    if (appointments.locationId) statement += "location,"
     if (appointments.notes) statement += "note,"
     if (appointments.patientId) statement += "enquiry_id,"
     // if (appointments.patient_attended) statement += "patient_attended,"
@@ -113,8 +113,8 @@ const createAppointment = (request, response, appointments) => {
     statement += "created_at,"
     statement += "kind"
     statement += ") VALUES ("
-    if (appointments.doctorName) statement += "'"+ appointments.doctorName +"',"
-    if (appointments.locationName) statement += "'"+ appointments.locationName +"',"
+    if (appointments.doctorId) statement += "'"+ appointments.doctorId +"',"
+    if (appointments.locationId) statement += "'"+ appointments.locationId +"',"
     if (appointments.notes) statement += "'"+ appointments.notes +"',"
     if (appointments.patientId) statement += "'"+ appointments.patientId +"',"
     if (appointments.patient_attended) statement += "'"+patient_attended +"',"

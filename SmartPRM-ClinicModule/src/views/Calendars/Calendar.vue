@@ -179,7 +179,7 @@ export default {
         this.doctorsList.map(item => {
           this.resources.push({
             id: item.id,
-            title: item.first_name.charAt(0) + '. ' + item.surname
+            title: item.name
           })
           this.doctors.push({
             id: Date.now(),
@@ -202,7 +202,7 @@ export default {
         this.clonedResources = this.resources
         this.events = dataWithDoctor.map(item => {
           let patientAttended = item.patient_attended === 'true' ? 'attended' : item.patient_attended === 'false' ? 'not_attended' : 'unknown'
-          let doctor = this.doctorsList.find(doc => doc.name === item.app_doctor_name)
+          let doctor = this.doctorsList.find(doc => doc.name === item.doctor_name)
           return {
             id: item.id,
             title: item.note ? item.name + ' ' + item.last_name + ' - ' + item.prm_pr_group_name_text + '\n' + moment(item.starts_at).format('HH:mm') + ' - ' + moment(item.ends_at).format('HH:mm') + '\n' + item.note : item.name + ' ' + item.last_name + ' - ' + item.prm_pr_group_name_text + '\n' + moment(item.starts_at).format('HH:mm') + ' - ' + moment(item.ends_at).format('HH:mm'),
@@ -222,7 +222,7 @@ export default {
             prm_client_name: item.prm_client_name,
             time: item.time,
             notes: item.note ? item.note : '',
-            doctorId: item.doctor_name ? item.doctor_name : item.app_doctor_name,
+            doctorId: item.doctor_name,
             enquiry_id: item.enquiry_id,
             label_id: item.app_lb_id,
             display: 'block',
