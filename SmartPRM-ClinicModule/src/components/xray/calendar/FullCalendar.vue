@@ -581,7 +581,6 @@ export default {
     saveAppointment () {
       if (this.formData.patientId && this.formData.doctorId && this.formData.assignmentDate) {
         this.disabled = true
-        let id = this.calendarApi.getEvents().length + 1
         this.formData.resourceId = this.formData.doctorId
         if (!this.formData.appointment_canceled_in_advance_by_clinic) {
           this.formData.appointment_canceled_in_advance_by_clinic = false
