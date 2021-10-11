@@ -708,6 +708,11 @@ export default {
     line-height: 0 !important;
 }
 
+.fc-day-today {
+    background-color: #08a4b4;
+    color: white;
+}
+
 .fc-event{
   cursor: pointer;
   white-space: pre;
