@@ -229,6 +229,14 @@ DROP COLUMN next_visit;
 UPDATE appointments SET ends_at = starts_at + interval'15 minutes' WHERE ends_at IS NULL;
 
 --############################################################
+--# Filling in location and doctor_name in appointments
+--# table where empty
+--############################################################
+
+UPDATE appointments SET location = 'Spodnje Škofije - Scoffie di Sotto' WHERE location IS NULL;
+UPDATE appointments SET doctor_name = 'Mirjana Tavčar' WHERE doctor_name IS NULL;
+
+--############################################################
 --# update version
 --############################################################
 

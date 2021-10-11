@@ -83,11 +83,10 @@ const updateAppointments = (request, response, id, appointments) => {
     if (appointments.product_groups) statement += "product_group_id='" + appointments.product_groups + "',"
     if (appointments.assignmentDate) statement += "starts_at='" + moment(appointments.assignmentDate).format('YYYY-MM-DDTHH:mm') + "',"
     if (appointments.backgroundColor) statement += "label_id='" + appointments.backgroundColor + "',"
-    if (appointments.end) statement += "ends_at='" + moment(appointments.end).format('YYYY-MM-DDTHH:mm') + "',"
+    if (appointments.end) statement += "ends_at='" + moment(appointments.assignmentDate).format('YYYY-MM-DD') + 'T' + moment(appointments.end).format('HH:mm') + "',"
     if (appointments.time) statement += "time='" + time + "' "
     statement = statement.slice(0, -1)
     statement += " WHERE id = " + id
-    console.log(statement)
     pool.query(statement , (error, results) => {
         if (error) {
             throw error
