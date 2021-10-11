@@ -182,8 +182,8 @@
                 </template>
             </div>
             <b-modal v-model="openCancelationModal"
-                     :ok-title="$t('calendar.btnSave')"
-                     :cancel-title="$t('calendar.btnCancel')"
+                     :ok-title="$t('calendar.btnCancel')"
+                     :cancel-title="$t('calendar.btnClose')"
                      :title="$t('calendar.btnCancelation')"
                      @ok="saveAppointment"
                      @close="closeCancelation"
