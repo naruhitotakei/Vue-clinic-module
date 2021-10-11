@@ -30,7 +30,6 @@ UPDATE users SET prm_role_id = 6, prm_password_hash = '$2b$12$zHk/lqjgGOaYmzWU9G
 UPDATE users SET prm_role_id = 6, prm_password_hash = '$2b$12$zHk/lqjgGOaYmzWU9Gtw1usL7oSFp7up91PvgmNdp/dzJ7mWS8wha' WHERE id = 157;
 UPDATE users SET prm_role_id = 5 WHERE id = 130;
 UPDATE users SET prm_role_id = 4 WHERE id = 140;
-UPDATE users SET first_name = 'Mirjam', surname = 'Mavrič', function = '{dentist}' WHERE id = 38;
 
 UPDATE users SET prm_client_id = NULL WHERE id IN (1, 53, 130, 140, 150, 151, 153, 154, 157);
 

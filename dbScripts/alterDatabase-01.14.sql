@@ -44,7 +44,7 @@ INSERT INTO users (name, email, prm_role_id) VALUES
 UPDATE users SET roles = '{doctor}' WHERE id = 148;
 UPDATE users SET roles = '{doctor}' WHERE id = 149;
 
-UPDATE users SET accessible_user_ids = '{38, 148, 149}' WHERE id = 39;
+UPDATE users SET accessible_user_ids = '{148, 149}' WHERE id = 39;
 UPDATE users SET accessible_user_ids = '{38}' WHERE id = 150;
 UPDATE users SET accessible_user_ids = '{17,27,28,29,30,51,62,98,103,104,105,106,107,108,110,119,120,121,125,126,129,136,137,148,149}' WHERE id = 151;
 
