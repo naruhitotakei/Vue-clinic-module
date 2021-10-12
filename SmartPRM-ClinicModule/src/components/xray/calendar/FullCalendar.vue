@@ -335,7 +335,7 @@ export default {
         initialView: 'resourceTimeGridWeek',
         resources: this.resourcesOuter,
         slotMinTime: '09:00:00',
-        slotMaxTime: '21:30:00',
+        slotMaxTime: '23:30:00',
         slotDuration: '00:15:00',
         allDaySlot: false,
         editable: true,
@@ -715,6 +715,9 @@ export default {
 }
 .fc-timegrid-slot {
     line-height: 0 !important;
+}
+.fc .fc-timegrid-now-indicator-container {
+  overflow: visible !important;
 }
 
 .fc-day-today {
