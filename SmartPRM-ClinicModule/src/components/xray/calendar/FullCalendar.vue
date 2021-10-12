@@ -34,10 +34,10 @@
                               :disabled="disabled"
                               :clearable="false"
                               label="full_name"
-                              :reduce="patient => patient.id"
                               class="style-chooser form-control-disabled font-size-16"
                               v-model="formData.patientId"
                               :options="patients"
+                              @input="findPatientsDoctor"
                               style="max-height: 400px;">
                     </v-select>
                 </div>
@@ -351,7 +351,8 @@ export default {
         datesSet: this.onViewChange,
         slotLabelInterval: '01:00:00',
         eventMinHeight: 5,
-        expandRows: true
+        expandRows: true,
+        nowIndicator: true
       }
     }
   },
@@ -446,6 +447,10 @@ export default {
     xray.index()
   },
   methods: {
+    findPatientsDoctor (patient) {
+      let patientsDoctor = this.doctors.find(doctor => doctor.id === patient.prm_dentist_user_id)
+      this.formData.doctorId = patientsDoctor.name
+    },
     closeCancelation () {
       this.openCancelationModal = false
       this.formData.appointment_canceled_in_advance_by_clinic = false
