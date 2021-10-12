@@ -104,40 +104,6 @@
     "icon": "ri-task-line"
   },
   {
-    "title": "Statistics",
-    "name": "sidebar.statistics",
-    "is_heading": false,
-    "is_active": false,
-    "link": "",
-    "class_name": "",
-    "is_icon_class": true,
-    "icon": "ri-bar-chart-2-fill",
-    "children": [
-      {
-        "title": "Statistics For Clinic",
-        "name": "statistics.statistics for clinic",
-        "is_active": false,
-        "link": {
-          "name": "statistics.statistics-for-clinic"
-        },
-        "class_name": "",
-        "is_icon_class": true,
-        "icon": "ri-file-chart-line"
-      },
-      {
-        "title": "Personal Statistics",
-        "name": "statistics.personal statistics",
-        "is_active": false,
-        "link": {
-          "name": "statistics.personal-statistics"
-        },
-        "class_name": "",
-        "is_icon_class": true,
-        "icon": "ri-bar-chart-line"
-      }
-    ]
-  },
-  {
     "title": "Reporting",
     "name": "sidebar.reporting",
     "is_heading": false,
