@@ -448,8 +448,10 @@ export default {
   },
   methods: {
     findPatientsDoctor (patient) {
-      let patientsDoctor = this.doctors.find(doctor => doctor.id === patient.prm_dentist_user_id)
-      this.formData.doctorId = patientsDoctor.name
+      if (!this.formData.doctorId) {
+        let patientsDoctor = this.doctors.find(doctor => doctor.id === patient.prm_dentist_user_id)
+        this.formData.doctorId = patientsDoctor.name
+      }
     },
     closeCancelation () {
       this.openCancelationModal = false
