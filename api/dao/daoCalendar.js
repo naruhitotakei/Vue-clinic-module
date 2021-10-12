@@ -10,9 +10,9 @@ const pool = new Pool({
 var moment = require('moment');
 
 const getApontments = (request, response, from, to, user_id, accessible_user_ids, selctedIds, prm_client_id, scope, lang ) => {
-    var statement = "SELECT app.id, app.starts_at, app.ends_at, app.created_at, app.note, app.product_group_id, app.enquiry_id as app_enquiry_id, app.kind, app.patient_attended, app.appointment_canceled_in_advance_by_clinic, " +
+    var statement = "SELECT app.id, app.starts_at, app.ends_at, app.created_at, app.note, app.product_group_id, app.enquiry_id as app_enquiry_id, app.kind, app.patient_attended, app.appointment_canceled_in_advance_by_clinic, app.doctor_id, " +
         "app.appointment_canceled_in_advance_by_patient, app.time, app.location as app_location, app.doctor_name, app.enquiry_id, enq.name, enq.last_name, " +
-        "app.attendance, app.product_id, app_s.location as app_s_location, app_s.doctor_name AS slot_doctor_name, us.id as doctor_user_id, pcl.id as prm_client_id, " +
+        "app.attendance, app.product_id, app_s.location as app_s_location, app_s.doctor_name AS slot_doctor_name, pcl.id as prm_client_id, " +
         "pcl.client_name as prm_client_name, prd.name as prd_name, prd.group as prd_group, prd.category as prd_category, " +
         "prd.fee as prd_fee, prd.price_adjustment as prd_price_adjustment, prd.fee_type as prd_fee_type,  " +
         "app_lb.type as app_lb_type, app_lb.color as app_lb_color, app_lb.id as app_lb_id, " +
@@ -20,7 +20,7 @@ const getApontments = (request, response, from, to, user_id, accessible_user_ids
         "prm_pr_group_name.text as prm_pr_group_name_text, prm_pr_group_name.id as prm_pr_group_name_id "
     statement += "FROM appointments app "
     statement += "LEFT JOIN appointment_slots app_s ON app.id = app_s.appointment_id "
-    statement += "LEFT JOIN users us ON app.doctor_name = us.name "
+    statement += "LEFT JOIN users us ON app.doctor_id = us.id "
     statement += "LEFT JOIN clients cl ON app_s.client_id = cl.id "
     statement += "LEFT JOIN prm_client pcl ON cl.id = pcl.id "
     statement += "LEFT JOIN enquiries enq ON app.enquiry_id = enq.id "
@@ -30,6 +30,7 @@ const getApontments = (request, response, from, to, user_id, accessible_user_ids
     statement += "LEFT JOIN prm_product_group_name prm_pr_group_name ON prm_pr_group.product_group_id = prm_pr_group_name.product_group_id "
     statement += "WHERE app.trashed = false "
     statement += `AND prm_pr_group_name.language = '${lang}' `
+    statement += `AND app.doctor_id IS NOT NULL `
     // statement += "AND pcl.client_deleted = false "
     if (scope=='All') {
     } else if (scope=='PrmClient') {
@@ -70,7 +71,7 @@ const updateAppointments = (request, response, id, appointments) => {
     // let patient_attended = appointments.patient_attended === 'attended' ? true : appointments.patient_attended === 'not_attended' ? false : null;
     let time = moment(appointments.assignmentDate).format('HH:mm');
     let statement = "UPDATE appointments SET "
-    if (appointments.doctorId) statement += "doctor_name='" + appointments.doctorId + "',"
+    if (appointments.doctorId) statement += "doctor_name='" + appointments.doctorId + "'," + "doctor_id=" + appointments.eventResourceId + ","
     if (appointments.locationId) statement += "location='" + appointments.locationId + "',"
     if (appointments.notes) statement += "note='" + appointments.notes + "',"
     if (appointments.patientId) {
@@ -99,7 +100,7 @@ const createAppointment = (request, response, appointments) => {
     let patient_attended = appointments.patient_attended === 'attended' ? true : appointments.patient_attended === 'not_attended' ? false : null;
     let time = moment(appointments.assignmentDate).format('HH:mm');
     let statement = "INSERT INTO appointments ("
-    if (appointments.doctorId) statement += "doctor_name,"
+    if (appointments.doctorId) statement += "doctor_name, doctor_id,"
     if (appointments.locationId) statement += "location,"
     if (appointments.notes) statement += "note,"
     if (appointments.patientId) statement += "enquiry_id,"
@@ -112,7 +113,7 @@ const createAppointment = (request, response, appointments) => {
     statement += "created_at,"
     statement += "kind"
     statement += ") VALUES ("
-    if (appointments.doctorId) statement += "'"+ appointments.doctorId +"',"
+    if (appointments.doctorId) statement += "'"+ appointments.doctorId +"'," + "'"+ appointments.eventResourceId +"'," 
     if (appointments.locationId) statement += "'"+ appointments.locationId +"',"
     if (appointments.notes) statement += "'"+ appointments.notes +"',"
     if (appointments.patientId) statement += "'"+ appointments.patientId +"',"

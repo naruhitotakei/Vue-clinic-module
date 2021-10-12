@@ -694,13 +694,15 @@ export default {
         start: event.start,
         end: event.end,
         backgroundColor: event.backgroundColor,
-        resourceId: event.extendedProps.eventResourceId,
+        resourceId: event.extendedProps.resourceId,
+        eventResourceId: event.extendedProps.eventResourceId,
         locationId: location,
         ...event.extendedProps,
         assignmentDate: new Date(event.extendedProps.assignmentDate)
 
       }
       this.modalTitle = this.formData.title
+      console.log('Opening created appointment: ' + JSON.stringify(this.formData))
     }
   }
 }

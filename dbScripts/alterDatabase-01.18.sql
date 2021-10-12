@@ -237,6 +237,23 @@ UPDATE appointments SET location = 'Spodnje Škofije - Scoffie di Sotto' WHERE l
 UPDATE appointments SET doctor_name = 'Mirjana Tavčar' WHERE doctor_name IS NULL;
 
 --############################################################
+--# Adding doctor_id (FK to users table) to appointments table
+--# And filling in data
+--############################################################
+
+ALTER TABLE appointments ADD COLUMN doctor_id INT
+CONSTRAINT appointments_users_fk REFERENCES users (id);
+
+UPDATE appointments SET doctor_id = 39 WHERE doctor_name::text LIKE '%Tavčar%';
+UPDATE appointments SET doctor_id = 148 WHERE doctor_name::text LIKE '%Gaja%';
+UPDATE appointments SET doctor_id = 168 WHERE doctor_name::text LIKE '%Eneja%';
+UPDATE appointments SET doctor_id = 169 WHERE doctor_name::text LIKE '%Arko%';
+UPDATE appointments SET doctor_id = 156 WHERE doctor_name::text LIKE '%Fortuna%';
+UPDATE appointments SET doctor_id = 149 WHERE doctor_name::text LIKE '%Žgur%';
+UPDATE appointments SET doctor_id = 157 WHERE doctor_name::text LIKE '%Žiga%';
+UPDATE appointments SET doctor_id = 153 WHERE doctor_name::text LIKE '%Tomaž%';
+
+--############################################################
 --# update version
 --############################################################
 
