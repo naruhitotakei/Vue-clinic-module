@@ -406,6 +406,9 @@ export default {
     },
     'isSelectable' () {
       if (this.calendarApi) this.calendarApi.setOption('selectable', this.isSelectable)
+    },
+    'resourcesOuter' (newResources) {
+      this.calendarOptions.resources = newResources
     }
   },
   computed: {
