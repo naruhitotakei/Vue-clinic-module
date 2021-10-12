@@ -722,6 +722,9 @@ export default {
 .fc .fc-timegrid-now-indicator-container {
   overflow: visible !important;
 }
+.fc-timegrid-cols table {
+  height: 100% !important;
+}
 
 .fc-day-today {
     background-color: #08a4b4;
