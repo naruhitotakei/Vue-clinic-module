@@ -392,14 +392,23 @@ export default {
     'colorsLabel' () {
       this.colors = this.colorsLabel
     },
-    'events' () {
-      if (this.events.length) {
+    'events' (events) {
+      if (events.length) {
+        if (this.calendarApi) {
+          this.calendarApi.options.events = events
+        } else {
+          this.calendarOptions.events = events
+        }
         this.isDataLoaded = true
         this.$nextTick(() => {
           this.calendarApi = this.$refs.calendar.getApi()
-          this.calendarOptions.events = this.events
           this.calendarApi.render()
         })
+      }
+    },
+    'isDataLoaded' (data) {
+      if (data && this.calendarApi) {
+        this.calendarApi.render()
       }
     },
     '$refs.calendar' () {
@@ -724,6 +733,7 @@ export default {
 }
 .fc-timegrid-cols table {
   height: 100% !important;
+  width: 100% !important;
 }
 
 .fc-day-today {
