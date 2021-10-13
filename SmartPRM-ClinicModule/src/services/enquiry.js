@@ -22,6 +22,31 @@ export async function getEnquiryById (id) {
   return rawResponse.json()
 }
 
+export async function getEnquiryServices (id) {
+  const rawResponse = await fetch(`/api/enquiries/${id}/services`, {
+    method: 'GET',
+    credentials: 'same-origin',
+    headers: {
+      'Accept': 'application/json',
+      'Content-Type': 'application/json'
+    }
+  })
+  return rawResponse.json()
+}
+
+export async function createEnquiryService (id, service) {
+  const rawResponse = await fetch(`/api/enquiries/${id}/services`, {
+    method: 'POST',
+    credentials: 'same-origin',
+    headers: {
+      'Accept': 'application/json',
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify(service)
+  })
+  return rawResponse.json()
+}
+
 export async function getEnquiryNotes (id) {
   const rawResponse = await fetch(`/api/enquiries/${id}/notes`, {
     method: 'GET',
@@ -109,18 +134,6 @@ export async function getEnquirySMS (id) {
 
 export async function getEnquiryOffers (id) {
   const rawResponse = await fetch(`/api/enquiries/${id}/offers`, {
-    method: 'GET',
-    credentials: 'same-origin',
-    headers: {
-      'Accept': 'application/json',
-      'Content-Type': 'application/json'
-    }
-  })
-  return rawResponse.json()
-}
-
-export async function getEnquiryServices (id) {
-  const rawResponse = await fetch(`/api/enquiries/${id}/services`, {
     method: 'GET',
     credentials: 'same-origin',
     headers: {

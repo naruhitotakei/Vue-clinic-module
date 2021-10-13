@@ -229,6 +229,17 @@ const recordSignInTime = (request, response, user_id) => {
     })
 }
 
+const getLegacyDoctors = (request, response) => {
+  let statement = "SELECT cu.id as id, cu.user_id, u.name from client_users cu JOIN users u ON cu.user_id = u.id WHERE cu.access_role = 'doctor'"
+  console.log(statement)
+  pool.query(statement, (error, results) => {
+    if (error) {
+      throw error
+    }
+    response.status(200).json(results.rows)
+  })
+}
+
 module.exports = {
   loginUser,
   getUserById,
@@ -242,5 +253,6 @@ module.exports = {
   getRoles,
   updateUser,
   getUsersForAssignments,
-  recordSignInTime
+  recordSignInTime,
+  getLegacyDoctors
 }

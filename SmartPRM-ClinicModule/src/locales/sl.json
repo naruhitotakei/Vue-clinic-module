@@ -225,7 +225,7 @@
       "fileType": "Vrsta datoteke",
       "fileCreatedAt": "Ustvarjeno",
       "fileAddedAt": "Dodano",
-      "downloadFile": "Naloži datoteko"
+      "downloadFile": "Prenesi datoteko"
     },
     "invoicesTab": "Računi",
     "invoices": {
@@ -234,7 +234,8 @@
       },
       "invoicesHeader": "Računi",
       "addInvoice": "Nov račun",
-      "servicesSummary": "Povzetek storitev"
+      "servicesSummary": "Povzetek storitev",
+      "addService": "Nov storitev"
     },
     "invoicesColumn": {
       "type": "Tip",

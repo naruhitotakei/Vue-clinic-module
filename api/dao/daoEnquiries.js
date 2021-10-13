@@ -251,12 +251,25 @@ const getEnquiryOffers = (request, response, enquiryId) => {
 }
 
 const getEnquiryServices = (request, response, enquiryId) => {
-    pool.query("SELECT *, products.name as product_name, services.created_at AS done_at, u.name as doctor FROM services JOIN products ON services.product_id = products.id JOIN users u ON services.doctor_id = u.id WHERE enquiry_id = $1 ORDER BY done_at DESC", [enquiryId], (error, results) => {
+    pool.query("SELECT *, products.name as product_name, services.created_at AS done_at, u.name as doctor FROM services LEFT JOIN products ON services.product_id = products.id LEFT JOIN client_users cu ON services.doctor_id = cu.id LEFT JOIN users u ON cu.user_id = u.id WHERE enquiry_id = $1 ORDER BY done_at DESC", [enquiryId], (error, results) => {
         if (error) {
             throw error
         }
         response.status(200).json(results.rows)
     })
+}
+
+const createEnquiryService = (req, res, enquiryId, service) => {
+    var statement = "INSERT INTO services (title, product_id, price, created_at, payment_method, doctor_id, enquiry_id, fee) VALUES ('"
+    + service.title + "', " + service.product_id + ", " + service.price + ", '" + service.created_at + "', '" + service.payment_method + "', " + service.doctor_id + ", " + enquiryId + ", " + service.fee + ")"
+    console.log(statement)
+    pool.query(statement, (error, results) => {
+        if (error) {
+            throw error
+        }
+        res.status(200).json("OK")
+    })
+
 }
 
 const getPatients = (request, response) => {
@@ -291,6 +304,7 @@ module.exports = {
   getEnquiryInvoices,
   getEnquiryOffers,
   getEnquiryServices,
+  createEnquiryService,
   getPatients,
   createEnquiryNotes,
   getEnquirySMS

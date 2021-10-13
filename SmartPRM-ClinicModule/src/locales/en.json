@@ -235,7 +235,8 @@
       },
       "invoicesHeader": "Invoices",
       "addInvoice": "New invoice",
-      "servicesSummary": "Services Summary"
+      "servicesSummary": "Services Summary",
+      "addService": "New service"
     },
     "invoicesColumn": {
       "type": "Type",

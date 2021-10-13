@@ -195,3 +195,15 @@ export async function deleteProductCategory (id) {
   })
   return rawResponse.json()
 }
+
+export async function getOldProducts () {
+  const rawResponse = await fetch('/api/old-products/', {
+    method: 'GET',
+    credentials: 'same-origin',
+    headers: {
+      'Accept': 'application/json',
+      'Content-Type': 'application/json'
+    }
+  })
+  return rawResponse.json()
+}
