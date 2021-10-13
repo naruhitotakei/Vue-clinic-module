@@ -163,18 +163,13 @@ export default {
       getDoctorList().then((data) => {
         if (Array.isArray(data)) {
           this.doctorsList = data
-          this.doctorsList.map(item => {
-            this.resources.push({
-              id: item.id,
-              title: item.name
-            })
-            this.doctors.push({
-              id: Date.now(),
-              title: item.name,
-              disabled: false,
-              checked: false
-            })
-          })
+          this.resources = this.doctorsList.map(item => ({ id: item.id, title: item.name }))
+          this.doctors = this.doctorsList.map(item => ({
+            id: Date.now(),
+            title: item.name,
+            disabled: false,
+            checked: false
+          }))
         }
       })
     },
