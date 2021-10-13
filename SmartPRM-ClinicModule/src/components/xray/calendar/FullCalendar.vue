@@ -332,7 +332,6 @@ export default {
           right: 'dayGridMonth,resourceTimeGridWeek,resourceTimeGridDay'
         },
         initialView: 'resourceTimeGridWeek',
-        filterResourcesWithEvents: true,
         resources: this.resourcesOuter,
         slotMinTime: '09:00:00',
         slotMaxTime: '21:30:00',
