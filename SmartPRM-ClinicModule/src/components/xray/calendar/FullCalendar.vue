@@ -567,12 +567,14 @@ export default {
         this.formData.id = event.id
         this.formData.assignmentDate = event.start
         this.formData.end = event.end
+        this.formData.eventResourceId = newResource.id
         this.formData.doctorId = newResource.title
         this.formData.time = new Date(event.start).toTimeString()
         event.setExtendedProp('assignmentDate', this.formData.assignmentDate)
         event.setStart(this.formData.start)
         event.setEnd(this.formData.end)
         event.setProp('doctorId', this.formData.doctorId)
+        event.setProp('eventResourceId', this.formData.eventResourceId)
         this.updateCalendar(this.formData.id, this.formData)
       }
     },
@@ -714,7 +716,6 @@ export default {
 
       }
       this.modalTitle = this.formData.title
-      console.log('Opening created appointment: ' + JSON.stringify(this.formData))
     }
   }
 }
