@@ -584,7 +584,7 @@ export default {
         start: '',
         end: '',
         notes: '',
-        backgroundColor: '#64D6E8',
+        backgroundColor: '',
         patient_attended: '',
         patient_id: '',
         doctor_id: '',
@@ -612,7 +612,7 @@ export default {
       } else {
         let event = this.calendarApi.getEventById(this.formData.id)
         event.setProp('title', this.formData.title)
-        event.setProp('backgroundColor', this.formData.backgroundColor)
+        event.setEProp('backgroundColor', this.formData.backgroundColor)
         event.setExtendedProp('doctor_id', this.formData.doctor_id)
         event.setStart(this.formData.assignmentDate)
         event.setEnd(this.formData.end)
