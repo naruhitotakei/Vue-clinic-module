@@ -329,9 +329,10 @@ export default {
         headerToolbar: {
           left: 'prev,next today',
           center: 'title',
-          right: 'dayGridMonth,timeGridWeek,timeGridDay'
+          right: 'dayGridMonth,resourceTimeGridWeek,resourceTimeGridDay'
         },
-        initialView: 'timeGridWeek',
+        initialView: 'resourceTimeGridWeek',
+        filterResourcesWithEvents: true,
         resources: this.resourcesOuter,
         slotMinTime: '09:00:00',
         slotMaxTime: '21:30:00',
