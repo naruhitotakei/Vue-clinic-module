@@ -161,19 +161,21 @@ export default {
     },
     getDoctors () {
       getDoctorList().then((data) => {
-        this.doctorsList = data
-        this.doctorsList.map(item => {
-          this.resources.push({
-            id: item.id,
-            title: item.name
+        if (Array.isArray(data)) {
+          this.doctorsList = data
+          this.doctorsList.map(item => {
+            this.resources.push({
+              id: item.id,
+              title: item.name
+            })
+            this.doctors.push({
+              id: Date.now(),
+              title: item.name,
+              disabled: false,
+              checked: false
+            })
           })
-          this.doctors.push({
-            id: Date.now(),
-            title: item.name,
-            disabled: false,
-            checked: false
-          })
-        })
+        }
       })
     },
     async updateApp () {
@@ -182,45 +184,47 @@ export default {
     getApontments () {
       this.events = []
       getCalendar('2021-01-01', '2021-12-31', '', this.$i18n.locale).then(data => {
-        let dataWithDoctor = data.filter(item => {
-          return item
-        })
-        this.clonedResources = this.resources
-        this.events = dataWithDoctor.map(item => {
-          let patientAttended = item.patient_attended === 'true' ? 'attended' : item.patient_attended === 'false' ? 'not_attended' : 'unknown'
-          let doctor = this.doctorsList.find(doc => doc.name === item.doctor_name)
-          return {
-            id: item.id,
-            title: item.note ? item.name + ' ' + item.last_name + ' - ' + item.prm_pr_group_name_text + '\n' + moment(item.starts_at).format('HH:mm') + ' - ' + moment(item.ends_at).format('HH:mm') + '\n' + item.note : item.name + ' ' + item.last_name + ' - ' + item.prm_pr_group_name_text + '\n' + moment(item.starts_at).format('HH:mm') + ' - ' + moment(item.ends_at).format('HH:mm'),
-            start: moment(item.starts_at).format('YYYY-MM-DDTHH:mm'),
-            end: item.ends_at ? moment(item.ends_at).format('YYYY-MM-DDTHH:mm') : moment(item.starts_at).add('0', 'hours').add('15', 'minutes').format('YYYY-MM-DDTHH:mm'),
-            backgroundColor: item.app_lb_color ? item.app_lb_color : '#64D6E8',
-            assignmentDate: moment(item.starts_at).format('YYYY-MM-DDTHH:mm'),
-            patient_attended: patientAttended,
-            appointment_canceled_in_advance_by_patient: item.appointment_canceled_in_advance_by_patient,
-            appointment_canceled_in_advance_by_clinic: item.appointment_canceled_in_advance_by_clinic,
-            resourceId: doctor && doctor.id,
-            eventResourceId: doctor && doctor.id,
-            locationId: item.location ? item.location : item.app_location,
-            product_groups: item.product_group_id,
-            last_name: item.last_name,
-            prm_client_id: item.prm_client_id,
-            prm_client_name: item.prm_client_name,
-            time: item.time,
-            notes: item.note ? item.note : '',
-            doctorId: item.doctor_name,
-            enquiry_id: item.enquiry_id,
-            label_id: item.app_lb_id,
-            display: 'block',
-            patientId: {
-              id: item.enquiry_id,
-              full_name: item.name + ' ' + item.last_name
-            },
-            allDay: false,
-            app_lb_color: item.app_lb_color,
-            app_lb_type: item.app_lb_type
-          }
-        })
+        if (Array.isArray(data)) {
+          let dataWithDoctor = data.filter(item => {
+            return item
+          })
+          this.clonedResources = this.resources
+          this.events = dataWithDoctor.map(item => {
+            let patientAttended = item.patient_attended === 'true' ? 'attended' : item.patient_attended === 'false' ? 'not_attended' : 'unknown'
+            let doctor = this.doctorsList.find(doc => doc.name === item.doctor_name)
+            return {
+              id: item.id,
+              title: item.note ? item.name + ' ' + item.last_name + ' - ' + item.prm_pr_group_name_text + '\n' + moment(item.starts_at).format('HH:mm') + ' - ' + moment(item.ends_at).format('HH:mm') + '\n' + item.note : item.name + ' ' + item.last_name + ' - ' + item.prm_pr_group_name_text + '\n' + moment(item.starts_at).format('HH:mm') + ' - ' + moment(item.ends_at).format('HH:mm'),
+              start: moment(item.starts_at).format('YYYY-MM-DDTHH:mm'),
+              end: item.ends_at ? moment(item.ends_at).format('YYYY-MM-DDTHH:mm') : moment(item.starts_at).add('0', 'hours').add('15', 'minutes').format('YYYY-MM-DDTHH:mm'),
+              backgroundColor: item.app_lb_color ? item.app_lb_color : '#64D6E8',
+              assignmentDate: moment(item.starts_at).format('YYYY-MM-DDTHH:mm'),
+              patient_attended: patientAttended,
+              appointment_canceled_in_advance_by_patient: item.appointment_canceled_in_advance_by_patient,
+              appointment_canceled_in_advance_by_clinic: item.appointment_canceled_in_advance_by_clinic,
+              resourceId: doctor && doctor.id,
+              eventResourceId: doctor && doctor.id,
+              locationId: item.location ? item.location : item.app_location,
+              product_groups: item.product_group_id,
+              last_name: item.last_name,
+              prm_client_id: item.prm_client_id,
+              prm_client_name: item.prm_client_name,
+              time: item.time,
+              notes: item.note ? item.note : '',
+              doctorId: item.doctor_name,
+              enquiry_id: item.enquiry_id,
+              label_id: item.app_lb_id,
+              display: 'block',
+              patientId: {
+                id: item.enquiry_id,
+                full_name: item.name + ' ' + item.last_name
+              },
+              allDay: false,
+              app_lb_color: item.app_lb_color,
+              app_lb_type: item.app_lb_type
+            }
+          })
+        }
       })
     },
     calculateEndDate (startDate, hours, minutes) {
