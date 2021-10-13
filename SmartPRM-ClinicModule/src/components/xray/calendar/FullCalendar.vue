@@ -398,7 +398,6 @@ export default {
         } else {
           this.calendarOptions.events = events
         }
-        this.isDataLoaded = true
         this.$nextTick(() => {
           this.calendarApi = this.$refs.calendar.getApi()
           this.calendarApi.render()
@@ -417,6 +416,12 @@ export default {
     },
     'resourcesOuter' (newResources) {
       this.calendarOptions.resources = newResources
+    },
+    'eventAndResources' (data) {
+      console.log(data)
+      if (data.events.length > 0 && data.resources.length > 0) {
+        this.isDataLoaded = true
+      }
     }
   },
   computed: {
@@ -443,6 +448,12 @@ export default {
     },
     isSaveDisabled () {
       return !this.selectedPatient || !this.formData.location || !this.selectedDoctor || !this.formData.product_groups || !this.formData.assignmentDate || !this.formData.end
+    },
+    eventAndResources () {
+      return {
+        events: this.events,
+        resources: this.resourcesOuter
+      }
     }
   },
   mounted () {
