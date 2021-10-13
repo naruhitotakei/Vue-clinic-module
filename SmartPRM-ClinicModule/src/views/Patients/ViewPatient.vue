@@ -285,8 +285,8 @@
                                       </iq-card>
                               </b-col>
                               <b-col>
-                                  <b-col md="14" v-if="patient.general_notes">
-                                      <b-card class="iq-card">
+                                  <b-col md="14">
+                                      <b-card class="iq-card" v-if="patient.general_notes">
                                           <b-card-title>{{ $t('EPR.overview.generalNotes') }}</b-card-title>
                                           <hr />
                                           <b-card-text class="text-black" v-html="patient.general_notes"></b-card-text>
@@ -296,7 +296,8 @@
                                   <b-col md="14">
                                       <b-card text-variant="white"
                                               bg-variant="danger"
-                                              class="iq-card">
+                                              class="iq-card"
+                                              v-if="patient.allergies">
                                           <b-card-title class="text-white">{{ $t('EPR.overview.allergies') }}</b-card-title>
                                           <blockquote class="blockquote mb-0">
                                               <p class="font-size-14">{{patient.allergies}}</p>
@@ -395,6 +396,7 @@
                                                           <div v-if="item.appointment_canceled_in_advance_by_clinic === false && item.appointment_canceled_in_advance_by_patient === false" class="timeline-dots border-success"></div>
                                                           <div v-if="item.appointment_canceled_in_advance_by_clinic" class="timeline-dots border-light"></div>
                                                           <div v-if="item.appointment_canceled_in_advance_by_patient" class="timeline-dots border-danger"></div>
+                                                          <div v-if="item.patient_attended === null || !item.patient_attended" class="timeline-dots border-warning"></div>
                                                           <div @click="openEditAppointmentModal(item)" style="cursor: pointer;">
                                                               <h6>{{item.product_group_text}}<span class="float-right">{{item.note}}</span></h6>
                                                               <small class="mt-1">{{item.starts_at | formatDateAndTime}}</small>

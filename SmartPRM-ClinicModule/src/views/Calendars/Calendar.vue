@@ -26,18 +26,6 @@
                     <div class="calendar-doctor-slider d-none">
                       <button @click="scroll_left" class="nav-btn btn-primary mr-1"><i class="ri-arrow-left-s-line"></i>
                       </button>
-                      <VueSlickCarousel
-                          v-bind="optionSlider"
-                          v-if="doctors.length"
-                          ref="carousel"
-                      >
-                        <div v-for="(item,index) in doctors" :key="index">
-                          <b-checkbox class="custom-switch-color" :color="item.color" @change="checkData(item)"
-                                      v-model="item.checked" :ref="'doctor_'+index" name="check-button" inline>
-                            {{ item.title }}
-                          </b-checkbox>
-                        </div>
-                      </VueSlickCarousel>
                       <button @click="scroll_right" class="nav-btn btn-primary ml-1"><i
                           class="ri-arrow-right-s-line"></i></button>
                     </div>
@@ -69,14 +57,11 @@
 <script>
 import { xray } from '../../config/pluginInit'
 import { getCalendar, getDoctorList } from '@/services/calendarService'
-import _ from 'lodash'
 import moment from 'moment'
 import { getProductGroups } from '@/services/products'
-import VueSlickCarousel from 'vue-slick-carousel'
 
 export default {
   name: 'GoogleCalendar',
-  components: { VueSlickCarousel },
   data () {
     return {
       allDoctorCheck: true,
@@ -200,14 +185,11 @@ export default {
         let dataWithDoctor = data.filter(item => {
           return item
         })
-        this.doctors = _.uniqBy(this.doctors, 'title')
-
-        this.resources = _.uniqBy(this.resources, 'id')
         this.clonedResources = this.resources
-        dataWithDoctor.map(item => {
+        this.events = dataWithDoctor.map(item => {
           let patientAttended = item.patient_attended === 'true' ? 'attended' : item.patient_attended === 'false' ? 'not_attended' : 'unknown'
-          let doctor = this.doctorsList.find(doc => doc.name === item.app_doctor_name)
-          this.events.push({
+          let doctor = this.doctorsList.find(doc => doc.name === item.doctor_name)
+          return {
             id: item.id,
             title: item.note ? item.name + ' ' + item.last_name + ' - ' + item.prm_pr_group_name_text + '\n' + moment(item.starts_at).format('HH:mm') + ' - ' + moment(item.ends_at).format('HH:mm') + '\n' + item.note : item.name + ' ' + item.last_name + ' - ' + item.prm_pr_group_name_text + '\n' + moment(item.starts_at).format('HH:mm') + ' - ' + moment(item.ends_at).format('HH:mm'),
             start: moment(item.starts_at).format('YYYY-MM-DDTHH:mm'),
@@ -226,9 +208,10 @@ export default {
             prm_client_name: item.prm_client_name,
             time: item.time,
             notes: item.note ? item.note : '',
-            doctorId: item.doctor_name ? item.doctor_name : item.app_doctor_name,
+            doctorId: item.doctor_name,
             enquiry_id: item.enquiry_id,
             label_id: item.app_lb_id,
+            display: 'block',
             patientId: {
               id: item.enquiry_id,
               full_name: item.name + ' ' + item.last_name
@@ -236,7 +219,7 @@ export default {
             allDay: false,
             app_lb_color: item.app_lb_color,
             app_lb_type: item.app_lb_type
-          })
+          }
         })
       })
     },

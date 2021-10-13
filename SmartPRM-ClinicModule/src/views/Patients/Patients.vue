@@ -121,7 +121,7 @@
                                     <template v-slot:cell(action)="data">
 <!--                                      <b-button variant=" iq-bg-success mr-1 mb-1" size="sm" @click="edit(data.item)" v-if="!data.item.editable">-->
 <!--                                          <i class="ri-ball-pen-fill m-0"></i>-->
-<!--                                      </b-button>-->
+<!--                                      </b-button>--><!---->
                                       <b-button variant=" iq-bg-primary mr-1 mb-1" size="sm" @click="emailPatient(data.item)" v-if="!data.item.editable">
                                           <i class="ri-mail-line m-0"></i>
                                       </b-button>
@@ -236,7 +236,7 @@ export default {
       paginatedItems: rows,
       tempPatient: null,
       currentPage: 1,
-      perPage: 10,
+      perPage: 20,
       totalRows: 1,
       filter: '',
       filterOn: [],
@@ -258,16 +258,16 @@ export default {
       ],
       sortBy: '',
       columns: [
-        { label: this.$t('patients.patientsColumn.name'), key: 'name', class: 'text-left' },
-        { label: this.$t('patients.patientsColumn.lastName'), key: 'last_name', class: 'text-left' },
-        { label: this.$t('patients.patientsColumn.telephone'), key: 'phone', class: 'text-left' },
-        { label: this.$t('patients.patientsColumn.email'), key: 'email', class: 'text-left' },
-        { label: this.$t('patients.patientsColumn.region'), key: 'region', class: 'text-left' },
-        { label: this.$t('patients.patientsColumn.state'), key: 'country', class: 'text-left' },
-        { label: this.$t('patients.patientsColumn.lastVisit'), key: 'last_visit', class: 'text-left' },
-        { label: this.$t('patients.patientsColumn.nextVisit'), key: 'next_visit', class: 'text-center' },
-        { label: this.$t('patients.patientsColumn.personalDentist'), key: 'personal_dentist', class: 'text-center' },
-        { label: this.$t('patients.patientsColumn.action'), key: 'action', class: 'text-center action-column' }
+        { label: this.$t('patients.patientsColumn.name'), key: 'name', class: 'text-left py-1' },
+        { label: this.$t('patients.patientsColumn.lastName'), key: 'last_name', class: 'text-left py-1' },
+        { label: this.$t('patients.patientsColumn.telephone'), key: 'phone', class: 'text-left py-1' },
+        { label: this.$t('patients.patientsColumn.email'), key: 'email', class: 'text-left py-1' },
+        { label: this.$t('patients.patientsColumn.region'), key: 'region', class: 'text-left py-1' },
+        { label: this.$t('patients.patientsColumn.state'), key: 'country', class: 'text-left py-1' },
+        { label: this.$t('patients.patientsColumn.lastVisit'), key: 'last_visit', class: 'text-left py-1' },
+        { label: this.$t('patients.patientsColumn.nextVisit'), key: 'next_visit', class: 'text-center py-1' },
+        { label: this.$t('patients.patientsColumn.personalDentist'), key: 'personal_dentist', class: 'text-center py-1' },
+        { label: this.$t('patients.patientsColumn.action'), key: 'action', class: 'text-center action-column py-1' }
       ]
     }
   }

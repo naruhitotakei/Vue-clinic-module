@@ -10,17 +10,17 @@ const pool = new Pool({
 var moment = require('moment');
 
 const getApontments = (request, response, from, to, user_id, accessible_user_ids, selctedIds, prm_client_id, scope, lang ) => {
-    var statement = "SELECT app.id, app.starts_at, app.ends_at, app.created_at, app.note, app.product_group_id, app.enquiry_id as app_enquiry_id, app.kind, app.patient_attended, app.appointment_canceled_in_advance_by_clinic, " +
-        "app.appointment_canceled_in_advance_by_patient, app.time, app.location as app_location, app.doctor_name as app_doctor_name, app.enquiry_id, enq.name, enq.last_name, " +
-        "app.attendance, app.product_id, app_s.location as app_s_location, app_s.doctor_name, us.id as doctor_user_id, pcl.id as prm_client_id, " +
+    var statement = "SELECT app.id, app.starts_at, app.ends_at, app.created_at, app.note, app.product_group_id, app.enquiry_id as app_enquiry_id, app.kind, app.patient_attended, app.appointment_canceled_in_advance_by_clinic, app.doctor_id, " +
+        "app.appointment_canceled_in_advance_by_patient, app.time, app.location as app_location, app.doctor_name, app.enquiry_id, enq.name, enq.last_name, " +
+        "app.attendance, app.product_id, app_s.location as app_s_location, app_s.doctor_name AS slot_doctor_name, pcl.id as prm_client_id, " +
         "pcl.client_name as prm_client_name, prd.name as prd_name, prd.group as prd_group, prd.category as prd_category, " +
         "prd.fee as prd_fee, prd.price_adjustment as prd_price_adjustment, prd.fee_type as prd_fee_type,  " +
         "app_lb.type as app_lb_type, app_lb.color as app_lb_color, app_lb.id as app_lb_id, " +
-        "prm_pr_group.product_group_code, prm_pr_group.fee as prm_pr_group_fee, " +
+        "prm_pr_group.product_group_code, prm_pr_group.fee as prm_pr_group_fee, prm_pr_group_name.language, " +
         "prm_pr_group_name.text as prm_pr_group_name_text, prm_pr_group_name.id as prm_pr_group_name_id "
     statement += "FROM appointments app "
     statement += "LEFT JOIN appointment_slots app_s ON app.id = app_s.appointment_id "
-    statement += "LEFT JOIN users us ON app.doctor_name = us.name "
+    statement += "LEFT JOIN users us ON app.doctor_id = us.id "
     statement += "LEFT JOIN clients cl ON app_s.client_id = cl.id "
     statement += "LEFT JOIN prm_client pcl ON cl.id = pcl.id "
     statement += "LEFT JOIN enquiries enq ON app.enquiry_id = enq.id "
@@ -30,6 +30,7 @@ const getApontments = (request, response, from, to, user_id, accessible_user_ids
     statement += "LEFT JOIN prm_product_group_name prm_pr_group_name ON prm_pr_group.product_group_id = prm_pr_group_name.product_group_id "
     statement += "WHERE app.trashed = false "
     statement += `AND prm_pr_group_name.language = '${lang}' `
+    statement += `AND app.doctor_id IS NOT NULL `
     // statement += "AND pcl.client_deleted = false "
     if (scope=='All') {
     } else if (scope=='PrmClient') {
@@ -67,29 +68,27 @@ const getApontments = (request, response, from, to, user_id, accessible_user_ids
 }
 
 const updateAppointments = (request, response, id, appointments) => {
-    // let patient_attended = appointments.patient_attended === 'attended' ? true : appointments.patient_attended === 'not_attended' ? false : null;
+    let patient_attended = appointments.patient_attended === 'attended' ? true : appointments.patient_attended === 'not_attended' ? false : null;
     let time = moment(appointments.assignmentDate).format('HH:mm');
     let statement = "UPDATE appointments SET "
-    if (appointments.doctorName) statement += "doctor_name='" + appointments.doctorName + "',"
-    if (appointments.locationName) statement += "location='" + appointments.locationName + "',"
+    if (appointments.doctor_id) statement += "doctor_id='" + appointments.doctor_id + "',"
+    if (appointments.doctor_name) statement += "doctor_name='" + appointments.doctor_name + "',"
+    if (appointments.location) statement += "location='" + appointments.location + "',"
     if (appointments.notes) statement += "note='" + appointments.notes + "',"
-    if (appointments.patientId) {
-        if (typeof appointments.patientId == 'object')
-        statement += "enquiry_id='" + appointments.patientId.full_name + "',"
-    }
-    // if (appointments.patient_attended) statement += "patient_attended=" + patient_attended + ","
+    if (appointments.patient_id) statement +="enquiry_id=" + appointments.patient_id + ","
+    if (appointments.patient_attended) statement += "patient_attended=" + patient_attended + ","
     statement += "appointment_canceled_in_advance_by_patient=" + appointments.appointment_canceled_in_advance_by_patient + ","
     statement += "appointment_canceled_in_advance_by_clinic=" + appointments.appointment_canceled_in_advance_by_clinic + ","
     if (appointments.product_groups) statement += "product_group_id='" + appointments.product_groups + "',"
-    if (appointments.assignmentDate) statement += "starts_at='" + moment(appointments.assignmentDate).format('YYYY-MM-DDTHH:mm') + "',"
+    if (appointments.assignmentDate) statement += "starts_at='" + moment(appointments.assignmentDate).format('YYYY-MM-DDTHH:mm') + "', date=" + moment(appointments.assignmentDate).format('YYYY-MM-DD') + "',"
     if (appointments.backgroundColor) statement += "label_id='" + appointments.backgroundColor + "',"
-    if (appointments.end) statement += "ends_at='" + moment(appointments.end).format('YYYY-MM-DDTHH:mm') + "',"
+    if (appointments.end) statement += "ends_at='" + moment(appointments.assignmentDate).format('YYYY-MM-DD') + 'T' + moment(appointments.end).format('HH:mm') + "',"
     if (appointments.time) statement += "time='" + time + "' "
     statement = statement.slice(0, -1)
     statement += " WHERE id = " + id
-    console.log(statement)
     pool.query(statement , (error, results) => {
         if (error) {
+            response.status(404).json(error)
             throw error
         }
         response.status(200).json(results)
@@ -100,26 +99,28 @@ const createAppointment = (request, response, appointments) => {
     let patient_attended = appointments.patient_attended === 'attended' ? true : appointments.patient_attended === 'not_attended' ? false : null;
     let time = moment(appointments.assignmentDate).format('HH:mm');
     let statement = "INSERT INTO appointments ("
-    if (appointments.doctorName) statement += "doctor_name,"
-    if (appointments.locationName) statement += "location,"
+    if (appointments.doctor_id) statement += "doctor_id,"
+    if (appointments.doctor_name) statement += "doctor_name,"
+    if (appointments.location) statement += "location,"
     if (appointments.notes) statement += "note,"
-    if (appointments.patientId) statement += "enquiry_id,"
-    // if (appointments.patient_attended) statement += "patient_attended,"
+    if (appointments.patient_id) statement += "enquiry_id,"
+    if (appointments.patient_attended) statement += "patient_attended,"
     if (appointments.product_groups) statement += "product_group_id,"
-    if (appointments.assignmentDate) statement += "starts_at,"
+    if (appointments.assignmentDate) statement += "starts_at, date,"
     if (appointments.backgroundColor) statement += "label_id,"
     if (appointments.end) statement += "ends_at,"
     statement += "time,"
     statement += "created_at,"
     statement += "kind"
     statement += ") VALUES ("
-    if (appointments.doctorName) statement += "'"+ appointments.doctorName +"',"
-    if (appointments.locationName) statement += "'"+ appointments.locationName +"',"
+    if (appointments.doctor_id) statement += "'"+ appointments.doctor_id +"',"
+    if (appointments.doctor_name) statement += "'"+ appointments.doctor_name +"',"
+    if (appointments.location) statement += "'"+ appointments.location +"',"
     if (appointments.notes) statement += "'"+ appointments.notes +"',"
-    if (appointments.patientId) statement += "'"+ appointments.patientId +"',"
+    if (appointments.patient_id) statement += "'"+ appointments.patient_id +"',"
     if (appointments.patient_attended) statement += "'"+patient_attended +"',"
     if (appointments.product_groups) statement += ""+ appointments.product_groups +","
-    if (appointments.assignmentDate) statement += "'"+ moment(appointments.assignmentDate).format('YYYY-MM-DDTHH:mm') +"',"
+    if (appointments.assignmentDate) statement += "'" + moment(appointments.assignmentDate).format('YYYY-MM-DDTHH:mm') + "'," + "'" + moment(appointments.assignmentDate).format('YYYY-MM-DD') + "'," 
     if (appointments.backgroundColor) statement += "'"+ appointments.backgroundColor +"',"
     if (appointments.end) statement += "'"+ moment(appointments.end).format('YYYY-MM-DDTHH:mm') +"',"
     statement += "'"+ time +"',"
@@ -127,6 +128,7 @@ const createAppointment = (request, response, appointments) => {
     statement += "'Posvet')"
     pool.query(statement , (error, results) => {
         if (error) {
+            response.status(404).json(error)
             throw error
         }
         pool.query("SELECT * FROM appointments WHERE id=(SELECT max(id) FROM appointments)" , (err, res) => {
@@ -222,7 +224,7 @@ const deleteAppointmentsLabel = (request, response, id) => {
 
 
 const getDoctors = (request, response, user_id, accessible_user_ids, prm_client_id, scope ) => {
-    var statement = "SELECT id, concat(title, ' ', first_name , ' ', surname) AS name from users WHERE function::text LIKE '%dentist%' ";
+    var statement = "SELECT id, title, first_name, surname, concat(title, ' ', first_name , ' ', surname) AS name from users WHERE function::text LIKE '%dentist%' ";
     if (scope==='All') {
     } else if (scope==='PrmClient') {
        statement +=    "AND prm_client_id=" + prm_client_id;
