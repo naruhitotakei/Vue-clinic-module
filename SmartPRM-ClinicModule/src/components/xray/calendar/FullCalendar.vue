@@ -395,18 +395,18 @@ export default {
       if (events.length) {
         if (this.calendarApi && this.calendarApi.options) {
           this.calendarApi.options.events = events
+          this.calendarApi.render()
         } else {
           this.calendarOptions.events = events
         }
+      }
+    },
+    'isDataLoaded' (data) {
+      if (data) {
         this.$nextTick(() => {
           this.calendarApi = this.$refs.calendar.getApi()
           this.calendarApi.render()
         })
-      }
-    },
-    'isDataLoaded' (data) {
-      if (data && this.calendarApi) {
-        this.calendarApi.render()
       }
     },
     '$refs.calendar' () {
