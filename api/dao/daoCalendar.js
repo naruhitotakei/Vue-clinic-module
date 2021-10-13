@@ -68,17 +68,15 @@ const getApontments = (request, response, from, to, user_id, accessible_user_ids
 }
 
 const updateAppointments = (request, response, id, appointments) => {
-    // let patient_attended = appointments.patient_attended === 'attended' ? true : appointments.patient_attended === 'not_attended' ? false : null;
+    let patient_attended = appointments.patient_attended === 'attended' ? true : appointments.patient_attended === 'not_attended' ? false : null;
     let time = moment(appointments.assignmentDate).format('HH:mm');
     let statement = "UPDATE appointments SET "
-    if (appointments.doctorId) statement += "doctor_name='" + appointments.doctorId + "'," + "doctor_id=" + appointments.eventResourceId + ","
-    if (appointments.locationId) statement += "location='" + appointments.locationId + "',"
+    if (appointments.doctor_id) statement += "doctor_id='" + appointments.doctor_id + "',"
+    if (appointments.doctor_name) statement += "doctor_name='" + appointments.doctor_name + "',"
+    if (appointments.location) statement += "location='" + appointments.location + "',"
     if (appointments.notes) statement += "note='" + appointments.notes + "',"
-    if (appointments.patientId) {
-        if (typeof appointments.patientId == 'object')
-        statement += "enquiry_id='" + appointments.patientId.full_name + "',"
-    }
-    // if (appointments.patient_attended) statement += "patient_attended=" + patient_attended + ","
+    if (appointments.patient_id) statement +="enquiry_id=" + appointments.patient_id + ","
+    if (appointments.patient_attended) statement += "patient_attended=" + patient_attended + ","
     statement += "appointment_canceled_in_advance_by_patient=" + appointments.appointment_canceled_in_advance_by_patient + ","
     statement += "appointment_canceled_in_advance_by_clinic=" + appointments.appointment_canceled_in_advance_by_clinic + ","
     if (appointments.product_groups) statement += "product_group_id='" + appointments.product_groups + "',"
@@ -100,11 +98,12 @@ const createAppointment = (request, response, appointments) => {
     let patient_attended = appointments.patient_attended === 'attended' ? true : appointments.patient_attended === 'not_attended' ? false : null;
     let time = moment(appointments.assignmentDate).format('HH:mm');
     let statement = "INSERT INTO appointments ("
-    if (appointments.doctorId) statement += "doctor_name, doctor_id,"
-    if (appointments.locationId) statement += "location,"
+    if (appointments.doctor_id) statement += "doctor_id,"
+    if (appointments.doctor_name) statement += "doctor_name,"
+    if (appointments.location) statement += "location,"
     if (appointments.notes) statement += "note,"
-    if (appointments.patientId) statement += "enquiry_id,"
-    // if (appointments.patient_attended) statement += "patient_attended,"
+    if (appointments.patient_id) statement += "enquiry_id,"
+    if (appointments.patient_attended) statement += "patient_attended,"
     if (appointments.product_groups) statement += "product_group_id,"
     if (appointments.assignmentDate) statement += "starts_at,"
     if (appointments.backgroundColor) statement += "label_id,"
@@ -113,10 +112,11 @@ const createAppointment = (request, response, appointments) => {
     statement += "created_at,"
     statement += "kind"
     statement += ") VALUES ("
-    if (appointments.doctorId) statement += "'"+ appointments.doctorId +"'," + "'"+ appointments.eventResourceId +"'," 
-    if (appointments.locationId) statement += "'"+ appointments.locationId +"',"
+    if (appointments.doctor_id) statement += "'"+ appointments.doctor_id +"',"
+    if (appointments.doctor_name) statement += "'"+ appointments.doctor_name +"',"
+    if (appointments.location) statement += "'"+ appointments.location +"',"
     if (appointments.notes) statement += "'"+ appointments.notes +"',"
-    if (appointments.patientId) statement += "'"+ appointments.patientId +"',"
+    if (appointments.patient_id) statement += "'"+ appointments.patient_id +"',"
     if (appointments.patient_attended) statement += "'"+patient_attended +"',"
     if (appointments.product_groups) statement += ""+ appointments.product_groups +","
     if (appointments.assignmentDate) statement += "'"+ moment(appointments.assignmentDate).format('YYYY-MM-DDTHH:mm') +"',"

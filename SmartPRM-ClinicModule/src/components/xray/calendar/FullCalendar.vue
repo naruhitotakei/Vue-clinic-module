@@ -35,7 +35,7 @@
                               :clearable="false"
                               label="full_name"
                               class="style-chooser form-control-disabled font-size-16"
-                              v-model="formData.patientId"
+                              v-model="selectedPatient"
                               :options="patients"
                               @input="findPatientsDoctor"
                               style="max-height: 400px;">
@@ -50,9 +50,9 @@
                     <v-select :disabled="disabled"
                               :clearable="false"
                               label="city"
-                              :reduce="location => location.id"
+                              :reduce="location => location.city"
                               class="style-chooser form-control-disabled font-size-16 ml-0 mt-1"
-                              v-model="formData.locationId"
+                              v-model="formData.location"
                               :options="locations"
                               style="min-width:305px;"></v-select>
                 </div>
@@ -65,9 +65,8 @@
                     <v-select :disabled="disabled"
                               :clearable="false"
                               label="name"
-                              :reduce="doctor => doctor.id"
                               class="style-chooser form-control-disabled font-size-16"
-                              v-model="formData.doctorId"
+                              v-model="selectedDoctor"
                               :options="doctors"
                               style="min-width: 305px;"></v-select>
                 </div>
@@ -150,7 +149,6 @@
                                       inline
                                       v-model="formData.backgroundColor"
                                       :key="index"
-                                      :reduce="item => item.id"
                                       :value="item.id"
                                       :style="{'background': item.color}"
                                       name="labels"
@@ -253,6 +251,8 @@ export default {
       eventResourceId: '',
       patientData: '',
       patients: [],
+      selectedDoctor: '',
+      selectedPatient: '',
       product_groups: [],
       disabled: true,
       showModal: false,
@@ -309,11 +309,10 @@ export default {
         notes: '',
         backgroundColor: '',
         patient_attended: '',
-        resourceId: '',
-        eventResourceId: '',
-        patientId: '',
-        doctorId: '',
-        locationId: '',
+        patient_id: '',
+        doctor_id: '',
+        doctor_name: '',
+        location: '',
         enquiry_id: '',
         product_groups: '',
         appointment_canceled_in_advance_by_clinic: false,
@@ -443,7 +442,7 @@ export default {
       return this.colorsLabel
     },
     isSaveDisabled () {
-      return !this.formData.patientId || !this.formData.locationId || !this.formData.doctorId || !this.formData.product_groups || !this.formData.assignmentDate || !this.formData.end
+      return !this.selectedPatient || !this.formData.location || !this.selectedDoctor || !this.formData.product_groups || !this.formData.assignmentDate || !this.formData.end
     }
   },
   mounted () {
@@ -460,9 +459,8 @@ export default {
   },
   methods: {
     findPatientsDoctor (patient) {
-      if (!this.formData.doctorId) {
-        let patientsDoctor = this.doctors.find(doctor => doctor.id === patient.prm_dentist_user_id)
-        this.formData.doctorId = patientsDoctor.name
+      if (!this.selectedDoctor) {
+        this.selectedDoctor = this.doctors.find(doctor => doctor.id === patient.prm_dentist_user_id)
       }
     },
     closeCancelation () {
@@ -567,14 +565,14 @@ export default {
         this.formData.id = event.id
         this.formData.assignmentDate = event.start
         this.formData.end = event.end
-        this.formData.eventResourceId = newResource.id
-        this.formData.doctorId = newResource.title
+        this.formData.doctor_id = newResource.id
+        this.formData.doctor_name = newResource.title
         this.formData.time = new Date(event.start).toTimeString()
         event.setExtendedProp('assignmentDate', this.formData.assignmentDate)
         event.setStart(this.formData.start)
         event.setEnd(this.formData.end)
-        event.setProp('doctorId', this.formData.doctorId)
-        event.setProp('eventResourceId', this.formData.eventResourceId)
+        event.setProp('doctor_id', this.formData.doctor_id)
+        event.setProp('doctor_name', this.formData.doctor_name)
         this.updateCalendar(this.formData.id, this.formData)
       }
     },
@@ -588,76 +586,46 @@ export default {
         notes: '',
         backgroundColor: '#64D6E8',
         patient_attended: '',
-        resourceId: '',
-        eventResourceId: '',
-        patientId: '',
-        doctorId: '',
-        locationId: this.locations.length === 1 ? this.locations[0].city : '',
-        enquiry_id: ''
+        patient_id: '',
+        doctor_id: '',
+        doctor_name: '',
+        location: this.locations.length === 1 ? this.locations[0].city : '',
+        enquiry_id: '',
+        appointment_canceled_in_advance_by_clinic: false,
+        appointment_canceled_in_advance_by_patient: false
       }
     },
     calculateEndDate (startDate, hours, minutes) {
       return moment(startDate).add(hours, 'hours').add(minutes, 'minutes').format('YYYY-MM-DDTHH:mm')
     },
     saveAppointment () {
-      if (this.formData.patientId && this.formData.doctorId && this.formData.assignmentDate) {
-        this.disabled = true
-        this.formData.resourceId = this.formData.doctorId
-        if (!this.formData.appointment_canceled_in_advance_by_clinic) {
-          this.formData.appointment_canceled_in_advance_by_clinic = false
-        }
-        if (!this.formData.appointment_canceled_in_advance_by_patient) {
-          this.formData.appointment_canceled_in_advance_by_patient = false
-        }
-        if (typeof this.formData.patientId === 'object') {
-          this.formData.patientId = this.formData.patientId.id
-        } else {
-          let title = this.patients.find(item => item.id === this.formData.patientId)
-          this.modalTitle = title.full_name
-          this.formData.title = title.full_name
-        }
-        if (typeof this.formData.doctorId === 'number') {
-          let doctor = this.doctors.find(doctor => doctor.id === this.formData.doctorId)
-          this.formData.doctorId = doctor.name
-        }
-        if (typeof this.formData.locationId === 'number') {
-          let location = this.locations.find(location => location.id === this.formData.locationId)
-          this.formData.locationId = location.city
-        }
-        if (typeof this.formData.product_groups === 'object') {
-          this.formData.product_groups = this.formData.product_groups.product_group_id
-        }
-        if (typeof this.formData.backgroundColor === 'string') {
-          let label = this.colors.find(label => {
-            return label.value === this.formData.backgroundColor
-          })
-          this.formData.backgroundColor = label
-        }
-        if (!this.formData.id) {
-          createCalendar(this.formData).then(() => {
-            this.$emit('updateApp')
-            this.formData = this.defaultAppointment()
-            this.$emit('setModalShow', false)
-          })
-        } else {
-          let event = this.calendarApi.getEventById(this.formData.id)
-          event.setProp('title', this.formData.title)
-          event.setProp('backgroundColor', this.formData.backgroundColor)
-          event.setProp('resourceId', this.formData.resourceId)
-          event.setStart(this.formData.assignmentDate)
-          event.setEnd(this.formData.end)
-          event.setExtendedProp('assignmentDate', this.formData.assignmentDate)
-          event.setExtendedProp('start', this.formData.assignmentDate)
-          event.setExtendedProp('notes', this.formData.notes)
-          event.setExtendedProp('eventResourceId', this.formData.resourceId)
-          event.setExtendedProp('patientId', this.formData.patientId)
-          event.setExtendedProp('doctorId', this.formData.doctorId)
-          event.setExtendedProp('locationId', this.formData.locationId)
-          this.updateCalendar(this.formData.id, this.formData)
-          // this.updateCalendarLabel(this.formData.id, this.formData)
+      this.formData.doctor_id = this.selectedDoctor.id
+      this.formData.doctor_name = this.selectedDoctor.name
+      this.formData.patient_id = this.selectedPatient.id
+      this.modalTitle = this.selectedPatient.full_name
+      if (!this.formData.id) {
+        createCalendar(this.formData).then(() => {
+          this.$emit('updateApp')
           this.formData = this.defaultAppointment()
           this.$emit('setModalShow', false)
-        }
+        })
+      } else {
+        let event = this.calendarApi.getEventById(this.formData.id)
+        event.setProp('title', this.formData.title)
+        event.setProp('backgroundColor', this.formData.backgroundColor)
+        event.setExtendedProp('doctor_id', this.formData.doctor_id)
+        event.setStart(this.formData.assignmentDate)
+        event.setEnd(this.formData.end)
+        event.setExtendedProp('assignmentDate', this.formData.assignmentDate)
+        event.setExtendedProp('start', this.formData.assignmentDate)
+        event.setExtendedProp('notes', this.formData.notes)
+        event.setExtendedProp('patient_id', this.formData.patient_id)
+        event.setExtendedProp('doctor_name', this.formData.doctor_name)
+        event.setExtendedProp('location', this.formData.location)
+        this.updateCalendar(this.formData.id, this.formData)
+        // this.updateCalendarLabel(this.formData.id, this.formData)
+        this.formData = this.defaultAppointment()
+        this.$emit('setModalShow', false)
       }
     },
     openCreateModal (selectionInfo) {
@@ -665,9 +633,10 @@ export default {
       this.formData = this.defaultAppointment()
       this.modalTitle = ''
       this.$emit('setModalShow', true)
-      this.formData.resourceId = selectionInfo.resource.id
-      this.formData.doctorId = selectionInfo.resource.title
-      this.formData.eventResourceId = selectionInfo.resource.id
+      // this.formData.resourceId = selectionInfo.resource.id
+      this.selectedDoctor = this.doctors.find(doctor => doctor.id === +selectionInfo.resource.id)
+      // this.formData.doctorId = selectionInfo.resource.title
+      // this.formData.eventResourceId = selectionInfo.resource.id
       this.formData.assignmentDate = new Date(selectionInfo.startStr)
       this.formData.end = new Date(selectionInfo.endStr)
       // this.setAssignmentDateAndDuration(selectionInfo.start, selectionInfo.end)
@@ -708,9 +677,11 @@ export default {
         start: event.start,
         end: event.end,
         backgroundColor: event.backgroundColor,
-        resourceId: event.extendedProps.resourceId,
-        eventResourceId: event.extendedProps.eventResourceId,
-        locationId: location,
+        doctor_id: event.extendedProps.doctor_id,
+        doctor_name: event.extendedProps.doctor_name,
+        patient_id: event.extendedProps.patient_id,
+        // eventResourceId: event.extendedProps.eventResourceId,
+        location: location,
         ...event.extendedProps,
         assignmentDate: new Date(event.extendedProps.assignmentDate)
 
