@@ -476,6 +476,7 @@ export default {
     closeModal () {
       this.$emit('setModalShow', false)
       this.formData = this.defaultAppointment()
+      this.selectedDoctor = null
     },
     updateCalendar (id, appointment, success, error) {
       updateCalendar(id, appointment).then(() => {
@@ -674,22 +675,23 @@ export default {
       this.$emit('setModalShow', true)
       this.disabled = true
       let event = this.calendarApi.getEventById(selectionInfo.event.id)
-      let location = this.locations.find(item => item.city === event.location)
+      let location = this.locations.find(item => item.city === event.extendedProps.locationId)
       this.formData = {
         id: event.id,
         title: event.title,
         start: event.start,
         end: event.end,
         backgroundColor: event.backgroundColor,
-        doctor_id: event.extendedProps.doctor_id,
+        doctor_id: event.extendedProps.doctorId,
         doctor_name: event.extendedProps.doctor_name,
-        patient_id: event.extendedProps.patient_id,
+        patient_id: event.extendedProps.patientId,
         // eventResourceId: event.extendedProps.eventResourceId,
         location: location,
         ...event.extendedProps,
         assignmentDate: new Date(event.extendedProps.assignmentDate)
 
       }
+      this.selectedDoctor = event.extendedProps.doctorId
       this.modalTitle = this.formData.title
     }
   }
