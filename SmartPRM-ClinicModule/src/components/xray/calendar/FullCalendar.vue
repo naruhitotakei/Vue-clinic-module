@@ -416,9 +416,11 @@ export default {
     },
     'resourcesOuter' (newResources) {
       this.calendarOptions.resources = newResources
+      if (this.calendarApi) {
+        this.calendarApi.render()
+      }
     },
     'eventAndResources' (data) {
-      console.log(data)
       if (data.events.length > 0 && data.resources.length > 0) {
         this.isDataLoaded = true
       }
