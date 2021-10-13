@@ -93,6 +93,18 @@ export async function getSurgeons () {
   return rawResponse.json()
 }
 
+export async function getLegacyDoctors () {
+  const rawResponse = await fetch('/api/legacy-doctors', {
+    method: 'GET',
+    credentials: 'same-origin',
+    headers: {
+      'Accept': 'application/json',
+      'Content-Type': 'application/json'
+    }
+  })
+  return rawResponse.json()
+}
+
 export async function getUsers () {
   const rawResponse = await fetch('/api/users', {
     method: 'GET',

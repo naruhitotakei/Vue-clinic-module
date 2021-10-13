@@ -272,6 +272,15 @@ const getProductCategoryNaming = (request, response, id) => {
     })
 }
 
+const getOldProducts = (request, response) =>  {
+    pool.query("SELECT * FROM products", (error, results) => {
+        if (error) {
+            throw error
+        }
+        response.status(200).json(results.rows)
+    })
+}
+
 module.exports = {
   getProducts,
   getProductCategories,
@@ -288,5 +297,6 @@ module.exports = {
   deleteProductCategory,
   getProductNaming,
   getProductGroupNaming,
-  getProductCategoryNaming
+  getProductCategoryNaming,
+  getOldProducts
 }

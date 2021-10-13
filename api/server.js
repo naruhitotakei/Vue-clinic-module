@@ -177,6 +177,14 @@ app.get('/api/surgeons', async function (req, res) {
     }
 });
 
+app.get('/api/legacy-doctors', async function (req, res) {
+    if (req.session.prm_user) {
+        daoUser.getLegacyDoctors(req, res)
+    } else {
+        res.status(200).json("NOK: user not logged in")
+    }
+});
+
 ///////////////////////////////////
 // home
 ///////////////////////////////////
@@ -454,6 +462,13 @@ app.get('/api/productGroups/:id/product-naming', (req, res) => {
         res.status(401).json("OK: user unauthorized")
 });
 
+app.get('/api/old-products/', (req, res) => {
+    if(req.session.prm_user && req.session.prm_user.permissions && checkPermission(req.session.prm_user.permissions, productsPermission))
+        daoProducts.getOldProducts(req, res)
+    else
+        res.status(401).json("OK: user unauthorized")
+});
+
 ///////////////////////////////////
 // business
 ///////////////////////////////////
@@ -683,6 +698,15 @@ app.get('/api/enquiries/:id/services', (req, res) => {
         daoEnquiries.getEnquiryServices(req, res, id)
     else
         res.status(401).json("OK: user unauthorized")
+});
+
+app.post('/api/enquiries/:id/services', (req, res) => {
+    const id = req.params.id
+    const service = req.body
+    if(req.session.prm_user && req.session.prm_user.permissions && checkPermission(req.session.prm_user.permissions, enquiriesPermission))
+      daoEnquiries.createEnquiryService(req, res, id, service)
+    else
+      res.status(401).json("OK: user unauthorized")
 });
 
 app.get('/api/enquiries/:id/offers', (req, res) => {

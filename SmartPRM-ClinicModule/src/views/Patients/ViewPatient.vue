@@ -721,7 +721,7 @@
                                                   <p class="mb-0">{{ $t('EPR.files.fileName') }}: {{file.name}}</p>
                                                   <p class="mb-0">{{ $t('EPR.files.fileType') }}: {{file.type}}</p>
                                                   <p class="mb-0">{{ $t('EPR.files.fileAddedAt') }}: {{file.created_at}}</p>
-                                                  <p class="clickable mb-0" @click="downloadFile(file)"> {{ $t('EPR.files.downloadFile') }} <i style="font-size:20px" class="ri-file-download-line"></i></p>
+                                                  <p class="clickable mb-0" @click="downloadFile(file)"> <span> {{ $t('EPR.files.downloadFile') }} </span> <i style="font-size:20px" class="ri-file-download-line"></i></p>
                                               </div>
                                           </li>
                                       </ul>
@@ -795,7 +795,10 @@
                       </iq-card>
                       <iq-card>
                           <template v-slot:body>
-                              <h5 class="card-title">{{ $t('EPR.invoices.servicesSummary') }}</h5>
+                            <h3 class="card-title" style="margin-top: 10px;">{{ $t('EPR.invoices.servicesSummary') }}</h3>
+                            <div class="btn-add-patient mb-4 mt-0">
+                                <b-button variant="primary" @click="modalServiceShow = true"><i class="ri-add-line mr-2"></i>{{ $t('EPR.invoices.addService') }}</b-button>
+                            </div>
                               <b-table small
                                        id="patient-services"
                                        :items="services"
@@ -816,6 +819,49 @@
                               </div>
                           </template>
                       </iq-card>
+                      <b-modal v-model="modalServiceShow" no-close-on-backdrop size="lg" :title="$t('EPR.invoices.addService')" :ok-disabled="isServiceDisabled" @close="cancelService"  @cancel="cancelService" :ok-title="$t('servicesAndProducts.addProductModal.save')" @ok="createPatientService" :cancel-title="$t('servicesAndProducts.addProductModal.close')">
+                        <form>
+                          <div class="form-row">
+                            <div class="col-md-12 mb-3">
+                                <label for="title">{{ $t('EPR.servicesSummaryColumn.serviceTitle') }} *</label>
+                                <v-select class="drop-down" label="name"
+                                  :clearable="false" v-model="formService.product"
+                                  :options="products" @input="setServiceProductId">
+                                  <template #search="{attributes, events}">
+                                    <input
+                                        class="vs__search"
+                                        :required="!formService.product_id"
+                                        v-bind="attributes"
+                                        v-on="events"
+                                      />
+                                  </template>
+                                </v-select>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label for="title">{{ $t('EPR.servicesSummaryColumn.servicePrice') }}</label>
+                                <input type="number" v-model="formService.price" class="form-control" placeholder="Price">
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label for="title">{{ $t('EPR.servicesSummaryColumn.serviceDate') }}</label>
+                                 <b-form-input v-model="formService.created_at" type="date"></b-form-input>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label for="title">{{ $t('EPR.servicesSummaryColumn.paymentMethod') }}</label>
+                                <v-select :clearable="false" label="name" :reduce="opt => opt.name" class="style-chooser" v-model="formService.payment_method" :options="paymentMethodOptions"></v-select>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label for="patient">{{ $t('reportingEmazing.servicesListColumn.serviceDoctor') }} *</label>
+                                <v-select :clearable="false"
+                                  label="name"
+                                  :reduce="doctor => doctor.id"
+                                  class="style-chooser form-control-disabled font-size-15"
+                                  v-model="formService.doctor_id"
+                                  :options="legacyDoctors"
+                                  style="min-width: 305px;"></v-select>
+                            </div>
+                          </div>
+                        </form>
+                      </b-modal>
                   </tab-content-item>
                   <tab-content-item :active="false" id="offers">
                       <iq-card>
@@ -978,17 +1024,18 @@ import {
   getEnquiryInvoices,
   getEnquiryOffers,
   getEnquiryServices,
+  createEnquiryService,
   createEnquiryNotes,
   trashEnquiry
 } from '../../services/enquiry'
-import { getDentists, getSurgeons, getUsersForAssignments, sso } from '../../services/userService'
+import { getDentists, getSurgeons, getLegacyDoctors, getUsersForAssignments, sso } from '../../services/userService'
 import { getCountriesList, getRegionsList, getLocationsList, getMunicipalitiesList } from '../../services/commonCodeLists'
 import moment from 'moment'
 import { createAssignments } from '@/services/assignmentsService'
 import { getEnquirySMS } from '@/services/enquiry'
 import { fileUpload, getFilesWithPrefix, downloadFile } from '@/services/upDownLoad'
 import { createCalendar, getDoctorList, getLabels, updateCalendar } from '@/services/calendarService'
-import { getProductGroups } from '@/services/products'
+import { getProductGroups, getOldProducts } from '@/services/products'
 import Tiff from 'tiff.js'
 import DatePicker from 'vue2-datepicker'
 import _ from 'lodash'
@@ -1011,6 +1058,7 @@ export default {
     this.getMunicipalities()
     this.getDentists()
     this.getSurgeons()
+    this.getLegacyDoctors()
     this.getPatientInvoices(this.patientId, 'ASC')
     this.getPatientOffers(this.patientId)
     this.getPatientServices(this.patientId)
@@ -1021,11 +1069,15 @@ export default {
     this.getSms()
     this.getDoctors()
     this.getProductGroups(this.$i18n.locale)
+    this.getOldProducts()
     this.getLabels(this.$i18n.locale)
   },
   computed: {
     isSaveDisabled () {
       return !this.formAppointments.patientId || !this.formAppointments.locationName || !this.formAppointments.doctorName || !this.formAppointments.product_groups || !this.formAppointments.assignmentDate || !this.formAppointments.end
+    },
+    isServiceDisabled () {
+      return !this.formService.product_id || !this.formService.price || !this.formService.created_at || !this.formService.payment_method || !this.formService.doctor_id
     },
     isOkDisabled () {
       return !this.formData.due_at || !this.formData.description
@@ -1157,6 +1209,7 @@ export default {
       addAppointmentModal: false,
       modalTrashPatient: false,
       openCancelationModal: false,
+      modalServiceShow: false,
       generalNotes: '',
       notesGeneral: '',
       users: [],
@@ -1169,6 +1222,7 @@ export default {
       timeSinceFirstVisit: '',
       dentists: [],
       surgeons: [],
+      legacyDoctors: [],
       filter: '',
       invoices: [],
       services: [],
@@ -1200,6 +1254,16 @@ export default {
         due_at: null,
         user: {}
       },
+      formService: {
+        title: '',
+        product_id: '',
+        product: '',
+        created_at: moment().format('YYYY-MM-DD'),
+        price: '',
+        doctor_id: '',
+        payment_method: '',
+        fee: ''
+      },
       formAppointments: {
         id: '',
         patientId: null,
@@ -1220,6 +1284,11 @@ export default {
         content: '',
         user_id: null
       },
+      paymentMethodOptions: [
+        { id: 1, name: 'Cash', label: this.$t('paymentMethods.cash') },
+        { id: 2, name: 'Credit card', label: this.$t('paymentMethods.creditCard') },
+        { id: 3, name: 'Bank Account', label: this.$t('paymentMethods.bankAccount') }
+      ],
       currentInvoicePage: 1,
       invoicesPerPage: 10,
       currentOfferPage: 1,
@@ -1280,6 +1349,7 @@ export default {
       },
       countries: [],
       regions: [],
+      products: [],
       municipalities: [],
       columnsInvoices: [
         { label: this.$t('EPR.invoicesColumn.type'), key: 'invoice_type', class: 'text-left' },
@@ -1328,7 +1398,7 @@ export default {
           key: 'price',
           class: 'text-left',
           formatter: value => {
-            return value + '0 EUR'
+            return value + ' EUR'
           }
         },
         { label: this.$t('reportingEmazing.servicesListColumn.serviceDoctor'), key: 'doctor', class: 'text-left' },
@@ -1366,6 +1436,20 @@ export default {
     cancelAppointmentModal () {
       this.formAppointments = this.defaultFormAppointment()
       this.disabled = true
+    },
+    cancelService () {
+      this.formService = this.defaultFormService()
+    },
+    defaultFormService () {
+      return {
+        title: '',
+        product_id: '',
+        product: '',
+        created_at: moment().format('YYYY-MM-DD'),
+        price: '',
+        doctor_id: '',
+        payment_method: ''
+      }
     },
     isItOverdue (date) {
       return moment().isAfter(date)
@@ -1549,9 +1633,33 @@ export default {
         this.services = response
       })
     },
+    createPatientService () {
+      this.formService.title = this.formService.product.name
+      this.calculateFee()
+      createEnquiryService(this.patientId, this.formService).then(response => {
+        this.getPatientServices(this.patientId)
+        this.modalServiceShow = false
+        this.formService = this.defaultFormService()
+      })
+    },
+    calculateFee () {
+      if (this.formService.product.fee_type === 'RELATIVE') {
+        this.formService.fee = (this.formService.price - this.formService.product.price_adjustment) * this.formService.product.fee
+      } else {
+        this.formService.fee = this.formService.product.fee
+      }
+    },
+    setServiceProductId () {
+      this.formService.product_id = this.formService.product.id
+    },
     getDentists () {
       getDentists().then(response => {
         this.dentists = response
+      })
+    },
+    getLegacyDoctors () {
+      getLegacyDoctors().then(response => {
+        this.legacyDoctors = response
       })
     },
     getSurgeons () {
@@ -1802,6 +1910,11 @@ export default {
     getProductGroups (lang) {
       getProductGroups(lang).then((response) => {
         this.product_groups = response
+      })
+    },
+    getOldProducts () {
+      getOldProducts().then((response) => {
+        this.products = response
       })
     },
     openEditAppointmentModal (appointment) {
