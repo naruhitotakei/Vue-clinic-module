@@ -88,6 +88,7 @@ const updateAppointments = (request, response, id, appointments) => {
     statement += " WHERE id = " + id
     pool.query(statement , (error, results) => {
         if (error) {
+            response.status(404).json(error)
             throw error
         }
         response.status(200).json(results)
@@ -127,6 +128,7 @@ const createAppointment = (request, response, appointments) => {
     statement += "'Posvet')"
     pool.query(statement , (error, results) => {
         if (error) {
+            response.status(404).json(error)
             throw error
         }
         pool.query("SELECT * FROM appointments WHERE id=(SELECT max(id) FROM appointments)" , (err, res) => {

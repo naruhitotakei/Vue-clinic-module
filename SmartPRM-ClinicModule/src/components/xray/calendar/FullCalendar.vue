@@ -393,7 +393,7 @@ export default {
     },
     'events' (events) {
       if (events.length) {
-        if (this.calendarApi) {
+        if (this.calendarApi && this.calendarApi.options) {
           this.calendarApi.options.events = events
         } else {
           this.calendarOptions.events = events
@@ -477,10 +477,11 @@ export default {
       this.$emit('setModalShow', false)
       this.formData = this.defaultAppointment()
     },
-    updateCalendar (id, appointment) {
+    updateCalendar (id, appointment, success, error) {
       updateCalendar(id, appointment).then(() => {
         this.$emit('updateApp')
-      })
+        success()
+      }).catch(() => error())
     },
     updateCalendarLabel (id, appointment) {
       updateCalendarLabel(id, appointment).then(() => {
@@ -543,9 +544,10 @@ export default {
       this.formData.id = event.id
       this.formData.assignmentDate = event.start
       this.formData.end = event.end
-      event.setStart(this.formData.start)
-      event.setEnd(this.formData.end)
-      this.updateCalendar(this.formData.id, this.formData)
+      this.updateCalendar(this.formData.id, this.formData, () => {
+        event.setStart(this.formData.start)
+        event.setEnd(this.formData.end)
+      }, () => info.revert())
     },
     eventDrop (info) {
       if (info.view.type === 'dayGridMonth') {
@@ -554,10 +556,11 @@ export default {
         this.formData.assignmentDate = event.start
         this.formData.end = event.end
         this.formData.time = new Date(event.start).toTimeString()
-        event.setExtendedProp('assignmentDate', this.formData.assignmentDate)
-        event.setStart(this.formData.start)
-        event.setEnd(this.formData.end)
-        this.updateCalendar(this.formData.id, this.formData)
+        this.updateCalendar(this.formData.id, this.formData, () => {
+          event.setExtendedProp('assignmentDate', this.formData.assignmentDate)
+          event.setStart(this.formData.start)
+          event.setEnd(this.formData.end)
+        }, () => info.revert())
       } else {
         let event = this.calendarApi.getEventById(info.event.id)
         // newResource is null when you move within same resource
@@ -568,12 +571,13 @@ export default {
         this.formData.doctor_id = newResource.id
         this.formData.doctor_name = newResource.title
         this.formData.time = new Date(event.start).toTimeString()
-        event.setExtendedProp('assignmentDate', this.formData.assignmentDate)
-        event.setStart(this.formData.start)
-        event.setEnd(this.formData.end)
-        event.setProp('doctor_id', this.formData.doctor_id)
-        event.setProp('doctor_name', this.formData.doctor_name)
-        this.updateCalendar(this.formData.id, this.formData)
+        this.updateCalendar(this.formData.id, this.formData, () => {
+          event.setExtendedProp('assignmentDate', this.formData.assignmentDate)
+          event.setStart(this.formData.start)
+          event.setEnd(this.formData.end)
+          event.setProp('doctor_id', this.formData.doctor_id)
+          event.setProp('doctor_name', this.formData.doctor_name)
+        }, () => info.revert())
       }
     },
     defaultAppointment () {
