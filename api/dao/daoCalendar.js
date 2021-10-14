@@ -80,7 +80,7 @@ const updateAppointments = (request, response, id, appointments) => {
     statement += "appointment_canceled_in_advance_by_patient=" + appointments.appointment_canceled_in_advance_by_patient + ","
     statement += "appointment_canceled_in_advance_by_clinic=" + appointments.appointment_canceled_in_advance_by_clinic + ","
     if (appointments.product_groups) statement += "product_group_id='" + appointments.product_groups + "',"
-    if (appointments.assignmentDate) statement += "starts_at='" + moment(appointments.assignmentDate).format('YYYY-MM-DDTHH:mm') + "', date=" + moment(appointments.assignmentDate).format('YYYY-MM-DD') + "',"
+    if (appointments.assignmentDate) statement += "starts_at='" + moment(appointments.assignmentDate).format('YYYY-MM-DDTHH:mm') + "', date='" + moment(appointments.assignmentDate).format('YYYY-MM-DD') + "',"
     if (appointments.backgroundColor) statement += "label_id='" + appointments.backgroundColor + "',"
     if (appointments.end) statement += "ends_at='" + moment(appointments.assignmentDate).format('YYYY-MM-DD') + 'T' + moment(appointments.end).format('HH:mm') + "',"
     if (appointments.time) statement += "time='" + time + "' "

@@ -329,9 +329,9 @@ export default {
         headerToolbar: {
           left: 'prev,next today',
           center: 'title',
-          right: 'dayGridMonth,timeGridWeek,timeGridDay'
+          right: 'dayGridMonth,resourceTimeGridWeek,resourceTimeGridDay'
         },
-        initialView: 'timeGridWeek',
+        initialView: 'resourceTimeGridWeek',
         resources: this.resourcesOuter,
         slotMinTime: '09:00:00',
         slotMaxTime: '21:30:00',
@@ -491,11 +491,10 @@ export default {
       this.formData = this.defaultAppointment()
       this.selectedDoctor = null
     },
-    updateCalendar (id, appointment, success, error) {
+    updateCalendar (id, appointment) {
       updateCalendar(id, appointment).then(() => {
         this.$emit('updateApp')
-        success()
-      }).catch(() => error())
+      })
     },
     updateCalendarLabel (id, appointment) {
       updateCalendarLabel(id, appointment).then(() => {
@@ -630,7 +629,7 @@ export default {
       } else {
         let event = this.calendarApi.getEventById(this.formData.id)
         event.setProp('title', this.formData.title)
-        event.setEProp('backgroundColor', this.formData.backgroundColor)
+        event.setExtendedProp('backgroundColor', this.formData.backgroundColor)
         event.setExtendedProp('doctor_id', this.formData.doctor_id)
         event.setStart(this.formData.assignmentDate)
         event.setEnd(this.formData.end)
@@ -688,16 +687,17 @@ export default {
       this.$emit('setModalShow', true)
       this.disabled = true
       let event = this.calendarApi.getEventById(selectionInfo.event.id)
-      let location = this.locations.find(item => item.city === event.extendedProps.locationId)
+      let location = this.locations.find(item => item.city === event.extendedProps.location)
+      let label = this.colors.find(color => color.id === event.extendedProps.backgroundColor)
       this.formData = {
         id: event.id,
         title: event.title,
         start: event.start,
         end: event.end,
-        backgroundColor: event.backgroundColor,
-        doctor_id: event.extendedProps.doctorId,
+        backgroundColor: label,
+        doctor_id: event.extendedProps.doctor_id,
         doctor_name: event.extendedProps.doctor_name,
-        patient_id: event.extendedProps.patientId,
+        patient_id: event.extendedProps.patient_id,
         // eventResourceId: event.extendedProps.eventResourceId,
         location: location,
         ...event.extendedProps,
