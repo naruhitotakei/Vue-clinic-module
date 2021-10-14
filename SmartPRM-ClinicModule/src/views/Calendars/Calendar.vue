@@ -186,7 +186,6 @@ export default {
           this.clonedResources = this.resources
           this.events = dataWithDoctor.map(item => {
             let patientAttended = item.patient_attended === 'true' ? 'attended' : item.patient_attended === 'false' ? 'not_attended' : 'unknown'
-            let doctor = this.doctorsList.find(doc => doc.name === item.doctor_name)
             return {
               id: item.id,
               title: item.note ? item.name + ' ' + item.last_name + ' - ' + item.prm_pr_group_name_text + '\n' + moment(item.starts_at).format('HH:mm') + ' - ' + moment(item.ends_at).format('HH:mm') + '\n' + item.note : item.name + ' ' + item.last_name + ' - ' + item.prm_pr_group_name_text + '\n' + moment(item.starts_at).format('HH:mm') + ' - ' + moment(item.ends_at).format('HH:mm'),
@@ -197,8 +196,8 @@ export default {
               patient_attended: patientAttended,
               appointment_canceled_in_advance_by_patient: item.appointment_canceled_in_advance_by_patient,
               appointment_canceled_in_advance_by_clinic: item.appointment_canceled_in_advance_by_clinic,
-              resourceId: doctor && doctor.id,
-              eventResourceId: doctor && doctor.id,
+              resourceId: item.doctor_id,
+              eventResourceId: item.doctor_id,
               locationId: item.location ? item.location : item.app_location,
               product_groups: item.product_group_id,
               last_name: item.last_name,
