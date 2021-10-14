@@ -134,10 +134,11 @@
                                                       <label for="start" class="mb-0">{{ $t('calendarEvent.start') }} *</label>
                                                   </div>
                                                   <div class="col-md-9 d-flex align-items-center mb-3" :class="{'icon-disabled': disabled}">
-                                                      <date-picker class="form-control form-control-disabled font-size-15 no-border date-picker"
+                                                      <date-picker class="font-size-15 date-picker"
                                                                    :disabled="disabled"
                                                                    v-model="formAppointments.assignmentDate"
                                                                    type="datetime"
+                                                                   :class="{'form-control form-control-disabled no-border': disabled}"
                                                                    :minute-step="5"
                                                                    :show-second="false"
                                                                    :lang="'en'"
@@ -145,7 +146,8 @@
                                                       <label for="start" class="mb-0 mr-3 ml-4">{{ $t('calendarEvent.end') }}*</label>
                                                       <date-picker required
                                                                    :disabled="disabled"
-                                                                   class="form-control form-control-disabled font-size-15 no-border date-picker"
+                                                                   class="font-size-15 date-picker"
+                                                                   :class="{'form-control form-control-disabled no-border': disabled}"
                                                                    v-model="formAppointments.end"
                                                                    type="time"
                                                                    :minute-step="5"
@@ -418,6 +420,7 @@
                                                           <div v-if="item.appointment_canceled_in_advance_by_clinic === false && item.appointment_canceled_in_advance_by_patient === false" class="timeline-dots border-success"></div>
                                                           <div v-if="item.appointment_canceled_in_advance_by_clinic" class="timeline-dots border-light"></div>
                                                           <div v-if="item.appointment_canceled_in_advance_by_patient" class="timeline-dots border-danger"></div>
+                                                          <div v-if="item.patient_attended === null || !item.patient_attended" class="timeline-dots border-warning"></div>
                                                           <h6 @click="openEditAppointmentModal(item)" class="clickable">{{item.product_group_text}}<span class="float-right">{{item.note}}</span></h6>
                                                           <small class="mt-1">{{item.starts_at | formatDateAndTime}}</small>
                                                       </li>
