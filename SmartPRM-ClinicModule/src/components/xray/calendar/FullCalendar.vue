@@ -29,7 +29,7 @@
                     <label for="patient" class="pt-1 mb-0">{{ $t('calendarEvent.patient') }} *</label>
                 </div>
                 <div class="col-md-9">
-                    <router-link v-if="disabled" tag="span" :to="'/patients/'+ formData.enquiry_id" style="cursor:pointer;" class="ml-2 text-black style-chooser form-control-disabled font-size-16">{{ formData.title }}</router-link>
+                    <router-link v-if="disabled" tag="span" :to="'/patients/'+ formData.enquiry_id" style="cursor:pointer;" class="ml-2 text-black style-chooser form-control-disabled font-size-16">{{ formData.patient_name }}</router-link>
                     <v-select v-else
                               :disabled="disabled"
                               :clearable="false"
@@ -310,6 +310,7 @@ export default {
         backgroundColor: '',
         patient_attended: '',
         patient_id: '',
+        patient_name: '',
         doctor_id: '',
         doctor_name: '',
         location: '',
@@ -604,6 +605,7 @@ export default {
         backgroundColor: '',
         patient_attended: '',
         patient_id: '',
+        patient_name: '',
         doctor_id: '',
         doctor_name: '',
         location: this.locations.length === 1 ? this.locations[0].city : '',
@@ -687,7 +689,7 @@ export default {
       this.$emit('setModalShow', true)
       this.disabled = true
       let event = this.calendarApi.getEventById(selectionInfo.event.id)
-      let location = this.locations.find(item => item.city === event.extendedProps.location)
+      let location = this.locations.find(item => item.city === event.extendedProps.locationId)
       let label = this.colors.find(color => color.id === event.extendedProps.backgroundColor)
       this.formData = {
         id: event.id,
@@ -698,6 +700,7 @@ export default {
         doctor_id: event.extendedProps.doctor_id,
         doctor_name: event.extendedProps.doctor_name,
         patient_id: event.extendedProps.patient_id,
+        patient_name: event.extendedProps.patient_name,
         // eventResourceId: event.extendedProps.eventResourceId,
         location: location,
         ...event.extendedProps,
@@ -705,6 +708,7 @@ export default {
 
       }
       this.selectedDoctor = event.extendedProps.doctorId
+      this.selectedPatient = event.extendedProps.patientId.full_name
       this.modalTitle = this.formData.title
     }
   }
