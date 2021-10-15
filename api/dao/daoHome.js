@@ -82,7 +82,6 @@ const updateAppointment = (request, response, id, appointment) => {
     statement += "appointment_canceled_in_advance_by_clinic=" + appointment.appointment_canceled_in_advance_by_clinic + "," 
     statement = statement.slice(0, -1)
     statement += " WHERE id = " + id
-    console.log("Updating appointment on HomePage: " + statement)
     pool.query(statement, (error, results) => {
         if (error) {
             throw error

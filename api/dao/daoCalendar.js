@@ -82,10 +82,9 @@ const updateAppointments = (request, response, id, appointments) => {
     if (appointments.assignmentDate) statement += "starts_at='" + moment(appointments.assignmentDate).format('YYYY-MM-DDTHH:mm') + "', date='" + moment(appointments.assignmentDate).format('YYYY-MM-DD') + "',"
     if (appointments.backgroundColor) statement += "label_id='" + appointments.backgroundColor + "',"
     if (appointments.end) statement += "ends_at='" + moment(appointments.assignmentDate).format('YYYY-MM-DD') + 'T' + moment(appointments.end).format('HH:mm') + "',"
-    if (appointments.time) statement += "time='" + time + "' "
+    if (appointments.assignmentDate) statement += "time='" + time + "' "
     statement = statement.slice(0, -1)
     statement += " WHERE id = " + id
-    console.log('Updating appointment on the BE: ' + statement)
     pool.query(statement , (error, results) => {
         if (error) {
             response.status(404).json(error)
@@ -125,7 +124,6 @@ const createAppointment = (request, response, appointments) => {
     statement += "'"+ time +"',"
     statement += "NOW(),"
     statement += "'Posvet')"
-    console.log("Saving the appointment on the BE: " + statement)
     pool.query(statement , (error, results) => {
         if (error) {
             response.status(404).json(error)
