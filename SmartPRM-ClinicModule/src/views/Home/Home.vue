@@ -7,19 +7,19 @@
                         <h4 class="card-title">{{ $t('home.todaysAppointments') }}</h4>
                     </template>
                     <!-- <template v-slot:headerAction>
-                        <b-dropdown size="lg p-0"  variant="link" toggle-class="text-decoration-none" no-caret>
-                      <template v-slot:button-content>
-                            <span class="dropdown-toggle p-0" id="dropdownMenuButton5" data-toggle="dropdown">
-                              <i class="ri-more-fill m-0 text-primary"></i>
-                            </span>
-                      </template>
-                      <b-dropdown-item href="#"><i class="ri-eye-fill mr-2"></i>{{ $t('home.newAppointmentsDropDown.view') }}</b-dropdown-item>
-                      <b-dropdown-item href="#"><i class="ri-delete-bin-6-fill mr-2"></i>{{ $t('home.newAppointmentsDropDown.delete') }}</b-dropdown-item>
-                      <b-dropdown-item href="#"><i class="ri-pencil-fill mr-2"></i>{{ $t('home.newAppointmentsDropDown.edit') }}</b-dropdown-item>
-                      <b-dropdown-item href="#"><i class="ri-printer-fill mr-2"></i>{{ $t('home.newAppointmentsDropDown.print') }}</b-dropdown-item>
-                      <b-dropdown-item href="#"><i class="ri-file-download-fill mr-2"></i>{{ $t('home.newAppointmentsDropDown.download') }}</b-dropdown-item>
-                    </b-dropdown>
-                    </template> -->
+                    <b-dropdown size="lg p-0"  variant="link" toggle-class="text-decoration-none" no-caret>
+                  <template v-slot:button-content>
+                        <span class="dropdown-toggle p-0" id="dropdownMenuButton5" data-toggle="dropdown">
+                          <i class="ri-more-fill m-0 text-primary"></i>
+                        </span>
+                  </template>
+                  <b-dropdown-item href="#"><i class="ri-eye-fill mr-2"></i>{{ $t('home.newAppointmentsDropDown.view') }}</b-dropdown-item>
+                  <b-dropdown-item href="#"><i class="ri-delete-bin-6-fill mr-2"></i>{{ $t('home.newAppointmentsDropDown.delete') }}</b-dropdown-item>
+                  <b-dropdown-item href="#"><i class="ri-pencil-fill mr-2"></i>{{ $t('home.newAppointmentsDropDown.edit') }}</b-dropdown-item>
+                  <b-dropdown-item href="#"><i class="ri-printer-fill mr-2"></i>{{ $t('home.newAppointmentsDropDown.print') }}</b-dropdown-item>
+                  <b-dropdown-item href="#"><i class="ri-file-download-fill mr-2"></i>{{ $t('home.newAppointmentsDropDown.download') }}</b-dropdown-item>
+                </b-dropdown>
+                </template> -->
                     <template v-slot:body>
                         <b-table v-if="todaysAppointments.length > 0"
                                  borderless
@@ -303,6 +303,16 @@
                 </div>
             </form>
         </b-modal>
+        <FooterStyle1>
+            <template v-slot:left>
+                <li class="list-inline-item"><a href="#">{{ $t('footer.privacyPolicy') }}</a></li>
+                <li class="list-inline-item"><a href="#">{{ $t('footer.termsOfUse') }}</a></li>
+            </template>
+            <template v-slot:right>
+                Copyright {{ new Date().getFullYear() }}
+                <a href="https://www.emazing.si/en">Emazing</a> {{ $t('footer.allRightsReserved') }}.
+            </template>
+        </FooterStyle1>
     </b-container>
 </template>
 <script>

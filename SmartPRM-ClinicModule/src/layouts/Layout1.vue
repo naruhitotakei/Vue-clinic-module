@@ -210,15 +210,6 @@
                     :leave-active-class="`animated ${animated.exit}`">
           <router-view/>
         </transition>
-        <FooterStyle1>
-          <template v-slot:left>
-            <li class="list-inline-item"><a href="#">Privacy Policy</a></li>
-            <li class="list-inline-item"><a href="#">Terms of Use</a></li>
-          </template>
-          <template v-slot:right>
-            Copyright {{ new Date().getFullYear() }} <a href="https://www.emazing.si/en">Emazing</a> All Rights Reserved.
-          </template>
-        </FooterStyle1>
       </div>
     </div>
   </div>

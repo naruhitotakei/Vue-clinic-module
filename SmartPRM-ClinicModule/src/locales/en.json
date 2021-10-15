@@ -667,6 +667,11 @@
       "labelAction": "Action"
     }
   },
+  "footer": {
+    "privacyPolicy":  "Privacy policy",
+    "termsOfUse":  "Terms of use",
+    "allRightsReserved":  "All rights reserved"
+  },
   "dashboard2": {
     "card1": "AVG Impressions",
     "card2": "AVG Engagements Rate",
