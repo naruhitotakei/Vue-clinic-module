@@ -187,10 +187,9 @@
                         <div class="col-md-9">
                             <v-select :disabled="disabled"
                                       :clearable="false"
-                                      label="name"
-                                      :reduce="doctor => doctor.name"
+                                      label="doctor"
                                       class="style-chooser form-control-disabled font-size-16"
-                                      v-model="appointmentData.doctor_name"
+                                      v-model="selectedDoctor"
                                       :options="doctors"
                                       style="min-width: 305px;"></v-select>
                         </div>
@@ -205,7 +204,7 @@
                                       label="product_group_name"
                                       :reduce="product_group => product_group.product_group_id"
                                       class="style-chooser form-control-disabled font-size-16"
-                                      v-model="appointmentData.product_groups"
+                                      v-model="appointmentData.product_group"
                                       :options="product_groups"></v-select>
                         </div>
                     </div>
@@ -404,16 +403,19 @@ export default {
         id: '',
         patient_name: '',
         start_time: '',
+        time: '',
         end_time: '',
         note: '',
         patient_attended: '',
+        doctor_id: '',
         doctor_name: '',
         location: '',
         patient_id: '',
-        product_groups: '',
+        product_group: '',
         appointment_canceled_in_advance_by_clinic: false,
         appointment_canceled_in_advance_by_patient: false
       },
+      selectedDoctor: '',
       disabled: true,
       locations: [],
       product_groups: [],
@@ -424,17 +426,17 @@ export default {
       patient_attend: [
         {
           label: this.$t('calendarEvent.unknown'),
-          value: 'unknown',
+          value: 'Unknown',
           checked: true
         },
         {
           label: this.$t('calendarEvent.attended'),
-          value: 'attended',
+          value: 'Attended',
           checked: false
         },
         {
           label: this.$t('calendarEvent.notAttended'),
-          value: 'not_attended',
+          value: 'Not attended',
           checked: false
         }
       ]
@@ -459,13 +461,13 @@ export default {
         if (typeof response !== 'string') {
           getTodaysAppointments(this.$i18n.locale).then(response => {
             response.map(appointment => {
-              let patientAttended = appointment.patient_attended === 'true' ? 'attended' : appointment.patient_attended === 'false' ? 'not_attended' : 'unknown'
               this.todaysAppointments.push({
                 id: appointment.id,
                 patient_name: appointment.patient_name,
                 location: appointment.location,
+                doctor_id: appointment.doctor_id,
                 doctor_name: appointment.doctor_name,
-                product_groups: appointment.product_group_id,
+                product_group: appointment.product_group_name,
                 product_group_id: appointment.product_group_id,
                 product_group_name: appointment.product_group_name,
                 start_time: new Date(appointment.starts_at),
@@ -473,7 +475,7 @@ export default {
                 end_time: new Date(appointment.ends_at),
                 patient_phone: appointment.patient_phone,
                 patient_id: appointment.patient_id,
-                patient_attended: patientAttended,
+                patient_attended: appointment.patient_attended,
                 appointment_canceled_in_advance_by_clinic: false,
                 appointment_canceled_in_advance_by_patient: false
               })
@@ -497,7 +499,12 @@ export default {
         }
       })
     },
-    updateAppointment () {
+    getTodaysAppointmentsList (locale) {
+      getTodaysAppointments(locale).then(response => {
+        this.todaysAppointments = response
+      })
+    },
+    updateAppointment (info) {
       this.todaysAppointments.splice(0, this.todaysAppointments.length)
       updateAppointment(this.appointmentData.id, this.appointmentData).then(() => {
         this.disabled = true
@@ -531,6 +538,7 @@ export default {
     openAppointmentModal (item) {
       this.appointmentData = item
       this.appointmentModal = true
+      this.selectedDoctor = item.doctor_name
     }
   }
 }

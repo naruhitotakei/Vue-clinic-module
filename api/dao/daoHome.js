@@ -68,21 +68,21 @@ const getAssignmentsForUser = (request, response, user_id) => {
 }
 
 const updateAppointment = (request, response, id, appointment) => {
-    let patient_attended = appointment.patient_attended === 'attended' ? true : appointment.patient_attended === 'not_attended' ? false : null
-    let time = moment(appointment.starts_at).format('HH:mm')
     let statement = "UPDATE appointments SET "
     if (appointment.location) statement += "location='" + appointment.location + "',"
+    if (appointment.doctor_id) statement += "doctor_id=" + appointment.doctor_id + ","
     if (appointment.doctor_name) statement += "doctor_name='" + appointment.doctor_name + "',"
     if (appointment.product_groups) statement += "product_group_id=" + appointment.product_groups + ","
-    if (appointment.start_time) statement += "starts_at='" + appointment.start_time + "',"
-    if (appointment.end_time) statement += "ends_at='" + appointment.end_time + "',"
+    if (appointment.start_time) statement += "starts_at='" + moment(appointment.start_time).format('YYYY-MM-DDTHH:mm') + "',"
+    if (appointment.time) statement += "time='" + moment(appointment.start_time).format('HH:mm') + "',"
+    if (appointment.end_time) statement += "ends_at='" + moment(appointment.end_time).format('YYYY-MM-DDTHH:mm') + "',"
     if (appointment.note) statement += "note='" + appointment.note + "',"
-    if (appointment.patient_attended) statement += "patient_attended=" + patient_attended + ","
-    statement += "time='"+ time + "',"
+    if (appointment.patient_attended) statement += "patient_attended='" + appointment.patient_attended + "',"
     statement += "appointment_canceled_in_advance_by_patient=" + appointment.appointment_canceled_in_advance_by_patient + ","
     statement += "appointment_canceled_in_advance_by_clinic=" + appointment.appointment_canceled_in_advance_by_clinic + "," 
     statement = statement.slice(0, -1)
     statement += " WHERE id = " + id
+    console.log("Updating appointment on HomePage: " + statement)
     pool.query(statement, (error, results) => {
         if (error) {
             throw error

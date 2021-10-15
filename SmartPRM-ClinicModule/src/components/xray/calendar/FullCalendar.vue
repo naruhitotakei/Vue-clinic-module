@@ -272,17 +272,17 @@ export default {
       patient_attend: [
         {
           label: this.$t('calendarEvent.unknown'),
-          value: 'unknown',
+          value: 'Unknown',
           checked: true
         },
         {
           label: this.$t('calendarEvent.attended'),
-          value: 'attended',
+          value: 'Attended',
           checked: false
         },
         {
           label: this.$t('calendarEvent.notAttended'),
-          value: 'not_attended',
+          value: 'Not attended',
           checked: false
         }
       ],
@@ -689,7 +689,7 @@ export default {
       this.$emit('setModalShow', true)
       this.disabled = true
       let event = this.calendarApi.getEventById(selectionInfo.event.id)
-      let location = this.locations.find(item => item.city === event.extendedProps.locationId)
+      let location = this.locations.find(item => item.city === event.extendedProps.location)
       let label = this.colors.find(color => color.id === event.extendedProps.backgroundColor)
       this.formData = {
         id: event.id,

@@ -68,7 +68,6 @@ const getApontments = (request, response, from, to, user_id, accessible_user_ids
 }
 
 const updateAppointments = (request, response, id, appointments) => {
-    let patient_attended = appointments.patient_attended === 'attended' ? true : appointments.patient_attended === 'not_attended' ? false : null;
     let time = moment(appointments.assignmentDate).format('HH:mm');
     let statement = "UPDATE appointments SET "
     if (appointments.doctor_id) statement += "doctor_id='" + appointments.doctor_id + "',"
@@ -76,7 +75,7 @@ const updateAppointments = (request, response, id, appointments) => {
     if (appointments.location) statement += "location='" + appointments.location + "',"
     if (appointments.notes) statement += "note='" + appointments.notes + "',"
     if (appointments.patient_id) statement +="enquiry_id=" + appointments.patient_id + ","
-    if (appointments.patient_attended) statement += "patient_attended=" + patient_attended + ","
+    if (appointments.patient_attended) statement += "patient_attended='" + appointments.patient_attended + "',"
     statement += "appointment_canceled_in_advance_by_patient=" + appointments.appointment_canceled_in_advance_by_patient + ","
     statement += "appointment_canceled_in_advance_by_clinic=" + appointments.appointment_canceled_in_advance_by_clinic + ","
     if (appointments.product_groups) statement += "product_group_id='" + appointments.product_groups + "',"
@@ -86,6 +85,7 @@ const updateAppointments = (request, response, id, appointments) => {
     if (appointments.time) statement += "time='" + time + "' "
     statement = statement.slice(0, -1)
     statement += " WHERE id = " + id
+    console.log('Updating appointment on the BE: ' + statement)
     pool.query(statement , (error, results) => {
         if (error) {
             response.status(404).json(error)
@@ -96,7 +96,6 @@ const updateAppointments = (request, response, id, appointments) => {
 }
 
 const createAppointment = (request, response, appointments) => {
-    let patient_attended = appointments.patient_attended === 'attended' ? true : appointments.patient_attended === 'not_attended' ? false : null;
     let time = moment(appointments.assignmentDate).format('HH:mm');
     let statement = "INSERT INTO appointments ("
     if (appointments.doctor_id) statement += "doctor_id,"
@@ -118,7 +117,7 @@ const createAppointment = (request, response, appointments) => {
     if (appointments.location) statement += "'"+ appointments.location +"',"
     if (appointments.notes) statement += "'"+ appointments.notes +"',"
     if (appointments.patient_id) statement += "'"+ appointments.patient_id +"',"
-    if (appointments.patient_attended) statement += "'"+patient_attended +"',"
+    if (appointments.patient_attended) statement += "'" + appointments.patient_attended + "',"
     if (appointments.product_groups) statement += ""+ appointments.product_groups +","
     if (appointments.assignmentDate) statement += "'" + moment(appointments.assignmentDate).format('YYYY-MM-DDTHH:mm') + "'," + "'" + moment(appointments.assignmentDate).format('YYYY-MM-DD') + "'," 
     if (appointments.backgroundColor) statement += "'"+ appointments.backgroundColor +"',"
@@ -126,6 +125,7 @@ const createAppointment = (request, response, appointments) => {
     statement += "'"+ time +"',"
     statement += "NOW(),"
     statement += "'Posvet')"
+    console.log("Saving the appointment on the BE: " + statement)
     pool.query(statement , (error, results) => {
         if (error) {
             response.status(404).json(error)

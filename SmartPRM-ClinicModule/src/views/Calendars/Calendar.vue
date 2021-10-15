@@ -185,7 +185,6 @@ export default {
           })
           this.clonedResources = this.resources
           this.events = dataWithDoctor.map(item => {
-            let patientAttended = item.patient_attended === 'true' ? 'attended' : item.patient_attended === 'false' ? 'not_attended' : 'unknown'
             return {
               id: item.id,
               title: item.note ? item.name + ' ' + item.last_name + ' - ' + item.prm_pr_group_name_text + '\n' + moment(item.starts_at).format('HH:mm') + ' - ' + moment(item.ends_at).format('HH:mm') + '\n' + item.note : item.name + ' ' + item.last_name + ' - ' + item.prm_pr_group_name_text + '\n' + moment(item.starts_at).format('HH:mm') + ' - ' + moment(item.ends_at).format('HH:mm'),
@@ -193,12 +192,12 @@ export default {
               end: item.ends_at ? moment(item.ends_at).format('YYYY-MM-DDTHH:mm') : moment(item.starts_at).add('0', 'hours').add('15', 'minutes').format('YYYY-MM-DDTHH:mm'),
               backgroundColor: item.app_lb_color ? item.app_lb_color : '#64D6E8',
               assignmentDate: moment(item.starts_at).format('YYYY-MM-DDTHH:mm'),
-              patient_attended: patientAttended,
+              patient_attended: item.patient_attended,
               appointment_canceled_in_advance_by_patient: item.appointment_canceled_in_advance_by_patient,
               appointment_canceled_in_advance_by_clinic: item.appointment_canceled_in_advance_by_clinic,
               resourceId: item.doctor_id,
               eventResourceId: item.doctor_id,
-              locationId: item.location ? item.location : item.app_location,
+              location: item.location ? item.location : item.app_location,
               product_groups: item.product_group_id,
               last_name: item.last_name,
               prm_client_id: item.prm_client_id,
