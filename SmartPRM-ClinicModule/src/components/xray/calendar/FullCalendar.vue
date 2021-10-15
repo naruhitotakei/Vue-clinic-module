@@ -578,7 +578,7 @@ export default {
       } else {
         let event = this.calendarApi.getEventById(info.event.id)
         // newResource is null when you move within same resource
-        let newResource = info.newResource ? this.calendarApi.getResourceById(info.newResource.id) : this.selectedDoctor
+        let newResource = info.newResource ? this.calendarApi.getResourceById(info.newResource.id) : ''
         this.formData.id = event.id
         this.formData.assignmentDate = event.start
         this.formData.end = event.end
