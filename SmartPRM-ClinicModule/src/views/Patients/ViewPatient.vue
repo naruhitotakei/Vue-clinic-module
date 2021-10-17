@@ -94,7 +94,7 @@
                                                                 label="city"
                                                                 :reduce="location => location.city"
                                                                 class="style-chooser form-control-disabled font-size-15"
-                                                                v-model="formAppointments.locationName"
+                                                                v-model="formAppointments.location"
                                                                 :options="locations"
                                                                 style="min-width:305px;"></v-select>
                                                   </div>
@@ -107,9 +107,8 @@
                                                       <v-select :clearable="false"
                                                                 :disabled="disabled"
                                                                 label="name"
-                                                                :reduce="doctor => doctor.name"
                                                                 class="style-chooser form-control-disabled font-size-15"
-                                                                v-model="formAppointments.doctorName"
+                                                                v-model="selectedDoctor"
                                                                 :options="doctors"
                                                                 style="min-width: 305px;"></v-select>
                                                   </div>
@@ -395,10 +394,10 @@
                                                   </div>
                                                   <ul class="iq-timeline">
                                                       <li v-for="(item,index) in futureAppointments" :key="index">
-                                                          <div v-if="item.appointment_canceled_in_advance_by_clinic === false && item.appointment_canceled_in_advance_by_patient === false" class="timeline-dots border-success"></div>
-                                                          <div v-if="item.appointment_canceled_in_advance_by_clinic" class="timeline-dots border-light"></div>
-                                                          <div v-if="item.appointment_canceled_in_advance_by_patient" class="timeline-dots border-danger"></div>
-                                                          <div v-if="item.patient_attended === null || !item.patient_attended" class="timeline-dots border-warning"></div>
+                                                          <div v-if="item.appointmentStatus === 'Attended'" class="timeline-dots border-success"></div>
+                                                          <div v-if="item.appointmentStatus === 'Canceled by clinic'" class="timeline-dots border-light"></div>
+                                                          <div v-if="item.appointmentStatus === 'Canceled by patient'" class="timeline-dots border-danger"></div>
+                                                          <div v-if="item.appointmentStatus === 'Unknown'" class="timeline-dots border-warning"></div>
                                                           <div @click="openEditAppointmentModal(item)" style="cursor: pointer;">
                                                               <h6>{{item.product_group_text}}<span class="float-right">{{item.note}}</span></h6>
                                                               <small class="mt-1">{{item.starts_at | formatDateAndTime}}</small>
@@ -417,12 +416,12 @@
                                                   </div>
                                                   <ul class="iq-timeline" id="pastAppointments">
                                                       <li v-for="(item, index) in pastAppointments" :key="index">
-                                                          <div v-if="item.appointment_canceled_in_advance_by_clinic === false && item.appointment_canceled_in_advance_by_patient === false" class="timeline-dots border-success"></div>
-                                                          <div v-if="item.appointment_canceled_in_advance_by_clinic" class="timeline-dots border-light"></div>
-                                                          <div v-if="item.appointment_canceled_in_advance_by_patient" class="timeline-dots border-danger"></div>
-                                                          <div v-if="item.patient_attended === 'Unknown' || !item.patient_attended" class="timeline-dots border-warning"></div>
-                                                          <h6 @click="openEditAppointmentModal(item)" class="clickable">{{item.product_group_text}}<span class="float-right">{{item.note}}</span></h6>
-                                                          <small class="mt-1">{{item.starts_at | formatDateAndTime}}</small>
+                                                        <div v-if="item.appointmentStatus === 'Attended'" class="timeline-dots border-success"></div>
+                                                        <div v-if="item.appointmentStatus === 'Canceled by clinic'" class="timeline-dots border-light"></div>
+                                                        <div v-if="item.appointmentStatus === 'Canceled by patient'" class="timeline-dots border-danger"></div>
+                                                        <div v-if="item.appointmentStatus === 'Unknown'" class="timeline-dots border-warning"></div>
+                                                        <h6 @click="openEditAppointmentModal(item)" class="clickable">{{item.product_group_text}}<span class="float-right">{{item.note}}</span></h6>
+                                                        <small class="mt-1">{{item.starts_at | formatDateAndTime}}</small>
                                                       </li>
                                                   </ul>
                                               </template>
@@ -1077,7 +1076,7 @@ export default {
   },
   computed: {
     isSaveDisabled () {
-      return !this.formAppointments.patientId || !this.formAppointments.locationName || !this.formAppointments.doctorName || !this.formAppointments.product_groups || !this.formAppointments.assignmentDate || !this.formAppointments.end
+      return !this.formAppointments.patient_id || !this.formAppointments.location || !this.selectedDoctor || !this.formAppointments.product_groups || !this.formAppointments.assignmentDate || !this.formAppointments.end
     },
     isServiceDisabled () {
       return !this.formService.product_id || !this.formService.price || !this.formService.created_at || !this.formService.payment_method || !this.formService.doctor_id
@@ -1235,6 +1234,7 @@ export default {
       product_groups: [],
       smsMessages: [],
       selectedInvoices: '',
+      selectedDoctor: '',
       invoicesType: [
         {
           label: this.$t('EPR.invoice'),
@@ -1269,11 +1269,11 @@ export default {
       },
       formAppointments: {
         id: '',
-        patientId: null,
+        patient_id: null,
         notes: '',
-        locationName: '',
-        doctorId: '',
-        doctorName: '',
+        location: '',
+        doctor_id: '',
+        doctor_name: '',
         assignmentDate: '',
         end: '',
         backgroundColor: '',
@@ -1436,6 +1436,17 @@ export default {
     }
   },
   methods: {
+    decideAppointmentStatus (appointment) {
+      if (appointment.appointment_canceled_in_advance_by_clinic) {
+        return 'Canceled by clinic'
+      } else if (appointment.appointment_canceled_in_advance_by_patient) {
+        return 'Canceled by patient'
+      } else if (appointment.patient_attended === 'Attended') {
+        return 'Attended'
+      } else if (appointment.patient_attended === 'Unknown' || !appointment.patient_attended) {
+        return 'Unknown'
+      }
+    },
     cancelAppointmentModal () {
       this.formAppointments = this.defaultFormAppointment()
       this.disabled = true
@@ -1607,6 +1618,9 @@ export default {
       getEnquiryPastAppointments(id, lang).then(response => {
         this.pastAppointments = _.takeRight(response, 5)
         this.numberOfVisits = response.length
+        this.pastAppointments.forEach(appointment => {
+          appointment['appointmentStatus'] = this.decideAppointmentStatus(appointment)
+        })
         this.timeSinceFirstVisit = response.length && response[0].date
       }
       )
@@ -1614,6 +1628,9 @@ export default {
     getPatientFutureAppointments (id, lang) {
       getEnquiryFutureAppointments(id, lang).then(response => {
         this.futureAppointments = _.takeRight(response, 5)
+        this.futureAppointments.forEach(appointment => {
+          appointment['appointmentStatus'] = this.decideAppointmentStatus(appointment)
+        })
       })
     },
     getPatientAssignments (id) {
@@ -1794,15 +1811,16 @@ export default {
       }
     },
     defaultFormAppointment () {
+      this.selectedDoctor = null
       return {
         id: '',
+        patient_id: null,
         notes: '',
-        location_id: '',
+        location: '',
         doctor_id: '',
+        doctor_name: '',
         assignmentDate: '',
         end: '',
-        hours: '',
-        minutes: '',
         backgroundColor: '',
         description: '',
         product_groups: '',
@@ -1853,14 +1871,14 @@ export default {
       this.addAppointmentModal = true
       this.findDentist(this.patient.prm_dentist_user_id)
       this.formAppointments.backgroundColor = 136
-      this.formAppointments.patientId = this.patient.id
-      this.formAppointments.locationName = this.locations[0].city
+      this.formAppointments.patient_id = this.patient.id
+      this.formAppointments.location = this.locations[0].city
       this.formAppointments.assignmentDate = this.roundUpStartTime()
       this.disabled = false
     },
     findDentist (dentistId) {
       let doctor = this.doctors.find(doctor => doctor.id === dentistId)
-      this.formAppointments.doctorName = doctor.name
+      this.selectedDoctor = doctor
     },
     closeAppointmentModal () {
       this.addAppointmentModal = false
@@ -1876,8 +1894,9 @@ export default {
     },
     saveAppointment  () {
       this.addAppointmentModal = false
-      this.formAppointments.resourceId = this.formAppointments.doctorId
-      this.formAppointments.patientId = this.patient.id
+      this.formAppointments.patient_id = this.patient.id
+      this.formAppointments.doctor_id = this.selectedDoctor.id
+      this.formAppointments.doctor_name = this.selectedDoctor.name
       if (!this.formAppointments.id) {
         createCalendar(this.formAppointments).then(() => {
           this.$emit('setModalShow', false)
@@ -1921,11 +1940,13 @@ export default {
       })
     },
     openEditAppointmentModal (appointment) {
+      this.findDentist(appointment.doctor_id)
       this.formAppointments = {
         id: appointment.appointment_id,
-        locationName: appointment.location,
-        doctorName: appointment.doctor_name,
-        patientId: this.patient.id,
+        location: appointment.location,
+        doctor_name: appointment.doctor_name,
+        doctor_id: appointment.doctor_id,
+        patient_id: this.patient.id,
         notes: appointment.note,
         product_groups: appointment.product_group_id,
         assignmentDate: moment(appointment.starts_at).toDate(),
