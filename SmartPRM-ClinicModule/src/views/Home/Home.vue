@@ -112,7 +112,6 @@
                                 </div>
                             </li>
                         </ul>
-                        <a href="javascript:void(0);" class="btn btn-primary d-block mt-3"><i class="ri-add-line"></i>{{ $t('home.staffListBtn') }}</a>
                     </template>
                 </iq-card>
             </b-col>
