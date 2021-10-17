@@ -334,6 +334,7 @@ export default {
         },
         initialView: 'resourceTimeGridWeek',
         resources: this.resourcesOuter,
+        resourceLabelClassNames: 'weekly',
         slotMinTime: '09:00:00',
         slotMaxTime: '21:30:00',
         slotDuration: '00:15:00',
@@ -393,7 +394,6 @@ export default {
       this.colors = this.colorsLabel
     },
     'events' (events) {
-      console.log(events)
       if (events.length) {
         if (this.calendarApi && this.calendarApi.options) {
           this.calendarApi.options.events = [...events]
@@ -416,8 +416,9 @@ export default {
     'isSelectable' () {
       if (this.calendarApi) this.calendarApi.setOption('selectable', this.isSelectable)
     },
-    'resourcesOuter' (newResources) {
-      this.calendarOptions.resources = newResources
+    'resourcesOuter' () {
+      this.setResourcesName()
+      this.setResourcesView()
       if (this.calendarApi) {
         this.calendarApi.render()
       }
@@ -428,7 +429,8 @@ export default {
       }
     },
     'viewName' (data) {
-      console.log(data)
+      this.setResourcesName()
+      this.setResourcesView()
       if (this.calendarOptions) {
         if (data === 'dayGridMonth') {
           this.calendarOptions.events = this.events.map(e => ({
@@ -438,7 +440,6 @@ export default {
         } else {
           this.calendarOptions.events = this.events
         }
-        console.log(this.calendarOptions.events)
       }
     }
   },
@@ -487,6 +488,23 @@ export default {
     xray.index()
   },
   methods: {
+    setResourcesName () {
+      if (this.viewName === 'resourceTimeGridWeek') {
+        this.calendarOptions.resources = this.resourcesOuter.map(r => ({
+          ...r,
+          title: `${r.doctorInfo.first_name[0]}. ${r.doctorInfo.surname}`
+        }))
+      } else {
+        this.calendarOptions.resources = this.resourcesOuter
+      }
+    },
+    setResourcesView () {
+      if (this.viewName === 'resourceTimeGridWeek' && (this.resourcesOuter.length > 2 || window.innerWidth < 1200)) {
+        this.calendarOptions.resourceLabelClassNames = 'weekly'
+      } else {
+        this.calendarOptions.resourceLabelClassNames = ''
+      }
+    },
     findPatientsDoctor (patient) {
       if (!this.selectedDoctor) {
         this.selectedDoctor = this.doctors.find(doctor => doctor.id === patient.prm_dentist_user_id)
@@ -774,10 +792,12 @@ th {
   text-align: center !important;
 }
 .fc-col-header-cell.fc-resource {
-  writing-mode:  vertical-lr !important;
-  transform: rotate(180deg) !important;
   line-height: 13px !important;
   vertical-align: middle !important;
+}
+.fc-col-header-cell.fc-resource.weekly {
+  writing-mode:  vertical-lr !important;
+  transform: rotate(180deg) !important;
 }
 body .wrapper .custom-control-label::before {
   top:50% !important;
