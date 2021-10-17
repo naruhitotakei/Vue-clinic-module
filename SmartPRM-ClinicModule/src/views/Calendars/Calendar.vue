@@ -202,6 +202,7 @@ export default {
               last_name: item.last_name,
               prm_client_id: item.prm_client_id,
               prm_client_name: item.prm_client_name,
+              prm_pr_group_name_text: item.prm_pr_group_name_text,
               time: item.time,
               notes: item.note ? item.note : '',
               doctorId: item.doctor_name,

@@ -393,12 +393,13 @@ export default {
       this.colors = this.colorsLabel
     },
     'events' (events) {
+      console.log(events)
       if (events.length) {
         if (this.calendarApi && this.calendarApi.options) {
-          this.calendarApi.options.events = events
+          this.calendarApi.options.events = [...events]
           this.calendarApi.render()
         } else {
-          this.calendarOptions.events = events
+          this.calendarOptions.events = [...events]
         }
       }
     },
@@ -424,6 +425,20 @@ export default {
     'eventAndResources' (data) {
       if (data.events.length > 0 && data.resources.length > 0) {
         this.isDataLoaded = true
+      }
+    },
+    'viewName' (data) {
+      console.log(data)
+      if (this.calendarOptions) {
+        if (data === 'dayGridMonth') {
+          this.calendarOptions.events = this.events.map(e => ({
+            ...e,
+            title: `${e.patient_name} - ${e.prm_pr_group_name_text}`
+          }))
+        } else {
+          this.calendarOptions.events = this.events
+        }
+        console.log(this.calendarOptions.events)
       }
     }
   },
