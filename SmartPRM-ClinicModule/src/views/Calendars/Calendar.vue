@@ -163,7 +163,6 @@ export default {
       getDoctorList().then((data) => {
         if (Array.isArray(data)) {
           this.doctorsList = data
-          console.log(data)
           this.resources = this.doctorsList.map(item => ({
             id: item.id,
             title: item.name,
@@ -178,12 +177,12 @@ export default {
         }
       })
     },
-    async updateApp () {
-      await this.getApontments()
+    async updateApp ({ start, end }) {
+      await this.getApontments(start, end)
     },
-    getApontments () {
+    getApontments (start, end) {
       this.events = []
-      getCalendar('2021-01-01', '2021-12-31', '', this.$i18n.locale).then(data => {
+      getCalendar(start, end, '', this.$i18n.locale).then(data => {
         if (Array.isArray(data)) {
           let dataWithDoctor = data.filter(item => {
             return item

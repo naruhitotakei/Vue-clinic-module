@@ -324,6 +324,7 @@ export default {
       // modalShow: false,
       viewName: 'resourceTimeGridWeek',
       event: {},
+      dates: null,
       calendarOptions: {
         plugins: [dayGridPlugin, timeGridPlugin, interactionPlugin, resourceTimeGrid, listPlugin],
         defaultAllDay: false,
@@ -353,7 +354,8 @@ export default {
         slotLabelInterval: '01:00:00',
         eventMinHeight: 5,
         expandRows: true,
-        nowIndicator: true
+        nowIndicator: true,
+        fixedWeekCount: false
       }
     }
   },
@@ -393,15 +395,8 @@ export default {
     'colorsLabel' () {
       this.colors = this.colorsLabel
     },
-    'events' (events) {
-      if (events.length) {
-        if (this.calendarApi && this.calendarApi.options) {
-          this.calendarApi.options.events = [...events]
-          this.calendarApi.render()
-        } else {
-          this.calendarOptions.events = [...events]
-        }
-      }
+    'events' () {
+      this.setEventsTitle()
     },
     'isDataLoaded' (data) {
       if (data) {
@@ -424,22 +419,21 @@ export default {
       }
     },
     'eventAndResources' (data) {
-      if (data.events.length > 0 && data.resources.length > 0) {
+      if (data.events.length >= 0 && data.resources.length >= 0) {
         this.isDataLoaded = true
       }
     },
-    'viewName' (data) {
+    'viewName' () {
       this.setResourcesName()
       this.setResourcesView()
-      if (this.calendarOptions) {
-        if (data === 'dayGridMonth') {
-          this.calendarOptions.events = this.events.map(e => ({
-            ...e,
-            title: `${e.patient_name} - ${e.prm_pr_group_name_text}`
-          }))
-        } else {
-          this.calendarOptions.events = this.events
-        }
+      this.setEventsTitle()
+    },
+    'dates' (newDates, oldDates) {
+      if (!oldDates || (oldDates.startStr !== newDates.startStr || oldDates.endStr !== newDates.endStr)) {
+        this.$emit('updateApp', {
+          start: moment(newDates.start).format('YYYY-MM-DD'),
+          end: moment(newDates.end).format('YYYY-MM-DD')
+        })
       }
     }
   },
@@ -478,7 +472,10 @@ export default {
   mounted () {
     this.$nextTick(() => {
       this.$forceUpdate()
-      this.$emit('updateApp')
+      this.$emit('updateApp', {
+        start: moment().startOf('month').format('YYYY-MM-DD'),
+        end: moment().endOf('month').format('YYYY-MM-DD')
+      })
     })
     this.getPatients()
     this.getDoctors()
@@ -488,6 +485,18 @@ export default {
     xray.index()
   },
   methods: {
+    setEventsTitle () {
+      if (this.calendarOptions) {
+        if (this.viewName === 'dayGridMonth') {
+          this.calendarOptions.events = this.events.map(e => ({
+            ...e,
+            title: `${e.patient_name} - ${e.prm_pr_group_name_text}`
+          }))
+        } else {
+          this.calendarOptions.events = this.events
+        }
+      }
+    },
     setResourcesName () {
       if (this.viewName === 'resourceTimeGridWeek') {
         this.calendarOptions.resources = this.resourcesOuter.map(r => ({
@@ -527,7 +536,10 @@ export default {
     },
     updateCalendar (id, appointment) {
       updateCalendar(id, appointment).then(() => {
-        this.$emit('updateApp')
+        this.$emit('updateApp', {
+          start: moment(this.dates.start).format('YYYY-MM-DD'),
+          end: moment(this.dates.end).format('YYYY-MM-DD')
+        })
       })
     },
     updateCalendarLabel (id, appointment) {
@@ -585,6 +597,7 @@ export default {
     },
     onViewChange (info) {
       this.viewName = info.view.type
+      this.dates = info
     },
     eventResize (info) {
       let event = this.calendarApi.getEventById(info.event.id)
@@ -656,7 +669,10 @@ export default {
       this.modalTitle = this.selectedPatient.full_name
       if (!this.formData.id) {
         createCalendar(this.formData).then(() => {
-          this.$emit('updateApp')
+          this.$emit('updateApp', {
+            start: moment(this.dates.start).format('YYYY-MM-DD'),
+            end: moment(this.dates.end).format('YYYY-MM-DD')
+          })
           this.formData = this.defaultAppointment()
           this.$emit('setModalShow', false)
         })
