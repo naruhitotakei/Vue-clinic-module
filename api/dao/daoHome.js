@@ -37,7 +37,7 @@ const getTodaysAppointments = (request, response, user_id, prm_client_id, locale
 
 const getStaff = (request, response, prm_client_id, scope) => {
     let statement = "SELECT id, concat(title, ' ', first_name, ' ', surname) AS name, specialization, last_sign_in_at FROM users "
-    statement += "WHERE active = true AND last_sign_in_at IS NOT NULL "
+    statement += "WHERE active = true "
     statement += "AND prm_role_id IN (1, 3, 6, 7, 8, 9, 10) "
     if (scope == 'All') {
     } else if (scope == 'PrmClient') {
