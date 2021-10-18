@@ -14,13 +14,13 @@ const getEmazingServicesReport = (request, response, startdate, endate, countrie
         response.status(401).json("NOK: user has wrong privileges " + scope)
     }
     if (!countrie || countrie.toLowerCase() == 'all' || countrie.toLowerCase() == 'null') {
-        var statement = ["SELECT pr.name as service_title, se.fee AS fee, pr.group, COUNT(se.id), SUM(se.price) FROM services se ",
+        var statement = ["SELECT pr.name as service_title, pr.group, COUNT(pr.name), SUM(se.price), SUM(se.fee) AS fee_sum FROM services se ",
                      "LEFT JOIN products pr ON se.product_id = pr.id ",
                      "LEFT JOIN clients cl ON pr.client_id = cl.id ",
                      "LEFT JOIN clients_prm_client_bridge cpcb ON cl.id = cpcb.clients_id ",                    
                      "WHERE date_trunc('day', se.date) >= $1 AND (date_trunc('day', se.date) - INTERVAL '1 DAY' ) <= $2 ",
                      "AND cpcb.prm_client_id=$3 ",
-                     "GROUP BY pr.id, se.fee "].join('\n')
+                     "GROUP BY pr.group, pr.name "].join('\n')
         pool.query(statement, [startdate, endate, prm_client_id], (error, results) => {
             if (error) {
                 throw error
@@ -28,7 +28,7 @@ const getEmazingServicesReport = (request, response, startdate, endate, countrie
             response.status(200).json(results.rows)
         })                     
     } else {
-        var statement = ["SELECT pr.name as service_title, se.fee AS fee, COUNT(se.id), SUM(se.price) FROM services se ",
+        var statement = ["SELECT pr.name as service_title, pr.group, COUNT(pr.name), SUM(se.price), SUM(se.fee) AS fee_sum FROM services se ",
                      "LEFT JOIN products pr ON se.product_id = pr.id ",
                      "LEFT JOIN enquiries en ON se.enquiry_id = en.id ",
                      "LEFT JOIN countries co ON en.country_id = co.id ",
@@ -36,7 +36,7 @@ const getEmazingServicesReport = (request, response, startdate, endate, countrie
                      "LEFT JOIN clients_prm_client_bridge cpcb ON cl.id = cpcb.clients_id ",                     
                      "WHERE date_trunc('day', se.date) >= $1 AND (date_trunc('day', se.date) - INTERVAL '1 DAY' ) <= $2 AND co.id = $4 ",
                      "AND cpcb.prm_client_id=$3",
-                     "GROUP BY pr.id, se.fee "].join('\n')
+                     "GROUP BY pr.group, pr.name "].join('\n')
         pool.query(statement, [startdate, endate, prm_client_id, countrie], (error, results) => {
             if (error) {
                 throw error
