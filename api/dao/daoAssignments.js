@@ -53,8 +53,8 @@ const getAssignments = (request, response, scope, userid, accessible_user_ids, p
                          "LEFT JOIN prm_client ON clients_prm_client_bridge.prm_client_id = prm_client.id",                         
                          condition,
                          "AND prm_client.id=" + prmClientId,
-                         "ORDER BY todos.due_at ASC"].join('\n') 
-        pool.query(statement, [prmClientId], (error, results) => {
+                         "ORDER BY todos.due_at ASC"].join('\n')
+        pool.query(statement, (error, results) => {
             if (error) {
                 throw error
             }
@@ -71,7 +71,7 @@ const getAssignments = (request, response, scope, userid, accessible_user_ids, p
                          condition,
                          "AND users.id=" + userid,
                          "ORDER BY todos.due_at ASC"].join('\n') 
-        pool.query(statement, [userid], (error, results) => {
+        pool.query(statement, (error, results) => {
             if (error) {
                 throw error
             }
