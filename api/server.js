@@ -1141,7 +1141,7 @@ app.post('/api/files/upload/:id', async function(req, res) {
 app.post('/api/files/avatar', async function(req, res) {
   let files = req.files
   if(req.session.prm_user) {
-      const rv = await awsS3.upload('avatar-' + req.session.prm_user.id, req.files.file.data, req.files.file.mimetype)
+      const rv = await awsS3.upload('avatar-' + req.session.prm_user.id, req.files.file.data, req.files.file.mimetype, 'avatar-' + req.session.prm_user.id, 'avatar')
       res.status(200).json(rv.status)
   }
   else
@@ -1189,7 +1189,7 @@ app.get('/api/files/:key', async function(req, res) {
 app.post('/api/files/avatar/:id', async function(req, res) {
   let id = req.params.id
   if(req.session.prm_user) {
-    const rv = await awsS3.upload('avatar-' + id + '/', req.files.file.data, req.files.file.mimetype)
+    const rv = await awsS3.upload('avatar-' + id + '/', req.files.file.data, req.files.file.mimetype, 'avatar-' + id, 'avatar')
     res.status(200).json(rv.status)
   }
   else
