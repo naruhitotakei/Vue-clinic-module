@@ -158,7 +158,9 @@
       "nextVisit": "Next Visit",
       "personalDentist": "Personal Dentist",
       "action": "Actions"
-    }
+    },
+    "save": "Shrani",
+    "close": "Close"
   },
   "EPR": {
     "overviewTab": "Overview",

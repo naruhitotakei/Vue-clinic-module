@@ -57,9 +57,9 @@ const getEnquiriesById = (request, response, id) => {
     })
 }
 
-const createEnquiry = (req, res, enquiry) => {
+const createEnquiry = (req, res, enquiry, prm_client_id) => {
     var statement = "INSERT INTO enquiries ("
-    if (enquiry.name) statement += "name,"
+    if (enquiry.firstName) statement += "name,"
     if (enquiry.phone) statement += "phone,"
     if (enquiry.email) statement += "email,"
     if (enquiry.client_id) statement += "client_id,"
@@ -67,13 +67,14 @@ const createEnquiry = (req, res, enquiry) => {
     if (enquiry.region_id) statement += "region_id,"
     if (enquiry.prm_dentist_user_id) statement += "prm_dentist_user_id,"
     if (enquiry.gender) statement += "gender,"
-    if (enquiry.last_name) statement += "last_name,"
+    if (enquiry.lastName) statement += "last_name,"
     statement += "lead_owner_id,"
     statement += "created_at,"
     statement += "updated_at,"
     statement += "trashed,email_sent"
+    statement += ",prm_client_id"
     statement += ") VALUES ("
-    if (enquiry.name) statement += "'" + enquiry.name + "',"
+    if (enquiry.firstName) statement += "'" + enquiry.firstName + "',"
     if (enquiry.phone) statement += "'" + enquiry.phone + "',"
     if (enquiry.email) statement += "'" + enquiry.email + "',"
     if (enquiry.client_id) statement += enquiry.client_id + ","
@@ -81,11 +82,13 @@ const createEnquiry = (req, res, enquiry) => {
     if (enquiry.region_id) statement += enquiry.region_id + ","
     if (enquiry.prm_dentist_user_id) statement += enquiry.prm_dentist_user_id + ","
     if (enquiry.gender) statement += "'" + enquiry.gender + "',"
-    if (enquiry.last_name) statement += "'" + enquiry.last_name + "',"
+    if (enquiry.lastName) statement += "'" + enquiry.lastName + "',"
     if (enquiry.lead_owner_id) { statement += enquiry.lead_owner_id + ","} else {statement += "0,"}
     statement += "NOW(),NOW()," 
-    statement += "false,false"    
-    statement +=")"
+    statement += "false,false,"   
+    statement += prm_client_id
+    statement += ")"
+    console.log("Adding patient to db: " + statement)
     pool.query(statement , (error, results) => {
         if (error) {
             throw error
