@@ -88,7 +88,6 @@ const createEnquiry = (req, res, enquiry, prm_client_id) => {
     statement += "false,false,"   
     statement += prm_client_id
     statement += ")"
-    console.log("Adding patient to db: " + statement)
     pool.query(statement , (error, results) => {
         if (error) {
             throw error
@@ -265,7 +264,6 @@ const getEnquiryServices = (request, response, enquiryId) => {
 const createEnquiryService = (req, res, enquiryId, service) => {
     var statement = "INSERT INTO services (title, product_id, price, created_at, payment_method, doctor_id, enquiry_id, fee) VALUES ('"
     + service.title + "', " + service.product_id + ", " + service.price + ", '" + service.created_at + "', '" + service.payment_method + "', " + service.doctor_id + ", " + enquiryId + ", " + service.fee + ")"
-    console.log(statement)
     pool.query(statement, (error, results) => {
         if (error) {
             throw error
