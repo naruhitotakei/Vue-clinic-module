@@ -817,6 +817,7 @@ th {
 .fc-col-header-cell.fc-resource.weekly  .fc-col-header-cell-cushion {
   writing-mode:  vertical-lr !important;
   transform: rotate(180deg) !important;
+  white-space: nowrap !important;
 }
 body .wrapper .custom-control-label::before {
   top:50% !important;
