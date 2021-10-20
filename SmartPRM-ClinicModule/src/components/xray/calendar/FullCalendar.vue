@@ -765,6 +765,9 @@ export default {
 
 <style lang="scss">
 @import '~@fullcalendar/common/main.css';
+#calendar {
+  height: calc(100vh - 210px);
+}
 .fc-col-header, .fc-timegrid-body, .fc-timegrid-slots table {
   min-width: 100%;
 }
@@ -811,7 +814,7 @@ th {
   line-height: 13px !important;
   vertical-align: middle !important;
 }
-.fc-col-header-cell.fc-resource.weekly {
+.fc-col-header-cell.fc-resource.weekly  .fc-col-header-cell-cushion {
   writing-mode:  vertical-lr !important;
   transform: rotate(180deg) !important;
 }
