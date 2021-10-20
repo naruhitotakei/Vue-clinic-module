@@ -259,6 +259,7 @@ export default {
   },
   data () {
     return {
+      calendarUpdateEvery3Min: undefined,
       eventInfo: '',
       eventResourceId: '',
       patientData: '',
@@ -501,6 +502,12 @@ export default {
     this.getProductGroups(this.$i18n.locale)
     this.getLabels(this.$i18n.locale)
     xray.index()
+    this.calendarUpdateEvery3Min = setInterval(() => {
+      this.updateCalendar()
+    }, 1000 * 3 * 60) // 1000 => 1 second, 3 * 60 => 3 minutes
+  },
+  beforeDestroy () {
+    clearInterval(this.calendarUpdateEvery3Min)
   },
   methods: {
     closeNewEditModal () {
