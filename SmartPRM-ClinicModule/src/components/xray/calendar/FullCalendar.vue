@@ -175,10 +175,22 @@
                 </template>
                 <template v-if="!disabled">
                     <p v-if="isSaveDisabled" class="mt-1 mr-4 text-black">{{ $t('calendarEvent.requiredFields') }}</p>
-                    <button type="button" class="btn btn-secondary" @click="$emit('setModalShow', false), formData = defaultAppointment">{{ $t('calendar.btnCancel') }}</button>
+                    <button type="button" class="btn btn-secondary" @click="closeNewEditModal">{{ $t('calendar.btnCancel') }}</button>
                     <button type="button" class="btn btn-primary" @click="saveAppointment">{{ $t('calendar.btnSave') }}</button>
                 </template>
             </div>
+            <b-modal id="data-not-saved" centered hide-footer>
+              <template #modal-title>
+                {{ $t('calendar.notSavedModalHeader') }}
+              </template>
+              <div class="">
+                <p>{{$t('calendar.notSavedModalBody')}}</p>
+              </div>
+              <div class="modal-footer modal-footer-bt" style="width: 100%;">
+                <b-button class="btn btn-secondary" @click="notSavedModalClose">{{ $t('calendar.btnClose') }}</b-button>
+                <b-button class="btn btn-primary" @click="notSavedModalSave">{{ $t('calendar.btnSave') }}</b-button>
+              </div>
+            </b-modal>
             <b-modal v-model="openCancelationModal"
                      :ok-title="$t('calendar.btnCancel')"
                      :cancel-title="$t('calendar.btnClose')"
@@ -319,6 +331,7 @@ export default {
         appointment_canceled_in_advance_by_clinic: false,
         appointment_canceled_in_advance_by_patient: false
       },
+      formDataFirstModalOpened: {},
       calendarApi: null,
       modalTitle: '',
       // modalShow: false,
@@ -376,6 +389,11 @@ export default {
         // this.formData.assignmentDate = moment(new Date()).format('YYYY-MM-DDTHH:mm')
       }
       this.showModal = this.modalShow.show
+      if (!this.modalShow.show) {
+        this.formDataFirstModalOpened = {}
+      } else {
+        this.formDataFirstModalOpened = { ...this.formData }
+      }
     },
     'formData.appointment_canceled_in_advance_by_clinic' () {
       if (this.formData.appointment_canceled_in_advance_by_clinic) {
@@ -485,6 +503,24 @@ export default {
     xray.index()
   },
   methods: {
+    closeNewEditModal () {
+      const isDataChanged = JSON.stringify(this.formDataFirstModalOpened) !== JSON.stringify(this.formData)
+      if (isDataChanged) {
+        this.$bvModal.show('data-not-saved')
+      } else {
+        this.$emit('setModalShow', false)
+        this.formData = this.defaultAppointment
+      }
+    },
+    notSavedModalClose () {
+      this.$bvModal.hide('data-not-saved')
+      this.$emit('setModalShow', false)
+      this.formData = this.defaultAppointment
+    },
+    notSavedModalSave () {
+      this.$bvModal.hide('data-not-saved')
+      this.saveAppointment()
+    },
     setEventsTitle () {
       if (this.calendarOptions) {
         if (this.viewName === 'dayGridMonth') {
