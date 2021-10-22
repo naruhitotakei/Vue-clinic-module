@@ -43,8 +43,8 @@ const getInactiveLocationsList = (request, response, prm_client_id, scope) => {
     })
 }
 
-const createLocation = (req, res, location) => {
-    var statement = "INSERT INTO locations (name, city, address, active, created_at, prm_client_id) VALUES ('" + location.name + "', " + "'" + location.city + "', " + "'" + location.address + "', " + "true, NOW(), 1" + ");"
+const createLocation = (req, res, location, prm_client_id) => {
+    var statement = "INSERT INTO locations (name, city, address, active, created_at, prm_client_id) VALUES ('" + location.name + "', " + "'" + location.city + "', " + "'" + location.address + "', " + "true, NOW()," + prm_client_id + ");"
     pool.query(statement, (error, results) => {
         if (error) {
             throw error

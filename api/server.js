@@ -546,7 +546,7 @@ app.get('/api/inactive-locations', (req, res) => {
 app.post('/api/locations', (req, res) => {
     const location = req.body
     if (req.session.prm_user && req.session.prm_user.permissions && checkPermission(req.session.prm_user.permissions, locationsPermission))
-        daoLocations.createLocation(req, res, location)
+        daoLocations.createLocation(req, res, location, req.session.prm_user.prm_client_id)
     else
         res.status(401).json("OK: user unauthorized")
 });
