@@ -370,7 +370,8 @@ export default {
         eventMinHeight: 5,
         expandRows: true,
         nowIndicator: true,
-        fixedWeekCount: false
+        fixedWeekCount: false,
+        locale: this.calendarLocale
       }
     }
   },
@@ -383,6 +384,9 @@ export default {
     '$i18n.locale' () {
       this.getProductGroups(this.$i18n.locale)
       this.getLabels(this.$i18n.locale)
+    },
+    'calendarLocale' () {
+      this.calendarOptions.locale = this.calendarLocale
     },
     'modalShow.show' () {
       if (!this.formData.id) {
