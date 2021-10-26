@@ -438,8 +438,9 @@ export default {
       }
     },
     'eventAndResources' (data) {
-      if (data.events.length >= 0 && data.resources.length >= 0) {
+      if (data.events.length >= 0 && data.resources.length > 0) {
         this.isDataLoaded = true
+        if (this.calendarApi) this.calendarApi.render()
       }
     },
     'viewName' () {
