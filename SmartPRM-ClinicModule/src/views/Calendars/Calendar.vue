@@ -194,8 +194,8 @@ export default {
               title: item.note ? item.name + ' ' + item.last_name + ' - ' + item.prm_pr_group_name_text + '\n' + moment(item.starts_at).format('HH:mm') + ' - ' + moment(item.ends_at).format('HH:mm') + '\n' + item.note : item.name + ' ' + item.last_name + ' - ' + item.prm_pr_group_name_text + '\n' + moment(item.starts_at).format('HH:mm') + ' - ' + moment(item.ends_at).format('HH:mm'),
               start: moment(item.starts_at).format('YYYY-MM-DDTHH:mm'),
               end: item.ends_at ? moment(item.ends_at).format('YYYY-MM-DDTHH:mm') : moment(item.starts_at).add('0', 'hours').add('15', 'minutes').format('YYYY-MM-DDTHH:mm'),
-              backgroundColor: item.appointment_canceled_in_advance_by_clinic || item.appointment_canceled_in_advance_by_patient ? 'transparent' : item.app_lb_color ? item.app_lb_color : '#64D6E8',
-              textColor: item.appointment_canceled_in_advance_by_clinic || item.appointment_canceled_in_advance_by_patient ? 'black' : 'auto',
+              backgroundColor: item.app_lb_color ? item.app_lb_color : '#64D6E8',
+              classNames: item.appointment_canceled_in_advance_by_clinic || item.appointment_canceled_in_advance_by_patient ? 'bg-opacity-50' : '',
               assignmentDate: moment(item.starts_at).format('YYYY-MM-DDTHH:mm'),
               patient_attended: item.patient_attended,
               appointment_canceled_in_advance_by_patient: item.appointment_canceled_in_advance_by_patient,
@@ -274,6 +274,9 @@ export default {
 }
 </script>
 <style  lang="scss">
+.bg-opacity-50 {
+  opacity: 0.5;
+}
 .calendar-page {
   .main-wrapper {
     display: flex;
