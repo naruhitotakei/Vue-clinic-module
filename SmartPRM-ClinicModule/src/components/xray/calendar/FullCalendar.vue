@@ -441,7 +441,6 @@ export default {
     'eventAndResources' (data) {
       if (data.events.length >= 0 && data.resources.length > 0) {
         this.isDataLoaded = true
-        if (this.calendarApi) this.calendarApi.render()
       }
     },
     'viewName' () {
@@ -452,8 +451,8 @@ export default {
     'dates' (newDates, oldDates) {
       if (!oldDates || (oldDates.startStr !== newDates.startStr || oldDates.endStr !== newDates.endStr)) {
         this.$emit('updateApp', {
-          start: moment(newDates.start).format('YYYY-MM-DD'),
-          end: moment(newDates.end).format('YYYY-MM-DD')
+          start: newDates.start,
+          end: newDates.end
         })
       }
     }
@@ -582,8 +581,8 @@ export default {
     updateCalendar (id, appointment) {
       updateCalendar(id, appointment).then(() => {
         this.$emit('updateApp', {
-          start: moment(this.dates.start).format('YYYY-MM-DD'),
-          end: moment(this.dates.end).format('YYYY-MM-DD')
+          start: this.dates.start,
+          end: this.dates.end
         })
       })
     },
@@ -715,8 +714,8 @@ export default {
       if (!this.formData.id) {
         createCalendar(this.formData).then(() => {
           this.$emit('updateApp', {
-            start: moment(this.dates.start).format('YYYY-MM-DD'),
-            end: moment(this.dates.end).format('YYYY-MM-DD')
+            start: this.dates.start,
+            end: this.dates.end
           })
           this.formData = this.defaultAppointment()
           this.$emit('setModalShow', false)

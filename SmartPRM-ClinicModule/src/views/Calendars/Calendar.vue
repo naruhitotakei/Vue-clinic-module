@@ -178,10 +178,10 @@ export default {
       })
     },
     async updateApp ({ start, end }) {
-      await this.getApontments(start, end)
+      await this.getApontments(moment(start).startOf('month').format('YYYY-MM-DD'), moment(end).endOf('month').format('YYYY-MM-DD'))
     },
     getApontments (start, end) {
-      this.events = []
+      // this.events = []
       getCalendar(start, end, '', this.$i18n.locale).then(data => {
         if (Array.isArray(data)) {
           let dataWithDoctor = data.filter(item => {
