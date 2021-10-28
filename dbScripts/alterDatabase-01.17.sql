@@ -3,7 +3,7 @@
 --############################################################
 
 INSERT INTO clients_prm_client_bridge (clients_id, prm_client_id) VALUES 
-(10, 1), (23, 1), (27,1), (25, 2), (30, 2), (21, 2), (28, 2), (22, 2), (1, 2), (5, 2), (19, 2);
+(10, (SELECT id FROM prm_client WHERE client_name = 'Primadent')), (23, (SELECT id FROM prm_client WHERE client_name = 'Primadent')), (27,(SELECT id FROM prm_client WHERE client_name = 'Primadent')), (25, (SELECT id FROM prm_client WHERE client_name = 'Fabjan')), (30, (SELECT id FROM prm_client WHERE client_name = 'Fabjan')), (21, (SELECT id FROM prm_client WHERE client_name = 'Fabjan')), (28, (SELECT id FROM prm_client WHERE client_name = 'Fabjan')), (22, (SELECT id FROM prm_client WHERE client_name = 'Fabjan')), (1, (SELECT id FROM prm_client WHERE client_name = 'Fabjan')), (5, (SELECT id FROM prm_client WHERE client_name = 'Fabjan')), (19, (SELECT id FROM prm_client WHERE client_name = 'Fabjan'));
 
 --############################################################
 --# changing foreign keys in invoice_item to INT type
@@ -30,7 +30,6 @@ ALTER COLUMN company_city DROP NOT NULL,
 ALTER COLUMN company_country_code DROP NOT NULL,
 ALTER COLUMN company_iban DROP NOT NULL,
 ALTER COLUMN company_tax_registration_number DROP NOT NULL,
-ALTER COLUMN company_vat_number DROP NOT NULL,
 ALTER COLUMN company_legal_registration_identifier DROP NOT NULL,
 ALTER COLUMN cert_file DROP NOT NULL,
 ALTER COLUMN key_file DROP NOT NULL,
@@ -79,12 +78,6 @@ INSERT INTO prm_role_permission (role_permission_id, role_id, permission_id) VAL
 INSERT INTO prm_role_permission (role_permission_id, role_id, permission_id) VALUES (1132, 11, 321);
 INSERT INTO prm_role_permission (role_permission_id, role_id, permission_id) VALUES (1133, 11, 331);
 INSERT INTO prm_role_permission (role_permission_id, role_id, permission_id) VALUES (1134, 11, 341);
-
---############################################################
---# Removing company_vat_number from prm_company table
---############################################################
-
-ALTER TABLE prm_company DROP COLUMN company_vat_number;
 
 --############################################################
 --# Renaming and altering payment_method 
@@ -178,61 +171,41 @@ ALTER TABLE users
 ADD COLUMN first_name VARCHAR(128),
 ADD COLUMN surname VARCHAR(128);
 
-UPDATE users SET first_name = 'Emazing', surname = 'General' WHERE id = 4;
-UPDATE users SET first_name = 'Valerija', surname = 'Fabjan' WHERE id = 7;
-UPDATE users SET first_name = 'Gašper', surname = 'Fabjan' WHERE id = 13;
-UPDATE users SET first_name = 'Amadej', surname = 'Lah' WHERE id = 17;
-UPDATE users SET first_name = 'Andreja', surname = 'Kraševec' WHERE id = 18;
-UPDATE users SET first_name = 'Rok', surname = 'Kržič' WHERE id = 24;
-UPDATE users SET first_name = 'Matic', surname = 'Fabjan' WHERE id = 27;
-UPDATE users SET first_name = 'Živa', surname = 'Fabjan' WHERE id = 28;
-UPDATE users SET first_name = 'Marjan', surname = 'Fabjan' WHERE id = 29;
-UPDATE users SET first_name = 'Mirjana', surname = 'Tavčar' WHERE id = 39;
-UPDATE users SET first_name = 'Živa', surname = 'Fabjan' WHERE id = 50;
-UPDATE users SET first_name = 'Tina', surname = 'Fabjan' WHERE id = 78;
-UPDATE users SET first_name = 'Rene', surname = 'Male' WHERE id = 102;
-UPDATE users SET first_name = 'Jasna', surname = 'Bordon' WHERE id = 130;
-UPDATE users SET first_name = 'Zora', surname = 'Fabjan' WHERE id = 133;
-UPDATE users SET first_name = 'Matej', surname = 'Lavrič' WHERE id = 137;
-UPDATE users SET first_name = 'Manca', surname = 'Jeglič' WHERE id = 140;
-UPDATE users SET first_name = 'Alen', surname = 'Dedić' WHERE id = 143;
-UPDATE users SET first_name = 'Uroš', surname = 'Krmac' WHERE id = 147;
-UPDATE users SET first_name = 'Gaja', surname = 'Bužan' WHERE id = 148;
-UPDATE users SET first_name = 'Lea', surname = 'Žgur' WHERE id = 149;
-UPDATE users SET first_name = 'Sestra', surname = 'Primadent' WHERE id = 150;
-UPDATE users SET first_name = 'SuperSestra', surname = 'Primadent' WHERE id = 151;
-UPDATE users SET first_name = 'Emazing', surname = 'Demo' WHERE id = 152;
-UPDATE users SET first_name = 'Tomaž', surname = 'Lukanovič' WHERE id = 153;
-UPDATE users SET first_name = 'Špela', surname = 'Rangus' WHERE id = 154;
-UPDATE users SET first_name = 'Polona', surname = 'Šter' WHERE id = 155;
-UPDATE users SET first_name = 'Gašper', surname = 'Fortuna' WHERE id = 156;
-UPDATE users SET first_name = 'Žiga', surname = 'Kovačič' WHERE id = 157;
+UPDATE users SET first_name = 'Emazing', surname = 'General' WHERE email = 'info@emazing.si';
+UPDATE users SET first_name = 'Valerija', surname = 'Fabjan' WHERE email = 'valerija.fabjan@siol.net';
+UPDATE users SET first_name = 'Gašper', surname = 'Fabjan' WHERE email = 'fabjan.gasper@siol.net';
+UPDATE users SET first_name = 'Amadej', surname = 'Lah' WHERE email = 'amadej.lah@gmail.com';
+UPDATE users SET first_name = 'Andreja', surname = 'Kraševec' WHERE email = 'krasevecandreja@gmail.com';
+UPDATE users SET first_name = 'Rok', surname = 'Kržič' WHERE email = 'rokkrzic@gmail.com';
+UPDATE users SET first_name = 'Matic', surname = 'Fabjan' WHERE email = 'dr.matic@fabjan.si';
+UPDATE users SET first_name = 'Živa', surname = 'Fabjan' WHERE email = 'dr.ziva.fabjan@gmail.com';
+UPDATE users SET first_name = 'Marjan', surname = 'Fabjan' WHERE email = 'marjan.fabjan@gmail.com';
+UPDATE users SET first_name = 'Mirjana', surname = 'Tavčar' WHERE email = 'mirjana.tavcar@siol.net';
+UPDATE users SET first_name = 'Živa', surname = 'Fabjan' WHERE email = 'dr.ziva-fabjan@gmail.com';
+UPDATE users SET first_name = 'Tina', surname = 'Fabjan' WHERE email = 'info@medicalfabjan.si';
+UPDATE users SET first_name = 'Rene', surname = 'Male' WHERE email = 'info@renemale.com';
+UPDATE users SET first_name = 'Jasna', surname = 'Bordon' WHERE email = 'jasna.bordon@emazing.si';
+UPDATE users SET first_name = 'Zora', surname = 'Fabjan' WHERE email = 'zora.fabjan.crm@gmail.com';
+UPDATE users SET first_name = 'Matej', surname = 'Lavrič' WHERE email = 'lavricmatej@yahoo.com';
+UPDATE users SET first_name = 'Manca', surname = 'Jeglič' WHERE email = 'manca.jeglic@emazing.si';
+UPDATE users SET first_name = 'Alen', surname = 'Dedić' WHERE email = 'alen.dedic@emazing.si';
+UPDATE users SET first_name = 'Uroš', surname = 'Krmac' WHERE email = 'uros.krmac@primadent.si';
+UPDATE users SET first_name = 'Gaja', surname = 'Bužan' WHERE email = 'gaja.buzan@primadent.si';
+UPDATE users SET first_name = 'Lea', surname = 'Žgur' WHERE email = 'lea.zgur@primadent.si';
+UPDATE users SET first_name = 'Sestra', surname = 'Primadent' WHERE email = 'NursePrimadent@gmail.com';
+UPDATE users SET first_name = 'SuperSestra', surname = 'Primadent' WHERE email = 'SuperNursePrimadent@gmail.com';
+UPDATE users SET first_name = 'Emazing', surname = 'Demo' WHERE email = 'demo@emazing.si';
+UPDATE users SET first_name = 'Tomaž', surname = 'Lukanovič' WHERE email = 'tomaz.lukanovic@primadent.si';
+UPDATE users SET first_name = 'Špela', surname = 'Rangus' WHERE email = 'spela.rangus@primadent.si';
+UPDATE users SET first_name = 'Polona', surname = 'Šter' WHERE email = 'polona.ster@primadent.si';
+UPDATE users SET first_name = 'Gašper', surname = 'Fortuna' WHERE email = 'gasper.fortuna@primadent.si';
+UPDATE users SET first_name = 'Žiga', surname = 'Kovačič' WHERE email = 'ziga.kovacic@primadent.si';
 
 --############################################################
---# Dropping NOT NULL CONSTRAINT in table prm_product, field
---# field product_price, adding "advance payment" to prm_product
+--# Updating business_premise_id in prm_company_premise
 --############################################################
 
-ALTER TABLE prm_product ALTER COLUMN product_price DROP NOT NULL;
-INSERT INTO prm_product (product_type_id, product_group_id) VALUES (1, 2);
-INSERT INTO prm_product_name (product_id, language, text) VALUES 
-(659, 'sl', 'Avansni račun'), (659, 'en', 'Advance payment'), (659, 'it', 'Pagamento anticipato');
-
---############################################################
---# Updating business_premise_id in prm_company_premise and
---# electronic_device_id in prm_company_premise_device
---############################################################
-
-UPDATE prm_company_premise SET business_premise_id = '5' WHERE premise_id = 5;
-UPDATE prm_company_premise SET business_premise_id = '2' WHERE premise_id = 2;
-UPDATE prm_company_premise SET business_premise_id = '3' WHERE premise_id = 3;
-UPDATE prm_company_premise SET business_premise_id = '4' WHERE premise_id = 4;
-UPDATE prm_company_premise SET business_premise_id = '1' WHERE premise_id = 1;
-
-UPDATE prm_company_premise_device SET electronic_device_id = '1' WHERE device_id = 4;
-UPDATE prm_company_premise_device SET electronic_device_id = '1' WHERE device_id = 1;
-UPDATE prm_company_premise_device SET electronic_device_id = '2' WHERE device_id = 2;
-UPDATE prm_company_premise_device SET electronic_device_id = '3' WHERE device_id = 3;
+UPDATE prm_company_premise SET business_premise_id = '1' WHERE premise_name = 'Zobna ambulanta Primadent Škofije';
 
 --############################################################
 --# Adding columns to invoice table
@@ -247,29 +220,29 @@ ADD COLUMN reference_code_furs VARCHAR(64);
 --# Updating users data
 --############################################################
 
-UPDATE users SET title = 'Dr.', specialization = 'dr. med., spec. spl. krg.' WHERE id = 17;
-UPDATE users SET title = 'Dr.' WHERE id = 27;
-UPDATE users SET title = 'Dr.', specialization = 'dr. med., spec. plast.' WHERE id = 28;
-UPDATE users SET title = 'Dr.', specialization = 'dr. med., spec. plast.' WHERE id = 29;
-UPDATE users SET first_name = 'Mojca', surname = 'Arnuga Erjavec' WHERE id = 30;
-UPDATE users SET first_name = 'Tanja', surname = '(Fabjan)' WHERE id = 51;
-UPDATE users SET title = 'Dr.', specialization = 'dr.med., spec.gin.por.', first_name = 'Mariusz', surname = 'Kosi' WHERE id = 62;
-UPDATE users SET first_name = 'Mateja', surname = 'Mlinarič' WHERE id = 98;
-UPDATE users SET title = 'Dr.', first_name = 'Miloš', surname = 'Petrović' WHERE id = 103;
-UPDATE users SET title = 'Dr.', specialization = 'dr. med., spec. plast.', first_name = 'Viljem', surname = 'Topćić' WHERE id = 104;
-UPDATE users SET title = 'Dr.', first_name = 'Tamara', surname = 'Levičnik' WHERE id = 105;
-UPDATE users SET title = 'Dr.', first_name = 'Gregor', surname = 'Hvalc' WHERE id = 106;
-UPDATE users SET title = 'Dr.', specialization = 'dr. med., spec. rentgenolog', first_name = 'Andreja', surname = 'Bohnec' WHERE id = 107;
-UPDATE users SET title = 'Dr.', specialization = 'dr.med., spec.gin.por.', first_name = 'Jernej', surname = 'Bernik' WHERE id = 108;
-UPDATE users SET first_name = 'Rebeka', surname = 'Celje - Medical' WHERE id = 110;
-UPDATE users SET first_name = 'Suzana', surname = 'Pohar' WHERE id = 119;
-UPDATE users SET first_name = 'Zobna', surname = 'Šenčur - Fabjan' WHERE id = 120;
-UPDATE users SET title = 'Dr.', specialization = 'dr. med. spec. ginek.', first_name = 'Suzana', surname = 'Peternelj' WHERE id = 121;
-UPDATE users SET first_name = 'Dermatologija', surname = 'Rogl-Fabjan' WHERE id = 125;
-UPDATE users SET title = 'Dr.', specialization = 'dr. med., spec. radiolog', first_name = 'Mitja', surname = 'Četina' WHERE id = 126;
-UPDATE users SET first_name = 'Jana', surname = 'Lieber' WHERE id = 129;
-UPDATE users SET title = 'Dr.', specialization = 'dr. med., spec. plast. krg.', first_name = 'Rok', surname = 'Pavlič' WHERE id = 136;
-UPDATE users SET title = 'Dr.', specialization = 'dr. med., spec. spl. krg.' WHERE id = 137;
+UPDATE users SET title = 'Dr.', specialization = 'dr. med., spec. spl. krg.' WHERE email = 'amadej.lah@gmail.com';
+UPDATE users SET title = 'Dr.' WHERE email = 'dr.matic@fabjan.si';
+UPDATE users SET title = 'Dr.', specialization = 'dr. med., spec. plast.' WHERE email = 'dr.ziva.fabjan@gmail.com';
+UPDATE users SET title = 'Dr.', specialization = 'dr. med., spec. plast.' WHERE email = 'marjan.fabjan@gmail.com';
+UPDATE users SET first_name = 'Mojca', surname = 'Arnuga Erjavec' WHERE email = 'mojcaarn@gmail.com';
+UPDATE users SET first_name = 'Tanja', surname = '(Fabjan)' WHERE email = 'fabjan.gorica@gmail.com';
+UPDATE users SET title = 'Dr.', specialization = 'dr.med., spec.gin.por.', first_name = 'Mariusz', surname = 'Kosi' WHERE email = 'mariusz.kosi@gmail.com';
+UPDATE users SET first_name = 'Mateja', surname = 'Mlinarič' WHERE email = 'zobozdravstvo.lukanovic@gmail.com';
+UPDATE users SET title = 'Dr.', first_name = 'Miloš', surname = 'Petrović' WHERE email = '5rovic.milos@gmail.com';
+UPDATE users SET title = 'Dr.', specialization = 'dr. med., spec. plast.', first_name = 'Viljem', surname = 'Topćić' WHERE email = 'viljem.t@gmail.com';
+UPDATE users SET title = 'Dr.', first_name = 'Tamara', surname = 'Levičnik' WHERE email = 'dermatologinja@fabjan.si';
+UPDATE users SET title = 'Dr.', first_name = 'Gregor', surname = 'Hvalc' WHERE email = 'znamenja@fabjan.si';
+UPDATE users SET title = 'Dr.', specialization = 'dr. med., spec. rentgenolog', first_name = 'Andreja', surname = 'Bohnec' WHERE email = 'rentgenolog@fabjan.si';
+UPDATE users SET title = 'Dr.', specialization = 'dr.med., spec.gin.por.', first_name = 'Jernej', surname = 'Bernik' WHERE email = 'ginekolog@fabjan.si';
+UPDATE users SET first_name = 'Rebeka', surname = 'Celje - Medical' WHERE email = 'rebeka@medicalfabjan.si';
+UPDATE users SET first_name = 'Suzana', surname = 'Pohar' WHERE email = 'pohar.suzana@gmail.com';
+UPDATE users SET first_name = 'Zobna', surname = 'Šenčur - Fabjan' WHERE email = 'zobnafabjan@gmail.com';
+UPDATE users SET title = 'Dr.', specialization = 'dr. med. spec. ginek.', first_name = 'Suzana', surname = 'Peternelj' WHERE email = 'speternelj@hotmail.com';
+UPDATE users SET first_name = 'Dermatologija', surname = 'Rogl-Fabjan' WHERE email = 'info@dermatologija.eu';
+UPDATE users SET title = 'Dr.', specialization = 'dr. med., spec. radiolog', first_name = 'Mitja', surname = 'Četina' WHERE email = 'ultrazvok.velenje@gmail.com';
+UPDATE users SET first_name = 'Jana', surname = 'Lieber' WHERE email = 'jana.liebercrm@gmail.com';
+UPDATE users SET title = 'Dr.', specialization = 'dr. med., spec. plast. krg.', first_name = 'Rok', surname = 'Pavlič' WHERE email = 'rpavlic@gmail.com';
+UPDATE users SET title = 'Dr.', specialization = 'dr. med., spec. spl. krg.' WHERE email = 'lavricmatej@yahoo.com';
 
 --############################################################
 --# adding parent_id and child_id fields to invoice
@@ -310,24 +283,26 @@ ADD COLUMN minutes INT;
 --# Altering invoice table
 --############################################################
 
-ALTER TABLE invoice
-ADD COLUMN service_date DATE DEFAULT CURRENT_DATE,
-ADD COLUMN due_date DATE DEFAULT CURRENT DATE;
+ALTER TABLE invoice ADD COLUMN service_date DATE DEFAULT CURRENT_DATE;
+ALTER TABLE invoice ADD COLUMN due_date DATE DEFAULT CURRENT_DATE;
 
 --############################################################
 --# Altering payment_item table
 --############################################################
 
-ALTER TABLE payment_item
-ADD COLUMN due_date DATE,
-ADD COLUMN payment_date DATE;
+ALTER TABLE payment_item ADD COLUMN due_date DATE;
+ALTER TABLE payment_item ADD COLUMN payment_date DATE;
 
 --############################################################
 --# Adding prm_client_id to users
 --############################################################
 
 UPDATE users SET prm_client_id = 1 
-WHERE id IN (7, 13, 17, 18, 24, 27, 28, 29, 39, 50, 78, 102, 130, 133, 137, 140, 143, 147, 148, 149, 150, 151, 152, 153, 154, 155, 156, 157);
+WHERE email IN ('valerija.fabjan@siol.net', 'fabjan.gasper@siol.net', 'amadej.lah@gmail.com', 'krasevecandreja@gmail.com', 'rokkrzic@gmail.com', 'dr.matic@fabjan.si', 
+'dr.ziva.fabjan@gmail.com', 'marjan.fabjan@gmail.com', 'mirjana.tavcar@siol.net', 'dr.ziva-fabjan@gmail.com', 'info@medicalfabjan.si', 'info@renemale.com', 
+'jasna.bordon@emazing.si', 'zora.fabjan.crm@gmail.com', 'lavricmatej@yahoo.com', 'manca.jeglic@emazing.si', 'alen.dedic@emazing.si', 'uros.krmac@primadent.si', 
+'gaja.buzan@primadent.si', 'lea.zgur@primadent.si', 'NursePrimadent@gmail.com', 'SuperNursePrimadent@gmail.com', 'demo@emazing.si', 'tomaz.lukanovic@primadent.si', 
+'spela.rangus@primadent.si', 'polona.ster@primadent.si', 'gasper.fortuna@primadent.si', 'ziga.kovacic@primadent.si');
 
 --############################################################
 --# Altering users table

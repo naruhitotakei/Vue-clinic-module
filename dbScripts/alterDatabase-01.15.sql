@@ -4,7 +4,7 @@
 --############################################################
 
 ALTER TABLE prm_client 
-DROP COLUMN user_id
+DROP COLUMN user_id,
 DROP COLUMN clients_id;
 
 CREATE TABLE IF NOT EXISTS users_prm_client_bridge (
@@ -20,13 +20,6 @@ CREATE TABLE IF NOT EXISTS clients_prm_client_bridge (
 	prm_client_id	INT NOT NULL CONSTRAINT clients_prm_client_bridge_prm_client_fk REFERENCES prm_client (id),
 	created_at		DATE NOT NULL DEFAULT CURRENT_DATE
 );
-
---############################################################
---# altering prm_company table
---############################################################
-
-ALTER TABLE prm_company ADD COLUMN prm_client_id INT
-CONSTRAINT prm_company_prm_client REFERENCES prm_client (id);
 
 --############################################################
 --# adding columns to users table
@@ -134,7 +127,7 @@ ALTER TABLE prm_company_premise DROP COLUMN device_id;
 --# column to users table
 --############################################################
 
-DROP TABLE users_prm_client;
+DROP TABLE users_prm_client CASCADE;
 ALTER TABLE users ADD COLUMN function TEXT[];
 
 --############################################################
@@ -172,12 +165,12 @@ ALTER TABLE prm_company_premise ADD COLUMN premise_label VARCHAR(20);
 --# Updating users for SmartPRM
 --############################################################
 
-UPDATE users SET title = 'Dr.', specialization = 'dr. dent. med.', function = '{dentist}' WHERE id = 39; 
-UPDATE users SET title = 'Dr.', specialization = 'dr. dent. med.', function = '{dentist}' WHERE id = 148;
-UPDATE users SET title = 'Dr.', specialization = 'dr. dent. med.', function = '{dentist}' WHERE id = 149;
-UPDATE users SET title = 'Dr.', specialization = 'dr. dent. med.', function = '{dentist}' WHERE id = 102;
+UPDATE users SET title = 'Dr.', specialization = 'dr. dent. med.', function = '{dentist}' WHERE email = 'mirjana.tavcar@siol.net'; 
+UPDATE users SET title = 'Dr.', specialization = 'dr. dent. med.', function = '{dentist}' WHERE email = 'gaja.buzan@primadent.si';
+UPDATE users SET title = 'Dr.', specialization = 'dr. dent. med.', function = '{dentist}' WHERE email = 'lea.zgur@primadent.si';
+UPDATE users SET title = 'Dr.', specialization = 'dr. dent. med.', function = '{dentist}' WHERE email = 'info@renemale.com';
 INSERT INTO users (name, email, title, specialization, function) VALUES ('Tomaž Lukanovič', 'tomaz.lukanovic@primadent.si', 'Dr.', 'dr. dent. med.', '{dentist}');
-UPDATE users SET name = 'Tina Fabjan', title = 'Dr.', specialization = 'dr. dent. med.', function = '{dentist}' WHERE id = 78;
+UPDATE users SET name = 'Tina Fabjan', title = 'Dr.', specialization = 'dr. dent. med.', function = '{dentist}' WHERE email = 'info@medicalfabjan.si';
 INSERT INTO users (name, email, title, specialization, function) VALUES ('Špela Rangus', 'spela.rangus@primadent.si', 'Dr.', 'dr. dent. med.', '{dentist}');
 INSERT INTO users (name, email, title, specialization, function) VALUES ('Polona Šter', 'polona.ster@primadent.si', 'Dr.', 'dr. dent. med.', '{dentist}');
 INSERT INTO users (name, email, title, specialization, function) VALUES ('Gašper Fortuna', 'gasper.fortuna@primadent.si', 'Dr.', 'dr. dent. med., spec. oralne in maksilofacialne kirurgije', '{dentist,surgeon}');

@@ -1,15 +1,42 @@
 ﻿--############################################################
+--# Changing values in vat_tax_rate table, tax_rate_label columns
+--############################################################
+
+UPDATE vat_tax_rate SET tax_rate_label = 'Brez davka' WHERE tax_rate_label = 'Not taxable';
+UPDATE vat_tax_rate SET tax_rate_label = 'Nič' WHERE tax_rate_label = '0';
+UPDATE vat_tax_rate SET tax_rate_label = 'Nižja stopnja' WHERE tax_rate_label = '9.5';
+UPDATE vat_tax_rate SET tax_rate_label = 'Splošna stopnja' WHERE tax_rate_label = '22';
+
+--############################################################
+--# Inserting Primadent into prm_company
+--############################################################
+
+ALTER TABLE prm_company ADD COLUMN prm_client_id INT
+CONSTRAINT prm_company_prm_client_fk REFERENCES prm_client (id);
+
+ALTER TABLE prm_company RENAME COLUMN company_vat_number TO company_tax_registration_number;
+
+ALTER TABLE prm_company
+ALTER COLUMN cert_file DROP NOT NULL,
+ALTER COLUMN key_file DROP NOT NULL,
+ALTER COLUMN pass_phrase DROP NOT NULL,
+ALTER COLUMN company_subject DROP NOT NULL,
+ALTER COLUMN company_issuer DROP NOT NULL,
+ALTER COLUMN company_serial DROP NOT NULL;
+
+INSERT INTO prm_company (company_name, company_address_line_1, company_post_code, company_country_code, company_city,
+company_iban, company_tax_registration_number, company_legal_registration_identifier, prm_client_id) VALUES 
+('Primadent d.o.o.', 'Spodnje Škofije 147', 6281, 'sl', 'Škofije', 'SI56 1010 0005 6606 867', 'SI 49184075', 8158584000, 1);
+
+
+--############################################################
 --# Inserting values into prm_company_premise
 --############################################################
 
 INSERT INTO prm_company_premise (premise_id, company_id, premise_name, premise_street, premise_house_number,
 premise_community, premise_post_code, premise_city, premise_country_code, premise_cadastral_number, building_number,
 building_section_number) VALUES
-(1, 1, 'Zobna ambulanta Primadent Ljubljana', 'Ulica bratov Učakar', '64', 'Četrtna skupnost Šiška', '1000', 'Ljubljana', 'SI', '1739', '1064', '1'),
-(2, 1, 'Zobna ambulanta Primadent Maribor', 'Gospejna ulica', '11', 'Center', '2000', 'Maribor', 'SI', '657', '1619', '1'),
-(3, 1, 'Zobna ambulanta Primadent Celje', 'Aškerčeva ulica', '14', 'Center', '3000', 'Celje', 'SI', '1077', '3086', '1'),
-(4, 1, 'Zobna ambulanta Primadent Šenčur', 'Poslovna cona A', '32', '/', '4208', 'Šenčur', 'SI', '2119', '1575', '1'),
-(5, 1, 'Zobna ambulanta Primadent Škofije', 'Spodnje Škofije', '147', '/', '6281', 'Škofije', 'SI', '2595', '142', '1');
+(1, (SELECT company_id FROM prm_company WHERE company_name = 'Primadent d.o.o.'), 'Zobna ambulanta Primadent Škofije', 'Spodnje Škofije', '147', '/', '6281', 'Škofije', 'SI', '2595', '142', '1');
 
 --############################################################
 --# Small alteration to invoice table
@@ -30,9 +57,9 @@ ALTER TABLE users ADD COLUMN tax_number VARCHAR(32);
 
 INSERT INTO prm_role (role_id, role_name) VALUES (9, 'SuperCaller');
 
-UPDATE users SET prm_role_id = 9 WHERE id = 130;
-UPDATE users SET prm_role_id = 5 WHERE id = 39;
-UPDATE users SET prm_role_id = 3 WHERE id = 140;
+UPDATE users SET prm_role_id = 9 WHERE email = 'jasna.bordon@emazing.si';
+UPDATE users SET prm_role_id = 5 WHERE email = 'mirjana.tavcar@siol.net';
+UPDATE users SET prm_role_id = 3 WHERE email = 'manca.jeglic@emazing.si';
 
 INSERT INTO users (name, email, prm_role_id) VALUES
 ('Uroš Krmac', 'uros.krmac@gmail.com', 1),
@@ -41,12 +68,12 @@ INSERT INTO users (name, email, prm_role_id) VALUES
 ('Sestra Primadent', 'NursePrimadent@gmail.com', 7),
 ('SuperSestra Primadent', 'SuperNursePrimadent@gmail.com', 8);
 
-UPDATE users SET roles = '{doctor}' WHERE id = 148;
-UPDATE users SET roles = '{doctor}' WHERE id = 149;
+UPDATE users SET roles = '{doctor}' WHERE email = 'gaja.buzan@primadent.si';
+UPDATE users SET roles = '{doctor}' WHERE email = 'lea.zgur@primadent.si';
 
-UPDATE users SET accessible_user_ids = '{148, 149}' WHERE id = 39;
-UPDATE users SET accessible_user_ids = '{38}' WHERE id = 150;
-UPDATE users SET accessible_user_ids = '{17,27,28,29,30,51,62,98,103,104,105,106,107,108,110,119,120,121,125,126,129,136,137,148,149}' WHERE id = 151;
+UPDATE users SET accessible_user_ids = '{148, 149}' WHERE email = 'mirjana.tavcar@siol.net';
+UPDATE users SET accessible_user_ids = '{38}' WHERE email = 'NursePrimadent@gmail.com';
+UPDATE users SET accessible_user_ids = '{17,27,28,29,30,51,62,98,103,104,105,106,107,108,110,119,120,121,125,126,129,136,137,148,149}' WHERE email = 'SuperNursePrimadent@gmail.com';
 
 ALTER TABLE users ADD COLUMN prm_client_id INT 
 CONSTRAINT users_prm_client_fk REFERENCES prm_client (id);
@@ -82,9 +109,6 @@ ADD COLUMN prm_company INT CONSTRAINT users_prm_client_prm_company_fk REFERENCES
 --############################################################
 
 ALTER TABLE prm_company_premise_device ADD COLUMN device_name VARCHAR(128);
-
-ALTER TABLE users ADD COLUMN prm_company_id INT 
-CONSTRAINT users_prm_company_fk REFERENCES prm_company (company_id);
 
 --############################################################
 --# Adding name column in locations table and updating values
