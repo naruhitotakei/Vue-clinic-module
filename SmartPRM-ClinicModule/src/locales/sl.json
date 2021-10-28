@@ -225,7 +225,8 @@
       "fileType": "Vrsta datoteke",
       "fileCreatedAt": "Ustvarjeno",
       "fileAddedAt": "Dodano",
-      "downloadFile": "Prenesi datoteko"
+      "downloadFile": "Prenesi datoteko",
+      "uploadingFile": "Datoteka se nalaga..."
     },
     "invoicesTab": "Računi",
     "invoices": {

@@ -226,7 +226,8 @@
       "fileType": "File type",
       "fileCreatedAt": "Date",
       "fileAddedAt": "Added at",
-      "downloadFile": "Download file"
+      "downloadFile": "Download file",
+      "uploadingFile": "File is uploading..."
     },
     "invoicesTab": "Invoices",
     "invoices": {

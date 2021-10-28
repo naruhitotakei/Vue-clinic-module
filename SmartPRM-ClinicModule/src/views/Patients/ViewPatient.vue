@@ -676,7 +676,7 @@
                                   <h3 class="card-title mt-3 mb-2">{{ $t('EPR.filesHeader') }}</h3>
                                   <div class="btn-add-patient mt-2">
                                       <b-button variant="primary" @click="add_file">
-                                        <label for="upload-file" class="text-white m-0 p-0">
+                                        <label for="upload-file" class="text-white m-0 p-0 clickable">
                                           <i class="ri-add-line mr-2"></i>
                                           {{ $t('EPR.files.addFile') }}
                                           <input type="file" ref="file_upload" @change="uploadFile" id="upload-file" hidden accept="image/png, image/jpg, image/jpeg, .dicom, .pdf, .dcm, .tiff, .txt"/>
@@ -916,6 +916,16 @@
       </template>
       <template #default>
           <span><i class="ri-checkbox-circle-line"></i>  {{ $t('EPR.changesSaved') }}</span>
+      </template>
+    </b-toast>
+    <b-toast id="upload-file" variant="primary" solid no-auto-hide>
+      <template #toast-title>
+        <div class="d-flex flex-grow-1 align-items-baseline">
+            <strong class="mr-auto">{{ $t('EPR.notification') }}</strong>
+        </div>
+      </template>
+      <template #default>
+          <span><i class="ri-checkbox-circle-line"></i>  {{ $t('EPR.files.uploadingFile') }}</span>
       </template>
     </b-toast>
     <b-modal
@@ -1497,6 +1507,10 @@ export default {
       this.getPatientInvoices(this.patientId, this.sortByInvoice.sort.toUpperCase())
     },
     uploadFile (e) {
+      var files = e.target.files || e.dataTransfer.files
+      if (files.length) {
+        this.$bvToast.show('upload-file')
+      }
       fileUpload(e.target.files[0], this.$route.params.patientId).then(data => {
         let reader = new FileReader()
         reader.readAsDataURL(e.target.files[0])
@@ -1518,6 +1532,7 @@ export default {
         if (type === 'tiff') {
           this.tiffConvertToCanvas(file, this.files.length)
         }
+        this.$bvToast.hide('upload-file')
       })
     },
     getFiles () {
