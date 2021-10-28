@@ -1,5 +1,5 @@
 # ### STAGE 1: Build ###
-FROM node:lts as builder
+FROM node:14 as builder
 
 WORKDIR /app
 
