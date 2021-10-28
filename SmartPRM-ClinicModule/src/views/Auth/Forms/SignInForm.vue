@@ -3,7 +3,7 @@
     <form class="mt-4" novalidate @submit.prevent="handleSubmit(onSubmit)">
       <ValidationProvider vid="email" name="E-mail" rules="required|email" v-slot="{ errors }">
         <div class="form-group ">
-          <label for="emailInput">Email address</label>
+          <label class="mobile" for="emailInput">Email address</label>
           <input type="email" :class="'form-control mb-0' +(errors.length > 0 ? ' is-invalid' : '')"
                  id="emailInput" aria-describedby="emailHelp"
                  v-model="user.email" placeholder="Enter email" required>
@@ -14,7 +14,7 @@
       </ValidationProvider>
       <ValidationProvider vid="password" name="Password" rules="required" v-slot="{ errors }">
         <div class="form-group">
-          <label for="passwordInput">Password</label>
+          <label class="mobile" for="passwordInput">Password</label>
           <!-- <router-link to="/auth/password-reset" class="float-right">
             Forgot password?
           </router-link> -->
@@ -105,3 +105,11 @@ export default {
   }
 }
 </script>
+
+<style lang="scss">
+@media (max-width: 479px) {
+  .mobile {
+    font-size: 14px;
+  }
+}
+</style>
