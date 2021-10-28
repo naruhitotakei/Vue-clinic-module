@@ -115,11 +115,6 @@ CREATE TABLE IF NOT EXISTS prm_invoice_item (
 
 ALTER TABLE invoice DROP COLUMN item_id;
 
-ALTER TABLE prm_invoice_item ADD CONSTRAINT prm_invoice_item_id PRIMARY KEY (id);
-
-ALTER TABLE invoice ADD COLUMN item_id INT
-CONSTRAINT invoice_prm_invoice_item_fk REFERENCES prm_invoice_item (id);
-
 
 UPDATE db_version SET version ='01.12', version_date=CURRENT_DATE WHERE resource='Tables';
 

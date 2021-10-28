@@ -546,7 +546,7 @@ app.get('/api/inactive-locations', (req, res) => {
 app.post('/api/locations', (req, res) => {
     const location = req.body
     if (req.session.prm_user && req.session.prm_user.permissions && checkPermission(req.session.prm_user.permissions, locationsPermission))
-        daoLocations.createLocation(req, res, location)
+        daoLocations.createLocation(req, res, location, req.session.prm_user.prm_client_id)
     else
         res.status(401).json("OK: user unauthorized")
 });
@@ -720,7 +720,7 @@ app.get('/api/enquiries/:id/offers', (req, res) => {
 app.post('/api/enquiries', (req, res) => {
   const enquiry = req.body
   if(req.session.prm_user && req.session.prm_user.permissions && checkPermission(req.session.prm_user.permissions, enquiriesPermission))
-      daoEnquiries.createEnquiry(req, res, enquiry)
+      daoEnquiries.createEnquiry(req, res, enquiry, req.session.prm_user.prm_client_id)
   else
       res.status(401).json("OK: user unauthorized")
 });
@@ -1141,7 +1141,7 @@ app.post('/api/files/upload/:id', async function(req, res) {
 app.post('/api/files/avatar', async function(req, res) {
   let files = req.files
   if(req.session.prm_user) {
-      const rv = await awsS3.upload('avatar-' + req.session.prm_user.id, req.files.file.data, req.files.file.mimetype)
+      const rv = await awsS3.upload('avatar-' + req.session.prm_user.id, req.files.file.data, req.files.file.mimetype, 'avatar-' + req.session.prm_user.id, 'avatar')
       res.status(200).json(rv.status)
   }
   else
@@ -1189,7 +1189,7 @@ app.get('/api/files/:key', async function(req, res) {
 app.post('/api/files/avatar/:id', async function(req, res) {
   let id = req.params.id
   if(req.session.prm_user) {
-    const rv = await awsS3.upload('avatar-' + id + '/', req.files.file.data, req.files.file.mimetype)
+    const rv = await awsS3.upload('avatar-' + id + '/', req.files.file.data, req.files.file.mimetype, 'avatar-' + id, 'avatar')
     res.status(200).json(rv.status)
   }
   else

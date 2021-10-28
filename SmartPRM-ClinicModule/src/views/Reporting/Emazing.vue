@@ -53,7 +53,7 @@
                      <td  style="max-width: 200px">{{ item.service_title }}</td>
                      <td class="td-count">&nbsp; {{ item.count }}&nbsp;  </td>
                      <td>{{ formatNumber(Math.trunc(item.sum)) }} &#8364;</td>
-                     <td>{{ formatNumber(Math.trunc(item.fee)) }} &#8364;</td>
+                     <td>{{ formatNumber(Math.trunc(item.fee_sum)) }} &#8364;</td>
                    </tr>
                   </template>
               </template>
@@ -253,10 +253,10 @@ export default {
             res[group].map(item => {
               res[`${group}`].group_count = res[`${group}`].group_count + Number(item.count)
               res[`${group}`].group_amount = res[`${group}`].group_amount + Number(item.sum)
-              res[`${group}`].group_fee = res[`${group}`].group_fee + Number(item.fee)
+              res[`${group}`].group_fee = res[`${group}`].group_fee + Number(item.fee_sum)
               totalCount += Number(item.count)
               totalAmount += Number(item.sum)
-              totalFee += Number(item.fee)
+              totalFee += Number(item.fee_sum)
             })
           }
           this.servicesSummaryItems = res

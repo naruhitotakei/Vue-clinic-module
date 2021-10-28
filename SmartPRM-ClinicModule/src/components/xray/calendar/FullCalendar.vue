@@ -175,10 +175,22 @@
                 </template>
                 <template v-if="!disabled">
                     <p v-if="isSaveDisabled" class="mt-1 mr-4 text-black">{{ $t('calendarEvent.requiredFields') }}</p>
-                    <button type="button" class="btn btn-secondary" @click="$emit('setModalShow', false), formData = defaultAppointment">{{ $t('calendar.btnCancel') }}</button>
+                    <button type="button" class="btn btn-secondary" @click="closeNewEditModal">{{ $t('calendar.btnCancel') }}</button>
                     <button type="button" class="btn btn-primary" @click="saveAppointment">{{ $t('calendar.btnSave') }}</button>
                 </template>
             </div>
+            <b-modal id="data-not-saved" centered hide-footer>
+              <template #modal-title>
+                {{ $t('calendar.notSavedModalHeader') }}
+              </template>
+              <div class="">
+                <p>{{$t('calendar.notSavedModalBody')}}</p>
+              </div>
+              <div class="modal-footer modal-footer-bt" style="width: 100%;">
+                <b-button class="btn btn-secondary" @click="notSavedModalClose">{{ $t('calendar.btnClose') }}</b-button>
+                <b-button class="btn btn-primary" @click="notSavedModalSave">{{ $t('calendar.btnSave') }}</b-button>
+              </div>
+            </b-modal>
             <b-modal v-model="openCancelationModal"
                      :ok-title="$t('calendar.btnCancel')"
                      :cancel-title="$t('calendar.btnClose')"
@@ -247,6 +259,7 @@ export default {
   },
   data () {
     return {
+      calendarUpdateEvery3Min: undefined,
       eventInfo: '',
       eventResourceId: '',
       patientData: '',
@@ -319,11 +332,13 @@ export default {
         appointment_canceled_in_advance_by_clinic: false,
         appointment_canceled_in_advance_by_patient: false
       },
+      formDataFirstModalOpened: {},
       calendarApi: null,
       modalTitle: '',
       // modalShow: false,
       viewName: 'resourceTimeGridWeek',
       event: {},
+      dates: null,
       calendarOptions: {
         plugins: [dayGridPlugin, timeGridPlugin, interactionPlugin, resourceTimeGrid, listPlugin],
         defaultAllDay: false,
@@ -334,9 +349,11 @@ export default {
         },
         initialView: 'resourceTimeGridWeek',
         resources: this.resourcesOuter,
-        slotMinTime: '09:00:00',
-        slotMaxTime: '21:30:00',
+        resourceLabelClassNames: 'weekly',
+        slotMinTime: '06:00:00',
+        slotMaxTime: '23:00:00',
         slotDuration: '00:15:00',
+        scrollTime: '09:00:00',
         allDaySlot: false,
         editable: true,
         selectable: true,
@@ -352,7 +369,9 @@ export default {
         slotLabelInterval: '01:00:00',
         eventMinHeight: 5,
         expandRows: true,
-        nowIndicator: true
+        nowIndicator: true,
+        fixedWeekCount: false,
+        locale: this.calendarLocale
       }
     }
   },
@@ -366,6 +385,9 @@ export default {
       this.getProductGroups(this.$i18n.locale)
       this.getLabels(this.$i18n.locale)
     },
+    'calendarLocale' () {
+      this.calendarOptions.locale = this.calendarLocale
+    },
     'modalShow.show' () {
       if (!this.formData.id) {
         this.disabled = false
@@ -373,6 +395,11 @@ export default {
         // this.formData.assignmentDate = moment(new Date()).format('YYYY-MM-DDTHH:mm')
       }
       this.showModal = this.modalShow.show
+      if (!this.modalShow.show) {
+        this.formDataFirstModalOpened = {}
+      } else {
+        this.formDataFirstModalOpened = { ...this.formData }
+      }
     },
     'formData.appointment_canceled_in_advance_by_clinic' () {
       if (this.formData.appointment_canceled_in_advance_by_clinic) {
@@ -392,16 +419,8 @@ export default {
     'colorsLabel' () {
       this.colors = this.colorsLabel
     },
-    'events' (events) {
-      console.log(events)
-      if (events.length) {
-        if (this.calendarApi && this.calendarApi.options) {
-          this.calendarApi.options.events = [...events]
-          this.calendarApi.render()
-        } else {
-          this.calendarOptions.events = [...events]
-        }
-      }
+    'events' () {
+      this.setEventsTitle()
     },
     'isDataLoaded' (data) {
       if (data) {
@@ -416,29 +435,29 @@ export default {
     'isSelectable' () {
       if (this.calendarApi) this.calendarApi.setOption('selectable', this.isSelectable)
     },
-    'resourcesOuter' (newResources) {
-      this.calendarOptions.resources = newResources
+    'resourcesOuter' () {
+      this.setResourcesName()
+      this.setResourcesView()
       if (this.calendarApi) {
         this.calendarApi.render()
       }
     },
     'eventAndResources' (data) {
-      if (data.events.length > 0 && data.resources.length > 0) {
+      if (data.events.length >= 0 && data.resources.length > 0) {
         this.isDataLoaded = true
       }
     },
-    'viewName' (data) {
-      console.log(data)
-      if (this.calendarOptions) {
-        if (data === 'dayGridMonth') {
-          this.calendarOptions.events = this.events.map(e => ({
-            ...e,
-            title: `${e.patient_name} - ${e.prm_pr_group_name_text}`
-          }))
-        } else {
-          this.calendarOptions.events = this.events
-        }
-        console.log(this.calendarOptions.events)
+    'viewName' () {
+      this.setResourcesName()
+      this.setResourcesView()
+      this.setEventsTitle()
+    },
+    'dates' (newDates, oldDates) {
+      if (!oldDates || (oldDates.startStr !== newDates.startStr || oldDates.endStr !== newDates.endStr)) {
+        this.$emit('updateApp', {
+          start: newDates.start,
+          end: newDates.end
+        })
       }
     }
   },
@@ -477,7 +496,10 @@ export default {
   mounted () {
     this.$nextTick(() => {
       this.$forceUpdate()
-      this.$emit('updateApp')
+      this.$emit('updateApp', {
+        start: moment().startOf('month').format('YYYY-MM-DD'),
+        end: moment().endOf('month').format('YYYY-MM-DD')
+      })
     })
     this.getPatients()
     this.getDoctors()
@@ -485,8 +507,61 @@ export default {
     this.getProductGroups(this.$i18n.locale)
     this.getLabels(this.$i18n.locale)
     xray.index()
+    this.calendarUpdateEvery3Min = setInterval(() => {
+      this.updateCalendar()
+    }, 1000 * 3 * 60) // 1000 => 1 second, 3 * 60 => 3 minutes
+  },
+  beforeDestroy () {
+    clearInterval(this.calendarUpdateEvery3Min)
   },
   methods: {
+    closeNewEditModal () {
+      const isDataChanged = JSON.stringify(this.formDataFirstModalOpened) !== JSON.stringify(this.formData)
+      if (isDataChanged) {
+        this.$bvModal.show('data-not-saved')
+      } else {
+        this.$emit('setModalShow', false)
+        this.formData = this.defaultAppointment
+      }
+    },
+    notSavedModalClose () {
+      this.$bvModal.hide('data-not-saved')
+      this.$emit('setModalShow', false)
+      this.formData = this.defaultAppointment
+    },
+    notSavedModalSave () {
+      this.$bvModal.hide('data-not-saved')
+      this.saveAppointment()
+    },
+    setEventsTitle () {
+      if (this.calendarOptions) {
+        if (this.viewName === 'dayGridMonth') {
+          this.calendarOptions.events = this.events.map(e => ({
+            ...e,
+            title: `${e.patient_name} - ${e.prm_pr_group_name_text}`
+          }))
+        } else {
+          this.calendarOptions.events = this.events
+        }
+      }
+    },
+    setResourcesName () {
+      if (this.viewName === 'resourceTimeGridWeek') {
+        this.calendarOptions.resources = this.resourcesOuter.map(r => ({
+          ...r,
+          title: `${r.doctorInfo.first_name[0]}. ${r.doctorInfo.surname}`
+        }))
+      } else {
+        this.calendarOptions.resources = this.resourcesOuter
+      }
+    },
+    setResourcesView () {
+      if (this.viewName === 'resourceTimeGridWeek' && (this.resourcesOuter.length > 2 || window.innerWidth < 1200)) {
+        this.calendarOptions.resourceLabelClassNames = 'weekly'
+      } else {
+        this.calendarOptions.resourceLabelClassNames = ''
+      }
+    },
     findPatientsDoctor (patient) {
       if (!this.selectedDoctor) {
         this.selectedDoctor = this.doctors.find(doctor => doctor.id === patient.prm_dentist_user_id)
@@ -509,7 +584,10 @@ export default {
     },
     updateCalendar (id, appointment) {
       updateCalendar(id, appointment).then(() => {
-        this.$emit('updateApp')
+        this.$emit('updateApp', {
+          start: this.dates.start,
+          end: this.dates.end
+        })
       })
     },
     updateCalendarLabel (id, appointment) {
@@ -567,6 +645,7 @@ export default {
     },
     onViewChange (info) {
       this.viewName = info.view.type
+      this.dates = info
     },
     eventResize (info) {
       let event = this.calendarApi.getEventById(info.event.id)
@@ -638,7 +717,10 @@ export default {
       this.modalTitle = this.selectedPatient.full_name
       if (!this.formData.id) {
         createCalendar(this.formData).then(() => {
-          this.$emit('updateApp')
+          this.$emit('updateApp', {
+            start: this.dates.start,
+            end: this.dates.end
+          })
           this.formData = this.defaultAppointment()
           this.$emit('setModalShow', false)
         })
@@ -731,6 +813,9 @@ export default {
 
 <style lang="scss">
 @import '~@fullcalendar/common/main.css';
+#calendar {
+  height: calc(100vh - 210px);
+}
 .fc-col-header, .fc-timegrid-body, .fc-timegrid-slots table {
   min-width: 100%;
 }
@@ -774,10 +859,13 @@ th {
   text-align: center !important;
 }
 .fc-col-header-cell.fc-resource {
-  writing-mode:  vertical-lr !important;
-  transform: rotate(180deg) !important;
   line-height: 13px !important;
   vertical-align: middle !important;
+}
+.fc-col-header-cell.fc-resource.weekly  .fc-col-header-cell-cushion {
+  writing-mode:  vertical-lr !important;
+  transform: rotate(180deg) !important;
+  white-space: nowrap !important;
 }
 body .wrapper .custom-control-label::before {
   top:50% !important;

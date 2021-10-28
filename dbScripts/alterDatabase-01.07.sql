@@ -44,7 +44,7 @@ ALTER TABLE enquiries
 ADD COLUMN general_notes			TEXT,
 ADD COLUMN general_notes_updated_at TIMESTAMP,
 ADD COLUMN allergies				TEXT,
-ADD COLUMN allergies_updated_at		TIMESTAMP;
+ADD COLUMN allergies_updated_at		TIMESTAMP,
 ADD COLUMN prm_surgeon_user_id		INT REFERENCES users(id) ON DELETE SET NULL;
 
 --############################################################

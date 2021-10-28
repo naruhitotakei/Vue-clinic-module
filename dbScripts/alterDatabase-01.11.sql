@@ -3,7 +3,7 @@
 --############################################################
 
 ALTER TABLE invoice ADD COLUMN item_id INT
-CONSTRAINT invoice_prm_invoice_item_fk REFERENCES prm_invoice_item (item_id);
+CONSTRAINT invoice_prm_invoice_item_fk REFERENCES prm_invoice_item (invoice_item_id);
 
 ALTER TABLE prm_invoice_item DROP COLUMN product_id;
 

@@ -101,13 +101,17 @@ const fileUpload = async (id, fileName, fileContent, mimeType) => {
   })
 }
 
-const upload = async (fileName, fileContent, mimeType) => {
+const upload = async (fileName, fileContent, mimeType, displayName, fileType) => {
   return new Promise((resolve, reject) => {
     var params = {
       Bucket: defaultBucketName,
       Key: fileName,
       Body: fileContent,
-      ContentType: mimeType
+      ContentType: mimeType,
+      Metadata: {
+        'displayName': displayName,
+        'fileType': fileType,
+      }
     }
     s3.upload(params, function (err, data) {
       if (err) {

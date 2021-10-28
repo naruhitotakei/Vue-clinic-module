@@ -163,7 +163,11 @@ export default {
       getDoctorList().then((data) => {
         if (Array.isArray(data)) {
           this.doctorsList = data
-          this.resources = this.doctorsList.map(item => ({ id: item.id, title: item.name }))
+          this.resources = this.doctorsList.map(item => ({
+            id: item.id,
+            title: item.name,
+            doctorInfo: { ...item }
+          }))
           this.doctors = this.doctorsList.map(item => ({
             id: Date.now(),
             title: item.name,
@@ -173,12 +177,12 @@ export default {
         }
       })
     },
-    async updateApp () {
-      await this.getApontments()
+    async updateApp ({ start, end }) {
+      await this.getApontments(moment(start).startOf('month').format('YYYY-MM-DD'), moment(end).endOf('month').format('YYYY-MM-DD'))
     },
-    getApontments () {
-      this.events = []
-      getCalendar('2021-01-01', '2021-12-31', '', this.$i18n.locale).then(data => {
+    getApontments (start, end) {
+      // this.events = []
+      getCalendar(start, end, '', this.$i18n.locale).then(data => {
         if (Array.isArray(data)) {
           let dataWithDoctor = data.filter(item => {
             return item
@@ -191,6 +195,7 @@ export default {
               start: moment(item.starts_at).format('YYYY-MM-DDTHH:mm'),
               end: item.ends_at ? moment(item.ends_at).format('YYYY-MM-DDTHH:mm') : moment(item.starts_at).add('0', 'hours').add('15', 'minutes').format('YYYY-MM-DDTHH:mm'),
               backgroundColor: item.app_lb_color ? item.app_lb_color : '#64D6E8',
+              classNames: item.appointment_canceled_in_advance_by_clinic || item.appointment_canceled_in_advance_by_patient ? 'bg-opacity-50' : '',
               assignmentDate: moment(item.starts_at).format('YYYY-MM-DDTHH:mm'),
               patient_attended: item.patient_attended,
               appointment_canceled_in_advance_by_patient: item.appointment_canceled_in_advance_by_patient,
@@ -269,6 +274,9 @@ export default {
 }
 </script>
 <style  lang="scss">
+.bg-opacity-50 {
+  opacity: 0.5;
+}
 .calendar-page {
   .main-wrapper {
     display: flex;

@@ -164,6 +164,25 @@
                                                       <textarea :disabled="disabled" row="2" v-model="formAppointments.notes" class="form-control form-control-disabled font-size-15" placeholder="Add your note here for event!" id="note" required></textarea>
                                                   </div>
                                               </div>
+                                              <template v-if="formAppointments.id">
+                                                  <div class="row align-items-center justify-content-between w-100 pt-1" :class="{'mb-3': !disabled}">
+                                                      <div class="col-md-3">
+                                                          <label for="color" class="mb-0">{{ $t('calendarEvent.patient_attended') }}</label><br>
+                                                      </div>
+                                                      <div class="col-md-9">
+                                                          <template v-for="(item,index) in patient_attend">
+                                                              <b-form-radio class="custom-radio-patient font-size-16"
+                                                                            inline
+                                                                            v-model="formAppointments.patient_attended"
+                                                                            :value="item.value"
+                                                                            :key="index"
+                                                                            v-if="showProps(item, formAppointments.patient_attended)">
+                                                                  {{ item.label }}
+                                                              </b-form-radio>
+                                                          </template>
+                                                      </div>
+                                                  </div>
+                                              </template>
                                               <div class="row align-items-center justify-content-between w-100 mb-3 mt-2">
                                                   <div class="col-md-3">
                                                       <label for="color">{{ $t('calendarEvent.labels') }}</label><br>
@@ -1289,9 +1308,27 @@ export default {
         backgroundColor: '',
         description: '',
         product_groups: '',
+        patient_attended: '',
         appointment_canceled_in_advance_by_clinic: false,
         appointment_canceled_in_advance_by_patient: false
       },
+      patient_attend: [
+        {
+          label: this.$t('calendarEvent.unknown'),
+          value: 'Unknown',
+          checked: true
+        },
+        {
+          label: this.$t('calendarEvent.attended'),
+          value: 'Attended',
+          checked: false
+        },
+        {
+          label: this.$t('calendarEvent.notAttended'),
+          value: 'Not attended',
+          checked: false
+        }
+      ],
       notesFormData: {
         enquiry_id: +this.$route.params.patientId,
         content: '',
@@ -1839,8 +1876,16 @@ export default {
         backgroundColor: '',
         description: '',
         product_groups: '',
+        patient_attended: '',
         appointment_canceled_in_advance_by_clinic: false,
         appointment_canceled_in_advance_by_patient: false
+      }
+    },
+    showProps (item, prop) {
+      if (this.disabled && prop === item.value) {
+        return true
+      } else if (!this.disabled) {
+        return true
       }
     },
     cancelAssignments () {

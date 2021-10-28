@@ -246,7 +246,7 @@ export default {
       colors: 'Setting/colorState'
     }),
     getAvatarUrl: function () {
-      return '/api/files/avatar/' + this.logedInUser.id
+      return '/api/files/avatar'
     },
     isEditDisabled () {
       return !this.logedInUser.first_name || !this.logedInUser.surname || !this.logedInUser.email
@@ -451,6 +451,7 @@ export default {
     langChange (lang) {
       this.langChangeState(lang)
       this.$i18n.locale = lang
+      this.logedInUser.prm_locale = lang
       if (document.getElementsByClassName('iq-show').length) {
         document.getElementsByClassName('iq-show')[0].classList.remove('iq-show')
       }
