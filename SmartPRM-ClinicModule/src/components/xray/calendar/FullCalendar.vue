@@ -819,6 +819,7 @@ export default {
 }
 .fc-timegrid-slot {
     line-height: 0 !important;
+    border-bottom: 1px solid var(--fc-border-color, #ddd) !important;
 }
 .fc .fc-timegrid-now-indicator-container {
   overflow: visible !important;
