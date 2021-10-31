@@ -385,8 +385,11 @@ export default {
       this.getProductGroups(this.$i18n.locale)
       this.getLabels(this.$i18n.locale)
     },
-    'calendarLocale' () {
-      this.calendarOptions.locale = this.calendarLocale
+    'calendarLocale': {
+      immediate: true,
+      handler () {
+        this.calendarOptions.locale = this.calendarLocale
+      }
     },
     'modalShow.show' () {
       if (!this.formData.id) {
