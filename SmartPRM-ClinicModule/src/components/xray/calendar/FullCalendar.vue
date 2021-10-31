@@ -586,12 +586,7 @@ export default {
       this.selectedDoctor = null
     },
     updateCalendar (id, appointment) {
-      updateCalendar(id, appointment).then(() => {
-        this.$emit('updateApp', {
-          start: this.dates.start,
-          end: this.dates.end
-        })
-      })
+      updateCalendar(id, appointment)
     },
     updateCalendarLabel (id, appointment) {
       updateCalendarLabel(id, appointment).then(() => {
