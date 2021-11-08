@@ -385,8 +385,11 @@ export default {
       this.getProductGroups(this.$i18n.locale)
       this.getLabels(this.$i18n.locale)
     },
-    'calendarLocale' () {
-      this.calendarOptions.locale = this.calendarLocale
+    'calendarLocale': {
+      immediate: true,
+      handler () {
+        this.calendarOptions.locale = this.calendarLocale
+      }
     },
     'modalShow.show' () {
       if (!this.formData.id) {
@@ -583,12 +586,7 @@ export default {
       this.selectedDoctor = null
     },
     updateCalendar (id, appointment) {
-      updateCalendar(id, appointment).then(() => {
-        this.$emit('updateApp', {
-          start: this.dates.start,
-          end: this.dates.end
-        })
-      })
+      updateCalendar(id, appointment)
     },
     updateCalendarLabel (id, appointment) {
       updateCalendarLabel(id, appointment).then(() => {
@@ -821,6 +819,7 @@ export default {
 }
 .fc-timegrid-slot {
     line-height: 0 !important;
+    border-bottom: 1px solid var(--fc-border-color, #ddd) !important;
 }
 .fc .fc-timegrid-now-indicator-container {
   overflow: visible !important;
