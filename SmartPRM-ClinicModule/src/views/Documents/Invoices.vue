@@ -26,27 +26,27 @@
           </b-modal>
         <iq-card>
           <template v-slot:headerTitle>
-              <h3 class="card-title" style="margin-top: 10px;">{{ $t('invoices.invoicesHeader') }}</h3>
-                        <div class="col-12 col-sm-3 col-md-3 col-lg-2 mb-4 mb-sm-0 invoice">
-                            <b-button variant="primary" @click="modalShow = true"><i class="ri-add-line mr-2"></i>{{ $t('invoices.invoicesBtn') }}</b-button>
-                        </div>
-                        <div class="iq-card-header-toolbar d-sm-flex align-items-center col-12 col-sm-9 col-md-9 col-lg-10" style="margin-top: -10px;">
-                            <div class="iq-search-bar">
-                                <form action="#" class="searchbox">
-                                    <input type="search" v-model="filter" class="text search-input" :placeholder="$t('shared.search')">
-                                    <a class="search-link" href="#"><i class="ri-search-line"></i></a>
-                                </form>
-                            </div>
-                            <iq-card class="mt-4 mt-sm-0">
-                              <b-form-group label-for="searchOptions" :label="$t('shared.searchBy')">
-                              <v-select class="patients" label="text"
-                                :clearable="false" :reduce="filter => filter.value"
-                                :options="searchOptions" @input="filterSelected">
-                              </v-select>
-                              </b-form-group>
-                            </iq-card>
-                        </div>
-                    </template>
+            <h3 class="card-title" style="margin-top: 10px;">{{ $t('invoices.invoicesHeader') }}</h3>
+            <div class="btn-add-patient col-12 col-sm-3 col-md-4 col-lg-3 mb-4 mb-sm-0 invoice">
+                <b-button variant="primary" @click="modalShow = true"><i class="ri-add-line mr-2"></i>{{ $t('invoices.invoicesBtn') }}</b-button>
+            </div>
+            <div class="iq-card-header-toolbar d-sm-flex align-items-center col-12 col-sm-9 col-md-8 col-lg-9" style="margin-top: -10px;">
+                <div class="iq-search-bar">
+                    <form action="#" class="searchbox">
+                        <input type="search" v-model="filter" class="text search-input" :placeholder="$t('shared.search')">
+                        <a class="search-link" href="#"><i class="ri-search-line"></i></a>
+                    </form>
+                </div>
+                <iq-card class="mt-4 mt-sm-0">
+                  <b-form-group label-for="searchOptions" :label="$t('shared.searchBy')">
+                  <v-select class="patients" label="text"
+                    :clearable="false" :reduce="filter => filter.value"
+                    :options="searchOptions" @input="filterSelected">
+                  </v-select>
+                  </b-form-group>
+                </iq-card>
+            </div>
+          </template>
           <template v-slot:body>
             <b-row>
               <b-col md="12" class="table-responsive">
@@ -231,10 +231,7 @@ export default {
   padding: 0 15px 0 0 !important;
   margin: 0 !important;
 }
-.search-link {
-  right: -4px !important;
-  top: 83px !important;
-}
+
 .search-input {
   width: 105% !important;
 }

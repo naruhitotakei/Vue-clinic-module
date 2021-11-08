@@ -19,10 +19,10 @@
                 <iq-card>
                     <template v-slot:headerTitle>
                         <h3 class="card-title" style="margin-top: 10px;">{{ $t('advPayments.advPaymentsHeader') }}</h3>
-                        <div class="btn-add-patient col-12 col-sm-3 col-md-4 col-lg-3 mb-4 mb-sm-0 adv-payment">
+                        <div class="btn-add-patient col-12 col-sm-4 col-md-4 col-lg-3 mb-4 mb-sm-0 adv-payment">
                             <b-button variant="primary" @click="modalShow = true"><i class="ri-add-line mr-2"></i>{{ $t('advPayments.advPaymentsBtn') }}</b-button>
                         </div>
-                        <div class="iq-card-header-toolbar d-sm-flex align-items-center col-12 col-sm-9 col-md-8 col-lg-9" style="margin-top: -10px;">
+                        <div class="iq-card-header-toolbar d-sm-flex align-items-center col-12 col-sm-8 col-md-8 col-lg-9" style="margin-top: -10px;">
                             <div class="iq-search-bar">
                                 <form action="#" class="searchbox">
                                     <input type="text" v-model="filter" class="text search-input" :placeholder="$t('shared.search')">
@@ -204,10 +204,7 @@ export default {
   padding: 0 15px 0 0 !important;
   margin: 0 !important;
 }
-.search-link {
-  right: -4px !important;
-  top: 83px !important;
-}
+
 .search-input {
   width: 105% !important;
 }
