@@ -27,7 +27,7 @@
         <iq-card>
           <template v-slot:headerTitle>
               <h3 class="card-title" style="margin-top: 10px;">{{ $t('invoices.invoicesHeader') }}</h3>
-                        <div class="btn-add-patient col-12 col-sm-3 col-md-3 col-lg-2 mb-4 mb-sm-0 invoice">
+                        <div class="col-12 col-sm-3 col-md-3 col-lg-2 mb-4 mb-sm-0 invoice">
                             <b-button variant="primary" @click="modalShow = true"><i class="ri-add-line mr-2"></i>{{ $t('invoices.invoicesBtn') }}</b-button>
                         </div>
                         <div class="iq-card-header-toolbar d-sm-flex align-items-center col-12 col-sm-9 col-md-9 col-lg-10" style="margin-top: -10px;">
@@ -233,7 +233,7 @@ export default {
 }
 .search-link {
   right: -4px !important;
-  top: 94px !important;
+  top: 83px !important;
 }
 .search-input {
   width: 105% !important;

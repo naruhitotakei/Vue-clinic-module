@@ -5,7 +5,7 @@
                 <iq-card>
                     <template v-slot:headerTitle>
                         <h3 class="card-title" style="margin-top: 10px;">{{ $t('patients.patientsHeader') }}</h3>
-                        <div class="btn-add-patient col-12 col-sm-3 col-md-2 mb-4 mb-sm-0 patient" style="z-index:1">
+                        <div class="col-12 col-sm-3 col-md-2 mb-4 mb-sm-0 patient" style="z-index:1">
                             <b-button variant="primary" @click="openAddPatient = true"><i class="ri-add-line mr-2"></i>{{ $t('patients.addPatient') }}</b-button>
                         </div>
                         <div class="iq-card-header-toolbar d-sm-flex align-items-center col-12 col-sm-9 col-md-10" style="margin-top: -10px;">
@@ -23,7 +23,7 @@
                                     </v-select>
                                 </b-form-group>
                             </iq-card>
-                            <iq-card class="mt-4 ml-3 mt-sm-0">
+                            <iq-card class="mt-4 mt-sm-0">
                                 <b-form-group label-for="searchOptions" :label="$t('shared.sortBy')">
                                     <v-select class="patients" label="text"
                                               :clearable="false"
@@ -335,10 +335,11 @@ export default {
 }
 .search-link {
   right: -4px !important;
-  top: 94px !important;
+  top: 83px !important;
 }
 .search-input {
   width: 105% !important;
+  min-height: 35px !important;
 }
 }
 
@@ -374,6 +375,6 @@ export default {
 .patients .vs__dropdown-menu {
     border-radius: 10px;
     min-height: 35px;
-    min-width: 150px;
+    min-width: 150px !important;
 }
 </style>

@@ -181,7 +181,7 @@ export default {
 }
 .search-link {
   right: -4px !important;
-  top: 94px !important;
+  top: 83px !important;
 }
 .search-input {
   width: 105% !important;
