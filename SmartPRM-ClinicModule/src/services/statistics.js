@@ -17,3 +17,13 @@ export async function clinicStatisticsAttendance () {
   })
   return rawResponse.json()
 }
+
+export async function visitsByCountryInAWeek () {
+  const rawResponse = await fetch('/api/statistics/visits-by-country', {
+    credentials: 'same-origin',
+    headers: {
+      'Accept': 'application/json'
+    }
+  })
+  return rawResponse.json()
+}

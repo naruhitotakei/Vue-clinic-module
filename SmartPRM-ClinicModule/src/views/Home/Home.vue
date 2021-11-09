@@ -87,7 +87,7 @@
                 </iq-card>
             </b-col>
             <b-col lg="4">
-                <iq-card class-name="iq-card-block iq-card-stretch iq-card-height" style="height: auto;">
+                <iq-card class-name="iq-card-block iq-card-stretch">
                     <template v-slot:headerTitle>
                         <h4 class="card-title">{{ $t('home.staffList') }}</h4>
                     </template>
@@ -114,7 +114,23 @@
                         </ul>
                     </template>
                 </iq-card>
+                <iq-card class-name="iq-card-block iq-card-stretch">
+                  <template v-slot:headerTitle>
+                    <h4 class="card-title">{{ $t('home.patientsByCountry') }}</h4>
+                  </template>
+                  <template v-slot:body>
+                    <div class="iq-details" :class="{'mt-3': index !== 0}" v-for="(country, index) in countriesWithPatients" :key="index">
+                      <span class="title text-dark">{{country.name}}</span>
+                      <div class="percentage float-right text-primary">{{country.percentage ? country.percentage : 0}} <span>%</span></div>
+                      <div class="iq-progress-bar-linear d-inline-block w-100">
+                        <b-progress :value="country.percentage ? country.percentage : 0" class="pr-bar" :key="index"></b-progress>
+                      </div>
+                    </div>
+                  </template>
+                </iq-card>
             </b-col>
+            <b-col lg="4">
+      </b-col>
             <b-col lg="3">
                 <!--<iq-card>
               <template v-slot:headerTitle>
@@ -319,13 +335,14 @@ import IqCard from '../../components/xray/cards/iq-card'
 import { xray } from '../../config/pluginInit'
 import { getTodaysAppointments, getStaff, getAssignmentsForUser, updateAppointment } from '../../services/homeService'
 import moment from 'moment'
-import { getLocationsList } from '../../services/commonCodeLists'
+import { getLocationsList, getCountriesWithPatients } from '../../services/commonCodeLists'
+import { visitsByCountryInAWeek } from '../../services/statistics'
 import { getProductGroups } from '@/services/products'
 import { getDoctorList } from '@/services/calendarService'
 import { sso } from '@/services/userService'
 import DatePicker from 'vue2-datepicker'
 import 'vue2-datepicker/index.css'
-
+import _ from 'lodash'
 const body = document.getElementsByTagName('body')
 export default {
   name: 'Home',
@@ -384,6 +401,8 @@ export default {
           opacity: 1
         }
       },
+      totalVisits: 0,
+      countriesWithPatients: [],
       todaysAppointments: [],
       todaysAppointmentsColumns: [
         { label: this.$t('home.todaysAppointmentsColumn.patient'), key: 'patient_name', class: 'text-left' },
@@ -393,6 +412,7 @@ export default {
         { label: this.$t('home.todaysAppointmentsColumn.contact'), key: 'patient_phone', class: 'text-left' }
       ],
       staff: [],
+      a: 13,
       openAssignments: [],
       openAssignmentsColumns: [
         { label: this.$t('home.openAssignmentsColumn.description'), key: 'description', class: 'text-left' },
@@ -454,6 +474,7 @@ export default {
   mounted () {
     xray.index()
     this.getUserLogin()
+    this.getCountriesWithPatients()
     body[0].classList.add('sidebar-main-menu')
   },
   computed: {
@@ -548,11 +569,38 @@ export default {
       this.appointmentData = item
       this.appointmentModal = true
       this.selectedDoctor = item.doctor_name
+    },
+    getCountriesWithPatients () {
+      getCountriesWithPatients().then(response => {
+        this.countriesWithPatients = response
+        this.getVisitsByCountryInAWeek()
+      })
+    },
+    getVisitsByCountryInAWeek () {
+      visitsByCountryInAWeek().then(response => {
+        let visitsByCountry = response
+        this.totalVisits = _.sumBy(visitsByCountry, function (o) { return +o.count })
+        visitsByCountry.forEach(element => {
+          element.percentage = element.count / this.totalVisits * 100
+        })
+
+        this.countriesWithPatients = _.map(this.countriesWithPatients, function (country) {
+          return _.assign(country, _.find(visitsByCountry, {
+            name: country.name
+          }))
+        })
+      })
     }
   }
 }
 </script>
 
-<style scoped>
+<style lang="scss">
+.pr-bar {
+  height: 6px !important;
+}
 
+.pr-bar > div {
+  background-color: #089bab !important;
+}
 </style>

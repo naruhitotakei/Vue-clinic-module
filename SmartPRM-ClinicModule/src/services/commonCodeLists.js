@@ -68,3 +68,15 @@ export async function getMunicipalitiesList () {
   })
   return rawResponse.json()
 }
+
+export async function getCountriesWithPatients () {
+  const rawResponse = await fetch('/api/codelist/countries-with-patients', {
+    method: 'GET',
+    credentials: 'same-origin',
+    headers: {
+      'Accept': 'application/json',
+      'Content-Type': 'application/json'
+    }
+  })
+  return rawResponse.json()
+}

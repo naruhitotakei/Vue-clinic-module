@@ -17,6 +17,15 @@ const getCountriesList = (request, response) => {
     })
 }
 
+const getCountriesWithPatients = (request, response) => {
+    pool.query("SELECT DISTINCT c.name FROM enquiries e LEFT JOIN countries c ON e.country_id = c.id WHERE e.country_id NOTNULL", (error, results) => {
+        if (error) {
+            throw error
+        }
+        response.status(200).json(results.rows)
+    })
+}
+
 const getRegionsList = (request, response) => {
     pool.query("SELECT r.id as code, r.country_id, r.name as label FROM regions r", (error, results) => {
         if (error) {
@@ -64,6 +73,7 @@ const getClients = (request, response) => {
 
 module.exports = {
   getCountriesList,
+  getCountriesWithPatients,
   getRegionsList,
   getMunicipalitiesList,
   getLocationsList,

@@ -71,6 +71,7 @@
   "home": {
     "todaysAppointments": "Današnji termini",
     "noAppointmentsToday": "Danes ni dogovorjenih terminov",
+    "patientsByCountry": "Pacienti v tem tednu po državah",
     "todaysAppointmentsColumn": {
       "patient": "Pacient",
       "productGroup": "Produktna skupina",
