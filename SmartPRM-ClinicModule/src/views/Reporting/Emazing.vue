@@ -40,7 +40,7 @@
                 <th v-for="(item,index) in servicesSummaryColumns" :key="index" :class="item.key === 'item' ? 'text-left' : ''">{{ item.label }}</th>
               </tr>
               </thead>
-              <tbody>
+              <tbody class="text-center">
               <template v-for="(body,bodyKey ) in getServicesSummary" >
                 <tr :key="bodyKey" class="main-row">
                   <td style="max-width: 200px"><span class="font-weight-bold">{{ bodyKey }}</span></td>
@@ -80,28 +80,33 @@
                 <th v-for="(item,index) in servicesListColumns" :key="index" :class="item.key === 'item' ? 'text-left' : ''">{{ item.label }}</th>
               </tr>
               </thead>
-              <tbody>
+              <tbody class="text-center">
               <template v-for="(body, bodyKey) in servicesListItems" >
                 <tr :key="bodyKey" class="main-row">
-                  <td colspan="3"><span class="font-weight-bold">{{ bodyKey }}</span></td>
-                  <td ><span class="font-weight-bold">{{formatNumber(Math.trunc(body.group_price))}} &#8364;</span></td>
-                  <td  colspan="2"><span class="font-weight-bold">{{formatNumber(Math.trunc(body.group_fee))}} &#8364;</span></td>
+                  <td><span class="font-weight-bold">{{ bodyKey }}</span></td>
+                  <td><span class="font-weight-bold"></span></td>
+                  <td><span class="font-weight-bold"></span></td>
+                  <td><span class="font-weight-bold">{{formatNumber(Math.trunc(body.group_price))}} &#8364;</span></td>
+                  <td><span class="font-weight-bold">{{formatNumber(Math.trunc(body.group_fee))}} &#8364;</span></td>
+                  <td><span class="font-weight-bold"></span></td>
                 </tr>
                 <template v-for="(item, index) in body" >
                   <tr :key="Math.random(index + 1000)">
-                    <td><span >{{ item.doctor }}</span></td>
-                    <td><span >{{ item.service_title}}  </span></td>
-                    <td><router-link tag="span" :to="'/patients/'+ item.enquiry_id" style="cursor:pointer;">{{ item.name }} {{ item.last_name}}  </router-link></td>
-                    <td><span>{{ formatNumber(Math.trunc(item.price))}} &#8364;  </span></td>
-                    <td><span>{{ formatNumber(Math.trunc(item.fee))}} &#8364;  </span></td>
-                    <td><span >{{ formatDateString(item.date)}}  </span></td>
+                    <td class="text-center"><span >{{ item.doctor }}</span></td>
+                    <td class="text-center"><span >{{ item.service_title}}  </span></td>
+                    <td class="text-center"><router-link tag="span" :to="'/patients/'+ item.enquiry_id" class="clickable">{{ item.name }} {{ item.last_name}}  </router-link></td>
+                    <td class="text-center"><span>{{ formatNumber(Math.trunc(item.price))}} &#8364;  </span></td>
+                    <td class="text-center"><span>{{ formatNumber(Math.trunc(item.fee))}} &#8364;  </span></td>
+                    <td class="text-center"><span >{{ formatDateString(item.date)}}  </span></td>
                   </tr>
                 </template>
               </template>
               <tr v-if="servicesSummaryTotalCount">
-                <td  colspan="3"><span class="font-weight-bold"> Total: </span></td>
-                <td> <span class="font-weight-bold">{{formatNumber(Math.trunc(servicesListTotalCount))}} &#8364;</span></td>
-                <td colspan="2"> <span class="font-weight-bold">{{formatNumber(Math.trunc(servicesListTotalFee))}} &#8364;</span></td>
+                  <td><span class="font-weight-bold"> Total: </span></td>
+                  <td><span class="font-weight-bold"></span></td>
+                  <td><span class="font-weight-bold"></span></td>
+                  <td> <span class="font-weight-bold">{{formatNumber(Math.trunc(servicesListTotalCount))}} &#8364;</span></td>
+                  <td> <span class="font-weight-bold">{{formatNumber(Math.trunc(servicesListTotalFee))}} &#8364;</span></td>
               </tr>
               </tbody>
             </b-table-simple>
@@ -353,6 +358,10 @@ export default {
 }
 </script>
 <style lang="scss">
+.clickable {
+   cursor: pointer;
+}
+
 .date-group {
   margin-right:20px;
 
