@@ -27,3 +27,10 @@ export default {
   }
 }
 </script>
+<style lang="scss">
+@media (max-width: 479px) {
+[dir=ltr] h1 {
+  font-size: 2.052em !important;
+}
+}
+</style>
