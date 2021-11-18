@@ -1,12 +1,10 @@
 <template>
   <div class="mt-5">
     <service-table
-    :key="`service_section_${index}`"
     :ref="`service`"
     :list="service.list"
     :title="service.title"
     :selectedServices="selectedServices"
-    :tabId="`${index}_tab`"
     @row-selected="rowSelectHandler"
     />
     <div class="text-right">
