@@ -41,7 +41,7 @@
                                 <div class="mt-4 ml-2">
                                     <p v-if="todaysTotalRows === 0"> You have no assignment today.</p>
                                      <b-pagination
-                                         v-else-if="todaysTotalRows > 20"
+                                         v-else-if="todaysTotalRows > 10"
                                          v-model="todayCurrentPage"
                                         :total-rows="todaysTotalRows"
                                         :per-page="todayPerPage"
@@ -131,7 +131,7 @@
                             <div class="mt-4 ml-2">
                                 <p v-if="futureTotalRows===0"> You have no future assignments.</p>
                                 <b-pagination
-                                    v-else
+                                    v-else-if="futureTotalRows > 10"
                                     v-model="futureCurrentPage"
                                     :total-rows="futureTotalRows"
                                     :per-page="futurePerPage"
@@ -165,7 +165,7 @@
                             <div class="mt-4 ml-2">
                                 <p v-if="completedTotalRows===0"> You have no completed assignments.</p>
                                 <b-pagination
-                                    v-else-if="completedTotalRows > 20"
+                                    v-else-if="completedTotalRows > 10"
                                     v-model="completedCurrentPage"
                                     :total-rows="completedTotalRows"
                                     :per-page="completedPerPage"
