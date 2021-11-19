@@ -32,6 +32,10 @@ export const xray = {
     animation.fadeOut(load, { duration: 0 })
     animation.fadeOut(load, { duration: 1400 })
     setTimeout(() => {
+      if (load == null) {
+        return
+      }
+
       load.classList.add('d-none')
     }, 1400)
     // $('#loading').delay(1000).fadeOut('slow')
@@ -416,6 +420,10 @@ export const animation = {
         return animation.easing.swing(progress)
       },
       step: function (delta) {
+        if (element == null) {
+          return
+        }
+
         element.style.opacity = to - delta
       }
     })
@@ -429,6 +437,10 @@ export const animation = {
         return animation.easing.swing(progress)
       },
       step: function (delta) {
+        if (element == null) {
+          return
+        }
+
         element.style.opacity = to + delta
       }
     })

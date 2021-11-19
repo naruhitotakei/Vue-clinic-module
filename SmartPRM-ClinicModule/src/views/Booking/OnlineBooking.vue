@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <public-layout>
     <!-- Tabs with card integration -->
     <b-card no-body>
       <b-tabs v-model="tabIndex" small card>
@@ -16,7 +16,7 @@
       </b-tabs>
     </b-card>
 
-  </div>
+  </public-layout>
 </template>
 
 <script>
@@ -24,12 +24,14 @@ import { xray } from '../../config/pluginInit'
 import Order from './components/Order/Order'
 import Map from './components/Map'
 import Team from './components/Team'
+import PublicLayout from '../../layouts/PublicLayout.vue'
 
 export default {
   components: {
     Order,
     Map,
-    Team
+    Team,
+    PublicLayout
   },
   name: 'OnlineBooking',
   data: function () {
