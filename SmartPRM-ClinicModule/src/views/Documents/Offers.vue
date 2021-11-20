@@ -57,6 +57,7 @@
               <b-collapse id="collapse-6" class="mb-2"> </b-collapse>
               <div class="mt-3">
                 <b-pagination
+                v-if="hidePagination"
                 v-model="currentPage"
                 :total-rows="totalRows"
                 :per-page="perPage"
@@ -81,6 +82,11 @@ export default {
   components: {
   },
   name: 'Offers',
+  computed: {
+    hidePagination () {
+      return Math.floor(this.totalRows / this.perPage) !== 0
+    }
+  },
   methods: {
     default () {
       return {
