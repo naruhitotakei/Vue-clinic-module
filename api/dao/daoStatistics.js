@@ -37,8 +37,18 @@ const getVisitsByCountryInAWeek = (request, response) =>  {
     })
 }
 
+const getDoctorsStatisticPerWeek = (request, response) =>  {
+    pool.query("select a.starts_at, a.doctor_id from appointments a where a.starts_at >= date_trunc('week', CURRENT_DATE) AND a.starts_at < (date_trunc('week', CURRENT_DATE) + INTERVAL '6 DAY') AND a.appointment_canceled_in_advance_by_clinic = false AND a.appointment_canceled_in_advance_by_patient = false GROUP BY a.starts_at , a.doctor_id, a.attendance", (error, results) => {
+        if (error) {
+            throw error
+        }
+        response.status(200).json(results.rows)
+    })
+}
+
 module.exports = {
   getClinicStatistics,
   getClinicAttendance,
-  getVisitsByCountryInAWeek
+  getVisitsByCountryInAWeek,
+  getDoctorsStatisticPerWeek
 }
