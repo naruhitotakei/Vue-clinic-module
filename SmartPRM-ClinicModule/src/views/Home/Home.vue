@@ -129,8 +129,9 @@
                   </template>
                 </iq-card>
             </b-col>
-            <b-col lg="4">
-      </b-col>
+            <b-col lg="8">
+              <apex-chart type="bar" height="350" :options="chartOptions" :series="series"></apex-chart>
+            </b-col>
             <b-col lg="3">
                 <!--<iq-card>
               <template v-slot:headerTitle>
@@ -335,13 +336,14 @@ import IqCard from '../../components/xray/cards/iq-card'
 import { xray } from '../../config/pluginInit'
 import { getTodaysAppointments, getStaff, getAssignmentsForUser, updateAppointment } from '../../services/homeService'
 import moment from 'moment'
-import { getLocationsList, getCountriesWithPatients } from '../../services/commonCodeLists'
-import { visitsByCountryInAWeek } from '../../services/statistics'
+import { getLocationsList, getCountriesWithPatients, getDatesForCurrentWeek } from '../../services/commonCodeLists'
+import { visitsByCountryInAWeek, getDoctorsStatisticPerWeek } from '../../services/statistics'
 import { getProductGroups } from '@/services/products'
 import { getDoctorList } from '@/services/calendarService'
 import { sso } from '@/services/userService'
 import DatePicker from 'vue2-datepicker'
 import 'vue2-datepicker/index.css'
+
 import _ from 'lodash'
 const body = document.getElementsByTagName('body')
 export default {
@@ -349,18 +351,12 @@ export default {
   components: { IqCard, DatePicker },
   data () {
     return {
-      chart5: {
-        series: [{
-          name: 'PRODUCT A',
-          data: [44, 55, 41, 67, 22, 43]
-        }, {
-          name: 'PRODUCT B',
-          data: [13, 23, 20, 8, 13, 27]
-        }, {
-          name: 'PRODUCT C',
-          data: [11, 17, 15, 15, 21, 14]
-        }],
-        // colors: ['#089bab', '#FC9F5B', '#5bc5d1'],
+      doctorsData: [],
+      datesForCurrentWeek: [],
+      dataForChart: [],
+      series: [],
+      dates: [],
+      chartOptions: {
         chart: {
           type: 'bar',
           height: 350,
@@ -372,6 +368,7 @@ export default {
             enabled: true
           }
         },
+        colors: ['#089bab', '#ffb177', '#00d0ff', '#e64141', '#00ca00', '#777D74', '#374948', '#6610f2'],
         responsive: [{
           breakpoint: 480,
           options: {
@@ -384,7 +381,8 @@ export default {
         }],
         plotOptions: {
           bar: {
-            horizontal: false
+            horizontal: false,
+            borderRadius: 10
           }
         },
         xaxis: {
@@ -449,7 +447,6 @@ export default {
       locations: [],
       product_groups: [],
       doctors: [],
-      colors: [],
       appointmentModal: false,
       openCancelationModal: false,
       patient_attend: [
@@ -475,6 +472,7 @@ export default {
     xray.index()
     this.getUserLogin()
     this.getCountriesWithPatients()
+    this.getDoctorsStatisticPerWeek()
     body[0].classList.add('sidebar-main-menu')
   },
   computed: {
@@ -525,6 +523,7 @@ export default {
           })
           getDoctorList().then((data) => {
             this.doctors = data
+            this.getDatesForCurrentWeek()
           })
         }
       })
@@ -532,6 +531,16 @@ export default {
     getTodaysAppointmentsList (locale) {
       getTodaysAppointments(locale).then(response => {
         this.todaysAppointments = response
+      })
+    },
+    getDatesForCurrentWeek () {
+      getDatesForCurrentWeek().then(response => {
+        let temp = _.map(response, '?column?')
+        this.dates = temp
+        this.datesForCurrentWeek = _.map(temp, function (date) {
+          return moment(date).format('DD-MM-YYYY')
+        })
+        this.prepareDataForChart()
       })
     },
     updateAppointment (info) {
@@ -570,6 +579,29 @@ export default {
       this.appointmentModal = true
       this.selectedDoctor = item.doctor_name
     },
+    getDoctorsStatisticPerWeek () {
+      getDoctorsStatisticPerWeek().then(response => {
+        this.doctorsData = _.map(response, function (element) {
+          element.starts_at = moment(element.starts_at).format('DD-MM-YYYY')
+          return element
+        })
+      })
+    },
+    prepareDataForChart () {
+      this.doctors.forEach(doctor => {
+        let tempObj = {}
+        tempObj.name = doctor.name
+        tempObj.data = []
+        let allDoctorsData = this.doctorsData
+        let tempDoctorData = _.filter(allDoctorsData, { doctor_id: doctor.id })
+        this.datesForCurrentWeek.forEach(date => {
+          let tempArr = _.filter(tempDoctorData, { starts_at: date })
+          tempObj.data.push(tempArr.length)
+        })
+        this.dataForChart.push(tempObj)
+      })
+      this.chartOptions = { ...this.chartOptions, ...{ series: this.dataForChart, xaxis: { categories: this.dates } } }
+    },
     getCountriesWithPatients () {
       getCountriesWithPatients().then(response => {
         this.countriesWithPatients = response
@@ -581,13 +613,16 @@ export default {
         let visitsByCountry = response
         this.totalVisits = _.sumBy(visitsByCountry, function (o) { return +o.count })
         visitsByCountry.forEach(element => {
-          element.percentage = element.count / this.totalVisits * 100
+          element.percentage = (element.count / this.totalVisits * 100).toFixed(2)
         })
 
         this.countriesWithPatients = _.map(this.countriesWithPatients, function (country) {
           return _.assign(country, _.find(visitsByCountry, {
             name: country.name
           }))
+        })
+        this.countriesWithPatients = _.filter(this.countriesWithPatients, function (country) {
+          return country.hasOwnProperty('percentage')
         })
       })
     }
