@@ -8,7 +8,7 @@
               <template v-slot:body>
                 <div class="row justify-content-between align-items-center m-0">
                   <div class="row align-items-center">
-                    <b-dropdown id="dropdown-aria" variant="primary" :text="$t('calendar.selectDoctor')" class="ml-2">
+                    <b-dropdown id="dropdown-aria" variant="primary" :text="$t('calendar.selectDoctor')" class="ml-2 ml-sm-2">
                       <b-dropdown-group>
                         <b-checkbox name="check-button" v-model="allDoctorCheck" @change="allDoctorFun(allDoctorCheck)"
                                     inline>{{ $t('calendar.selectAll') }}
