@@ -218,9 +218,8 @@
                             <v-select :disabled="disabled"
                                       :clearable="false"
                                       label="product_group_name"
-                                      :reduce="product_group => product_group.product_group_id"
                                       class="style-chooser form-control-disabled font-size-16"
-                                      v-model="appointmentData.product_group"
+                                      v-model="selectedProductGroup"
                                       :options="product_groups"></v-select>
                         </div>
                     </div>
@@ -278,6 +277,25 @@
                             </div>
                         </div>
                     </template>
+                    <div class="row align-items-center justify-content-between w-100 pt-3 mb-3">
+                        <div class="col-md-3">
+                            <label for="color" class="mt-1 ml-1">{{ $t('calendarEvent.labels') }}</label><br>
+                        </div>
+                        <div class="col-md-9 mb-1">
+                            <template v-for="(item,index) in colors">
+                                <b-form-radio class="custom-radio-color font-size-16 labels"
+                                              inline
+                                              v-model="appointmentData.backgroundColor"
+                                              :key="index"
+                                              :value="item.id"
+                                              :style="{'background': item.color}"
+                                              name="labels"
+                                              v-if="showLabels(item)">
+                                    <p class="text-white m-0 py-1 pr-2">{{ item.text }}</p>
+                                </b-form-radio>
+                            </template>
+                        </div>
+                    </div>
                     <div class="modal-footer modal-footer-bt" style="width: 100%;">
                         <template v-if="disabled">
                             <button v-if="appointmentData.appointment_canceled_in_advance_by_clinic === false && appointmentData.appointment_canceled_in_advance_by_patient === false || openCancelationModal === true" type="button" class="btn btn-secondary" @click="openCancelationModal = true">{{ $t('calendar.btnCancelation') }}</button>
@@ -339,7 +357,7 @@ import moment from 'moment'
 import { getLocationsList, getCountriesWithPatients, getDatesForCurrentWeek } from '../../services/commonCodeLists'
 import { visitsByCountryInAWeek, getDoctorsStatisticPerWeek } from '../../services/statistics'
 import { getProductGroups } from '@/services/products'
-import { getDoctorList } from '@/services/calendarService'
+import { getDoctorList, getLabels } from '@/services/calendarService'
 import { sso } from '@/services/userService'
 import DatePicker from 'vue2-datepicker'
 import 'vue2-datepicker/index.css'
@@ -356,6 +374,7 @@ export default {
       dataForChart: [],
       series: [],
       dates: [],
+      colors: [],
       chartOptions: {
         chart: {
           type: 'bar',
@@ -439,10 +458,14 @@ export default {
         location: '',
         patient_id: '',
         product_group: '',
+        crmProduct: '',
+        label_id: '',
+        backgroundColor: '',
         appointment_canceled_in_advance_by_clinic: false,
         appointment_canceled_in_advance_by_patient: false
       },
       selectedDoctor: '',
+      selectedProductGroup: '',
       disabled: true,
       locations: [],
       product_groups: [],
@@ -525,8 +548,18 @@ export default {
             this.doctors = data
             this.getDatesForCurrentWeek()
           })
+          getLabels(this.$i18n.locale).then(response => {
+            this.colors = response
+          })
         }
       })
+    },
+    showLabels (item) {
+      if (this.disabled && this.appointmentData.label_id === item.id) {
+        return true
+      } else if (!this.disabled) {
+        return true
+      }
     },
     getTodaysAppointmentsList (locale) {
       getTodaysAppointments(locale).then(response => {
@@ -545,6 +578,10 @@ export default {
     },
     updateAppointment (info) {
       this.todaysAppointments.splice(0, this.todaysAppointments.length)
+      this.appointmentData.doctor_id = this.selectedDoctor.id
+      this.appointmentData.doctor_name = this.selectedDoctor.name
+      this.appointmentData.product_groups = this.selectedProductGroup.product_group_id
+      this.appointmentData.crmProduct = this.selectedProductGroup.crm_product_id
       updateAppointment(this.appointmentData.id, this.appointmentData).then(() => {
         this.disabled = true
         this.appointmentModal = false
@@ -553,8 +590,8 @@ export default {
     },
     closeCancelation () {
       this.openCancelationModal = false
-      this.formData.appointment_canceled_in_advance_by_clinic = false
-      this.formData.appointment_canceled_in_advance_by_patient = false
+      this.appointmentData.appointment_canceled_in_advance_by_clinic = false
+      this.appointmentData.appointment_canceled_in_advance_by_patient = false
     },
     editMode (e) {
       e.preventDefault()

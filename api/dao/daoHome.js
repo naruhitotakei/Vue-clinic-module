@@ -73,11 +73,13 @@ const updateAppointment = (request, response, id, appointment) => {
     if (appointment.doctor_id) statement += "doctor_id=" + appointment.doctor_id + ","
     if (appointment.doctor_name) statement += "doctor_name='" + appointment.doctor_name + "',"
     if (appointment.product_groups) statement += "product_group_id=" + appointment.product_groups + ","
+    if (appointment.crmProduct) statement += "product_id=" + appointment.crmProduct + ","
     if (appointment.start_time) statement += "starts_at='" + moment(appointment.start_time).format('YYYY-MM-DDTHH:mm') + "',"
     if (appointment.time) statement += "time='" + moment(appointment.start_time).format('HH:mm') + "',"
     if (appointment.end_time) statement += "ends_at='" + moment(appointment.end_time).format('YYYY-MM-DDTHH:mm') + "',"
     if (appointment.note) statement += "note='" + appointment.note + "',"
     if (appointment.patient_attended) statement += "patient_attended='" + appointment.patient_attended + "',"
+    if (appointment.backgroundColor) statement += "label_id=" + appointments.backgroundColor + ","
     statement += "appointment_canceled_in_advance_by_patient=" + appointment.appointment_canceled_in_advance_by_patient + ","
     statement += "appointment_canceled_in_advance_by_clinic=" + appointment.appointment_canceled_in_advance_by_clinic + "," 
     statement = statement.slice(0, -1)
