@@ -72,6 +72,7 @@
     "todaysAppointments": "Today's appointments",
     "noAppointmentsToday": "No scheduled appointments today",
     "patientsByCountry": "Patients this week by country",
+    "appointmentChart": "Number of appointments",
     "todaysAppointmentsColumn": {
       "patient": "Patient",
       "productGroup": "Product Group",
