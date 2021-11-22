@@ -1,7 +1,6 @@
 <template>
   <div>
       <div class="mb-3">
-        <b-button block v-b-toggle="tabId" variant="primary" class="text-left">{{title}}</b-button>
         <b-collapse :id="tabId" visible appear>
           <b-table
           :items="list"
@@ -12,6 +11,9 @@
           selectable
           @row-selected="selectedRowHandler"
           >
+          <template #head(serviceName)>
+            <span>Service</span>
+          </template>
           <template #cell(selected)="{ rowSelected }">
             <template v-if="rowSelected">
               <span aria-hidden="true">&check;</span>
