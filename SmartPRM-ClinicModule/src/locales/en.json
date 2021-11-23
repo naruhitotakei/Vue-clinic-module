@@ -48,7 +48,8 @@
     "SMSTemplates": "SMS templates",
     "mailTemplates": "Mail templates",
     "advertising": "Advertising",
-    "labels": "Labels"
+    "labels": "Labels",
+    "onlineBooking": "Online booking"
   },
   "nav": {
     "allNotifications": "All Notifications",
@@ -72,6 +73,7 @@
     "todaysAppointments": "Today's appointments",
     "noAppointmentsToday": "No scheduled appointments today",
     "patientsByCountry": "Patients this week by country",
+    "appointmentChart": "Number of appointments",
     "todaysAppointmentsColumn": {
       "patient": "Patient",
       "productGroup": "Product Group",
@@ -130,7 +132,7 @@
     "duration": "Duration",
     "note": "Note",
     "changeColor": "Change Color",
-    "labels": "Labels",
+    "labels": "Label",
     "viewPatient": "View Patient",
     "changeDisplayColor": "Change Appointment Color",
     "appointmentCancelled": "Appointment Cancelled by the Patient",
@@ -516,7 +518,7 @@
     "overdueAssignments": "Overdue Assignments",
     "futureAssignments": "Future Assignments",
     "completedAssignments": "Completed Assignments",
-    "addAssignmentsModal" : {
+    "addAssignmentsModal": {
       "addAssignments": "New Assignment",
       "editAssignments": "Edit Assignment",
       "enquiry": "Patient",
@@ -673,10 +675,23 @@
       "labelAction": "Action"
     }
   },
+  "onlineBooking": {
+    "header": "Services and products",
+    "addBtn": "Add",
+    "onlineBookingColumns": {
+      "serviceName": "Name",
+      "price": "Price",
+      "duration": "Duration (min.)",
+      "doctor": "Doctor",
+      "productGroup": "Product group",
+      "premise": "Location",
+      "action": "Action"
+    }
+  },
   "footer": {
-    "privacyPolicy":  "Privacy policy",
-    "termsOfUse":  "Terms of use",
-    "allRightsReserved":  "All rights reserved"
+    "privacyPolicy": "Privacy policy",
+    "termsOfUse": "Terms of use",
+    "allRightsReserved": "All rights reserved"
   },
   "dashboard2": {
     "card1": "AVG Impressions",

@@ -7,17 +7,7 @@ const pool = new Pool({
   database: process.env.POSTGRES_DB,
   password: process.env.POSTGRES_PASSWORD,
   port: process.env.POSTGRES_PORT || 5432,
-})
-
-const getClinicStatistics = (request, response, clinicId) =>  {
-    var statement = ["SELECT date_trunc('week',date)::date as date, SUM(cash_amount) AS cachRevenue, SUM(credit_card_amount) AS cardRevenue, SUM(cash_amount) + SUM(credit_card_amount) AS totalRevenue FROM services GROUP BY ( date_trunc('week', date)) ORDER BY ( date_trunc('week', date)) ASC "].join('\n') 
-    pool.query(statement, (error, results) => {
-        if (error) {
-            throw error
-        }
-        response.status(200).json(results.rows)
-    })
-}
+})  
 
 const getClinicAttendance = (request, response, clinicId) =>  {
     pool.query("SELECT COUNT(id) from appointments WHERE date >= date_trunc('month', CURRENT_DATE) AND attendance='Attended'", (error, results) => {
@@ -37,8 +27,17 @@ const getVisitsByCountryInAWeek = (request, response) =>  {
     })
 }
 
+const getDoctorsStatisticPerWeek = (request, response) =>  {
+    pool.query("select a.starts_at, a.doctor_id from appointments a where a.starts_at >= date_trunc('week', CURRENT_DATE) AND a.starts_at < (date_trunc('week', CURRENT_DATE) + INTERVAL '7 DAY') AND a.appointment_canceled_in_advance_by_clinic = false AND a.appointment_canceled_in_advance_by_patient = false GROUP BY a.starts_at , a.doctor_id, a.attendance", (error, results) => {
+        if (error) {
+            throw error
+        }
+        response.status(200).json(results.rows)
+    })
+}
+
 module.exports = {
-  getClinicStatistics,
   getClinicAttendance,
-  getVisitsByCountryInAWeek
+  getVisitsByCountryInAWeek,
+  getDoctorsStatisticPerWeek
 }

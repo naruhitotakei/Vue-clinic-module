@@ -122,9 +122,8 @@
                                                                 :clearable="false"
                                                                 label="product_group_name"
                                                                 :class="{'font-size-15': disabled}"
-                                                                :reduce="product_group => product_group.product_group_id"
                                                                 class="style-chooser form-control-disabled font-size-15"
-                                                                v-model="formAppointments.product_groups"
+                                                                v-model="selectedProductGroup"
                                                                 :options="product_groups"></v-select>
                                                   </div>
                                               </div>
@@ -1105,7 +1104,7 @@ export default {
   },
   computed: {
     isSaveDisabled () {
-      return !this.formAppointments.patient_id || !this.formAppointments.location || !this.selectedDoctor || !this.formAppointments.product_groups || !this.formAppointments.assignmentDate || !this.formAppointments.end
+      return !this.formAppointments.patient_id || !this.formAppointments.location || !this.selectedDoctor || !this.selectedProductGroup || !this.formAppointments.assignmentDate || !this.formAppointments.end
     },
     isServiceDisabled () {
       return !this.formService.product_id || !this.formService.price || !this.formService.created_at || !this.formService.payment_method || !this.formService.doctor_id
@@ -1264,6 +1263,7 @@ export default {
       smsMessages: [],
       selectedInvoices: '',
       selectedDoctor: '',
+      selectedProductGroup: '',
       invoicesType: [
         {
           label: this.$t('EPR.invoice'),
@@ -1308,6 +1308,7 @@ export default {
         backgroundColor: '',
         description: '',
         product_groups: '',
+        crmProduct: '',
         patient_attended: '',
         appointment_canceled_in_advance_by_clinic: false,
         appointment_canceled_in_advance_by_patient: false
@@ -1864,6 +1865,7 @@ export default {
     },
     defaultFormAppointment () {
       this.selectedDoctor = null
+      this.selectedProductGroup = null
       return {
         id: '',
         patient_id: null,
@@ -1876,6 +1878,7 @@ export default {
         backgroundColor: '',
         description: '',
         product_groups: '',
+        crmProduct: '',
         patient_attended: '',
         appointment_canceled_in_advance_by_clinic: false,
         appointment_canceled_in_advance_by_patient: false
@@ -1957,6 +1960,8 @@ export default {
       this.formAppointments.patient_id = this.patient.id
       this.formAppointments.doctor_id = this.selectedDoctor.id
       this.formAppointments.doctor_name = this.selectedDoctor.name
+      this.formAppointments.product_groups = this.selectedProductGroup.product_group_id
+      this.formAppointments.crmProduct = this.selectedProductGroup.crm_product_id
       if (!this.formAppointments.id) {
         createCalendar(this.formAppointments).then(() => {
           this.$emit('setModalShow', false)

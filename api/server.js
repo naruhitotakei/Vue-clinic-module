@@ -51,6 +51,7 @@ const daoCompanies = require('./dao/daoCompanies')
 const daoLocations = require('./dao/daoLocations')
 const daoCompanyPremises = require('./dao/daoCompanyPremises')
 const daoAppointmentSlots = require('./dao/daoAppointmentSlots')
+const daoOnlineBooking = require('./dao/daoOnlineBooking')
 const awsS3 = require('./services/awsS3')
 
 app.use(fileUpload({
@@ -83,6 +84,7 @@ const calendarPermission = "Calendar"
 const locationsPermission = "Locations"
 const appointmentSlotsPermission = "Free Slots"
 const usersPermission = "Users"
+const onlineBookingPermission = "Online Booking"
 
 ///////////////////////////////////
 // user login, logout, ...
@@ -607,6 +609,19 @@ app.get('/api/users-assignments', (req, res) => {
 });
 
 ///////////////////////////////////
+// settings -> online booking
+///////////////////////////////////
+
+app.get('/api/online-booking-products/:locale', (req, res) => {
+    const locale = req.params.locale
+    if (req.session.prm_user && req.session.prm_user.permissions && checkPermission(req.session.prm_user.permissions, onlineBookingPermission)) {
+        daoOnlineBooking.getOnlineBookingProducts(req, res, req.session.prm_user.prm_client_id, getScope(req.session.prm_user.permissions, onlineBookingPermission), locale)
+    } else {
+        res.status(401).json("OK: user unauthorized")
+    }
+});
+
+///////////////////////////////////
 // enquiries, patients
 ///////////////////////////////////
 
@@ -953,7 +968,7 @@ app.get('/api/offers', (req, res) => {
 app.get('/api/statistics/clinic', (req, res) => {
   const clinicId = 123 // todo - get it from session
   if(req.session.prm_user && req.session.prm_user.permissions && checkPermission(req.session.prm_user.permissions, clinicStatisticsPermission))
-      daoStatistics.getClinicStatistics(req, res, clinicId)
+      daoReporting.getClinicStatistics(req, res, clinicId)
   else
       res.status(401).json("OK: user unauthorized")
 });
@@ -969,6 +984,13 @@ app.get('/api/statistics/clinic/attendance', (req, res) => {
 app.get('/api/statistics/visits-by-country', (req, res) => {
     if(req.session.prm_user && req.session.prm_user.permissions)
         daoStatistics.getVisitsByCountryInAWeek(req, res)
+    else
+        res.status(401).json("OK: user unauthorized")
+  });
+
+  app.get('/api/statistics/doctors-per-week', (req, res) => {
+    if(req.session.prm_user && req.session.prm_user.permissions)
+        daoStatistics.getDoctorsStatisticPerWeek(req, res)
     else
         res.status(401).json("OK: user unauthorized")
   });
@@ -1032,6 +1054,10 @@ app.get('/api/codelist/country/:id/tax-rate', (req, res) => {
 
 app.get('/api/codelist/clients', (req, res) => {
     daoCodeLists.getClients(req, res)
+});
+
+app.get('/api/codelist/week-dates', (req, res) => {
+    daoCodeLists.getDatesForCurrentWeek(req, res)
 });
 
 ///////////////////////////////////

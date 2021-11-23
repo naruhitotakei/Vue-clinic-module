@@ -79,9 +79,8 @@
                     <v-select :disabled="disabled"
                               :clearable="false"
                               label="product_group_name"
-                              :reduce="product_group => product_group.product_group_id"
                               class="style-chooser form-control-disabled font-size-16"
-                              v-model="formData.product_groups"
+                              v-model="selectedProductGroup"
                               :options="product_groups"></v-select>
                 </div>
             </div>
@@ -264,6 +263,7 @@ export default {
       eventResourceId: '',
       patientData: '',
       patients: [],
+      selectedProductGroup: '',
       selectedDoctor: '',
       selectedPatient: '',
       product_groups: [],
@@ -329,6 +329,7 @@ export default {
         location: '',
         enquiry_id: '',
         product_groups: '',
+        crmProduct: '',
         appointment_canceled_in_advance_by_clinic: false,
         appointment_canceled_in_advance_by_patient: false
       },
@@ -487,7 +488,7 @@ export default {
       return this.colorsLabel
     },
     isSaveDisabled () {
-      return !this.selectedPatient || !this.formData.location || !this.selectedDoctor || !this.formData.product_groups || !this.formData.assignmentDate || !this.formData.end
+      return !this.selectedPatient || !this.formData.location || !this.selectedDoctor || !this.selectedProductGroup || !this.formData.assignmentDate || !this.formData.end
     },
     eventAndResources () {
       return {
@@ -699,6 +700,8 @@ export default {
         patient_name: '',
         doctor_id: '',
         doctor_name: '',
+        product_groups: '',
+        crmProduct: '',
         location: this.locations.length === 1 ? this.locations[0].city : '',
         enquiry_id: '',
         appointment_canceled_in_advance_by_clinic: false,
@@ -713,6 +716,8 @@ export default {
       this.formData.doctor_name = this.selectedDoctor.name
       this.formData.patient_id = this.selectedPatient.id
       this.modalTitle = this.selectedPatient.full_name
+      this.formData.product_groups = this.selectedProductGroup.product_group_id
+      this.formData.crmProduct = this.selectedProductGroup.crm_product_id
       if (!this.formData.id) {
         createCalendar(this.formData).then(() => {
           this.$emit('updateApp', {
