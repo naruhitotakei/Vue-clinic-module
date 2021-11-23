@@ -11,10 +11,12 @@
 <script>
 import { xray } from '../../config/pluginInit'
 import Order from './components/Order/Order'
+import PublicLayout from '../../layouts/PublicLayout.vue'
 
 export default {
   components: {
-    Order
+    Order,
+    PublicLayout
   },
   name: 'OnlineBookingPublic',
   data: function () {
