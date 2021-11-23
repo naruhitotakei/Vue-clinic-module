@@ -83,6 +83,7 @@ const calendarPermission = "Calendar"
 const locationsPermission = "Locations"
 const appointmentSlotsPermission = "Free Slots"
 const usersPermission = "Users"
+const onlineBookingPermission = "Online Booking"
 
 ///////////////////////////////////
 // user login, logout, ...
@@ -601,6 +602,19 @@ app.put('/api/users/:id', (req, res) => {
 app.get('/api/users-assignments', (req, res) => {
     if (req.session.prm_user && req.session.prm_user.permissions && checkPermission(req.session.prm_user.permissions, usersPermission)) {
         daoUser.getUsersForAssignments(req, res, req.session.prm_user.prm_client_id, getScope(req.session.prm_user.permissions, usersPermission))
+    } else {
+        res.status(401).json("OK: user unauthorized")
+    }
+});
+
+///////////////////////////////////
+// settings -> online booking
+///////////////////////////////////
+
+app.get('/api/online-booking-products/:locale', (req, res) => {
+    const locale = req.params.locale
+    if (req.session.prm_user && req.session.prm_user.permissions && checkPermission(req.session.prm_user.permissions, onlineBookingPermission)) {
+        daoOnlineBooking.getOnlineBookingProducts(req, res, req.session.prm_user.prm_client_id, getScope(req.session.prm_user.permissions, onlineBookingPermission), locale)
     } else {
         res.status(401).json("OK: user unauthorized")
     }

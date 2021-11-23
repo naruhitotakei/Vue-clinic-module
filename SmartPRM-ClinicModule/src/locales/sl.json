@@ -672,6 +672,19 @@
       "labelAction": "Urejaj"
     }
   },
+  "onlineBooking": {
+    "header": "Storitve in produkti",
+    "addBtn": "Dodaj",
+    "onlineBookingColumns": {
+      "serviceName": "Naziv",
+      "price": "Cena",
+      "duration": "Dolžina (min.)",
+      "doctor": "Zdravnika",
+      "productGroup": "Produktna skupina",
+      "premise": "Lokacija",
+      "action": "Uredi"
+    }
+  },
   "footer": {
     "privacyPolicy": "Politika zasebnosti",
     "termsOfUse": "Pogoji uporabe",

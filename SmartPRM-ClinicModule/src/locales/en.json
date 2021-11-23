@@ -518,7 +518,7 @@
     "overdueAssignments": "Overdue Assignments",
     "futureAssignments": "Future Assignments",
     "completedAssignments": "Completed Assignments",
-    "addAssignmentsModal" : {
+    "addAssignmentsModal": {
       "addAssignments": "New Assignment",
       "editAssignments": "Edit Assignment",
       "enquiry": "Patient",
@@ -675,10 +675,23 @@
       "labelAction": "Action"
     }
   },
+  "onlineBooking": {
+    "header": "Services and products",
+    "addBtn": "Add",
+    "onlineBookingColumns": {
+      "serviceName": "Name",
+      "price": "Price",
+      "duration": "Duration (min.)",
+      "doctor": "Doctor",
+      "productGroup": "Product group",
+      "premise": "Location",
+      "action": "Action"
+    }
+  },
   "footer": {
-    "privacyPolicy":  "Privacy policy",
-    "termsOfUse":  "Terms of use",
-    "allRightsReserved":  "All rights reserved"
+    "privacyPolicy": "Privacy policy",
+    "termsOfUse": "Terms of use",
+    "allRightsReserved": "All rights reserved"
   },
   "dashboard2": {
     "card1": "AVG Impressions",
