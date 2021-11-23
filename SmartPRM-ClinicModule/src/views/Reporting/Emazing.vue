@@ -142,8 +142,7 @@
 <script>
 import IqCard from '../../components/xray/cards/iq-card.vue'
 import { xray } from '../../config/pluginInit'
-import { getCountryList, getEmazingServicesReport, getServiceList } from '../../services/reporting'
-import { clinicStatistics } from '../../services/statistics'
+import { getCountryList, getEmazingServicesReport, getServiceList, getClinicStatistics } from '../../services/reporting'
 import _ from 'lodash'
 // import moment from 'moment'
 
@@ -266,7 +265,7 @@ export default {
       return true
     },
     getClinicStats () {
-      clinicStatistics().then(response => {
+      getClinicStatistics().then(response => {
         this.setRevenueData(response)
       }).catch(error => {
         console.log(error)

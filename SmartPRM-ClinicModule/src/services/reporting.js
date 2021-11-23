@@ -27,3 +27,13 @@ export async function getCountryList (startdate, endate) {
   })
   return rawResponse.json()
 }
+
+export async function getClinicStatistics () {
+  const rawResponse = await fetch('/api/statistics/clinic', {
+    credentials: 'same-origin',
+    headers: {
+      'Accept': 'application/json'
+    }
+  })
+  return rawResponse.json()
+}

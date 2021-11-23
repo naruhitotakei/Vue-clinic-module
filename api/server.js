@@ -967,7 +967,7 @@ app.get('/api/offers', (req, res) => {
 app.get('/api/statistics/clinic', (req, res) => {
   const clinicId = 123 // todo - get it from session
   if(req.session.prm_user && req.session.prm_user.permissions && checkPermission(req.session.prm_user.permissions, clinicStatisticsPermission))
-      daoStatistics.getClinicStatistics(req, res, clinicId)
+      daoReporting.getClinicStatistics(req, res, clinicId)
   else
       res.status(401).json("OK: user unauthorized")
 });
