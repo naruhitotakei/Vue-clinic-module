@@ -20,7 +20,8 @@ const getOnlineBookingProducts = (request, response, prm_client_id, scope, local
     statement += "LEFT JOIN users ON online_booking_users_bridge.doctor_id = users.id "
     statement += "LEFT JOIN online_booking_premise_bridge ON online_booking_service.id = online_booking_premise_bridge.id "
     statement += "LEFT JOIN prm_company_premise ON online_booking_premise_bridge.premise_id = prm_company_premise.premise_id "
-    statement += "WHERE online_booking_service.trashed IS FALSE AND online_booking_service_name.language = '" + locale + "' AND prm_product_group_name.language = '" + locale + "'
+    statement += "WHERE online_booking_service.trashed IS FALSE AND online_booking_service_name.language = '" + locale + "' "
+    statement += "AND prm_product_group_name.language = '" + locale + "' "
     if (scope == 'All') {
     } else if (scope == 'PrmClient') {
         statement += " AND users.prm_client_id = " + prm_client_id;

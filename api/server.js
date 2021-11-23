@@ -51,6 +51,7 @@ const daoCompanies = require('./dao/daoCompanies')
 const daoLocations = require('./dao/daoLocations')
 const daoCompanyPremises = require('./dao/daoCompanyPremises')
 const daoAppointmentSlots = require('./dao/daoAppointmentSlots')
+const daoOnlineBooking = require('./dao/daoOnlineBooking')
 const awsS3 = require('./services/awsS3')
 
 app.use(fileUpload({

@@ -27,6 +27,11 @@
                                             <strong class="loading">Loading...</strong>
                                         </div>
                                     </template>
+                                    <template v-slot:cell(default_online_price)="data">
+                                        <span>
+                                            {{ data.item.default_online_price | euro }}
+                                        </span>
+                                    </template>
                                     <template v-slot:cell(action)="data">
                                         <b-button variant=" iq-bg-success mr-1 mb-1" size="sm" @click="editProduct(data.item)"><i class="ri-ball-pen-fill m-0"></i></b-button>
                                         <b-button variant=" iq-bg-danger mr-1 mb-1" size="sm" @click="removeProduct(data.item)"><i class="ri-delete-bin-line m-0"></i></b-button>
@@ -37,7 +42,8 @@
                         <template>
                             <b-collapse id="collapse-6" class="mb-2"> </b-collapse>
                             <div class="mt-3">
-                                <b-pagination v-model="currentProductPage"
+                                <b-pagination v-if="hideProductsPagination"
+                                              v-model="currentProductPage"
                                               :total-rows="onlineBookingProducts.length"
                                               :per-page="productsPerPage"
                                               aria-controls="online-booking-table">
@@ -74,10 +80,15 @@ export default {
         { label: this.$t('onlineBooking.onlineBookingColumns.price'), key: 'default_online_price', class: 'text-left' },
         { label: this.$t('onlineBooking.onlineBookingColumns.duration'), key: 'default_duration', class: 'text-left' },
         { label: this.$t('onlineBooking.onlineBookingColumns.doctor'), key: 'doctor_name', class: 'text-left' },
-        { label: this.$t('onlineBooking.onlineBookingColumns.productGroup'), key: 'online_booking_service', class: 'text-left' },
+        { label: this.$t('onlineBooking.onlineBookingColumns.productGroup'), key: 'product_group_text', class: 'text-left' },
         { label: this.$t('onlineBooking.onlineBookingColumns.premise'), key: 'premise_name', class: 'text-left' },
         { label: this.$t('onlineBooking.onlineBookingColumns.action'), key: 'action', class: 'text-center' }
       ]
+    }
+  },
+  computed: {
+    hideProductsPagination () {
+      return Math.floor(this.onlineBookingProducts.length / this.productsPerPage) !== 0
     }
   },
   methods: {
