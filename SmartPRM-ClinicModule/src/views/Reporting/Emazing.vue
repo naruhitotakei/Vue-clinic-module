@@ -5,7 +5,7 @@
             <h5 class="card-title">Revenue Statistics</h5>
             <div class="row">
               <div class="col-sm-3 col-12">
-                <h4 class="margin-0">€ {{ totalRevenue.toFixed(3) }} </h4>
+                <h4 class="margin-0">€ {{ todayRevenue.toFixed(3) }} </h4>
                 <p class="text-muted">{{ $t('statisticsForClinic.todaysIncome') }}</p>
               </div>
               <div class="col-sm-3 col-12">
@@ -193,6 +193,7 @@ export default {
       monthlyRevenue: 0,
       weeklyRevenue: 0,
       yearlyRevenue: 0,
+      todayRevenue: 0,
       revenueChartSeries: [{
         name: 'Revenue',
         data: []
@@ -279,17 +280,41 @@ export default {
       const weekly = data.weekly
       const monthly = data.monthly
       const yearly = data.yearly
-      if (Array.isArray(weekly)) {
-        this.weeklyRevenue = await weekly.reduce((a, b) => Number(a.totalrevenue) + Number(b.totalrevenue))
+      const sixtyWeeks = data.sixtyWeeks
+      const today = data.today
+      if (today && Array.isArray(today)) {
+        this.todayRevenue = 0
+        today.forEach(item => {
+          this.todayRevenue += Number(item.totalrevenue)
+        })
+        console.log('Today , ', this.todayRevenue)
       }
-      if (Array.isArray(monthly)) {
-        this.monthlyRevenue = await monthly.reduce((a, b) => Number(a.totalrevenue) + Number(b.totalrevenue))
+      if (weekly && Array.isArray(weekly)) {
+        this.weeklyRevenue = 0
+        weekly.forEach(item => {
+          this.weeklyRevenue += Number(item.totalrevenue)
+        })
+        console.log('Weekly , ', this.weeklyRevenue)
       }
-      if (Array.isArray(yearly)) {
-        this.yearlyRevenue = await yearly.reduce((a, b) => Number(a.totalrevenue) + Number(b.totalrevenue))
+      if (monthly && Array.isArray(monthly)) {
+        this.monthlyRevenue = 0
+        monthly.forEach(item => {
+          this.monthlyRevenue += Number(item.totalrevenue)
+        })
+        console.log('Monthly , ', this.monthlyRevenue)
+        // this.monthlyRevenue = await monthly.reduce((a, b) => Number(a.totalrevenue) + Number(b.totalrevenue))
+      }
+      if (yearly && Array.isArray(yearly)) {
+        this.yearlyRevenue = 0
+        yearly.forEach(item => {
+          this.yearlyRevenue += Number(item.totalrevenue)
+        })
+        console.log('Yearly , ', this.yearlyRevenue)
+      }
+      if (sixtyWeeks && Array.isArray(sixtyWeeks)) {
         let datesArray = []
         this.totalRevenue = 0
-        yearly.forEach(item => {
+        sixtyWeeks.forEach(item => {
           this.revenueList.push(item.cachrevenue)
           datesArray.push(item.date)
           this.totalRevenue += Number(item.totalrevenue)
@@ -297,7 +322,6 @@ export default {
         this.revenueChartSeries = [{
           data: this.revenueList
         }]
-
         this.revenueChartOptions = {
           xaxis: {
             categories: [...datesArray]
@@ -467,7 +491,6 @@ export default {
     }
   },
   mounted () {
-    console.log(process.env.VUE_APP_API_URL)
     xray.index()
     var today = new Date()
     var firstThisMonth = new Date()

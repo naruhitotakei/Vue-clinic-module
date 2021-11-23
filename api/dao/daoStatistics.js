@@ -11,32 +11,25 @@ const pool = new Pool({
 
 const getClinicStatistics = async (request, response, clinicId) =>  {
     let statsRecord = {
+        today: [],
         weekly: [],
         monthly: [],
-        yearly: []
+        yearly: [],
+        sixtyWeeks: []
     }
 
-    var dailyStatement = ["SELECT date_trunc('day',date)::date as date, SUM(cash_amount) AS cachRevenue, SUM(credit_card_amount) AS cardRevenue, SUM(cash_amount) + SUM(credit_card_amount) AS totalRevenue FROM services GROUP BY ( date_trunc('week', date)) ORDER BY ( date_trunc('week', date)) ASC "].join('\n')
+    var todayStatement = ["SELECT date_trunc('day',date)::date as date, SUM(cash_amount) AS cachRevenue, SUM(credit_card_amount) AS cardRevenue, SUM(cash_amount) + SUM(credit_card_amount) AS totalRevenue FROM services where date = CURRENT_DATE GROUP BY ( date_trunc('day', date)) ORDER BY ( date_trunc('day', date)) ASC "].join('\n')
+    var sixtyWeekStatement = ["SELECT date_trunc('week',date)::date as date, SUM(cash_amount) AS cachRevenue, SUM(credit_card_amount) AS cardRevenue, SUM(cash_amount) + SUM(credit_card_amount) AS totalRevenue FROM services where date > current_date - interval '60 weeks' GROUP BY ( date_trunc('week', date)) ORDER BY ( date_trunc('week', date)) ASC "].join('\n')
     var weeklyStatement = ["SELECT date_trunc('week',date)::date as date, SUM(cash_amount) AS cachRevenue, SUM(credit_card_amount) AS cardRevenue, SUM(cash_amount) + SUM(credit_card_amount) AS totalRevenue FROM services GROUP BY ( date_trunc('week', date)) ORDER BY ( date_trunc('week', date)) ASC "].join('\n')
     var monthlyStatement = ["SELECT date_trunc('month',date)::date as date, SUM(cash_amount) AS cachRevenue, SUM(credit_card_amount) AS cardRevenue, SUM(cash_amount) + SUM(credit_card_amount) AS totalRevenue FROM services GROUP BY ( date_trunc('month', date)) ORDER BY ( date_trunc('month', date)) ASC "].join('\n')
     var yearlyStatement = ["SELECT date_trunc('year',date)::date as date, SUM(cash_amount) AS cachRevenue, SUM(credit_card_amount) AS cardRevenue, SUM(cash_amount) + SUM(credit_card_amount) AS totalRevenue FROM services GROUP BY ( date_trunc('year', date)) ORDER BY ( date_trunc('year', date)) ASC "].join('\n') 
     
-    
-    // const weeklyPool = pool.query(weeklyStatement, (error, results) => {
-    //     if (error) {
-    //         throw error
-    //     }
-    //     return results.rows
-    // })
-
-    await Promise.all([ pool.query(weeklyStatement), pool.query(monthlyStatement), pool.query(yearlyStatement) ]).then(result => {
-        const weekly = result[0];
-        const monthly = result[1];
-        const yearly = result[2];
-
-        statsRecord.weekly = weekly.rows
-        statsRecord.monthly = monthly.rows
-        statsRecord.yearly = yearly.rows
+    await Promise.all([ pool.query(weeklyStatement), pool.query(monthlyStatement), pool.query(yearlyStatement), pool.query(sixtyWeekStatement), pool.query(todayStatement) ]).then(result => {
+        statsRecord.weekly = result[0].rows
+        statsRecord.monthly = result[1].rows
+        statsRecord.yearly = result[2].rows
+        statsRecord.sixtyWeeks = result[3].rows
+        statsRecord.today = result[4].rows
 
         response.status(200).json(statsRecord)
     }).catch((error) => {
