@@ -42,7 +42,8 @@ export default {
       code: '',
       confirmationField: false,
       loader: false,
-      complete: false
+      complete: false,
+      requestId: null
     }
   },
   methods: {
@@ -52,6 +53,7 @@ export default {
         const res = await sendSms({ phone: this.phone })
         if (res.success) {
           this.confirmationField = true
+          this.requestId = res.requestId
         }
       } catch (err) {
         console.error(err)
@@ -66,7 +68,8 @@ export default {
           phone: this.phone,
           code: this.code,
           selectedSlot: this.selectedSlot,
-          servivces: this.services
+          servivces: this.services,
+          requestId: this.requestId
         })
         if (res.success) {
           this.complete = true
