@@ -11,6 +11,7 @@ import './registerServiceWorker'
 import i18n from './i18n'
 import Rollbar from 'rollbar'
 import vueNumeralFilterInstaller from 'vue-numeral-filter'
+import VueApexCharts from 'vue-apexcharts'
 
 global.Raphael = Raphael
 Vue.config.productionTip = false
@@ -36,6 +37,8 @@ Vue.filter('euro', function (value) {
 })
 
 Vue.use(vueNumeralFilterInstaller, { locale: 'en-gb' })
+Vue.use(VueApexCharts)
+Vue.component('apex-chart', VueApexCharts)
 
 Vue.filter('percentage', function (value) {
   if (!value) return '0%'

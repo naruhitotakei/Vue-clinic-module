@@ -129,8 +129,16 @@
                   </template>
                 </iq-card>
             </b-col>
-            <b-col lg="4">
-      </b-col>
+            <b-col lg="8">
+              <iq-card class-name="iq-card-block iq-card-stretch">
+                  <template v-slot:headerTitle>
+                    <h4 class="card-title">{{ $t('home.appointmentChart') }}</h4>
+                  </template>
+                  <template v-slot:body>
+                    <apex-chart type="bar" height="350" :options="chartOptions" :series="series"></apex-chart>
+                  </template>
+                </iq-card>
+            </b-col>
             <b-col lg="3">
                 <!--<iq-card>
               <template v-slot:headerTitle>
@@ -217,9 +225,8 @@
                             <v-select :disabled="disabled"
                                       :clearable="false"
                                       label="product_group_name"
-                                      :reduce="product_group => product_group.product_group_id"
                                       class="style-chooser form-control-disabled font-size-16"
-                                      v-model="appointmentData.product_group"
+                                      v-model="selectedProductGroup"
                                       :options="product_groups"></v-select>
                         </div>
                     </div>
@@ -277,6 +284,25 @@
                             </div>
                         </div>
                     </template>
+                    <div class="row align-items-center justify-content-between w-100 pt-3 mb-3">
+                        <div class="col-md-3">
+                            <label for="color" class="mt-1 ml-1">{{ $t('calendarEvent.labels') }}</label><br>
+                        </div>
+                        <div class="col-md-9 mb-1">
+                            <template v-for="(item,index) in colors">
+                                <b-form-radio class="custom-radio-color font-size-16 labels"
+                                              inline
+                                              v-model="appointmentData.backgroundColor"
+                                              :key="index"
+                                              :value="item.id"
+                                              :style="{'background': item.color}"
+                                              name="labels"
+                                              v-if="showLabels(item)">
+                                    <p class="text-white m-0 py-1 pr-2">{{ item.text }}</p>
+                                </b-form-radio>
+                            </template>
+                        </div>
+                    </div>
                     <div class="modal-footer modal-footer-bt" style="width: 100%;">
                         <template v-if="disabled">
                             <button v-if="appointmentData.appointment_canceled_in_advance_by_clinic === false && appointmentData.appointment_canceled_in_advance_by_patient === false || openCancelationModal === true" type="button" class="btn btn-secondary" @click="openCancelationModal = true">{{ $t('calendar.btnCancelation') }}</button>
@@ -335,13 +361,14 @@ import IqCard from '../../components/xray/cards/iq-card'
 import { xray } from '../../config/pluginInit'
 import { getTodaysAppointments, getStaff, getAssignmentsForUser, updateAppointment } from '../../services/homeService'
 import moment from 'moment'
-import { getLocationsList, getCountriesWithPatients } from '../../services/commonCodeLists'
-import { visitsByCountryInAWeek } from '../../services/statistics'
+import { getLocationsList, getCountriesWithPatients, getDatesForCurrentWeek } from '../../services/commonCodeLists'
+import { visitsByCountryInAWeek, getDoctorsStatisticPerWeek } from '../../services/statistics'
 import { getProductGroups } from '@/services/products'
-import { getDoctorList } from '@/services/calendarService'
+import { getDoctorList, getLabels } from '@/services/calendarService'
 import { sso } from '@/services/userService'
 import DatePicker from 'vue2-datepicker'
 import 'vue2-datepicker/index.css'
+
 import _ from 'lodash'
 const body = document.getElementsByTagName('body')
 export default {
@@ -349,18 +376,13 @@ export default {
   components: { IqCard, DatePicker },
   data () {
     return {
-      chart5: {
-        series: [{
-          name: 'PRODUCT A',
-          data: [44, 55, 41, 67, 22, 43]
-        }, {
-          name: 'PRODUCT B',
-          data: [13, 23, 20, 8, 13, 27]
-        }, {
-          name: 'PRODUCT C',
-          data: [11, 17, 15, 15, 21, 14]
-        }],
-        // colors: ['#089bab', '#FC9F5B', '#5bc5d1'],
+      doctorsData: [],
+      datesForCurrentWeek: [],
+      dataForChart: [],
+      series: [],
+      dates: [],
+      colors: [],
+      chartOptions: {
         chart: {
           type: 'bar',
           height: 350,
@@ -372,6 +394,7 @@ export default {
             enabled: true
           }
         },
+        colors: ['#089bab', '#ffb177', '#00d0ff', '#e64141', '#00ca00', '#777D74', '#374948', '#6610f2'],
         responsive: [{
           breakpoint: 480,
           options: {
@@ -384,7 +407,8 @@ export default {
         }],
         plotOptions: {
           bar: {
-            horizontal: false
+            horizontal: false,
+            borderRadius: 10
           }
         },
         xaxis: {
@@ -441,15 +465,18 @@ export default {
         location: '',
         patient_id: '',
         product_group: '',
+        crmProduct: '',
+        label_id: '',
+        backgroundColor: '',
         appointment_canceled_in_advance_by_clinic: false,
         appointment_canceled_in_advance_by_patient: false
       },
       selectedDoctor: '',
+      selectedProductGroup: '',
       disabled: true,
       locations: [],
       product_groups: [],
       doctors: [],
-      colors: [],
       appointmentModal: false,
       openCancelationModal: false,
       patient_attend: [
@@ -475,6 +502,7 @@ export default {
     xray.index()
     this.getUserLogin()
     this.getCountriesWithPatients()
+    this.getDoctorsStatisticPerWeek()
     body[0].classList.add('sidebar-main-menu')
   },
   computed: {
@@ -525,17 +553,42 @@ export default {
           })
           getDoctorList().then((data) => {
             this.doctors = data
+            this.getDatesForCurrentWeek()
+          })
+          getLabels(this.$i18n.locale).then(response => {
+            this.colors = response
           })
         }
       })
+    },
+    showLabels (item) {
+      if (this.disabled && this.appointmentData.label_id === item.id) {
+        return true
+      } else if (!this.disabled) {
+        return true
+      }
     },
     getTodaysAppointmentsList (locale) {
       getTodaysAppointments(locale).then(response => {
         this.todaysAppointments = response
       })
     },
+    getDatesForCurrentWeek () {
+      getDatesForCurrentWeek().then(response => {
+        let temp = _.map(response, '?column?')
+        this.dates = temp
+        this.datesForCurrentWeek = _.map(temp, function (date) {
+          return moment(date).format('DD-MM-YYYY')
+        })
+        this.prepareDataForChart()
+      })
+    },
     updateAppointment (info) {
       this.todaysAppointments.splice(0, this.todaysAppointments.length)
+      this.appointmentData.doctor_id = this.selectedDoctor.id
+      this.appointmentData.doctor_name = this.selectedDoctor.name
+      this.appointmentData.product_groups = this.selectedProductGroup.product_group_id
+      this.appointmentData.crmProduct = this.selectedProductGroup.crm_product_id
       updateAppointment(this.appointmentData.id, this.appointmentData).then(() => {
         this.disabled = true
         this.appointmentModal = false
@@ -544,8 +597,8 @@ export default {
     },
     closeCancelation () {
       this.openCancelationModal = false
-      this.formData.appointment_canceled_in_advance_by_clinic = false
-      this.formData.appointment_canceled_in_advance_by_patient = false
+      this.appointmentData.appointment_canceled_in_advance_by_clinic = false
+      this.appointmentData.appointment_canceled_in_advance_by_patient = false
     },
     editMode (e) {
       e.preventDefault()
@@ -570,6 +623,29 @@ export default {
       this.appointmentModal = true
       this.selectedDoctor = item.doctor_name
     },
+    getDoctorsStatisticPerWeek () {
+      getDoctorsStatisticPerWeek().then(response => {
+        this.doctorsData = _.map(response, function (element) {
+          element.starts_at = moment(element.starts_at).format('DD-MM-YYYY')
+          return element
+        })
+      })
+    },
+    prepareDataForChart () {
+      this.doctors.forEach(doctor => {
+        let tempObj = {}
+        tempObj.name = doctor.name
+        tempObj.data = []
+        let allDoctorsData = this.doctorsData
+        let tempDoctorData = _.filter(allDoctorsData, { doctor_id: doctor.id })
+        this.datesForCurrentWeek.forEach(date => {
+          let tempArr = _.filter(tempDoctorData, { starts_at: date })
+          tempObj.data.push(tempArr.length)
+        })
+        this.dataForChart.push(tempObj)
+      })
+      this.chartOptions = { ...this.chartOptions, ...{ series: this.dataForChart, xaxis: { categories: this.dates } } }
+    },
     getCountriesWithPatients () {
       getCountriesWithPatients().then(response => {
         this.countriesWithPatients = response
@@ -581,13 +657,16 @@ export default {
         let visitsByCountry = response
         this.totalVisits = _.sumBy(visitsByCountry, function (o) { return +o.count })
         visitsByCountry.forEach(element => {
-          element.percentage = element.count / this.totalVisits * 100
+          element.percentage = (element.count / this.totalVisits * 100).toFixed(2)
         })
 
         this.countriesWithPatients = _.map(this.countriesWithPatients, function (country) {
           return _.assign(country, _.find(visitsByCountry, {
             name: country.name
           }))
+        })
+        this.countriesWithPatients = _.filter(this.countriesWithPatients, function (country) {
+          return country.hasOwnProperty('percentage')
         })
       })
     }

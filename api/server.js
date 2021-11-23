@@ -973,6 +973,13 @@ app.get('/api/statistics/visits-by-country', (req, res) => {
         res.status(401).json("OK: user unauthorized")
   });
 
+  app.get('/api/statistics/doctors-per-week', (req, res) => {
+    if(req.session.prm_user && req.session.prm_user.permissions)
+        daoStatistics.getDoctorsStatisticPerWeek(req, res)
+    else
+        res.status(401).json("OK: user unauthorized")
+  });
+
 app.get('/api/report/emazing/services/:statrtdate/:enddate/:countrie', (req, res) => {
   const statrtdate = req.params.statrtdate
   const enddate = req.params.enddate
@@ -1032,6 +1039,10 @@ app.get('/api/codelist/country/:id/tax-rate', (req, res) => {
 
 app.get('/api/codelist/clients', (req, res) => {
     daoCodeLists.getClients(req, res)
+});
+
+app.get('/api/codelist/week-dates', (req, res) => {
+    daoCodeLists.getDatesForCurrentWeek(req, res)
 });
 
 ///////////////////////////////////

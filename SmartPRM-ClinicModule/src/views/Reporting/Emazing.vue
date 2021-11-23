@@ -1,6 +1,30 @@
 <template>
     <div class="container-fluid">
         <iq-card>
+          <template v-slot:body>
+            <h5 class="card-title">Revenue Statistics</h5>
+            <div class="row">
+              <div class="col-sm-3 col-12">
+                <h4 class="margin-0">€ {{ totalRevenue.toFixed(3) }} </h4>
+                <p class="text-muted">{{ $t('statisticsForClinic.todaysIncome') }}</p>
+              </div>
+              <div class="col-sm-3 col-12">
+                <h4 class="margin-0">€ {{ weeklyRevenue.toFixed(3) }} </h4>
+                <p class="text-muted">{{ $t('statisticsForClinic.weeksIncome') }}</p>
+              </div>
+              <div class="col-sm-3 col-12">
+                <h4 class="margin-0">€ {{ monthlyRevenue.toFixed(3) }} </h4>
+                <p class="text-muted">{{ $t('statisticsForClinic.monthsIncome') }}</p>
+              </div>
+              <div class="col-sm-3 col-12">
+                <h4 class="margin-0">€ {{ yearlyRevenue.toFixed(3) }} </h4>
+                <p class="text-muted">{{ $t('statisticsForClinic.yearsIncome') }}</p>
+              </div>
+            </div>
+            <apex-chart type="bar" height="350" :options="revenueChartOptions" :series="revenueChartSeries"></apex-chart>
+          </template>
+        </iq-card>
+        <iq-card>
           <template v-slot:headerTitle>
             <div class="row pt-3">
 
@@ -119,6 +143,7 @@
 import IqCard from '../../components/xray/cards/iq-card.vue'
 import { xray } from '../../config/pluginInit'
 import { getCountryList, getEmazingServicesReport, getServiceList } from '../../services/reporting'
+import { clinicStatistics } from '../../services/statistics'
 import _ from 'lodash'
 // import moment from 'moment'
 
@@ -162,7 +187,58 @@ export default {
         { label: this.$t('reportingEmazing.servicesListColumn.serviceFee'), key: 'fee', class: 'text-left' },
         { label: this.$t('reportingEmazing.servicesListColumn.serviceDate'), key: 'date', formatter: (value, key, item) => { return this.formatDateString(value) } }
       ],
-      servicesListItems: []
+      servicesListItems: [],
+      revenueList: [],
+      totalRevenue: 0,
+      monthlyRevenue: 0,
+      weeklyRevenue: 0,
+      yearlyRevenue: 0,
+      revenueChartSeries: [{
+        name: 'Revenue',
+        data: []
+      }],
+      revenueChartOptions: {
+        chart: {
+          type: 'bar',
+          height: 350
+        },
+        plotOptions: {
+          bar: {
+            colors: {
+              ranges: [{
+                from: -100,
+                to: -46,
+                color: '#F15B46'
+              }, {
+                from: -45,
+                to: 0,
+                color: '#FEB019'
+              }]
+            },
+            columnWidth: '80%'
+          }
+        },
+        dataLabels: {
+          enabled: false
+        },
+        yaxis: {
+          title: {
+            text: 'EUR'
+          },
+          labels: {
+            formatter: function (y) {
+              return y.toFixed(0)
+            }
+          }
+        },
+        xaxis: {
+          type: 'datetime',
+          categories: [],
+          labels: {
+            rotate: -90
+          }
+        }
+      }
     }
   },
   watch: {
@@ -187,6 +263,52 @@ export default {
       }
       this.$refs[`excel-${tableName}`].download = documentName + ' ' + date
       return true
+    },
+    getClinicStats () {
+      console.log('Fetching...')
+      clinicStatistics().then(response => {
+        console.log('Stats Record...')
+        console.log(response)
+        this.setRevenueData(response)
+      }).catch(error => {
+        console.log(error)
+      })
+    },
+    async setRevenueData (data) {
+      this.revenueList = []
+      const weekly = data.weekly
+      const monthly = data.monthly
+      const yearly = data.yearly
+      if (Array.isArray(weekly)) {
+        this.weeklyRevenue = await weekly.reduce((a, b) => Number(a.totalrevenue) + Number(b.totalrevenue))
+      }
+      if (Array.isArray(monthly)) {
+        this.monthlyRevenue = await monthly.reduce((a, b) => Number(a.totalrevenue) + Number(b.totalrevenue))
+      }
+      if (Array.isArray(yearly)) {
+        this.yearlyRevenue = await yearly.reduce((a, b) => Number(a.totalrevenue) + Number(b.totalrevenue))
+        let datesArray = []
+        this.totalRevenue = 0
+        yearly.forEach(item => {
+          this.revenueList.push(item.cachrevenue)
+          datesArray.push(item.date)
+          this.totalRevenue += Number(item.totalrevenue)
+        })
+        this.revenueChartSeries = [{
+          data: this.revenueList
+        }]
+
+        this.revenueChartOptions = {
+          xaxis: {
+            categories: [...datesArray]
+          },
+          yaxis: {
+            title: {
+              text: this.totalRevenue.toFixed(3) + ' EUR'
+            }
+          }
+        }
+      }
     },
     onFromChange () {
       this.getServicesReport()
@@ -345,12 +467,14 @@ export default {
     }
   },
   mounted () {
+    console.log(process.env.VUE_APP_API_URL)
     xray.index()
     var today = new Date()
     var firstThisMonth = new Date()
     firstThisMonth.setDate(1)
     this.fromdate = this.formatDate(firstThisMonth)
     this.todate = this.formatDate(today)
+    this.getClinicStats()
     this.getServicesReport()
     this.getServicesList()
     this.getCountryList()

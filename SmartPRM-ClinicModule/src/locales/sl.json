@@ -48,7 +48,8 @@
     "SMSTemplates": "SMS predloge",
     "mailTemplates": "Mail predloge",
     "advertising": "Oglaševanje",
-    "labels": "Oznake"
+    "labels": "Oznake",
+    "onlineBooking": "Spletne rezervacije"
   },
   "nav": {
     "allNotifications": "Vsa obvestila",
@@ -72,6 +73,7 @@
     "todaysAppointments": "Današnji termini",
     "noAppointmentsToday": "Danes ni dogovorjenih terminov",
     "patientsByCountry": "Pacienti v tem tednu po državah",
+    "appointmentChart": "Število terminov",
     "todaysAppointmentsColumn": {
       "patient": "Pacient",
       "productGroup": "Produktna skupina",
