@@ -15,7 +15,7 @@ export default {
   components: {
     Order
   },
-  name: 'OnlineBooking',
+  name: 'OnlineBookingPublic',
   data: function () {
     return {
       tabIndex: 0

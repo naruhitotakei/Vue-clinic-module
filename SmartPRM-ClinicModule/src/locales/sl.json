@@ -48,7 +48,8 @@
     "SMSTemplates": "SMS predloge",
     "mailTemplates": "Mail predloge",
     "advertising": "Oglaševanje",
-    "labels": "Oznake"
+    "labels": "Oznake",
+    "onlineBooking": "Spletne rezervacije"
   },
   "nav": {
     "allNotifications": "Vsa obvestila",

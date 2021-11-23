@@ -48,7 +48,8 @@
     "SMSTemplates": "SMS templates",
     "mailTemplates": "Mail templates",
     "advertising": "Advertising",
-    "labels": "Labels"
+    "labels": "Labels",
+    "onlineBooking": "Online booking"
   },
   "nav": {
     "allNotifications": "All Notifications",
