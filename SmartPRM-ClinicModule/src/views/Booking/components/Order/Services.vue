@@ -49,9 +49,7 @@ export default {
   methods: {
     rowSelectHandler: function () {
       let services = []
-      this.$refs.service.forEach(serv => {
-        services = services.concat(serv.selected)
-      })
+      services = services.concat(this.$refs.service.selected)
       this.$emit('row-selected', { services })
     }
   }
