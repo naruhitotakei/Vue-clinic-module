@@ -266,10 +266,7 @@ export default {
       return true
     },
     getClinicStats () {
-      console.log('Fetching...')
       clinicStatistics().then(response => {
-        console.log('Stats Record...')
-        console.log(response)
         this.setRevenueData(response)
       }).catch(error => {
         console.log(error)
@@ -287,29 +284,24 @@ export default {
         today.forEach(item => {
           this.todayRevenue += Number(item.totalrevenue)
         })
-        console.log('Today , ', this.todayRevenue)
       }
       if (weekly && Array.isArray(weekly)) {
         this.weeklyRevenue = 0
         weekly.forEach(item => {
           this.weeklyRevenue += Number(item.totalrevenue)
         })
-        console.log('Weekly , ', this.weeklyRevenue)
       }
       if (monthly && Array.isArray(monthly)) {
         this.monthlyRevenue = 0
         monthly.forEach(item => {
           this.monthlyRevenue += Number(item.totalrevenue)
         })
-        console.log('Monthly , ', this.monthlyRevenue)
-        // this.monthlyRevenue = await monthly.reduce((a, b) => Number(a.totalrevenue) + Number(b.totalrevenue))
       }
       if (yearly && Array.isArray(yearly)) {
         this.yearlyRevenue = 0
         yearly.forEach(item => {
           this.yearlyRevenue += Number(item.totalrevenue)
         })
-        console.log('Yearly , ', this.yearlyRevenue)
       }
       if (sixtyWeeks && Array.isArray(sixtyWeeks)) {
         let datesArray = []
