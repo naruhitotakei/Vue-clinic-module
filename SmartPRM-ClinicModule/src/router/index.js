@@ -3,7 +3,6 @@ import VueRouter from 'vue-router'
 /* Layouts */
 import Layout1 from '../layouts/Layout1'
 import AuthLayout1 from '../layouts/AuthLayouts/AuthLayout1'
-import PublicLayout from '../layouts/PublicLayout'
 /* Home */
 import Home from '../views/Home/Home'
 /* Call Center Dashboard */
@@ -48,6 +47,7 @@ import SMSTemplates from '../views/Settings/SMSTemplates'
 import MailTemplates from '../views/Settings/MailTemplates'
 import Advertising from '../views/Settings/Advertising'
 import Labels from '../views/Settings/Labels'
+import OnlineBooking from '../views/Settings/OnlineBooking'
 /* Authentic View */
 import SignIn from '../views/Auth/Pages/SignIn'
 import SignUp from '../views/Auth/Pages/SignUp'
@@ -55,7 +55,7 @@ import RecoverPassword from '../views/Auth/Pages/RecoverPassword'
 import LockScreen from '../views/Auth/Pages/LockScreen'
 import ConfirmMail from '../views/Auth/Pages/ConfirmMail'
 /* Booking */
-import OnlineBooking from '../views/Booking/OnlineBooking'
+import OnlineBookingPublic from '../views/Booking/OnlineBooking'
 
 Vue.use(VueRouter)
 
@@ -127,7 +127,7 @@ const childRoutes = (prop, mode) => [
     path: 'online-booking/:clientId/:locationId',
     name: prop + '.online-booking',
     meta: { dark: mode, auth: true, name: 'online-booking' },
-    component: OnlineBooking
+    component: OnlineBookingPublic
   }
 ]
 const documentChildRoute = (prop, mode) => [
@@ -318,6 +318,12 @@ const settingsChildRoute = (prop, mode = false) => [
     name: prop + '.labels',
     meta: { dark: mode, auth: true, name: 'Labels' },
     component: Labels
+  },
+  {
+    path: 'online-booking',
+    name: prop + '.online-booking',
+    meta: { dark: mode, auth: true, name: 'Online Booking' },
+    component: OnlineBooking
   }
 ]
 
@@ -381,7 +387,7 @@ const routes = [
   {
     path: '/public',
     name: 'public',
-    component: PublicLayout,
+    component: OnlineBookingPublic,
     meta: { auth: false }
   }
 ]

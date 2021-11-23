@@ -1,6 +1,6 @@
 <template>
     <div class="container">
-        <h1>Public</h1>
+        <slot></slot>
     </div>
 </template>
 
@@ -12,8 +12,6 @@ export default {
   mounted () {
   },
   watch: {
-  },
-  data () {
   },
   methods: {
   }

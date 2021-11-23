@@ -1,13 +1,10 @@
 <template>
   <div class="mt-5">
     <service-table
-    v-for="(service, index) in services"
-    :key="`service_section_${index}`"
     :ref="`service`"
     :list="service.list"
     :title="service.title"
     :selectedServices="selectedServices"
-    :tabId="`${index}_tab`"
     @row-selected="rowSelectHandler"
     />
     <div class="text-right">
@@ -34,6 +31,19 @@ export default {
     selectedServices: {
       type: Array,
       default: () => []
+    }
+  },
+  computed: {
+    service () {
+      return this.services.reduce((accumulator, current) => {
+        const item = current.list[0]
+        accumulator.list.push({
+          ...item,
+          time: 30
+        })
+
+        return accumulator
+      }, { list: [] })
     }
   },
   methods: {
