@@ -227,6 +227,7 @@ import { Users } from '../FackApi/api/chat'
 import { mapGetters, mapActions } from 'vuex'
 import { sso, logout, editProfile, changeLang } from '../services/userService'
 import { uploadAvatar } from '../services/upDownLoad'
+import { localize } from 'vee-validate'
 
 export default {
   name: 'Layout1',
@@ -253,6 +254,9 @@ export default {
     }
   },
   watch: {
+    '$i18n.locale': function (code) {
+      localize(code)
+    }
   },
   // sidebarTicket
   data () {

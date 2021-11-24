@@ -14,7 +14,13 @@
       </b-col>
     </b-row>
   </b-container>
-  <div v-if="contentHeight > 60" class="show-more rounded-circle mt-1" @click="expanded = !expanded">Show more...</div>
+  <div
+    v-if="contentHeight > 60"
+    class="show-more rounded-circle mt-1"
+    @click="expanded = !expanded"
+  >
+    {{ $t('public.onlineBooking.showMore') }}
+  </div>
   </div>
 </template>
 

@@ -12,7 +12,7 @@
           @row-selected="selectedRowHandler"
           >
           <template #head(serviceName)>
-            <span>Service</span>
+            <span>{{ $t('public.onlineBooking.service') }}</span>
           </template>
           <template #cell(selected)="{ rowSelected }">
             <template v-if="rowSelected">
@@ -43,9 +43,18 @@ export default {
   },
   data () {
     return {
-      fields: [ { key: 'serviceName', label: this.title, tdClass: 'w-50' }, 'time', 'price', { key: 'selected', label: ' ', tdClass: 'checkColumn' } ],
       selectMode: 'multi',
       selected: []
+    }
+  },
+  computed: {
+    fields () {
+      return [
+        { key: 'serviceName', label: this.title, tdClass: 'w-50' },
+        { key: 'time', label: this.$t('public.onlineBooking.time') },
+        { key: 'price', label: this.$t('public.onlineBooking.price') },
+        { key: 'selected', label: ' ', tdClass: 'checkColumn' }
+      ]
     }
   },
   methods: {

@@ -1,7 +1,7 @@
-export function getDayOfWeek (date, options = { type: 'long' }) {
-  return new Intl.DateTimeFormat(['en'], { weekday: options.type }).format(date)
+export function getDayOfWeek (date, { type = 'long', lang = 'en' } = {}) {
+  return new Intl.DateTimeFormat([lang], { weekday: type }).format(date)
 }
 
-export function getMonthName (date, options = { type: 'long' }) {
-  return new Intl.DateTimeFormat(['en'], { month: options.type }).format(date)
+export function getMonthName (date, { type = 'long', lang = 'en' } = {}) {
+  return new Intl.DateTimeFormat([lang], { month: type }).format(date)
 }

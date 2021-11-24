@@ -1,9 +1,9 @@
 <template>
   <div v-if="selectedSlot" class="total-card d-flex flex-column app-border overflow-hidden p-3">
-    <h4 class="primary-color" >Total Info</h4>
+    <h4 class="primary-color" >{{ $t('public.onlineBooking.totalInfo') }}</h4>
     <div class="text-left">
-    <div> Date: <b>{{selectedSlot.date | formatDate }}</b></div>
-    <div> Time: <b>{{selectedSlot.time}}</b></div>
+    <div>{{ $t('public.onlineBooking.date') }}: <b>{{selectedSlot.date | formatDate }}</b></div>
+    <div>{{ $t('public.onlineBooking.time') }}: <b>{{selectedSlot.time}}</b></div>
     <hr />
     <div v-if="doctor" class="d-flex align-items-center p-1">
       <img class="img-fluid avatar-40 rounded-circle mr-1" :src="doctor.img" :alt="doctor.name">
@@ -19,7 +19,7 @@
         </div>
       </div>
       <div class="d-flex justify-content-end align-items-end service-item pt-3">
-        <h5 class="primary-color">Total:</h5>
+        <h5 class="primary-color">{{ $t('public.onlineBooking.total') }}:</h5>
         <h4 class="ml-2">${{totalPrice}}</h4>
       </div>
     </div>
