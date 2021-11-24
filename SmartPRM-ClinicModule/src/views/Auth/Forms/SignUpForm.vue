@@ -56,7 +56,8 @@
 
 <script>
 import auth from '../../../services/auth'
-import firebase from 'firebase'
+import firebase from 'firebase/app'
+import 'firebase/auth'
 import SocialLoginForm from './SocialLoginForm'
 import { mapGetters } from 'vuex'
 export default {
