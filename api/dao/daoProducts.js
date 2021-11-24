@@ -36,7 +36,7 @@ const getProductCategories = (request, response, locale) =>  {
 }
 
 const getProductGroups = (request, response, locale) =>  {
-    pool.query("SELECT ppg.product_group_id, ppgn.text AS product_group_name, ppg.fee, ppg.category_id, ppcn.text AS category_name, products.id AS crm_product_id FROM prm_product_group ppg JOIN prm_product_group_name ppgn ON ppg.product_group_id = ppgn.product_group_id JOIN prm_product_category_name ppcn ON ppg.category_id = ppcn.category_id JOIN products ON ppg.product_group_id = products.prm_product_group_id WHERE ppgn.language='" + locale + "' AND ppcn.language='" + locale + "' ORDER BY ppg.created_date DESC", (error, results) => {
+    pool.query("SELECT DISTINCT ON (ppg.product_group_id) ppg.product_group_id, ppgn.text AS product_group_name, ppg.fee, ppg.category_id, ppcn.text AS category_name, products.id AS crm_product_id FROM prm_product_group ppg JOIN prm_product_group_name ppgn ON ppg.product_group_id = ppgn.product_group_id JOIN prm_product_category_name ppcn ON ppg.category_id = ppcn.category_id JOIN products ON ppg.product_group_id = products.prm_product_group_id WHERE ppgn.language='" + locale + "' AND ppcn.language='" + locale + "'", (error, results) => {
         if (error) {
             throw error
         }

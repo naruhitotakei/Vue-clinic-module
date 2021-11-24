@@ -808,7 +808,9 @@ export default {
       }
       this.selectedDoctor = event.extendedProps.doctorId
       this.selectedPatient = event.extendedProps.patientId.full_name
+      this.selectedProductGroup = event.extendedProps.prm_pr_group_name_text
       this.modalTitle = this.formData.title
+      console.log('Appointment data: ' + JSON.stringify(selectionInfo))
     }
   }
 }
