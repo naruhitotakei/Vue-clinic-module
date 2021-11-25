@@ -201,7 +201,7 @@ ALTER TABLE appointments
 ADD COLUMN starts_at TIMESTAMP,
 ADD COLUMN ends_at TIMESTAMP;
 
-UPDATE appointments SET starts_at = date + cast(time as time) WHERE time IS NOT NULL AND date > now();
+UPDATE appointments SET starts_at = date + cast(time as time) WHERE time IS NOT NULL AND date > CURRENT_DATE - INTERVAL '3 months';
 
 ALTER TABLE appointments DROP COLUMN end_time;
 

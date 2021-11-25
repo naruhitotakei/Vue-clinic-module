@@ -109,7 +109,7 @@ export async function deletePremise (id) {
 }
 
 export async function createPremiseDevice (premise) {
-  const rawResponse = await fetch('/api/company-premise-devices', {
+  const rawResponse = await fetch('/api/add-premise-device', {
     method: 'POST',
     credentials: 'same-origin',
     headers: {

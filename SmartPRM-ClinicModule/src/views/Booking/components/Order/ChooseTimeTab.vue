@@ -1,38 +1,21 @@
 <template>
   <div class="mt-5" v-if="datesList.length > 0">
-    <slick :option="{
-      infinite: false,
-      slidesToShow: 9,
-      slidesToScroll: 2,
-      arrows: false,
-      dots: true,
-      responsive: [
-      {
-        breakpoint: 1200,
-        settings: { slidesToShow: 6 }
-      },
-      {
-        breakpoint: 992,
-        settings: { slidesToShow: 4 }
-      },
-      {
-        breakpoint: 768,
-        settings: { slidesToShow: 3 }
-      },
-      {
-        breakpoint: 576,
-        settings: { slidesToShow: 2 }
-      }
-      ]
-    }">
-    <date-card v-for="(dateItem, index) in datesList" :key="`date_${index}`"
-    :date="dateItem.date"
-    :aviability="dateItem.aviability"
-    :active="isActiveDate(dateItem.date)"
-    :totalPrice="totalPrice"
-    @date-selected="dateSelectionHandler"
-    />
-    </slick>
+    <div style="
+      padding-left: 48px;
+      padding-right: 48px;
+    ">
+      <slick :option="slickOptions">
+        <date-card
+          v-for="(dateItem, index) in datesList"
+          :key="`date_${index}`"
+          :date="dateItem.date"
+          :aviability="dateItem.aviability"
+          :active="isActiveDate(dateItem.date)"
+          :totalPrice="totalPrice"
+          @date-selected="dateSelectionHandler"
+        />
+      </slick>
+    </div>
     <b-container>
       <b-row>
         <b-col md="9">
@@ -121,6 +104,46 @@ export default {
       filteredScedule: [],
       selectedDateDoctors: [],
       filterDoctors: []
+    }
+  },
+  computed: {
+    slickOptions () {
+      return {
+        infinite: false,
+        slidesToShow: 9,
+        slidesToScroll: 2,
+        dots: true,
+        responsive: [
+          {
+            breakpoint: 1200,
+            settings: { slidesToShow: 6 }
+          },
+          {
+            breakpoint: 992,
+            settings: { slidesToShow: 4 }
+          },
+          {
+            breakpoint: 768,
+            settings: { slidesToShow: 3 }
+          },
+          {
+            breakpoint: 576,
+            settings: { slidesToShow: 2 }
+          }
+        ],
+        prevArrow: /* html */`
+          <a href="#" class="ri-arrow-left-s-line left" style="
+            margin-left: -48px;
+            background: transparent;
+          "></a>
+        `,
+        nextArrow: /* html */`
+          <a href="#" class="ri-arrow-right-s-line right" style="
+            margin-right: -48px;
+            background: transparent;
+          "></a>
+        `
+      }
     }
   },
   watch: {
