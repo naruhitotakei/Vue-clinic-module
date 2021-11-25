@@ -1138,9 +1138,12 @@ export default {
       }
     },
     patientsDentist: function () {
-      return this.dentists.find((item) => {
-        return item.code === this.patient.prm_dentist_user_id
-      })
+      if (this.dentists && this.dentists.length) {
+        return this.dentists.find((item) => {
+          return item.code === this.patient.prm_dentist_user_id
+        })
+      }
+      return null
     },
     patientsSurgeon: function () {
       return this.surgeons.find((item) => {
@@ -1663,7 +1666,9 @@ export default {
     },
     getPatientNotes (id) {
       getEnquiryNotes(id).then(response => {
-        this.notes = response.reverse()
+        if (Array.isArray(response)) {
+          this.notes = response.reverse()
+        }
       }
       )
     },

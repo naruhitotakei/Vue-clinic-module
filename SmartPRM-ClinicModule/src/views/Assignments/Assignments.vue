@@ -339,30 +339,36 @@ export default {
       })
       getAssignments('future').then(response => {
         let res = []
-        let reverseResponse = response.reverse()
-        for (let i = 0; i < response.length; i += 3) {
-          res = [...res, reverseResponse.slice(i, i + 20)]
+        if (Array.isArray(response)) {
+          let reverseResponse = response.reverse()
+          for (let i = 0; i < response.length; i += 3) {
+            res = [...res, reverseResponse.slice(i, i + 20)]
+          }
+          this.futureAssigments = res
+          this.futureTotalRows = response.length
         }
-        this.futureAssigments = res
-        this.futureTotalRows = response.length
       })
       getAssignments('past').then(response => {
         let res = []
-        let reverseResponse = response.reverse()
-        for (let i = 0; i < response.length; i += 3) {
-          res = [...res, reverseResponse.slice(i, i + 20)]
+        if (Array.isArray(response)) {
+          let reverseResponse = response.reverse()
+          for (let i = 0; i < response.length; i += 3) {
+            res = [...res, reverseResponse.slice(i, i + 20)]
+          }
+          this.overdueAssignments = res
+          this.overdueTotalRows = response.length
         }
-        this.overdueAssignments = res
-        this.overdueTotalRows = response.length
       })
       getAssignments('finished').then(response => {
         let res = []
-        let reverseResponse = response.reverse()
-        for (let i = 0; i < response.length; i += 3) {
-          res = [...res, reverseResponse.slice(i, i + 20)]
+        if (Array.isArray(response)) {
+          let reverseResponse = response.reverse()
+          for (let i = 0; i < response.length; i += 3) {
+            res = [...res, reverseResponse.slice(i, i + 20)]
+          }
+          this.completedAssigments = res
+          this.completedTotalRows = response.length
         }
-        this.completedAssigments = res
-        this.completedTotalRows = response.length
       })
     },
     finishAssignment (id, finished) {
@@ -421,10 +427,12 @@ export default {
       })
     },
     patientsDentist (patient) {
-      let dentist = this.dentists.find((item) => {
-        return item.code === patient.prm_dentist_user_id
-      })
-      return dentist && dentist.label
+      if (this.dentists && this.dentists.length) {
+        let dentist = this.dentists.find((item) => {
+          return item.code === patient.prm_dentist_user_id
+        })
+        return dentist && dentist.label
+      }
     }
   },
   data () {

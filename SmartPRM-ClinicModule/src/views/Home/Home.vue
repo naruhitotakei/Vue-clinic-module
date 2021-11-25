@@ -518,26 +518,28 @@ export default {
       sso().then(response => {
         if (typeof response !== 'string') {
           getTodaysAppointments(this.$i18n.locale).then(response => {
-            response.map(appointment => {
-              this.todaysAppointments.push({
-                id: appointment.id,
-                patient_name: appointment.patient_name,
-                location: appointment.location,
-                doctor_id: appointment.doctor_id,
-                doctor_name: appointment.doctor_name,
-                product_group: appointment.product_group_name,
-                product_group_id: appointment.product_group_id,
-                product_group_name: appointment.product_group_name,
-                start_time: new Date(appointment.starts_at),
-                time: appointment.time,
-                end_time: new Date(appointment.ends_at),
-                patient_phone: appointment.patient_phone,
-                patient_id: appointment.patient_id,
-                patient_attended: appointment.patient_attended,
-                appointment_canceled_in_advance_by_clinic: false,
-                appointment_canceled_in_advance_by_patient: false
+            if (Array.isArray(response)) {
+              response.map(appointment => {
+                this.todaysAppointments.push({
+                  id: appointment.id,
+                  patient_name: appointment.patient_name,
+                  location: appointment.location,
+                  doctor_id: appointment.doctor_id,
+                  doctor_name: appointment.doctor_name,
+                  product_group: appointment.product_group_name,
+                  product_group_id: appointment.product_group_id,
+                  product_group_name: appointment.product_group_name,
+                  start_time: new Date(appointment.starts_at),
+                  time: appointment.time,
+                  end_time: new Date(appointment.ends_at),
+                  patient_phone: appointment.patient_phone,
+                  patient_id: appointment.patient_id,
+                  patient_attended: appointment.patient_attended,
+                  appointment_canceled_in_advance_by_clinic: false,
+                  appointment_canceled_in_advance_by_patient: false
+                })
               })
-            })
+            }
           })
           getStaff().then(response => {
             this.staff = response
@@ -626,8 +628,9 @@ export default {
     getDoctorsStatisticPerWeek () {
       getDoctorsStatisticPerWeek().then(response => {
         this.doctorsData = _.map(response, function (element) {
-          element.starts_at = moment(element.starts_at).format('DD-MM-YYYY')
-          return element
+          let parsedElement = Object.assign({}, element)
+          parsedElement.starts_at = moment(parsedElement.starts_at).format('DD-MM-YYYY')
+          return parsedElement
         })
       })
     },
@@ -656,9 +659,11 @@ export default {
       visitsByCountryInAWeek().then(response => {
         let visitsByCountry = response
         this.totalVisits = _.sumBy(visitsByCountry, function (o) { return +o.count })
-        visitsByCountry.forEach(element => {
-          element.percentage = (element.count / this.totalVisits * 100).toFixed(2)
-        })
+        if (visitsByCountry && Array.isArray(visitsByCountry)) {
+          visitsByCountry.forEach(element => {
+            element.percentage = (element.count / this.totalVisits * 100).toFixed(2)
+          })
+        }
 
         this.countriesWithPatients = _.map(this.countriesWithPatients, function (country) {
           return _.assign(country, _.find(visitsByCountry, {
