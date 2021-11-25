@@ -346,6 +346,14 @@ export default {
     width: 400px;
     padding-top: 0;
   }
+
+  @media screen and (max-width: 460px) {
+  .b-dropdown-form {
+    flex-direction: row;
+    max-height: fit-content;
+    width: auto;
+  }
+}
 }
 
 </style>

@@ -96,7 +96,8 @@
 <script>
 import { xray } from '../../config/pluginInit'
 import IqCard from '../../components/xray/cards/iq-card'
-import { clinicStatistics, clinicStatisticsAttendance } from '../../services/statistics'
+import { clinicStatisticsAttendance } from '../../services/statistics'
+import { getClinicStatistics } from '../../services/reporting'
 import moment from 'moment'
 
 let dates = []
@@ -191,7 +192,7 @@ export default {
   },
   methods: {
     getStatistics () {
-      clinicStatistics().then(response => {
+      getClinicStatistics().then(response => {
         if (typeof response !== 'string') {
           this.statistics = response
           this.statistics.forEach(function (item) {
