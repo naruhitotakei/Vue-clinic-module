@@ -160,12 +160,13 @@ const createPremiseDevice = (req, res, premiseDevice) => {
     if (premiseDevice.device_name) premiseDeviceStatement += "device_name,"
     if (premiseDevice.company_premise_id) premiseDeviceStatement += "company_premise_id,"
     if (premiseDevice.electronic_device_id) premiseDeviceStatement += "electronic_device_id,"
-    premiseDeviceStatement += "created_date"
+    premiseDeviceStatement += "created_at"
     premiseDeviceStatement += ") VALUES ("
     if (premiseDevice.device_name) premiseDeviceStatement += "'" + premiseDevice.device_name + "',"
-    if (premiseDevice.company_premise_id) premiseDeviceStatement += "'" + premiseDevice.company_premise_id + "',"
+    if (premiseDevice.company_premise_id) premiseDeviceStatement += "" + premiseDevice.company_premise_id + ","
+    if (premiseDevice.electronic_device_id) premiseDeviceStatement += "'" + premiseDevice.electronic_device_id + "',"
     premiseDeviceStatement +="NOW())"
-
+    console.log("Creating Premise device on BE: " + premiseDeviceStatement)
     pool.query(premiseDeviceStatement , (error, results) => {
         if (error) {
             throw error

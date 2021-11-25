@@ -524,7 +524,8 @@ export default {
       },
       deviceFormData: {
         company_premise_id: '',
-        device_name: ''
+        device_name: '',
+        electronic_device_id: ''
       },
       modalPremiseShow: false,
       modalDeviceShow: false,
@@ -607,7 +608,8 @@ export default {
     defaultDeviceFormData () {
       return {
         company_premise_id: '',
-        device_name: ''
+        device_name: '',
+        electronic_device_id: ''
       }
     },
     defaultCompanyFormData () {
@@ -740,6 +742,7 @@ export default {
         })
       } else {
         createPremiseDevice(this.deviceFormData).then(() => {
+          console.log('Saving premise device on FE: ' + JSON.stringify(this.deviceFormData))
           this.getCompanyPremiseDevices()
         })
       }

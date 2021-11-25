@@ -1102,7 +1102,7 @@ app.post('/api/company-premise-devices/check-electronic-device-id', (req, res) =
     daoCompanyPremises.checkElectronicDeviceIdUniquness(req, res, data)
 });
 
-app.post('/api/company-premise-devices', (req, res) => {
+app.post('/api/add-premise-device', (req, res) => {
     const premiseDevice = req.body
     daoCompanyPremises.createPremiseDevice(req, res, premiseDevice)
 });
