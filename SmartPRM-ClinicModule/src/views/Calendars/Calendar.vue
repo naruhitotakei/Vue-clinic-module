@@ -354,6 +354,7 @@ export default {
     width: auto;
   }
 }
+  @media screen and (max-width:600px) { .fc-toolbar.fc-header-toolbar {font-size: 60%}}
 }
 
 </style>

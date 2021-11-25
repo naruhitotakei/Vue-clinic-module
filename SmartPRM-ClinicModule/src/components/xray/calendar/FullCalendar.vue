@@ -705,7 +705,7 @@ export default {
         location: this.locations.length === 1 ? this.locations[0].city : '',
         enquiry_id: '',
         appointment_canceled_in_advance_by_clinic: false,
-        appointment_canceled_in_advance_by_patient: false,
+        appointment_canceled_in_advance_by_patient: false
       }
     },
     calculateEndDate (startDate, hours, minutes) {
