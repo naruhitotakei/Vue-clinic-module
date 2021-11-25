@@ -6,9 +6,9 @@ Vue.filter('reverse', function (value) {
   return value.slice().reverse()
 })
 
-Vue.filter('formatDate', function (value) {
+Vue.filter('formatDate', function (value, { lang = 'en' } = {}) {
   if (value) {
-    return moment(String(value)).format('ddd, D MMM')
+    return moment(String(value)).locale(lang).format('ddd, D MMM')
   }
 })
 
@@ -38,9 +38,9 @@ Vue.filter('formatDateAssignments', function (value, lang) {
   }
 })
 
-Vue.filter('formatFullDate', function (value) {
+Vue.filter('formatFullDate', function (value, { lang = 'en' } = {}) {
   if (value) {
-    return moment(String(value)).format('dddd, MMMM D, YYYY')
+    return moment(String(value)).locale(lang).format('dddd, MMMM D, YYYY')
   }
 })
 

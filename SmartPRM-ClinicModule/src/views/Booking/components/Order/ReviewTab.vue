@@ -5,7 +5,7 @@
     </h5>
     <div class="selected-slot p-2 my-3">
       {{ $t('public.onlineBooking.selectedSlot') }}:
-      {{ selectedSlot.date | formatFullDate }}
+      {{ selectedSlot.date | formatFullDate({ lang: $i18n.locale }) }}
       {{ $t('public.onlineBooking.at') }}
       {{ selectedSlot.time }}
     </div>
