@@ -125,7 +125,7 @@ export default {
       let events = []
       this.events.map(e => {
         return this.check.map(c => {
-          if (e.doctorId === c.title) {
+          if (e.eventResourceId === c.id) {
             events.push(e)
           }
         })
@@ -139,7 +139,7 @@ export default {
       let resources = []
       this.resources.map(e => {
         this.check.map(c => {
-          if (e.title === c.title) {
+          if (e.id === c.id) {
             resources.push(e)
           }
         })
@@ -169,7 +169,7 @@ export default {
             doctorInfo: { ...item }
           }))
           this.doctors = this.doctorsList.map(item => ({
-            id: Date.now(),
+            id: item.id,
             title: item.name,
             disabled: false,
             checked: false
@@ -239,14 +239,14 @@ export default {
     checkData (item) {
       this.selectDoctor = item
       this.doctors.map(doctor => {
-        if (doctor.title === item.title) {
+        if (doctor.id === item.id) {
           if (item.checked) {
             this.check.push(item)
             doctor.checked = true
           } else {
             doctor.checked = false
             this.check.map((i, index) => {
-              if (i.title === item.title) {
+              if (i.id === item.id) {
                 this.check.splice(index, 1)
               }
             })
