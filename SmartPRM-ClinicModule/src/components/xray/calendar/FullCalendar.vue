@@ -760,8 +760,6 @@ export default {
       this.$emit('setModalShow', true)
       // this.formData.resourceId = selectionInfo.resource.id
       this.selectedDoctor = this.doctors.find(doctor => doctor.id === +selectionInfo.resource.id)
-      this.selectedPatient = ''
-      this.selectedProductGroup = ''
       // this.formData.doctorId = selectionInfo.resource.title
       // this.formData.eventResourceId = selectionInfo.resource.id
       this.formData.assignmentDate = new Date(selectionInfo.startStr)
