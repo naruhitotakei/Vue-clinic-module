@@ -4,7 +4,7 @@
     <div class="text-left">
     <div>
       {{ $t('public.onlineBooking.date') }}:
-      <b>{{selectedSlot.date | formatDate({ lang: $i18n.locale }) }}</b>
+      <b>{{selectedSlot.date.toISOString() | formatDate({ lang: $i18n.locale }) }}</b>
     </div>
     <div>
       {{ $t('public.onlineBooking.time') }}:
