@@ -1,7 +1,14 @@
 <template>
   <div>
-    <h5 class="text-left">Check selected slot and confirm reservation.</h5>
-    <div class="selected-slot p-2 my-3">Selected slot: {{selectedSlot.date | formatFullDate}} at {{selectedSlot.time}}</div>
+    <h5 class="text-left">
+      {{ $t('public.onlineBooking.checkSelectedSlotAndConfirmReservation') }}
+    </h5>
+    <div class="selected-slot p-2 my-3">
+      {{ $t('public.onlineBooking.selectedSlot') }}:
+      {{ selectedSlot.date.toISOString() | formatFullDate({ lang: $i18n.locale }) }}
+      {{ $t('public.onlineBooking.at') }}
+      {{ selectedSlot.time }}
+    </div>
      <b-table
       :items="services"
       :fields="fields"
@@ -21,7 +28,7 @@
       </template>
       <template #custom-foot>
         <tr>
-            <td><b>TOTAL</b></td>
+            <td><b style="text-transform: uppercase">{{ $t('public.onlineBooking.total') }}</b></td>
             <td></td>
             <td>{{totalTime | formatTime}}</td>
             <td>{{totalPrice | formatMoney}}</td>
@@ -32,15 +39,17 @@
       <b-button
         align-self="end"
         variant="primary"
-        @click="$emit('change-tab', 1)">
-        Slots and Prices
+        @click="$emit('change-tab', 1)"
+      >
+        {{ $t('public.onlineBooking.slotsAndPrices') }}
       </b-button>
       <b-button
         align-self="end"
         variant="primary"
         :disabled="!selectedSlot"
-        v-b-modal.confirm-modal>
-        Confirm
+        v-b-modal.confirm-modal
+      >
+        {{ $t('public.onlineBooking.confirm') }}
       </b-button>
     </div>
     <SMSCodeModal :selectedSlot="selectedSlot" :services="services" />
@@ -58,19 +67,20 @@ export default {
     totalPrice: Number,
     selectedSlot: Object
   },
-  data: function () {
-    return {
-      fields: [
-        { key: 'serviceName', label: '' },
-        { key: 'doctor', label: '' },
-        { key: 'time', label: '' },
-        { key: 'price', label: `Start at ${this.selectedSlot.time}` }
-      ]
-    }
-  },
   computed: {
     totalTime: function () {
       return this.services.reduce((total, service) => total + service.time, 0)
+    },
+    fields () {
+      return [
+        { key: 'serviceName', label: '' },
+        { key: 'doctor', label: '' },
+        { key: 'time', label: '' },
+        {
+          key: 'price',
+          label: `${this.$t('public.onlineBooking.startAt')} ${this.selectedSlot.time}`
+        }
+      ]
     }
   }
 }

@@ -30,6 +30,7 @@
     "express-brute": "^1.0.1",
     "express-fileupload": "^1.2.1",
     "express-session": "^1.17.1",
+    "geoip-lite": "^1.4.2",
     "get-env": "^0.5.10",
     "http-proxy-middleware": "^1.0.4",
     "moment": "^2.29.1",

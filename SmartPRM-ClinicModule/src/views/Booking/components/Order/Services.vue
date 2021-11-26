@@ -13,7 +13,7 @@
         variant="primary"
         :disabled="!selectedServices.length"
         @click="$emit('change-tab', 1)">
-        Choose Time
+        {{ $t('public.onlineBooking.chooseTime') }}
       </b-button>
     </div>
   </div>

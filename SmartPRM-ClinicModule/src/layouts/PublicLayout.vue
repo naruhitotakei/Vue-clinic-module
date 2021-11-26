@@ -5,11 +5,22 @@
 </template>
 
 <script>
+import { localize } from 'vee-validate'
+
 export default {
   name: 'PublicLayout',
   components: {
   },
-  mounted () {
+  async mounted () {
+    const response = await fetch('/api/config')
+
+    if (response.ok === false) {
+      return
+    }
+
+    const { lang } = await response.json()
+    this.$i18n.locale = lang
+    localize(lang)
   },
   watch: {
   },

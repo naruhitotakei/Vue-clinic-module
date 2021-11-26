@@ -20,12 +20,17 @@
       <b-row>
         <b-col md="9">
           <template v-if="scedule.length">
-          <div class="favorite-doctor text-left">Choose your favorite doctor</div>
+          <div class="favorite-doctor text-left">
+            {{ $t('public.onlineBooking.chooseYourFavoriteDoctor') }}
+          </div>
           <app-multiselect
           :options="selectedDateDoctors"
           label="name"
           trackBy="name"
           v-model="filterDoctors"
+          :placeholder="$t('public.onlineBooking.selectOption')"
+          :selectLabel="$t('public.onlineBooking.pressEnterToSelect')"
+          :deselectLabel="$t('public.onlineBooking.pressEnterToRemove')"
           />
           </template>
           <time-selection-table
@@ -48,15 +53,17 @@
             <b-button
               align-self="end"
               variant="primary"
-              @click="$emit('change-tab', 0)">
-              Back to Services
+              @click="$emit('change-tab', 0)"
+            >
+              {{ $t('public.onlineBooking.backToServices') }}
             </b-button>
             <b-button
               align-self="end"
               variant="primary"
               :disabled="!selectedSlot"
-              @click="$emit('change-tab', 2)">
-              To review
+              @click="$emit('change-tab', 2)"
+            >
+              {{ $t('public.onlineBooking.toReview') }}
             </b-button>
           </div>
         </b-col>
@@ -165,7 +172,7 @@ export default {
     !this.selectedDate ? this.initialDate() : this.getsDayScedule(this.selectedDate)
   },
   methods: {
-    getDatesArr: function () {
+    getDatesArr () {
       const resArray = []
       const currDate = new Date(Date.now())
       const startDate = new Date(currDate.getTime())
@@ -176,7 +183,9 @@ export default {
         resArray.push({
           date: new Date(startDate),
           priceField: '35$',
-          aviability: startDate.getDate() === currDate.getDate() ? 'taken' : getDayOfWeek(startDate) === 'Sunday' && 'closed'
+          aviability: startDate.getDate() === currDate.getDate()
+            ? this.$t('public.onlineBooking.taken')
+            : getDayOfWeek(startDate) === 'Sunday' && this.$t('public.onlineBooking.closed')
         })
         startDate.setDate(startDate.getDate() + 1)
       }
