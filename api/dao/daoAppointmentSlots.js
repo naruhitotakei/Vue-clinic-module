@@ -9,16 +9,27 @@ const pool = new Pool({
 })
 let moment = require('moment');
 
-const getFreeSlots = (request, response, prm_client_id) => {
-    let statement = "SELECT * FROM appointment_slots WHERE prm_client_id = " + prm_client_id
-    /* statement += "WHERE '[:from, :to]':: daterange @> starts_at:: date "
-    statement = statement.replace(":from", from).replace(":to", to) */
-    pool.query(statement, (error, results) => {
-        if (error) {
-            throw error
-        }
-        response.status(200).json(results.rows)
-    })
+const getFreeSlots = ({ serviceId, date }, callback) => {
+    const statement = /* sql */`
+        SELECT
+            appointment_slots.id,
+            appointment_slots.starts_at,
+            appointment_slots.doctor_id,
+            users.name
+        FROM appointment_slots
+        JOIN users
+        ON appointment_slots.doctor_id = users.id
+        WHERE appointment_slots.doctor_id IN (
+            SELECT doctor_id
+            FROM online_booking_users_bridge
+            WHERE online_booking_id = ${serviceId}
+        )
+        AND appointment_slots.starts_at::date = date '${date}'
+        AND appointment_slots.appointment_id IS NULL
+        ORDER BY appointment_slots.starts_at
+    `
+
+    pool.query(statement, callback)
 }
 
 const createFreeSlots = (request, response, slot, prm_client_id) => {

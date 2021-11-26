@@ -301,10 +301,14 @@ app.delete('/api/calendar/label/:id', (req, res) => {
 ///////////////////////////////////
 
 app.get('/api/calendar/free-slots', (req, res) => {
-    if (req.session.prm_user && req.session.prm_user.permissions && checkPermission(req.session.prm_user.permissions, appointmentSlotsPermission))
-        daoAppointmentSlots.getFreeSlots(req, res, req.session.prm_user.prm_client_id)
-    else
-        res.status(401).json("OK: user unauthorized")
+    const { serviceId, date } = req.query
+    daoAppointmentSlots.getFreeSlots({ serviceId, date }, (error, { rows }) => {
+        if (error) {
+            res.status(500).send()
+        }
+
+        res.status(200).json(rows)
+    })
 });
 
 app.post('/api/calendar/create-free-slots', (req, res) => {
@@ -1234,18 +1238,14 @@ app.post('/api/files/avatar/:id', async function(req, res) {
 });
 
 app.get('/api/files/avatar/:id', async function (req, res) {
-  let id = req.params.id
-  if(req.session.prm_user) {
+    let id = req.params.id
     const rv = await awsS3.download('avatar-' + id + '/')
     if (rv.status=='OK') {
-      const download = Buffer.from(rv.data.Body)
-      res.end(download)
+        const download = Buffer.from(rv.data.Body)
+        res.end(download)
     } else {
-      res.download('./resources/avatar-default.png', 'avatar-default.png');
+        res.download('./resources/avatar-default.png', 'avatar-default.png');
     }
-  }
-  else
-    res.status(401).json("OK: user unauthorized")
 });
 
 ///////////////////////////////////
