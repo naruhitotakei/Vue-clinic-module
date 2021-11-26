@@ -585,12 +585,15 @@ export default {
       this.$emit('setModalShow', false)
       this.formData = this.defaultAppointment()
       this.selectedDoctor = null
+      this.selectedProductGroup = null
+      this.selectedPatient = null
     },
     updateCalendar (id, appointment) {
-      updateCalendar(id, appointment)
-      this.$emit('updateApp', {
-        start: moment().startOf('month').format('YYYY-MM-DD'),
-        end: moment().endOf('month').format('YYYY-MM-DD')
+      updateCalendar(id, appointment).then(() => {
+        this.$emit('updateApp', {
+          start: this.dates.start,
+          end: this.dates.end
+        })
       })
     },
     updateCalendarLabel (id, appointment) {
