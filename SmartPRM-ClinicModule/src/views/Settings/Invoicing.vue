@@ -742,7 +742,6 @@ export default {
         })
       } else {
         createPremiseDevice(this.deviceFormData).then(() => {
-          console.log('Saving premise device on FE: ' + JSON.stringify(this.deviceFormData))
           this.getCompanyPremiseDevices()
         })
       }

@@ -588,6 +588,10 @@ export default {
     },
     updateCalendar (id, appointment) {
       updateCalendar(id, appointment)
+      this.$emit('updateApp', {
+        start: moment().startOf('month').format('YYYY-MM-DD'),
+        end: moment().endOf('month').format('YYYY-MM-DD')
+      })
     },
     updateCalendarLabel (id, appointment) {
       updateCalendarLabel(id, appointment).then(() => {
