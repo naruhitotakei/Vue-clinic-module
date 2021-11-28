@@ -301,14 +301,10 @@ app.delete('/api/calendar/label/:id', (req, res) => {
 ///////////////////////////////////
 
 app.get('/api/calendar/free-slots', (req, res) => {
-    const { serviceId, date } = req.query
-    daoAppointmentSlots.getFreeSlots({ serviceId, date }, (error, { rows }) => {
-        if (error) {
-            res.status(500).send()
-        }
-
-        res.status(200).json(rows)
-    })
+    if (req.session.prm_user && req.session.prm_user.permissions && checkPermission(req.session.prm_user.permissions, appointmentSlotsPermission))
+        daoAppointmentSlots.getFreeSlots(req, res, req.session.prm_user.prm_client_id)
+    else
+        res.status(401).json("OK: user unauthorized")
 });
 
 app.post('/api/calendar/create-free-slots', (req, res) => {
@@ -1342,3 +1338,17 @@ app.get('/api/config', (request, response) => {
 const langByCountry = {
     'SI': 'sl'
 }
+
+app.get('/api/public/free-slots', (req, res) => {
+    const { serviceId, date } = req.query
+    daoAppointmentSlots.getFreeSlotsPublic(
+        { serviceId, date },
+        (error, { rows }) => {
+            if (error) {
+                res.status(500).send()
+            }
+
+            res.status(200).json(rows)
+        }
+    )
+});

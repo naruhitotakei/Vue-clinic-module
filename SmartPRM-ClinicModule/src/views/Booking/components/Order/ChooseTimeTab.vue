@@ -24,7 +24,7 @@
             {{ $t('public.onlineBooking.chooseYourFavoriteDoctor') }}
           </div>
           <app-multiselect
-          :options="selectedDateDoctors"
+          :options="favoriteDoctors"
           label="name"
           trackBy="name"
           v-model="filterDoctors"
@@ -34,7 +34,7 @@
           />
           </template>
           <time-selection-table
-          :items="filteredScedule"
+          :items="appointmentSlotsFiltered"
           @select-doctor="$emit('select-doctor', $event)"
           :selectedSlot="selectedSlot"
           :selectedDate="selectedDate"
@@ -80,6 +80,7 @@ import TimeSelectionTable from './TimeSelectionTable.vue'
 import { dailySchedule, daysScedule } from '../../booking-data'
 import TotalOrderInfo from './TotalOrderInfo.vue'
 import AppMultiselect from '../Controls/AppMultiselect.vue'
+import moment from 'moment'
 
 export default {
   components: {
@@ -103,7 +104,8 @@ export default {
       scedule: [],
       filteredScedule: [],
       selectedDateDoctors: [],
-      filterDoctors: []
+      filterDoctors: [],
+      appointmentSlots: []
     }
   },
   computed: {
@@ -144,6 +146,36 @@ export default {
           "></a>
         `
       }
+    },
+    appointmentSlotsFiltered () {
+      const grouped = this.appointmentSlots.reduce((group, slot) => {
+        if (group[slot.starts_at] == null) {
+          group[slot.starts_at] = []
+        }
+
+        group[slot.starts_at].push(slot)
+
+        return group
+      }, {})
+      const sorted = Object.entries(grouped).sort(([a], [b]) => a - b)
+
+      return sorted.map(([dateTime, slots]) => ({
+        doctors: slots.map((slot) => ({
+          ...slot,
+          img: `/api/files/avatar/${slot.doctor_id}`
+        })),
+        time: moment(dateTime).format('HH:mm'),
+        totalPrice: this.totalPrice
+      }))
+    },
+    favoriteDoctors () {
+      return Object.values(this.appointmentSlots.reduce((doctorById, slot) => {
+        if (doctorById[slot.doctor_id] == null) {
+          doctorById[slot.doctor_id] = slot
+        }
+
+        return doctorById
+      }, {}))
     }
   },
   watch: {
@@ -163,7 +195,38 @@ export default {
       immediate: true,
       handler: function (value) {
         this.filteredScedule = (!this.filterDoctors.length) ? value : this.filterSceduleByDoctors(this.filterDoctors)
-        !this.selectedSlot && this.initialSlot()
+      }
+    },
+    selectedDate: {
+      immediate: true,
+      async handler (date) {
+        if (date == null) {
+          return
+        }
+
+        const response = await fetch(`/api/public/free-slots?${new URLSearchParams({
+          serviceId: this.services[0].id,
+          date: moment(date).format('YYYY-MM-DD')
+        })}`)
+
+        if (response.ok === false) {
+          return
+        }
+
+        this.appointmentSlots = await response.json()
+        const firstSlot = this.appointmentSlots[0]
+
+        if (firstSlot == null) {
+          return
+        }
+
+        this.$emit('select-doctor', {
+          doctor: {
+            ...firstSlot,
+            img: `/api/files/avatar/${firstSlot.doctor_id}`
+          },
+          time: moment(firstSlot.starts_at).format('HH:mm')
+        })
       }
     }
   },
@@ -246,23 +309,6 @@ export default {
         })
       }
       return resScedule
-    },
-    initialSlot: function () {
-      if (this.scedule.length > 0) {
-        let doctor = null
-        let time = ''
-        for (let index = 0; index < this.scedule.length; index++) {
-          const timeItem = this.scedule[index]
-          if (timeItem.doctors.length > 0) {
-            doctor = timeItem.doctors[0]
-            time = timeItem.time
-            break
-          }
-        }
-        if (doctor) {
-          this.$emit('select-doctor', { doctor, time })
-        }
-      }
     }
   }
 }

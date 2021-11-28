@@ -9,7 +9,19 @@ const pool = new Pool({
 })
 let moment = require('moment');
 
-const getFreeSlots = ({ serviceId, date }, callback) => {
+const getFreeSlots = (request, response, prm_client_id) => {
+    let statement = "SELECT * FROM appointment_slots WHERE prm_client_id = " + prm_client_id
+    /* statement += "WHERE '[:from, :to]':: daterange @> starts_at:: date "
+    statement = statement.replace(":from", from).replace(":to", to) */
+    pool.query(statement, (error, results) => {
+        if (error) {
+            throw error
+        }
+        response.status(200).json(results.rows)
+    })
+}
+
+const getFreeSlotsPublic = ({ serviceId, date }, callback) => {
     const statement = /* sql */`
         SELECT
             appointment_slots.id,
@@ -64,6 +76,7 @@ const deleteFreeSlot = (request, response, id) => {
 
 module.exports = {
     getFreeSlots,
+    getFreeSlotsPublic,
     createFreeSlots,
     deleteFreeSlot
 }
