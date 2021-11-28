@@ -165,7 +165,7 @@ export default {
           img: `/api/files/avatar/${slot.doctor_id}`
         })),
         time: moment(dateTime).format('HH:mm'),
-        totalPrice: this.totalPrice
+        totalPrice: `$${this.totalPrice}`
       }))
     },
     favoriteDoctors () {
