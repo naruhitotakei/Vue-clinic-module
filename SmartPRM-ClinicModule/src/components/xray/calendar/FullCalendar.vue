@@ -525,13 +525,13 @@ export default {
         this.$bvModal.show('data-not-saved')
       } else {
         this.$emit('setModalShow', false)
-        this.formData = this.defaultAppointment
+        this.formData = this.defaultAppointment()
       }
     },
     notSavedModalClose () {
       this.$bvModal.hide('data-not-saved')
       this.$emit('setModalShow', false)
-      this.formData = this.defaultAppointment
+      this.formData = this.defaultAppointment()
     },
     notSavedModalSave () {
       this.$bvModal.hide('data-not-saved')
@@ -753,6 +753,8 @@ export default {
       this.$emit('setModalShow', true)
       // this.formData.resourceId = selectionInfo.resource.id
       this.selectedDoctor = this.doctors.find(doctor => doctor.id === +selectionInfo.resource.id)
+      this.selectedPatient = ''
+      this.selectedProductGroup = ''
       // this.formData.doctorId = selectionInfo.resource.title
       // this.formData.eventResourceId = selectionInfo.resource.id
       this.formData.assignmentDate = new Date(selectionInfo.startStr)
@@ -808,6 +810,7 @@ export default {
       }
       this.selectedDoctor = event.extendedProps.doctorId
       this.selectedPatient = event.extendedProps.patientId.full_name
+      this.selectedProductGroup = event.extendedProps.prm_pr_group_name_text
       this.modalTitle = this.formData.title
     }
   }

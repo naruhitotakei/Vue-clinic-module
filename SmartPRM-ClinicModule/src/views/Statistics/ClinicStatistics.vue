@@ -96,8 +96,9 @@
 <script>
 import { xray } from '../../config/pluginInit'
 import IqCard from '../../components/xray/cards/iq-card'
-import { clinicStatistics, clinicStatisticsAttendance } from '../../services/statistics'
-import moment from 'moment'
+import { clinicStatisticsAttendance } from '../../services/statistics'
+// import { getClinicStatistics } from '../../services/reporting'
+// import moment from 'moment'
 
 let dates = []
 let totalRevenue = []
@@ -106,7 +107,7 @@ export default {
   components: { IqCard },
   mounted () {
     xray.index()
-    this.getStatistics()
+    // this.getStatistics()
     this.getAttendance()
   },
   data () {
@@ -190,21 +191,21 @@ export default {
     }
   },
   methods: {
-    getStatistics () {
-      clinicStatistics().then(response => {
-        if (typeof response !== 'string') {
-          this.statistics = response
-          this.statistics.forEach(function (item) {
-            if (item.date !== null) {
-              dates.push(moment(item.date).format('YYYY-MM-DD'))
-              totalRevenue.push(parseFloat(item.totalrevenue))
-            }
-          })
-        } else {
-          console.error(response)
-        }
-      })
-    },
+    // getStatistics () {
+    //   getClinicStatistics().then(response => {
+    //     if (typeof response !== 'string') {
+    //       this.statistics = response
+    //       this.statistics.forEach(function (item) {
+    //         if (item.date !== null) {
+    //           dates.push(moment(item.date).format('YYYY-MM-DD'))
+    //           totalRevenue.push(parseFloat(item.totalrevenue))
+    //         }
+    //       })
+    //     } else {
+    //       console.error(response)
+    //     }
+    //   })
+    // },
     getAttendance () {
       clinicStatisticsAttendance().then(response => {
         if (typeof response !== 'string') {

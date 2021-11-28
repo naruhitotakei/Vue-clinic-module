@@ -1106,7 +1106,7 @@ app.post('/api/company-premise-devices/check-electronic-device-id', (req, res) =
     daoCompanyPremises.checkElectronicDeviceIdUniquness(req, res, data)
 });
 
-app.post('/api/company-premise-devices', (req, res) => {
+app.post('/api/add-premise-device', (req, res) => {
     const premiseDevice = req.body
     daoCompanyPremises.createPremiseDevice(req, res, premiseDevice)
 });
@@ -1283,17 +1283,45 @@ app.listen(port, () => {
 ///////////////////////////////////
 app.post('/api/booking/sendsms', (req, res) => {
     const phone = req.body.phone
+
     if(phone) {
-        res.status(200).json({ success: true })
+        const vonage = require('./services/vonage')
+
+        vonage.verify.request({
+            number: phone,
+            brand: 'SMART PRM Dental'
+        }, (error, { request_id }) => {
+            if (error) {
+                res.status(500)
+            } else {
+                res.status(200).json({
+                    success: true,
+                    requestId: request_id,
+                })
+            }
+
+        })
     } else {
         res.status(400).json("No phone number")
     }
 });
 
 app.post('/api/booking/confirm-and-save', (req, res) => {
-    const { code, selectedSlot } = req.body
+    const { code, selectedSlot, requestId } = req.body
+
     if(code) {
-        res.status(200).json({ success: true, code, selectedSlot })
+        const vonage = require('./services/vonage')
+
+        vonage.verify.check({
+            request_id: requestId,
+            code
+        }, (error, _result) => {
+            if (error) {
+                res.status(500)
+            } else {
+                res.status(200).json({ success: true, code, selectedSlot })
+            }
+        })
     } else {
         res.status(400).json("No confirmation code")
     }

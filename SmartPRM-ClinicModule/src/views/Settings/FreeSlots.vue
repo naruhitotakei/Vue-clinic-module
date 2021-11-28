@@ -264,16 +264,18 @@ export default {
   methods: {
     getFreeSlotsList () {
       getFreeSlots().then(response => {
-        response.map(slot => {
-          this.slots.push({
-            id: slot.id,
-            title: slot.doctor_name,
-            start: moment(slot.starts_at).format('YYYY-MM-DDTHH:mm'),
-            end: moment(slot.starts_at).add('0', 'hours').add('15', 'minutes').format('YYYY-MM-DDTHH:mm'),
-            backgroundColor: slot.appointment_id ? '#F1773A' : '#64D6E8'
+        if (Array.isArray(response)) {
+          response.map(slot => {
+            this.slots.push({
+              id: slot.id,
+              title: slot.doctor_name,
+              start: moment(slot.starts_at).format('YYYY-MM-DDTHH:mm'),
+              end: moment(slot.starts_at).add('0', 'hours').add('15', 'minutes').format('YYYY-MM-DDTHH:mm'),
+              backgroundColor: slot.appointment_id ? '#F1773A' : '#64D6E8'
+            })
           })
-        })
-        this.reFetchSlots++
+          this.reFetchSlots++
+        }
       })
     },
     getDoctors () {
