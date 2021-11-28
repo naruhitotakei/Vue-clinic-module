@@ -1237,10 +1237,10 @@ app.get('/api/files/avatar/:id', async function (req, res) {
     let id = req.params.id
     const rv = await awsS3.download('avatar-' + id + '/')
     if (rv.status=='OK') {
-        const download = Buffer.from(rv.data.Body)
-        res.end(download)
+      const download = Buffer.from(rv.data.Body)
+      res.end(download)
     } else {
-        res.download('./resources/avatar-default.png', 'avatar-default.png');
+      res.download('./resources/avatar-default.png', 'avatar-default.png');
     }
 });
 
