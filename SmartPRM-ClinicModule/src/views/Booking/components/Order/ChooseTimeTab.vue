@@ -112,7 +112,7 @@ export default {
     slickOptions () {
       return {
         infinite: false,
-        slidesToShow: 9,
+        slidesToShow: 7,
         slidesToScroll: 2,
         dots: true,
         responsive: [
