@@ -3,6 +3,8 @@
   v-model="selectValue"
   :options="options"
   :placeholder="placeholder"
+  :selectLabel="selectLabel"
+  :deselectLabel="deselectLabel"
   :multiple="true"
   :label="label"
   :track-by="trackBy"
@@ -22,7 +24,9 @@ export default {
     'label',
     'trackBy',
     'value',
-    'placeholder'
+    'placeholder',
+    'selectLabel',
+    'deselectLabel'
   ],
   computed: {
     selectValue: {

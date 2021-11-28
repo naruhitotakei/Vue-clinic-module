@@ -47,8 +47,16 @@ export default {
   },
   data () {
     return {
-      fields: [ { key: 'time', label: 'Time' }, { key: 'doctors', label: 'Available Doctors' }, { key: 'totalPrice', label: ' ' } ],
       selected: []
+    }
+  },
+  computed: {
+    fields () {
+      return [
+        { key: 'time', label: this.$t('public.onlineBooking.time') },
+        { key: 'doctors', label: this.$t('public.onlineBooking.availableDoctors') },
+        { key: 'totalPrice', label: ' ' }
+      ]
     }
   },
   mounted () {

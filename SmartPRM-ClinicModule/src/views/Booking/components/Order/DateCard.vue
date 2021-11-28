@@ -29,11 +29,11 @@ export default {
     totalPrice: Number
   },
   computed: {
-    day: function () {
-      return getDayOfWeek(this.date)
+    day () {
+      return getDayOfWeek(this.date, { lang: this.$i18n.locale })
     },
-    month: function () {
-      return getMonthName(this.date)
+    month () {
+      return getMonthName(this.date, { lang: this.$i18n.locale })
     }
   }
 }

@@ -1,9 +1,9 @@
 <template>
   <div class="text-center">
     <b-button-group class="mt-2">
-      <b-button :variant="activeBtnVariant(0)" @click="changeTab(0)">Pick service</b-button>
-      <b-button :variant="activeBtnVariant(1)" @click="changeTab(1)" :disabled="!serviceChoosed">Choose time</b-button>
-      <b-button :variant="activeBtnVariant(2)" @click="changeTab(2)" :disabled="!serviceChoosed || !selectedSlot">Review</b-button>
+      <b-button :variant="activeBtnVariant(0)" @click="changeTab(0)">{{ $t('public.onlineBooking.pickService') }}</b-button>
+      <b-button :variant="activeBtnVariant(1)" @click="changeTab(1)" :disabled="!serviceChoosed">{{ $t('public.onlineBooking.chooseTime') }}</b-button>
+      <b-button :variant="activeBtnVariant(2)" @click="changeTab(2)" :disabled="!serviceChoosed || !selectedSlot">{{ $t('public.onlineBooking.review') }}</b-button>
     </b-button-group>
 
     <!-- <Consultations/> -->
