@@ -44,6 +44,8 @@ const getFreeSlotsPublic = (request, response, serviceId, date) => {
     pool.query(statement, (error, results) => {
         if (error) {
             response.status(500).send()
+
+            return
         }
 
         response.status(200).json(results.rows)
