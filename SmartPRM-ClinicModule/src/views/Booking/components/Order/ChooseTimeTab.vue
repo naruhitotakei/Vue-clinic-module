@@ -73,6 +73,7 @@
 </template>
 
 <script>
+import { getFreeSlotsPublic } from '@/services/appointmentSlotsService'
 import Slick from '@/components/xray/slider/Slick.vue'
 import DateCard from './DateCard.vue'
 import { getDayOfWeek } from '@/Utils/appDate'
@@ -204,16 +205,10 @@ export default {
           return
         }
 
-        const response = await fetch(`/api/public/free-slots?${new URLSearchParams({
+        this.appointmentSlots = await getFreeSlotsPublic({
           serviceId: this.services[0].id,
           date: moment(date).format('YYYY-MM-DD')
-        })}`)
-
-        if (response.ok === false) {
-          return
-        }
-
-        this.appointmentSlots = await response.json()
+        })
         const firstSlot = this.appointmentSlots[0]
 
         if (firstSlot == null) {

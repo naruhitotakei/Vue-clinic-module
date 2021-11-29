@@ -21,7 +21,7 @@ const getFreeSlots = (request, response, prm_client_id) => {
     })
 }
 
-const getFreeSlotsPublic = ({ serviceId, date }, callback) => {
+const getFreeSlotsPublic = (request, response, serviceId, date) => {
     const statement = /* sql */`
         SELECT
             appointment_slots.id,
@@ -41,7 +41,13 @@ const getFreeSlotsPublic = ({ serviceId, date }, callback) => {
         ORDER BY appointment_slots.starts_at
     `
 
-    pool.query(statement, callback)
+    pool.query(statement, (error, results) => {
+        if (error) {
+            response.status(500).send()
+        }
+
+        response.status(200).json(results.rows)
+    })
 }
 
 const createFreeSlots = (request, response, slot, prm_client_id) => {
