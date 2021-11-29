@@ -1234,8 +1234,7 @@ app.post('/api/files/avatar/:id', async function(req, res) {
 });
 
 app.get('/api/files/avatar/:id', async function (req, res) {
-  let id = req.params.id
-  if(req.session.prm_user) {
+    let id = req.params.id
     const rv = await awsS3.download('avatar-' + id + '/')
     if (rv.status=='OK') {
       const download = Buffer.from(rv.data.Body)
@@ -1243,9 +1242,6 @@ app.get('/api/files/avatar/:id', async function (req, res) {
     } else {
       res.download('./resources/avatar-default.png', 'avatar-default.png');
     }
-  }
-  else
-    res.status(401).json("OK: user unauthorized")
 });
 
 ///////////////////////////////////
@@ -1342,3 +1338,17 @@ app.get('/api/config', (request, response) => {
 const langByCountry = {
     'SI': 'sl'
 }
+
+app.get('/api/public/free-slots', (req, res) => {
+    const { serviceId, date } = req.query
+    daoAppointmentSlots.getFreeSlotsPublic(
+        { serviceId, date },
+        (error, { rows }) => {
+            if (error) {
+                res.status(500).send()
+            }
+
+            res.status(200).json(rows)
+        }
+    )
+});

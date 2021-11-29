@@ -35,10 +35,11 @@ export default {
   },
   computed: {
     service () {
-      return this.services.reduce((accumulator, current) => {
+      return this.services.reduce((accumulator, current, index) => {
         const item = current.list[0]
         accumulator.list.push({
           ...item,
+          id: index + 1,
           time: 30
         })
 
