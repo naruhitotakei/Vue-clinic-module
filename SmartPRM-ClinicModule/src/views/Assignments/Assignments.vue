@@ -7,7 +7,7 @@
                       <div class="row justify-content-between pl-3 pr-3">
                         <h4 class="card-title">{{ $t('assignments.assignmentsHeader') }}</h4>
                         <div class="btn-add-patient  mt-0">
-                          <b-button variant="primary" @click="modalAssigmentShow = true"><i class="ri-add-line mr-2"></i>{{ $t('assignments.addAssignments') }}</b-button>
+                          <b-button variant="primary" @click="addNewAssignment"><i class="ri-add-line mr-2"></i>{{ $t('assignments.addAssignments') }}</b-button>
                         </div>
                       </div>
                     </template>
@@ -270,14 +270,28 @@
             <div class="col-md-12 mb-3">
               <label for="title">{{ $t('assignments.addAssignmentsModal.enquiry') }} *</label>
               <v-select
-                  taggable
-                  :clearable="false"
-                  label="full_name"
-                  :options="enquires"
-                  v-model="formData.enquiry"
+                taggable
+                :clearable="false"
+                label="full_name"
+                :options="enquires"
+                v-model="formData.enquiry"
               >
                 <template v-slot:option="option">
                   {{ option.name }} {{option.last_name}}
+                </template>
+              </v-select>
+            </div>
+            <div class="col-md-12 mb-3">
+              <label for="title">{{ $t('home.openAssignmentsColumn.assignedTo') }} *</label>
+              <v-select
+                taggable
+                :clearable="false"
+                label="name"
+                :options="users"
+                v-model="formData.user_id"
+              >
+                <template v-slot:option="option">
+                  {{ option.name }} {{ option.surname }}
                 </template>
               </v-select>
             </div>
@@ -374,7 +388,7 @@ body  .custom-control-label::after {
 import { xray } from '../../config/pluginInit'
 import { getAssignments, finishAssignment, createAssignments, updateAssignments } from '../../services/assignmentsService'
 import { getEnquires } from '@/services/enquiry'
-import { getDentists, sso } from '@/services/userService'
+import { getUsers, getDentists, sso } from '@/services/userService'
 import moment from 'moment'
 
 export default {
@@ -385,6 +399,7 @@ export default {
     this.getEnquires()
     this.getUserLogin()
     this.getDentists()
+    this.getUsersList()
   },
   watch: {
   },
@@ -399,15 +414,20 @@ export default {
   methods: {
     editAssignments (assignment) {
       let enquiry = this.enquires.find(item => item.id === assignment.enquiry_id)
+      let user = this.users.find(user => user.id === assignment.user_id)
       this.formData = {
         id: assignment.id,
         enquiry: enquiry,
         description: assignment.description,
         due_at: moment(assignment.due_at).format('YYYY-MM-DD'),
-        user_id: assignment.user_id
-
+        user_id: user
       }
       this.modalAssigmentShow = true
+    },
+    getUsersList () {
+      getUsers().then(response => {
+        this.users = response
+      })
     },
     getAssignments () {
       getAssignments('today').then(response => {
@@ -490,15 +510,27 @@ export default {
     getDifferenceDate (date) {
       return Math.floor((Date.parse(new Date(Date.now())) - Date.parse(date)) / 86400000)
     },
+    addNewAssignment () {
+      this.formData.user_id = null
+      this.modalAssigmentShow = true
+    },
     addAssignments () {
       if (this.formData.id) {
-        updateAssignments(this.formData.id, this.formData).then(() => {
+        let data = Object.assign({}, this.formData)
+        if (typeof this.formData.user_id === 'object') {
+          data.user_id = this.formData.user_id.id
+        }
+        updateAssignments(this.formData.id, data).then(() => {
           this.getAssignments()
           this.formData = this.defaultFormData()
           this.getUserLogin()
         })
       } else {
-        createAssignments(this.formData).then(() => {
+        let data = Object.assign({}, this.formData)
+        if (typeof this.formData.user_id === 'object') {
+          data.user_id = this.formData.user_id.id
+        }
+        createAssignments(data).then(() => {
           this.getAssignments()
           this.formData = this.defaultFormData()
           this.getUserLogin()
@@ -567,6 +599,7 @@ export default {
       futurePerPage: 10,
       completedCurrentPage: 0,
       completedPerPage: 10,
+      users: [],
       bool: [
         { label: 'Completed', checked: true },
         { label: 'Completed', checked: false }
