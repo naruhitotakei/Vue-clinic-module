@@ -34,14 +34,14 @@ const getFreeSlotsPublic = (request, response, serviceId, date) => {
         WHERE appointment_slots.doctor_id IN (
             SELECT doctor_id
             FROM online_booking_users_bridge
-            WHERE online_booking_id = ${serviceId}
+            WHERE online_booking_id = $1
         )
-        AND appointment_slots.starts_at::date = date '${date}'
+        AND appointment_slots.starts_at::date = $2::date
         AND appointment_slots.appointment_id IS NULL
         ORDER BY appointment_slots.starts_at
     `
 
-    pool.query(statement, (error, results) => {
+    pool.query(statement, [serviceId, date], (error, results) => {
         if (error) {
             response.status(500).send()
 
