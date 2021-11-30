@@ -67,7 +67,41 @@ const getOnlineBookingProductsPublic = (request, response, locale) => {
     })
 }
 
+const getOnlineBookingProductGroups = (request, response, prm_client_id, locale) => {
+    let statement = "SELECT prm_product_group.product_group_id AS id, prm_product_group_name.text AS text, "
+    statement += "prm_product_group_name.language AS language, prm_product_group.prm_client_id AS prm_client_id FROM prm_product_group "
+    statement += "LEFT JOIN prm_product_group_name ON prm_product_group_name.product_group_id = prm_product_group.product_group_id "
+    statement += "WHERE language = '" + locale + "' "
+    if (scope == 'All') {
+    } else if (scope == 'PrmClient') {
+        statement += "AND prm_client_id = " + prm_client_id;
+    }
+    pool.query(statement, (error, results) => {
+        if (error) {
+            throw error
+        }
+        response.status(200).json(results.rows)
+    })
+}
+
+const getPremises = (request, response, prm_client_id) => {
+    let statement = "SELECT premise_id AS id, premise_name, prm_client_id FROM prm_company_premise "
+    if (scope == 'All') {
+    } else if (scope == 'PrmClient') {
+        statement += "AND prm_client_id = " + prm_client_id;
+    }
+    pool.query(statement, (error, results) => {
+        if (error) {
+            throw error
+        }
+        response.status(200).json(results.rows)
+    })
+}
+
+
 module.exports = {
     getOnlineBookingProducts,
-    getOnlineBookingProductsPublic
+    getOnlineBookingProductsPublic,
+    getOnlineBookingProductGroups,
+    getPremises
 }

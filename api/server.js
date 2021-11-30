@@ -621,6 +621,24 @@ app.get('/api/online-booking-products/:locale', (req, res) => {
     }
 });
 
+app.get('/api/online-booking-product-groups/:locale', (req, res) => {
+    const locale = req.params.locale
+    if (req.session.prm_user && req.session.prm_user.permissions && checkPermission(req.session.prm_user.permissions, onlineBookingPermission)) {
+        daoOnlineBooking.getOnlineBookingProductGroups(req, res, req.session.prm_user.prm_client_id, getScope(req.session.prm_user.permissions, onlineBookingPermission), locale)
+    } else {
+        res.status(401).json("OK: user unauthorized")
+    }
+});
+
+app.get('/api/premises', (req, res) => {
+    if (req.session.prm_user && req.session.prm_user.permissions && checkPermission(req.session.prm_user.permissions, onlineBookingPermission)) {
+        daoOnlineBooking.getPremises(req, res, req.session.prm_user.prm_client_id, getScope(req.session.prm_user.permissions, onlineBookingPermission))
+    } else {
+        res.status(401).json("OK: user unauthorized")
+    }
+});
+
+
 ///////////////////////////////////
 // enquiries, patients
 ///////////////////////////////////
