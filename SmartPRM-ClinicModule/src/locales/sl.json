@@ -683,6 +683,17 @@
       "productGroup": "Produktna skupina",
       "premise": "Lokacija",
       "action": "Uredi"
+    },
+    "serviceModal": {
+      "title": "Spletne rezervacije - storitev",
+      "save": "Shrani",
+      "close": "Zapri",
+      "service": "Storitev",
+      "price": "Cena",
+      "duration": "Dolžina (min)",
+      "doctor": "Doktor",
+      "productGroup": "Produktna skupina",
+      "premise": "Lokacija"
     }
   },
   "footer": {

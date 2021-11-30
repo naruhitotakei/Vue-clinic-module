@@ -686,6 +686,17 @@
       "productGroup": "Product group",
       "premise": "Location",
       "action": "Action"
+    },
+    "serviceModal": {
+      "title": "Online booking - service",
+      "save": "Save",
+      "close": "Close",
+      "service": "Service",
+      "price": "Price",
+      "duration": "Duration (min)",
+      "doctor": "Doctor",
+      "productGroup": "Product group",
+      "premise": "Premise"
     }
   },
   "footer": {
