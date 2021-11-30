@@ -24,12 +24,12 @@ const getEnquiries = (request, response, user_id, accessible_user_ids, prm_clien
     } else if (scope=='PrmClient') {
         statement += "AND enquiries.prm_client_id=" + prm_client_id;  
     } else if (scope=='Self') {
-        statement += "AND enquiries.user_id=" + user_id; 
+        statement += "AND enquiries.prm_dentist_user_id=" + user_id; 
     } else if (scope==='Self&LinkedUsers') {
-        statement += " AND (enquiries.user_id=" + user_id;
+        statement += " AND (enquiries.prm_dentist_user_id=" + user_id;
         if (accessible_user_ids) {           
             for (const acc_id in accessible_user_ids) {
-                statement +=" OR enquiries.user_id=" + accessible_user_ids[acc_id];
+                statement +=" OR enquiries.prm_dentist_user_id=" + accessible_user_ids[acc_id];
             } 
         }
         statement += ") ";    
