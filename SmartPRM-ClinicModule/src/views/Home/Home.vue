@@ -388,7 +388,11 @@ export default {
           height: 350,
           stacked: true,
           toolbar: {
-            show: true
+            show: true,
+            tools: {
+              pan: false,
+              zoom: false
+            }
           },
           zoom: {
             enabled: true
@@ -645,7 +649,10 @@ export default {
           let tempArr = _.filter(tempDoctorData, { starts_at: date })
           tempObj.data.push(tempArr.length)
         })
-        this.dataForChart.push(tempObj)
+        const isZero = tempObj.data.every(item => item === 0)
+        if (!isZero) {
+          this.dataForChart.push(tempObj)
+        }
       })
       this.chartOptions = { ...this.chartOptions, ...{ series: this.dataForChart, xaxis: { categories: this.dates } } }
     },
