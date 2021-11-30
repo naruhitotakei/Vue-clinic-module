@@ -9,3 +9,15 @@ export async function getOnlineBookingProducts (locale) {
   })
   return rawResponse.json()
 }
+
+export async function getOnlineBookingProductsPublic (locale) {
+  const rawResponse = await fetch('/api/public/online-booking-products/' + locale, {
+    method: 'GET',
+    credentials: 'same-origin',
+    headers: {
+      'Accept': 'application/json',
+      'Content-Type': 'application/json'
+    }
+  })
+  return rawResponse.json()
+}

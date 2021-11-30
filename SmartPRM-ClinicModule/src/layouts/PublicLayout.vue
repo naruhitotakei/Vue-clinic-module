@@ -1,6 +1,6 @@
 <template>
     <div class="container">
-        <slot></slot>
+        <slot v-if="isLocalized"></slot>
     </div>
 </template>
 
@@ -10,6 +10,11 @@ import { localize } from 'vee-validate'
 export default {
   name: 'PublicLayout',
   components: {
+  },
+  data () {
+    return {
+      isLocalized: false
+    }
   },
   async mounted () {
     const response = await fetch('/api/config')
@@ -21,6 +26,7 @@ export default {
     const { lang } = await response.json()
     this.$i18n.locale = lang
     localize(lang)
+    this.isLocalized = true
   },
   watch: {
   },

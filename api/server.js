@@ -1352,3 +1352,8 @@ app.get('/api/public/free-slots', (req, res) => {
         }
     )
 });
+
+app.get('/api/public/online-booking-products/:locale', (req, res) => {
+    const locale = req.params.locale
+    daoOnlineBooking.getOnlineBookingProductsPublic(req, res, locale)
+});
