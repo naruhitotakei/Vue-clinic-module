@@ -1295,7 +1295,6 @@ app.post('/api/booking/sendsms', (req, res) => {
                     requestId: request_id,
                 })
             }
-
         })
     } else {
         res.status(400).json("No phone number")
@@ -1340,15 +1339,5 @@ const langByCountry = {
 }
 
 app.get('/api/public/free-slots', (req, res) => {
-    const { serviceId, date } = req.query
-    daoAppointmentSlots.getFreeSlotsPublic(
-        { serviceId, date },
-        (error, { rows }) => {
-            if (error) {
-                res.status(500).send()
-            }
-
-            res.status(200).json(rows)
-        }
-    )
+    daoAppointmentSlots.getFreeSlotsPublic(req, res, req.query.serviceId, req.query.date)
 });
