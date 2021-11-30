@@ -22,32 +22,17 @@ const getFreeSlots = (request, response, prm_client_id) => {
 }
 
 const getFreeSlotsPublic = (request, response, serviceId, date) => {
-    const statement = /* sql */`
-        SELECT
-            appointment_slots.id,
-            appointment_slots.starts_at,
-            appointment_slots.doctor_id,
-            users.name
-        FROM appointment_slots
-        JOIN users
-        ON appointment_slots.doctor_id = users.id
-        WHERE appointment_slots.doctor_id IN (
-            SELECT doctor_id
-            FROM online_booking_users_bridge
-            WHERE online_booking_id = $1
-        )
-        AND appointment_slots.starts_at::date = $2::date
-        AND appointment_slots.appointment_id IS NULL
-        ORDER BY appointment_slots.starts_at
-    `
-
+    let statement = "SELECT appointment_slots.id, appointment_slots.starts_at, appointment_slots.doctor_id, " +
+                    "concat(users.title, ' ', users.first_name, ' ', users.surname) AS name FROM appointment_slots "
+    statement += "JOIN users ON appointment_slots.doctor_id = users.id WHERE appointment_slots.doctor_id IN (SELECT doctor_id FROM online_booking_users_bridge WHERE online_booking_id = $1 ) "
+    statement += "AND appointment_slots.starts_at::date = $2::date "
+    statement += "AND appointment_slots.appointment_id IS NULL "
+    statement += "ORDER BY appointment_slots.starts_at "
+    console.log("Fetching online booking on BE: " + statement)
     pool.query(statement, [serviceId, date], (error, results) => {
         if (error) {
-            response.status(500).send()
-
-            return
+            throw error
         }
-
         response.status(200).json(results.rows)
     })
 }
