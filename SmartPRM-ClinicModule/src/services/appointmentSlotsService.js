@@ -11,13 +11,13 @@ export async function getFreeSlots () {
 
 export async function getFreeSlotsPublic (params) {
   const rawResponse = await fetch(`/api/public/free-slots?${new URLSearchParams(params)}`, {
+    method: 'GET',
     credentials: 'same-origin',
     headers: {
       'Accept': 'application/json',
       'Content-type': 'application/json'
     }
   })
-
   return rawResponse.json()
 }
 
