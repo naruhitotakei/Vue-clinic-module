@@ -782,15 +782,17 @@
       "slotsAndPrices": "Slots and Prices",
       "confirm": "Confirm",
       "dataConfirmed": "Data confirmed",
-      "checkYourData": "Check your data",
+      "confirmationOfBooking": "Confirmation of booking",
       "pleaseEnterYourMobileNumber": "Please enter your mobile number, so that we can contact you in case of any change.",
       "phoneNumber": "Phone number",
       "phone": "Phone",
-      "saveAndSendVerification": "Save and send verification SMS.",
-      "yourDetailsHaveBeenSuccessfullyVerified": "Your details have been successfully verified. We look forward to your visit.",
+      "sendVerificationCode": "Send verification code",
+      "theCodeHasBeenSentTo": "The code has been sent to",
       "smsVerificationCode": "Sms verification code:",
       "confirmationCode": "Confirmation code",
-      "confirmCode": "Confirm code"
+      "confirmCode": "Confirm code",
+      "modifyPhoneNumber": "Modify phone number",
+      "yourDetailsHaveBeenSuccessfullyVerified": "Your details have been successfully verified. We look forward to your visit."
     }
   }
 }
