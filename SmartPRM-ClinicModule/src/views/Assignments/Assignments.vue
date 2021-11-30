@@ -88,9 +88,9 @@
                     </b-list-group>
                     <template>
                             <div class="mt-4 ml-2">
-                              <p v-if="myOverdueTotalRows === 0"> You have no overdue assignments.</p>
+                              <p v-if="myOverdueTotalRows < 1"> You have no overdue assignments.</p>
                                 <b-pagination
-                                    v-else-if="myOverdueTotalRows > 0"
+                                    v-else-if="myOverdueTotalRows > 10"
                                     v-model="myOverdueCurrentPage"
                                     :total-rows="myOverdueTotalRows"
                                     :per-page="myOverduePerPage"
