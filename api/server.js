@@ -1341,3 +1341,8 @@ const langByCountry = {
 app.get('/api/public/free-slots', (req, res) => {
     daoAppointmentSlots.getFreeSlotsPublic(req, res, req.query.serviceId, req.query.date)
 });
+
+app.get('/api/public/online-booking-products/:locale', (req, res) => {
+    const locale = req.params.locale
+    daoOnlineBooking.getOnlineBookingProductsPublic(req, res, locale)
+});

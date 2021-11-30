@@ -34,6 +34,40 @@ const getOnlineBookingProducts = (request, response, prm_client_id, scope, local
     })
 }
 
+const getOnlineBookingProductsPublic = (request, response, locale) => {
+    const statement = /* sql */`
+        SELECT
+            online_booking_service.id,
+            online_booking_service.default_duration,
+            online_booking_service.default_online_price,
+            online_booking_service_name.text
+        FROM online_booking_service
+        JOIN online_booking_service_name
+        ON online_booking_service.id = online_booking_service_name.online_booking_service_id
+        WHERE online_booking_service.id IN (
+            SELECT DISTINCT online_booking_users_bridge.online_booking_id
+            FROM appointment_slots
+            JOIN online_booking_users_bridge
+            ON appointment_slots.doctor_id = online_booking_users_bridge.doctor_id
+            WHERE appointment_slots.appointment_id IS null
+            AND appointment_slots.starts_at BETWEEN NOW()::date AND NOW()::date + interval '30' day
+        )
+        AND online_booking_service_name.language = $1
+        ORDER BY online_booking_service_name.text
+    `
+
+    pool.query(statement, [locale], (error, results) => {
+        if (error) {
+            response.status(500).send()
+
+            return
+        }
+
+        response.status(200).json(results.rows)
+    })
+}
+
 module.exports = {
-    getOnlineBookingProducts
+    getOnlineBookingProducts,
+    getOnlineBookingProductsPublic
 }
