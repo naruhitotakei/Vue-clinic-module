@@ -355,6 +355,9 @@ export default {
   }
 }
   @media screen and (max-width:600px) { .fc-toolbar.fc-header-toolbar {font-size: 60%}}
+  @media screen and (max-width:550px) { .fc-toolbar.fc-header-toolbar {font-size: 50%}}
+  @media screen and (max-width:450px) { .fc-toolbar.fc-header-toolbar {font-size: 45%}}
+  @media screen and (max-width:300px) { .fc-toolbar.fc-header-toolbar {font-size: 30%}}
 }
 
 </style>
