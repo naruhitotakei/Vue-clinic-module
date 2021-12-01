@@ -1359,7 +1359,9 @@ app.get('/api/config', (request, response) => {
     const geo = geoip.lookup(request.ip)
     // Example for local testing with IP from Slovenia
     // const geo = geoip.lookup('109.182.0.0')
-    const lang = geo != null ? langByCountry[geo.country] : 'en'
+    const lang = geo != null && langByCountry[geo.country] != null
+        ? langByCountry[geo.country]
+        : 'en'
     
     response.json({
         lang,
