@@ -98,10 +98,77 @@ const getPremises = (request, response, prm_client_id, scope) => {
     })
 }
 
+const createOnlineBookingProduct = (req, res, product) => {
+    let productStatement = "INSERT INTO online_booking_service ("
+    if (product.duration) productStatement += "default_duration,"
+    if (product.price) productStatement += "default_price,"
+    if (product.productGroup) productStatement += "product_group_id,"
+    productStatement += "created_at"
+    productStatement += ") VALUES ("
+    if (product.duration) productStatement += "" + product.duration + ","
+    if (product.price) productStatement += "" + product.price + ","
+    if (product.productGroup) productStatement += "" + product.productGroup + ","
+    productStatement += "NOW()"
+    productStatement += ") RETURNING id"
+    console.log("Creating online booking on BE: " + statement)
+    pool.query(productStatement, (error, results) => {
+        if (error) {
+            throw error
+        }
+        let serviceId = results.rows[0].id;
+        let doctorId = results.rows[0].doctor;
+        let premiseId = results.rows[0].premise;
+
+        if (product.slovenian) createOnlineBookingNameStatement('online_booking_service_name', 'online_booking_service_id', serviceId, 'sl', product.slovenian)
+        if (product.english) createOnlineBookingNameStatement('online_booking_service_name', 'online_booking_service_id', serviceId, 'en', product.english)
+        if (product.italian) createOnlineBookingNameStatement('online_booking_service_name', 'online_booking_service_id', serviceId, 'it', product.italian)
+
+        if (product.doctor) createOnlineBookingUsersStatement('online_booking_users_bridge', 'online_booking_service_id', doctorId)
+
+        if (product.premise) createOnlineBookingPremiseStatement('online_booking_premise_bridge', 'online_booking_service_id', premiseId)
+
+        res.status(200).json("OK")
+    })
+}
+
+const createOnlineBookingNameStatement = (table, idName, id, language, text) => {
+    let statement = "INSERT INTO " + table + " (" + idName + ",language, text, created_at) VALUES (" + id + ",'" + language + "','" + text + "',NOW())"
+    console.log("Creating online booking name on BE: " + statement)
+    pool.query(statement, (error, results) => {
+        if (error) {
+            throw error
+        }
+    })
+}
+
+const createOnlineBookingUsersStatement = (table, idName, id, idDoctor, id_doctor) => {
+    let statement = "INSERT INTO " + table + " (" + idName + "," + idDoctor + ",created_at) VALUES (" + id + "," + id_doctor + "',NOW())"
+    console.log("Creating online booking doctor on BE: " + statement)
+    pool.query(statement, (error, results) => {
+        if (error) {
+            throw error
+        }
+    })
+}
+
+const createOnlineBookingPremiseStatement = (table, idName, id, idPremise, id_premise) => {
+    let statement = "INSERT INTO " + table + " (" + idName + "," + idPremise + ",created_at) VALUES (" + id + "," + id_premise + "',NOW())"
+    console.log("Creating online booking premise on BE: " + statement)
+    pool.query(statement, (error, results) => {
+        if (error) {
+            throw error
+        }
+    })
+}
+
 
 module.exports = {
     getOnlineBookingProducts,
     getOnlineBookingProductsPublic,
     getOnlineBookingProductGroups,
-    getPremises
+    getPremises,
+    createOnlineBookingProduct,
+    createOnlineBookingNameStatement,
+    createOnlineBookingUsersStatement,
+    createOnlineBookingPremiseStatement
 }

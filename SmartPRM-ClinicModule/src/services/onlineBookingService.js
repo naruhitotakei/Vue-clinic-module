@@ -45,3 +45,16 @@ export async function getPremises () {
   })
   return rawResponse.json()
 }
+
+export async function createOnlineBookingService (service) {
+  const rawResponse = await fetch('/api/add-online-booking-service', {
+    method: 'POST',
+    credentials: 'same-origin',
+    headers: {
+      'Accept': 'application/json',
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify(service)
+  })
+  return rawResponse.json()
+}

@@ -62,9 +62,21 @@
                     <form>
                         <div class="form-row">
                             <div class="col-md-12 mb-3">
-                                <label for="service">{{ $t('onlineBooking.serviceModal.service') }} *</label>
+                                <label for="slovenian">{{ $t('onlineBooking.serviceModal.slovenian') }} *</label>
                                 <div style="display: flex;">
-                                    <input type="text" v-model="onlineBookingData.service" class="form-control" required>
+                                    <input type="text" v-model="onlineBookingData.slovenian" class="form-control" required>
+                                </div>
+                            </div>
+                            <div class="col-md-12 mb-3">
+                                <label for="italian">{{ $t('onlineBooking.serviceModal.italian') }}</label>
+                                <div style="display: flex;">
+                                    <input type="text" v-model="onlineBookingData.italian" class="form-control" required>
+                                </div>
+                            </div>
+                            <div class="col-md-12 mb-3">
+                                <label for="english">{{ $t('onlineBooking.serviceModal.english') }}</label>
+                                <div style="display: flex;">
+                                    <input type="text" v-model="onlineBookingData.english" class="form-control" required>
                                 </div>
                             </div>
                             <div class="col-md-6 mb-3">
@@ -79,39 +91,39 @@
                                     <input type="number" v-model="onlineBookingData.duration" class="form-control" step="5" required>
                                 </div>
                             </div>
-                                <div class="col-md-12 mb-3">
-                                    <label for="doctor">{{ $t('onlineBooking.serviceModal.doctor') }} *</label>
-                                    <v-select :clearable="false"
-                                              label="doctor"
-                                              :reduce="doctor => doctor.id"
-                                              :getOptionLabel="doctor => doctor.name"
-                                              class="style-chooser form-control-disabled font-size-16 ml-0 mt-1"
-                                              v-model="onlineBookingData.doctor"
-                                              :options="doctors"
-                                              style="min-width:305px;"></v-select>
-                                </div>
-                                <div class="col-md-12 mb-3">
-                                    <label for="productGroup">{{ $t('onlineBooking.serviceModal.productGroup') }} *</label>
-                                    <v-select :clearable="false"
-                                              label="productGroup"
-                                              :reduce="product_group => product_group.id"
-                                              :getOptionLabel="product_group => product_group.text"
-                                              class="style-chooser form-control-disabled font-size-16 ml-0 mt-1"
-                                              v-model="onlineBookingData.productGroup"
-                                              :options="productGroups"
-                                              style="min-width:305px;"></v-select>
-                                </div>
-                                <div class="col-md-12 mb-3">
-                                    <label for="premise">{{ $t('onlineBooking.serviceModal.premise') }} *</label>
-                                    <v-select :clearable="false"
-                                              label="premise"
-                                              :reduce="premise => premise.id"
-                                              :getOptionLabel="premise => premise.name"
-                                              class="style-chooser form-control-disabled font-size-16 ml-0 mt-1"
-                                              v-model="onlineBookingData.premise"
-                                              :options="premises"
-                                              style="min-width:305px;"></v-select>
-                                </div>
+                            <div class="col-md-12 mb-3">
+                                <label for="doctor">{{ $t('onlineBooking.serviceModal.doctor') }} *</label>
+                                <v-select :clearable="false"
+                                          label="doctor"
+                                          :reduce="doctor => doctor.id"
+                                          :getOptionLabel="doctor => doctor.name"
+                                          class="style-chooser form-control-disabled font-size-16 ml-0 mt-1"
+                                          v-model="onlineBookingData.doctor"
+                                          :options="doctors"
+                                          style="min-width:305px;"></v-select>
+                            </div>
+                            <div class="col-md-12 mb-3">
+                                <label for="productGroup">{{ $t('onlineBooking.serviceModal.productGroup') }} *</label>
+                                <v-select :clearable="false"
+                                          label="productGroup"
+                                          :reduce="product_group => product_group.id"
+                                          :getOptionLabel="product_group => product_group.text"
+                                          class="style-chooser form-control-disabled font-size-16 ml-0 mt-1"
+                                          v-model="onlineBookingData.productGroup"
+                                          :options="productGroups"
+                                          style="min-width:305px;"></v-select>
+                            </div>
+                            <div class="col-md-12 mb-3">
+                                <label for="premise">{{ $t('onlineBooking.serviceModal.premise') }} *</label>
+                                <v-select :clearable="false"
+                                          label="premise"
+                                          :reduce="premise => premise.id"
+                                          :getOptionLabel="premise => premise.name"
+                                          class="style-chooser form-control-disabled font-size-16 ml-0 mt-1"
+                                          v-model="onlineBookingData.premise"
+                                          :options="premises"
+                                          style="min-width:305px;"></v-select>
+                            </div>
                         </div>
                     </form>
                 </b-modal>
@@ -145,7 +157,9 @@ export default {
       currentProductPage: 1,
       onlineBookingData: {
         id: '',
-        service: '',
+        slovenian: '',
+        italian: '',
+        english: '',
         price: '',
         duration: '',
         doctor: '',
@@ -172,7 +186,7 @@ export default {
       return Math.floor(this.onlineBookingProducts.length / this.productsPerPage) !== 0
     },
     isServiceDisabled () {
-      return !this.onlineBookingData.service || !this.onlineBookingData.price || !this.onlineBookingData.duration || !this.onlineBookingData.doctor || !this.onlineBookingData.productGroup || !this.onlineBookingData.premise
+      return !this.onlineBookingData.slovenian || !this.onlineBookingData.price || !this.onlineBookingData.duration || !this.onlineBookingData.doctor || !this.onlineBookingData.productGroup || !this.onlineBookingData.premise
     }
   },
   methods: {
@@ -200,7 +214,9 @@ export default {
     defaultOnlineBookingData () {
       return {
         id: '',
-        service: '',
+        slovenian: '',
+        italian: '',
+        english: '',
         price: '',
         duration: '',
         doctor: '',
@@ -211,6 +227,18 @@ export default {
     cancelService () {
       this.onlineBookingData = this.defaultOnlineBookingData()
     }
+    /* addService () {
+      if (this.onlineBookingData.id) {
+        updateService(this.onlineBookingData.id, this.onlineBookingData).then(() => {
+          this.getOnlineBookingProducts(locale)
+        })
+      } else {
+        createService(this.onlineBookingData).then(() => {
+          this.getOnlineBookingProducts(locale)
+        })
+      }
+      this.onlineBookingData = this.defaultOnlineBookingData()
+    } */
   }
 }
 </script>

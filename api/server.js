@@ -638,6 +638,14 @@ app.get('/api/premises', (req, res) => {
     }
 });
 
+app.post('/api/add-online-booking-service', (req, res) => {
+    const onlineBookingService = req.body
+    if (req.session.prm_user && req.session.prm_user.permissions && checkPermission(req.session.prm_user.permissions, onlineBookingPermission))
+        daoOnlineBooking.createOnlineBookingProduct(req, res, onlineBookingService)
+    else
+        res.status(401).json("OK: user unauthorized")
+});
+
 
 ///////////////////////////////////
 // enquiries, patients
