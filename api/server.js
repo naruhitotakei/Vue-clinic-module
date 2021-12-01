@@ -1328,12 +1328,26 @@ app.post('/api/booking/confirm-and-save', (req, res) => {
         vonage.verify.check({
             request_id: requestId,
             code
-        }, (error, _result) => {
-            if (error) {
+        }, (error, result) => {
+            if (error != null) {
                 res.status(500)
-            } else {
-                res.status(200).json({ success: true, code, selectedSlot })
+
+                return
             }
+
+            if (result.status === '16') {
+                res.status(422).json(result)
+
+                return
+            }
+
+            if (result.status !== '0') {
+                res.status(500)
+
+                return
+            }
+
+            res.status(200).json({ success: true, code, selectedSlot })
         })
     } else {
         res.status(400).json("No confirmation code")
