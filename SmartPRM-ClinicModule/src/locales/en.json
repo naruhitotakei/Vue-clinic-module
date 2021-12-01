@@ -15,7 +15,8 @@
   "shared": {
     "search": "Search",
     "searchBy": "Search By",
-    "sortBy": "Sort By"
+    "sortBy": "Sort By",
+    "country": "Country"
   },
   "documents": {
     "offers": "Offers",
