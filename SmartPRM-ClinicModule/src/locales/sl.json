@@ -15,7 +15,8 @@
   "shared": {
     "search": "Iskanje",
     "searchBy": "Išči po",
-    "sortBy": "Razvrsti po"
+    "sortBy": "Razvrsti po",
+    "country": "Država"
   },
   "documents": {
     "offers": "Ponudbe",

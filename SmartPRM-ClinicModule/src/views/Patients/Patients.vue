@@ -168,6 +168,17 @@
                                 <label for="email">{{ $t('patients.patientsColumn.email') }}</label>
                                 <b-form-input type="email" v-model="addPatientForm.email"></b-form-input>
                             </div>
+                            <div class="col-md-12 mb-3">
+                                <label for="country">{{ $t('shared.country') }} *</label>
+                                <v-select :clearable="false"
+                                          label="country"
+                                          :reduce="country => country.id"
+                                          :getOptionLabel="country => country.name"
+                                          class="style-chooser form-control-disabled font-size-16 ml-0 mt-1"
+                                          v-model="addPatientForm.country"
+                                          :options="countries"
+                                          style="min-width:305px;"></v-select>
+                            </div>
                         </div>
                     </form>
                 </b-modal>
@@ -178,6 +189,7 @@
 <script>
 import { xray } from '../../config/pluginInit'
 import { getEnquires, createEnquiry } from '../../services/enquiry'
+import { getCountriesList } from '../../services/commonCodeLists'
 
 var rows = []
 export default {
@@ -185,12 +197,13 @@ export default {
   async mounted () {
     xray.index()
     this.getPatients('ASC')
+    this.getCountries()
     this.searchBy = 'last_name'
     this.filterSelected(this.searchBy)
   },
   computed: {
     isDisabled () {
-      return !this.addPatientForm.firstName || !this.addPatientForm.lastName
+      return !this.addPatientForm.firstName || !this.addPatientForm.lastName || !this.addPatientForm.country
     }
   },
   methods: {
@@ -209,7 +222,8 @@ export default {
         firstName: '',
         lastName: '',
         phone: '',
-        email: ''
+        email: '',
+        country: ''
       }
     },
     cancelAddingPatient () {
@@ -245,6 +259,11 @@ export default {
         this.setTotalRows(this.patients.length)
       })
     },
+    getCountries () {
+      getCountriesList().then(response => {
+        this.countries = response
+      })
+    },
     onFiltered (filteredItems) {
       this.totalRows = filteredItems.length
       this.currentPage = 1
@@ -274,6 +293,7 @@ export default {
       totalRows: 1,
       filter: '',
       filterOn: [],
+      countries: [],
       searchBy: '',
       searchOptions: [
         { value: 'name', text: 'Name' },
@@ -307,7 +327,8 @@ export default {
         firstName: '',
         lastName: '',
         phone: '',
-        email: ''
+        email: '',
+        country: ''
       }
     }
   }
