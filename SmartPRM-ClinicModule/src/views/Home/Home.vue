@@ -295,10 +295,10 @@
                                               v-model="appointmentData.backgroundColor"
                                               :key="index"
                                               :value="item.id"
-                                              :style="{'background': item.color}"
+                                              :style="{'border': '1px solid ' + item.color}"
                                               name="labels"
                                               v-if="showLabels(item)">
-                                    <p class="text-white m-0 py-1 pr-2">{{ item.text }}</p>
+                                    <p class="m-0 py-1 pr-2" :style="{'color': item.color}">{{ item.text }}</p>
                                 </b-form-radio>
                             </template>
                         </div>
