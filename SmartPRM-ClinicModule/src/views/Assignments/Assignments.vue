@@ -541,7 +541,8 @@ export default {
       this.myOverdueTotalRows = filtered.length
     },
     finishAssignment (id, finished, from) {
-      finishAssignment(id, finished).then(response => {
+      const completedBy = this.userId
+      finishAssignment(id, finished, completedBy).then(response => {
         if (from === 'today') {
           this.todaysAssigments = this.todaysAssigments.filter(assignment => assignment.id !== id)
         }
@@ -608,6 +609,7 @@ export default {
       sso().then(response => {
         if (typeof response !== 'string') {
           this.formData.user_id = response.id
+          this.userId = response.id
         }
       })
     },
@@ -628,6 +630,7 @@ export default {
   data () {
     return {
       disabled: false,
+      userId: null,
       modalAssigmentShow: false,
       selectEnquires: null,
       logedInUser: {},
