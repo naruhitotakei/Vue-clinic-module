@@ -148,7 +148,7 @@
                     <template v-for="(item,index) in colors">
                         <b-form-radio class="custom-radio-color font-size-16 labels"
                                       inline
-                                      v-model="appointmentData.backgroundColor"
+                                      v-model="formData.backgroundColor"
                                       :key="index"
                                       :value="item.id"
                                       :style="{'border': '1px solid ' + item.color}"
