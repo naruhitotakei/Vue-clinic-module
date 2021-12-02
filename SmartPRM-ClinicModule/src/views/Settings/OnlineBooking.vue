@@ -34,8 +34,8 @@
                                         </span>
                                     </template>
                                     <template v-slot:cell(action)="data">
-                                        <b-button variant=" iq-bg-success mr-1 mb-1" size="sm" @click="editProduct(data.item)"><i class="ri-ball-pen-fill m-0"></i></b-button>
-                                        <b-button variant=" iq-bg-danger mr-1 mb-1" size="sm" @click="removeProduct(data.item)"><i class="ri-delete-bin-line m-0"></i></b-button>
+                                        <b-button variant=" iq-bg-success mr-1 mb-1" size="sm" @click="openEditModal(data.item)"><i class="ri-ball-pen-fill m-0"></i></b-button>
+                                        <b-button variant=" iq-bg-danger mr-1 mb-1" size="sm" @click="removeService(data.item)"><i class="ri-delete-bin-line m-0"></i></b-button>
                                     </template>
                                 </b-table>
                             </b-col>
@@ -55,9 +55,7 @@
                 </iq-card>
                 <!--END OF Online Booking Services Table-->
                 <!--Online Booking Services modal-->
-
-                <!--TO DO ADD @OK="AddService"-->
-                <b-modal v-model="modalServiceShow" no-close-on-backdrop :title="$t('onlineBooking.serviceModal.title')" :ok-disabled="isServiceDisabled"
+                <b-modal v-model="modalServiceShow" no-close-on-backdrop :title="$t('onlineBooking.serviceModal.title')" :ok-disabled="isServiceDisabled" @ok="addService"
                          @close="cancelService" @cancel="cancelService" :ok-title="$t('onlineBooking.serviceModal.save')" :cancel-title="$t('onlineBooking.serviceModal.close')">
                     <form>
                         <div class="form-row">
@@ -80,7 +78,7 @@
                                 </div>
                             </div>
                             <div class="col-md-6 mb-3">
-                                <label for="price">{{ $t('onlineBooking.serviceModal.price') }} *</label>
+                                <label for="price">{{ $t('onlineBooking.serviceModal.price') }} (EUR) *</label>
                                 <div style="display: flex;">
                                     <input type="number" v-model="onlineBookingData.price" class="form-control" required>
                                 </div>
@@ -135,7 +133,7 @@
 
 <script>
 import { xray } from '../../config/pluginInit'
-import { getOnlineBookingProducts, getOnlineBookingProductGroups, getPremises } from '../../services/onlineBookingService'
+import { getOnlineBookingProducts, getOnlineBookingProductGroups, getPremises, createOnlineBookingService, deleteOnlineBookingService, updateOnlineBookingService } from '../../services/onlineBookingService'
 import { getDoctorList } from '../../services/calendarService'
 
 export default {
@@ -213,7 +211,6 @@ export default {
     },
     defaultOnlineBookingData () {
       return {
-        id: '',
         slovenian: '',
         italian: '',
         english: '',
@@ -226,19 +223,39 @@ export default {
     },
     cancelService () {
       this.onlineBookingData = this.defaultOnlineBookingData()
-    }
-    /* addService () {
+    },
+    addService () {
       if (this.onlineBookingData.id) {
-        updateService(this.onlineBookingData.id, this.onlineBookingData).then(() => {
-          this.getOnlineBookingProducts(locale)
+        updateOnlineBookingService(this.onlineBookingData.id, this.onlineBookingData).then(() => {
+          this.getOnlineBookingProducts()
         })
       } else {
-        createService(this.onlineBookingData).then(() => {
-          this.getOnlineBookingProducts(locale)
+        createOnlineBookingService(this.onlineBookingData).then(() => {
+          this.getOnlineBookingProducts()
         })
       }
       this.onlineBookingData = this.defaultOnlineBookingData()
-    } */
+    },
+    removeService (item) {
+      let index = this.onlineBookingProducts.indexOf(item)
+      this.onlineBookingProducts.splice(index, 1)
+      deleteOnlineBookingService(item.id)
+    },
+    openEditModal (item) {
+      this.onlineBookingData = {
+        id: item.id,
+        slovenian: item.slovenian,
+        italian: item.italian,
+        english: item.english,
+        price: item.default_online_price,
+        duration: item.default_duration,
+        doctor: item.doctor_name,
+        productGroup: item.product_group_text,
+        premise: item.premise_name
+      }
+      this.modalServiceShow = true
+      console.log('Info about service: ' + JSON.stringify(item))
+    }
   }
 }
 </script>

@@ -646,6 +646,23 @@ app.post('/api/add-online-booking-service', (req, res) => {
         res.status(401).json("OK: user unauthorized")
 });
 
+app.delete('/api/delete-online-booking-service/:id', (req, res) => {
+    const id = req.params.id
+    if (req.session.prm_user && req.session.prm_user.permissions && checkPermission(req.session.prm_user.permissions, onlineBookingPermission))
+        daoOnlineBooking.deleteOnlineBookingProduct(req, res, id)
+    else
+        res.status(401).json("OK: user unauthorized")
+});
+
+app.put('/api/update-online-booking-service/:id', (req, res) => {
+    const id = req.params.id
+    const service = req.body
+    if (req.session.prm_user && req.session.prm_user.permissions && checkPermission(req.session.prm_user.permissions, onlineBookingPermission))
+        daoOnlineBooking.updateOnlineBookingProduct(req, res, id, service)
+    else
+        res.status(401).json("OK: user unauthorized")
+});
+
 
 ///////////////////////////////////
 // enquiries, patients
