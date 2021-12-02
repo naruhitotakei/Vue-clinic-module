@@ -232,23 +232,25 @@
                     </div>
                     <div class="row align-items-center justify-content-between w-100 pt-2 " :class="{'mb-3': !disabled}">
                         <div class="col-md-3">
-                            <label for="start" class="mb-0">{{ $t('calendarEvent.start') }} *</label>
+                            <label for="start" class="mb-0" :style="{ 'margin-top': '13px' }">{{ $t('calendarEvent.start') }} *</label>
                         </div>
                         <div class="col-md-9 d-flex align-items-center">
                             <date-picker :disabled="disabled"
                                          class="form-control form-control-disabled font-size-16"
                                          :class="{'no-border margin-left': disabled}"
                                          v-model="appointmentData.start_time"
+                                         :style="{ 'height': !disabled ? '53px' : '45px' }"
                                          type="datetime"
                                          :minute-step="5"
                                          :show-second="false"
                                          :lang="'en'"
                                          :format="'DD.MM.YYYY HH.mm'"></date-picker>
-                            <label for="start" class="mb-0">{{ $t('calendarEvent.end') }}*</label>
+                            <label for="start" class="mb-0" :style="{ 'margin-top': '13px' }">{{ $t('calendarEvent.end') }}*</label>
                             <date-picker :disabled="disabled"
                                          required
                                          class="form-control form-control-disabled font-size-16"
                                          :class="{'no-border': disabled}"
+                                         :style="{ 'height': !disabled ? '53px' : '45px' }"
                                          v-model="appointmentData.end_time"
                                          type="time"
                                          :minute-step="5"
@@ -265,7 +267,7 @@
                             <textarea :disabled="disabled" row="2" v-model="appointmentData.note" class="form-control form-control-disabled font-size-16 mt-3" placeholder="Add your note here for event!" id="note" required></textarea>
                         </div>
                     </div>
-                    <template v-if="appointmentData.id">
+                    <template v-if="appointmentData.id && !disabled">
                         <div class="row align-items-center justify-content-between w-100 pt-1 mb-3" :class="{'mb-3': !disabled}">
                             <div class="col-md-3">
                                 <label for="color" class="mb-0">{{ $t('calendarEvent.patient_attended') }}</label><br>
