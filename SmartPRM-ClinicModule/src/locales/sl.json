@@ -360,7 +360,10 @@
         "price": "Cena",
         "discount": "Popust",
         "amount": "Znesek",
-        "action": "Možnosti"
+        "action": "Možnosti",
+        "teeth": "Zob",
+        "surface": "Površino",
+        "comment": "Komentar"
       },
       "newInvoiceSummary": {
         "header": "Povzetek računa",

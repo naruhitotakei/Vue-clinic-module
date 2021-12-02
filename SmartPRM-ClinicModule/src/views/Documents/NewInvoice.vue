@@ -104,10 +104,10 @@
                             <div class="table-responsive-sm">
                               <b-table-simple>
                                 <b-thead>
-                                  <b-th colspan="2">{{ $t('invoices.newInvoice.newInvoiceColumn.issuedBy') }}</b-th>
-                                  <b-th colspan="3">{{ $t('invoices.newInvoice.newInvoiceColumn.customer') }}</b-th>
-                                  <b-th colspan="4">{{ $t('invoices.newInvoice.newInvoiceColumn.issuedIn') }}</b-th>
-                                  <b-th colspan="3">{{ $t('invoices.newInvoice.newInvoiceColumn.device') }}</b-th>
+                                  <b-th colspan="2" class="text-left">{{ $t('invoices.newInvoice.newInvoiceColumn.issuedBy') }}</b-th>
+                                  <b-th colspan="3 " class="text-left">{{ $t('invoices.newInvoice.newInvoiceColumn.customer') }}</b-th>
+                                  <b-th colspan="4" class="text-left">{{ $t('invoices.newInvoice.newInvoiceColumn.issuedIn') }}</b-th>
+                                  <b-th colspan="3" class="text-left">{{ $t('invoices.newInvoice.newInvoiceColumn.device') }}</b-th>
                                 </b-thead>
                                 <b-tbody>
                                   <b-tr>
@@ -125,7 +125,7 @@
                                         <span v-if="isInvoiceStatusIssued">
                                           {{ device.device_name}}
                                         </span>
-                                        <v-select v-else :clearable="false" label="device_name" class="premises" v-model="device" :options="devices"></v-select>
+                                        <v-select v-else :clearable="false" :getOptionLabel="device => device.device_name" class="premises" v-model="device" :options="devices"></v-select>
                                       </div>
                                     </b-td>
                                   </b-tr>
@@ -169,8 +169,28 @@
                                     <template v-slot:cell(name)="data">
                                       <span v-if="!data.item.editable">{{ data.item.item.product_name }}</span>
                                       <div v-else>
-                                      <v-select :clearable="false" label="product_name" class="style-chooser" v-model="data.item.item" :options="products" @input="getPrice"></v-select>
+                                        <v-select :clearable="false" :getOptionLabel="product => product.product_name" class="style-chooser" v-model="data.item.item" :options="products" @input="getPrice"></v-select>
                                       </div>
+                                    </template>
+                                    <template v-slot:cell(teeth)="data">
+                                      <span v-if="!data.item.editable">
+                                        <v-select class="style-chooser" disabled multiple v-model="data.item.teeth" :options="teethOptions"></v-select>
+                                      </span>
+                                      <div v-else>
+                                        <v-select class="style-chooser" multiple :close-on-select="false" v-model="data.item.teeth" :options="teethOptions"></v-select>
+                                      </div>
+                                    </template>
+                                    <template v-slot:cell(surface)="data">
+                                      <span v-if="!data.item.editable">
+                                        <v-select class="style-chooser" disabled multiple v-model="data.item.surface" :options="surfaceOptions"></v-select>
+                                      </span>
+                                      <div v-else>
+                                        <v-select class="style-chooser" :close-on-select="false" multiple v-model="data.item.surface" :options="surfaceOptions"></v-select>
+                                      </div>
+                                    </template>
+                                    <template v-slot:cell(comment)="data">
+                                      <span v-if="!data.item.editable">{{ data.item.comment }}</span>
+                                      <input type="text" v-model="data.item.comment" v-else class="form-control">
                                     </template>
                                     <template v-slot:cell(quantity)="data">
                                       <span v-if="!data.item.editable">{{ data.item.quantity }}</span>
@@ -327,7 +347,7 @@ import { sso } from '../../services/userService'
 import { getCompanyById } from '../../services/companies'
 import { getPremisesForCompany, getDevicesForPremise } from '../../services/companyPremises'
 import { getEnquiryById } from '../../services/enquiry'
-import { createInvoice, updateInvoice, getItemsOfInvoiceById, getPaymentItemsOfInvoiceById, getSerialForInvoiceNumberBasedOnType, getSerialForFursInvoiceNumberBasedOnType } from '../../services/invoice'
+import { createInvoice, updateInvoice, getEnquiryToothByInvoiceItemsId, getItemsOfInvoiceById, getPaymentItemsOfInvoiceById, getSerialForInvoiceNumberBasedOnType, getSerialForFursInvoiceNumberBasedOnType } from '../../services/invoice'
 import { getProducts } from '../../services/products'
 import html2pdf from 'html2pdf.js'
 import _ from 'lodash'
@@ -352,9 +372,12 @@ export default {
         { label: '#', key: 'id', class: 'text-left' },
         { label: this.$t('invoices.newInvoice.newInvoiceDetails.item'), key: 'name', class: 'text-left item-name' },
         { label: this.$t('invoices.newInvoice.newInvoiceDetails.quantity'), key: 'quantity', class: 'text-left narrow-column' },
-        { label: this.$t('invoices.newInvoice.newInvoiceDetails.price'), key: 'product_price', class: 'text-left' },
-        { label: this.$t('invoices.newInvoice.newInvoiceDetails.discount'), key: 'discount', class: 'text-left percentage-column' },
-        { label: this.$t('invoices.newInvoice.newInvoiceDetails.amount'), key: 'total', class: 'text-left' },
+        { label: this.$t('invoices.newInvoice.newInvoiceDetails.teeth'), key: 'teeth', class: 'text-left' },
+        { label: this.$t('invoices.newInvoice.newInvoiceDetails.surface'), key: 'surface', class: 'text-left' },
+        { label: this.$t('invoices.newInvoice.newInvoiceDetails.comment'), key: 'comment', class: 'text-left' },
+        { label: this.$t('invoices.newInvoice.newInvoiceDetails.price'), key: 'product_price', class: 'text-left narrow-column' },
+        { label: this.$t('invoices.newInvoice.newInvoiceDetails.discount'), key: 'discount', class: 'text-left narrow-column' },
+        { label: this.$t('invoices.newInvoice.newInvoiceDetails.amount'), key: 'total', class: 'text-left narrow-column' },
         { label: this.$t('invoices.newInvoice.newInvoiceDetails.action'), key: 'action', class: 'text-center action-column' }
       ],
       items: [
@@ -364,6 +387,9 @@ export default {
             name: ''
           },
           quantity: '1',
+          teeth: '',
+          surface: '',
+          comment: '',
           discount: '0',
           total: '0',
           editable: true
@@ -402,6 +428,8 @@ export default {
         }
 
       ],
+      teethOptions: ['11', '12', '13', '14', '15', '16', '17', '18', '21', '22', '23', '24', '25', '26', '27', '28', '31', '32', '33', '34', '35', '36', '37', '38', '41', '42', '43', '44', '45', '46', '47', '48', '51', '52', '53', '54', '55', '61', '62', '63', '64', '65', '71', '72', '73', '74', '75'],
+      surfaceOptions: ['B', 'L', 'M', 'D', 'O'],
       products: [],
       selectedItemName: '',
       dateOfInvoice: moment().format('YYYY-MM-DDTHH:MM:SS'),
@@ -590,6 +618,9 @@ export default {
         id: this.items.length + 1,
         item: {},
         quantity: '1',
+        teeth: '',
+        surface: '',
+        comment: '',
         discount: '0',
         total: '0',
         editable: true
@@ -650,21 +681,50 @@ export default {
       getItemsOfInvoiceById(this.invoiceId).then(response => {
         let responseItems = []
         response.forEach(element => {
-          let item = {
-            id: element.id,
-            item: this.findProduct(element.product_id),
-            quantity: element.invoiced_quantity,
-            discount: element.discount,
-            total: this.calculatePrice(element.product_price, element.invoiced_quantity, element.discount).toFixed(2),
-            editable: false
-          }
-          responseItems.push(item)
+          getEnquiryToothByInvoiceItemsId(element.id).then(toothResponse => {
+            let item = {
+              id: element.id,
+              item: this.findProduct(element.product_id),
+              quantity: element.invoiced_quantity,
+              discount: element.discount,
+              total: this.calculatePrice(element.product_price, element.invoiced_quantity, element.discount).toFixed(2),
+              editable: false,
+              teeth: this.getTeeth(toothResponse),
+              surface: this.getSurface(toothResponse[0]),
+              comment: toothResponse[0].comment
+            }
+            responseItems.push(item)
+          })
         })
         this.items = responseItems
         getPaymentItemsOfInvoiceById(this.invoiceId).then(items => {
           this.paymentMethods = items
         })
       })
+    },
+    getTeeth (data) {
+      return _.map(data, function (item) {
+        return item.number.toString()
+      })
+    },
+    getSurface (data) {
+      let surfaces = []
+      if (data.occlusal) {
+        surfaces.push('O')
+      }
+      if (data.mesial) {
+        surfaces.push('M')
+      }
+      if (data.distal) {
+        surfaces.push('D')
+      }
+      if (data.buccal) {
+        surfaces.push('B')
+      }
+      if (data.lingual) {
+        surfaces.push('L')
+      }
+      return surfaces
     },
     createInvoice () {
       if (!this.isItemValid()) this.items.pop()
@@ -780,9 +840,6 @@ export default {
   width: 120px !important;
 }
 
-.percentage-column {
-  width: 110px !important;
-}
 .item-name {
   min-width: 240px !important;
 }

@@ -363,7 +363,10 @@
         "price": "Price",
         "discount": "Discount",
         "amount": "Amount",
-        "action": "Action"
+        "action": "Action",
+        "teeth": "Teeth",
+        "surface": "Surface",
+        "comment": "Comment"
       },
       "newInvoiceSummary": {
         "header": "Invoice summary",

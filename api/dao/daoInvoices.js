@@ -115,7 +115,6 @@ const createInvoices = (request, response, invoice) => {
     if (invoice.reference_code_furs) statement += "'" + invoice.reference_code_furs + "',"
     statement = statement.slice(0, -1)
     statement += ") RETURNING invoice_id"
-    
     pool.query(statement, (error, results) => {
         if (error) {
             throw error
@@ -124,7 +123,7 @@ const createInvoices = (request, response, invoice) => {
         
         if (invoice.invoiceItems.length > 0) {
             invoice.invoiceItems.forEach(item => {
-                createInoviceItem(item, invoiceId)
+                createInoviceItem(item, invoiceId, invoice.id)
             });
         }
         if (invoice.payment_methods.length > 0) {
@@ -241,9 +240,75 @@ const updatePaymentMethod = (id, paymentMethod, amount, paid) => {
     })
 }
 
-const createInoviceItem = (item, id) => {
+const createInoviceItem = (item, id, enquiryId) => {
     let net_amount = item.item.tax_amount ? parseFloat(item.item.product_price) + parseFloat(item.item.tax_amount) : parseFloat(item.item.product_price)
-    let statement = "INSERT INTO invoice_item(invoice_id, product_id, product_name, product_price, invoiced_quantity, discount, product_vat_tax_rate, product_tax_amount, net_amount, created_date) VALUES (" + id + "," + item.item.product_id + ",'" + item.item.product_name + "'," + item.item.product_price + "," + item.quantity + ","+ item.discount + "," + item.item.tax_rate + "," + item.item.tax_amount + "," + net_amount + ",NOW())"
+    let statement = "INSERT INTO invoice_item(invoice_id, product_id, product_name, product_price, invoiced_quantity, discount, product_vat_tax_rate, product_tax_amount, net_amount, created_date) VALUES (" + id + "," + item.item.product_id + ",'" + item.item.product_name + "'," + item.item.product_price + "," + item.quantity + ","+ item.discount + "," + item.item.tax_rate + "," + item.item.tax_amount + "," + net_amount + ",NOW()) RETURNING id"
+    pool.query(statement, (error, results) => {
+        if (error) {
+            throw error
+        }
+        var invoiceItemId = results.rows[0].id;
+
+        item.teeth.forEach(tooth => {
+            createTooth(tooth, enquiryId, invoiceItemId, item.surface, item.comment)
+        })
+    })
+}
+
+const createTooth = (tooth, enquiryId, invoiceItemId, surface, comment) => {
+    let statement = "INSERT INTO enquiry_teeth(enquiry_id, number, created_at) VALUES (" + enquiryId + ", " + tooth + ", NOW()) RETURNING id"
+    pool.query(statement, (error, results) => {
+        if (error) {
+            throw error
+        }
+        var toothId = results.rows[0].id;
+
+        createInvoiceItemTooth(toothId, invoiceItemId, surface, comment)
+        createToothLog(toothId, surface, comment)
+    })
+}
+
+const createToothLog = (toothId, surface, comment) => {
+    let statement = "INSERT INTO tooth_log(enquiry_teeth_id, comment, date, created_at,"
+    if (surface.includes('O')) statement += "occlusal,"
+    if (surface.includes('M')) statement += "mesial,"
+    if (surface.includes('D')) statement += "distal,"
+    if (surface.includes('B')) statement += "buccal,"
+    if (surface.includes('L')) statement += "lingual,"
+    statement = statement.slice(0, -1)
+    statement+= ") VALUES (" + toothId + ", '" + comment + "', NOW(), NOW(),"
+    if (surface.includes('O')) statement += "true,"
+    if (surface.includes('M')) statement += "true,"
+    if (surface.includes('D')) statement += "true,"
+    if (surface.includes('B')) statement += "true,"
+    if (surface.includes('L')) statement += "true,"
+    statement = statement.slice(0, -1)
+    statement += ")"
+    console.log('createToothLog: ' + statement)
+    pool.query(statement, (error, results) => {
+        if (error) {
+            throw error
+        }
+    })
+}
+
+const createInvoiceItemTooth = (toothId, invoiceItemId, surface, comment) => {
+    let statement = "INSERT INTO teeth_invoice_item(enquiry_teeth_id, invoice_item_id, comment, created_at,"
+    if (surface.includes('O')) statement += "occlusal,"
+    if (surface.includes('M')) statement += "mesial,"
+    if (surface.includes('D')) statement += "distal,"
+    if (surface.includes('B')) statement += "buccal,"
+    if (surface.includes('L')) statement += "lingual,"
+    statement = statement.slice(0, -1)
+    statement+= ") VALUES (" + toothId + ", " + invoiceItemId + ", '" + comment + "', NOW(),"
+    if (surface.includes('O')) statement += "true,"
+    if (surface.includes('M')) statement += "true,"
+    if (surface.includes('D')) statement += "true,"
+    if (surface.includes('B')) statement += "true,"
+    if (surface.includes('L')) statement += "true,"
+    statement = statement.slice(0, -1)
+    statement += ")"
+    console.log('createInvoiceItemTooth: ' + statement)
     pool.query(statement, (error, results) => {
         if (error) {
             throw error
@@ -318,6 +383,17 @@ const getItemsOfInvoiceById = (request, response, id) => {
     })
 }
 
+const getEnquiryToothByInvoiceItemsId = (request, response, id) => {
+    let statement = "SELECT et.number, t.occlusal, t.mesial, t.distal, t.buccal, t.lingual, t.comment FROM teeth_invoice_item t JOIN enquiry_teeth et ON t.enquiry_teeth_id = et.id WHERE t.invoice_item_id = " + id
+    console.log(statement)
+    pool.query(statement, (error, results) => {
+        if (error) {
+            throw error
+        }
+        response.status(200).json(results.rows)
+    })
+}
+
 const getPaymentItemsOfInvoiceById = (request, response, id) => {
     let statement = "SELECT * FROM payment_item WHERE invoice_id = " + id
     pool.query(statement, (error, results) => {
@@ -366,5 +442,6 @@ module.exports = {
     getConsecutiveInvoiceNumberForCompany,
     getPaymentItemsOfInvoiceById,
     getSerialForInvoiceNumberBasedOnType,
-    getSerialForFursInvoiceNumberBasedOnType
+    getSerialForFursInvoiceNumberBasedOnType,
+    getEnquiryToothByInvoiceItemsId
 }
