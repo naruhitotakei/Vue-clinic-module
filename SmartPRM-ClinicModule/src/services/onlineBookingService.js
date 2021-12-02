@@ -9,3 +9,52 @@ export async function getOnlineBookingProducts (locale) {
   })
   return rawResponse.json()
 }
+
+export async function getOnlineBookingProductsPublic (locale) {
+  const rawResponse = await fetch('/api/public/online-booking-products/' + locale, {
+    method: 'GET',
+    credentials: 'same-origin',
+    headers: {
+      'Accept': 'application/json',
+      'Content-Type': 'application/json'
+    }
+  })
+  return rawResponse.json()
+}
+
+export async function getOnlineBookingProductGroups (locale) {
+  const rawResponse = await fetch('/api/online-booking-product-groups/' + locale, {
+    method: 'GET',
+    credentials: 'same-origin',
+    headers: {
+      'Accept': 'application/json',
+      'Content-Type': 'application/json'
+    }
+  })
+  return rawResponse.json()
+}
+
+export async function getPremises () {
+  const rawResponse = await fetch('/api/premises', {
+    method: 'GET',
+    credentials: 'same-origin',
+    headers: {
+      'Accept': 'application/json',
+      'Content-Type': 'application/json'
+    }
+  })
+  return rawResponse.json()
+}
+
+export async function createOnlineBookingService (service) {
+  const rawResponse = await fetch('/api/add-online-booking-service', {
+    method: 'POST',
+    credentials: 'same-origin',
+    headers: {
+      'Accept': 'application/json',
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify(service)
+  })
+  return rawResponse.json()
+}

@@ -21,6 +21,22 @@ const getFreeSlots = (request, response, prm_client_id) => {
     })
 }
 
+const getFreeSlotsPublic = (request, response, serviceId, date) => {
+    let statement = "SELECT appointment_slots.id, appointment_slots.starts_at, appointment_slots.doctor_id, " +
+                    "concat(users.title, ' ', users.first_name, ' ', users.surname) AS name FROM appointment_slots "
+    statement += "JOIN users ON appointment_slots.doctor_id = users.id WHERE appointment_slots.doctor_id IN (SELECT doctor_id FROM online_booking_users_bridge WHERE online_booking_id = $1 ) "
+    statement += "AND appointment_slots.starts_at::date = $2::date "
+    statement += "AND appointment_slots.appointment_id IS NULL "
+    statement += "ORDER BY appointment_slots.starts_at "
+    console.log("Fetching online booking on BE: " + statement)
+    pool.query(statement, [serviceId, date], (error, results) => {
+        if (error) {
+            throw error
+        }
+        response.status(200).json(results.rows)
+    })
+}
+
 const createFreeSlots = (request, response, slot, prm_client_id) => {
     let time = moment(slot.start).format('YYYY-MM-DDTHH:mm')
     let statement = "INSERT INTO appointment_slots ("
@@ -53,6 +69,7 @@ const deleteFreeSlot = (request, response, id) => {
 
 module.exports = {
     getFreeSlots,
+    getFreeSlotsPublic,
     createFreeSlots,
     deleteFreeSlot
 }

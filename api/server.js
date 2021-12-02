@@ -621,6 +621,32 @@ app.get('/api/online-booking-products/:locale', (req, res) => {
     }
 });
 
+app.get('/api/online-booking-product-groups/:locale', (req, res) => {
+    const locale = req.params.locale
+    if (req.session.prm_user && req.session.prm_user.permissions && checkPermission(req.session.prm_user.permissions, onlineBookingPermission)) {
+        daoOnlineBooking.getOnlineBookingProductGroups(req, res, req.session.prm_user.prm_client_id, getScope(req.session.prm_user.permissions, onlineBookingPermission), locale)
+    } else {
+        res.status(401).json("OK: user unauthorized")
+    }
+});
+
+app.get('/api/premises', (req, res) => {
+    if (req.session.prm_user && req.session.prm_user.permissions && checkPermission(req.session.prm_user.permissions, onlineBookingPermission)) {
+        daoOnlineBooking.getPremises(req, res, req.session.prm_user.prm_client_id, getScope(req.session.prm_user.permissions, onlineBookingPermission))
+    } else {
+        res.status(401).json("OK: user unauthorized")
+    }
+});
+
+app.post('/api/add-online-booking-service', (req, res) => {
+    const onlineBookingService = req.body
+    if (req.session.prm_user && req.session.prm_user.permissions && checkPermission(req.session.prm_user.permissions, onlineBookingPermission))
+        daoOnlineBooking.createOnlineBookingProduct(req, res, onlineBookingService)
+    else
+        res.status(401).json("OK: user unauthorized")
+});
+
+
 ///////////////////////////////////
 // enquiries, patients
 ///////////////////////////////////
@@ -1242,8 +1268,7 @@ app.post('/api/files/avatar/:id', async function(req, res) {
 });
 
 app.get('/api/files/avatar/:id', async function (req, res) {
-  let id = req.params.id
-  if(req.session.prm_user) {
+    let id = req.params.id
     const rv = await awsS3.download('avatar-' + id + '/')
     if (rv.status=='OK') {
       const download = Buffer.from(rv.data.Body)
@@ -1251,9 +1276,6 @@ app.get('/api/files/avatar/:id', async function (req, res) {
     } else {
       res.download('./resources/avatar-default.png', 'avatar-default.png');
     }
-  }
-  else
-    res.status(401).json("OK: user unauthorized")
 });
 
 ///////////////////////////////////
@@ -1307,7 +1329,6 @@ app.post('/api/booking/sendsms', (req, res) => {
                     requestId: request_id,
                 })
             }
-
         })
     } else {
         res.status(400).json("No phone number")
@@ -1323,12 +1344,26 @@ app.post('/api/booking/confirm-and-save', (req, res) => {
         vonage.verify.check({
             request_id: requestId,
             code
-        }, (error, _result) => {
-            if (error) {
+        }, (error, result) => {
+            if (error != null) {
                 res.status(500)
-            } else {
-                res.status(200).json({ success: true, code, selectedSlot })
+
+                return
             }
+
+            if (result.status === '16') {
+                res.status(422).json(result)
+
+                return
+            }
+
+            if (result.status !== '0') {
+                res.status(500)
+
+                return
+            }
+
+            res.status(200).json({ success: true, code, selectedSlot })
         })
     } else {
         res.status(400).json("No confirmation code")
@@ -1350,3 +1385,12 @@ app.get('/api/config', (request, response) => {
 const langByCountry = {
     'SI': 'sl'
 }
+
+app.get('/api/public/free-slots', (req, res) => {
+    daoAppointmentSlots.getFreeSlotsPublic(req, res, req.query.serviceId, req.query.date)
+});
+
+app.get('/api/public/online-booking-products/:locale', (req, res) => {
+    const locale = req.params.locale
+    daoOnlineBooking.getOnlineBookingProductsPublic(req, res, locale)
+});

@@ -36,6 +36,18 @@
     "icon": "ri-calendar-todo-line"
   },
   {
+    "title": "Appointments",
+    "name": "sidebar.appointments",
+    "is_heading": false,
+    "is_active": false,
+    "link": {
+      "name": "dashboard.appointments"
+    },
+    "class_name": "",
+    "is_icon_class": true,
+    "icon": "ri-book-mark-line"
+  },
+  {
     "title": "Patients",
     "name": "sidebar.patients",
     "is_active": false,

@@ -7,7 +7,7 @@
                       <div class="row justify-content-between pl-3 pr-3">
                         <h4 class="card-title">{{ $t('assignments.assignmentsHeader') }}</h4>
                         <div class="btn-add-patient  mt-0">
-                          <b-button variant="primary" @click="modalAssigmentShow = true"><i class="ri-add-line mr-2"></i>{{ $t('assignments.addAssignments') }}</b-button>
+                          <b-button variant="primary" @click="addNewAssignment"><i class="ri-add-line mr-2"></i>{{ $t('assignments.addAssignments') }}</b-button>
                         </div>
                       </div>
                     </template>
@@ -23,7 +23,7 @@
                                 >
                                     <div class="assignments-container row align-items-center flex-nowrap justify-content-between w-100" :class="{ 'taskIsActive' : !item.completed}">
                                        <div class="row align-items-center flex-nowrap w-40">
-                                         <b-checkbox v-model="item.completed" :disabled="item.disabled" name="check-button" inline :key="index" class="checkbox-assignment" @change="finishAssignment(item.id, $event)"></b-checkbox>
+                                         <b-checkbox v-model="item.completed" :disabled="item.disabled" name="check-button" inline :key="index" class="checkbox-assignment" @change="finishAssignment(item.id, $event, 'today')"></b-checkbox>
                                          <span class="assignments-descriptions w-100 text-break">{{ item.description }}</span>
                                        </div>
                                        <div class="w-60 row justify-content-end flex-nowrap">
@@ -54,26 +54,120 @@
             </b-col>
         </b-row>
         <b-row style="justify-content: center;">
-            <b-col lg="12">
+            <b-col cols="12" lg="6">
+              <iq-card class-name="iq-card-block iq-card-stretch iq-card-height overdueAssignments-body">
+                  <template v-slot:headerTitle>
+                      <h5>My {{ $t('assignments.overdueAssignments') }}</h5>
+                  </template>
+                  <template v-slot:body>
+                    <b-list-group class="list-group-flush" id="myOverdueAssignments">
+                      <b-list-group-item
+                        v-for="(item, index) in myOverDueList"
+                        :key="index"
+                        :style="{'background': getDifferenceDate(item.due_at) === 1 && '#ffeeba' || getDifferenceDate(item.due_at) > 1 && '#f5c6cb'}">
+                        <div :class="{ 'taskIsActive' : !item.completed}">
+                          <div class="mb-2">
+                            <b-checkbox v-model="item.completed" :disabled="item.disabled" name="check-button" inline
+                              :key="index" class=""
+                              @change="finishAssignment(item.id, $event, 'myoverdue')"><strong>{{ item.description }}</strong></b-checkbox>
+                          </div>
+                          <div class="d-flex align-items-center justify-content-between">
+                            <div>
+                              <span class="text-left">{{ item.patientname }} {{ item.patientlastname }}</span> <br>
+                              <span class="text-left">{{ patientsDentist(item) }}</span>
+                            </div>
+                            <div class="d-flex align-items-center">
+                              <span class="text-right text-width-150">{{ item.due_at | formatDate }}</span>
+                              <b-button variant=" iq-bg-success mr-1 mb-1" size="sm" style="margin-left: 5%;" @click="editAssignments(item)">
+                               <i class="ri-ball-pen-fill m-0"></i>
+                             </b-button>
+                            </div>
+                          </div>
+                        </div>
+                      </b-list-group-item>
+                    </b-list-group>
+                    <template>
+                            <div class="mt-4 ml-2">
+                              <p v-if="myOverdueAssignments.length < 1"> You have no overdue assignments.</p>
+                                <b-pagination
+                                    v-else-if="myOverdueAssignments.length > 10"
+                                    v-model="myOverdueCurrentPage"
+                                    :total-rows="myOverdueAssignments.length"
+                                    :per-page="myOverduePerPage"
+                                    aria-controls="myOverdueAssignments"></b-pagination>
+                            </div>
+                        </template>
+                    </template>
+                </iq-card>
+            </b-col>
+            <b-col cols="12" lg="6">
                 <iq-card class-name="iq-card-block iq-card-stretch iq-card-height overdueAssignments-body">
                     <template v-slot:headerTitle>
-                        <h5>{{ $t('assignments.overdueAssignments') }}</h5>
+                        <h5>{{ $t('assignments.overdueAssignments') }} of other users.</h5>
                     </template>
                   <template v-slot:body>
-                    <b-list-group class="list-group-flush" id="overdueAssignments">
+                    <b-form-input type="search" placeholder="Filter By User" debounce="500" v-model="filterOverdue"></b-form-input>
+                    <b-list-group class="list-group-flush mt-2" id="overdueAssignments">
+                      <b-list-group-item
+                        v-for="(item, index) in otherUserOverDueList"
+                        :key="index"
+                        :style="{'background': getDifferenceDate(item.due_at) === 1 && '#ffeeba' || getDifferenceDate(item.due_at) > 1 && '#f5c6cb'}">
+                        <div :class="{ 'taskIsActive' : !item.completed}">
+                          <div class="mb-2">
+                            <b-checkbox v-model="item.completed" :disabled="item.disabled" name="check-button" inline
+                              :key="index" class=""
+                              @change="finishAssignment(item.id, $event, 'overdue')">
+                                <strong>{{ item.description }}</strong>
+                            </b-checkbox>
+                          </div>
+                          <b-row>
+                            <b-col cols="12" lg="6">
+                              <span class="text-left">{{ item.patientname }} {{ item.patientlastname }}</span>
+                              <span class="text-left pl-2">{{ patientsDentist(item) }}</span>
+                            </b-col>
+                            <b-col cols="12" lg="6" class="d-flex align-items-center justify-content-end">
+                              <span class="text-right pr-2">{{ item.todoname }}</span>
+                                <span class="text-right">{{ item.due_at | formatDate }}</span>
+                                <b-button variant=" iq-bg-success mr-1 mb-1" size="sm" style="margin-left: 2%;" @click="editAssignments(item)">
+                                <i class="ri-ball-pen-fill m-0"></i>
+                              </b-button>
+                            </b-col>
+                          </b-row>
+                          <!-- <div class="d-flex align-items-center justify-content-between">
+                            <div>
+                              <span class="text-left">{{ item.patientname }} {{ item.patientlastname }}</span>
+                              <span class="text-left pl-2">{{ patientsDentist(item) }}</span>
+                            </div>
+                            <div>
+                              <div class="d-flex align-items-center">
+                                <span class="text-right text-width-100">{{ item.todoname }}</span>
+                                <span class="text-right text-width-100">{{ item.due_at | formatDate }}</span>
+                                <b-button variant=" iq-bg-success mr-1 mb-1" size="sm" style="margin-left: 2%;" @click="editAssignments(item)">
+                                <i class="ri-ball-pen-fill m-0"></i>
+                              </b-button>
+                              </div>
+                            </div>
+                          </div> -->
+                        </div>
+                      </b-list-group-item>
+                    </b-list-group>
+                    <!-- <b-list-group class="list-group-flush" id="overdueAssignments">
                       <b-list-group-item
                           v-for="(item, index) in overdueAssignments[overdueCurrentPage]"
                           :key="index"
                           :style="{'background': getDifferenceDate(item.due_at) === 1 && '#ffeeba' || getDifferenceDate(item.due_at) > 1 && '#f5c6cb'}">
-                        <div class="assignments-container row align-items-center flex-nowrap justify-content-between w-100"
-                             :class="{ 'taskIsActive' : !item.completed}">
-                           <div class="w-40 flex-nowrap row">
+                        <div class="row align-items-center flex-nowrap justify-content-between w-100"
+                          :class="{ 'taskIsActive' : !item.completed}">
+                           <div class="w-60 flex-nowrap row">
                              <b-checkbox v-model="item.completed" :disabled="item.disabled" name="check-button" inline
                                          :key="index" class="checkbox-assignment"
                                          @change="finishAssignment(item.id, $event)"></b-checkbox>
                              <span class="assignments-descriptions  w-100 text-break">{{ item.description }}</span>
                            </div>
-                           <div class="w-60 row justify-content-end flex-nowrap">
+                           <div class="w-20 row justify-content-end flex-nowrap">
+                             <span class="pl-5 text-left">{{ item.todoname }}</span>
+                           </div>
+                           <div class="w-20 row justify-content-end flex-nowrap">
                              <span class="pl-5 text-left">{{ item.patientname }} {{ item.patientlastname }}</span>
                              <span class="pl-5 text-left">{{ patientsDentist(item) }}</span>
                              <span class="text-right text-width-150">{{ item.due_at | formatDate }}</span>
@@ -83,19 +177,20 @@
                            </div>
                         </div>
                       </b-list-group-item>
-                    </b-list-group>
+                    </b-list-group> -->
                     <template>
-                            <div class="mt-4 ml-2">
-                              <p v-if="overdueTotalRows === 0"> You have no overdue assignments.</p>
-                                <b-pagination
-                                    v-else-if="overdueTotalRows > 20"
-                                    v-model="overdueCurrentPage"
-                                    :total-rows="overdueTotalRows"
-                                    :per-page="overduePerPage"
-                                    aria-controls="overdueAssignments"></b-pagination>
-                            </div>
-                        </template>
+                      <div class="mt-4 ml-2">
+                        <p v-if="overdueAssignments.length === 0"> You have no overdue assignments.</p>
+                        <b-pagination
+                          v-else-if="overdueAssignments.length > 10"
+                          v-model="overdueCurrentPage"
+                          :total-rows="overdueAssignments.length"
+                          :per-page="overduePerPage"
+                          aria-controls="overdueAssignments">
+                        </b-pagination>
+                      </div>
                     </template>
+                  </template>
                 </iq-card>
             </b-col>
         </b-row>
@@ -143,7 +238,7 @@
                 </iq-card>
             </b-col>
         </b-row>
-        <b-row style="justify-content: center;">
+        <!-- <b-row style="justify-content: center;">
             <b-col lg="12">
                 <iq-card class-name="iq-card-block iq-card-stretch iq-card-height completedAssignments-body">
                     <template v-slot:headerTitle>
@@ -175,7 +270,7 @@
                     </template>
                 </iq-card>
             </b-col>
-        </b-row>
+        </b-row> -->
       <b-modal
           v-model="modalAssigmentShow"
           no-close-on-backdrop
@@ -193,14 +288,28 @@
             <div class="col-md-12 mb-3">
               <label for="title">{{ $t('assignments.addAssignmentsModal.enquiry') }} *</label>
               <v-select
-                  taggable
-                  :clearable="false"
-                  label="full_name"
-                  :options="enquires"
-                  v-model="formData.enquiry"
+                taggable
+                :clearable="false"
+                label="full_name"
+                :options="enquires"
+                v-model="formData.enquiry"
               >
                 <template v-slot:option="option">
                   {{ option.name }} {{option.last_name}}
+                </template>
+              </v-select>
+            </div>
+            <div class="col-md-12 mb-3">
+              <label for="title">{{ $t('home.openAssignmentsColumn.assignedTo') }} *</label>
+              <v-select
+                taggable
+                :clearable="false"
+                label="name"
+                :options="users"
+                v-model="formData.user_id"
+              >
+                <template v-slot:option="option">
+                  {{ option.name }} {{ option.surname }}
                 </template>
               </v-select>
             </div>
@@ -297,7 +406,7 @@ body  .custom-control-label::after {
 import { xray } from '../../config/pluginInit'
 import { getAssignments, finishAssignment, createAssignments, updateAssignments } from '../../services/assignmentsService'
 import { getEnquires } from '@/services/enquiry'
-import { getDentists, sso } from '@/services/userService'
+import { getUsers, getDentists, sso } from '@/services/userService'
 import moment from 'moment'
 
 export default {
@@ -308,8 +417,7 @@ export default {
     this.getEnquires()
     this.getUserLogin()
     this.getDentists()
-  },
-  watch: {
+    this.getUsersList()
   },
   computed: {
     getLocale () {
@@ -317,25 +425,66 @@ export default {
     },
     isOkDisabled () {
       return !this.formData.due_at || !this.formData.description
+    },
+    otherUserOverDueList () {
+      return this.overdueAssignments.slice(
+        (this.overdueCurrentPage - 1) * this.overduePerPage,
+        this.overdueCurrentPage * this.overduePerPage)
+    },
+    myOverDueList () {
+      return this.myOverdueAssignments.slice(
+        (this.myOverdueCurrentPage - 1) * this.myOverduePerPage,
+        this.myOverdueCurrentPage * this.myOverduePerPage)
+    },
+    filterOverdueByUser () {
+      if (this.filterOverdue) {
+        console.log(this.filterOverdue.toLowerCase())
+        return this.overdueAssignments.filter(assignment => assignment.todoname && assignment.todoname.toLowerCase().includes(this.filterOverdue.toLowerCase()))
+      }
+      return this.overdueAssignments
+    }
+  },
+  watch: {
+    filterOverdue (val) {
+      if (val) {
+        this.filterOverDueItems()
+      } else {
+        this.overdueAssignments = [...this.allOverdueAssignments]
+      }
     }
   },
   methods: {
+    filterOverDueItems () {
+      this.overdueAssignments = this.allOverdueAssignments.filter(assignment => assignment.todoname && assignment.todoname.toLowerCase().includes(this.filterOverdue.toLowerCase()))
+    },
     editAssignments (assignment) {
       let enquiry = this.enquires.find(item => item.id === assignment.enquiry_id)
+      let user = this.users.find(user => user.id === assignment.user_id)
       this.formData = {
         id: assignment.id,
         enquiry: enquiry,
         description: assignment.description,
         due_at: moment(assignment.due_at).format('YYYY-MM-DD'),
-        user_id: assignment.user_id
-
+        user_id: user
       }
       this.modalAssigmentShow = true
+    },
+    getUsersList () {
+      getUsers().then(response => {
+        this.users = response
+      })
     },
     getAssignments () {
       getAssignments('today').then(response => {
         this.todaysAssigments = response
         this.todaysTotalRows = response.length
+      })
+      getAssignments('past').then(response => {
+        if (Array.isArray(response)) {
+          let reverseResponse = response.reverse()
+          this.setOtherUsersOverdueAssignments(reverseResponse)
+          this.setMyOverdueAssignments(reverseResponse)
+        }
       })
       getAssignments('future').then(response => {
         let res = []
@@ -346,17 +495,6 @@ export default {
           }
           this.futureAssigments = res
           this.futureTotalRows = response.length
-        }
-      })
-      getAssignments('past').then(response => {
-        let res = []
-        if (Array.isArray(response)) {
-          let reverseResponse = response.reverse()
-          for (let i = 0; i < response.length; i += 3) {
-            res = [...res, reverseResponse.slice(i, i + 20)]
-          }
-          this.overdueAssignments = res
-          this.overdueTotalRows = response.length
         }
       })
       getAssignments('finished').then(response => {
@@ -371,8 +509,48 @@ export default {
         }
       })
     },
-    finishAssignment (id, finished) {
+    setOtherUsersOverdueAssignments (assignments) {
+      // let res = []
+      let filtered = assignments.filter(assignment => assignment.user_id !== this.formData.user_id)
+      // if (filtered.length > 10) {
+      //   for (let i = 0; i < filtered.length; i += 3) {
+      //     res = [...res, filtered.slice(i, i + 10)]
+      //   }
+      // } else {
+      //   res = filtered
+      // }
+
+      this.overdueAssignments = [...filtered]
+      this.allOverdueAssignments = [...filtered]
+      this.overdueTotalRows = filtered.length
+
+      console.log(this.overdueAssignments.length)
+    },
+    setMyOverdueAssignments (assignments) {
+      let res = []
+      let filtered = assignments.filter(assignment => assignment.user_id === this.formData.user_id)
+      if (filtered > 10) {
+        for (let i = 0; i < filtered.length; i++) {
+          res = [...res, filtered.slice(i, i + 10)]
+        }
+      } else {
+        res = filtered
+      }
+
+      this.myOverdueAssignments = res
+      this.myOverdueTotalRows = filtered.length
+    },
+    finishAssignment (id, finished, from) {
       finishAssignment(id, finished).then(response => {
+        if (from === 'today') {
+          this.todaysAssigments = this.todaysAssigments.filter(assignment => assignment.id !== id)
+        }
+        if (from === 'overdue') {
+          this.overdueAssignments = this.overdueAssignments.filter(assignment => assignment.id !== id)
+        }
+        if (from === 'myoverdue') {
+          this.myOverdueAssignments = this.myOverdueAssignments.filter(assignment => assignment.id !== id)
+        }
       })
     },
     getEnquires () {
@@ -387,15 +565,27 @@ export default {
     getDifferenceDate (date) {
       return Math.floor((Date.parse(new Date(Date.now())) - Date.parse(date)) / 86400000)
     },
+    addNewAssignment () {
+      this.formData.user_id = null
+      this.modalAssigmentShow = true
+    },
     addAssignments () {
       if (this.formData.id) {
-        updateAssignments(this.formData.id, this.formData).then(() => {
+        let data = Object.assign({}, this.formData)
+        if (typeof this.formData.user_id === 'object') {
+          data.user_id = this.formData.user_id.id
+        }
+        updateAssignments(this.formData.id, data).then(() => {
           this.getAssignments()
           this.formData = this.defaultFormData()
           this.getUserLogin()
         })
       } else {
-        createAssignments(this.formData).then(() => {
+        let data = Object.assign({}, this.formData)
+        if (typeof this.formData.user_id === 'object') {
+          data.user_id = this.formData.user_id.id
+        }
+        createAssignments(data).then(() => {
           this.getAssignments()
           this.formData = this.defaultFormData()
           this.getUserLogin()
@@ -444,7 +634,10 @@ export default {
       enquires: [],
       dentists: [],
       index: [],
+      filterOverdue: null,
       todaysAssigments: [],
+      allOverdueAssignments: [],
+      myOverdueAssignments: [],
       overdueAssignments: [],
       futureAssigments: [],
       todaysTotalRows: 0,
@@ -455,11 +648,15 @@ export default {
       todayCurrentPage: 1,
       todayPerPage: 10,
       overdueCurrentPage: 1,
-      overduePerPage: 20,
+      overduePerPage: 10,
+      myOverdueTotalRows: 0,
+      myOverdueCurrentPage: 1,
+      myOverduePerPage: 10,
       futureCurrentPage: 1,
       futurePerPage: 10,
       completedCurrentPage: 0,
       completedPerPage: 10,
+      users: [],
       bool: [
         { label: 'Completed', checked: true },
         { label: 'Completed', checked: false }

@@ -43,7 +43,7 @@ export default {
   },
   data () {
     return {
-      selectMode: 'multi',
+      selectMode: 'single',
       selected: []
     }
   },

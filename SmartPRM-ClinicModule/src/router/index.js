@@ -9,6 +9,8 @@ import Home from '../views/Home/Home'
 import CallCenterDashboard from '../views/CallCenterDashboard/CallCenterDashboard'
 /* Calendar */
 import Calendar from '../views/Calendars/Calendar'
+/* Appointments */
+import Appointments from '../views/Appointments/Appointments'
 /* Patients */
 import Patients from '../views/Patients/Patients'
 import ViewPatient from '../views/Patients/ViewPatient'
@@ -110,6 +112,12 @@ const childRoutes = (prop, mode) => [
     name: prop + '.calendar',
     meta: { dark: mode, auth: true, name: 'Calendar' },
     component: Calendar
+  },
+  {
+    path: 'appointments',
+    name: prop + '.appointments',
+    meta: { dark: mode, auth: true, name: 'Appointments' },
+    component: Appointments
   },
   {
     path: 'patients',

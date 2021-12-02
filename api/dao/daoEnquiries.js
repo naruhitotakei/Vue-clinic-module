@@ -24,12 +24,12 @@ const getEnquiries = (request, response, user_id, accessible_user_ids, prm_clien
     } else if (scope=='PrmClient') {
         statement += "AND enquiries.prm_client_id=" + prm_client_id;  
     } else if (scope=='Self') {
-        statement += "AND enquiries.user_id=" + user_id; 
+        statement += "AND enquiries.prm_dentist_user_id=" + user_id; 
     } else if (scope==='Self&LinkedUsers') {
-        statement += " AND (enquiries.user_id=" + user_id;
+        statement += " AND (enquiries.prm_dentist_user_id=" + user_id;
         if (accessible_user_ids) {           
             for (const acc_id in accessible_user_ids) {
-                statement +=" OR enquiries.user_id=" + accessible_user_ids[acc_id];
+                statement +=" OR enquiries.prm_dentist_user_id=" + accessible_user_ids[acc_id];
             } 
         }
         statement += ") ";    
@@ -62,8 +62,7 @@ const createEnquiry = (req, res, enquiry, prm_client_id) => {
     if (enquiry.firstName) statement += "name,"
     if (enquiry.phone) statement += "phone,"
     if (enquiry.email) statement += "email,"
-    if (enquiry.client_id) statement += "client_id,"
-    if (enquiry.country_id) statement += "country_id,"
+    if (enquiry.country) statement += "country_id, client_id,"
     if (enquiry.region_id) statement += "region_id,"
     if (enquiry.prm_dentist_user_id) statement += "prm_dentist_user_id,"
     if (enquiry.gender) statement += "gender,"
@@ -77,8 +76,11 @@ const createEnquiry = (req, res, enquiry, prm_client_id) => {
     if (enquiry.firstName) statement += "'" + enquiry.firstName + "',"
     if (enquiry.phone) statement += "'" + enquiry.phone + "',"
     if (enquiry.email) statement += "'" + enquiry.email + "',"
-    if (enquiry.client_id) statement += enquiry.client_id + ","
-    if (enquiry.country_id) statement += enquiry.country_id + ","
+    if (enquiry.country && enquiry.country === 2) {
+        statement += enquiry.country + ", 23,"
+    } else {
+        statement += enquiry.country + ", 10,"
+    }
     if (enquiry.region_id) statement += enquiry.region_id + ","
     if (enquiry.prm_dentist_user_id) statement += enquiry.prm_dentist_user_id + ","
     if (enquiry.gender) statement += "'" + enquiry.gender + "',"
@@ -88,6 +90,7 @@ const createEnquiry = (req, res, enquiry, prm_client_id) => {
     statement += "false,false,"   
     statement += prm_client_id
     statement += ")"
+    console.log("Adding new patient on BE: " + statement)
     pool.query(statement , (error, results) => {
         if (error) {
             throw error

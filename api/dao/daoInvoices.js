@@ -339,7 +339,7 @@ const getInvoices = (request, response, user_id, accessible_user_ids, prm_client
     let statement = "SELECT DISTINCT ON (invoice_id) * FROM invoice "
     statement += "LEFT JOIN enquiries ON invoice.enquiries_id = enquiries.id "
     statement += "LEFT JOIN users ON enquiries.prm_dentist_user_id = users.id OR enquiries.prm_surgeon_user_id = users.id "
-    statement += "LEFT JOIN prm_client ON users.prm_client_id = prm_client.id "
+    statement += "LEFT JOIN prm_client ON enquiries.prm_client_id = prm_client.id "
     statement += "WHERE invoice_type = 'Invoice' "
     statement += "AND prm_client.client_deleted IS FALSE "
     if (scope == 'All') {

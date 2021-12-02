@@ -5,19 +5,19 @@
             <h5 class="card-title">Revenue Statistics</h5>
             <div class="row">
               <div class="col-sm-3 col-12">
-                <h4 class="margin-0">€ {{ todayRevenue.toFixed(3) }} </h4>
+                <h4 class="margin-0">€ {{ todayRevenue.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 }) }} </h4>
                 <p class="text-muted">{{ $t('statisticsForClinic.todaysIncome') }}</p>
               </div>
               <div class="col-sm-3 col-12">
-                <h4 class="margin-0">€ {{ weeklyRevenue.toFixed(3) }} </h4>
+                <h4 class="margin-0">€ {{ weeklyRevenue.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 }) }} </h4>
                 <p class="text-muted">{{ $t('statisticsForClinic.weeksIncome') }}</p>
               </div>
               <div class="col-sm-3 col-12">
-                <h4 class="margin-0">€ {{ monthlyRevenue.toFixed(3) }} </h4>
+                <h4 class="margin-0">€ {{ monthlyRevenue.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 }) }} </h4>
                 <p class="text-muted">{{ $t('statisticsForClinic.monthsIncome') }}</p>
               </div>
               <div class="col-sm-3 col-12">
-                <h4 class="margin-0">€ {{ yearlyRevenue.toFixed(3) }} </h4>
+                <h4 class="margin-0">€ {{ yearlyRevenue.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 }) }} </h4>
                 <p class="text-muted">{{ $t('statisticsForClinic.yearsIncome') }}</p>
               </div>
             </div>
@@ -227,7 +227,7 @@ export default {
           },
           labels: {
             formatter: function (y) {
-              return y.toFixed(0)
+              return y.toLocaleString()
             }
           }
         },
@@ -318,8 +318,13 @@ export default {
             categories: [...datesArray]
           },
           yaxis: {
+            labels: {
+              formatter: function (y) {
+                return y.toLocaleString()
+              }
+            },
             title: {
-              text: this.totalRevenue.toFixed(3) + ' EUR'
+              text: this.totalRevenue.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + ' EUR'
             }
           }
         }

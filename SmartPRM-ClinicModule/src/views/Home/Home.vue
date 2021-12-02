@@ -388,7 +388,11 @@ export default {
           height: 350,
           stacked: true,
           toolbar: {
-            show: true
+            show: true,
+            tools: {
+              pan: false,
+              zoom: false
+            }
           },
           zoom: {
             enabled: true
@@ -465,6 +469,7 @@ export default {
         location: '',
         patient_id: '',
         product_group: '',
+        productGroupName: '',
         crmProduct: '',
         label_id: '',
         backgroundColor: '',
@@ -589,7 +594,8 @@ export default {
       this.todaysAppointments.splice(0, this.todaysAppointments.length)
       this.appointmentData.doctor_id = this.selectedDoctor.id
       this.appointmentData.doctor_name = this.selectedDoctor.name
-      this.appointmentData.product_groups = this.selectedProductGroup.product_group_id
+      this.appointmentData.product_group = this.selectedProductGroup.product_group_id
+      this.appointmentData.productGroupName = this.selectedProductGroup.product_group_name
       this.appointmentData.crmProduct = this.selectedProductGroup.crm_product_id
       updateAppointment(this.appointmentData.id, this.appointmentData).then(() => {
         this.disabled = true
@@ -624,6 +630,7 @@ export default {
       this.appointmentData = item
       this.appointmentModal = true
       this.selectedDoctor = item.doctor_name
+      this.selectedProductGroup = item.product_group_name
     },
     getDoctorsStatisticPerWeek () {
       getDoctorsStatisticPerWeek().then(response => {
@@ -645,7 +652,10 @@ export default {
           let tempArr = _.filter(tempDoctorData, { starts_at: date })
           tempObj.data.push(tempArr.length)
         })
-        this.dataForChart.push(tempObj)
+        const isZero = tempObj.data.every(item => item === 0)
+        if (!isZero) {
+          this.dataForChart.push(tempObj)
+        }
       })
       this.chartOptions = { ...this.chartOptions, ...{ series: this.dataForChart, xaxis: { categories: this.dates } } }
     },
