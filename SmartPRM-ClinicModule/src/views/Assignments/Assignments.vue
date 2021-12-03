@@ -22,8 +22,8 @@
                     <b-col cols="12" lg="6">
                       <h5>My {{ $t('assignments.todaysAssignments') }}</h5>
                     </b-col>
-                    <b-col cols="12" lg="6" v-if="getCompletedAssignments">
-                      <b-progress :value="getCompletedAssignments" :max="100" show-progress animated></b-progress>
+                    <b-col cols="12" lg="6" v-if="myCompletedAssignments">
+                      <b-progress :value="myCompletedAssignments" :max="100" show-progress animated></b-progress>
                     </b-col>
                   </b-row>
               </template>
@@ -555,13 +555,13 @@ import moment from 'moment'
 
 export default {
   name: 'Assignments',
-  mounted () {
+  async mounted () {
     xray.index()
-    this.getAssignments()
-    this.getEnquires()
-    this.getUserLogin()
+    await this.getUserLogin()
     this.getDentists()
     this.getUsersList()
+    this.getAssignments()
+    this.getEnquires()
   },
   computed: {
     getLocale () {
@@ -602,19 +602,9 @@ export default {
     },
     filterOverdueByUser () {
       if (this.filterOverdue) {
-        console.log(this.filterOverdue.toLowerCase())
         return this.overdueAssignments.filter(assignment => assignment.todoname && assignment.todoname.toLowerCase().includes(this.filterOverdue.toLowerCase()))
       }
       return this.overdueAssignments
-    },
-    getCompletedAssignments () {
-      if (this.myTodayAssignments.length) {
-        const total = this.myTodayAssignments.length
-        const completed = this.myTodayAssignments.filter(assignment => assignment.completed)
-
-        return (completed / total) * 100
-      }
-      return null
     }
   },
   watch: {
@@ -653,6 +643,8 @@ export default {
         // this.todaysTotalRows = response.length
         this.setMyTodayAssignments(response)
         this.setOtherUserTodayAssignments(response)
+
+        this.myCompletedAssignments = this.getCompletedAssignments()
       })
       getAssignments('past').then(response => {
         if (Array.isArray(response)) {
@@ -685,6 +677,14 @@ export default {
           this.completedTotalRows = response.length
         }
       })
+    },
+    getCompletedAssignments () {
+      if (this.myTodayAssignments.length) {
+        const total = this.myTodayAssignments.length
+        const completed = this.myTodayAssignments.filter(assignment => assignment.completed)
+        return (Number(completed.length) / Number(total)) * 100
+      }
+      return null
     },
     setMyFutureAssignments (assignments) {
       let filtered = assignments.filter(assignment => assignment.user_id === this.formData.user_id)
@@ -739,6 +739,7 @@ export default {
       const completedBy = this.userId
       finishAssignment(id, finished, completedBy).then(response => {
         if (from === 'today') {
+          this.myCompletedAssignments = this.getCompletedAssignments()
           // this.todaysAssignments = this.todaysAssignments.filter(assignment => assignment.id !== id)
         }
         if (from === 'overdue') {
@@ -839,6 +840,7 @@ export default {
       dentists: [],
       index: [],
       filterOverdue: null,
+      myCompletedAssignments: null,
       todaysAssignments: [],
       allOverdueAssignments: [],
       myOverdueAssignments: [],
