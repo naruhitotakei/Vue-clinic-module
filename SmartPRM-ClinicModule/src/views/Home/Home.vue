@@ -259,7 +259,7 @@
                                          :format="'HH.mm'"></date-picker>
                         </div>
                     </div>
-                    <div class="row align-items-center justify-content-between w-100 " :class="{'mb-3': !disabled}">
+                    <div class="row align-items-center justify-content-between w-100" v-if="!disabled || appointmentData.note" :class="{'mb-3': !disabled}">
                         <div class="col-md-3">
                             <label for="notes">{{ $t('calendarEvent.note') }}</label>
                         </div>
@@ -267,7 +267,7 @@
                             <textarea :disabled="disabled" row="2" v-model="appointmentData.note" class="form-control form-control-disabled font-size-16 mt-3" placeholder="Add your note here for event!" id="note" required></textarea>
                         </div>
                     </div>
-                    <template v-if="appointmentData.id && !disabled">
+                    <template v-if="!disabled || appointmentData.patient_attended">
                         <div class="row align-items-center justify-content-between w-100 pt-1 mb-3" :class="{'mb-3': !disabled}">
                             <div class="col-md-3">
                                 <label for="color" class="mb-0">{{ $t('calendarEvent.patient_attended') }}</label><br>
@@ -286,7 +286,7 @@
                             </div>
                         </div>
                     </template>
-                    <div class="row align-items-center justify-content-between w-100 pt-3 mb-3">
+                    <div class="row align-items-center justify-content-between w-100 pt-3 mb-3" v-if="!disabled || appointmentData.backgroundColor">
                         <div class="col-md-3">
                             <label for="color" class="mt-1 ml-1">{{ $t('calendarEvent.labels') }}</label><br>
                         </div>
