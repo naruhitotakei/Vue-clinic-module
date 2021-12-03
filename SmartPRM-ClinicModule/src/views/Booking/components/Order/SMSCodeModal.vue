@@ -7,12 +7,13 @@
       :title="
         complete
           ? $t('public.onlineBooking.dataConfirmed')
-          : $t('public.onlineBooking.checkYourData')
+          : $t('public.onlineBooking.confirmationOfBooking')
       "
       @hide="closeModal"
     >
       <template v-if="!complete">
       <template v-if="confirmationField">
+        <div class="my-2">{{ $t('public.onlineBooking.theCodeHasBeenSentTo') }} {{ phone }}.</div>
         <ValidationProvider :name="$t('public.onlineBooking.confirmationCode')" rules="required|min:4" v-slot="{ errors, invalid }">
           <b-form-group :label="$t('public.onlineBooking.smsVerificationCode')">
             <b-form-input v-model="code" type="text" :class="(errors.length > 0 ? ' is-invalid' : '')"></b-form-input>
@@ -23,22 +24,27 @@
           <b-button variant="primary" :disabled="invalid" @click="confirmAndSave">
             {{ $t('public.onlineBooking.confirmCode') }}
           </b-button>
+          <b-button variant="link" @click="confirmationField = false">
+            {{ $t('public.onlineBooking.modifyPhoneNumber') }}
+          </b-button>
         </ValidationProvider>
       </template>
-      <p class="my-4">
-        {{ $t('public.onlineBooking.pleaseEnterYourMobileNumber') }}
-      </p>
-      <ValidationProvider :name="$t('public.onlineBooking.phone')" rules="required|numeric|min:9|max:15" v-slot="{ errors, invalid }">
-        <b-form-group :label="$t('public.onlineBooking.phoneNumber')">
-          <b-form-input v-model="phone" type="text" :class="(errors.length > 0 ? ' is-invalid' : '')"></b-form-input>
-          <div class="invalid-feedback">
-            <span>{{ errors[0] }}</span>
-          </div>
-        </b-form-group>
-        <b-button variant="primary" :disabled="invalid" @click="sendConfirmationCode">
-          {{ $t('public.onlineBooking.saveAndSendVerification') }}
-        </b-button>
-      </ValidationProvider>
+      <template v-if="confirmationField === false">
+        <p class="my-4">
+          {{ $t('public.onlineBooking.pleaseEnterYourMobileNumber') }}
+        </p>
+        <ValidationProvider :name="$t('public.onlineBooking.phone')" rules="required|numeric|min:9|max:15" v-slot="{ errors, invalid }">
+          <b-form-group :label="$t('public.onlineBooking.phoneNumber')">
+            <b-form-input v-model="phone" type="text" :class="(errors.length > 0 ? ' is-invalid' : '')"></b-form-input>
+            <div class="invalid-feedback">
+              <span>{{ errors[0] }}</span>
+            </div>
+          </b-form-group>
+          <b-button variant="primary" :disabled="invalid" @click="sendConfirmationCode">
+            {{ $t('public.onlineBooking.sendVerificationCode') }}
+          </b-button>
+        </ValidationProvider>
+      </template>
       </template>
       <template v-else>
         {{ $t('public.onlineBooking.yourDetailsHaveBeenSuccessfullyVerified') }}

@@ -86,23 +86,25 @@
             </div>
             <div class="row align-items-center justify-content-between w-100 pt-2 " :class="{'mb-3': !disabled}">
                 <div class="col-md-3">
-                    <label for="start" class="mb-0">{{ $t('calendarEvent.start') }} *</label>
+                    <label for="start" class="mb-0" :style="{ 'margin-top': '13px' }">{{ $t('calendarEvent.start') }} *</label>
                 </div>
                 <div class="col-md-9 d-flex align-items-center">
                     <date-picker :disabled="disabled"
                                  class="form-control form-control-disabled font-size-16"
                                  :class="{'no-border margin-left': disabled}"
+                                 :style="{ 'height': !disabled ? '53px' : '45px' }"
                                  v-model="formData.assignmentDate"
                                  type="datetime"
                                  :minute-step="5"
                                  :show-second="false"
                                  :lang="'en'"
                                  :format="'DD.MM.YYYY HH.mm'"></date-picker>
-                    <label for="start" class="mb-0 mr-3 ml-4">{{ $t('calendarEvent.end') }}*</label>
+                    <label for="start" class="mb-0 mr-3 ml-4" :style="{ 'margin-top': '13px' }">{{ $t('calendarEvent.end') }}*</label>
                     <date-picker :disabled="disabled"
                                  required
                                  class="form-control form-control-disabled font-size-16"
                                  :class="{'no-border': disabled}"
+                                 :style="{ 'height': !disabled ? '53px' : '45px' }"
                                  v-model="formData.end"
                                  type="time"
                                  :minute-step="5"
@@ -111,7 +113,7 @@
                                  :format="'HH.mm'"></date-picker>
                 </div>
             </div>
-            <div class="row align-items-center justify-content-between w-100 " :class="{'mb-3': !disabled}">
+            <div class="row align-items-center justify-content-between w-100 " v-if="!disabled || formData.note" :class="{'mb-3': !disabled}">
                 <div class="col-md-3">
                     <label for="notes">{{ $t('calendarEvent.note') }}</label>
                 </div>
@@ -119,7 +121,7 @@
                     <textarea :disabled="disabled" row="2" v-model="formData.notes" class="form-control form-control-disabled font-size-16 mt-3" placeholder="Add your note here for event!" id="note" required></textarea>
                 </div>
             </div>
-            <template v-if="formData.id">
+            <template v-if="!disabled || formData.patient_attended">
                 <div class="row align-items-center justify-content-between w-100 pt-1" :class="{'mb-3': !disabled}">
                     <div class="col-md-3">
                         <label for="color" class="mb-0">{{ $t('calendarEvent.patient_attended') }}</label><br>
@@ -138,7 +140,7 @@
                     </div>
                 </div>
             </template>
-            <div class="row align-items-center justify-content-between w-100 pt-3 mb-3">
+            <div class="row align-items-center justify-content-between w-100 pt-3 mb-3" v-if="!disabled || formData.backgroundColor">
                 <div class="col-md-3">
                     <label for="color" class="mt-1 ml-1">{{ $t('calendarEvent.labels') }}</label><br>
                 </div>
@@ -149,10 +151,10 @@
                                       v-model="formData.backgroundColor"
                                       :key="index"
                                       :value="item.id"
-                                      :style="{'background': item.color}"
+                                      :style="{'border': '1px solid ' + item.color}"
                                       name="labels"
                                       v-if="showLabels(item)">
-                            <p class="text-white m-0 py-1 pr-2">{{ item.text }}</p>
+                            <p class="m-0 py-1 pr-2" :style="{'color': item.color}">{{ item.text }}</p>
                         </b-form-radio>
                     </template>
                 </div>

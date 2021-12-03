@@ -3,6 +3,7 @@
     "dashboard": "Domov",
     "callCenterDashboard": "Klicni Center Dashboard",
     "calendar": "Koledar",
+    "appointments": "Termini",
     "patients": "Pacienti",
     "documents": "Dokumenti",
     "assignments": "Naloge",
@@ -14,7 +15,8 @@
   "shared": {
     "search": "Iskanje",
     "searchBy": "Išči po",
-    "sortBy": "Razvrsti po"
+    "sortBy": "Razvrsti po",
+    "country": "Država"
   },
   "documents": {
     "offers": "Ponudbe",
@@ -360,7 +362,10 @@
         "price": "Cena",
         "discount": "Popust",
         "amount": "Znesek",
-        "action": "Možnosti"
+        "action": "Možnosti",
+        "teeth": "Zob",
+        "surface": "Površino",
+        "comment": "Komentar"
       },
       "newInvoiceSummary": {
         "header": "Povzetek računa",
@@ -683,6 +688,19 @@
       "productGroup": "Produktna skupina",
       "premise": "Lokacija",
       "action": "Uredi"
+    },
+    "serviceModal": {
+      "title": "Spletne rezervacije - storitev",
+      "save": "Shrani",
+      "close": "Zapri",
+      "slovenian": "Opis (slovenščina)",
+      "italian": "Opis (italijanščina)",
+      "english": "Opis (angleščina)",
+      "price": "Cena",
+      "duration": "Dolžina (min)",
+      "doctor": "Doktor",
+      "productGroup": "Produktna skupina",
+      "premise": "Lokacija"
     }
   },
   "footer": {
@@ -768,15 +786,17 @@
       "slotsAndPrices": "Slots and Prices",
       "confirm": "Confirm",
       "dataConfirmed": "Data confirmed",
-      "checkYourData": "Check your data",
+      "confirmationOfBooking": "Confirmation of booking",
       "pleaseEnterYourMobileNumber": "Please enter your mobile number, so that we can contact you in case of any change.",
       "phoneNumber": "Phone number",
       "phone": "Phone",
-      "saveAndSendVerification": "Save and send verification SMS.",
-      "yourDetailsHaveBeenSuccessfullyVerified": "Your details have been successfully verified. We look forward to your visit.",
+      "sendVerificationCode": "Send verification code",
+      "theCodeHasBeenSentTo": "The code has been sent to",
       "smsVerificationCode": "Sms verification code:",
       "confirmationCode": "Confirmation code",
-      "confirmCode": "Confirm code"
+      "confirmCode": "Confirm code",
+      "modifyPhoneNumber": "Modify phone number",
+      "yourDetailsHaveBeenSuccessfullyVerified": "Your details have been successfully verified. We look forward to your visit."
     }
   }
 }

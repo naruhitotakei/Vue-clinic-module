@@ -604,7 +604,7 @@ export default {
 }
 
 .narrow-column {
-  width: 100px !important;
+  width: 85px !important;
 }
 .item-name {
   min-width: 240px !important;

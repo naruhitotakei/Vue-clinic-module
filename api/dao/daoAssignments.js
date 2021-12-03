@@ -11,7 +11,7 @@ const pool = new Pool({
 const getAssignments = (request, response, scope, userid, accessible_user_ids, prmClientId, due) =>  {
     var condition = null;
     if (due == "today") {
-        condition = "WHERE (todos.due_at = now()::date) AND completed = false"
+        condition = "WHERE (todos.due_at = now()::date) OR completed_at = now()::date"
     } else if (due == "future") {
         condition = "WHERE (todos.due_at > now()::date) AND completed = false"
     } else if (due == "past") {
@@ -91,7 +91,7 @@ const getAssignments = (request, response, scope, userid, accessible_user_ids, p
 }
 
 const finishAssignment = (req, res, assignmentDescriptor) =>  {
-    pool.query("UPDATE todos SET completed=$2, updated_at=now()  WHERE id=$1" , [assignmentDescriptor.id, assignmentDescriptor.finished])
+    pool.query("UPDATE todos SET completed_by=$3, completed=$2, updated_at=now(), completed_at=now() WHERE id=$1" , [assignmentDescriptor.id, assignmentDescriptor.finished, assignmentDescriptor.completedBy])
     res.status(200).json("OK")
 }
 

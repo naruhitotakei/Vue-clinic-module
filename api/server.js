@@ -621,6 +621,49 @@ app.get('/api/online-booking-products/:locale', (req, res) => {
     }
 });
 
+app.get('/api/online-booking-product-groups/:locale', (req, res) => {
+    const locale = req.params.locale
+    if (req.session.prm_user && req.session.prm_user.permissions && checkPermission(req.session.prm_user.permissions, onlineBookingPermission)) {
+        daoOnlineBooking.getOnlineBookingProductGroups(req, res, req.session.prm_user.prm_client_id, getScope(req.session.prm_user.permissions, onlineBookingPermission), locale)
+    } else {
+        res.status(401).json("OK: user unauthorized")
+    }
+});
+
+app.get('/api/premises', (req, res) => {
+    if (req.session.prm_user && req.session.prm_user.permissions && checkPermission(req.session.prm_user.permissions, onlineBookingPermission)) {
+        daoOnlineBooking.getPremises(req, res, req.session.prm_user.prm_client_id, getScope(req.session.prm_user.permissions, onlineBookingPermission))
+    } else {
+        res.status(401).json("OK: user unauthorized")
+    }
+});
+
+app.post('/api/add-online-booking-service', (req, res) => {
+    const onlineBookingService = req.body
+    if (req.session.prm_user && req.session.prm_user.permissions && checkPermission(req.session.prm_user.permissions, onlineBookingPermission))
+        daoOnlineBooking.createOnlineBookingProduct(req, res, onlineBookingService)
+    else
+        res.status(401).json("OK: user unauthorized")
+});
+
+app.delete('/api/delete-online-booking-service/:id', (req, res) => {
+    const id = req.params.id
+    if (req.session.prm_user && req.session.prm_user.permissions && checkPermission(req.session.prm_user.permissions, onlineBookingPermission))
+        daoOnlineBooking.deleteOnlineBookingProduct(req, res, id)
+    else
+        res.status(401).json("OK: user unauthorized")
+});
+
+app.put('/api/update-online-booking-service/:id', (req, res) => {
+    const id = req.params.id
+    const service = req.body
+    if (req.session.prm_user && req.session.prm_user.permissions && checkPermission(req.session.prm_user.permissions, onlineBookingPermission))
+        daoOnlineBooking.updateOnlineBookingProduct(req, res, id, service)
+    else
+        res.status(401).json("OK: user unauthorized")
+});
+
+
 ///////////////////////////////////
 // enquiries, patients
 ///////////////////////////////////
@@ -936,6 +979,14 @@ app.get('/api/invoices/:id/items', (req, res) => {
     const id = req.params.id
     if (req.session.prm_user && req.session.prm_user.permissions && checkPermission(req.session.prm_user.permissions, invoicesPermission))
         daoInvoices.getItemsOfInvoiceById(req, res, id)
+    else
+        res.status(401).json("OK: user unauthorized")
+});
+
+app.get('/api/invoices/items/:id/enquiry-tooth', (req, res) => {
+    const id = req.params.id
+    if (req.session.prm_user && req.session.prm_user.permissions && checkPermission(req.session.prm_user.permissions, invoicesPermission))
+        daoInvoices.getEnquiryToothByInvoiceItemsId(req, res, id)
     else
         res.status(401).json("OK: user unauthorized")
 });
@@ -1310,12 +1361,26 @@ app.post('/api/booking/confirm-and-save', (req, res) => {
         vonage.verify.check({
             request_id: requestId,
             code
-        }, (error, _result) => {
-            if (error) {
+        }, (error, result) => {
+            if (error != null) {
                 res.status(500)
-            } else {
-                res.status(200).json({ success: true, code, selectedSlot })
+
+                return
             }
+
+            if (result.status === '16') {
+                res.status(422).json(result)
+
+                return
+            }
+
+            if (result.status !== '0') {
+                res.status(500)
+
+                return
+            }
+
+            res.status(200).json({ success: true, code, selectedSlot })
         })
     } else {
         res.status(400).json("No confirmation code")

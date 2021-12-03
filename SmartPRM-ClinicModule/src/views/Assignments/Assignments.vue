@@ -1,79 +1,157 @@
 <template>
     <b-container fluid>
         <b-row style="justify-content: center;">
-            <b-col lg="12">
-                <iq-card class-name="iq-card-block iq-card-stretch iq-card-height todaysAssignments-body">
+            <b-col cols="12">
+                <iq-card class-name="iq-card-block iq-card-stretch iq-card-height">
                     <template v-slot:headerTitle>
-                      <div class="row justify-content-between pl-3 pr-3">
+                      <div class="row align-items-center justify-content-between pl-3 pr-3 mb-4 mt-4">
                         <h4 class="card-title">{{ $t('assignments.assignmentsHeader') }}</h4>
                         <div class="btn-add-patient  mt-0">
                           <b-button variant="primary" @click="addNewAssignment"><i class="ri-add-line mr-2"></i>{{ $t('assignments.addAssignments') }}</b-button>
                         </div>
                       </div>
                     </template>
-                    <iq-card class-name="iq-card-block iq-card-stretch iq-card-height">
-                        <template v-slot:headerTitle>
-                            <h5>{{ $t('assignments.todaysAssignments') }}</h5>
-                        </template>
-                        <template v-slot:body>
-                            <b-list-group class="list-group-flush" id="todaysAssignments">
-                                <b-list-group-item
-                                    v-for="(item, index) in todaysAssigments"
-                                    :key="index"
-                                >
-                                    <div class="assignments-container row align-items-center flex-nowrap justify-content-between w-100" :class="{ 'taskIsActive' : !item.completed}">
-                                       <div class="row align-items-center flex-nowrap w-40">
-                                         <b-checkbox v-model="item.completed" :disabled="item.disabled" name="check-button" inline :key="index" class="checkbox-assignment" @change="finishAssignment(item.id, $event)"></b-checkbox>
-                                         <span class="assignments-descriptions w-100 text-break">{{ item.description }}</span>
-                                       </div>
-                                       <div class="w-60 row justify-content-end flex-nowrap">
-                                         <router-link tag="span" :to="'/patients/'+ item.enquiry_id" class="pl-5" style="cursor:pointer;">{{ item.patientname }} {{ item.patientlastname }}</router-link>
-                                         <span class="pl-5">{{ patientsDentist(item) }}</span>
-                                         <span class="text-right text-width-150">{{ item.due_at | formatDateAssignments(getLocale) }}</span>
-                                        <b-button variant=" iq-bg-success mr-1 mb-1" size="sm" style="margin-left: 5%" @click="editAssignments(item)" >
-                                          <i class="ri-ball-pen-fill m-0"></i>
-                                        </b-button>
-                                       </div>
-                                    </div>
-                                </b-list-group-item>
-                            </b-list-group>
-                            <template>
-                                <div class="mt-4 ml-2">
-                                    <p v-if="todaysTotalRows === 0"> You have no assignment today.</p>
-                                     <b-pagination
-                                         v-else-if="todaysTotalRows > 10"
-                                         v-model="todayCurrentPage"
-                                        :total-rows="todaysTotalRows"
-                                        :per-page="todayPerPage"
-                                        aria-controls="todaysAssignments"></b-pagination>
-                                </div>
-                            </template>
-                        </template>
-                    </iq-card>
                 </iq-card>
             </b-col>
         </b-row>
+        <b-row>
+          <b-col cols="12" lg="6">
+            <iq-card class-name="iq-card-block iq-card-stretch iq-card-height">
+              <template v-slot:headerTitle>
+                  <b-row>
+                    <b-col cols="12" lg="6">
+                      <h5>My {{ $t('assignments.todaysAssignments') }}</h5>
+                    </b-col>
+                    <b-col cols="12" lg="6" v-if="myCompletedAssignments">
+                      <b-progress :value="myCompletedAssignments" :max="100" show-progress animated></b-progress>
+                    </b-col>
+                  </b-row>
+              </template>
+              <template v-slot:body>
+                  <b-list-group class="list-group-flush" id="myTodaysAssignments">
+                      <b-list-group-item
+                          v-for="(item, index) in myTodayList"
+                          :key="index"
+                      >
+                        <div :class="{ 'taskIsActive' : !item.completed}">
+                          <div class="mb-2">
+                            <b-checkbox v-model="item.completed" :disabled="item.disabled || item.completed" name="check-button" inline
+                              :key="index" class=""
+                              @change="finishAssignment(item.id, $event, 'today')"><strong>{{ item.description }}</strong></b-checkbox>
+                          </div>
+                          <div class="d-flex align-items-center justify-content-between">
+                            <div>
+                              <span class="text-left">{{ item.patientname }} {{ item.patientlastname }}</span> <br>
+                              <span class="text-left">{{ patientsDentist(item) }}</span>
+                            </div>
+                            <div class="d-flex align-items-center">
+                              <span class="text-right text-width-150">{{ item.due_at | formatDate }}</span>
+                              <b-button variant=" iq-bg-success mr-1 mb-1" size="sm" style="margin-left: 5%;" @click="editAssignments(item)">
+                              <i class="ri-ball-pen-fill m-0"></i>
+                            </b-button>
+                            </div>
+                          </div>
+                        </div>
+                          <!-- <div class="assignments-container row align-items-center flex-nowrap justify-content-between w-100" :class="{ 'taskIsActive' : !item.completed}">
+                            <div class="row align-items-center flex-nowrap w-40">
+                              <b-checkbox v-model="item.completed" :disabled="item.disabled || item.completed" name="check-button" inline :key="index" class="checkbox-assignment" @change="finishAssignment(item.id, $event, 'today')"></b-checkbox>
+                              <span class="assignments-descriptions w-100 text-break">{{ item.description }}</span>
+                            </div>
+                            <div class="w-60 row justify-content-end flex-nowrap">
+                              <router-link tag="span" :to="'/patients/'+ item.enquiry_id" class="pl-5" style="cursor:pointer;">{{ item.patientname }} {{ item.patientlastname }}</router-link>
+                              <span class="pl-5">{{ patientsDentist(item) }}</span>
+                              <span class="text-right text-width-150">{{ item.due_at | formatDateAssignments(getLocale) }}</span>
+                              <b-button variant=" iq-bg-success mr-1 mb-1" size="sm" style="margin-left: 5%" @click="editAssignments(item)" >
+                                <i class="ri-ball-pen-fill m-0"></i>
+                              </b-button>
+                            </div>
+                          </div> -->
+                      </b-list-group-item>
+                  </b-list-group>
+                  <template>
+                      <div class="mt-4 ml-2">
+                          <p v-if="myTodaysTotalRows === 0"> You have no assignment today.</p>
+                          <b-pagination
+                              v-else-if="myTodaysTotalRows > 10"
+                              v-model="myTodayCurrentPage"
+                              :total-rows="myTodaysTotalRows"
+                              :per-page="myTodayPerPage"
+                              aria-controls="myTodaysAssignments"></b-pagination>
+                      </div>
+                  </template>
+              </template>
+            </iq-card>
+          </b-col>
+          <b-col cols="12" lg="6">
+            <iq-card class-name="iq-card-block iq-card-stretch iq-card-height overdueAssignments-body">
+                <template v-slot:headerTitle>
+                    <h5>My {{ $t('assignments.overdueAssignments') }}</h5>
+                </template>
+                <template v-slot:body>
+                  <b-list-group class="list-group-flush" id="myOverdueAssignments">
+                    <b-list-group-item
+                      v-for="(item, index) in myOverDueList"
+                      :key="index"
+                      :style="{'background': getDifferenceDate(item.due_at) === 1 && '#ffeeba' || getDifferenceDate(item.due_at) > 1 && '#f5c6cb'}">
+                      <div :class="{ 'taskIsActive' : !item.completed}">
+                        <div class="mb-2">
+                          <b-checkbox v-model="item.completed" :disabled="item.disabled" name="check-button" inline
+                            :key="index" class=""
+                            @change="finishAssignment(item.id, $event, 'myoverdue')"><strong>{{ item.description }}</strong></b-checkbox>
+                        </div>
+                        <div class="d-flex align-items-center justify-content-between">
+                          <div>
+                            <span class="text-left">{{ item.patientname }} {{ item.patientlastname }}</span> <br>
+                            <span class="text-left">{{ patientsDentist(item) }}</span>
+                          </div>
+                          <div class="d-flex align-items-center">
+                            <span class="text-right text-width-150">{{ item.due_at | formatDate }}</span>
+                            <b-button variant=" iq-bg-success mr-1 mb-1" size="sm" style="margin-left: 5%;" @click="editAssignments(item)">
+                            <i class="ri-ball-pen-fill m-0"></i>
+                          </b-button>
+                          </div>
+                        </div>
+                      </div>
+                    </b-list-group-item>
+                  </b-list-group>
+                  <template>
+                    <div class="mt-4 ml-2">
+                      <p v-if="myOverdueAssignments.length < 1"> You have no overdue assignments.</p>
+                        <b-pagination
+                            v-else-if="myOverdueAssignments.length > 10"
+                            v-model="myOverdueCurrentPage"
+                            :total-rows="myOverdueAssignments.length"
+                            :per-page="myOverduePerPage"
+                            aria-controls="myOverdueAssignments"></b-pagination>
+                    </div>
+                  </template>
+                </template>
+              </iq-card>
+          </b-col>
+        </b-row>
+            <!-- </b-col>
+        </b-row> -->
         <b-row style="justify-content: center;">
             <b-col cols="12" lg="6">
               <iq-card class-name="iq-card-block iq-card-stretch iq-card-height overdueAssignments-body">
                   <template v-slot:headerTitle>
-                      <h5>My {{ $t('assignments.overdueAssignments') }}</h5>
+                      <h5>{{ $t('assignments.todaysAssignments') }} of other users</h5>
                   </template>
                   <template v-slot:body>
-                    <b-list-group class="list-group-flush" id="myOverdueAssignments">
+                    <b-list-group class="list-group-flush" id="todaysAssignments">
                       <b-list-group-item
-                        v-for="(item, index) in myOverdueAssignments"
+                        v-for="(item, index) in otherUserTodayList"
                         :key="index"
-                        :style="{'background': getDifferenceDate(item.due_at) === 1 && '#ffeeba' || getDifferenceDate(item.due_at) > 1 && '#f5c6cb'}">
+                      >
                         <div :class="{ 'taskIsActive' : !item.completed}">
                           <div class="mb-2">
-                            <b-checkbox v-model="item.completed" :disabled="item.disabled" name="check-button" inline
+                            <b-checkbox v-model="item.completed" :disabled="item.disabled || item.completed" name="check-button" inline
                               :key="index" class=""
-                              @change="finishAssignment(item.id, $event)">{{ item.description }}</b-checkbox>
+                              @change="finishAssignment(item.id, $event, 'today')"><strong>{{ item.description }}</strong></b-checkbox>
                           </div>
                           <div class="d-flex align-items-center justify-content-between">
                             <div>
-                              <strong class="text-left">{{ item.patientname }} {{ item.patientlastname }}</strong> <br>
+                              <span class="text-left">{{ item.patientname }} {{ item.patientlastname }}</span> <br>
                               <span class="text-left">{{ patientsDentist(item) }}</span>
                             </div>
                             <div class="d-flex align-items-center">
@@ -87,17 +165,17 @@
                       </b-list-group-item>
                     </b-list-group>
                     <template>
-                            <div class="mt-4 ml-2">
-                              <p v-if="myOverdueTotalRows < 1"> You have no overdue assignments.</p>
-                                <b-pagination
-                                    v-else-if="myOverdueTotalRows > 10"
-                                    v-model="myOverdueCurrentPage"
-                                    :total-rows="myOverdueTotalRows"
-                                    :per-page="myOverduePerPage"
-                                    aria-controls="myOverdueAssignments"></b-pagination>
-                            </div>
-                        </template>
+                      <div class="mt-4 ml-2">
+                        <p v-if="todaysAssignments.length < 1"> You have no overdue assignments.</p>
+                          <b-pagination
+                              v-else-if="todaysTotalRows > 10"
+                              v-model="todayCurrentPage"
+                              :total-rows="todaysTotalRows"
+                              :per-page="todayPerPage"
+                              aria-controls="todaysAssignments"></b-pagination>
+                      </div>
                     </template>
+                  </template>
                 </iq-card>
             </b-col>
             <b-col cols="12" lg="6">
@@ -106,30 +184,48 @@
                         <h5>{{ $t('assignments.overdueAssignments') }} of other users.</h5>
                     </template>
                   <template v-slot:body>
-                    <b-list-group class="list-group-flush" id="overdueAssignments">
+                    <b-form-input type="search" placeholder="Filter By User" debounce="500" v-model="filterOverdue"></b-form-input>
+                    <b-list-group class="list-group-flush mt-2" id="overdueAssignments">
                       <b-list-group-item
-                        v-for="(item, index) in overdueAssignments[overdueCurrentPage]"
+                        v-for="(item, index) in otherUserOverDueList"
                         :key="index"
                         :style="{'background': getDifferenceDate(item.due_at) === 1 && '#ffeeba' || getDifferenceDate(item.due_at) > 1 && '#f5c6cb'}">
                         <div :class="{ 'taskIsActive' : !item.completed}">
                           <div class="mb-2">
                             <b-checkbox v-model="item.completed" :disabled="item.disabled" name="check-button" inline
                               :key="index" class=""
-                              @change="finishAssignment(item.id, $event)">{{ item.description }}</b-checkbox>
+                              @change="finishAssignment(item.id, $event, 'overdue')">
+                                <strong>{{ item.description }}</strong>
+                            </b-checkbox>
                           </div>
-                          <div class="d-flex align-items-center justify-content-between">
+                          <b-row>
+                            <b-col cols="12" lg="6">
+                              <span class="text-left">{{ item.patientname }} {{ item.patientlastname }}</span>
+                              <span class="text-left pl-2">{{ patientsDentist(item) }}</span>
+                            </b-col>
+                            <b-col cols="12" lg="6" class="d-flex align-items-center justify-content-end">
+                              <span class="text-right pr-2">{{ item.todoname }}</span>
+                                <span class="text-right">{{ item.due_at | formatDate }}</span>
+                                <b-button variant=" iq-bg-success mr-1 mb-1" size="sm" style="margin-left: 2%;" @click="editAssignments(item)">
+                                <i class="ri-ball-pen-fill m-0"></i>
+                              </b-button>
+                            </b-col>
+                          </b-row>
+                          <!-- <div class="d-flex align-items-center justify-content-between">
                             <div>
-                              <strong class="text-left">{{ item.patientname }} {{ item.patientlastname }}</strong> <br>
-                              <span class="text-left">{{ item.todoname }}</span>
+                              <span class="text-left">{{ item.patientname }} {{ item.patientlastname }}</span>
                               <span class="text-left pl-2">{{ patientsDentist(item) }}</span>
                             </div>
-                            <div class="d-flex align-items-center">
-                              <span class="text-right text-width-150">{{ item.due_at | formatDate }}</span>
-                              <b-button variant=" iq-bg-success mr-1 mb-1" size="sm" style="margin-left: 5%;" @click="editAssignments(item)">
-                               <i class="ri-ball-pen-fill m-0"></i>
-                             </b-button>
+                            <div>
+                              <div class="d-flex align-items-center">
+                                <span class="text-right text-width-100">{{ item.todoname }}</span>
+                                <span class="text-right text-width-100">{{ item.due_at | formatDate }}</span>
+                                <b-button variant=" iq-bg-success mr-1 mb-1" size="sm" style="margin-left: 2%;" @click="editAssignments(item)">
+                                <i class="ri-ball-pen-fill m-0"></i>
+                              </b-button>
+                              </div>
                             </div>
-                          </div>
+                          </div> -->
                         </div>
                       </b-list-group-item>
                     </b-list-group>
@@ -162,11 +258,11 @@
                     </b-list-group> -->
                     <template>
                       <div class="mt-4 ml-2">
-                        <p v-if="overdueTotalRows === 0"> You have no overdue assignments.</p>
+                        <p v-if="overdueAssignments.length === 0"> You have no overdue assignments.</p>
                         <b-pagination
-                          v-else-if="overdueTotalRows > 10"
+                          v-else-if="overdueAssignments.length > 10"
                           v-model="overdueCurrentPage"
-                          :total-rows="overdueTotalRows"
+                          :total-rows="overdueAssignments.length"
                           :per-page="overduePerPage"
                           aria-controls="overdueAssignments">
                         </b-pagination>
@@ -177,18 +273,84 @@
             </b-col>
         </b-row>
         <b-row style="justify-content: center;">
-            <b-col lg="12">
+            <b-col cols="12" lg="6">
                 <iq-card class-name="iq-card-block iq-card-stretch iq-card-height futureAssignments-body">
                     <template v-slot:headerTitle>
-                        <h5>{{ $t('assignments.futureAssignments') }}</h5>
+                        <h5>My {{ $t('assignments.futureAssignments') }}</h5>
                     </template>
                     <template v-slot:body>
-                        <b-list-group class="list-group-flush" id="futureAssignments" :per-page="futurePerPage" :current-page="futureCurrentPage">
+                        <b-list-group class="list-group-flush" id="myFutureAssignments">
                             <b-list-group-item
-                                v-for="(item, index) in futureAssigments[futureCurrentPage]"
+                                v-for="(item, index) in myFutureList"
                                 :key="index"
                             >
-                                <div class="assignments-container row align-items-center flex-nowrap justify-content-between w-100" :class="{ 'taskIsActive' : !item.completed}">
+                              <div :class="{ 'taskIsActive' : !item.completed}">
+                                <div class="mb-2">
+                                  <b-checkbox v-model="item.completed" :disabled="item.disabled" name="check-button" inline
+                                    :key="index" class=""
+                                    @change="finishAssignment(item.id, $event, 'myFuture')"><strong>{{ item.description }}</strong></b-checkbox>
+                                </div>
+                                <div class="d-flex align-items-center justify-content-between">
+                                  <div>
+                                    <router-link tag="span" :to="'/patients/'+ item.enquiry_id" class="text-left" style="cursor:pointer;">{{ item.patientname }} {{ item.patientlastname }}</router-link> <br>
+                                    <span class="text-left">{{ patientsDentist(item) }}</span>
+                                  </div>
+                                  <div class="d-flex align-items-center">
+                                    <span class="text-right text-width-150">{{ item.due_at | formatDate }}</span>
+                                    <b-button variant=" iq-bg-success mr-1 mb-1" size="sm" style="margin-left: 5%;" @click="editAssignments(item)">
+                                    <i class="ri-ball-pen-fill m-0"></i>
+                                  </b-button>
+                                  </div>
+                                </div>
+                              </div>
+                            </b-list-group-item>
+                        </b-list-group>
+                        <template>
+                            <div class="mt-4 ml-2">
+                                <p v-if="myFutureTotalRows===0"> You have no future assignments.</p>
+                                <b-pagination
+                                    v-else-if="myFutureTotalRows > 10"
+                                    v-model="myFutureCurrentPage"
+                                    :total-rows="myFutureTotalRows"
+                                    :per-page="myFuturePerPage"
+                                    aria-controls="myFutureAssignments"
+                                ></b-pagination>
+                            </div>
+                        </template>
+                    </template>
+                </iq-card>
+            </b-col>
+            <b-col cols="12" lg="6">
+                <iq-card class-name="iq-card-block iq-card-stretch iq-card-height futureAssignments-body">
+                    <template v-slot:headerTitle>
+                        <h5>{{ $t('assignments.futureAssignments') }} of other users</h5>
+                    </template>
+                    <template v-slot:body>
+                        <b-list-group class="list-group-flush" id="futureAssignments">
+                            <b-list-group-item
+                                v-for="(item, index) in otherUserFutureList"
+                                :key="index"
+                            >
+                              <div :class="{ 'taskIsActive' : !item.completed}">
+                                <div class="mb-2">
+                                  <b-checkbox v-model="item.completed" :disabled="item.disabled" name="check-button" inline
+                                    :key="index" class=""
+                                    @change="finishAssignment(item.id, $event, 'future')"><strong>{{ item.description }}</strong></b-checkbox>
+                                </div>
+                                <div class="d-flex align-items-center justify-content-between">
+                                  <div>
+                                    <router-link tag="span" :to="'/patients/'+ item.enquiry_id" class="text-left" style="cursor:pointer;">{{ item.patientname }} {{ item.patientlastname }}</router-link> <br>
+                                    <span class="text-left">{{ patientsDentist(item) }}</span>
+                                  </div>
+                                  <div class="d-flex align-items-center">
+                                    <span class="text-right text-width-150">{{ item.due_at | formatDate }}</span>
+                                    <b-button variant=" iq-bg-success mr-1 mb-1" size="sm" style="margin-left: 5%;" @click="editAssignments(item)">
+                                    <i class="ri-ball-pen-fill m-0"></i>
+                                  </b-button>
+                                  </div>
+                                </div>
+                              </div>
+                                <!-- <div class="assignments-container row align-items-center flex-nowrap justify-content-between w-100" :class="{ 'taskIsActive' : !item.completed}">
                                     <div class="w-40 flex-nowrap row">
                                       <b-checkbox v-model="item.completed" :disabled="item.disabled" name="check-button" inline :key="index" class="checkbox-assignment" @change="finishAssignment(item.id, $event)"></b-checkbox>
                                       <span class="assignments-description  w-100 text-break">{{ item.description }}</span>
@@ -201,7 +363,7 @@
                                       <i class="ri-ball-pen-fill m-0"></i>
                                     </b-button>
                                   </div>
-                                </div>
+                                </div> -->
                             </b-list-group-item>
                         </b-list-group>
                         <template>
@@ -220,7 +382,7 @@
                 </iq-card>
             </b-col>
         </b-row>
-        <b-row style="justify-content: center;">
+        <!-- <b-row style="justify-content: center;">
             <b-col lg="12">
                 <iq-card class-name="iq-card-block iq-card-stretch iq-card-height completedAssignments-body">
                     <template v-slot:headerTitle>
@@ -252,7 +414,7 @@
                     </template>
                 </iq-card>
             </b-col>
-        </b-row>
+        </b-row> -->
       <b-modal
           v-model="modalAssigmentShow"
           no-close-on-backdrop
@@ -393,15 +555,13 @@ import moment from 'moment'
 
 export default {
   name: 'Assignments',
-  mounted () {
+  async mounted () {
     xray.index()
-    this.getAssignments()
-    this.getEnquires()
-    this.getUserLogin()
+    await this.getUserLogin()
     this.getDentists()
     this.getUsersList()
-  },
-  watch: {
+    this.getAssignments()
+    this.getEnquires()
   },
   computed: {
     getLocale () {
@@ -409,9 +569,57 @@ export default {
     },
     isOkDisabled () {
       return !this.formData.due_at || !this.formData.description
+    },
+    myTodayList () {
+      return this.myTodayAssignments.slice(
+        (this.myTodayCurrentPage - 1) * this.myTodayPerPage,
+        this.myTodayCurrentPage * this.myTodayPerPage)
+    },
+    otherUserTodayList () {
+      return this.todaysAssignments.slice(
+        (this.todayCurrentPage - 1) * this.todayPerPage,
+        this.todayCurrentPage * this.todayPerPage)
+    },
+    myFutureList () {
+      return this.myFutureAssignments.slice(
+        (this.myFutureCurrentPage - 1) * this.myFuturePerPage,
+        this.myFutureCurrentPage * this.myFuturePerPage)
+    },
+    otherUserFutureList () {
+      return this.futureAssigments.slice(
+        (this.futureCurrentPage - 1) * this.futurePerPage,
+        this.futureCurrentPage * this.futurePerPage)
+    },
+    otherUserOverDueList () {
+      return this.overdueAssignments.slice(
+        (this.overdueCurrentPage - 1) * this.overduePerPage,
+        this.overdueCurrentPage * this.overduePerPage)
+    },
+    myOverDueList () {
+      return this.myOverdueAssignments.slice(
+        (this.myOverdueCurrentPage - 1) * this.myOverduePerPage,
+        this.myOverdueCurrentPage * this.myOverduePerPage)
+    },
+    filterOverdueByUser () {
+      if (this.filterOverdue) {
+        return this.overdueAssignments.filter(assignment => assignment.todoname && assignment.todoname.toLowerCase().includes(this.filterOverdue.toLowerCase()))
+      }
+      return this.overdueAssignments
+    }
+  },
+  watch: {
+    filterOverdue (val) {
+      if (val) {
+        this.filterOverDueItems()
+      } else {
+        this.overdueAssignments = [...this.allOverdueAssignments]
+      }
     }
   },
   methods: {
+    filterOverDueItems () {
+      this.overdueAssignments = this.allOverdueAssignments.filter(assignment => assignment.todoname && assignment.todoname.toLowerCase().includes(this.filterOverdue.toLowerCase()))
+    },
     editAssignments (assignment) {
       let enquiry = this.enquires.find(item => item.id === assignment.enquiry_id)
       let user = this.users.find(user => user.id === assignment.user_id)
@@ -431,8 +639,12 @@ export default {
     },
     getAssignments () {
       getAssignments('today').then(response => {
-        this.todaysAssigments = response
-        this.todaysTotalRows = response.length
+        // this.todaysAssignments = response
+        // this.todaysTotalRows = response.length
+        this.setMyTodayAssignments(response)
+        this.setOtherUserTodayAssignments(response)
+
+        this.myCompletedAssignments = this.getCompletedAssignments()
       })
       getAssignments('past').then(response => {
         if (Array.isArray(response)) {
@@ -442,14 +654,16 @@ export default {
         }
       })
       getAssignments('future').then(response => {
-        let res = []
+        // let res = []
         if (Array.isArray(response)) {
           let reverseResponse = response.reverse()
-          for (let i = 0; i < response.length; i += 3) {
-            res = [...res, reverseResponse.slice(i, i + 20)]
-          }
-          this.futureAssigments = res
-          this.futureTotalRows = response.length
+          this.setMyFutureAssignments(reverseResponse)
+          this.setOtherUsersFutureAssignments(reverseResponse)
+          // for (let i = 0; i < response.length; i += 3) {
+          //   res = [...res, reverseResponse.slice(i, i + 20)]
+          // }
+          // this.futureAssigments = res
+          // this.futureTotalRows = response.length
         }
       })
       getAssignments('finished').then(response => {
@@ -464,18 +678,47 @@ export default {
         }
       })
     },
-    setOtherUsersOverdueAssignments (assignments) {
-      let res = []
-      let filtered = assignments.filter(assignment => assignment.user_id !== this.formData.user_id)
-      if (filtered.length > 10) {
-        for (let i = 0; i < filtered.length; i += 3) {
-          res = [...res, filtered.slice(i, i + 10)]
-        }
-      } else {
-        res = filtered
+    getCompletedAssignments () {
+      if (this.myTodayAssignments.length) {
+        const total = this.myTodayAssignments.length
+        const completed = this.myTodayAssignments.filter(assignment => assignment.completed)
+        return (Number(completed.length) / Number(total)) * 100
       }
+      return null
+    },
+    setMyFutureAssignments (assignments) {
+      let filtered = assignments.filter(assignment => assignment.user_id === this.formData.user_id)
+      this.myFutureAssignments = filtered
+      this.myFutureTotalRows = filtered.length
+    },
+    setOtherUsersFutureAssignments (assignments) {
+      let filtered = assignments.filter(assignment => assignment.user_id !== this.formData.user_id)
+      this.futureAssigments = filtered
+      this.futureTotalRows = filtered.length
+    },
+    setMyTodayAssignments (assignments) {
+      let filtered = assignments.filter(assignment => assignment.user_id === this.formData.user_id)
+      this.myTodayAssignments = filtered
+      this.myTodaysTotalRows = filtered.length
+    },
+    setOtherUserTodayAssignments (assignments) {
+      let filtered = assignments.filter(assignment => assignment.user_id !== this.formData.user_id)
+      this.todaysAssignments = filtered
+      this.todaysTotalRows = filtered.length
+    },
+    setOtherUsersOverdueAssignments (assignments) {
+      // let res = []
+      let filtered = assignments.filter(assignment => assignment.user_id !== this.formData.user_id)
+      // if (filtered.length > 10) {
+      //   for (let i = 0; i < filtered.length; i += 3) {
+      //     res = [...res, filtered.slice(i, i + 10)]
+      //   }
+      // } else {
+      //   res = filtered
+      // }
 
-      this.overdueAssignments = res
+      this.overdueAssignments = [...filtered]
+      this.allOverdueAssignments = [...filtered]
       this.overdueTotalRows = filtered.length
     },
     setMyOverdueAssignments (assignments) {
@@ -491,11 +734,26 @@ export default {
 
       this.myOverdueAssignments = res
       this.myOverdueTotalRows = filtered.length
-
-      console.log('My ', this.myOverdueAssignments)
     },
-    finishAssignment (id, finished) {
-      finishAssignment(id, finished).then(response => {
+    finishAssignment (id, finished, from) {
+      const completedBy = this.userId
+      finishAssignment(id, finished, completedBy).then(response => {
+        if (from === 'today') {
+          this.myCompletedAssignments = this.getCompletedAssignments()
+          // this.todaysAssignments = this.todaysAssignments.filter(assignment => assignment.id !== id)
+        }
+        if (from === 'overdue') {
+          this.overdueAssignments = this.overdueAssignments.filter(assignment => assignment.id !== id)
+        }
+        if (from === 'myoverdue') {
+          this.myOverdueAssignments = this.myOverdueAssignments.filter(assignment => assignment.id !== id)
+        }
+        if (from === 'future') {
+          this.futureAssigments = this.futureAssigments.filter(assignment => assignment.id !== id)
+        }
+        if (from === 'myFuture') {
+          this.myFutureAssignments = this.myFutureAssignments.filter(assignment => assignment.id !== id)
+        }
       })
     },
     getEnquires () {
@@ -553,6 +811,7 @@ export default {
       sso().then(response => {
         if (typeof response !== 'string') {
           this.formData.user_id = response.id
+          this.userId = response.id
         }
       })
     },
@@ -573,17 +832,29 @@ export default {
   data () {
     return {
       disabled: false,
+      userId: null,
       modalAssigmentShow: false,
       selectEnquires: null,
       logedInUser: {},
       enquires: [],
       dentists: [],
       index: [],
-      todaysAssigments: [],
+      filterOverdue: null,
+      myCompletedAssignments: null,
+      todaysAssignments: [],
+      allOverdueAssignments: [],
       myOverdueAssignments: [],
       overdueAssignments: [],
+      myFutureAssignments: [],
+      myFutureTotalRows: 0,
+      myFutureCurrentPage: 1,
+      myFuturePerPage: 10,
       futureAssigments: [],
+      myTodayAssignments: [],
+      myTodaysTotalRows: 0,
       todaysTotalRows: 0,
+      myTodayCurrentPage: 1,
+      myTodayPerPage: 10,
       overdueTotalRows: 0,
       futureTotalRows: 0,
       completedAssigments: [],

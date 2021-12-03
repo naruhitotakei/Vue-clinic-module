@@ -278,6 +278,7 @@ export default {
       const yearly = data.yearly
       const sixtyWeeks = data.sixtyWeeks
       const today = data.today
+      console.log(data)
       if (today && Array.isArray(today)) {
         this.todayRevenue = 0
         today.forEach(item => {
