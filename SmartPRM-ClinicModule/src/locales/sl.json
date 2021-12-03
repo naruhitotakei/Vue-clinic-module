@@ -3,6 +3,7 @@
     "dashboard": "Domov",
     "callCenterDashboard": "Klicni Center Dashboard",
     "calendar": "Koledar",
+    "appointments": "Termini",
     "patients": "Pacienti",
     "documents": "Dokumenti",
     "assignments": "Naloge",
@@ -14,7 +15,8 @@
   "shared": {
     "search": "Iskanje",
     "searchBy": "Išči po",
-    "sortBy": "Razvrsti po"
+    "sortBy": "Razvrsti po",
+    "country": "Država"
   },
   "documents": {
     "offers": "Ponudbe",
@@ -360,7 +362,10 @@
         "price": "Cena",
         "discount": "Popust",
         "amount": "Znesek",
-        "action": "Možnosti"
+        "action": "Možnosti",
+        "teeth": "Zob",
+        "surface": "Površino",
+        "comment": "Komentar"
       },
       "newInvoiceSummary": {
         "header": "Povzetek računa",
@@ -688,7 +693,9 @@
       "title": "Spletne rezervacije - storitev",
       "save": "Shrani",
       "close": "Zapri",
-      "service": "Storitev",
+      "slovenian": "Opis (slovenščina)",
+      "italian": "Opis (italijanščina)",
+      "english": "Opis (angleščina)",
       "price": "Cena",
       "duration": "Dolžina (min)",
       "doctor": "Doktor",

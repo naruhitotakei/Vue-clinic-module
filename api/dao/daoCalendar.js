@@ -76,14 +76,19 @@ const updateAppointments = (request, response, id, appointments) => {
     if (appointments.notes) statement += "note='" + appointments.notes + "',"
     if (appointments.patient_id) statement +="enquiry_id=" + appointments.patient_id + ","
     if (appointments.patient_attended) statement += "patient_attended='" + appointments.patient_attended + "',"
-    statement += "appointment_canceled_in_advance_by_patient=" + appointments.appointment_canceled_in_advance_by_patient + ","
-    statement += "appointment_canceled_in_advance_by_clinic=" + appointments.appointment_canceled_in_advance_by_clinic + ","
+    if (appointments.appointment_canceled_in_advance_by_patient) statement += "appointment_canceled_in_advance_by_patient=" + appointments.appointment_canceled_in_advance_by_patient + ","
+    if (appointments.appointment_canceled_in_advance_by_clinic) statement += "appointment_canceled_in_advance_by_clinic=" + appointments.appointment_canceled_in_advance_by_clinic + ","
     if (appointments.product_groups) statement += "product_group_id='" + appointments.product_groups + "',"
     if (appointments.crmProduct) statement += "product_id=" + appointments.crmProduct + ","
     if (appointments.assignmentDate) statement += "starts_at='" + moment(appointments.assignmentDate).format('YYYY-MM-DDTHH:mm') + "', date='" + moment(appointments.assignmentDate).format('YYYY-MM-DD') + "',"
     if (appointments.backgroundColor) statement += "label_id='" + appointments.backgroundColor + "',"
     if (appointments.end) statement += "ends_at='" + moment(appointments.assignmentDate).format('YYYY-MM-DD') + 'T' + moment(appointments.end).format('HH:mm') + "',"
-    if (appointments.assignmentDate) statement += "time='" + time + "' "
+    if (appointments.assignmentDate) statement += "time='" + time + "',"
+    if (appointments.patient_attended === 'Attended') statement += "attendance='Attended' "
+    if (appointments.patient_attended === 'Not attended') statement += "attendance='No-show' "
+    if (appointments.patient_attended === 'Unknown') statement += "attendance='' "
+    if (appointments.appointment_canceled_in_advance_by_patient) statement += "attendance='Cancelled by Patient' "
+    if (appointments.appointment_canceled_in_advance_by_clinic) statement += "attendance='Cancelled by Lead' "
     statement = statement.slice(0, -1)
     statement += " WHERE id = " + id
     pool.query(statement , (error, results) => {

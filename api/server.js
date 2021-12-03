@@ -638,6 +638,31 @@ app.get('/api/premises', (req, res) => {
     }
 });
 
+app.post('/api/add-online-booking-service', (req, res) => {
+    const onlineBookingService = req.body
+    if (req.session.prm_user && req.session.prm_user.permissions && checkPermission(req.session.prm_user.permissions, onlineBookingPermission))
+        daoOnlineBooking.createOnlineBookingProduct(req, res, onlineBookingService)
+    else
+        res.status(401).json("OK: user unauthorized")
+});
+
+app.delete('/api/delete-online-booking-service/:id', (req, res) => {
+    const id = req.params.id
+    if (req.session.prm_user && req.session.prm_user.permissions && checkPermission(req.session.prm_user.permissions, onlineBookingPermission))
+        daoOnlineBooking.deleteOnlineBookingProduct(req, res, id)
+    else
+        res.status(401).json("OK: user unauthorized")
+});
+
+app.put('/api/update-online-booking-service/:id', (req, res) => {
+    const id = req.params.id
+    const service = req.body
+    if (req.session.prm_user && req.session.prm_user.permissions && checkPermission(req.session.prm_user.permissions, onlineBookingPermission))
+        daoOnlineBooking.updateOnlineBookingProduct(req, res, id, service)
+    else
+        res.status(401).json("OK: user unauthorized")
+});
+
 
 ///////////////////////////////////
 // enquiries, patients
@@ -954,6 +979,14 @@ app.get('/api/invoices/:id/items', (req, res) => {
     const id = req.params.id
     if (req.session.prm_user && req.session.prm_user.permissions && checkPermission(req.session.prm_user.permissions, invoicesPermission))
         daoInvoices.getItemsOfInvoiceById(req, res, id)
+    else
+        res.status(401).json("OK: user unauthorized")
+});
+
+app.get('/api/invoices/items/:id/enquiry-tooth', (req, res) => {
+    const id = req.params.id
+    if (req.session.prm_user && req.session.prm_user.permissions && checkPermission(req.session.prm_user.permissions, invoicesPermission))
+        daoInvoices.getEnquiryToothByInvoiceItemsId(req, res, id)
     else
         res.status(401).json("OK: user unauthorized")
 });

@@ -34,8 +34,8 @@
                                         </span>
                                     </template>
                                     <template v-slot:cell(action)="data">
-                                        <b-button variant=" iq-bg-success mr-1 mb-1" size="sm" @click="editProduct(data.item)"><i class="ri-ball-pen-fill m-0"></i></b-button>
-                                        <b-button variant=" iq-bg-danger mr-1 mb-1" size="sm" @click="removeProduct(data.item)"><i class="ri-delete-bin-line m-0"></i></b-button>
+                                        <b-button variant=" iq-bg-success mr-1 mb-1" size="sm" @click="openEditModal(data.item)"><i class="ri-ball-pen-fill m-0"></i></b-button>
+                                        <b-button variant=" iq-bg-danger mr-1 mb-1" size="sm" @click="removeService(data.item)"><i class="ri-delete-bin-line m-0"></i></b-button>
                                     </template>
                                 </b-table>
                             </b-col>
@@ -55,20 +55,30 @@
                 </iq-card>
                 <!--END OF Online Booking Services Table-->
                 <!--Online Booking Services modal-->
-
-                <!--TO DO ADD @OK="AddService"-->
-                <b-modal v-model="modalServiceShow" no-close-on-backdrop :title="$t('onlineBooking.serviceModal.title')" :ok-disabled="isServiceDisabled"
+                <b-modal v-model="modalServiceShow" no-close-on-backdrop :title="$t('onlineBooking.serviceModal.title')" :ok-disabled="isServiceDisabled" @ok="addService"
                          @close="cancelService" @cancel="cancelService" :ok-title="$t('onlineBooking.serviceModal.save')" :cancel-title="$t('onlineBooking.serviceModal.close')">
                     <form>
                         <div class="form-row">
                             <div class="col-md-12 mb-3">
-                                <label for="service">{{ $t('onlineBooking.serviceModal.service') }} *</label>
+                                <label for="slovenian">{{ $t('onlineBooking.serviceModal.slovenian') }} *</label>
                                 <div style="display: flex;">
-                                    <input type="text" v-model="onlineBookingData.service" class="form-control" required>
+                                    <input type="text" v-model="onlineBookingData.slovenian" class="form-control" required>
+                                </div>
+                            </div>
+                            <div class="col-md-12 mb-3">
+                                <label for="italian">{{ $t('onlineBooking.serviceModal.italian') }}</label>
+                                <div style="display: flex;">
+                                    <input type="text" v-model="onlineBookingData.italian" class="form-control" required>
+                                </div>
+                            </div>
+                            <div class="col-md-12 mb-3">
+                                <label for="english">{{ $t('onlineBooking.serviceModal.english') }}</label>
+                                <div style="display: flex;">
+                                    <input type="text" v-model="onlineBookingData.english" class="form-control" required>
                                 </div>
                             </div>
                             <div class="col-md-6 mb-3">
-                                <label for="price">{{ $t('onlineBooking.serviceModal.price') }} *</label>
+                                <label for="price">{{ $t('onlineBooking.serviceModal.price') }} (EUR) *</label>
                                 <div style="display: flex;">
                                     <input type="number" v-model="onlineBookingData.price" class="form-control" required>
                                 </div>
@@ -79,39 +89,39 @@
                                     <input type="number" v-model="onlineBookingData.duration" class="form-control" step="5" required>
                                 </div>
                             </div>
-                                <div class="col-md-12 mb-3">
-                                    <label for="doctor">{{ $t('onlineBooking.serviceModal.doctor') }} *</label>
-                                    <v-select :clearable="false"
-                                              label="doctor"
-                                              :reduce="doctor => doctor.id"
-                                              :getOptionLabel="doctor => doctor.name"
-                                              class="style-chooser form-control-disabled font-size-16 ml-0 mt-1"
-                                              v-model="onlineBookingData.doctor"
-                                              :options="doctors"
-                                              style="min-width:305px;"></v-select>
-                                </div>
-                                <div class="col-md-12 mb-3">
-                                    <label for="productGroup">{{ $t('onlineBooking.serviceModal.productGroup') }} *</label>
-                                    <v-select :clearable="false"
-                                              label="productGroup"
-                                              :reduce="product_group => product_group.id"
-                                              :getOptionLabel="product_group => product_group.text"
-                                              class="style-chooser form-control-disabled font-size-16 ml-0 mt-1"
-                                              v-model="onlineBookingData.productGroup"
-                                              :options="productGroups"
-                                              style="min-width:305px;"></v-select>
-                                </div>
-                                <div class="col-md-12 mb-3">
-                                    <label for="premise">{{ $t('onlineBooking.serviceModal.premise') }} *</label>
-                                    <v-select :clearable="false"
-                                              label="premise"
-                                              :reduce="premise => premise.id"
-                                              :getOptionLabel="premise => premise.name"
-                                              class="style-chooser form-control-disabled font-size-16 ml-0 mt-1"
-                                              v-model="onlineBookingData.premise"
-                                              :options="premises"
-                                              style="min-width:305px;"></v-select>
-                                </div>
+                            <div class="col-md-12 mb-3">
+                                <label for="doctor">{{ $t('onlineBooking.serviceModal.doctor') }} *</label>
+                                <v-select :clearable="false"
+                                          label="doctor"
+                                          :reduce="doctor => doctor.id"
+                                          :getOptionLabel="doctor => doctor.name"
+                                          class="style-chooser form-control-disabled font-size-16 ml-0 mt-1"
+                                          v-model="onlineBookingData.doctor"
+                                          :options="doctors"
+                                          style="min-width:305px;"></v-select>
+                            </div>
+                            <div class="col-md-12 mb-3">
+                                <label for="productGroup">{{ $t('onlineBooking.serviceModal.productGroup') }} *</label>
+                                <v-select :clearable="false"
+                                          label="productGroup"
+                                          :reduce="product_group => product_group.id"
+                                          :getOptionLabel="product_group => product_group.text"
+                                          class="style-chooser form-control-disabled font-size-16 ml-0 mt-1"
+                                          v-model="onlineBookingData.productGroup"
+                                          :options="productGroups"
+                                          style="min-width:305px;"></v-select>
+                            </div>
+                            <div class="col-md-12 mb-3">
+                                <label for="premise">{{ $t('onlineBooking.serviceModal.premise') }} *</label>
+                                <v-select :clearable="false"
+                                          label="premise"
+                                          :reduce="premise => premise.id"
+                                          :getOptionLabel="premise => premise.name"
+                                          class="style-chooser form-control-disabled font-size-16 ml-0 mt-1"
+                                          v-model="onlineBookingData.premise"
+                                          :options="premises"
+                                          style="min-width:305px;"></v-select>
+                            </div>
                         </div>
                     </form>
                 </b-modal>
@@ -123,7 +133,7 @@
 
 <script>
 import { xray } from '../../config/pluginInit'
-import { getOnlineBookingProducts, getOnlineBookingProductGroups, getPremises } from '../../services/onlineBookingService'
+import { getOnlineBookingProducts, getOnlineBookingProductGroups, getPremises, createOnlineBookingService, deleteOnlineBookingService, updateOnlineBookingService } from '../../services/onlineBookingService'
 import { getDoctorList } from '../../services/calendarService'
 
 export default {
@@ -145,7 +155,9 @@ export default {
       currentProductPage: 1,
       onlineBookingData: {
         id: '',
-        service: '',
+        slovenian: '',
+        italian: '',
+        english: '',
         price: '',
         duration: '',
         doctor: '',
@@ -172,7 +184,7 @@ export default {
       return Math.floor(this.onlineBookingProducts.length / this.productsPerPage) !== 0
     },
     isServiceDisabled () {
-      return !this.onlineBookingData.service || !this.onlineBookingData.price || !this.onlineBookingData.duration || !this.onlineBookingData.doctor || !this.onlineBookingData.productGroup || !this.onlineBookingData.premise
+      return !this.onlineBookingData.slovenian || !this.onlineBookingData.price || !this.onlineBookingData.duration || !this.onlineBookingData.doctor || !this.onlineBookingData.productGroup || !this.onlineBookingData.premise
     }
   },
   methods: {
@@ -199,8 +211,9 @@ export default {
     },
     defaultOnlineBookingData () {
       return {
-        id: '',
-        service: '',
+        slovenian: '',
+        italian: '',
+        english: '',
         price: '',
         duration: '',
         doctor: '',
@@ -210,6 +223,38 @@ export default {
     },
     cancelService () {
       this.onlineBookingData = this.defaultOnlineBookingData()
+    },
+    addService () {
+      if (this.onlineBookingData.id) {
+        updateOnlineBookingService(this.onlineBookingData.id, this.onlineBookingData).then(() => {
+          this.getOnlineBookingProducts()
+        })
+      } else {
+        createOnlineBookingService(this.onlineBookingData).then(() => {
+          this.getOnlineBookingProducts()
+        })
+      }
+      this.onlineBookingData = this.defaultOnlineBookingData()
+    },
+    removeService (item) {
+      let index = this.onlineBookingProducts.indexOf(item)
+      this.onlineBookingProducts.splice(index, 1)
+      deleteOnlineBookingService(item.id)
+    },
+    openEditModal (item) {
+      this.onlineBookingData = {
+        id: item.id,
+        slovenian: item.slovenian,
+        italian: item.italian,
+        english: item.english,
+        price: item.default_online_price,
+        duration: item.default_duration,
+        doctor: item.doctor_name,
+        productGroup: item.product_group_text,
+        premise: item.premise_name
+      }
+      this.modalServiceShow = true
+      console.log('Info about service: ' + JSON.stringify(item))
     }
   }
 }

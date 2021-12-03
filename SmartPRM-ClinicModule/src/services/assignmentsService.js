@@ -8,10 +8,11 @@ export async function getAssignments (due) {
   return rawResponse.json()
 }
 
-export async function finishAssignment (id, finished) {
+export async function finishAssignment (id, finished, completedBy) {
   const assignmentDescriptor = {
     id: id,
-    finished: finished
+    finished: finished,
+    completedBy: completedBy
   }
   const rawResponse = await fetch('/api/assignments/', {
     method: 'POST',

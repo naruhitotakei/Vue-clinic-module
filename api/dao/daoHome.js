@@ -72,7 +72,7 @@ const updateAppointment = (request, response, id, appointment) => {
     if (appointment.location) statement += "location='" + appointment.location + "',"
     if (appointment.doctor_id) statement += "doctor_id=" + appointment.doctor_id + ","
     if (appointment.doctor_name) statement += "doctor_name='" + appointment.doctor_name + "',"
-    if (appointment.product_groups) statement += "product_group_id=" + appointment.product_groups + ","
+    if (appointment.product_group) statement += "product_group_id=" + appointment.product_group + ","
     if (appointment.crmProduct) statement += "product_id=" + appointment.crmProduct + ","
     if (appointment.start_time) statement += "starts_at='" + moment(appointment.start_time).format('YYYY-MM-DDTHH:mm') + "',"
     if (appointment.time) statement += "time='" + moment(appointment.start_time).format('HH:mm') + "',"
@@ -84,6 +84,7 @@ const updateAppointment = (request, response, id, appointment) => {
     statement += "appointment_canceled_in_advance_by_clinic=" + appointment.appointment_canceled_in_advance_by_clinic + "," 
     statement = statement.slice(0, -1)
     statement += " WHERE id = " + id
+    console.log("Updating Home Appointment on BE: " + statement)
     pool.query(statement, (error, results) => {
         if (error) {
             throw error

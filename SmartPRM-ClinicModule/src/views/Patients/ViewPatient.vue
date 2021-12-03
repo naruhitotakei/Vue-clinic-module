@@ -2159,7 +2159,7 @@ export default {
 }
 
 .vs--disabled .vs__dropdown-toggle, .vs--disabled .vs__clear, .vs--disabled .vs__search, .vs--disabled .vs__selected, .vs--disabled .vs__open-indicator {
-    background-color: #e9ecef !important;
+    background-color: transparent !important;
     margin-top: 4px;
 }
 

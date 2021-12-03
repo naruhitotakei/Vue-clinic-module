@@ -232,23 +232,25 @@
                     </div>
                     <div class="row align-items-center justify-content-between w-100 pt-2 " :class="{'mb-3': !disabled}">
                         <div class="col-md-3">
-                            <label for="start" class="mb-0">{{ $t('calendarEvent.start') }} *</label>
+                            <label for="start" class="mb-0" :style="{ 'margin-top': '13px' }">{{ $t('calendarEvent.start') }} *</label>
                         </div>
                         <div class="col-md-9 d-flex align-items-center">
                             <date-picker :disabled="disabled"
                                          class="form-control form-control-disabled font-size-16"
                                          :class="{'no-border margin-left': disabled}"
                                          v-model="appointmentData.start_time"
+                                         :style="{ 'height': !disabled ? '53px' : '45px' }"
                                          type="datetime"
                                          :minute-step="5"
                                          :show-second="false"
                                          :lang="'en'"
                                          :format="'DD.MM.YYYY HH.mm'"></date-picker>
-                            <label for="start" class="mb-0">{{ $t('calendarEvent.end') }}*</label>
+                            <label for="start" class="mb-0" :style="{ 'margin-top': '13px' }">{{ $t('calendarEvent.end') }}*</label>
                             <date-picker :disabled="disabled"
                                          required
                                          class="form-control form-control-disabled font-size-16"
                                          :class="{'no-border': disabled}"
+                                         :style="{ 'height': !disabled ? '53px' : '45px' }"
                                          v-model="appointmentData.end_time"
                                          type="time"
                                          :minute-step="5"
@@ -265,7 +267,7 @@
                             <textarea :disabled="disabled" row="2" v-model="appointmentData.note" class="form-control form-control-disabled font-size-16 mt-3" placeholder="Add your note here for event!" id="note" required></textarea>
                         </div>
                     </div>
-                    <template v-if="appointmentData.id">
+                    <template v-if="appointmentData.id && !disabled">
                         <div class="row align-items-center justify-content-between w-100 pt-1 mb-3" :class="{'mb-3': !disabled}">
                             <div class="col-md-3">
                                 <label for="color" class="mb-0">{{ $t('calendarEvent.patient_attended') }}</label><br>
@@ -295,10 +297,10 @@
                                               v-model="appointmentData.backgroundColor"
                                               :key="index"
                                               :value="item.id"
-                                              :style="{'background': item.color}"
+                                              :style="{'border': '1px solid ' + item.color}"
                                               name="labels"
                                               v-if="showLabels(item)">
-                                    <p class="text-white m-0 py-1 pr-2">{{ item.text }}</p>
+                                    <p class="m-0 py-1 pr-2" :style="{'color': item.color}">{{ item.text }}</p>
                                 </b-form-radio>
                             </template>
                         </div>
@@ -469,6 +471,7 @@ export default {
         location: '',
         patient_id: '',
         product_group: '',
+        productGroupName: '',
         crmProduct: '',
         label_id: '',
         backgroundColor: '',
@@ -593,7 +596,8 @@ export default {
       this.todaysAppointments.splice(0, this.todaysAppointments.length)
       this.appointmentData.doctor_id = this.selectedDoctor.id
       this.appointmentData.doctor_name = this.selectedDoctor.name
-      this.appointmentData.product_groups = this.selectedProductGroup.product_group_id
+      this.appointmentData.product_group = this.selectedProductGroup.product_group_id
+      this.appointmentData.productGroupName = this.selectedProductGroup.product_group_name
       this.appointmentData.crmProduct = this.selectedProductGroup.crm_product_id
       updateAppointment(this.appointmentData.id, this.appointmentData).then(() => {
         this.disabled = true
@@ -628,6 +632,7 @@ export default {
       this.appointmentData = item
       this.appointmentModal = true
       this.selectedDoctor = item.doctor_name
+      this.selectedProductGroup = item.product_group_name
     },
     getDoctorsStatisticPerWeek () {
       getDoctorsStatisticPerWeek().then(response => {
