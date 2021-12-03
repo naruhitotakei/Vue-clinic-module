@@ -1,12 +1,12 @@
 <template>
   <div class="container">
-    <template v-if="isConfigured">
+    <template v-if="lang != null">
       <div class="card my-4">
         <div class="card-body d-flex justify-content-between">
           <img src="/img/logo.png" alt="" style="height: 3rem; width: auto">
           <v-select
             :clearable="false"
-            @input="langChange"
+            @input="lang = $event"
             :reduce="language => language.value"
             class="style-chooser"
             label="title"
@@ -16,12 +16,8 @@
           />
         </div>
         <div class="card-body">
-          <div>
-            Location Name
-          </div>
-          <div>
-            Address
-          </div>
+          <div>{{ premise.name }}</div>
+          <div>{{ premise.address }}</div>
         </div>
       </div>
       <slot/>
@@ -39,7 +35,8 @@ export default {
   },
   data () {
     return {
-      isConfigured: false
+      lang: null,
+      premise: null
     }
   },
   computed: {
@@ -54,15 +51,12 @@ export default {
       return
     }
 
-    const { lang } = await response.json()
-    this.$i18n.locale = lang
-    localize(lang)
-    this.isConfigured = true
+    const { lang, premise } = await response.json()
+    this.lang = lang
+    this.premise = premise
   },
   watch: {
-  },
-  methods: {
-    langChange (lang) {
+    lang (lang) {
       this.$i18n.locale = lang
       localize(lang)
     }

@@ -53,6 +53,7 @@ const daoCompanyPremises = require('./dao/daoCompanyPremises')
 const daoAppointmentSlots = require('./dao/daoAppointmentSlots')
 const daoOnlineBooking = require('./dao/daoOnlineBooking')
 const awsS3 = require('./services/awsS3')
+const daoConfig = require('./dao/daoConfig')
 
 app.use(fileUpload({
     createParentPath: true
@@ -1388,17 +1389,7 @@ app.post('/api/booking/confirm-and-save', (req, res) => {
 });
 
 app.get('/api/config', (request, response) => {
-    const geoip = require('geoip-lite')
-    const geo = geoip.lookup(request.ip)
-    // Example for local testing with IP from Slovenia
-    // const geo = geoip.lookup('109.182.0.0')
-    const lang = geo != null && langByCountry[geo.country] != null
-        ? langByCountry[geo.country]
-        : 'en'
-    
-    response.json({
-        lang,
-    })
+    daoConfig.getConfig(request, response, request.ip)
 })
 
 const langByCountry = {
