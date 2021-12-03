@@ -89,13 +89,14 @@ const createEnquiry = (req, res, enquiry, prm_client_id) => {
     statement += "NOW(),NOW()," 
     statement += "false,false,"   
     statement += prm_client_id
-    statement += ")"
+    statement += ") RETURNING *"
     console.log("Adding new patient on BE: " + statement)
     pool.query(statement , (error, results) => {
+        const patient = results.rows[0];
         if (error) {
             throw error
         }
-        res.status(200).json("OK")
+        res.status(200).json({ status: "OK", patient })
     })    
 }
 

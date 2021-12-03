@@ -208,10 +208,13 @@ export default {
   },
   methods: {
     addPatient () {
-      createEnquiry(this.addPatientForm).then(() => {
-        this.openAddPatient = false
-        this.addPatientForm = this.defaultAddPatientForm()
-        this.getPatients()
+      createEnquiry(this.addPatientForm).then((result) => {
+        if (result.status === 'OK') {
+          this.openAddPatient = false
+          this.addPatientForm = this.defaultAddPatientForm()
+          this.$router.push({ path: `/patients/${result.patient.id}` })
+        }
+        // this.getPatients()
       })
     },
     onPatientClick (item) {
