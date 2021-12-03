@@ -18,7 +18,14 @@
           <b-col cols="12" lg="6">
             <iq-card class-name="iq-card-block iq-card-stretch iq-card-height">
               <template v-slot:headerTitle>
-                  <h5>My {{ $t('assignments.todaysAssignments') }}</h5>
+                  <b-row>
+                    <b-col cols="12" lg="6">
+                      <h5>My {{ $t('assignments.todaysAssignments') }}</h5>
+                    </b-col>
+                    <b-col cols="12" lg="6" v-if="getCompletedAssignments">
+                      <b-progress :value="getCompletedAssignments" :max="100" show-progress animated></b-progress>
+                    </b-col>
+                  </b-row>
               </template>
               <template v-slot:body>
                   <b-list-group class="list-group-flush" id="myTodaysAssignments">
@@ -599,6 +606,15 @@ export default {
         return this.overdueAssignments.filter(assignment => assignment.todoname && assignment.todoname.toLowerCase().includes(this.filterOverdue.toLowerCase()))
       }
       return this.overdueAssignments
+    },
+    getCompletedAssignments () {
+      if (this.myTodayAssignments.length) {
+        const total = this.myTodayAssignments.length
+        const completed = this.myTodayAssignments.filter(assignment => assignment.completed)
+
+        return (completed / total) * 100
+      }
+      return null
     }
   },
   watch: {
