@@ -10,8 +10,8 @@
                         </div>
                         <div class="iq-card-header-toolbar d-sm-flex align-items-center col-12 col-sm-9 col-md-9 col-lg-10" style="margin-top: -10px;">
                             <div class="iq-search-bar">
-                                <form action="#" class="searchbox">
-                                    <input type="search" class="text search-input" v-model="filter" :placeholder="$t('shared.search')">
+                                <form action="#" @submit.prevent="searchRecords" class="searchbox">
+                                    <input type="search" class="text search-input" v-model="searchTxt" :placeholder="$t('shared.search')">
                                     <a class="search-link" href="#"><i class="ri-search-line"></i></a>
                                 </form>
                             </div>
@@ -206,12 +206,25 @@ export default {
       return !this.addPatientForm.firstName || !this.addPatientForm.lastName || !this.addPatientForm.country
     }
   },
+  watch: {
+    searchTxt (val) {
+      if (!val) {
+        this.filter = ''
+      }
+    }
+  },
   methods: {
+    searchRecords () {
+      this.filter = this.searchTxt
+    },
     addPatient () {
-      createEnquiry(this.addPatientForm).then(() => {
-        this.openAddPatient = false
-        this.addPatientForm = this.defaultAddPatientForm()
-        this.getPatients()
+      createEnquiry(this.addPatientForm).then((result) => {
+        if (result.status === 'OK') {
+          this.openAddPatient = false
+          this.addPatientForm = this.defaultAddPatientForm()
+          this.$router.push({ path: `/patients/${result.patient.id}` })
+        }
+        // this.getPatients()
       })
     },
     onPatientClick (item) {
@@ -292,6 +305,7 @@ export default {
       perPage: 20,
       totalRows: 1,
       filter: '',
+      searchTxt: '',
       filterOn: [],
       countries: [],
       searchBy: '',

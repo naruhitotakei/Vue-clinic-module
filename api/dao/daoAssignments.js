@@ -11,7 +11,7 @@ const pool = new Pool({
 const getAssignments = (request, response, scope, userid, accessible_user_ids, prmClientId, due) =>  {
     var condition = null;
     if (due == "today") {
-        condition = "WHERE (todos.due_at = now()::date) AND completed = false"
+        condition = "WHERE (todos.due_at = now()::date) OR completed_at = now()::date"
     } else if (due == "future") {
         condition = "WHERE (todos.due_at > now()::date) AND completed = false"
     } else if (due == "past") {

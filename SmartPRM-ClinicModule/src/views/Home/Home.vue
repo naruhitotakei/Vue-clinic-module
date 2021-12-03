@@ -65,12 +65,17 @@
                     </template>
                     <template v-slot:body>
                         <b-table v-if="openAssignments.length > 0"
-                                 borderless
-                                 id="openAssignmentsTable"
-                                 :items="openAssignments"
-                                 :fields="openAssignmentsColumns"
-                                 :per-page="openAssignmentsPerPage"
-                                 :current-page="currentOpenAssignmentsPage"></b-table>
+                          borderless
+                          id="openAssignmentsTable"
+                          :items="openAssignments"
+                          :fields="openAssignmentsColumns"
+                          :per-page="openAssignmentsPerPage"
+                          :current-page="currentOpenAssignmentsPage"
+                        >
+                          <template v-slot:cell(dentist)="data">
+                            {{ patientsDentist(data.item) }}
+                          </template>
+                        </b-table>
                         <p v-else>{{ $t('home.noOpenAssignments') }}</p>
                     </template>
                     <template>
@@ -259,7 +264,7 @@
                                          :format="'HH.mm'"></date-picker>
                         </div>
                     </div>
-                    <div class="row align-items-center justify-content-between w-100 " :class="{'mb-3': !disabled}">
+                    <div class="row align-items-center justify-content-between w-100" v-if="!disabled || appointmentData.note" :class="{'mb-3': !disabled}">
                         <div class="col-md-3">
                             <label for="notes">{{ $t('calendarEvent.note') }}</label>
                         </div>
@@ -267,7 +272,7 @@
                             <textarea :disabled="disabled" row="2" v-model="appointmentData.note" class="form-control form-control-disabled font-size-16 mt-3" placeholder="Add your note here for event!" id="note" required></textarea>
                         </div>
                     </div>
-                    <template v-if="appointmentData.id && !disabled">
+                    <template v-if="!disabled || appointmentData.patient_attended">
                         <div class="row align-items-center justify-content-between w-100 pt-1 mb-3" :class="{'mb-3': !disabled}">
                             <div class="col-md-3">
                                 <label for="color" class="mb-0">{{ $t('calendarEvent.patient_attended') }}</label><br>
@@ -286,7 +291,7 @@
                             </div>
                         </div>
                     </template>
-                    <div class="row align-items-center justify-content-between w-100 pt-3 mb-3">
+                    <div class="row align-items-center justify-content-between w-100 pt-3 mb-3" v-if="!disabled || appointmentData.backgroundColor">
                         <div class="col-md-3">
                             <label for="color" class="mt-1 ml-1">{{ $t('calendarEvent.labels') }}</label><br>
                         </div>
@@ -367,7 +372,7 @@ import { getLocationsList, getCountriesWithPatients, getDatesForCurrentWeek } fr
 import { visitsByCountryInAWeek, getDoctorsStatisticPerWeek } from '../../services/statistics'
 import { getProductGroups } from '@/services/products'
 import { getDoctorList, getLabels } from '@/services/calendarService'
-import { sso } from '@/services/userService'
+import { sso, getDentists } from '@/services/userService'
 import DatePicker from 'vue2-datepicker'
 import 'vue2-datepicker/index.css'
 
@@ -447,6 +452,7 @@ export default {
       openAssignmentsColumns: [
         { label: this.$t('home.openAssignmentsColumn.description'), key: 'description', class: 'text-left' },
         { label: this.$t('home.openAssignmentsColumn.patientName'), key: 'patient_name', class: 'text-left' },
+        { label: 'Dentist', key: 'dentist', class: 'text-left' },
         {
           label: this.$t('home.openAssignmentsColumn.dueAt'),
           key: 'due_at',
@@ -484,6 +490,7 @@ export default {
       locations: [],
       product_groups: [],
       doctors: [],
+      dentists: [],
       appointmentModal: false,
       openCancelationModal: false,
       patient_attend: [
@@ -508,6 +515,7 @@ export default {
   mounted () {
     xray.index()
     this.getUserLogin()
+    this.getDentists()
     this.getCountriesWithPatients()
     this.getDoctorsStatisticPerWeek()
     body[0].classList.add('sidebar-main-menu')
@@ -521,6 +529,19 @@ export default {
     }
   },
   methods: {
+    getDentists () {
+      getDentists().then(response => {
+        this.dentists = response
+      })
+    },
+    patientsDentist (patient) {
+      if (this.dentists && this.dentists.length) {
+        let dentist = this.dentists.find((item) => {
+          return item.code === patient.prm_dentist_user_id
+        })
+        return dentist && dentist.label ? dentist.label : 'N/A'
+      }
+    },
     getUserLogin () {
       sso().then(response => {
         if (typeof response !== 'string') {
