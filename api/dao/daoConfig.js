@@ -13,13 +13,11 @@ const langByCountry = {
 }
 
 const getConfig = (request, response, ip, premiseId) => {
-    console.log({ premiseId });
     const geoip = require('geoip-lite')
     const geo = geoip.lookup(ip)
     const lang = geo != null && langByCountry[geo.country] != null
         ? langByCountry[geo.country]
         : 'en'
-
     const statement = /* sql */`
         SELECT
             premise_name as "name",
@@ -40,7 +38,6 @@ const getConfig = (request, response, ip, premiseId) => {
         }
 
         const premise = result.rows[0]
-        console.log({ premise });
 
         response.json({
             lang,
