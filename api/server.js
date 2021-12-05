@@ -1389,18 +1389,43 @@ app.post('/api/booking/confirm-and-save', (req, res) => {
 });
 
 app.get('/api/config', (request, response) => {
-    daoConfig.getConfig(request, response, request.ip)
+    daoConfig.getConfig(request, response, request.ip, request.query.premiseId)
 })
-
-const langByCountry = {
-    'SI': 'sl'
-}
 
 app.get('/api/public/free-slots', (req, res) => {
     daoAppointmentSlots.getFreeSlotsPublic(req, res, req.query.serviceId, req.query.date)
 });
 
-app.get('/api/public/online-booking-products/:locale', (req, res) => {
-    const locale = req.params.locale
+app.get('/api/public/online-booking-products', (req, res) => {
+    const locale = req.query.locale
     daoOnlineBooking.getOnlineBookingProductsPublic(req, res, locale)
+});
+
+app.post('/api/files/logo/:id', async function(req, res) {
+    if(req.session.prm_user == null) {
+        res.status(401).send("user unauthorized")
+
+        return
+    }
+
+    const { id } = req.params
+    const { logo } = req.files
+    const rv = await awsS3.upload( `logo-${id}`, logo.data, logo.mimetype, `logo-${id}`, 'logo')
+
+    res.status(200).json(rv.status)
+})
+
+app.get('/api/files/logo/:id', async function (req, res) {
+    let id = req.params.id
+    const rv = await awsS3.download(`logo-${id}`)
+    console.log({ rv })
+
+    if (rv.status !== 'OK') {
+        res.download('./resources/avatar-default.png', 'avatar-default.png');
+
+        return
+    }
+
+    const download = Buffer.from(rv.data.Body)
+    res.end(download)
 });

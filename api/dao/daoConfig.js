@@ -8,7 +8,12 @@ const pool = new Pool({
   port: process.env.POSTGRES_PORT || 5432,
 })
 
-const getConfig = (request, response, ip) => {
+const langByCountry = {
+    'SI': 'sl'
+}
+
+const getConfig = (request, response, ip, premiseId) => {
+    console.log({ premiseId });
     const geoip = require('geoip-lite')
     const geo = geoip.lookup(ip)
     const lang = geo != null && langByCountry[geo.country] != null
@@ -17,30 +22,31 @@ const getConfig = (request, response, ip) => {
 
     const statement = /* sql */`
         SELECT
-            premise_name,
-            premise_street,
-            premise_house_number,
-            premise_post_code,
-            premise_city
+            premise_name as "name",
+            premise_street as street,
+            premise_house_number as house_number,
+            premise_post_code as post_code,
+            premise_city as city
         FROM prm_company_premise
-        ORDER BY premise_id ASC
+        WHERE premise_id = $1
         LIMIT 1
     `
 
-    pool.query(statement, (error, results) => {
+    pool.query(statement, [premiseId], (error, result) => {
         if (error) {
-            response.status(500)
+            response.status(500).send()
 
             return
         }
 
-        const premise = results.rows[0]
+        const premise = result.rows[0]
+        console.log({ premise });
 
         response.json({
             lang,
             premise: {
-                name: premise.premise_name,
-                address: `${premise.premise_street} ${premise.premise_house_number}, ${premise.premise_post_code} ${premise.premise_city}`
+                name: premise.name,
+                address: `${premise.street} ${premise.house_number}, ${premise.post_code} ${premise.city}`
             }
         })
     })

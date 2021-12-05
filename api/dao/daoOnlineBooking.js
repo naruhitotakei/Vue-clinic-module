@@ -43,7 +43,7 @@ const getOnlineBookingProductsPublic = (request, response, locale) => {
             online_booking_service_name.text
         FROM online_booking_service
         JOIN online_booking_service_name
-        ON online_booking_service.id = online_booking_service_name.online_booking_service_id
+        ON online_booking_service.id = online_booking_service_name.online_booking_id
         WHERE online_booking_service.id IN (
             SELECT DISTINCT online_booking_users_bridge.online_booking_id
             FROM appointment_slots
@@ -58,7 +58,7 @@ const getOnlineBookingProductsPublic = (request, response, locale) => {
 
     pool.query(statement, [locale], (error, results) => {
         if (error) {
-            response.status(500).send()
+            response.status(500).send(error)
 
             return
         }

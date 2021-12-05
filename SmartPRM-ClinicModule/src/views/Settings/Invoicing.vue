@@ -217,6 +217,7 @@
             <b-modal v-model="modalPremiseShow" no-close-on-backdrop size="lg" title="Add premise" :ok-disabled="isPremiseDisabled" @close="cancelPremise"  @cancel="cancelPremise" :ok-title="$t('servicesAndProducts.addProductModal.save')" @ok="addPremise" :cancel-title="$t('servicesAndProducts.addProductModal.close')">
               <form>
                 <div class="form-row">
+                  <ImageUpload :src="`/api/files/logo/${premiseFormData.premise_id}`" />
                   <div class="col-md-12 mb-3">
                       <label for="title">Company name *</label>
                       <v-select class="drop-down" label="company_name"
@@ -428,9 +429,11 @@ import { getCompanies, createCompany, updateCompany, deleteCompany, getCompanyBy
 import { getCountriesList } from '../../services/commonCodeLists'
 import { getCompanyPremises, getPremiseById, checkElectronicDeviceIdUniquness, checkBusinessIdUniquness, getCompanyPremiseDevices, createPremise, updatePremise, deletePremise, getPremiseDeviceById, createPremiseDevice, updatePremiseDevice, deletePremiseDevice } from '../../services/companyPremises'
 import moment from 'moment'
+import ImageUpload from '@/components/ImageUpload.vue'
 
 export default {
   components: {
+    ImageUpload
   },
   mounted () {
     xray.index()

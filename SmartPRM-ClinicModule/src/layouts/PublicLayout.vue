@@ -3,7 +3,7 @@
     <template v-if="lang != null">
       <div class="card my-4">
         <div class="card-body d-flex justify-content-between">
-          <img src="/img/logo.png" alt="" style="height: 3rem; width: auto">
+          <img :src="`/api/files/logo/${$route.query.premiseId}`" alt="" style="height: 3rem; width: auto">
           <v-select
             :clearable="false"
             @input="lang = $event"
@@ -45,7 +45,7 @@ export default {
     })
   },
   async mounted () {
-    const response = await fetch('/api/config')
+    const response = await fetch(`/api/config?${new URLSearchParams({ premiseId: this.$route.query.premiseId })}`)
 
     if (response.ok === false) {
       return
