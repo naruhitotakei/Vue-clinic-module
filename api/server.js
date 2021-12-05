@@ -1418,7 +1418,6 @@ app.post('/api/files/logo/:id', async function(req, res) {
 app.get('/api/files/logo/:id', async function (req, res) {
     let id = req.params.id
     const rv = await awsS3.download(`logo-${id}`)
-    console.log({ rv })
 
     if (rv.status !== 'OK') {
         res.download('./resources/avatar-default.png', 'avatar-default.png');
