@@ -113,7 +113,7 @@
                                  :format="'HH.mm'"></date-picker>
                 </div>
             </div>
-            <div class="row align-items-center justify-content-between w-100 " v-if="!disabled || formData.note" :class="{'mb-3': !disabled}">
+            <div class="row align-items-center justify-content-between w-100 " v-if="!disabled || formData.notes" :class="{'mb-3': !disabled}">
                 <div class="col-md-3">
                     <label for="notes">{{ $t('calendarEvent.note') }}</label>
                 </div>
@@ -122,7 +122,7 @@
                 </div>
             </div>
             <template v-if="!disabled || formData.patient_attended">
-                <div class="row align-items-center justify-content-between w-100 pt-1" :class="{'mb-3': !disabled}">
+                <div v-if="!disabled" class="row align-items-center justify-content-between w-100 pt-1" :class="{'mb-3': !disabled}">
                     <div class="col-md-3">
                         <label for="color" class="mb-0">{{ $t('calendarEvent.patient_attended') }}</label><br>
                     </div>
@@ -139,27 +139,43 @@
                         </template>
                     </div>
                 </div>
+                <div v-else class="row align-items-center justify-content-between w-100 pt-1" :class="{'mb-3': !disabled}">
+                    <div class="col-md-3">
+                        <label for="color" class="mb-0">{{ $t('calendarEvent.patient_attended') }}</label><br>
+                    </div>
+                    <div class="col-md-9">
+                      <span class="font-size-16 text-black pl-2 ml-1 text-capitalize">{{ formData.patient_attended }}</span>
+                    </div>
+                </div>
             </template>
-            <div class="row align-items-center justify-content-between w-100 pt-3 mb-3" v-if="!disabled || formData.backgroundColor">
-                <div class="col-md-3">
-                    <label for="color" class="mt-1 ml-1">{{ $t('calendarEvent.labels') }}</label><br>
-                </div>
-                <div class="col-md-9 mb-1">
-                    <template v-for="(item,index) in colors">
-                        <b-form-radio class="custom-radio-color font-size-16 labels"
-                                      inline
-                                      v-model="formData.backgroundColor"
-                                      :key="index"
-                                      :value="item.id"
-                                      :style="{'border': '1px solid ' + item.color}"
-                                      name="labels"
-                                      v-if="showLabels(item)">
-                            <p class="m-0 py-1 pr-2" :style="{'color': item.color}">{{ item.text }}</p>
-                        </b-form-radio>
-                    </template>
-                </div>
-            </div>
-            <template>
+            <template v-if="!disabled || formData.backgroundColor || formData.app_lb_type">
+              <div v-if="!disabled" class="row align-items-center justify-content-between w-100 pt-3 mb-3">
+                  <div class="col-md-3">
+                      <label for="color" class="mt-1 ml-1">{{ $t('calendarEvent.labels') }}</label><br>
+                  </div>
+                  <div class="col-md-9 mb-1">
+                      <template v-for="(item,index) in colors">
+                          <b-form-radio class="custom-radio-color font-size-16 labels"
+                                        inline
+                                        v-model="formData.backgroundColor"
+                                        :key="index"
+                                        :value="item.id"
+                                        :style="{'border': '1px solid ' + item.color}"
+                                        name="labels"
+                                        v-if="showLabels(item)">
+                              <p class="m-0 py-1 pr-2" :style="{'color': item.color}">{{ item.text }}</p>
+                          </b-form-radio>
+                      </template>
+                  </div>
+              </div>
+              <div v-else class="row align-items-center justify-content-between w-100 pt-3 mb-3">
+                  <div class="col-md-3">
+                      <label for="color" class="mt-1 ml-1">{{ $t('calendarEvent.labels') }}</label><br>
+                  </div>
+                  <div class="col-md-9">
+                    <span class="font-size-16 text-black pl-2 ml-1 text-capitalize">{{ getLabelText(formData.app_lb_type) }}</span>
+                  </div>
+              </div>
             </template>
             <template>
                 <div class="cancelation-text font-size-18 mt-3 mb-1 row align-items-center justify-content-center w-100">
@@ -601,6 +617,10 @@ export default {
       getLabels(lang).then(response => {
         this.colors = response
       })
+    },
+    getLabelText (type) {
+      const label = this.colors.find(color => color.type === type)
+      return label.text
     },
     closeModal () {
       this.$emit('setModalShow', false)
