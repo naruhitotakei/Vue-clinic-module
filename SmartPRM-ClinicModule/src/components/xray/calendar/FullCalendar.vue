@@ -177,6 +177,7 @@
                 <template v-if="!disabled">
                     <p v-if="isSaveDisabled" class="mt-1 mr-4 text-black">{{ $t('calendarEvent.requiredFields') }}</p>
                     <button type="button" class="btn btn-secondary" @click="closeNewEditModal">{{ $t('calendar.btnCancel') }}</button>
+                    <button type="button" class="btn btn-primary" @click="openAddPatient = true">{{ $t('patients.addPatient') }}</button>
                     <button type="button" class="btn btn-primary" @click="saveAppointment">{{ $t('calendar.btnSave') }}</button>
                 </template>
             </div>
@@ -221,6 +222,13 @@
         </div>
     </form>
   </b-modal>
+
+  <AddPatientModal
+    from="calendar"
+    :openAddPatient="openAddPatient"
+    @closeAddPatient="closeAddPatientModal"
+    @savedPatient="setPatient"
+  />
 </b-container>
 </template>
 <script>
@@ -247,10 +255,11 @@ import {
 } from '@/services/calendarService'
 import DatePicker from 'vue2-datepicker'
 import 'vue2-datepicker/index.css'
+import AddPatientModal from '@/components/Patients/AddPatientModal.vue'
 
 export default {
   components: {
-    calendar, DatePicker
+    calendar, DatePicker, AddPatientModal
   },
   props: {
     resourcesOuter: Array,
@@ -260,6 +269,7 @@ export default {
   },
   data () {
     return {
+      openAddPatient: false,
       calendarUpdateEvery3Min: undefined,
       eventInfo: '',
       eventResourceId: '',
@@ -521,6 +531,15 @@ export default {
     clearInterval(this.calendarUpdateEvery3Min)
   },
   methods: {
+    closeAddPatientModal (value) {
+      this.openAddPatient = value
+    },
+    setPatient (patient) {
+      patient.full_name = `${patient.name} ${patient.last_name}`
+      this.patients.push(patient)
+      this.selectedPatient = Object.assign({}, patient)
+      this.openAddPatient = false
+    },
     closeNewEditModal () {
       const isDataChanged = JSON.stringify(this.formDataFirstModalOpened) !== JSON.stringify(this.formData)
       if (isDataChanged) {

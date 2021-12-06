@@ -140,7 +140,12 @@
                     </template>
                 </iq-card>
                 <!--Add patient modal-->
-                <b-modal v-model="openAddPatient"
+                <AddPatientModal
+                  from="patients"
+                  :openAddPatient="openAddPatient"
+                  @closeAddPatient="closeAddPatientModal"
+                />
+                <!-- <b-modal v-model="openAddPatient"
                          :ok-disabled="isDisabled"
                          no-close-on-backdrop
                          size="md"
@@ -181,7 +186,7 @@
                             </div>
                         </div>
                     </form>
-                </b-modal>
+                </b-modal> -->
             </b-col>
         </b-row>
     </b-container>
@@ -190,10 +195,13 @@
 import { xray } from '../../config/pluginInit'
 import { getEnquires, createEnquiry } from '../../services/enquiry'
 import { getCountriesList } from '../../services/commonCodeLists'
-
+import AddPatientModal from '@/components/Patients/AddPatientModal.vue'
 var rows = []
 export default {
   name: 'UiDataTable',
+  components: {
+    AddPatientModal
+  },
   async mounted () {
     xray.index()
     this.getPatients('ASC')
@@ -216,6 +224,9 @@ export default {
   methods: {
     searchRecords () {
       this.filter = this.searchTxt
+    },
+    closeAddPatientModal (value) {
+      this.openAddPatient = value
     },
     addPatient () {
       createEnquiry(this.addPatientForm).then((result) => {
