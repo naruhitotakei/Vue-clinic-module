@@ -264,12 +264,12 @@
                                          :format="'HH.mm'"></date-picker>
                         </div>
                     </div>
-                    <div class="row align-items-center justify-content-between w-100" v-if="!disabled || appointmentData.notes" :class="{'mb-3': !disabled}">
+                    <div class="row align-items-center justify-content-between w-100" v-if="!disabled || appointmentData.note" :class="{'mb-3': !disabled}">
                         <div class="col-md-3">
-                            <label for="notes">{{ $t('calendarEvent.note') }}</label>
+                            <label for="note">{{ $t('calendarEvent.note') }}</label>
                         </div>
                         <div class="col-md-9">
-                            <textarea :disabled="disabled" row="2" v-model="appointmentData.notes" class="form-control form-control-disabled font-size-16 mt-3" placeholder="Add your note here for event!" id="note" required></textarea>
+                            <textarea :disabled="disabled" row="2" v-model="appointmentData.note" class="form-control form-control-disabled font-size-16 mt-3" placeholder="Add your note here for event!" id="note"></textarea>
                         </div>
                     </div>
                     <template v-if="!disabled || appointmentData.patient_attended">
@@ -324,7 +324,7 @@
                             <label for="color" class="mt-1 ml-1">{{ $t('calendarEvent.labels') }}</label><br>
                         </div>
                         <div class="col-md-9">
-                          <span class="font-size-16 text-black pl-2 ml-1 text-capitalize">{{ getLabelText(appointmentData.app_lb_type) }}</span>
+                          <span class="font-size-16 text-black pl-2 ml-1 text-capitalize">{{ getLabelText(appointmentData.backgroundColor) }}</span>
                         </div>
                     </div>
                   </template>
@@ -582,6 +582,8 @@ export default {
                   start_time: new Date(appointment.starts_at),
                   time: appointment.time,
                   end_time: new Date(appointment.ends_at),
+                  note: appointment.note,
+                  backgroundColor: appointment.label_name,
                   patient_phone: appointment.patient_phone,
                   patient_id: appointment.patient_id,
                   patient_attended: appointment.patient_attended,
