@@ -264,34 +264,43 @@
                                          :format="'HH.mm'"></date-picker>
                         </div>
                     </div>
-                    <div class="row align-items-center justify-content-between w-100" v-if="!disabled || appointmentData.note" :class="{'mb-3': !disabled}">
+                    <div class="row align-items-center justify-content-between w-100" v-if="!disabled || appointmentData.notes" :class="{'mb-3': !disabled}">
                         <div class="col-md-3">
                             <label for="notes">{{ $t('calendarEvent.note') }}</label>
                         </div>
                         <div class="col-md-9">
-                            <textarea :disabled="disabled" row="2" v-model="appointmentData.note" class="form-control form-control-disabled font-size-16 mt-3" placeholder="Add your note here for event!" id="note" required></textarea>
+                            <textarea :disabled="disabled" row="2" v-model="appointmentData.notes" class="form-control form-control-disabled font-size-16 mt-3" placeholder="Add your note here for event!" id="note" required></textarea>
                         </div>
                     </div>
                     <template v-if="!disabled || appointmentData.patient_attended">
-                        <div class="row align-items-center justify-content-between w-100 pt-1 mb-3" :class="{'mb-3': !disabled}">
-                            <div class="col-md-3">
-                                <label for="color" class="mb-0">{{ $t('calendarEvent.patient_attended') }}</label><br>
-                            </div>
-                            <div class="col-md-9">
-                                <template v-for="(item,index) in patient_attend">
-                                    <b-form-radio class="custom-radio-patient font-size-16"
-                                                  inline
-                                                  v-model="appointmentData.patient_attended"
-                                                  :value="item.value"
-                                                  :key="index"
-                                                  v-if="showProps(item, appointmentData.patient_attended)">
-                                        {{ item.label }}
-                                    </b-form-radio>
-                                </template>
-                            </div>
-                        </div>
-                    </template>
-                    <div class="row align-items-center justify-content-between w-100 pt-3 mb-3" v-if="!disabled || appointmentData.backgroundColor">
+                      <div v-if="!disabled" class="row align-items-center justify-content-between w-100 pt-1" :class="{'mb-3': !disabled}">
+                          <div class="col-md-3">
+                              <label for="color" class="mb-0">{{ $t('calendarEvent.patient_attended') }}</label><br>
+                          </div>
+                          <div class="col-md-9">
+                              <template v-for="(item,index) in patient_attend">
+                                  <b-form-radio class="custom-radio-patient font-size-16"
+                                                inline
+                                                v-model="appointmentData.patient_attended"
+                                                :value="item.value"
+                                                :key="index"
+                                                v-if="showProps(item, appointmentData.patient_attended)">
+                                      {{ item.label }}
+                                  </b-form-radio>
+                              </template>
+                          </div>
+                      </div>
+                      <div v-else class="row align-items-center justify-content-between w-100 pt-1" :class="{'mb-3': !disabled}">
+                          <div class="col-md-3">
+                              <label for="color" class="mb-0">{{ $t('calendarEvent.patient_attended') }}</label><br>
+                          </div>
+                          <div class="col-md-9">
+                            <span class="font-size-16 text-black pl-2 ml-1 text-capitalize">{{ appointmentData.patient_attended }}</span>
+                          </div>
+                      </div>
+                  </template>
+                  <template v-if="!disabled || appointmentData.backgroundColor || appointmentData.app_lb_type">
+                    <div v-if="!disabled" class="row align-items-center justify-content-between w-100 pt-3 mb-3">
                         <div class="col-md-3">
                             <label for="color" class="mt-1 ml-1">{{ $t('calendarEvent.labels') }}</label><br>
                         </div>
@@ -310,6 +319,15 @@
                             </template>
                         </div>
                     </div>
+                    <div v-else class="row align-items-center justify-content-between w-100 pt-3 mb-3">
+                        <div class="col-md-3">
+                            <label for="color" class="mt-1 ml-1">{{ $t('calendarEvent.labels') }}</label><br>
+                        </div>
+                        <div class="col-md-9">
+                          <span class="font-size-16 text-black pl-2 ml-1 text-capitalize">{{ getLabelText(appointmentData.app_lb_type) }}</span>
+                        </div>
+                    </div>
+                  </template>
                     <div class="modal-footer modal-footer-bt" style="width: 100%;">
                         <template v-if="disabled">
                             <button v-if="appointmentData.appointment_canceled_in_advance_by_clinic === false && appointmentData.appointment_canceled_in_advance_by_patient === false || openCancelationModal === true" type="button" class="btn btn-secondary" @click="openCancelationModal = true">{{ $t('calendar.btnCancelation') }}</button>
@@ -529,6 +547,10 @@ export default {
     }
   },
   methods: {
+    getLabelText (type) {
+      const label = this.colors.find(color => color.type === type)
+      return label.text
+    },
     getDentists () {
       getDentists().then(response => {
         this.dentists = response
