@@ -23,7 +23,7 @@
                       <h5>My {{ $t('assignments.todaysAssignments') }}</h5>
                     </b-col>
                     <b-col cols="12" lg="6" v-if="myCompletedAssignments">
-                      <b-progress :value="myCompletedAssignments" :max="100" show-progress animated></b-progress>
+                      <b-progress :value="myCompletedAssignments" :max="100" show-progress></b-progress>
                     </b-col>
                   </b-row>
               </template>
@@ -499,6 +499,10 @@ body  .custom-control-label::before {
 }
 body  .custom-control-label::after {
   top:50% !important;
+}
+
+.progress-bar {
+  background-color: #4d9eae !important;
 }
 
 @media (max-width: 1661px) {
