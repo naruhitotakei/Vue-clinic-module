@@ -55,9 +55,29 @@ const getRevenueByProduct = (request, response, start, end, prm_client_id, scope
     })
 }
 
+const getNewEnquiriesPerDay = (request, response, start, end, prm_client_id, scope) => {
+    let statement = "SELECT date::date, COUNT(enq.id) AS enquiries_count, co.name AS country, enq.prm_client_id "
+    statment += "FROM generate_series($1::date, $2::date, '1 day'::interval) date "
+    statment += "LEFT JOIN enquiries enq ON enq.created_at::date = date "
+    statment += "LEFT JOIN countries co ON enq.country_id = co.id "
+    statment += "WHERE enq.id IS NOT NULL "
+    if (scope == 'All') {
+    } else if (scope == 'PrmClient') {
+        statement += "AND enq.prm_client_id = " + prm_client_id;
+    }
+    statement += 'GROUP BY date, co.name, enq.prm_client_id'
+    pool.query(statement, [start, end], (error, results) => {
+        if (error) {
+            throw error
+        }
+        response.status(200).json(results.rows)
+    })
+}
+
 module.exports = {
   getClinicAttendance,
   getVisitsByCountryInAWeek,
   getDoctorsStatisticPerWeek,
-  getRevenueByProduct
+  getRevenueByProduct,
+  getNewEnquiriesPerDay
 }
