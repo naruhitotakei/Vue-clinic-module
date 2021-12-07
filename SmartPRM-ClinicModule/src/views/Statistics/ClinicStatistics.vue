@@ -107,6 +107,8 @@
         </iq-card>
       </b-col>
     </b-row>
+
+    <LeadsChart />
   </b-container>
 </template>
 <script>
@@ -114,11 +116,12 @@ import { xray } from '../../config/pluginInit'
 import IqCard from '../../components/xray/cards/iq-card'
 import { clinicStatisticsAttendance, getRevenueByProduct } from '../../services/statistics'
 import { getDatesForCurrentYear } from '../../services/commonCodeLists'
+import LeadsChart from '@/components/ClinicStats/LeadsChart.vue'
 // import moment from 'moment'
 
 export default {
   name: 'Dashboard1',
-  components: { IqCard },
+  components: { IqCard, LeadsChart },
   mounted () {
     xray.index()
     this.getStartDates()
@@ -128,6 +131,8 @@ export default {
     return {
       startDate: null,
       endDate: null,
+      leadStartDate: null,
+      leadEndDate: null,
       attendance: 0,
       statistics: [],
       slickOptions: {
@@ -266,6 +271,11 @@ export default {
     onDateChange () {
       if (this.startDate && this.endDate) {
         this.getClinicRevenueByProduct(this.startDate, this.endDate)
+      }
+    },
+    onLeadDateChange () {
+      if (this.leadStartDate && this.leadEndDate) {
+        this.getClinicLeadStats(this.leadStartDate, this.leadEndDate)
       }
     },
     getClinicRevenueByProduct (start, end) {
