@@ -24,7 +24,8 @@ const getConfig = (request, response, ip, premiseId) => {
             premise_street as street,
             premise_house_number as house_number,
             premise_post_code as post_code,
-            premise_city as city
+            premise_city as city,
+            company_id
         FROM prm_company_premise
         WHERE premise_id = $1
         LIMIT 1
@@ -43,7 +44,8 @@ const getConfig = (request, response, ip, premiseId) => {
             lang,
             premise: {
                 name: premise.name,
-                address: `${premise.street} ${premise.house_number}, ${premise.post_code} ${premise.city}`
+                address: `${premise.street} ${premise.house_number}, ${premise.post_code} ${premise.city}`,
+                company_id: premise.company_id,
             }
         })
     })
