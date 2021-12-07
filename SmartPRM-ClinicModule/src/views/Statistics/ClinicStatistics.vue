@@ -113,6 +113,7 @@
 import { xray } from '../../config/pluginInit'
 import IqCard from '../../components/xray/cards/iq-card'
 import { clinicStatisticsAttendance, getRevenueByProduct } from '../../services/statistics'
+import { getDatesForCurrentYear } from '../../services/commonCodeLists'
 // import moment from 'moment'
 
 export default {
@@ -120,7 +121,7 @@ export default {
   components: { IqCard },
   mounted () {
     xray.index()
-    // this.getClinicRevenueByProduct()
+    this.getStartDates()
     this.getAttendance()
   },
   data () {
@@ -253,6 +254,15 @@ export default {
     }
   },
   methods: {
+    getStartDates () {
+      getDatesForCurrentYear().then(response => {
+        const start = response[0]
+        const end = response[response.length - 1]
+        this.startDate = start['?column?'].split('T')[0]
+        this.endDate = end['?column?'].split('T')[0]
+        this.getClinicRevenueByProduct(this.startDate, this.endDate)
+      })
+    },
     onDateChange () {
       if (this.startDate && this.endDate) {
         this.getClinicRevenueByProduct(this.startDate, this.endDate)
