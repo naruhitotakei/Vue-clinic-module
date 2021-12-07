@@ -101,7 +101,7 @@
     "openAssignmentsColumn": {
       "description": "Description",
       "patientName": "Patient name",
-      "assignedTo": "Assigned name",
+      "assignedTo": "Assign to",
       "dueAt": "Due at"
     },
     "operationsDropDown": {
@@ -529,7 +529,7 @@
       "enquiry": "Patient",
       "description": "Description",
       "due_at": "Date",
-      "users": "User",
+      "assignTo": "Assign to",
       "close": "Close",
       "save": "Save",
       "patientAttended": "Patient Attended"

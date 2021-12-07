@@ -961,7 +961,7 @@
       <form>
         <div class="form-row">
           <div class="col-md-12 mb-3" v-if="users">
-            <label for="title">{{ $t('assignments.addAssignmentsModal.users') }} *</label>
+            <label for="title">{{ $t('assignments.addAssignmentsModal.assignTo') }} *</label>
             <v-select
                 taggable
                 :clearable="false"
