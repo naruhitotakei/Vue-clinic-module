@@ -60,7 +60,23 @@
       <b-col sm="12">
         <iq-card class-name="iq-card-block iq-card-stretch iq-card-height">
           <template v-slot:headerTitle>
-              <h4 class="card-title">{{ $t('statisticsForClinic.statisticsForClinicHeader') }}</h4>
+            <h4 class="card-title mt-3">{{ $t('statisticsForClinic.statisticsForClinicHeader') }}</h4>
+            <b-form>
+              <b-row>
+                <b-col cols="12" sm="6" md="4" lg="3">
+                  <b-form-group>
+                    <label style="padding-top: 8px;">From:</label>
+                    <b-form-input style="line-height: normal" class="date" id="exampleStartdate" type="date" v-model="startDate" @change="onDateChange"></b-form-input>
+                  </b-form-group>
+                </b-col>
+                <b-col cols="12" sm="6" md="4" lg="3">
+                  <b-form-group>
+                    <label style="padding-top: 8px;">End:</label>
+                    <b-form-input style="line-height: normal" class="date" id="exampleEnddate" type="date" v-model="endDate" @change="onDateChange"></b-form-input>
+                  </b-form-group>
+                </b-col>
+              </b-row>
+            </b-form>
           </template>
           <template v-slot:body>
             <div class="iq-card-body pb-0 mt-3">
@@ -86,7 +102,7 @@
             <div id="home-servey-chart"></div>
             <!-- <ApexChart element="home-chart-09" :chartOption="homesurvey" v-if="$route.meta.dark"/> -->
             <!-- <ApexChart element="home-chart-09" :chartOption="chart9" v-else/> -->
-            <ApexChart element="home-chart-09" :chartOption="chart9"/>
+            <apex-chart type="bar" :series="series" :options="chartOptions" />
           </template>
         </iq-card>
       </b-col>
@@ -96,22 +112,21 @@
 <script>
 import { xray } from '../../config/pluginInit'
 import IqCard from '../../components/xray/cards/iq-card'
-import { clinicStatisticsAttendance } from '../../services/statistics'
-// import { getClinicStatistics } from '../../services/reporting'
+import { clinicStatisticsAttendance, getRevenueByProduct } from '../../services/statistics'
 // import moment from 'moment'
 
-let dates = []
-let totalRevenue = []
 export default {
   name: 'Dashboard1',
   components: { IqCard },
   mounted () {
     xray.index()
-    // this.getStatistics()
+    // this.getClinicRevenueByProduct()
     this.getAttendance()
   },
   data () {
     return {
+      startDate: null,
+      endDate: null,
       attendance: 0,
       statistics: [],
       slickOptions: {
@@ -138,11 +153,11 @@ export default {
           }
         }]
       },
-      chart9: {
-        series: [{
-          name: 'Total Revenue',
-          data: totalRevenue
-        }],
+      series: [{
+        name: 'Total Revenue',
+        data: []
+      }],
+      chartOptions: {
         chart: {
           type: 'bar',
           height: 350
@@ -172,25 +187,112 @@ export default {
         },
         yaxis: {
           title: {
-            text: 'Growth'
+            text: 'Total Revenue'
+          },
+          labels: {
+            formatter: function (y) {
+              return y.toLocaleString()
+            }
           }
-          // labels: {
-          //   formatter: function (y) {
-          //     return y.toFixed(0) + '%'
-          //   }
-          // }
         },
         xaxis: {
-          type: 'datetime',
-          categories: dates,
+          categories: [],
           labels: {
-            rotate: -90
           }
         }
       }
+      // chart9: {
+      //   series: [{
+      //     name: 'Total Revenue',
+      //     data: []
+      //   }],
+      //   chart: {
+      //     type: 'bar',
+      //     height: 350
+      //   },
+      //   plotOptions: {
+      //     bar: {
+      //       colors: {
+      //         ranges: [{
+      //           from: -100,
+      //           to: -46,
+      //           color: '#e64141'
+      //         }, {
+      //           from: -45,
+      //           to: 0,
+      //           color: '#089bab'
+      //         }, {
+      //           from: 0,
+      //           to: 20,
+      //           color: '#FC9F5B'
+      //         }]
+      //       },
+      //       columnWidth: '80%'
+      //     }
+      //   },
+      //   dataLabels: {
+      //     enabled: false
+      //   },
+      //   yaxis: {
+      //     title: {
+      //       text: 'Growth'
+      //     },
+      //     labels: {
+      //       formatter: function (y) {
+      //         return y.toFixed(0)
+      //       }
+      //     }
+      //   },
+      //   xaxis: {
+      //     categories: [],
+      //     labels: {
+      //       rotate: -90
+      //     }
+      //   }
+      // }
     }
   },
   methods: {
+    onDateChange () {
+      if (this.startDate && this.endDate) {
+        this.getClinicRevenueByProduct(this.startDate, this.endDate)
+      }
+    },
+    getClinicRevenueByProduct (start, end) {
+      getRevenueByProduct(start, end).then(response => {
+        console.log(response)
+        this.setChartData(response)
+      })
+    },
+    setChartData (data) {
+      let prNames = []
+      let sumArray = []
+      let sumOfRevenue = 0
+      data.forEach(item => {
+        prNames.push(item.pr_name)
+        sumArray.push(item.sum)
+        sumOfRevenue += Number(item.sum)
+      })
+      this.series = [{
+        data: sumArray
+      }]
+
+      this.chartOptions = {
+        xaxis: {
+          categories: [...prNames]
+        },
+        yaxis: {
+          labels: {
+            formatter: function (y) {
+              return y.toLocaleString()
+            }
+          },
+          title: {
+            text: 'Sum of Revenue ' + sumOfRevenue.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + ' EUR'
+          }
+        }
+      }
+    },
     // getStatistics () {
     //   getClinicStatistics().then(response => {
     //     if (typeof response !== 'string') {
