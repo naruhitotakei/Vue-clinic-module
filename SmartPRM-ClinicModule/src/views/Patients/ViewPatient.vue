@@ -426,11 +426,13 @@
                                           </iq-card>
                                           <iq-card>
                                               <template v-slot:body>
-                                                  <div class="iq-card-header d-flex justify-content-between">
+                                                  <div class="iq-card-header">
+                                                    <div class="row justify-content-between align-items-center">
                                                       <div class="iq-header-title">
-                                                          <h4 class="card-title">{{ $t('EPR.overview.pastAppointments') }}</h4>
-                                                          <hr />
+                                                        <h4 class="card-title">{{ $t('EPR.overview.pastAppointments') }}</h4>
                                                       </div>
+                                                    </div>
+                                                    <hr />
                                                   </div>
                                                   <ul class="iq-timeline" id="pastAppointments">
                                                       <li v-for="(item, index) in pastAppointments" :key="index">
@@ -961,7 +963,7 @@
       <form>
         <div class="form-row">
           <div class="col-md-12 mb-3" v-if="users">
-            <label for="title">{{ $t('assignments.addAssignmentsModal.users') }} *</label>
+            <label for="title">{{ $t('assignments.addAssignmentsModal.assignTo') }} *</label>
             <v-select
                 taggable
                 :clearable="false"

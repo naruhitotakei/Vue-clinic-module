@@ -68,23 +68,23 @@
               <template v-for="(body,bodyKey ) in getServicesSummary" >
                 <tr :key="bodyKey" class="main-row">
                   <td style="max-width: 200px"><span class="font-weight-bold">{{ bodyKey }}</span></td>
-                  <td><span class="font-weight-bold">&nbsp; {{ body.group_count }}&nbsp; </span></td>
-                  <td><span class="font-weight-bold">{{ formatNumber(Math.trunc(body.group_amount)) }}   &#8364;</span></td>
-                  <td><span class="font-weight-bold">{{ formatNumber(Math.trunc(body.group_fee)) }}   &#8364;</span></td>
+                  <td><span class="font-weight-bold">{{ body.group_count }}</span></td>
+                  <td><span class="font-weight-bold">{{ formatNumber(Math.trunc(body.group_amount)) }}&#8364;</span></td>
+                  <td><span class="font-weight-bold">{{ formatNumber(Math.trunc(body.group_fee)) }}&#8364;</span></td>
                 </tr>
                   <template v-for="(item, index) in body" >
                    <tr :key="Math.random(index + 1000)">
                      <td  style="max-width: 200px">{{ item.service_title }}</td>
-                     <td class="td-count">&nbsp; {{ item.count }}&nbsp;  </td>
-                     <td>{{ formatNumber(Math.trunc(item.sum)) }} &#8364;</td>
-                     <td>{{ formatNumber(Math.trunc(item.fee_sum)) }} &#8364;</td>
+                     <td class="td-count">{{ item.count }}</td>
+                     <td>{{ formatNumber(Math.trunc(item.sum)) }}&#8364;</td>
+                     <td>{{ formatNumber(Math.trunc(item.fee_sum)) }}&#8364;</td>
                    </tr>
                   </template>
               </template>
               <tr v-if="servicesSummaryTotalCount">
                 <td><span class="font-weight-bold"> Total: </span></td>
                 <td><span class="font-weight-bold">{{formatNumber(Math.trunc(servicesSummaryTotalCount))}}</span></td>
-                <td><span class="font-weight-bold">{{formatNumber(Math.trunc(servicesSummaryTotalAmount))}} &#8364;</span></td>
+                <td><span class="font-weight-bold">{{formatNumber(Math.trunc(servicesSummaryTotalAmount))}}&#8364;</span></td>
                 <td><span class="font-weight-bold">{{formatNumber(Math.trunc(servicesSummaryTotalFee))}} &#8364;</span></td>
               </tr>
               </tbody>
@@ -117,11 +117,11 @@
                 <template v-for="(item, index) in body" >
                   <tr :key="Math.random(index + 1000)">
                     <td class="text-center"><span >{{ item.doctor }}</span></td>
-                    <td class="text-center"><span >{{ item.service_title}}  </span></td>
+                    <td class="text-center"><span >{{ item.service_title}}</span></td>
                     <td class="text-center"><router-link tag="span" :to="'/patients/'+ item.enquiry_id" class="clickable">{{ item.name }} {{ item.last_name}}  </router-link></td>
-                    <td class="text-center"><span>{{ formatNumber(Math.trunc(item.price))}} &#8364;  </span></td>
-                    <td class="text-center"><span>{{ formatNumber(Math.trunc(item.fee))}} &#8364;  </span></td>
-                    <td class="text-center"><span >{{ formatDateString(item.date)}}  </span></td>
+                    <td class="text-center"><span>{{ formatNumber(Math.trunc(item.price))}}&#8364;</span></td>
+                    <td class="text-center"><span>{{ formatNumber(Math.trunc(item.fee))}}&#8364;</span></td>
+                    <td class="text-center"><span >{{ formatDateString(item.date)}}</span></td>
                   </tr>
                 </template>
               </template>
@@ -129,8 +129,8 @@
                   <td><span class="font-weight-bold"> Total: </span></td>
                   <td><span class="font-weight-bold"></span></td>
                   <td><span class="font-weight-bold"></span></td>
-                  <td> <span class="font-weight-bold">{{formatNumber(Math.trunc(servicesListTotalCount))}} &#8364;</span></td>
-                  <td> <span class="font-weight-bold">{{formatNumber(Math.trunc(servicesListTotalFee))}} &#8364;</span></td>
+                  <td> <span class="font-weight-bold">{{formatNumber(Math.trunc(servicesListTotalCount))}}&#8364;</span></td>
+                  <td> <span class="font-weight-bold">{{formatNumber(Math.trunc(servicesListTotalFee))}}&#8364;</span></td>
               </tr>
               </tbody>
             </b-table-simple>
@@ -251,8 +251,10 @@ export default {
     },
     exportReportToExcel (tableName) {
       let table = this.$refs[tableName]
+      console.log('Table')
+      console.log(table)
       let euro = /€/gi
-      let html = table.$el.outerHTML.replace(euro, '&nbsp &euro;')
+      let html = table.$el.outerHTML.replace(euro, '&euro;')
       this.$refs[`excel-${tableName}`].href = 'data:application/vnd.ms-excel,' + encodeURIComponent(html)
       let documentName = ''
       let date = new Date().toLocaleString()
