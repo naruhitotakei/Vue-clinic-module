@@ -81,8 +81,8 @@ export async function getCountriesWithPatients () {
   return rawResponse.json()
 }
 
-export async function getDatesForCurrentWeek () {
-  const rawResponse = await fetch('/api/codelist/week-dates', {
+export async function getDatesForCurrentYear () {
+  const rawResponse = await fetch('/api/codelist/year-dates', {
     method: 'GET',
     credentials: 'same-origin',
     headers: {
