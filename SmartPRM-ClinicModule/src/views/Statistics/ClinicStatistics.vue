@@ -270,7 +270,6 @@ export default {
     },
     getClinicRevenueByProduct (start, end) {
       getRevenueByProduct(start, end).then(response => {
-        console.log(response)
         this.setChartData(response)
       })
     },
