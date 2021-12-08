@@ -62,7 +62,8 @@ const getRevenueByDoctor = (request, response, start, end, prm_client_id, scope)
     statement += "LEFT JOIN enquiries ON services.enquiry_id = enquiries.id "
     statement += "LEFT JOIN client_users ON services.doctor_id = client_users.id "
     statement += "LEFT JOIN users ON client_users.user_id = users.id "
-    statement += "WHERE users.id IS NOT NULL "
+    statement += "WHERE date_trunc('day', services.date) >= $1 AND (date_trunc('day', services.date) - INTERVAL '1 DAY' ) <= $2 "
+    statement += "AND users.id IS NOT NULL "
     if (scope == 'All') {
     } else if (scope == 'PrmClient') {
         statement += "AND enquiries.prm_client_id = " + prm_client_id;
