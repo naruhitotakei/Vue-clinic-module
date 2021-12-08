@@ -102,7 +102,7 @@
             <div id="home-servey-chart"></div>
             <!-- <ApexChart element="home-chart-09" :chartOption="homesurvey" v-if="$route.meta.dark"/> -->
             <!-- <ApexChart element="home-chart-09" :chartOption="chart9" v-else/> -->
-            <apex-chart type="bar" :series="series" :options="chartOptions" />
+            <apex-chart type="pie" width="100%" :series="series" :options="chartOptions" />
           </template>
         </iq-card>
       </b-col>
@@ -159,54 +159,63 @@ export default {
           }
         }]
       },
-      series: [{
-        name: 'Total Revenue',
-        data: []
-      }],
+      series: [],
       chartOptions: {
-        chart: {
-          type: 'bar',
-          height: 350
-        },
-        plotOptions: {
-          bar: {
-            colors: {
-              ranges: [{
-                from: -100,
-                to: -46,
-                color: '#e64141'
-              }, {
-                from: -45,
-                to: 0,
-                color: '#089bab'
-              }, {
-                from: 0,
-                to: 20,
-                color: '#FC9F5B'
-              }]
-            },
-            columnWidth: '80%'
-          }
-        },
-        dataLabels: {
-          enabled: false
-        },
-        yaxis: {
-          title: {
-            text: 'Total Revenue'
-          },
-          labels: {
-            formatter: function (y) {
-              return y.toLocaleString()
-            }
-          }
-        },
-        xaxis: {
-          categories: [],
-          labels: {
-          }
-        }
+        // chart: {
+        //   type: 'pie',
+        //   height: 350
+        // },
+        labels: []
+        // responsive: [{
+        //   breakpoint: 480,
+        //   options: {
+        //     chart: {
+        //       width: 200
+        //     },
+        //     legend: {
+        //       position: 'bottom'
+        //     }
+        //   }
+        // }]
+        // plotOptions: {
+        //   bar: {
+        //     colors: {
+        //       ranges: [{
+        //         from: -100,
+        //         to: -46,
+        //         color: '#e64141'
+        //       }, {
+        //         from: -45,
+        //         to: 0,
+        //         color: '#089bab'
+        //       }, {
+        //         from: 0,
+        //         to: 20,
+        //         color: '#FC9F5B'
+        //       }]
+        //     },
+        //     columnWidth: '80%'
+        //   }
+        // },
+        // dataLabels: {
+        //   enabled: false
+        // },
+        // yaxis: {
+        //   title: {
+        //     text: 'Total Revenue'
+        //   },
+        //   labels: {
+        //     formatter: function (y) {
+        //       return y.toLocaleString()
+        //     }
+        //   }
+        // },
+        // xaxis: {
+        //   categories: [],
+        //   labels: {
+        //   }
       }
+      // }
       // chart9: {
       //   series: [{
       //     name: 'Total Revenue',
@@ -286,31 +295,34 @@ export default {
     setChartData (data) {
       let prNames = []
       let sumArray = []
-      let sumOfRevenue = 0
+      // let sumOfRevenue = 0
       data.forEach(item => {
         prNames.push(item.pr_name)
-        sumArray.push(item.sum)
-        sumOfRevenue += Number(item.sum)
+        sumArray.push(Math.floor(Number(item.sum)))
+        // sumOfRevenue += Number(item.sum)
       })
-      this.series = [{
-        data: sumArray
-      }]
+
+      this.series = [...sumArray]
 
       this.chartOptions = {
-        xaxis: {
-          categories: [...prNames]
-        },
-        yaxis: {
-          labels: {
-            formatter: function (y) {
-              return y.toLocaleString()
-            }
-          },
-          title: {
-            text: 'Sum of Revenue ' + sumOfRevenue.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + ' EUR'
-          }
-        }
+        labels: [...prNames]
       }
+
+      // this.chartOptions = {
+      //   xaxis: {
+      //     categories: [...prNames]
+      //   },
+      //   yaxis: {
+      //     labels: {
+      //       formatter: function (y) {
+      //         return y.toLocaleString()
+      //       }
+      //     },
+      //     title: {
+      //       text: 'Sum of Revenue ' + sumOfRevenue.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + ' EUR'
+      //     }
+      //   }
+      // }
     },
     // getStatistics () {
     //   getClinicStatistics().then(response => {
