@@ -55,6 +55,27 @@ const getRevenueByProduct = (request, response, start, end, prm_client_id, scope
     })
 }
 
+const getRevenueByDoctor = (request, response, start, end, prm_client_id, scope) => {
+    let statement = "SELECT products.name AS product, concat(users.title, ' ', users.first_name, ' ', users.surname) AS doctor_name, " +
+        "COUNT (users.id), SUM(services.price), enquiries.prm_client_id FROM services "
+    statement += "LEFT JOIN products ON services.product_id = products.id "
+    statement += "LEFT JOIN enquiries ON services.enquiry_id = enquiries.id "
+    statement += "LEFT JOIN client_users ON services.doctor_id = client_users.id "
+    statement += "LEFT JOIN users ON client_users.user_id = users.id "
+    statement += "WHERE users.id IS NOT NULL "
+    if (scope == 'All') {
+    } else if (scope == 'PrmClient') {
+        statement += "AND enquiries.prm_client_id = " + prm_client_id;
+    }
+    statement += "GROUP BY products.name, doctor_name, enquiries.prm_client_id "
+    pool.query(statement, [start, end], (error, results) => {
+        if (error) {
+            throw error
+        }
+        response.status(200).json(results.rows)
+    })
+}
+
 const getNewEnquiriesPerDay = (request, response, start, end, prm_client_id, scope) => {
     let statement = "SELECT date::date, COUNT(enq.id) AS enquiries_count, co.name AS country, enq.prm_client_id "
     statement += "FROM generate_series($1::date, $2::date, '1 day'::interval) date "
@@ -79,5 +100,6 @@ module.exports = {
   getVisitsByCountryInAWeek,
   getDoctorsStatisticPerWeek,
   getRevenueByProduct,
-  getNewEnquiriesPerDay
+  getNewEnquiriesPerDay,
+  getRevenueByDoctor
 }
