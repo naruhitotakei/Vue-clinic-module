@@ -51,7 +51,7 @@
             <b-modal v-model="modalCompanyShow" no-close-on-backdrop size="lg" title="Add company" :ok-disabled="isCompanyDisabled" @close="cancelCompany"  @cancel="cancelCompany" :ok-title="$t('servicesAndProducts.addProductModal.save')" @ok="addCompany" :cancel-title="$t('servicesAndProducts.addProductModal.close')">
               <form>
                 <div class="form-row">
-                  <ImageUpload :src="`/api/files/logo/${companyFormData.company_id}`" />
+                  <ImageUpload :src="`/api/files/logo/${companyFormData.prm_client_id}`" />
                   <div class="col-md-12 mb-3">
                       <label for="title">Company name *</label>
                       <input type="text" v-model="companyFormData.company_name" class="form-control" placeholder="Name">
