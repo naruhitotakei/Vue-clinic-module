@@ -3,7 +3,7 @@
     <template v-if="lang != null">
       <div class="card my-4">
         <div class="card-body d-flex justify-content-between">
-          <img :src="`/api/files/logo/${premise.company_id}`" alt="" style="height: 3rem; width: auto">
+          <img :src="`/api/files/logo/${premise.client_id}`" alt="" style="height: 3rem; width: auto">
           <v-select
             :clearable="false"
             @input="lang = $event"

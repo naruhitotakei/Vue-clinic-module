@@ -20,13 +20,14 @@ const getConfig = (request, response, ip, premiseId) => {
         : 'en'
     const statement = /* sql */`
         SELECT
-            premise_name as "name",
-            premise_street as street,
-            premise_house_number as house_number,
-            premise_post_code as post_code,
-            premise_city as city,
-            company_id
+            prm_company_premise.premise_name as "name",
+            prm_company_premise.premise_street as street,
+            prm_company_premise.premise_house_number as house_number,
+            prm_company_premise.premise_post_code as post_code,
+            prm_company_premise.premise_city as city,
+            prm_company.prm_client_id as client_id
         FROM prm_company_premise
+        JOIN prm_company ON prm_company_premise.company_id = prm_company.company_id
         WHERE premise_id = $1
         LIMIT 1
     `
@@ -45,7 +46,7 @@ const getConfig = (request, response, ip, premiseId) => {
             premise: {
                 name: premise.name,
                 address: `${premise.street} ${premise.house_number}, ${premise.post_code} ${premise.city}`,
-                company_id: premise.company_id,
+                client_id: premise.client_id
             }
         })
     })
