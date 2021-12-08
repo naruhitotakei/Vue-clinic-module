@@ -23,7 +23,7 @@ export async function getOnlineBookingProductsNaming (id) {
 }
 
 export async function getOnlineBookingProductsPublic (locale) {
-  const rawResponse = await fetch('/api/public/online-booking-products/' + locale, {
+  const rawResponse = await fetch(`/api/public/online-booking-products/?${new URLSearchParams({ locale })}`, {
     method: 'GET',
     credentials: 'same-origin',
     headers: {

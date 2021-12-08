@@ -68,7 +68,7 @@ const getOnlineBookingProductsPublic = (request, response, locale) => {
 
     pool.query(statement, [locale], (error, results) => {
         if (error) {
-            response.status(500).send()
+            response.status(500).send(error)
 
             return
         }
