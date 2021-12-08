@@ -40,6 +40,18 @@ export async function getRevenueByProduct (start, end) {
   return rawResponse.json()
 }
 
+export async function getRevenueByDoctor (start, end) {
+  const rawResponse = await fetch('/api/statistics/revenue-by-doctor/' + start + '/' + end, {
+    method: 'GET',
+    credentials: 'same-origin',
+    headers: {
+      'Accept': 'application/json',
+      'Content-Type': 'application/json'
+    }
+  })
+  return rawResponse.json()
+}
+
 export async function getLeadsPerDay (start, end) {
   const rawResponse = await fetch('/api/statistics/new-leads/' + start + '/' + end, {
     method: 'GET',
