@@ -818,8 +818,9 @@
                       <iq-card>
                           <template v-slot:body>
                             <h3 class="card-title" style="margin-top: 10px;">{{ $t('EPR.invoices.servicesSummary') }}</h3>
-                            <div class="btn-add-patient mb-4 mt-0">
-                                <b-button variant="primary" @click="modalServiceShow = true"><i class="ri-add-line mr-2"></i>{{ $t('EPR.invoices.addService') }}</b-button>
+                            <div class="mb-4 mt-0 d-flex align-items-center justify-content-between">
+                              <h5><strong>Total Services: {{ services.length }}</strong></h5>
+                              <b-button variant="primary" @click="modalServiceShow = true"><i class="ri-add-line mr-2"></i>{{ $t('EPR.invoices.addService') }}</b-button>
                             </div>
                               <b-table small
                                        id="patient-services"
@@ -1457,7 +1458,7 @@ export default {
           key: 'price',
           class: 'text-left',
           formatter: value => {
-            return value + ' EUR'
+            return Number(value).toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + ' EUR'
           }
         },
         { label: this.$t('reportingEmazing.servicesListColumn.serviceDoctor'), key: 'doctor', class: 'text-left' },
