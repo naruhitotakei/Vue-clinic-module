@@ -56,8 +56,8 @@ const getRevenueByProduct = (request, response, start, end, prm_client_id, scope
 }
 
 const getRevenueByDoctor = (request, response, start, end, prm_client_id, scope) => {
-    let statement = "SELECT products.name AS product, concat(users.title, ' ', users.first_name, ' ', users.surname) AS doctor_name, " +
-        "COUNT (users.id), SUM(services.price), enquiries.prm_client_id FROM services "
+    let statement = "SELECT products.name AS product_name, concat(users.title, ' ', users.first_name, ' ', users.surname) AS doctor_name, " +
+        "array_agg(products.id) AS products, COUNT (users.id), SUM(services.price), enquiries.prm_client_id FROM services "
     statement += "LEFT JOIN products ON services.product_id = products.id "
     statement += "LEFT JOIN enquiries ON services.enquiry_id = enquiries.id "
     statement += "LEFT JOIN client_users ON services.doctor_id = client_users.id "
@@ -78,7 +78,8 @@ const getRevenueByDoctor = (request, response, start, end, prm_client_id, scope)
 }
 
 const getNewEnquiriesPerDay = (request, response, start, end, prm_client_id, scope) => {
-    let statement = "SELECT date::date, COUNT(enq.id) AS enquiries_count, co.name AS country, enq.prm_client_id "
+    let statement = "SELECT date::date, COUNT(enq.id) AS enquiries_count, co.name AS country, "
+    statement += "enq.prm_client_id, array_agg(enq.id) AS enquiries_ids "
     statement += "FROM generate_series($1::date, $2::date, '1 day'::interval) date "
     statement += "LEFT JOIN enquiries enq ON enq.created_at::date = date "
     statement += "LEFT JOIN countries co ON enq.country_id = co.id "
