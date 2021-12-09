@@ -972,6 +972,9 @@
                 :options="users"
                 v-model="formData.user"
             >
+              <template v-slot:selected-option="data">
+                {{ data.name }} {{ data.surname }}
+              </template>
             </v-select>
           </div>
           <div class="col-md-12 mb-3">
