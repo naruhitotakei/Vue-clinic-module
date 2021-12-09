@@ -113,6 +113,9 @@
                   <td><span class="font-weight-bold">{{formatNumber(Math.trunc(body.group_price))}} &#8364;</span></td>
                   <td><span class="font-weight-bold">{{formatNumber(Math.trunc(body.group_fee))}} &#8364;</span></td>
                   <td><span class="font-weight-bold"></span></td>
+                  <td><span class="font-weight-bold"></span></td>
+                  <td><span class="font-weight-bold"></span></td>
+                  <td><span class="font-weight-bold"></span></td>
                 </tr>
                 <template v-for="(item, index) in body" >
                   <tr :key="Math.random(index + 1000)">
@@ -122,6 +125,9 @@
                     <td class="text-center"><span>{{ formatNumber(Math.trunc(item.price))}}&#8364;</span></td>
                     <td class="text-center"><span>{{ formatNumber(Math.trunc(item.fee))}}&#8364;</span></td>
                     <td class="text-center"><span >{{ formatDateString(item.date)}}</span></td>
+                    <td class="text-center"><span >{{ item.country}}</span></td>
+                    <td class="text-center"><span >{{ item.region}}</span></td>
+                    <td class="text-center"><span >{{ item.municipality}}</span></td>
                   </tr>
                 </template>
               </template>
@@ -184,7 +190,10 @@ export default {
         { label: this.$t('reportingEmazing.servicesListColumn.serviceLeadName'), key: 'name', class: 'text-left' },
         { label: this.$t('reportingEmazing.servicesListColumn.serviceAmount'), key: 'price', class: 'text-left' },
         { label: this.$t('reportingEmazing.servicesListColumn.serviceFee'), key: 'fee', class: 'text-left' },
-        { label: this.$t('reportingEmazing.servicesListColumn.serviceDate'), key: 'date', formatter: (value, key, item) => { return this.formatDateString(value) } }
+        { label: this.$t('reportingEmazing.servicesListColumn.serviceDate'), key: 'date', formatter: (value, key, item) => { return this.formatDateString(value) } },
+        { label: this.$t('reportingEmazing.servicesListColumn.serviceCountry'), key: 'fee', class: 'text-left' },
+        { label: this.$t('reportingEmazing.servicesListColumn.serviceRegion'), key: 'fee', class: 'text-left' },
+        { label: this.$t('reportingEmazing.servicesListColumn.serviceMunicipality'), key: 'fee', class: 'text-left' }
       ],
       servicesListItems: [],
       revenueList: [],
@@ -430,9 +439,13 @@ export default {
     },
     getServicesList () {
       getServiceList(this.fromdate, this.todate, this.countrySelect).then(response => {
+        console.log('Service List...', response)
         if (typeof response !== 'string') {
           let res = _.groupBy(response, 'doctor')
           for (let doc in res) {
+            res[doc].country = doc.country
+            res[doc].region = doc.region
+            res[doc].municipality = doc.municipality
             res[doc].group_price = 0
             res[doc].group_fee = 0
             res[doc].map(item => {

@@ -566,6 +566,9 @@
       "serviceFee": "Provizija",
       "serviceLocation": "Lokacija",
       "serviceDoctor": "Zdravnik",
+      "serviceCountry": "Država",
+      "serviceRegion": "Regija",
+      "serviceMunicipality": "Občina",
       "serviceLastConsult": "Lokacija zadnjega posveta"
     }
   },

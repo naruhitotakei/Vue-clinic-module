@@ -569,6 +569,9 @@
       "serviceFee": "Fee",
       "serviceLocation": "Location",
       "serviceDoctor": "Doctor",
+      "serviceCountry": "Country",
+      "serviceRegion": "Region",
+      "serviceMunicipality": "Municipality",
       "serviceLastConsult": "Last Consult Location"
     }
   },
