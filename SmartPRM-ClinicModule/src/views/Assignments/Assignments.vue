@@ -455,6 +455,9 @@
                 <template v-slot:option="option">
                   {{ option.name }} {{ option.surname }}
                 </template>
+                <template v-slot:selected-option="data">
+                  {{ data.name }} {{ data.surname }}
+                </template>
               </v-select>
             </div>
             <div class="col-md-12 mb-3">
