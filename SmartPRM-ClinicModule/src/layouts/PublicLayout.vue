@@ -2,22 +2,23 @@
   <div class="container">
     <template v-if="lang != null">
       <div class="card my-4">
-        <div class="card-body d-flex justify-content-between">
-          <img :src="`/api/files/logo/${premise.client_id}`" alt="" style="height: 3rem; width: auto">
-          <v-select
-            :clearable="false"
-            @input="lang = $event"
-            :reduce="language => language.value"
-            class="style-chooser"
-            label="title"
-            :value="$i18n.locale"
-            :options="langsOptions"
-            style="width: 12rem"
-          />
-        </div>
         <div class="card-body">
-          <div>{{ premise.name }}</div>
-          <div>{{ premise.address }}</div>
+          <div class="d-flex justify-content-between">
+            <img :src="`/api/files/logo/${premise.client_id}`" alt="" style="height: 3rem; width: auto">
+            <select v-model="lang" class="language-selector" ref="languageSelector" @change="$refs.languageSelector.blur()">
+              <option
+                v-for="{ value, title} in langsOptions"
+                :key="value"
+                :value="value"
+              >
+                {{ title }}
+              </option>
+            </select>
+          </div>
+          <div class="mt-4">
+            <div>{{ premise.name }}</div>
+            <div>{{ premise.address }}</div>
+          </div>
         </div>
       </div>
       <slot/>
@@ -64,10 +65,15 @@ export default {
 }
 </script>
 <style>
-  @import url("../assets/css/custom.css");
-  @media (max-width: 992px) {
+@import url("../assets/css/custom.css");
+@media (max-width: 992px) {
   .full-screen {
     display: none;
   }
+}
+
+.language-selector {
+  border: none;
+  background-color: transparent;
 }
 </style>
