@@ -1372,12 +1372,14 @@ app.post('/api/booking/sendsms', (req, res) => {
         vonage.verify.request({
             number: phone,
             brand: 'SMART PRM Dental'
-        }, (error, { request_id }) => {
+        }, (error, result) => {
             if (error) {
                 res.status(500)
             } else {
+                const { request_id } = result
                 res.status(200).json({
                     success: true,
+                    result,
                     requestId: request_id,
                 })
             }
@@ -1415,7 +1417,7 @@ app.post('/api/booking/confirm-and-save', (req, res) => {
                 return
             }
 
-            res.status(200).json({ success: true, code, selectedSlot })
+            res.status(200).json({ success: true, code, selectedSlot, result })
         })
     } else {
         res.status(400).json("No confirmation code")
