@@ -35,14 +35,21 @@ export default {
       services: []
     }
   },
+  watch: {
+    '$i18n.locale': {
+      immediate: true,
+      async handler (locale) {
+        const services = await getOnlineBookingProductsPublic(locale)
+        this.services = services.map((service) => ({
+          ...service,
+          serviceName: service.text,
+          time: service.default_duration,
+          price: parseFloat(service.default_online_price)
+        }))
+      }
+    }
+  },
   async mounted () {
-    const services = await getOnlineBookingProductsPublic(this.$i18n.locale)
-    this.services = services.map((service) => ({
-      ...service,
-      serviceName: service.text,
-      time: service.default_duration,
-      price: parseFloat(service.default_online_price)
-    }))
   },
   methods: {
     rowSelectHandler: function () {
