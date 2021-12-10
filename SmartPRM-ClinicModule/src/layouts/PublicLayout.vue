@@ -18,6 +18,7 @@
           <div class="mt-4">
             <div>{{ premise.name }}</div>
             <div>{{ premise.address }}</div>
+            <div>{{ premise.phone_number }}</div>
           </div>
         </div>
       </div>
