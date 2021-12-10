@@ -33,6 +33,7 @@
     "geoip-lite": "^1.4.2",
     "get-env": "^0.5.10",
     "http-proxy-middleware": "^1.0.4",
+    "module-alias": "^2.2.2",
     "moment": "^2.29.1",
     "node-forge": "^0.10.0",
     "pg": "^8.5.1",

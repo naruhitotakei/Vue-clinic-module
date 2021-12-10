@@ -24,13 +24,13 @@
             {{ $t('public.onlineBooking.chooseYourFavoriteDoctor') }}
           </div>
           <app-multiselect
-          :options="favoriteDoctors"
-          label="name"
-          trackBy="name"
-          v-model="filterDoctors"
-          :placeholder="$t('public.onlineBooking.selectOption')"
-          :selectLabel="$t('public.onlineBooking.pressEnterToSelect')"
-          :deselectLabel="$t('public.onlineBooking.pressEnterToRemove')"
+            :options="favoriteDoctors"
+            label="name"
+            trackBy="name"
+            v-model="filterDoctors"
+            :placeholder="$t('public.onlineBooking.selectOption')"
+            :selectLabel="$t('public.onlineBooking.pressEnterToSelect')"
+            :deselectLabel="$t('public.onlineBooking.pressEnterToRemove')"
           />
           </template>
           <time-selection-table
@@ -82,8 +82,9 @@ import { dailySchedule, daysScedule } from '../../booking-data'
 import TotalOrderInfo from './TotalOrderInfo.vue'
 import AppMultiselect from '../Controls/AppMultiselect.vue'
 import moment from 'moment'
+import { defineComponent } from '@vue/composition-api'
 
-export default {
+export default defineComponent({
   components: {
     Slick,
     DateCard,
@@ -114,7 +115,7 @@ export default {
       return {
         infinite: false,
         slidesToShow: 7,
-        slidesToScroll: 2,
+        slidesToScroll: 7,
         dots: true,
         responsive: [
           {
@@ -236,6 +237,7 @@ export default {
       const startDate = new Date(currDate.getTime())
       const endDate = new Date(currDate.getTime())
       endDate.setDate(endDate.getDate() + 17)
+
       /* eslint no-unmodified-loop-condition: "off" */
       while (startDate <= endDate) {
         resArray.push({
@@ -247,6 +249,7 @@ export default {
         })
         startDate.setDate(startDate.getDate() + 1)
       }
+
       return resArray
     },
     initialDate: function () {
@@ -306,8 +309,9 @@ export default {
       return resScedule
     }
   }
-}
+})
 </script>
+
 <style lang="scss" scoped>
 @import "~@/assets/scss/app-vars.scss";
 .favorite-doctor{

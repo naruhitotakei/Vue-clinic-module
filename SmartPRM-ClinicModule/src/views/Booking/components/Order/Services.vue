@@ -39,6 +39,7 @@ export default {
     '$i18n.locale': {
       immediate: true,
       async handler (locale) {
+        this.services = []
         const services = await getOnlineBookingProductsPublic(locale)
         this.services = services.map((service) => ({
           ...service,

@@ -10,7 +10,7 @@ export async function getFreeSlots () {
 }
 
 export async function getFreeSlotsPublic (params) {
-  const rawResponse = await fetch(`/api/public/free-slots?${new URLSearchParams(params)}`, {
+  const rawResponse = await fetch(`/api/appointment-slots?${new URLSearchParams(params)}`, {
     method: 'GET',
     credentials: 'same-origin',
     headers: {

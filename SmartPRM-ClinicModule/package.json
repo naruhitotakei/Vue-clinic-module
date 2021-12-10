@@ -20,6 +20,7 @@
     "@fullcalendar/resource-timeline": "^5.9.0",
     "@fullcalendar/timegrid": "^5.9.0",
     "@fullcalendar/vue": "^5.9.0",
+    "@vue/composition-api": "^1.4.1",
     "animate.css": "^3.7.2",
     "apexcharts": "^3.30.0",
     "auth0-js": "^9.12.2",
