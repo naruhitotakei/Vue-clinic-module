@@ -9,7 +9,7 @@
           v-for="(dateItem, index) in datesList"
           :key="`date_${index}`"
           :date="dateItem.date"
-          :aviability="dateItem.aviability"
+          :availability="dateItem.availability"
           :active="isActiveDate(dateItem.date)"
           :totalPrice="totalPrice"
           @date-selected="dateSelectionHandler"
@@ -243,7 +243,7 @@ export default defineComponent({
         resArray.push({
           date: new Date(startDate),
           priceField: '35$',
-          aviability: startDate.getDate() === currDate.getDate()
+          availability: startDate.getDate() === currDate.getDate()
             ? this.$t('public.onlineBooking.taken')
             : getDayOfWeek(startDate) === 'Sunday' && this.$t('public.onlineBooking.closed')
         })
@@ -253,13 +253,13 @@ export default defineComponent({
       return resArray
     },
     initialDate: function () {
-      const selectedDateItem = this.datesList.find(date => !date.aviability)
+      const selectedDateItem = this.datesList.find(date => !date.availability)
       !!selectedDateItem && this.dateSelectionHandler(selectedDateItem.date)
     },
     getsDayScedule: function (date) {
       let dayScedule = []
       const dateFromList = this.datesList.find(searchedDate => searchedDate.date.getDate() === date.getDate())
-      if (!!dateFromList && !dateFromList.aviability) {
+      if (!!dateFromList && !dateFromList.availability) {
         const set = new Set()
         const itemsCount = Math.floor(Math.random() * 6) + 1
         while (set.size < itemsCount) {

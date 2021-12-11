@@ -1,7 +1,7 @@
 <template>
   <div class="px-2">
     <div class="app-border pt-2 date-card overflow-hidden active-element"
-    :class="{'disabled': (!!aviability), 'active': (!!active)}"
+    :class="{'disabled': (!!availability), 'active': (!!active)}"
     @click="$emit('date-selected', date)"
     >
       <div class="px-3">
@@ -12,7 +12,7 @@
         <p class="app-font-small mb-0">{{month}}</p>
       </div>
       <div class="price-field">
-        {{(!aviability) ? `$${totalPrice}`: aviability}}
+        {{(!availability) ? `$${totalPrice}`: availability}}
       </div>
     </div>
   </div>
@@ -24,7 +24,7 @@ import { getDayOfWeek, getMonthName } from '@/Utils/appDate'
 export default {
   props: {
     date: Date,
-    aviability: [String, Boolean],
+    availability: [String, Boolean],
     active: Boolean,
     totalPrice: Number
   },
