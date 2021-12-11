@@ -1433,6 +1433,7 @@ app.get('/api/config', (request, response) => {
 })
 
 app.use('/api/appointment-slots', require('~/controllers/appointment-slots'))
+app.use('/api/available-dates', require('~/controllers/available-dates'))
 
 app.get('/api/public/online-booking-products', (req, res) => {
     const locale = req.query.locale

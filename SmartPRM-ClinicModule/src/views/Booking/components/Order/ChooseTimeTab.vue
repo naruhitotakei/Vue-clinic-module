@@ -73,7 +73,8 @@
 </template>
 
 <script>
-import { getFreeSlotsPublic } from '@/services/appointmentSlotsService'
+import { getAppointmentSlots } from '@/services/appointmentSlotsService'
+import { getAvailableDates } from '@/services/availableDatesService'
 import Slick from '@/components/xray/slider/Slick.vue'
 import DateCard from './DateCard.vue'
 import { getDayOfWeek } from '@/Utils/appDate'
@@ -206,7 +207,9 @@ export default defineComponent({
           return
         }
 
-        this.appointmentSlots = await getFreeSlotsPublic({
+        this.availableDates = await getAvailableDates()
+
+        this.appointmentSlots = await getAppointmentSlots({
           serviceId: this.services[0].id,
           date: moment(date).format('YYYY-MM-DD')
         })
