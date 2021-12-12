@@ -10,7 +10,7 @@
 
 <script>
 import { xray } from '../../config/pluginInit'
-import Order from './components/Order/Order'
+import Order from './components/Order/Order.vue'
 import PublicLayout from '../../layouts/PublicLayout.vue'
 
 export default {

@@ -908,7 +908,7 @@ export default {
   min-height: 0 !important;
 }
 
-th {
+.fc th {
   text-align: center !important;
 }
 .fc-col-header-cell.fc-resource {
