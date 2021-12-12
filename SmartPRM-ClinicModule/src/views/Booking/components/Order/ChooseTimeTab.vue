@@ -1,37 +1,37 @@
 <template>
-  <div class="mt-5" v-if="datesList.length > 0">
+  <div class="mt-5" v-if="dates.length > 0">
     <div style="
       padding-left: 48px;
       padding-right: 48px;
     ">
       <slick :option="slickOptions">
         <date-card
-          v-for="(dateItem, index) in datesList"
+          v-for="(dateItem, index) in dates"
           :key="`date_${index}`"
           :date="dateItem.date"
           :availability="dateItem.availability"
           :active="isActiveDate(dateItem.date)"
           :totalPrice="totalPrice"
-          @date-selected="dateSelectionHandler"
+          @date-selected="$emit('select-date', $event)"
         />
       </slick>
     </div>
     <b-container>
       <b-row>
         <b-col md="9">
-          <template v-if="scedule.length">
-          <div class="favorite-doctor text-left">
-            {{ $t('public.onlineBooking.chooseYourFavoriteDoctor') }}
-          </div>
-          <app-multiselect
-            :options="favoriteDoctors"
-            label="name"
-            trackBy="name"
-            v-model="filterDoctors"
-            :placeholder="$t('public.onlineBooking.selectOption')"
-            :selectLabel="$t('public.onlineBooking.pressEnterToSelect')"
-            :deselectLabel="$t('public.onlineBooking.pressEnterToRemove')"
-          />
+          <template>
+            <div class="favorite-doctor text-left">
+              {{ $t('public.onlineBooking.chooseYourFavoriteDoctor') }}
+            </div>
+            <app-multiselect
+              :options="favoriteDoctors"
+              label="name"
+              trackBy="name"
+              v-model="filterDoctors"
+              :placeholder="$t('public.onlineBooking.selectOption')"
+              :selectLabel="$t('public.onlineBooking.pressEnterToSelect')"
+              :deselectLabel="$t('public.onlineBooking.pressEnterToRemove')"
+            />
           </template>
           <time-selection-table
           :items="appointmentSlotsFiltered"
@@ -103,6 +103,7 @@ export default defineComponent({
   },
   data: function () {
     return {
+      availableDates: [],
       datesList: [],
       scedule: [],
       filteredScedule: [],
@@ -112,6 +113,28 @@ export default defineComponent({
     }
   },
   computed: {
+    dates () {
+      if (this.availableDates.length === 0) {
+        return []
+      }
+
+      const startDate = moment(this.availableDates[0]).startOf('isoWeek')
+      const endDate = moment(this.availableDates[this.availableDates.length - 1]).endOf('isoWeek')
+      const dates = []
+
+      for (let date = moment(startDate); date.isSameOrBefore(endDate); date.add(1, 'day')) {
+        dates.push({
+          availability: this.availableDates.includes(date.format('YYYY-MM-DD'))
+            ? false
+            : date.day() === 0
+              ? 'closed'
+              : 'taken',
+          date: date.toDate()
+        })
+      }
+
+      return dates
+    },
     slickOptions () {
       return {
         infinite: false,
@@ -206,8 +229,7 @@ export default defineComponent({
         if (date == null) {
           return
         }
-
-        this.availableDates = await getAvailableDates()
+        this.filterDoctors = []
 
         this.appointmentSlots = await getAppointmentSlots({
           serviceId: this.services[0].id,
@@ -229,9 +251,13 @@ export default defineComponent({
       }
     }
   },
-  created () {
-    this.datesList = this.getDatesArr()
-    !this.selectedDate ? this.initialDate() : this.getsDayScedule(this.selectedDate)
+  // created () {
+  //   this.datesList = this.getDatesArr()
+  //   !this.selectedDate ? this.initialDate() : this.getsDayScedule(this.selectedDate)
+  // },
+  async mounted () {
+    this.availableDates = await getAvailableDates()
+    this.$emit('select-date', new Date(this.availableDates[0]))
   },
   methods: {
     getDatesArr () {
@@ -255,10 +281,10 @@ export default defineComponent({
 
       return resArray
     },
-    initialDate: function () {
-      const selectedDateItem = this.datesList.find(date => !date.availability)
-      !!selectedDateItem && this.dateSelectionHandler(selectedDateItem.date)
-    },
+    // initialDate: function () {
+    //   const selectedDateItem = this.datesList.find(date => !date.availability)
+    //   !!selectedDateItem && this.dateSelectionHandler(selectedDateItem.date)
+    // },
     getsDayScedule: function (date) {
       let dayScedule = []
       const dateFromList = this.datesList.find(searchedDate => searchedDate.date.getDate() === date.getDate())
