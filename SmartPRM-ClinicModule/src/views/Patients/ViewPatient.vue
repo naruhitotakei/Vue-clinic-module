@@ -819,15 +819,15 @@
                           <template v-slot:body>
                             <h3 class="card-title" style="margin-top: 10px;">{{ $t('EPR.invoices.servicesSummary') }}</h3>
                             <div class="mb-4 mt-0 d-flex align-items-center justify-content-between">
-                              <h5><strong>Total Services: {{ services.length }}</strong></h5>
+                              <h5><strong>Sum of services: {{ getSumOfServices() }}</strong></h5>
                               <b-button variant="primary" @click="modalServiceShow = true"><i class="ri-add-line mr-2"></i>{{ $t('EPR.invoices.addService') }}</b-button>
                             </div>
                               <b-table small
-                                       id="patient-services"
-                                       :items="services"
-                                       :fields="servicesSummaryColumns"
-                                       :per-page="servicesPerPage"
-                                       :current-page="currentServicesPage"></b-table>
+                                id="patient-services"
+                                :items="services"
+                                :fields="servicesSummaryColumns"
+                                :per-page="servicesPerPage"
+                                :current-page="currentServicesPage"></b-table>
                           </template>
                           <template>
                               <b-collapse id="collapse-6" class="mb-2"> </b-collapse>
@@ -1084,6 +1084,7 @@ export default {
   },
   mounted () {
     xray.index()
+    this.getUserLogin()
     this.getPatient(this.patientId)
     this.getPatientNotes(this.patientId)
     this.getPatientPastAppointments(this.patientId, this.$i18n.locale)
@@ -1101,7 +1102,6 @@ export default {
     this.getUsersForAssignments()
     this.getFiles()
     this.getLocations()
-    this.getUserLogin()
     this.getSms()
     this.getDoctors()
     this.getProductGroups(this.$i18n.locale)
@@ -1239,7 +1239,7 @@ export default {
   },
   data () {
     return {
-      logedInUser: {},
+      loggedInUser: {},
       calendarApi: null,
       patientId: this.$route.params.patientId,
       modalAssigmentShow: false,
@@ -1456,7 +1456,7 @@ export default {
         {
           label: this.$t('EPR.servicesSummaryColumn.servicePrice'),
           key: 'price',
-          class: 'text-left',
+          class: 'price-column',
           formatter: value => {
             return Number(value).toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + ' EUR'
           }
@@ -1493,6 +1493,17 @@ export default {
     }
   },
   methods: {
+    getSumOfServices () {
+      let sum = 0
+      if (this.services.length) {
+        this.services.forEach(item => {
+          if (item.price) {
+            sum += Number(item.price)
+          }
+        })
+      }
+      return Number(sum).toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + ' EUR'
+    },
     decideAppointmentStatus (appointment) {
       if (appointment.appointment_canceled_in_advance_by_clinic) {
         return 'Canceled by clinic'
@@ -1917,7 +1928,7 @@ export default {
       })
     },
     addNotes () {
-      this.notesFormData.user_id = this.logedInUser.id
+      this.notesFormData.user_id = this.loggedInUser.id
       createEnquiryNotes(this.notesFormData).then(() => {
         this.getPatientNotes(this.patientId)
         this.cancelNotes()
@@ -1995,13 +2006,13 @@ export default {
     getDoctors () {
       getDoctorList().then((response) => {
         this.doctors = response
-        this.formAppointments.doctor_id = response.find(doctor => doctor.name === this.logedInUser.name)
+        this.formAppointments.doctor_id = response.find(doctor => doctor.name === this.loggedInUser.name)
       })
     },
     getUserLogin () {
       sso().then(response => {
         if (typeof response !== 'string') {
-          this.logedInUser = response
+          this.loggedInUser = response
         }
       })
     },
@@ -2012,7 +2023,9 @@ export default {
     },
     getOldProducts () {
       getOldProducts().then((response) => {
-        this.products = response
+        console.log(this.loggedInUser)
+        this.products = response.filter(pr => pr.client_id === this.loggedInUser.prm_client_id)
+        // console.log('All Products...', this.products)
       })
     },
     openEditAppointmentModal (appointment) {
@@ -2186,6 +2199,14 @@ export default {
   .img-files {
     max-width: 120px !important;
   }
+}
+
+th.price-column {
+  text-align: left;
+}
+
+td.price-column {
+  text-align: right;
 }
 
 div.preview canvas{
