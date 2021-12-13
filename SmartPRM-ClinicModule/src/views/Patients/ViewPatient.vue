@@ -1754,7 +1754,7 @@ export default {
     },
     getLegacyDoctors () {
       getLegacyDoctors().then(response => {
-        this.legacyDoctors = response
+        this.legacyDoctors = response.filter(doctor => doctor.prm_client_id === this.loggedInUser.prm_client_id)
       })
     },
     getSurgeons () {
@@ -2023,9 +2023,7 @@ export default {
     },
     getOldProducts () {
       getOldProducts().then((response) => {
-        console.log(this.loggedInUser)
-        this.products = response.filter(pr => pr.client_id === this.loggedInUser.prm_client_id)
-        // console.log('All Products...', this.products)
+        this.products = response.filter(pr => pr.prm_client_id === this.loggedInUser.prm_client_id)
       })
     },
     openEditAppointmentModal (appointment) {
