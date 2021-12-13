@@ -266,8 +266,8 @@ const getEnquiryServices = (request, response, enquiryId) => {
 }
 
 const createEnquiryService = (req, res, enquiryId, service) => {
-    var statement = "INSERT INTO services (title, product_id, price, created_at, payment_method, doctor_id, enquiry_id, fee) VALUES ('"
-    + service.title + "', " + service.product_id + ", " + service.price + ", '" + service.created_at + "', '" + service.payment_method + "', " + service.doctor_id + ", " + enquiryId + ", " + service.fee + ")"
+    var statement = "INSERT INTO services (title, product_id, price, date, created_at, payment_method, doctor_id, enquiry_id, fee) VALUES ('"
+    + service.title + "', " + service.product_id + ", " + service.price + ", '" + service.created_at + "', NOW(), '" + service.payment_method + "', " + service.doctor_id + ", " + enquiryId + ", " + service.fee + ")"
     pool.query(statement, (error, results) => {
         if (error) {
             throw error
