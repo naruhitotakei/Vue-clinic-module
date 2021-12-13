@@ -247,7 +247,7 @@ export default {
       colors: 'Setting/colorState'
     }),
     getAvatarUrl: function () {
-      return '/api/files/avatar'
+      return this.avatarURL
     },
     isEditDisabled () {
       return !this.logedInUser.first_name || !this.logedInUser.surname || !this.logedInUser.email
@@ -282,6 +282,7 @@ export default {
         url: ''
       },
       avatar_version: Math.random(),
+      avatarURL: '/api/files/avatar',
       formData: {
         old_password: '',
         new_password: '',
@@ -346,6 +347,7 @@ export default {
       await this.sleep(1000)
       // this will couse avatar to be dowloaded again
       this.avatar_version = Math.random()
+      this.avatarURL === '/api/files/avatar' ? this.avatarURL = './api/files/avatar' : this.avatarURL = '/api/files/avatar'
     },
     sleep (ms) {
       return new Promise((resolve) => {
