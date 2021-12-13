@@ -229,9 +229,12 @@ const recordSignInTime = (request, response, user_id) => {
     })
 }
 
-const getLegacyDoctors = (request, response) => {
-  let statement = "SELECT cu.id as id, cu.user_id, u.name from client_users cu JOIN users u ON cu.user_id = u.id WHERE cu.access_role = 'doctor'"
-  console.log(statement)
+const getLegacyDoctors = (request, response, prm_client_id, scope) => {
+  let statement = "SELECT DISTINCT ON (cu.user_id) cu.id as id, cu.user_id, u.name from client_users cu JOIN users u ON cu.user_id = u.id WHERE cu.access_role = 'doctor' "
+  if (scope == 'All') {
+  } else if (scope == 'PrmClient') {
+      statement += "AND u.prm_client_id = " + prm_client_id
+  }
   pool.query(statement, (error, results) => {
     if (error) {
       throw error
