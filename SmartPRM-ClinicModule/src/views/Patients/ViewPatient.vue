@@ -819,7 +819,7 @@
                           <template v-slot:body>
                             <h3 class="card-title" style="margin-top: 10px;">{{ $t('EPR.invoices.servicesSummary') }}</h3>
                             <div class="mb-4 mt-0 d-flex align-items-center justify-content-between">
-                              <h5><strong>Sum of services: {{ getSumOfServices() }}</strong></h5>
+                              <h5><strong>Sum of services: {{ getSumOfServices() | formatPrice }}</strong></h5>
                               <b-button variant="primary" @click="modalServiceShow = true"><i class="ri-add-line mr-2"></i>{{ $t('EPR.invoices.addService') }}</b-button>
                             </div>
                               <b-table small
@@ -1458,7 +1458,7 @@ export default {
           key: 'price',
           class: 'price-column',
           formatter: value => {
-            return Number(value).toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + ' EUR'
+            return this.$options.filters.formatPrice(value)
           }
         },
         { label: this.$t('reportingEmazing.servicesListColumn.serviceDoctor'), key: 'doctor', class: 'text-left' },
@@ -1502,7 +1502,7 @@ export default {
           }
         })
       }
-      return Number(sum).toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + ' EUR'
+      return sum
     },
     decideAppointmentStatus (appointment) {
       if (appointment.appointment_canceled_in_advance_by_clinic) {

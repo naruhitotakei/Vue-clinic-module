@@ -102,13 +102,14 @@
             <div id="home-servey-chart"></div>
             <!-- <ApexChart element="home-chart-09" :chartOption="homesurvey" v-if="$route.meta.dark"/> -->
             <!-- <ApexChart element="home-chart-09" :chartOption="chart9" v-else/> -->
-            <apex-chart type="pie" width="100%" :series="series" :options="chartOptions" />
+            <apex-chart type="pie" width="60%" :series="series" :options="chartOptions" />
           </template>
         </iq-card>
       </b-col>
     </b-row>
 
     <LeadsChart />
+    <RevenueByDoctor />
   </b-container>
 </template>
 <script>
@@ -117,11 +118,12 @@ import IqCard from '../../components/xray/cards/iq-card'
 import { clinicStatisticsAttendance, getRevenueByProduct } from '../../services/statistics'
 import { getDatesForCurrentYear } from '../../services/commonCodeLists'
 import LeadsChart from '@/components/ClinicStats/LeadsChart.vue'
+import RevenueByDoctor from '@/components/ClinicStats/RevenueByDoctor.vue'
 // import moment from 'moment'
 
 export default {
   name: 'Dashboard1',
-  components: { IqCard, LeadsChart },
+  components: { IqCard, LeadsChart, RevenueByDoctor },
   mounted () {
     xray.index()
     this.getStartDates()

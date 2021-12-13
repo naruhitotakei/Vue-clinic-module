@@ -55,3 +55,9 @@ Vue.filter('formatMoney', function (value) {
     return '$' + value
   }
 })
+
+Vue.filter('formatPrice', function (value) {
+  if (value) {
+    return Number(value).toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + ' EUR'
+  }
+})
