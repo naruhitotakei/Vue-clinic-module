@@ -441,6 +441,8 @@ export default {
       getServiceList(this.fromdate, this.todate, this.countrySelect).then(response => {
         console.log('Service List...', response)
         if (typeof response !== 'string') {
+          this.servicesListTotalCount = 0
+          this.servicesListTotalFee = 0
           let res = _.groupBy(response, 'doctor')
           for (let doc in res) {
             res[doc].country = doc.country
