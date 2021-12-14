@@ -2024,7 +2024,9 @@ export default {
     },
     getOldProducts () {
       getOldProducts().then((response) => {
-        this.products = response.filter(pr => pr.prm_client_id === this.loggedInUser.prm_client_id)
+        if (Array.isArray(response)) {
+          this.products = response.filter(pr => pr.prm_client_id === this.loggedInUser.prm_client_id)
+        }
       })
     },
     openEditAppointmentModal (appointment) {
