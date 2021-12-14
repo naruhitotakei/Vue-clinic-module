@@ -15,14 +15,14 @@
                                     <a class="search-link" href="#"><i class="ri-search-line"></i></a>
                                 </form>
                             </div>
-                            <iq-card class="mt-4 mt-sm-0">
+                            <!-- <iq-card class="mt-4 mt-sm-0">
                                 <b-form-group label-for="searchOptions" :label="$t('shared.searchBy')">
                                     <v-select class="patients" label="text"
                                               :clearable="false" :reduce="filter => filter.value"
                                               :options="searchOptions" @input="filterSelected" v-model="searchBy">
                                     </v-select>
                                 </b-form-group>
-                            </iq-card>
+                            </iq-card> -->
                             <iq-card class="mt-4 mt-sm-0 ml-sm-3">
                                 <b-form-group label-for="searchOptions" :label="$t('shared.sortBy')">
                                     <v-select class="patients" label="text"
@@ -297,7 +297,7 @@ export default {
     },
     filterSelected (value) {
       let array = [value]
-      if (value === 'name') { array.push('last_name') }
+      array.push('last_name', 'phone')
       this.filterOn = array
     },
     sortSelected () {
