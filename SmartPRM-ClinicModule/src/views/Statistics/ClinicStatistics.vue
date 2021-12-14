@@ -102,7 +102,7 @@
             <div id="home-servey-chart"></div>
             <!-- <ApexChart element="home-chart-09" :chartOption="homesurvey" v-if="$route.meta.dark"/> -->
             <!-- <ApexChart element="home-chart-09" :chartOption="chart9" v-else/> -->
-            <apex-chart type="pie" width="60%" :series="series" :options="chartOptions" />
+            <apex-chart type="pie" width="100%" height="500px" :series="series" :options="chartOptions" />
           </template>
         </iq-card>
       </b-col>
@@ -358,4 +358,5 @@ export default {
 .iq-card-body{
   flex: unset;
 }
+
 </style>
