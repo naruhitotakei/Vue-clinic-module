@@ -174,7 +174,7 @@
                                                                             inline
                                                                             v-model="formAppointments.patient_attended"
                                                                             :value="item.value"
-                                                                            :key="index"
+                                                                            :key="index + 'attended'"
                                                                             v-if="showProps(item, formAppointments.patient_attended)">
                                                                   {{ item.label }}
                                                               </b-form-radio>
@@ -191,7 +191,7 @@
                                                           <b-form-radio class="custom-radio-color labels"
                                                                         inline
                                                                         v-model="formAppointments.backgroundColor"
-                                                                        :key="index"
+                                                                        :key="index + 'color'"
                                                                         :reduce="item => item.id"
                                                                         :value="item.id"
                                                                         :style="{'background': item.color}"
@@ -411,7 +411,7 @@
                                                       </div>
                                                   </div>
                                                   <ul class="iq-timeline">
-                                                      <li v-for="(item,index) in futureAppointments" :key="index">
+                                                      <li v-for="(item,index) in futureAppointments" :key="index + 'future'">
                                                           <div v-if="item.appointmentStatus === 'Attended'" class="timeline-dots border-success"></div>
                                                           <div v-if="item.appointmentStatus === 'Canceled by clinic'" class="timeline-dots border-light"></div>
                                                           <div v-if="item.appointmentStatus === 'Canceled by patient'" class="timeline-dots border-danger"></div>
@@ -435,7 +435,7 @@
                                                     <hr />
                                                   </div>
                                                   <ul class="iq-timeline" id="pastAppointments">
-                                                      <li v-for="(item, index) in pastAppointments" :key="index">
+                                                      <li v-for="(item, index) in pastAppointments" :key="index + 'status'">
                                                         <div v-if="item.appointmentStatus === 'Attended'" class="timeline-dots border-success"></div>
                                                         <div v-if="item.appointmentStatus === 'Canceled by clinic'" class="timeline-dots border-light"></div>
                                                         <div v-if="item.appointmentStatus === 'Canceled by patient'" class="timeline-dots border-danger"></div>
@@ -1039,7 +1039,7 @@
                 v-model="selectedInvoices"
                 :name="item.value"
                 :value="item.value"
-                :key="item.value"
+                :key="item.value + 'value'"
             >{{ item.label }}
             </b-form-radio>
           </template>
@@ -1144,7 +1144,7 @@ export default {
       }
     },
     patientsDentist: function () {
-      if (this.dentists && this.dentists.length) {
+      if (this.dentists && Array.isArray(this.dentists) && this.dentists.length) {
         return this.dentists.find((item) => {
           return item.code === this.patient.prm_dentist_user_id
         })
@@ -1495,7 +1495,7 @@ export default {
   methods: {
     getSumOfServices () {
       let sum = 0
-      if (this.services.length) {
+      if (this.services && Array.isArray(this.services) && this.services.length) {
         this.services.forEach(item => {
           if (item.price) {
             sum += Number(item.price)
@@ -1511,9 +1511,8 @@ export default {
         return 'Canceled by patient'
       } else if (appointment.patient_attended === 'Attended') {
         return 'Attended'
-      } else if (appointment.patient_attended === 'Unknown' || !appointment.patient_attended) {
-        return 'Unknown'
       }
+      return 'Unknown'
     },
     cancelAppointmentModal () {
       this.formAppointments = this.defaultFormAppointment()
@@ -2006,7 +2005,9 @@ export default {
     getDoctors () {
       getDoctorList().then((response) => {
         this.doctors = response
-        this.formAppointments.doctor_id = response.find(doctor => doctor.name === this.loggedInUser.name)
+        if (Array.isArray(response)) {
+          this.formAppointments.doctor_id = response.find(doctor => doctor.name === this.loggedInUser.name)
+        }
       })
     },
     getUserLogin () {
