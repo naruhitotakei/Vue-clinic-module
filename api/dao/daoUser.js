@@ -131,12 +131,12 @@ const changeLang = ((req, res, profile) => {
 
 const editProfile = ((request, response, profile) => {
   var statement = "UPDATE users SET "
-  statement += "first_name='" + profile.first_name + "',"
-  statement += "surname='" + profile.surname + "',"
-  statement += "phone_number='" + profile.phone_number + "',"
-  statement += "specialization='" + profile.specialization + "',"
-  statement += "position='" + profile.position + "',"
-  statement += "title='" + profile.title + "',"
+  profile.first_name === null || profile.first_name === "null" ? statement += "first_name=''," : statement += "first_name='" + profile.first_name + "',"
+  profile.surname === null || profile.surname === "null" ? statement += "surname=''," : statement += "surname='" + profile.surname + "',"
+  profile.phone_number === null || profile.phone_number === "null" ? statement += "phone_number=''," : statement += "phone_number='" + profile.phone_number + "',"
+  profile.specialization === null || profile.specialization === "null" ? statement += "specialization=''," : statement += "specialization='" + profile.specialization + "',"
+  profile.position === null || profile.position === "null" ? statement += "position=''," : statement += "position='" + profile.position + "',"
+  profile.title === null || profile.title === "null" ? statement += "title=''," : statement += "title='" + profile.title + "',"
   statement = statement.slice(0, -1)
   statement += " WHERE email='" + profile.email + "'"
   pool.query(statement, (error, results) => {
