@@ -270,16 +270,18 @@ export default {
       this.isDataLoaded = false
       getEnquires(sort).then(response => {
         this.isDataLoaded = true
-        this.patients = response.map(obj => (
-          { ...obj,
-            editable: false,
-            region: obj.region_name,
-            country: obj.country_name,
-            last_visit: obj.last_visit,
-            next_visit: obj.next_visit,
-            personal_dentist: obj.label
-          }
-        ))
+        if (Array.isArray(response)) {
+          this.patients = response.map(obj => (
+            { ...obj,
+              editable: false,
+              region: obj.region_name,
+              country: obj.country_name,
+              last_visit: obj.last_visit,
+              next_visit: obj.next_visit,
+              personal_dentist: obj.label
+            }
+          ))
+        }
         this.setTotalRows(this.patients.length)
       })
     },
