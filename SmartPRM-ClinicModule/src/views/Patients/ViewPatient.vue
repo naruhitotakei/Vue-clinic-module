@@ -974,7 +974,7 @@
                 v-model="formData.user"
             >
               <template v-slot:selected-option="data">
-                {{ data.name }} {{ data.surname }}
+                {{ data.label }}
               </template>
             </v-select>
           </div>
@@ -2171,8 +2171,7 @@ export default {
 .style-chooser .vs__search::placeholder,
 .style-chooser .vs__dropdown-toggle,
 .style-chooser .vs__dropdown-menu {
-    border-radius: 10px;
-    min-height: 45px;
+  border-radius: 4px;
 }
 
 .vs--disabled .vs__dropdown-toggle, .vs--disabled .vs__clear, .vs--disabled .vs__search, .vs--disabled .vs__selected, .vs--disabled .vs__open-indicator {
