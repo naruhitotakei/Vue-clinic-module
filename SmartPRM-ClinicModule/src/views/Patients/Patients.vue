@@ -206,7 +206,7 @@ export default {
     xray.index()
     this.getPatients('ASC')
     this.getCountries()
-    this.searchBy = 'last_name'
+    this.searchBy = 'name'
     this.filterSelected(this.searchBy)
   },
   computed: {
@@ -297,6 +297,7 @@ export default {
     },
     filterSelected (value) {
       let array = [value]
+      if (value === 'name') { array.push('last_name') }
       this.filterOn = array
     },
     sortSelected () {
@@ -322,7 +323,6 @@ export default {
       searchBy: '',
       searchOptions: [
         { value: 'name', text: 'Name' },
-        { value: 'last_name', text: 'Last Name' },
         { value: 'phone', text: 'Phone' },
         { value: 'email', text: 'Email' },
         { value: 'region', text: 'Region' },
@@ -332,8 +332,8 @@ export default {
         { value: 'personal_dentist', text: 'Personal Dentist' }
       ],
       sortOptions: [
-        { value: 'last_name', text: 'Last Name', sort: 'asc' },
-        { value: 'last_name', text: 'Last Name', sort: 'desc' }
+        { value: 'name', text: 'Name', sort: 'asc' },
+        { value: 'name', text: 'Name', sort: 'desc' }
       ],
       sortBy: '',
       columns: [
