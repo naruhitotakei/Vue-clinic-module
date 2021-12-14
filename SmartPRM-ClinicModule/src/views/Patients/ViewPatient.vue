@@ -1754,7 +1754,7 @@ export default {
     },
     getLegacyDoctors () {
       getLegacyDoctors().then(response => {
-        this.legacyDoctors = response.filter(doctor => doctor.prm_client_id === this.loggedInUser.prm_client_id)
+        this.legacyDoctors = response
       })
     },
     getSurgeons () {
