@@ -98,7 +98,7 @@ const getPremises = (request, response, prm_client_id, scope) => {
     let statement = "SELECT premise_id AS id, premise_name AS name, prm_client_id FROM prm_company_premise "
     if (scope == 'All') {
     } else if (scope == 'PrmClient') {
-        statement += "AND prm_client_id = " + prm_client_id;
+        statement += "WHERE prm_client_id = " + prm_client_id;
     }
     pool.query(statement, (error, results) => {
         if (error) {
