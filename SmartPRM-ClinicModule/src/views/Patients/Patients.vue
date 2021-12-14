@@ -206,7 +206,7 @@ export default {
     xray.index()
     this.getPatients('ASC')
     this.getCountries()
-    this.searchBy = 'name'
+    this.searchBy = ['name', 'last_name', 'phone']
     this.filterSelected(this.searchBy)
   },
   computed: {
@@ -296,9 +296,7 @@ export default {
       this.totalRows = number
     },
     filterSelected (value) {
-      let array = [value]
-      array.push('last_name', 'phone')
-      this.filterOn = array
+      this.filterOn = value
     },
     sortSelected () {
       this.getPatients(this.sortBy.sort.toUpperCase())
