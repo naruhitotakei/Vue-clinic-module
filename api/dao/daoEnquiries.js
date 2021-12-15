@@ -287,7 +287,8 @@ const getPatients = (request, response) => {
 }
 
 const getEnquirySMS = (request, response, enquiryId) => {
-    let statement = `SELECT * FROM sms_messages WHERE enquiry_id = ${enquiryId}`
+    let statement = `SELECT DISTINCT ON (sms_messages.id) * FROM sms_messages 
+    LEFT JOIN sms_templates ON sms_templates.slug = sms_messages.kind WHERE enquiry_id = ${enquiryId}`
     pool.query(statement, (error, results) => {
         if (error) {
             throw error

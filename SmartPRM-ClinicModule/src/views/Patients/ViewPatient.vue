@@ -360,13 +360,22 @@
                                                   </div>
                                               </div>
                                               <ul class="list-inline m-0 overflow-y-scroll pl-2 pr-2" style="max-height: 300px;">
-                                                  <li v-for="(message,index) in smsMessages" :key="index + message.created_at" class="d-flex align-items-center justify-content-between mb-3">
+                                                  <li v-for="(message,index) in smsList" :key="index + message.created_at" id="smsList" class="d-flex align-items-center justify-content-between mb-3">
                                                       <div>
-                                                          <h6>{{message.kind}}</h6>
+                                                          <h6>{{message.name}}</h6>
                                                           <p class="mb-0">{{message.created_at | formatDateAndTime}} - {{ message.delivered_at ? $t('EPR.overview.deliveredSms') :  $t('EPR.overview.notDeliveredSms')}}</p>
                                                       </div>
                                                   </li>
                                               </ul>
+                                              <p v-if="smsMessages.length === 0">No Sent SMS found.</p>
+                                              <b-pagination
+                                                v-else-if="smsMessages.length > 4"
+                                                align="right"
+                                                v-model="smsCurrentPage"
+                                                :total-rows="smsMessages.length"
+                                                :per-page="smsPerPage"
+                                                aria-controls="smsList"
+                                            ></b-pagination>
                                           </template>
                                       </iq-card>
                                   </b-col>
@@ -1169,6 +1178,11 @@ export default {
     hideSummaryPagination () {
       return Math.floor(this.services.length / this.servicesPerPage) !== 0
     },
+    smsList () {
+      return this.smsMessages.slice(
+        (this.smsCurrentPage - 1) * this.smsPerPage,
+        this.smsCurrentPage * this.smsPerPage)
+    },
     filesSortBy () {
       if (this.sortBy === '') {
         let files = [...this.files]
@@ -1270,6 +1284,9 @@ export default {
       doctors: [],
       product_groups: [],
       smsMessages: [],
+      smsCurrentPage: 1,
+      smsPerPage: 4,
+
       selectedInvoices: '',
       selectedDoctor: '',
       selectedProductGroup: '',
@@ -1538,6 +1555,7 @@ export default {
     getSms () {
       getEnquirySMS(this.patientId).then(response => {
         this.smsMessages = response
+        console.log('Messages...', this.smsMessages)
       })
     },
     checkIfImageType (type) {
