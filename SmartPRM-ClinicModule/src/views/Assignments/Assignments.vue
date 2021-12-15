@@ -138,6 +138,7 @@
                       <h5>{{ $t('assignments.todaysAssignments') }} of other users</h5>
                   </template>
                   <template v-slot:body>
+                    <AppMultiselect v-model="filterToday" :options="todayAssignmentUsers" placeholder="Filter By Users" />
                     <b-list-group class="list-group-flush" id="todaysAssignments">
                       <b-list-group-item
                         v-for="(item, index) in otherUserTodayList"
@@ -149,7 +150,20 @@
                               :key="index"
                               @change="finishAssignment(item.id, $event, 'today')"><strong>{{ item.description }}</strong></b-checkbox>
                           </div>
-                          <div class="d-flex align-items-center justify-content-between">
+                          <b-row>
+                            <b-col cols="12" lg="6" align-self="center">
+                              <router-link tag="span" :to="'/patients/'+ item.enquiry_id" class="text-left" style="cursor:pointer;">{{ item.patientname }} {{ item.patientlastname }}</router-link>&nbsp;
+                              <span class="text-left">{{ patientsDentist(item) ? `(${patientsDentist(item)})` : '' }}</span>
+                            </b-col>
+                            <b-col cols="12" lg="6" class="d-flex align-items-center justify-content-end">
+                              <span class="text-right pr-2">{{ item.todoname }}</span>
+                                <span class="text-right">{{ item.due_at | formatDate }}</span>
+                                <b-button variant=" iq-bg-success mr-1 mb-1" size="sm" style="margin-left: 2%;" @click="editAssignments(item)">
+                                <i class="ri-ball-pen-fill m-0"></i>
+                              </b-button>
+                            </b-col>
+                          </b-row>
+                          <!-- <div class="d-flex align-items-center justify-content-between">
                             <div>
                               <router-link tag="span" :to="'/patients/'+ item.enquiry_id" class="text-left" style="cursor:pointer;">{{ item.patientname }} {{ item.patientlastname }}</router-link>&nbsp;
                               <span class="text-left">{{ patientsDentist(item) ? `(${patientsDentist(item)})` : '' }}</span>
@@ -160,7 +174,7 @@
                                <i class="ri-ball-pen-fill m-0"></i>
                              </b-button>
                             </div>
-                          </div>
+                          </div> -->
                         </div>
                       </b-list-group-item>
                     </b-list-group>
@@ -168,9 +182,9 @@
                       <div class="mt-4 ml-2">
                         <p v-if="todaysAssignments.length < 1"> You have no overdue assignments.</p>
                           <b-pagination
-                              v-else-if="todaysTotalRows > 10"
+                              v-else-if="todaysAssignments.length > 10"
                               v-model="todayCurrentPage"
-                              :total-rows="todaysTotalRows"
+                              :total-rows="todaysAssignments.length"
                               :per-page="todayPerPage"
                               aria-controls="todaysAssignments"></b-pagination>
                       </div>
@@ -185,7 +199,6 @@
                     </template>
                   <template v-slot:body>
                     <AppMultiselect v-model="filterOverdue" :options="pastAssignmentUsers" placeholder="Filter By Users" />
-                    <!-- <b-form-input type="search" placeholder="Filter By User" debounce="500" v-model="filterOverdue"></b-form-input> -->
                     <b-list-group class="list-group-flush mt-2" id="overdueAssignments">
                       <b-list-group-item
                         v-for="(item, index) in otherUserOverDueList"
@@ -327,6 +340,7 @@
                         <h5>{{ $t('assignments.futureAssignments') }} of other users</h5>
                     </template>
                     <template v-slot:body>
+                      <AppMultiselect v-model="filterFuture" :options="futureAssignmentUsers" placeholder="Filter By Users" />
                         <b-list-group class="list-group-flush" id="futureAssignments">
                             <b-list-group-item
                                 v-for="(item, index) in otherUserFutureList"
@@ -382,11 +396,11 @@
                         </b-list-group>
                         <template>
                             <div class="mt-4 ml-2">
-                                <p v-if="futureTotalRows===0"> You have no future assignments.</p>
+                                <p v-if="futureAssigments.length === 0"> You have no future assignments.</p>
                                 <b-pagination
-                                    v-else-if="futureTotalRows > 10"
+                                    v-else-if="futureAssigments.length > 10"
                                     v-model="futureCurrentPage"
-                                    :total-rows="futureTotalRows"
+                                    :total-rows="futureAssigments.length"
                                     :per-page="futurePerPage"
                                     aria-controls="futureAssignments"
                                 ></b-pagination>
@@ -648,6 +662,20 @@ export default {
       } else {
         this.overdueAssignments = [...this.allOverdueAssignments]
       }
+    },
+    filterFuture (val) {
+      if (val && val.length) {
+        this.filterFutureItems()
+      } else {
+        this.futureAssigments = [...this.allFutureAssignments]
+      }
+    },
+    filterToday (val) {
+      if (val && val.length) {
+        this.filterTodayItems()
+      } else {
+        this.todaysAssignments = [...this.allTodayAssignments]
+      }
     }
   },
   methods: {
@@ -661,6 +689,30 @@ export default {
         this.overdueAssignments = JSON.parse(JSON.stringify(filteredAssignments))
       } else {
         this.overdueAssignments = [...this.allOverdueAssignments]
+      }
+    },
+    filterFutureItems () {
+      if (this.filterFuture && this.filterFuture.length) {
+        let filteredAssignments = []
+        this.filterFuture.forEach(item => {
+          const foundRecords = this.allFutureAssignments.filter(assignment => assignment.todoname && assignment.todoname === item)
+          filteredAssignments = filteredAssignments.concat(foundRecords)
+        })
+        this.futureAssigments = JSON.parse(JSON.stringify(filteredAssignments))
+      } else {
+        this.futureAssigments = [...this.allFutureAssignments]
+      }
+    },
+    filterTodayItems () {
+      if (this.filterToday && this.filterToday.length) {
+        let filteredAssignments = []
+        this.filterToday.forEach(item => {
+          const foundRecords = this.allTodayAssignments.filter(assignment => assignment.todoname && assignment.todoname === item)
+          filteredAssignments = filteredAssignments.concat(foundRecords)
+        })
+        this.todaysAssignments = JSON.parse(JSON.stringify(filteredAssignments))
+      } else {
+        this.todaysAssignments = [...this.allTodayAssignments]
       }
     },
     editAssignments (assignment) {
@@ -691,6 +743,7 @@ export default {
         // this.todaysTotalRows = response.length
         this.setMyTodayAssignments(response)
         this.setOtherUserTodayAssignments(response)
+        this.getUsersInTodayAssignments()
 
         this.myCompletedAssignments = this.getCompletedAssignments()
       })
@@ -708,6 +761,7 @@ export default {
           let reverseResponse = response.reverse()
           this.setMyFutureAssignments(reverseResponse)
           this.setOtherUsersFutureAssignments(reverseResponse)
+          this.getUsersInFutureAssignments()
           // for (let i = 0; i < response.length; i += 3) {
           //   res = [...res, reverseResponse.slice(i, i + 20)]
           // }
@@ -738,18 +792,23 @@ export default {
     getUsersInPastAssignments () {
       this.pastAssignmentUsers = []
       this.pastAssignmentUsers = this.allOverdueAssignments
-        .filter(item => item.todoname && item.todoname)
-        .map(item => item.todoname && item.todoname)
+        .filter(item => item.todoname)
+        .map(item => item.todoname)
       this.pastAssignmentUsers = [...new Set(this.pastAssignmentUsers)]
-      // if (this.allOverdueAssignments && this.allOverdueAssignments.length) {
-      //   this.allOverdueAssignments.forEach(item => {
-      //     const user = this.users.find(user => user.full_name.toLowerCase().includes(item.todoname.toLowerCase()))
-      //     if (user) {
-      //       this.pastAssignmentUsers.push(user)
-      //     }
-      //   })
-      //   this.pastAssignmentUsers = [...new Set(this.pastAssignmentUsers)]
-      // }
+    },
+    getUsersInFutureAssignments () {
+      this.futureAssignmentUsers = []
+      this.futureAssignmentUsers = this.allFutureAssignments
+        .filter(item => item.todoname)
+        .map(item => item.todoname && item.todoname)
+      this.futureAssignmentUsers = [...new Set(this.futureAssignmentUsers)]
+    },
+    getUsersInTodayAssignments () {
+      this.todayAssignmentUsers = []
+      this.todayAssignmentUsers = this.allTodayAssignments
+        .filter(item => item.todoname)
+        .map(item => item.todoname && item.todoname)
+      this.todayAssignmentUsers = [...new Set(this.todayAssignmentUsers)]
     },
     setMyFutureAssignments (assignments) {
       let filtered = assignments.filter(assignment => assignment.user_id === this.formData.user_id)
@@ -759,6 +818,7 @@ export default {
     setOtherUsersFutureAssignments (assignments) {
       let filtered = assignments.filter(assignment => assignment.user_id !== this.formData.user_id)
       this.futureAssigments = filtered
+      this.allFutureAssignments = filtered
       this.futureTotalRows = filtered.length
     },
     setMyTodayAssignments (assignments) {
@@ -769,6 +829,7 @@ export default {
     setOtherUserTodayAssignments (assignments) {
       let filtered = assignments.filter(assignment => assignment.user_id !== this.formData.user_id)
       this.todaysAssignments = filtered
+      this.allTodayAssignments = filtered
       this.todaysTotalRows = filtered.length
     },
     setOtherUsersOverdueAssignments (assignments) {
@@ -905,10 +966,16 @@ export default {
       dentists: [],
       index: [],
       filterOverdue: [],
+      filterFuture: [],
+      filterToday: [],
+      futureAssignmentUsers: [],
       pastAssignmentUsers: [],
+      allTodayAssignments: [],
+      todayAssignmentUsers: [],
       myCompletedAssignments: null,
       todaysAssignments: [],
       allOverdueAssignments: [],
+      allFutureAssignments: [],
       myOverdueAssignments: [],
       overdueAssignments: [],
       myFutureAssignments: [],
