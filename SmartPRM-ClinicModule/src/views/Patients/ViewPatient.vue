@@ -31,7 +31,7 @@
                                                   <b-button type="button" variant=" iq-bg-danger mr-1 mb-1" size="sm" @click="modalTrashPatient = true"><i class="ri-delete-bin-7-fill m-0"></i></b-button>
                                               </b-col>
                                               <b-modal v-model="modalTrashPatient" ok-title="OK" cancel-title="Cancel" @ok="trashPatient" @cancel="modalTrashPatient = false">
-                                                  <h4 class="my-4 card-title text-center">Are you sure you want to delete the patient?</h4>
+                                                  <h4 class="my-4 card-title text-center">{{ $t('EPR.overview.deletePatientConfirm') }}</h4>
                                               </b-modal>
                                               <div class="user-profile text-center">
                                                   <img v-if="patient.gender == 'female'" src="../../assets/images/user/11.png" alt="profile-img" class="avatar-130 img-fluid">

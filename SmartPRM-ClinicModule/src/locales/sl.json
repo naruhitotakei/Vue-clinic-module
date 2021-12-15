@@ -196,7 +196,8 @@
       "openAssignments": "Odprte naloge",
       "futureAppointments": "Bodoči termini",
       "pastAppointments": "Pretekli termini",
-      "notSelected": "Ni izbrano"
+      "notSelected": "Ni izbrano",
+      "deletePatientConfirm":  "Ali ste prepričani da želite izbrisati pacienta?"
     },
     "personalInfoTab": "Osebni podatki",
     "personalInfo": {

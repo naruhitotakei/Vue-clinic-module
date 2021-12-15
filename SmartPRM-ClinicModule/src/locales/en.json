@@ -199,7 +199,8 @@
       "openAssignments": "Open assignments",
       "futureAppointments": "Future appointments",
       "pastAppointments": "Past appointments",
-      "notSelected": "Not selected"
+      "notSelected": "Not selected",
+      "deletePatientConfirm": "Are you sure you want to delete this patient?"
     },
     "personalInfoTab": "Personal Information",
     "personalInfo": {
