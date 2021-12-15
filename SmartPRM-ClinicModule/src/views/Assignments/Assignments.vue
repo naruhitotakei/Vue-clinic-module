@@ -95,7 +95,7 @@
                       :style="{'background': getDifferenceDate(item.due_at) === 1 && '#ffeeba' || getDifferenceDate(item.due_at) > 1 && '#f5c6cb'}">
                       <div :class="{ 'taskIsActive' : !item.completed}">
                         <div>
-                          <b-checkbox v-model="item.completed" :disabled="item.disabled" name="check-button" inline
+                          <b-checkbox v-model="item.completed" name="check-button" inline
                             :key="index"
                             @change="finishAssignment(item.id, $event, 'myoverdue')"><strong>{{ item.description }}</strong></b-checkbox>
                         </div>
@@ -338,7 +338,20 @@
                                     :key="index"
                                     @change="finishAssignment(item.id, $event, 'future')"><strong>{{ item.description }}</strong></b-checkbox>
                                 </div>
-                                <div class="d-flex align-items-center justify-content-between">
+                                <b-row>
+                                  <b-col cols="12" lg="6" align-self="center">
+                                    <router-link tag="span" :to="'/patients/'+ item.enquiry_id" class="text-left" style="cursor:pointer;">{{ item.patientname }} {{ item.patientlastname }}</router-link>&nbsp;
+                                    <span class="text-left">{{ patientsDentist(item) ? `(${patientsDentist(item)})` : '' }}</span>
+                                  </b-col>
+                                  <b-col cols="12" lg="6" class="d-flex align-items-center justify-content-end">
+                                    <span class="text-right pr-2">{{ item.todoname }}</span>
+                                      <span class="text-right">{{ item.due_at | formatDate }}</span>
+                                      <b-button variant=" iq-bg-success mr-1 mb-1" size="sm" style="margin-left: 2%;" @click="editAssignments(item)">
+                                      <i class="ri-ball-pen-fill m-0"></i>
+                                    </b-button>
+                                  </b-col>
+                                </b-row>
+                                <!-- <div class="d-flex align-items-center justify-content-between">
                                   <div>
                                     <router-link tag="span" :to="'/patients/'+ item.enquiry_id" class="text-left" style="cursor:pointer;">{{ item.patientname }} {{ item.patientlastname }}</router-link>&nbsp;
                                     <span class="text-left">{{ patientsDentist(item) ? `(${patientsDentist(item)})` : '' }}</span>
@@ -349,7 +362,7 @@
                                     <i class="ri-ball-pen-fill m-0"></i>
                                   </b-button>
                                   </div>
-                                </div>
+                                </div> -->
                               </div>
                                 <!-- <div class="assignments-container row align-items-center flex-nowrap justify-content-between w-100" :class="{ 'taskIsActive' : !item.completed}">
                                     <div class="w-40 flex-nowrap row">
@@ -797,9 +810,9 @@ export default {
         if (from === 'overdue') {
           this.overdueAssignments = this.overdueAssignments.filter(assignment => assignment.id !== id)
         }
-        if (from === 'myoverdue') {
-          this.myOverdueAssignments = this.myOverdueAssignments.filter(assignment => assignment.id !== id)
-        }
+        // if (from === 'myoverdue') {
+        //   this.myOverdueAssignments = this.myOverdueAssignments.filter(assignment => assignment.id !== id)
+        // }
         if (from === 'future') {
           this.futureAssigments = this.futureAssigments.filter(assignment => assignment.id !== id)
         }
