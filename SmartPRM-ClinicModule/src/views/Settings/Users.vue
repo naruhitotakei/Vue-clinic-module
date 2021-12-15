@@ -10,7 +10,7 @@
                         <div class="iq-doc-info mt-3">
                             <h4> {{user.title !== null && user.title !== "null" ? user.title : ''}} {{user.name !== null && user.name !== "null" ? user.name : ''}} {{user.surname !== null && user.surname !== "null" ? user.surname : ''}} </h4>
                         </div>
-                        <div v-if="user.specialization !== null && user.specialization !== 'null'" class="iq-doc-description mt-2">
+                        <div v-if="user.specialization !== null && user.specialization !== 'null'" class="iq-doc-description">
                             <p class="mb-0">{{user.specialization}}</p>
                         </div>
                         <div v-if="user.position !== null && user.position !== 'null'" class="iq-doc-description">
@@ -22,10 +22,10 @@
                         <div v-if="user.mail !== null && user.mail !== 'null'" class="iq-doc-description">
                             <p class="mb-0">{{user.mail}}</p>
                         </div>
-                        <div v-if="user.phone !== null && user.phone !== 'null'" class="iq-doc-description mt-2">
+                        <div v-if="user.phone !== null && user.phone !== 'null'" class="iq-doc-description">
                             <p class="mb-0">{{user.phone}}</p>
                         </div>
-                        <b-button variant="primary" @click="openProfileModal(user)" class="btn btn-primary">{{ $t('settingsUsers.editProfile') }}</b-button>
+                        <b-button variant="primary" @click="openProfileModal(user)" class="btn btn-primary mt-2">{{ $t('settingsUsers.editProfile') }}</b-button>
                     </template>
                 </iq-card>
             </b-col>
