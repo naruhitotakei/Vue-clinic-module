@@ -21,7 +21,7 @@ const getEmazingServicesReport = (request, response, startdate, endate, countrie
             statement += "AND cpcb.prm_client_id = " + prm_client_id
         }
         statement += "GROUP BY pr.group, pr.name "
-        console.log("Fetching reporting on BE: " + statement)
+
         pool.query(statement, [startdate, endate], (error, results) => {
             if (error) {
                 response.status(500).json({
@@ -43,7 +43,7 @@ const getEmazingServicesReport = (request, response, startdate, endate, countrie
         statement += "AND cpcb.prm_client_id= " + prm_client_id
         }
         statement += "GROUP BY pr.group, pr.name "
-        console.log("Fetching reporting on BE: " + statement)
+
         pool.query(statement, [startdate, endate, countrie], (error, results) => {
             if (error) {
                 response.status(500).json({
@@ -72,7 +72,7 @@ const getServiceList = (request, response, startdate, endate, countrie, prm_clie
             statement += " AND en.prm_client_id = " + prm_client_id
         }
         statement += "ORDER BY se.date ASC "
-        console.log("Fetching reporting on BE: " + statement)
+
         pool.query(statement, [startdate, endate], (error, results) => {
             if (error) {
                 response.status(500).json({
@@ -97,7 +97,7 @@ const getServiceList = (request, response, startdate, endate, countrie, prm_clie
             "AND en.prm_client_id = " + prm_client_id
         }
         statement += "ORDER BY se.date ASC "
-        console.log("Fetching reporting on BE: " + statement)
+
         pool.query(statement, [startdate, endate, countrie], (error, results) => {
             if (error) {
                 response.status(500).json({
