@@ -400,17 +400,6 @@ const getItemsOfInvoiceById = (request, response, id) => {
     })
 }
 
-const getEnquiryToothByInvoiceItemsId = (request, response, id) => {
-    let statement = "SELECT et.number, t.occlusal, t.mesial, t.distal, t.buccal, t.lingual, t.comment FROM teeth_invoice_item t JOIN enquiry_teeth et ON t.enquiry_teeth_id = et.id WHERE t.invoice_item_id = " + id
-    console.log(statement)
-    pool.query(statement, (error, results) => {
-        if (error) {
-            throw error
-        }
-        response.status(200).json(results.rows)
-    })
-}
-
 const getPaymentItemsOfInvoiceById = (request, response, id) => {
     let statement = "SELECT * FROM payment_item WHERE invoice_id = " + id
     pool.query(statement, (error, results) => {
@@ -459,6 +448,5 @@ module.exports = {
     getConsecutiveInvoiceNumberForCompany,
     getPaymentItemsOfInvoiceById,
     getSerialForInvoiceNumberBasedOnType,
-    getSerialForFursInvoiceNumberBasedOnType,
-    getEnquiryToothByInvoiceItemsId
+    getSerialForFursInvoiceNumberBasedOnType
 }

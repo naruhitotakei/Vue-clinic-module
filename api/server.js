@@ -983,14 +983,6 @@ app.get('/api/invoices/:id/items', (req, res) => {
         res.status(401).json("OK: user unauthorized")
 });
 
-app.get('/api/invoices/items/:id/enquiry-tooth', (req, res) => {
-    const id = req.params.id
-    if (req.session.prm_user && req.session.prm_user.permissions && checkPermission(req.session.prm_user.permissions, invoicesPermission))
-        daoInvoices.getEnquiryToothByInvoiceItemsId(req, res, id)
-    else
-        res.status(401).json("OK: user unauthorized")
-});
-
 app.get('/api/invoices/:id/payment-items', (req, res) => {
     const id = req.params.id
     if (req.session.prm_user && req.session.prm_user.permissions && checkPermission(req.session.prm_user.permissions, invoicesPermission))
