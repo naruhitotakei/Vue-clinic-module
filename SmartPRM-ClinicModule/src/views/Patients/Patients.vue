@@ -15,14 +15,14 @@
                                     <a class="search-link" href="#"><i class="ri-search-line"></i></a>
                                 </form>
                             </div>
-                            <iq-card class="mt-4 mt-sm-0">
+                            <!-- <iq-card class="mt-4 mt-sm-0">
                                 <b-form-group label-for="searchOptions" :label="$t('shared.searchBy')">
                                     <v-select class="patients" label="text"
                                               :clearable="false" :reduce="filter => filter.value"
                                               :options="searchOptions" @input="filterSelected" v-model="searchBy">
                                     </v-select>
                                 </b-form-group>
-                            </iq-card>
+                            </iq-card> -->
                             <iq-card class="mt-4 mt-sm-0 ml-sm-3">
                                 <b-form-group label-for="searchOptions" :label="$t('shared.sortBy')">
                                     <v-select class="patients" label="text"
@@ -206,7 +206,7 @@ export default {
     xray.index()
     this.getPatients('ASC')
     this.getCountries()
-    this.searchBy = 'last_name'
+    this.searchBy = ['name', 'last_name', 'phone']
     this.filterSelected(this.searchBy)
   },
   computed: {
@@ -298,8 +298,7 @@ export default {
       this.totalRows = number
     },
     filterSelected (value) {
-      let array = [value]
-      this.filterOn = array
+      this.filterOn = value
     },
     sortSelected () {
       this.getPatients(this.sortBy.sort.toUpperCase())
@@ -324,7 +323,6 @@ export default {
       searchBy: '',
       searchOptions: [
         { value: 'name', text: 'Name' },
-        { value: 'last_name', text: 'Last Name' },
         { value: 'phone', text: 'Phone' },
         { value: 'email', text: 'Email' },
         { value: 'region', text: 'Region' },
@@ -334,8 +332,8 @@ export default {
         { value: 'personal_dentist', text: 'Personal Dentist' }
       ],
       sortOptions: [
-        { value: 'last_name', text: 'Last Name', sort: 'asc' },
-        { value: 'last_name', text: 'Last Name', sort: 'desc' }
+        { value: 'name', text: 'Name', sort: 'asc' },
+        { value: 'name', text: 'Name', sort: 'desc' }
       ],
       sortBy: '',
       columns: [
