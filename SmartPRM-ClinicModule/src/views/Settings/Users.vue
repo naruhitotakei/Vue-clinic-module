@@ -8,31 +8,31 @@
                             <img class="rounded-circle img-fluid avatar-80" :src="'/api/files/avatar/' + user.id + '?' + Math.random()" alt="profile">
                         </div>
                         <div class="iq-doc-info mt-3">
-                            <h4> {{user.title}} {{user.name}} {{user.surname}} </h4>
+                            <h4> {{user.title !== null && user.title !== "null" ? user.title : ''}} {{user.name !== null && user.name !== "null" ? user.name : ''}} {{user.surname !== null && user.surname !== "null" ? user.surname : ''}} </h4>
                         </div>
-                        <div class="iq-doc-description mt-2">
+                        <div v-if="user.specialization !== null && user.specialization !== 'null'" class="iq-doc-description">
                             <p class="mb-0">{{user.specialization}}</p>
                         </div>
-                        <div class="iq-doc-description">
+                        <div v-if="user.position !== null && user.position !== 'null'" class="iq-doc-description">
                             <p class="mb-0">{{user.position}}</p>
                         </div>
-                        <div class="iq-doc-description">
+                        <div v-if="user.role_name !== null && user.role_name !== 'null'" class="iq-doc-description">
                             <p class="mb-0">{{user.role_name}}</p>
                         </div>
-                        <div class="iq-doc-description">
+                        <div v-if="user.mail !== null && user.mail !== 'null'" class="iq-doc-description">
                             <p class="mb-0">{{user.mail}}</p>
                         </div>
-                        <div class="iq-doc-description mt-2">
+                        <div v-if="user.phone !== null && user.phone !== 'null'" class="iq-doc-description">
                             <p class="mb-0">{{user.phone}}</p>
                         </div>
-                        <b-button variant="primary" @click="openProfileModal(user)" class="btn btn-primary">{{ $t('settingsUsers.editProfile') }}</b-button>
+                        <b-button variant="primary" @click="openProfileModal(user)" class="btn btn-primary mt-2">{{ $t('settingsUsers.editProfile') }}</b-button>
                     </template>
                 </iq-card>
             </b-col>
         </b-row>
         <b-modal
             v-model="editProfileShowModal"
-            no-close-on-backdrop size="lg"
+            no-close-on-backdrop size="md"
             :title="$t('settingsUsers.editProfile')"
             :ok-disabled="isEditDisabled"
             @close="editProfileShowModal = false"
@@ -183,6 +183,9 @@ export default {
     },
     openProfileModal (user) {
       this.editProfileShowModal = true
+      for (var key in user) {
+        if (user[key] === 'null') { user[key] = '' }
+      }
       this.formData = user
     },
     onButtonClick () {
