@@ -96,7 +96,7 @@
                 <template v-slot:body>
                     <b-row>
                         <b-col cols="4" align-self="center" style="margin-bottom: 25px;">
-                            <h4 class="mb-0">{{ $t('invoice.invoiceHeader') }}  N° : {{invoiceNumber}} </h4>
+                            <h4 class="mb-0">{{ $t('invoice.invoiceHeader') }}  N° : {{invoiceHeader}} </h4>
                         </b-col>
                     </b-row>
                     <b-row>
@@ -142,6 +142,12 @@
                                 </template>
                                 <template v-slot:cell(invoiced_quantity)="data">
                                   <span>{{ data.item.invoiced_quantity }}</span>
+                                </template>
+                                <template v-slot:cell(teeth)="data">
+                                  <v-select class="style-chooser" v-if="Array.isArray(data.item.teeth)" disabled multiple v-model="data.item.teeth" :options="teethOptions"></v-select>
+                                </template>
+                                <template v-slot:cell(surfaces)="data">
+                                  <v-select class="style-chooser" disabled multiple v-model="data.item.surfaces" :options="surfaceOptions"></v-select>
                                 </template>
                                 <template v-slot:cell(product_price)="data">
                                   <span>{{ data.item.product_price | numeral('0,0.00') | euro }}</span>
@@ -207,6 +213,11 @@ export default {
     this.getItems(this.invoiceId)
     this.getPaymentItems(this.invoiceId)
   },
+  computed: {
+    invoiceHeader () {
+      return this.invoiceNumber.includes('.') ? this.$t('invoice.draft') : this.invoiceNumber
+    }
+  },
   methods: {
     getInvoice (id) {
       getInvoiceById(id).then(response => {
@@ -230,7 +241,29 @@ export default {
     getItems (id) {
       getItemsOfInvoiceById(id).then(response => {
         this.items = response
+        this.items.forEach(item => {
+          item.teeth = this.getTeeth(item.teeth)
+          item.surfaces = this.getSurfaces(item.surfaces)
+        })
       })
+    },
+    getTeeth (teeth) {
+      if (teeth === '') {
+        return []
+      } else if (teeth.includes(',')) {
+        return teeth.split(',')
+      } else {
+        return new Array(teeth)
+      }
+    },
+    getSurfaces (surfaces) {
+      if (surfaces === '') {
+        return []
+      } else if (surfaces.includes(',')) {
+        return surfaces.split(',')
+      } else {
+        return new Array(surfaces)
+      }
     },
     getPaymentItems (id) {
       getPaymentItemsOfInvoiceById(id).then(response => {
@@ -275,40 +308,58 @@ export default {
     return {
       invoiceId: this.$route.params.invoiceId,
       invoiceNumber: '',
+      teethOptions: ['11', '12', '13', '14', '15', '16', '17', '18', '21', '22', '23', '24', '25', '26', '27', '28', '31', '32', '33', '34', '35', '36', '37', '38', '41', '42', '43', '44', '45', '46', '47', '48', '51', '52', '53', '54', '55', '61', '62', '63', '64', '65', '71', '72', '73', '74', '75'],
+      surfaceOptions: ['B', 'L', 'M', 'D', 'O'],
       invoiceDetailField: [
         {
           key: 'id',
-          label: '#'
+          label: '#',
+          class: 'text-left'
         },
         {
           key: 'product_name',
-          label: this.$t('invoice.invoiceDetailColumn.item')
+          label: this.$t('invoice.invoiceDetailColumn.item'),
+          class: 'text-left'
         },
         {
           key: 'invoiced_quantity',
-          label: this.$t('invoice.invoiceDetailColumn.quantity')
+          label: this.$t('invoice.invoiceDetailColumn.quantity'),
+          class: 'text-left'
+        },
+        { label: this.$t('invoices.newInvoice.newInvoiceDetails.teeth'),
+          key: 'teeth',
+          class: 'text-left'
+        },
+        { label: this.$t('invoices.newInvoice.newInvoiceDetails.surface'),
+          key: 'surfaces',
+          class: 'text-left'
         },
         {
           key: 'product_price',
-          label: this.$t('invoice.invoiceDetailColumn.price')
+          label: this.$t('invoice.invoiceDetailColumn.price'),
+          class: 'text-left'
         },
         {
           key: 'discount',
-          label: this.$t('invoice.invoiceDetailColumn.discount')
+          label: this.$t('invoice.invoiceDetailColumn.discount'),
+          class: 'text-left'
         },
         {
           key: 'net_amount',
-          label: this.$t('advPayments.advPaymentsColumn.amount')
+          label: this.$t('advPayments.advPaymentsColumn.amount'),
+          class: 'text-left'
         }
       ],
       invoiceSummaryFields: [
         {
           label: this.$t('invoice.invoiceSummaryColumn.paymentMethod'),
-          key: 'type'
+          key: 'type',
+          class: 'text-left'
         },
         {
           label: this.$t('advPayments.advPaymentsColumn.amount'),
-          key: 'amount'
+          key: 'amount',
+          class: 'text-left'
         }
       ],
       invoiceColumns: [

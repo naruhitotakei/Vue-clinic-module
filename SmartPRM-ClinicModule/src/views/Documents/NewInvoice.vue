@@ -163,7 +163,7 @@
                               <b-row>
                                 <b-col md="12" class="table-responsive" style="min-height:250px">
                                   <b-table bordered hover :items="items" :fields="detailColumns">
-                                   <template v-slot:cell(id)="data">
+                                   <template v-slot:cell(table_id)="data">
                                       <span>{{ items.indexOf(data.item) + 1 }}</span>
                                     </template>
                                     <template v-slot:cell(name)="data">
@@ -174,18 +174,18 @@
                                     </template>
                                     <template v-slot:cell(teeth)="data">
                                       <span v-if="!data.item.editable">
-                                        <v-select class="style-chooser" disabled multiple v-model="data.item.teeth" :options="teethOptions"></v-select>
+                                        <v-select class="style-chooser" v-if="Array.isArray(data.item.teeth)" disabled multiple v-model="data.item.teeth" :options="teethOptions"></v-select>
                                       </span>
                                       <div v-else>
                                         <v-select class="style-chooser" multiple :close-on-select="false" v-model="data.item.teeth" :options="teethOptions"></v-select>
                                       </div>
                                     </template>
-                                    <template v-slot:cell(surface)="data">
+                                    <template v-slot:cell(surfaces)="data">
                                       <span v-if="!data.item.editable">
-                                        <v-select class="style-chooser" disabled multiple v-model="data.item.surface" :options="surfaceOptions"></v-select>
+                                        <v-select class="style-chooser" disabled multiple v-model="data.item.surfaces" :options="surfaceOptions"></v-select>
                                       </span>
                                       <div v-else>
-                                        <v-select class="style-chooser" :close-on-select="false" multiple v-model="data.item.surface" :options="surfaceOptions"></v-select>
+                                        <v-select class="style-chooser" :close-on-select="false" multiple v-model="data.item.surfaces" :options="surfaceOptions"></v-select>
                                       </div>
                                     </template>
                                     <template v-slot:cell(comment)="data">
@@ -347,7 +347,7 @@ import { sso } from '../../services/userService'
 import { getCompanyById } from '../../services/companies'
 import { getPremisesForCompany, getDevicesForPremise } from '../../services/companyPremises'
 import { getEnquiryById } from '../../services/enquiry'
-import { createInvoice, updateInvoice, getEnquiryToothByInvoiceItemsId, getItemsOfInvoiceById, getPaymentItemsOfInvoiceById, getSerialForInvoiceNumberBasedOnType, getSerialForFursInvoiceNumberBasedOnType } from '../../services/invoice'
+import { createInvoice, updateInvoice, getItemsOfInvoiceById, getPaymentItemsOfInvoiceById, getSerialForInvoiceNumberBasedOnType, getSerialForFursInvoiceNumberBasedOnType } from '../../services/invoice'
 import { getProducts } from '../../services/products'
 import html2pdf from 'html2pdf.js'
 import _ from 'lodash'
@@ -359,6 +359,12 @@ export default {
   components: {
     QrcodeVue
   },
+  props: {
+    invoice: {
+      type: Object,
+      default: () => ({})
+    }
+  },
   mounted () {
     xray.index()
     this.getLoggedInUser()
@@ -369,11 +375,11 @@ export default {
     return {
       showPdf: false,
       detailColumns: [
-        { label: '#', key: 'id', class: 'text-left' },
+        { label: '#', key: 'table_id', class: 'text-left' },
         { label: this.$t('invoices.newInvoice.newInvoiceDetails.item'), key: 'name', class: 'text-left item-name' },
         { label: this.$t('invoices.newInvoice.newInvoiceDetails.quantity'), key: 'quantity', class: 'text-left narrow-column' },
         { label: this.$t('invoices.newInvoice.newInvoiceDetails.teeth'), key: 'teeth', class: 'text-left' },
-        { label: this.$t('invoices.newInvoice.newInvoiceDetails.surface'), key: 'surface', class: 'text-left' },
+        { label: this.$t('invoices.newInvoice.newInvoiceDetails.surface'), key: 'surfaces', class: 'text-left' },
         { label: this.$t('invoices.newInvoice.newInvoiceDetails.comment'), key: 'comment', class: 'text-left' },
         { label: this.$t('invoices.newInvoice.newInvoiceDetails.price'), key: 'product_price', class: 'text-left narrow-column' },
         { label: this.$t('invoices.newInvoice.newInvoiceDetails.discount'), key: 'discount', class: 'text-left narrow-column' },
@@ -382,13 +388,13 @@ export default {
       ],
       items: [
         {
-          id: 1,
+          table_id: 1,
           item: {
             name: ''
           },
           quantity: '1',
           teeth: '',
-          surface: '',
+          surfaces: '',
           comment: '',
           discount: '0',
           total: '0',
@@ -445,7 +451,7 @@ export default {
       paymentTotal: 0,
       subTotal: 0,
       discount: 0,
-      invoice: {},
+      // invoice: {},
       companyPremises: [],
       billingDetails: '',
       devices: [],
@@ -580,8 +586,8 @@ export default {
       details += '<br>'
       if (selectedPatient.address_line_1) details += selectedPatient.address_line_1 + '<br>'
       if (selectedPatient.post_code) details += selectedPatient.post_code
-      if (selectedPatient.city) details += ' ' + selectedPatient.city
-      if (selectedPatient.country) details += ', ' + selectedPatient.country
+      if (selectedPatient.city) details += ' ' + selectedPatient.city + ', '
+      if (selectedPatient.country) details += selectedPatient.country
       details += '<br>'
       if (selectedPatient.phone) details += 'Telefon: ' + selectedPatient.phone + '<br>'
       if (selectedPatient.email) details += 'Email: ' + selectedPatient.email
@@ -590,6 +596,10 @@ export default {
     getProducts () {
       getProducts('sl').then(response => {
         this.products = response
+        if (Object.keys(this.invoice).length !== 0) {
+          this.invoiceId = this.invoice.invoice_id
+          this.fetchItemsAndPaymentMethods()
+        }
       })
     },
     edit (item) {
@@ -615,11 +625,11 @@ export default {
     },
     default () {
       return {
-        id: this.items.length + 1,
+        table_id: this.items.length + 1,
         item: {},
         quantity: '1',
         teeth: '',
-        surface: '',
+        surfaces: '',
         comment: '',
         discount: '0',
         total: '0',
@@ -680,51 +690,45 @@ export default {
     fetchItemsAndPaymentMethods () {
       getItemsOfInvoiceById(this.invoiceId).then(response => {
         let responseItems = []
-        response.forEach(element => {
-          getEnquiryToothByInvoiceItemsId(element.id).then(toothResponse => {
-            let item = {
-              id: element.id,
-              item: this.findProduct(element.product_id),
-              quantity: element.invoiced_quantity,
-              discount: element.discount,
-              total: this.calculatePrice(element.product_price, element.invoiced_quantity, element.discount).toFixed(2),
-              editable: false,
-              teeth: this.getTeeth(toothResponse),
-              surface: this.getSurface(toothResponse[0]),
-              comment: toothResponse[0].comment
-            }
-            responseItems.push(item)
-          })
+        response.forEach((element, index) => {
+          let item = {
+            table_id: index + 1,
+            id: element.id,
+            item: this.findProduct(element.product_id),
+            quantity: element.invoiced_quantity,
+            discount: element.discount,
+            total: this.calculatePrice(element.product_price, element.invoiced_quantity, element.discount).toFixed(2),
+            editable: false,
+            teeth: this.getTeeth(element.teeth),
+            surfaces: this.getSurfaces(element.surfaces),
+            comment: element.comment
+          }
+          responseItems.push(item)
         })
         this.items = responseItems
-        getPaymentItemsOfInvoiceById(this.invoiceId).then(items => {
-          this.paymentMethods = items
-        })
+        this.getInvoiceTotal()
+      })
+      getPaymentItemsOfInvoiceById(this.invoiceId).then(items => {
+        this.paymentMethods = items
       })
     },
-    getTeeth (data) {
-      return _.map(data, function (item) {
-        return item.number.toString()
-      })
+    getTeeth (teeth) {
+      if (teeth === '') {
+        return []
+      } else if (teeth.includes(',')) {
+        return teeth.split(',')
+      } else {
+        return new Array(teeth)
+      }
     },
-    getSurface (data) {
-      let surfaces = []
-      if (data.occlusal) {
-        surfaces.push('O')
+    getSurfaces (surfaces) {
+      if (surfaces === '') {
+        return []
+      } else if (surfaces.includes(',')) {
+        return surfaces.split(',')
+      } else {
+        return new Array(surfaces)
       }
-      if (data.mesial) {
-        surfaces.push('M')
-      }
-      if (data.distal) {
-        surfaces.push('D')
-      }
-      if (data.buccal) {
-        surfaces.push('B')
-      }
-      if (data.lingual) {
-        surfaces.push('L')
-      }
-      return surfaces
     },
     createInvoice () {
       if (!this.isItemValid()) this.items.pop()
@@ -856,4 +860,7 @@ export default {
     margin: 3rem 12rem 0 0;
 }
 
+.vs__deselect:disabled {
+  display: none !important;
+}
 </style>

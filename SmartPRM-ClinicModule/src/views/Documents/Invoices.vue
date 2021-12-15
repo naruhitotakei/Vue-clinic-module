@@ -186,7 +186,14 @@ export default {
       })
     },
     invoiceSelected (item) {
-      this.$router.push({ path: `/documents/invoices/${item.invoice_id}` })
+      if (item.verification_status !== 'invoice.draft') {
+        this.$router.push({ path: `/documents/invoices/${item.invoice_id}` })
+      } else {
+        this.$router.push({ name: 'documents.draftInvoice', params: { patientId: item.enquiries_id, invoice: item, invoiceId: item.invoice_id } })
+      }
+    },
+    findProduct (productId) {
+      return _.find(this.products, function (prod) { return prod.product_id === productId })
     },
     addInvoice () {
       this.$router.push({ path: `/documents/invoices/${this.selectedPatient.id}/new-invoice` })
