@@ -347,7 +347,7 @@ import { sso } from '../../services/userService'
 import { getCompanyById } from '../../services/companies'
 import { getPremisesForCompany, getDevicesForPremise } from '../../services/companyPremises'
 import { getEnquiryById } from '../../services/enquiry'
-import { createInvoice, updateInvoice, getItemsOfInvoiceById, getPaymentItemsOfInvoiceById, getSerialForInvoiceNumberBasedOnType, getSerialForFursInvoiceNumberBasedOnType } from '../../services/invoice'
+import { createInvoice, getInvoiceById, updateInvoice, getItemsOfInvoiceById, getPaymentItemsOfInvoiceById, getSerialForInvoiceNumberBasedOnType, getSerialForFursInvoiceNumberBasedOnType } from '../../services/invoice'
 import { getProducts } from '../../services/products'
 import html2pdf from 'html2pdf.js'
 import _ from 'lodash'
@@ -358,12 +358,6 @@ export default {
   name: 'NewInvoice',
   components: {
     QrcodeVue
-  },
-  props: {
-    invoice: {
-      type: Object,
-      default: () => ({})
-    }
   },
   mounted () {
     xray.index()
@@ -451,7 +445,7 @@ export default {
       paymentTotal: 0,
       subTotal: 0,
       discount: 0,
-      // invoice: {},
+      invoice: {},
       companyPremises: [],
       billingDetails: '',
       devices: [],
@@ -463,7 +457,7 @@ export default {
       dateOfServicePdf: '',
       invoiceNumber: '',
       invoiceNumberFurs: '',
-      invoiceId: '',
+      invoiceId: this.$route.params.invoiceId,
       paidAmount: 0,
       zoi: 'a7e5f55e1dbb48b799268e1a6d8618a3',
       decimalZoi: '',
@@ -596,8 +590,10 @@ export default {
     getProducts () {
       getProducts('sl').then(response => {
         this.products = response
-        if (Object.keys(this.invoice).length !== 0) {
-          this.invoiceId = this.invoice.invoice_id
+        if (this.invoiceId) {
+          getInvoiceById(this.invoiceId).then(response => {
+            this.invoice = response[0]
+          })
           this.fetchItemsAndPaymentMethods()
         }
       })

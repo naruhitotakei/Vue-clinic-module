@@ -152,7 +152,7 @@ const documentChildRoute = (prop, mode) => [
     component: Invoice
   },
   {
-    path: 'invoices/:invoiceId/draft',
+    path: 'invoices/:invoiceId/draft/patient/:patientId',
     name: prop + '.draftInvoice',
     meta: { dark: mode, auth: true, name: 'Invoice' },
     props: true,

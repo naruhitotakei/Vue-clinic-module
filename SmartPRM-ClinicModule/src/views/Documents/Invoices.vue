@@ -189,7 +189,7 @@ export default {
       if (item.verification_status !== 'invoice.draft') {
         this.$router.push({ path: `/documents/invoices/${item.invoice_id}` })
       } else {
-        this.$router.push({ name: 'documents.draftInvoice', params: { patientId: item.enquiries_id, invoice: item, invoiceId: item.invoice_id } })
+        this.$router.push({ path: `/documents/invoices/${item.invoice_id}/draft/patient/${item.enquiries_id}` })
       }
     },
     findProduct (productId) {
