@@ -16,8 +16,8 @@
       <p class="mb-0">{{selectedSlot.doctor.name}}</p>
       </div>
     </div>
-    <div v-if="services">
-      <div v-for="(service, index) in services" :key="`total_service_${index}`" class="service-item d-flex flex-column py-2">
+    <div>
+      <div class="service-item d-flex flex-column py-2">
         <h5 class="text-left primary-color mb-1">{{service.serviceName}}</h5>
         <div class="d-flex justify-content-between">
           <p class="mb-0">{{service.time}}</p>
@@ -36,7 +36,7 @@
 
 export default {
   props: {
-    services: Array,
+    service: Array,
     totalPrice: Number,
     date: Date,
     time: String,

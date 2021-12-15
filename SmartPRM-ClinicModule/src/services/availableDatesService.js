@@ -1,5 +1,5 @@
 export async function getAvailableDates (params) {
-  const response = await fetch(`/api/available-dates`, {
+  const response = await fetch(`/api/available-dates?${new URLSearchParams(params)}`, {
     method: 'GET',
     credentials: 'same-origin',
     headers: {

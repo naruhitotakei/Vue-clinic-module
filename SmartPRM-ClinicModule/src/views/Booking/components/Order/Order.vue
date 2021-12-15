@@ -3,11 +3,11 @@
     <div class="text-center">
       <b-button-group class="mt-2">
         <b-button
-          v-for="{ name, text } in TabOrder"
+          v-for="({ name, text }, index) in StepOrder"
           :key="name"
-          :variant="activeTab === name ? 'primary': null"
-          @click="activeTab = name"
-          :disabled="TabOrder.findIndex((tab) => tab.name === activeTab) < TabOrder.findIndex((tab) => tab.name === name)"
+          :variant="activeStep === name ? 'primary': null"
+          @click="activeStep = name"
+          :disabled="StepOrder.findIndex((step) => step.name === lastStep) < index"
         >
           {{ $t(`public.onlineBooking.${text}`) }}
         </b-button>
@@ -15,7 +15,7 @@
     </div>
 
     <KeepAlive>
-      <component :is="activeTab" :form.sync="form" @next="next"></component>
+      <component :is="activeStep" :form.sync="form" @next="next"></component>
     </KeepAlive>
   </div>
 </template>
@@ -26,16 +26,16 @@ import ChooseTimeTab from './ChooseTimeTab.vue'
 import ReviewTab from './ReviewTab.vue'
 import Services from './Services.vue'
 
-const Tab = {
+const Step = {
   Services: 'Services',
   ChooseTimeTab: 'ChooseTimeTab',
   ReviewTab: 'ReviewTab'
 }
 
-const TabOrder = [
-  { name: Tab.Services, text: 'pickService' },
-  { name: Tab.ChooseTimeTab, text: 'chooseTime' },
-  { name: Tab.ReviewTab, text: 'review' }
+const StepOrder = [
+  { name: Step.Services, text: 'pickService' },
+  { name: Step.ChooseTimeTab, text: 'chooseTime' },
+  { name: Step.ReviewTab, text: 'review' }
 ]
 
 export default defineComponent({
@@ -51,24 +51,33 @@ export default defineComponent({
     return {
       form: {
       },
-      activeTab: Tab.Services
+      activeStep: Step.Services,
+      lastStep: Step.Services
     }
   },
 
   computed: {
-    TabOrder () {
-      return TabOrder
+    StepOrder () {
+      return StepOrder
     }
   },
 
   methods: {
     next () {
-      const activeTabIndex = TabOrder.findIndex(
-        ({ name }) => name === this.activeTab
+      const activeStepIndex = StepOrder.findIndex(
+        ({ name }) => name === this.activeStep
       )
 
-      if (activeTabIndex < TabOrder.length - 1) {
-        this.activeTab = TabOrder[activeTabIndex + 1].name
+      if (activeStepIndex < StepOrder.length - 1) {
+        this.activeStep = StepOrder[activeStepIndex + 1].name
+
+        const lastStepIndex = StepOrder.findIndex(
+          ({ name }) => name === this.lastStep
+        )
+
+        if (activeStepIndex + 1 > lastStepIndex) {
+          this.lastStep = this.activeStep
+        }
 
         return
       }
