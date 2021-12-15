@@ -314,4 +314,8 @@ export default {
   color: $primary;
   font-size: 16px;
 }
+
+::v-deep .slick-dots {
+  bottom: -35px;
+}
 </style>
