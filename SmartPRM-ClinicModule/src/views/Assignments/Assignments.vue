@@ -184,7 +184,8 @@
                         <h5>{{ $t('assignments.overdueAssignments') }} of other users.</h5>
                     </template>
                   <template v-slot:body>
-                    <b-form-input type="search" placeholder="Filter By User" debounce="500" v-model="filterOverdue"></b-form-input>
+                    <AppMultiselect v-model="filterOverdue" :options="pastAssignmentUsers" placeholder="Filter By Users" />
+                    <!-- <b-form-input type="search" placeholder="Filter By User" debounce="500" v-model="filterOverdue"></b-form-input> -->
                     <b-list-group class="list-group-flush mt-2" id="overdueAssignments">
                       <b-list-group-item
                         v-for="(item, index) in otherUserOverDueList"
@@ -563,9 +564,13 @@ import { getAssignments, finishAssignment, createAssignments, updateAssignments 
 import { getEnquires } from '@/services/enquiry'
 import { getUsers, getDentists, sso } from '@/services/userService'
 import moment from 'moment'
+import AppMultiselect from '../Booking/components/Controls/AppMultiselect.vue'
 
 export default {
   name: 'Assignments',
+  components: {
+    AppMultiselect
+  },
   async mounted () {
     xray.index()
     await this.getUserLogin()
@@ -612,15 +617,20 @@ export default {
         this.myOverdueCurrentPage * this.myOverduePerPage)
     },
     filterOverdueByUser () {
-      if (this.filterOverdue) {
-        return this.overdueAssignments.filter(assignment => assignment.todoname && assignment.todoname.toLowerCase().includes(this.filterOverdue.toLowerCase()))
+      if (this.filterOverdue && this.filterOverdue.length) {
+        let filteredAssignments = []
+        this.filterOverdue.forEach(item => {
+          const foundRecords = this.overdueAssignments.filter(assignment => assignment.todoname && assignment.todoname === item.full_name)
+          filteredAssignments = [...filteredAssignments, ...foundRecords]
+        })
+        return filteredAssignments
       }
       return this.overdueAssignments
     }
   },
   watch: {
     filterOverdue (val) {
-      if (val) {
+      if (val && val.length) {
         this.filterOverDueItems()
       } else {
         this.overdueAssignments = [...this.allOverdueAssignments]
@@ -629,7 +639,16 @@ export default {
   },
   methods: {
     filterOverDueItems () {
-      this.overdueAssignments = this.allOverdueAssignments.filter(assignment => assignment.todoname && assignment.todoname.toLowerCase().includes(this.filterOverdue.toLowerCase()))
+      if (this.filterOverdue && this.filterOverdue.length) {
+        let filteredAssignments = []
+        this.filterOverdue.forEach(item => {
+          const foundRecords = this.allOverdueAssignments.filter(assignment => assignment.todoname && assignment.todoname === item)
+          filteredAssignments = filteredAssignments.concat(foundRecords)
+        })
+        this.overdueAssignments = JSON.parse(JSON.stringify(filteredAssignments))
+      } else {
+        this.overdueAssignments = [...this.allOverdueAssignments]
+      }
     },
     editAssignments (assignment) {
       let enquiry = this.enquires.find(item => item.id === assignment.enquiry_id)
@@ -646,6 +665,11 @@ export default {
     getUsersList () {
       getUsers().then(response => {
         this.users = response
+        this.users = this.users.map(user => {
+          const userObj = Object.assign({}, user)
+          userObj.full_name = user.name + ' ' + user.surname
+          return userObj
+        })
       })
     },
     getAssignments () {
@@ -662,6 +686,7 @@ export default {
           let reverseResponse = response.reverse()
           this.setOtherUsersOverdueAssignments(reverseResponse)
           this.setMyOverdueAssignments(reverseResponse)
+          this.getUsersInPastAssignments()
         }
       })
       getAssignments('future').then(response => {
@@ -696,6 +721,22 @@ export default {
         return (Number(completed.length) / Number(total)) * 100
       }
       return null
+    },
+    getUsersInPastAssignments () {
+      this.pastAssignmentUsers = []
+      this.pastAssignmentUsers = this.allOverdueAssignments
+        .filter(item => item.todoname && item.todoname)
+        .map(item => item.todoname && item.todoname)
+      this.pastAssignmentUsers = [...new Set(this.pastAssignmentUsers)]
+      // if (this.allOverdueAssignments && this.allOverdueAssignments.length) {
+      //   this.allOverdueAssignments.forEach(item => {
+      //     const user = this.users.find(user => user.full_name.toLowerCase().includes(item.todoname.toLowerCase()))
+      //     if (user) {
+      //       this.pastAssignmentUsers.push(user)
+      //     }
+      //   })
+      //   this.pastAssignmentUsers = [...new Set(this.pastAssignmentUsers)]
+      // }
     },
     setMyFutureAssignments (assignments) {
       let filtered = assignments.filter(assignment => assignment.user_id === this.formData.user_id)
@@ -850,7 +891,8 @@ export default {
       enquires: [],
       dentists: [],
       index: [],
-      filterOverdue: null,
+      filterOverdue: [],
+      pastAssignmentUsers: [],
       myCompletedAssignments: null,
       todaysAssignments: [],
       allOverdueAssignments: [],
