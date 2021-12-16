@@ -1,8 +1,5 @@
 <template>
   <div>
-    <h5 class="text-left">
-      {{ $t('public.onlineBooking.checkSelectedSlotAndConfirmReservation') }}
-    </h5>
     <div class="selected-slot p-2 my-3">
       {{ $t('public.onlineBooking.selectedSlot') }}:
       {{ selectedSlot.date.toISOString() | formatFullDate({ lang: $i18n.locale }) }}
