@@ -336,14 +336,23 @@
                                                       <hr />
                                                   </div>
                                               </div>
-                                              <ul class="list-inline m-0 overflow-y-scroll pl-2 pr-2" style="max-height: 300px;">
-                                                  <li v-for="(note,index) in notes" :key="index + note.created_at" class="d-flex align-items-center justify-content-between mb-3">
+                                              <ul class="list-inline m-0 pl-2 pr-2">
+                                                  <li v-for="(note,index) in notesList" :key="index + note.created_at" id="notesList" class="d-flex align-items-center justify-content-between mb-3">
                                                       <div>
                                                           <h6>{{note.content}}</h6>
-                                                          <p class="mb-0">{{note.created_at | formatDate}} - <span class="ml-0">{{ note.user_name }}</span></p>
+                                                          <small class="mb-0">{{note.created_at | formatDate}} - <span class="ml-0">{{ note.user_name }}</span></small>
                                                       </div>
                                                   </li>
                                               </ul>
+                                              <p v-if="notes.length === 0">No Notes found.</p>
+                                              <b-pagination
+                                                class="mt-4"
+                                                v-else-if="notes.length > 5"
+                                                v-model="notesCurrentPage"
+                                                :total-rows="notes.length"
+                                                :per-page="notesPerPage"
+                                                aria-controls="notesList"
+                                              ></b-pagination>
                                           </template>
                                       </iq-card>
                                   </b-col>
@@ -363,7 +372,7 @@
                                                   <li v-for="(message,index) in smsList" :key="index + message.created_at" id="smsList" class="d-flex align-items-center justify-content-between mb-3">
                                                       <div>
                                                           <h6>{{message.name}}</h6>
-                                                          <p class="mb-0">{{message.created_at | formatDateAndTime}} - {{ message.delivered_at ? $t('EPR.overview.deliveredSms') :  $t('EPR.overview.notDeliveredSms')}}</p>
+                                                          <small class="mb-0">{{message.created_at | formatDateAndTime}} - {{ message.delivered_at ? $t('EPR.overview.deliveredSms') :  $t('EPR.overview.notDeliveredSms')}}</small>
                                                       </div>
                                                   </li>
                                               </ul>
@@ -1183,6 +1192,11 @@ export default {
         (this.smsCurrentPage - 1) * this.smsPerPage,
         this.smsCurrentPage * this.smsPerPage)
     },
+    notesList () {
+      return this.notes.slice(
+        (this.notesCurrentPage - 1) * this.notesPerPage,
+        this.notesCurrentPage * this.notesPerPage)
+    },
     filesSortBy () {
       if (this.sortBy === '') {
         let files = [...this.files]
@@ -1286,6 +1300,8 @@ export default {
       smsMessages: [],
       smsCurrentPage: 1,
       smsPerPage: 4,
+      notesCurrentPage: 1,
+      notesPerPage: 5,
 
       selectedInvoices: '',
       selectedDoctor: '',
@@ -1555,7 +1571,6 @@ export default {
     getSms () {
       getEnquirySMS(this.patientId).then(response => {
         this.smsMessages = response
-        console.log('Messages...', this.smsMessages)
       })
     },
     checkIfImageType (type) {
