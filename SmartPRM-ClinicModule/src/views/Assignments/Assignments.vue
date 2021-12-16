@@ -35,7 +35,7 @@
                       >
                         <div :class="{ 'taskIsActive' : !item.completed}">
                           <div>
-                            <b-checkbox v-model="item.completed" :disabled="item.disabled || item.completed" name="check-button" inline
+                            <b-checkbox v-model="item.completed" name="check-button" inline
                               :key="index"
                               @change="finishAssignment(item.id, $event, 'today')"><strong>{{ item.description }}</strong></b-checkbox>
                           </div>
