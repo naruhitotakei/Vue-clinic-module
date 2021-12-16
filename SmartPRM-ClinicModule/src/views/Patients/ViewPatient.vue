@@ -369,6 +369,7 @@
                                               </ul>
                                               <p v-if="smsMessages.length === 0">No Sent SMS found.</p>
                                               <b-pagination
+                                                class="mt-4"
                                                 v-else-if="smsMessages.length > 4"
                                                 v-model="smsCurrentPage"
                                                 :total-rows="smsMessages.length"
