@@ -38,7 +38,13 @@
     "KPIs": "KPIs",
     "workReport": "Work Report",
     "activityReport": "Activity Report",
-    "missingServices": "Missing Services"
+    "missingServices": "Missing Services",
+    "leadsPage": {
+      "actionCall": "Call",
+      "actionEdit": "Edit",
+      "actionSendSMS": "Send SMS",
+      "actionSendEmail": "Send e-mail"
+    }
   },
   "settings": {
     "users": "Users",

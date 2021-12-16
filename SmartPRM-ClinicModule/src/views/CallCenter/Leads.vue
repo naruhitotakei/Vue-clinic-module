@@ -22,20 +22,22 @@
                   </iq-card>
                 </b-col>
 
-                <b-col lg="8" class="pr-0 mt-4 pt-2 col-lg-8 d-flex" >
-                  <b-col md="6 d-flex" style="align-items: center">
-                    <b-col md="6">
-                      <div class="row">
-                        <div class="col-4 pl-lg-3 p-md-0 text-dark">{{ $t('EPR.overview.phone') }}:</div>
-                        <div class="col-8 pl-lg-3 p-md-0 text-dark">{{lead.phone}}</div>
-                        <div class="col-4 pl-lg-3 p-md-0 text-dark">{{ $t('EPR.overview.email') }}:</div>
-                        <div class="col-8 pl-lg-3 p-md-0 text-dark">{{lead.email}}</div>
-                        <div class="col-4 pl-lg-3 p-md-0 text-dark">{{ $t('EPR.overview.address') }}:</div>
-                        <div class="col-8 pl-lg-3 p-md-0 text-dark" v-if="lead.address_line_1">{{lead.address_line_1}}</div>
-                        <div v-else class="col-8 pl-lg-3 p-md-0 text-dark">{{ $t('EPR.overview.addressUnknown') }}</div>
-                      </div>
-                    </b-col>
-                  </b-col>
+                <b-col lg="8" class="pr-0 mt-4 pt-2 col-lg-8 d-flex" style="flex-direction: column">
+                  <b-row class="d-flex mb-4">
+                    <button type="button" class="btn btn-primary mr-3" style="height: max-content">{{ $t('callCenter.leadsPage.actionCall') }}</button>
+                    <button type="button" class="btn btn-primary mr-3" style="height: max-content">{{ $t('callCenter.leadsPage.actionEdit') }}</button>
+                    <button type="button" class="btn btn-primary mr-3" style="height: max-content">{{ $t('callCenter.leadsPage.actionSendSMS') }}</button>
+                    <button type="button" class="btn btn-primary mr-3" style="height: max-content">{{ $t('callCenter.leadsPage.actionSendEmail') }}</button>
+                  </b-row>
+                  <b-row>
+                    <div class="col-2 p-md-0 text-dark">{{ $t('EPR.overview.phone') }}:</div>
+                    <div class="col-10 p-md-0 text-dark">{{lead.phone}}</div>
+                    <div class="col-2 p-md-0 text-dark">{{ $t('EPR.overview.email') }}:</div>
+                    <div class="col-10 p-md-0 text-dark">{{lead.email}}</div>
+                    <div class="col-2 p-md-0 text-dark">{{ $t('EPR.overview.address') }}:</div>
+                    <div class="col-10 p-md-0 text-dark" v-if="lead.address_line_1">{{lead.address_line_1}}</div>
+                    <div v-else class="col-10 p-md-0 text-dark">{{ $t('EPR.overview.addressUnknown') }}</div>
+                  </b-row>
                 </b-col>
 
               </b-row>
