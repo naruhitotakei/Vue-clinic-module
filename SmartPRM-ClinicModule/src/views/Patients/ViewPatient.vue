@@ -541,15 +541,7 @@
                                                   </b-form-input>
                                               </b-form-group>
                                               <b-form-group class="col-md-12 align-items-center mt-1" :class="{'mb-0': disabledData}" style="justify-content: space-between;" label-cols-sm="4" label-for="city" :label="$t('EPR.personalInfo.postCodeCity')">
-                                                  <b-form-input :disabled="disabledData" class="col-md-4 form-control-disabled font-size-12 mt-1" style="float: left;" v-model="patient.post_code" type="text"></b-form-input>
-                                                  <v-select :disabled="disabledData"
-                                                            class="col-md-8 form-control-disabled style-chooser"
-                                                            :class="{'margin-top-city': disabledData}"
-                                                            style="float: right;" v-model="patient.city"
-                                                            :clearable="false" :options="filteredMunicipalities"
-                                                            :reduce="city => city.municipality_name"
-                                                            :getOptionLabel="getMunicipalityLabel"
-                                                            @input="onCityChange"></v-select>
+                                                  <b-form-input :disabled="disabledData" class="col-md-12 form-control-disabled font-size-12 mt-1" style="float: left;" v-model="patient.post_code" type="text"></b-form-input>
                                               </b-form-group>
                                               <b-form-group class="col-md-12 align-items-center " :class="{'mb-0': disabledData}" label-cols-sm="4" label-for="country" :label="$t('EPR.personalInfo.country')">
                                                   <v-select :disabled="disabledData" label="name" :clearable="false"
@@ -558,10 +550,27 @@
                                                             v-model="patient.country_id" :options="countries"></v-select>
                                               </b-form-group>
                                               <b-form-group class="col-md-12 align-items-center" :class="{'mb-0': disabledData}" label-cols-sm="4" label-for="region" :label="$t('EPR.personalInfo.region')">
-                                                  <v-select class="style-chooser form-control-disabled font-size-12" :clearable="false"
-                                                            :reduce="region => region.code" :disabled="disabledData"
-                                                            v-model="patient.region_id"
-                                                            :options="filteredRegions"></v-select>
+                                                  <v-select
+                                                    :clearable="false"
+                                                    :reduce="region => region.code"
+                                                    :disabled="disabledData"
+                                                    v-model="patient.region_id"
+                                                    style="float: left;width: 45%"
+                                                    class="style-chooser"
+                                                    :options="filteredRegions">
+                                                  </v-select>
+                                                  <v-select
+                                                    v-model="patient.city"
+                                                    :clearable="false"
+                                                    :disabled="disabledData"
+                                                    :options="filteredMunicipalities"
+                                                    :reduce="city => city.municipality_name"
+                                                    :getOptionLabel="getMunicipalityLabel"
+                                                    @input="onCityChange"
+                                                    class="style-chooser"
+                                                    style="float: right;width: 45%">
+                                                  </v-select>
+                                                  <!-- <b-form-input :disabled="disabledData" class="col-md-5 form-control-disabled font-size-12" style="float: right;" name="insured_at" type="text" v-model="patient.insured_at"></b-form-input> -->
                                               </b-form-group>
                                               <b-form-group class="col-md-12 align-items-center" :class="{'mb-0': disabledData}" label-cols-sm="4" label-for="insurance" :label="$t('EPR.personalInfo.insurance')">
                                                   <b-form-input :disabled="disabledData" class="col-md-5 form-control-disabled font-size-12" style="float: left;" name="insurance_no" type="text" v-model="patient.insurance_no"></b-form-input>
@@ -1153,9 +1162,9 @@ export default {
       })
     },
     filteredMunicipalities () {
-      if (this.patient.country_id) {
+      if (this.patient.region_id) {
         return this.municipalities.filter(item => {
-          return item.country_id === this.patient.country_id
+          return item.region_id === this.patient.region_id
         })
       } else {
         return this.municipalities
