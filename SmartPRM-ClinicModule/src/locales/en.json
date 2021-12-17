@@ -535,6 +535,7 @@
       "save": "Save"
     },
     "completeAssignmentModal": {
+      "title": "Update Assignment",
       "no": "No",
       "yes": "Yes",
       "tickAssignment": "Are you sure you want to complete this assignment?",

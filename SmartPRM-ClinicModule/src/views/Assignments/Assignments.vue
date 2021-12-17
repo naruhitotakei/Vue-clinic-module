@@ -505,15 +505,16 @@
       <b-modal
         v-model="warningModal"
         size="md"
-        title="Update Assignment"
-        :ok-title="$t('assignments.addAssignmentsModal.save')"
-        :cancel-title="$t('assignments.addAssignmentsModal.close')"
+        :title="$t('assignments.completeAssignmentModal.title')"
+        :ok-title="$t('assignments.completeAssignmentModal.yes')"
+        :cancel-title="$t('assignments.completeAssignmentModal.no')"
         @ok="changeAssignmentStatus"
         @close="closeWarningModal"
         @cancel="closeWarningModal"
       >
         <div v-if="assignmentToEdit">
-          Are you sure you want to {{ assignmentToEdit.event ? 'Complete' : 'Incomplete' }} this assignment ?
+          <p v-if="assignmentToEdit.event">{{ $t('assignments.completeAssignmentModal.tickAssignment') }}</p>
+          <p v-else>{{ $t('assignments.completeAssignmentModal.untickAssignment') }}</p>
         </div>
       </b-modal>
     </b-container>

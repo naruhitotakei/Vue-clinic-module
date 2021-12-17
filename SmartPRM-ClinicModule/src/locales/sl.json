@@ -532,6 +532,7 @@
       "save": "Shrani"
     },
     "completeAssignmentModal": {
+      "title": "posodobite nalogo",
       "no": "Ne",
       "yes": "Da",
       "tickAssignment": "Ste prepričani da želite obkljukati to nalogo?",
