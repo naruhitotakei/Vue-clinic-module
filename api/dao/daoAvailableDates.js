@@ -7,18 +7,26 @@ const daoAvailableDates = {
 
 module.exports = daoAvailableDates
 
-async function getAvailableDates() {
+async function getAvailableDates({ serviceId }) {
   const statements = /* sql */`
-    select distinct on (starts_at::date) starts_at::text
-    from appointment_slots
-    where appointment_id is null
-    AND appointment_slots.starts_at BETWEEN NOW()::date AND NOW()::date + interval '30' day
-    order by starts_at::date
+    SELECT DISTINCT ON (starts_at::date) starts_at::text
+    FROM appointment_slots
+    WHERE appointment_id IS null
+    AND starts_at BETWEEN $1::date AND $1::date + interval '30' day
+    AND doctor_id IN (
+      SELECT doctor_id FROM online_booking_users_bridge
+      WHERE online_booking_id = $2
+    )
+    ORDER BY starts_at::date
   `
 
-  const { rows } = await db.query(statements)
+  const startDate = moment()
+    .tz('Europe/Ljubljana')
+    .add(1, 'day')
+    .format('YYYY-MM-DD')
+  const { rows } = await db.query(statements, [startDate, serviceId])
 
   return rows.map((row) => {
-    return moment(row.starts_at).tz('Europe/Ljubljana').format('YYYY-MM-DD')
+    return moment.tz(row.starts_at, 'Europe/Ljubljana').format('YYYY-MM-DD')
   })
 }

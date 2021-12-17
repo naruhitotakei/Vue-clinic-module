@@ -1,4 +1,5 @@
 require('dotenv').config();
+const moment = require('moment')
 
 const Pool = require('pg').Pool
 const pool = new Pool({
@@ -60,13 +61,18 @@ const getOnlineBookingProductsPublic = (request, response, locale) => {
             JOIN online_booking_users_bridge
             ON appointment_slots.doctor_id = online_booking_users_bridge.doctor_id
             WHERE appointment_slots.appointment_id IS null
-            AND appointment_slots.starts_at BETWEEN NOW()::date AND NOW()::date + interval '30' day
+            AND appointment_slots.starts_at BETWEEN $1::date AND $1::date + interval '30' day
         )
-        AND online_booking_service_name.language = $1
+        AND online_booking_service_name.language = $2
         ORDER BY online_booking_service_name.text
     `
 
-    pool.query(statement, [locale], (error, results) => {
+    const startDate = moment()
+      .tz('Europe/Ljubljana')
+      .add(1, 'day')
+      .format('YYYY-MM-DD')
+
+    pool.query(statement, [startDate, locale], (error, results) => {
         if (error) {
             response.status(500).send(error)
 

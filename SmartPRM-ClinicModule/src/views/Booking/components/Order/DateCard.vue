@@ -1,18 +1,21 @@
 <template>
   <div class="px-2">
-    <div class="app-border pt-2 date-card overflow-hidden active-element"
-    :class="{'disabled': (!!availability), 'active': (!!active)}"
-    @click="$emit('date-selected', date)"
+    <div class="app-border pt-2 date-card overflow-hidden active-element text-center"
+      :class="{
+        'disabled': (!!availability),
+        'active': (!!active)
+      }"
+      @click="$emit('date-selected', date)"
     >
       <div class="px-3">
-        <p class="app-font-small mb-0">{{day}}</p>
+        <p class="app-font-small mb-0">{{ day }}</p>
         <hr class="my-1" />
-        <h1>{{date.getDate()}}</h1>
+        <h1>{{ date.getDate() }}</h1>
         <hr class="my-1"/>
-        <p class="app-font-small mb-0">{{month}}</p>
+        <p class="app-font-small mb-0">{{ month }}</p>
       </div>
       <div class="price-field">
-        {{(!availability) ? `$${totalPrice}`: availability}}
+        {{ (!availability) ? `$${totalPrice}`: availability }}
       </div>
     </div>
   </div>
@@ -20,8 +23,9 @@
 
 <script>
 import { getDayOfWeek, getMonthName } from '@/Utils/appDate'
+import { defineComponent } from '@vue/composition-api'
 
-export default {
+export default defineComponent({
   props: {
     date: Date,
     availability: [String, Boolean],
@@ -36,7 +40,7 @@ export default {
       return getMonthName(this.date, { lang: this.$i18n.locale })
     }
   }
-}
+})
 </script>
 
 <style lang="scss" scoped>
