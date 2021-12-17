@@ -11,7 +11,6 @@
   <!-- Event description modal -->
   <b-modal
       v-model="showModal"
-      no-close-on-esc
       no-close-on-backdrop
       size="lg"
       :title="$t('calendar.appointmentDetails')"
