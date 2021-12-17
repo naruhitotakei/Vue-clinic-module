@@ -184,7 +184,7 @@
       <ValidationProvider class="col-md-12 mb-3" vid="confirm_password" name="New password" rules="required" v-slot="{ errors }">
         <div>
           <label for="newPassword">New Password</label>
-          <input type="password" v-model="formData.confirm_password" class="form-control" id="newPassword" :class="'form-control mb-0' +(errors.length > 0 ? ' is-invalid' : '')">
+          <input type="password" v-model="formData.new_password" class="form-control" id="newPassword" :class="'form-control mb-0' +(errors.length > 0 ? ' is-invalid' : '')">
           <div class="invalid-feedback">
             <span>{{ errors[0] }}</span>
           </div>
@@ -193,7 +193,7 @@
       <ValidationProvider class="col-md-12 mb-3" name="Confirm Password" rules="required|confirmed:confirm_password" v-slot="{ errors }">
         <div>
           <label for="confirmNewPassword">Confirm New Password</label>
-          <input type="password" v-model="formData.new_password" class="form-control" id="confirmNewPassword" :class="'form-control mb-0' +(errors.length > 0 ? ' is-invalid' : '')">
+          <input type="password" v-model="formData.confirm_password" class="form-control" id="confirmNewPassword" :class="'form-control mb-0' +(errors.length > 0 ? ' is-invalid' : '')">
           <div class="invalid-feedback">
             <span>{{ errors[0] }}</span>
           </div>
@@ -225,7 +225,7 @@ import loader from '../assets/images/logo.png'
 import { xray } from '../config/pluginInit'
 import { Users } from '../FackApi/api/chat'
 import { mapGetters, mapActions } from 'vuex'
-import { sso, logout, editProfile, changeLang } from '../services/userService'
+import { sso, logout, editProfile, changeLang, changePassword } from '../services/userService'
 import { uploadAvatar } from '../services/upDownLoad'
 import { localize } from 'vee-validate'
 
@@ -286,6 +286,7 @@ export default {
       formData: {
         old_password: '',
         new_password: '',
+        confirm_password: '',
         email: ''
       },
       profileModalShow: false,
@@ -372,10 +373,26 @@ export default {
         email: this.logedInUser.email,
         prm_locale: this.logedInUser.prm_locale
       }
+      let password = {
+        oldpassword: this.formData.old_password,
+        password1: this.formData.new_password,
+        password2: this.formData.confirm_password
+      }
       this.changeLang(profile)
+      if (this.formData.new_password && this.formData.new_password.length >= 8) {
+        this.changePassword(password.oldpassword, password.password1, password.password2)
+        this.formData.old_password = ''
+        this.formData.new_password = ''
+        this.formData.confirm_password = ''
+      }
     },
     changeLang (profile) {
       changeLang(profile).then(() => {
+        this.$bvToast.show('b-toaster-bottom-right')
+      })
+    },
+    changePassword (oldPassword, newPassword1, newPassword2) {
+      changePassword(oldPassword, newPassword1, newPassword2).then(() => {
         this.$bvToast.show('b-toaster-bottom-right')
       })
     },
