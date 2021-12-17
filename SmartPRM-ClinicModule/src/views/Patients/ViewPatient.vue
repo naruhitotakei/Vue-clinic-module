@@ -462,7 +462,7 @@
                                                         <div v-if="item.appointmentStatus === 'Canceled by patient'" class="timeline-dots border-danger"></div>
                                                         <div v-if="item.appointmentStatus === 'Unknown'" class="timeline-dots border-warning"></div>
                                                         <h6 @click="openEditAppointmentModal(item)" class="clickable">{{item.product_group_text}}<span class="float-right">{{item.note}}</span></h6>
-                                                        <small class="mt-1">{{item.starts_at | formatDateAndTime}}</small>
+                                                        <small class="mt-1">{{item.starts_at | formatDateAndTime}} {{ item.location ? `(${item.location})` : '' }}</small>
                                                       </li>
                                                   </ul>
                                               </template>
@@ -1765,7 +1765,6 @@ export default {
         this.pastAppointments.forEach(appointment => {
           appointment['appointmentStatus'] = this.decideAppointmentStatus(appointment)
         })
-        console.log(this.pastAppointments)
         this.timeSinceFirstVisit = response.length && response[0].date
       }
       )
