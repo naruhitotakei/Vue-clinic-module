@@ -289,38 +289,37 @@ export default {
       const yearly = data.yearly
       const sixtyWeeks = data.sixtyWeeks
       const today = data.today
-      console.log(data)
       if (today && Array.isArray(today)) {
         this.todayRevenue = 0
         today.forEach(item => {
-          this.todayRevenue += Number(item.totalrevenue)
+          this.todayRevenue += Number(item.revenue)
         })
       }
       if (weekly && Array.isArray(weekly)) {
         this.weeklyRevenue = 0
         weekly.forEach(item => {
-          this.weeklyRevenue += Number(item.totalrevenue)
+          this.weeklyRevenue += Number(item.revenue)
         })
       }
       if (monthly && Array.isArray(monthly)) {
         this.monthlyRevenue = 0
         monthly.forEach(item => {
-          this.monthlyRevenue += Number(item.totalrevenue)
+          this.monthlyRevenue += Number(item.revenue)
         })
       }
       if (yearly && Array.isArray(yearly)) {
         this.yearlyRevenue = 0
         yearly.forEach(item => {
-          this.yearlyRevenue += Number(item.totalrevenue)
+          this.yearlyRevenue += Number(item.revenue)
         })
       }
       if (sixtyWeeks && Array.isArray(sixtyWeeks)) {
         let datesArray = []
         this.totalRevenue = 0
         sixtyWeeks.forEach(item => {
-          this.revenueList.push(item.cachrevenue)
+          this.revenueList.push(item.revenue)
           datesArray.push(item.date)
-          this.totalRevenue += Number(item.totalrevenue)
+          this.totalRevenue += Number(item.revenue)
         })
         this.revenueChartSeries = [{
           data: this.revenueList
@@ -439,7 +438,6 @@ export default {
     },
     getServicesList () {
       getServiceList(this.fromdate, this.todate, this.countrySelect).then(response => {
-        console.log('Service List...', response)
         if (typeof response !== 'string') {
           this.servicesListTotalCount = 0
           this.servicesListTotalFee = 0
