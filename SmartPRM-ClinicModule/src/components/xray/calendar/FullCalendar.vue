@@ -563,6 +563,7 @@ export default {
   },
   beforeDestroy () {
     clearInterval(this.calendarUpdateEvery3Min)
+    window.removeEventListener('keydown')
   },
   methods: {
     closeAddPatientModal (value) {

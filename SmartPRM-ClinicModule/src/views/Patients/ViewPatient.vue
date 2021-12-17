@@ -456,7 +456,7 @@
                                                           <div v-if="item.appointmentStatus === 'Unknown'" class="timeline-dots border-warning"></div>
                                                           <div @click="openEditAppointmentModal(item)" style="cursor: pointer;">
                                                               <h6>{{item.product_group_text}}<span class="float-right">{{item.note}}</span></h6>
-                                                              <small class="mt-1">{{item.starts_at | formatDateAndTime}}</small>
+                                                              <small class="mt-1">{{item.starts_at | formatDateAndTime}} {{ item.location ? `(${item.location})` : '' }}</small>
                                                           </div>
                                                       </li>
                                                   </ul>
