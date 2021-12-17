@@ -454,7 +454,7 @@ export default {
       return !this.premiseFormData.company_id || !this.premiseFormData.premise_name || !this.premiseFormData.premise_street ||
         !this.premiseFormData.premise_house_number || !this.premiseFormData.premise_city || !this.premiseFormData.premise_post_code ||
         !this.premiseFormData.premise_country_code || !this.premiseFormData.premise_community || !this.premiseFormData.premise_cadastral_number ||
-        !this.premiseFormData.building_number || !this.premiseFormData.building_section_number || !this.premiseFormData.special_notes ||
+        !this.premiseFormData.building_number || !this.premiseFormData.building_section_number ||
         !this.premiseFormData.validity_date || !this.premiseFormData.business_premise_id || !this.isBusinessPremiseIdUnique
     },
     isDeviceDisabled () {

@@ -224,10 +224,10 @@ const getEnquiryFutureAppointments = (request, response, enquiryId, locale) => {
 }
 
 const getEnquiryAssignments = (request, response, enquiryId) => {
-    let statement = ["SELECT enquiries.id AS id, todos.description AS description, todos.due_at AS due_at, concat(title, ' ', first_name, ' ', surname) AS name FROM todos ",
+    let statement = ["SELECT enquiries.id AS id, todos.description AS description, todos.completed AS completed, todos.due_at AS due_at, concat(title, ' ', first_name, ' ', surname) AS name FROM todos ",
                      "LEFT JOIN enquiries ON todos.enquiry_id = enquiries.id",
                      "LEFT JOIN users ON todos.user_id = users.id",
-                     "WHERE completed = FALSE and enquiries.id = $1",
+                     "WHERE enquiries.id = $1",
                      "ORDER BY due_at ASC"].join('\n')
     pool.query(statement, [enquiryId], (error, results) => {
         if (error) {
@@ -266,8 +266,8 @@ const getEnquiryServices = (request, response, enquiryId) => {
 }
 
 const createEnquiryService = (req, res, enquiryId, service) => {
-    var statement = "INSERT INTO services (title, product_id, price, created_at, payment_method, doctor_id, enquiry_id, fee) VALUES ('"
-    + service.title + "', " + service.product_id + ", " + service.price + ", '" + service.created_at + "', '" + service.payment_method + "', " + service.doctor_id + ", " + enquiryId + ", " + service.fee + ")"
+    var statement = "INSERT INTO services (title, product_id, price, date, created_at, payment_method, doctor_id, enquiry_id, fee) VALUES ('"
+    + service.title + "', " + service.product_id + ", " + service.price + ", '" + service.created_at + "', NOW(), '" + service.payment_method + "', " + service.doctor_id + ", " + enquiryId + ", " + service.fee + ")"
     pool.query(statement, (error, results) => {
         if (error) {
             throw error
@@ -287,7 +287,8 @@ const getPatients = (request, response) => {
 }
 
 const getEnquirySMS = (request, response, enquiryId) => {
-    let statement = `SELECT * FROM sms_messages WHERE enquiry_id = ${enquiryId}`
+    let statement = `SELECT DISTINCT ON (sms_messages.id) * FROM sms_messages 
+    LEFT JOIN sms_templates ON sms_templates.slug = sms_messages.kind WHERE enquiry_id = ${enquiryId}`
     pool.query(statement, (error, results) => {
         if (error) {
             throw error

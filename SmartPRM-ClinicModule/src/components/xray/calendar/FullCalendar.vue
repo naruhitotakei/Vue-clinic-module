@@ -11,7 +11,6 @@
   <!-- Event description modal -->
   <b-modal
       v-model="showModal"
-      no-close-on-esc
       no-close-on-backdrop
       size="lg"
       :title="$t('calendar.appointmentDetails')"
@@ -99,6 +98,7 @@
                                  :show-second="false"
                                  :lang="'en'"
                                  :format="'DD.MM.YYYY HH.mm'"></date-picker>
+                    <!-- <strong>{{ getDurationInMinutes ? getDurationInMinutes : '' }}</strong> -->
                     <label for="start" class="mb-0 mr-3 ml-4" :style="{ 'margin-top': '13px' }">{{ $t('calendarEvent.end') }}*</label>
                     <date-picker :disabled="disabled"
                                  required
@@ -503,6 +503,18 @@ export default {
         }
       })
     }, */
+    getDurationInMinutes () {
+      if (this.formData.assignmentDate && this.formData.end) {
+        const start = moment(this.formData.assignmentDate).format('YYYY-MM-DDTHH:mm')
+        const end = moment(this.formData.end).format('YYYY-MM-DDTHH:mm')
+        let duration = moment.duration(moment(end).diff(moment(start))).asMinutes()
+        if (duration && duration > 1) {
+          return duration + 'Minutes'
+        }
+        return null
+      }
+      return null
+    },
     calendarLocale () {
       return this.$i18n.locale === 'sl' ? slLocale : enLocale
     },
@@ -526,6 +538,12 @@ export default {
     }
   },
   mounted () {
+    let self = this
+    window.addEventListener('keydown', function (event) {
+      if (event.key === 'Escape') {
+        self.closeModal()
+      }
+    })
     this.$nextTick(() => {
       this.$forceUpdate()
       this.$emit('updateApp', {
@@ -545,6 +563,7 @@ export default {
   },
   beforeDestroy () {
     clearInterval(this.calendarUpdateEvery3Min)
+    window.removeEventListener('keydown')
   },
   methods: {
     closeAddPatientModal (value) {
@@ -616,6 +635,9 @@ export default {
     getLabels (lang) {
       getLabels(lang).then(response => {
         this.colors = response
+        const lastLabel = this.colors.pop()
+        this.colors.unshift(lastLabel)
+        console.log('Colors... ', this.colors)
       })
     },
     getLabelText (type) {

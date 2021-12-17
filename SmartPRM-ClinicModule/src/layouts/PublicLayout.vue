@@ -56,6 +56,7 @@ export default {
     const { lang, premise } = await response.json()
     this.lang = lang
     this.premise = premise
+    window.document.title = premise.name
   },
   watch: {
     lang (lang) {

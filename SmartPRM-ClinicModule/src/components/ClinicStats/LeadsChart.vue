@@ -71,15 +71,71 @@ export default {
       })
     },
     setDataForChart (data) {
+      let seriesData = []
       let enqCount = []
       let datesArray = []
+      const unknownCountries = data.filter(item => !item.country)
+      console.log(unknownCountries.length + ' Unknown Countries ... ')
+      // data = data.filter(item => !item.country)
       data.forEach(item => {
+        // Test By Country
+        // const itemDate = item.date.split('T')[0]
+        const enquires = Number(item.enquiries_count ? item.enquiries_count : 0)
+        let obj = {
+          name: item.country ? item.country : 'N/A',
+          data: []
+        }
+        if (seriesData.length === 0) {
+          obj.data.push(enquires)
+          seriesData.push(obj)
+        } else {
+          const isCountryExists = seriesData.find(record => (record.name === item.country) || (record.name === 'N/A' && !item.country))
+          if (isCountryExists) {
+            let existingData = Object.assign({}, isCountryExists)
+            existingData.data.push(enquires)
+          } else {
+            obj.data.push(enquires)
+            seriesData.push(obj)
+          }
+        }
+        datesArray.push(item.date)
         enqCount.push(item.enquiries_count)
-        datesArray.push(item.date.split('T')[0])
+        // const itemDate = item.date.split('T')[0]
+        // const isDateExists = datesArray.find(date => date === itemDate)
+        // if (!isDateExists) {
+        //   datesArray.push(itemDate)
+        // }
+
+        // let obj = {
+        //   name: item.country ? item.country : 'N/A',
+        //   data: []
+        // }
+
+        // Test By Date
+
+        // if (seriesData.length === 0) {
+        //   obj.data.push(item.enquiries_count)
+        //   seriesData.push(obj)
+        //   datesArray.push(itemDate)
+        // } else {
+        //   const isSameDateExists = seriesData.find(record => (record.date === itemDate))
+        //   if (isSameDateExists) {
+        //     let existingData = Object.assign({}, isSameDateExists)
+        //     existingData.data.push(item.enquiries_count)
+        //   } else {
+        //     obj.data.push(item.enquiries_count)
+        //     seriesData.push(obj)
+        //     datesArray.push(itemDate)
+        //   }
+        // }
       })
-      this.series = [{
-        data: enqCount
-      }]
+      console.log('Series Length ... ', seriesData)
+      console.log('Dates Length ... ', datesArray)
+      // this.series = [{
+      //   data: enqCount
+      // }]
+
+      this.series = seriesData
 
       this.chartOptions = {
         xaxis: {
@@ -88,7 +144,7 @@ export default {
         yaxis: {
           labels: {
             formatter: function (y) {
-              return y.toLocaleString()
+              return y
             }
           },
           title: {
@@ -109,30 +165,24 @@ export default {
       chartOptions: {
         chart: {
           type: 'bar',
-          height: 350
+          height: 350,
+          stacked: true
         },
+        // responsive: [{
+        //   breakpoint: 480,
+        //   options: {
+        //     legend: {
+        //       position: 'bottom',
+        //       offsetX: -10,
+        //       offsetY: 0
+        //     }
+        //   }
+        // }],
         plotOptions: {
           bar: {
-            colors: {
-              ranges: [{
-                from: -100,
-                to: -46,
-                color: '#e64141'
-              }, {
-                from: -45,
-                to: 0,
-                color: '#089bab'
-              }, {
-                from: 0,
-                to: 20,
-                color: '#FC9F5B'
-              }]
-            },
-            columnWidth: '80%'
+            horizontal: false,
+            borderRadius: 10
           }
-        },
-        dataLabels: {
-          enabled: false
         },
         yaxis: {
           title: {
@@ -145,9 +195,15 @@ export default {
           }
         },
         xaxis: {
-          categories: [],
-          labels: {
-          }
+          type: 'datetime',
+          categories: []
+        },
+        legend: {
+          position: 'right',
+          offsetY: 40
+        },
+        fill: {
+          opacity: 1
         }
       }
     }

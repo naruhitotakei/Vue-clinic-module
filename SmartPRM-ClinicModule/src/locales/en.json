@@ -199,7 +199,14 @@
       "openAssignments": "Open assignments",
       "futureAppointments": "Future appointments",
       "pastAppointments": "Past appointments",
-      "notSelected": "Not selected"
+      "notSelected": "Not selected",
+      "deletePatientConfirm": "Are you sure you want to delete this patient?",
+      "noNotes": "No notes for this patient.",
+      "noSMS": "No SMS sent to this patient.",
+      "noOpenAssignments": "No open assignments for this patient.",
+      "noCompletedAssignments": "No completed assignments for this patient.",
+      "noFutureAppointments": "No future appointments.",
+      "noPastAppointments": "No past appointments."
     },
     "personalInfoTab": "Personal Information",
     "personalInfo": {
@@ -531,8 +538,13 @@
       "due_at": "Date",
       "assignTo": "Assign to",
       "close": "Close",
-      "save": "Save",
-      "patientAttended": "Patient Attended"
+      "save": "Save"
+    },
+    "completeAssignmentModal": {
+      "no": "No",
+      "yes": "Yes",
+      "tickAssignment": "Are you sure you want to complete this assignment?",
+      "untickAssignment": "Are you sure you want to uncomplete this assignment?"
     }
   },
   "statisticsForClinic": {
@@ -569,6 +581,9 @@
       "serviceFee": "Fee",
       "serviceLocation": "Location",
       "serviceDoctor": "Doctor",
+      "serviceCountry": "Country",
+      "serviceRegion": "Region",
+      "serviceMunicipality": "Municipality",
       "serviceLastConsult": "Last Consult Location"
     }
   },

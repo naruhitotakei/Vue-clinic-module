@@ -196,7 +196,14 @@
       "openAssignments": "Odprte naloge",
       "futureAppointments": "Bodoči termini",
       "pastAppointments": "Pretekli termini",
-      "notSelected": "Ni izbrano"
+      "notSelected": "Ni izbrano",
+      "deletePatientConfirm": "Ali ste prepričani da želite izbrisati pacienta?",
+      "noNotes": "Ni opomb za pacienta.",
+      "noSMS": "Ni poslanih SMS sporočil pacientu.",
+      "noOpenAssignments": "Ni odprtih nalog za pacienta.",
+      "noCompletedAssignments": "Ni zaključenih nalog za pacienta.",
+      "noFutureAppointments": "Ni bodočih terminov.",
+      "noPastAppointments": "Ni preteklih terminov."
     },
     "personalInfoTab": "Osebni podatki",
     "personalInfo": {
@@ -528,8 +535,13 @@
       "due_at": "Datum",
       "assignTo": "Zadolžen",
       "close": "Zapri",
-      "save": "Shrani",
-      "patientAttended": "Pacient se je udeležil"
+      "save": "Shrani"
+    },
+    "completeAssignmentModal": {
+      "no": "Ne",
+      "yes": "Da",
+      "tickAssignment": "Ste prepričani da želite obkljukati to nalogo?",
+      "untickAssignment": "Ste prepričani da želite odkljukati to nalogo?"
     }
   },
   "statisticsForClinic": {
@@ -566,6 +578,9 @@
       "serviceFee": "Provizija",
       "serviceLocation": "Lokacija",
       "serviceDoctor": "Zdravnik",
+      "serviceCountry": "Država",
+      "serviceRegion": "Regija",
+      "serviceMunicipality": "Občina",
       "serviceLastConsult": "Lokacija zadnjega posveta"
     }
   },

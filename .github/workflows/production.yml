@@ -51,11 +51,13 @@ jobs:
           AWS_ACCESS_KEY_ID: ${{ secrets.PRODUCTION_AWS_ACCESS_KEY_ID }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.PRODUCTION_AWS_SECRET_ACCESS_KEY }}
           AWS_BUCKET_NAME: ${{ secrets.PRODUCTION_AWS_BUCKET_NAME }}
+          VONAGE_API_KEY: ${{ secrets.PRODUCTION_VONAGE_API_KEY }}
+          VONAGE_API_SECRET: ${{ secrets.PRODUCTION_VONAGE_API_SECRET }}
       with:
         host: ${{ secrets.PRODUCTION_HOST }}
         username: root
         key: ${{ secrets.SSH_KEY }}
-        envs: GITHUB_USERNAME, DOCKER_TOKEN, POSTGRES_HOST, POSTGRES_PORT, POSTGRES_DB, POSTGRES_USER, POSTGRES_PASSWORD, AWS_ACCESS_KEY_ID, AWS_SECRET_ACCESS_KEY, AWS_BUCKET_NAME
+        envs: GITHUB_USERNAME, DOCKER_TOKEN, POSTGRES_HOST, POSTGRES_PORT, POSTGRES_DB, POSTGRES_USER, POSTGRES_PASSWORD, AWS_ACCESS_KEY_ID, AWS_SECRET_ACCESS_KEY, AWS_BUCKET_NAME, VONAGE_API_KEY, VONA, VONAGE_API_KEY, VONAGE_API_SECRETGE_API_SECRET
         script: |
           docker login ghcr.io -u $GITHUB_USERNAME -p $DOCKER_TOKEN
           docker pull ghcr.io/thermidor/smartprm-api:production
@@ -73,6 +75,8 @@ jobs:
           -e AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID} \
           -e AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY} \
           -e AWS_BUCKET_NAME=${AWS_BUCKET_NAME} \
+          -e VONAGE_API_KEY=${VONAGE_API_KEY} \
+          -e VONAGE_API_SECRET=${VONAGE_API_SECRET} \
           ghcr.io/thermidor/smartprm-api:production
 
 

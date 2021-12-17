@@ -113,6 +113,9 @@
                   <td><span class="font-weight-bold">{{formatNumber(Math.trunc(body.group_price))}} &#8364;</span></td>
                   <td><span class="font-weight-bold">{{formatNumber(Math.trunc(body.group_fee))}} &#8364;</span></td>
                   <td><span class="font-weight-bold"></span></td>
+                  <td><span class="font-weight-bold"></span></td>
+                  <td><span class="font-weight-bold"></span></td>
+                  <td><span class="font-weight-bold"></span></td>
                 </tr>
                 <template v-for="(item, index) in body" >
                   <tr :key="Math.random(index + 1000)">
@@ -122,6 +125,9 @@
                     <td class="text-center"><span>{{ formatNumber(Math.trunc(item.price))}}&#8364;</span></td>
                     <td class="text-center"><span>{{ formatNumber(Math.trunc(item.fee))}}&#8364;</span></td>
                     <td class="text-center"><span >{{ formatDateString(item.date)}}</span></td>
+                    <td class="text-center"><span >{{ item.country}}</span></td>
+                    <td class="text-center"><span >{{ item.region}}</span></td>
+                    <td class="text-center"><span >{{ item.municipality}}</span></td>
                   </tr>
                 </template>
               </template>
@@ -184,7 +190,10 @@ export default {
         { label: this.$t('reportingEmazing.servicesListColumn.serviceLeadName'), key: 'name', class: 'text-left' },
         { label: this.$t('reportingEmazing.servicesListColumn.serviceAmount'), key: 'price', class: 'text-left' },
         { label: this.$t('reportingEmazing.servicesListColumn.serviceFee'), key: 'fee', class: 'text-left' },
-        { label: this.$t('reportingEmazing.servicesListColumn.serviceDate'), key: 'date', formatter: (value, key, item) => { return this.formatDateString(value) } }
+        { label: this.$t('reportingEmazing.servicesListColumn.serviceDate'), key: 'date', formatter: (value, key, item) => { return this.formatDateString(value) } },
+        { label: this.$t('reportingEmazing.servicesListColumn.serviceCountry'), key: 'fee', class: 'text-left' },
+        { label: this.$t('reportingEmazing.servicesListColumn.serviceRegion'), key: 'fee', class: 'text-left' },
+        { label: this.$t('reportingEmazing.servicesListColumn.serviceMunicipality'), key: 'fee', class: 'text-left' }
       ],
       servicesListItems: [],
       revenueList: [],
@@ -280,38 +289,37 @@ export default {
       const yearly = data.yearly
       const sixtyWeeks = data.sixtyWeeks
       const today = data.today
-      console.log(data)
       if (today && Array.isArray(today)) {
         this.todayRevenue = 0
         today.forEach(item => {
-          this.todayRevenue += Number(item.totalrevenue)
+          this.todayRevenue += Number(item.revenue)
         })
       }
       if (weekly && Array.isArray(weekly)) {
         this.weeklyRevenue = 0
         weekly.forEach(item => {
-          this.weeklyRevenue += Number(item.totalrevenue)
+          this.weeklyRevenue += Number(item.revenue)
         })
       }
       if (monthly && Array.isArray(monthly)) {
         this.monthlyRevenue = 0
         monthly.forEach(item => {
-          this.monthlyRevenue += Number(item.totalrevenue)
+          this.monthlyRevenue += Number(item.revenue)
         })
       }
       if (yearly && Array.isArray(yearly)) {
         this.yearlyRevenue = 0
         yearly.forEach(item => {
-          this.yearlyRevenue += Number(item.totalrevenue)
+          this.yearlyRevenue += Number(item.revenue)
         })
       }
       if (sixtyWeeks && Array.isArray(sixtyWeeks)) {
         let datesArray = []
         this.totalRevenue = 0
         sixtyWeeks.forEach(item => {
-          this.revenueList.push(item.cachrevenue)
+          this.revenueList.push(item.revenue)
           datesArray.push(item.date)
-          this.totalRevenue += Number(item.totalrevenue)
+          this.totalRevenue += Number(item.revenue)
         })
         this.revenueChartSeries = [{
           data: this.revenueList
@@ -431,8 +439,13 @@ export default {
     getServicesList () {
       getServiceList(this.fromdate, this.todate, this.countrySelect).then(response => {
         if (typeof response !== 'string') {
+          this.servicesListTotalCount = 0
+          this.servicesListTotalFee = 0
           let res = _.groupBy(response, 'doctor')
           for (let doc in res) {
+            res[doc].country = doc.country
+            res[doc].region = doc.region
+            res[doc].municipality = doc.municipality
             res[doc].group_price = 0
             res[doc].group_fee = 0
             res[doc].map(item => {

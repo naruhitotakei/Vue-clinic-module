@@ -187,10 +187,10 @@ app.get('/api/surgeons', async function (req, res) {
 });
 
 app.get('/api/legacy-doctors', async function (req, res) {
-    if (req.session.prm_user) {
-        daoUser.getLegacyDoctors(req, res)
+    if (req.session.prm_user && req.session.prm_user.permissions && checkPermission(req.session.prm_user.permissions, enquiriesPermission)) {
+        daoUser.getLegacyDoctors(req, res, req.session.prm_user.prm_client_id, getScope(req.session.prm_user.permissions, enquiriesPermission))
     } else {
-        res.status(200).json("NOK: user not logged in")
+        res.status(401).json("OK: user unauthorized")
     }
 });
 
@@ -473,7 +473,7 @@ app.get('/api/productGroups/:id/product-naming', (req, res) => {
 
 app.get('/api/old-products/', (req, res) => {
     if(req.session.prm_user && req.session.prm_user.permissions && checkPermission(req.session.prm_user.permissions, productsPermission))
-        daoProducts.getOldProducts(req, res)
+        daoProducts.getOldProducts(req, res, req.session.prm_user.prm_client_id, getScope(req.session.prm_user.permissions, productsPermission))
     else
         res.status(401).json("OK: user unauthorized")
 });
@@ -1378,12 +1378,14 @@ app.post('/api/booking/sendsms', (req, res) => {
         vonage.verify.request({
             number: phone,
             brand: 'SMART PRM Dental'
-        }, (error, { request_id }) => {
+        }, (error, result) => {
             if (error) {
                 res.status(500)
             } else {
+                const { request_id } = result
                 res.status(200).json({
                     success: true,
+                    result,
                     requestId: request_id,
                 })
             }
@@ -1421,7 +1423,7 @@ app.post('/api/booking/confirm-and-save', (req, res) => {
                 return
             }
 
-            res.status(200).json({ success: true, code, selectedSlot })
+            res.status(200).json({ success: true, code, selectedSlot, result })
         })
     } else {
         res.status(400).json("No confirmation code")
