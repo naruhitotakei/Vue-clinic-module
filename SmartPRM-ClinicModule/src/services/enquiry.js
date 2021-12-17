@@ -10,6 +10,18 @@ export async function getEnquires (sort) {
   return rawResponse.json()
 }
 
+export async function getLimitedEnquires (limit, offset) {
+  const rawResponse = await fetch('/api/limited_enquiries?limit=' + limit + '&offset=' + offset, {
+    method: 'GET',
+    credentials: 'same-origin',
+    headers: {
+      'Accept': 'application/json',
+      'Content-Type': 'application/json'
+    }
+  })
+  return rawResponse.json()
+}
+
 export async function getEnquiryById (id) {
   const rawResponse = await fetch('/api/enquiries/' + id, {
     method: 'GET',

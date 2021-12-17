@@ -43,6 +43,41 @@ const getEnquiries = (request, response, user_id, accessible_user_ids, prm_clien
     })
 }
 
+const getLimitedEnquiries = (request, response, user_id, accessible_user_ids, prm_client_id, scope, limit, offset) => {
+    let statement = "SELECT  enquiries.* , concat(u.title, ' ', u.first_name , ' ', u.surname) AS label, TO_CHAR(last_visit, 'DD.MM.YYYY') last_visit, TO_CHAR(next_visit, 'DD.MM.YYYY') next_visit, " +
+      "r.name AS region_name, countries.code AS country_code, countries.name AS country_name FROM enquiries "
+    statement +=    "LEFT JOIN prm_client ON prm_client.id = enquiries.prm_client_id "
+    statement +=    "LEFT JOIN users u ON u.id = enquiries.prm_dentist_user_id "
+    statement +=    "LEFT JOIN countries ON countries.id = enquiries.country_id "
+    statement +=    "LEFT JOIN regions r ON enquiries.region_id = r.id  "
+    statement +=    "LEFT JOIN LATERAL (SELECT MAX(starts_at) AS last_visit, enquiry_id from appointments where starts_at < current_date AND enquiry_id = enquiries.id GROUP BY enquiry_id) past_d ON past_d.enquiry_id = enquiries.id  " 
+    statement +=    "LEFT JOIN LATERAL (SELECT MIN(starts_at) AS next_visit, enquiry_id from appointments where starts_at > current_date AND enquiry_id = enquiries.id GROUP BY enquiry_id) future_d ON future_d.enquiry_id = enquiries.id  " 
+    statement +=    "WHERE enquiries.trashed IS FALSE "
+    statement +=    "AND prm_client.client_deleted IS FALSE "
+    if (scope=='All') {
+    } else if (scope=='PrmClient') {
+        statement += "AND enquiries.prm_client_id=" + prm_client_id;
+    } else if (scope=='Self') {
+        statement += "AND enquiries.prm_dentist_user_id=" + user_id;
+    } else if (scope==='Self&LinkedUsers') {
+        statement += " AND (enquiries.prm_dentist_user_id=" + user_id;
+        if (accessible_user_ids) {
+            for (const acc_id in accessible_user_ids) {
+                statement +=" OR enquiries.prm_dentist_user_id=" + accessible_user_ids[acc_id];
+            }
+        }
+        statement += ") ";
+    }
+    statement += "ORDER BY enquiries.created_at DESC "
+    statement += "LIMIT " + limit + " OFFSET " + offset
+    pool.query(statement, (error, results) => {
+        if (error) {
+            throw error
+        }
+        response.status(200).json(results.rows)
+    })
+}
+
 const getEnquiriesById = (request, response, id) => {
     //AND clients.slug = 'primadent_si'
     pool.query("SELECT enquiries.*, c.name as country " +
@@ -299,6 +334,7 @@ const getEnquirySMS = (request, response, enquiryId) => {
 
 module.exports = {
   getEnquiries,
+  getLimitedEnquiries,
   getEnquiriesById,
   createEnquiry,
   updateEnquiry,

@@ -42,6 +42,14 @@
 
               </b-row>
             </iq-card>
+            <div class="pagination-fixed">
+              <b-pagination
+                v-model="currentPage"
+                :total-rows="6000"
+                :per-page="limit"
+                aria-controls="my-table"
+              ></b-pagination>
+            </div>
           </div>
         </b-col>
 
@@ -53,7 +61,7 @@
 <script>
 import IqCard from '../../components/xray/cards/iq-card.vue'
 import {
-  getEnquires
+  getLimitedEnquires
 } from '../../services/enquiry'
 import { xray } from '../../config/pluginInit'
 export default {
@@ -63,18 +71,27 @@ export default {
   name: 'Leads',
   async mounted () {
     xray.index()
-    this.getLeads('ASC')
+    this.getLeads(this.limit, this.offset)
+  },
+  watch: {
+    currentPage (newPage) {
+      this.offset = (newPage * this.limit) - this.limit
+      this.getLeads(this.limit, this.offset)
+    }
   },
   data: function () {
     return {
       isDataLoaded: false,
-      leads: []
+      leads: [],
+      currentPage: 1,
+      limit: 10,
+      offset: 0
     }
   },
   methods: {
-    async getLeads (sort) {
+    async getLeads (dataLimit, dataOffset) {
       this.isDataLoaded = false
-      getEnquires(sort).then(response => {
+      getLimitedEnquires(dataLimit, dataOffset).then(response => {
         this.isDataLoaded = true
         if (Array.isArray(response)) {
           this.leads = response.map(obj => (
@@ -93,3 +110,10 @@ export default {
   }
 }
 </script>
+
+<style lang="scss">
+  .pagination-fixed {
+    position: fixed;
+    bottom: 1rem;
+  }
+</style>

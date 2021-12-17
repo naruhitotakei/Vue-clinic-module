@@ -685,6 +685,13 @@ app.get('/api/enquiries', (req, res) => {
       res.status(401).json("OK: user unauthorized")
 });
 
+app.get('/api/limited_enquiries', (req, res) => {
+    if(req.session.prm_user && req.session.prm_user.permissions && checkPermission(req.session.prm_user.permissions, enquiriesPermission))
+        daoEnquiries.getLimitedEnquiries(req, res, req.session.prm_user.id, req.session.prm_user.accessible_user_ids, req.session.prm_user.prm_client_id, getScope(req.session.prm_user.permissions, calendarPermission), req.query.limit, req.query.offset)
+    else
+        res.status(401).json("OK: user unauthorized")
+  });
+
 app.get('/api/patients', (req, res) => {
     if(req.session.prm_user && req.session.prm_user.permissions && checkPermission(req.session.prm_user.permissions, enquiriesPermission))
         daoEnquiries.getPatients(req, res)
