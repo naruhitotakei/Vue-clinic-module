@@ -410,11 +410,28 @@
                                                       <li v-for="(item,index) in assignments" :key="index + item.due_at"
                                                           class="d-flex align-items-center justify-content-between mb-3">
                                                           <div class="w-100">
-                                                              <h6 :class="{'red-text': isItOverdue(item.due_at)}">{{item.description}}</h6>
+                                                            <div>
+                                                              <b-checkbox v-model="item.completed" name="check-button" inline
+                                                                :key="index"
+                                                                @change="finishAssignment(item.id, $event)"><strong :class="{'red-text': isItOverdue(item.due_at)}">{{ item.description }}</strong></b-checkbox>
+                                                            </div>
+                                                            <div class="d-flex align-items-center justify-content-between">
+                                                              <div>
+                                                                <span class="text-left">{{ item.name }} {{ item.patientlastname }}</span>&nbsp;
+                                                                <span class="text-left">{{ getPatientsDentist(item) ? `(${getPatientsDentist(item)})` : '' }}</span>
+                                                              </div>
+                                                              <div class="d-flex align-items-center">
+                                                                <span class="text-right text-width-150">{{ item.due_at | formatDate }}</span>
+                                                                <!-- <b-button variant=" iq-bg-success mr-1 mb-1" size="sm" style="margin-left: 5%;" @click="editAssignments(item)">
+                                                                  <i class="ri-ball-pen-fill m-0"></i>
+                                                                </b-button> -->
+                                                              </div>
+                                                            </div>
+                                                              <!-- <h6 >{{item.description}}</h6>
                                                               <div class="row justify-content-between pt-1 w-100 ml-0 line-height">
                                                                   <p class="mb-0">{{item.name}}</p>
                                                                   <p class="mb-0">{{item.due_at | formatDate}}</p>
-                                                              </div>
+                                                              </div> -->
                                                           </div>
                                                       </li>
                                                   </ul>
@@ -1118,6 +1135,7 @@ import {
   createEnquiryNotes,
   trashEnquiry
 } from '../../services/enquiry'
+import { finishAssignment } from '../../services/assignmentsService'
 import { getDentists, getSurgeons, getLegacyDoctors, getUsersForAssignments, sso } from '../../services/userService'
 import { getCountriesList, getRegionsList, getLocationsList, getMunicipalitiesList } from '../../services/commonCodeLists'
 import moment from 'moment'
@@ -1304,6 +1322,7 @@ export default {
   data () {
     return {
       loggedInUser: {},
+      userId: null,
       calendarApi: null,
       patientId: this.$route.params.patientId,
       modalAssigmentShow: false,
@@ -1573,6 +1592,14 @@ export default {
         })
       }
       return sum
+    },
+    getPatientsDentist (patient) {
+      if (this.dentists && this.dentists.length) {
+        let dentist = this.dentists.find((item) => {
+          return item.code === patient.prm_dentist_user_id
+        })
+        return dentist && dentist.label
+      }
     },
     decideAppointmentStatus (appointment) {
       if (appointment.appointment_canceled_in_advance_by_clinic) {
@@ -2006,6 +2033,21 @@ export default {
         this.cancelNotes()
       })
     },
+    finishAssignment (id, finished) {
+      const completedBy = this.userId
+      finishAssignment(id, finished, completedBy).then(response => {
+        if (finished) {
+          const open = this.assignments.find(todo => {
+            if (todo.id === id) {
+              todo.completed = true
+              this.completedAssignments.push(todo)
+              return todo
+            }
+          })
+          this.assignments = this.assignments.filter(todo => todo.id !== open.id)
+        }
+      })
+    },
     chooseInvoice () {
       switch (this.selectedInvoices) {
         case 'new-invoice':
@@ -2087,6 +2129,7 @@ export default {
       sso().then(response => {
         if (typeof response !== 'string') {
           this.loggedInUser = response
+          this.userId = response.id
         }
       })
     },
