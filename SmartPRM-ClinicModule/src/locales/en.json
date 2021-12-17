@@ -200,7 +200,13 @@
       "futureAppointments": "Future appointments",
       "pastAppointments": "Past appointments",
       "notSelected": "Not selected",
-      "deletePatientConfirm": "Are you sure you want to delete this patient?"
+      "deletePatientConfirm": "Are you sure you want to delete this patient?",
+      "noNotes": "No notes for this patient.",
+      "noSMS": "No SMS sent to this patient.",
+      "noOpenAssignments": "No open assignments for this patient.",
+      "noCompletedAssignments": "No completed assignments for this patient.",
+      "noFutureAppointments": "No future appointments.",
+      "noPastAppointments": "No past appointments."
     },
     "personalInfoTab": "Personal Information",
     "personalInfo": {

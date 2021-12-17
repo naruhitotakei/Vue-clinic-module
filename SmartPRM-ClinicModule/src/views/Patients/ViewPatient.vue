@@ -344,7 +344,7 @@
                                                       </div>
                                                   </li>
                                               </ul>
-                                              <p v-if="notes.length === 0">No Notes found.</p>
+                                              <p v-if="notes.length === 0">{{ $t('EPR.overview.noNotes') }}</p>
                                               <b-pagination
                                                 class="mt-4"
                                                 v-else-if="notes.length > 5"
@@ -379,7 +379,7 @@
                                                       </div>
                                                   </li>
                                               </ul>
-                                              <p v-if="smsMessages.length === 0">No Sent SMS found.</p>
+                                              <p v-if="smsMessages.length === 0">{{ $t('EPR.overview.noSMS') }}</p>
                                               <b-pagination
                                                 class="mt-2"
                                                 v-else-if="smsMessages.length > 4"
@@ -435,7 +435,7 @@
                                                           </div>
                                                       </li>
                                                   </ul>
-                                                  <p v-if="assignments.length === 0">No Open Assignment found.</p>
+                                                  <p v-if="assignments.length === 0">{{ $t('EPR.overview.noOpenAssignments') }}</p>
                                                   <b-pagination
                                                     class="mt-2"
                                                     v-else-if="assignments.length > 5"
@@ -469,7 +469,7 @@
                                                           </div>
                                                       </li>
                                                   </ul>
-                                                  <p v-if="futureAppointments.length === 0">No Future Appointment found.</p>
+                                                  <p v-if="futureAppointments.length === 0">{{ $t('EPR.overview.noFutureAppointments') }}</p>
                                                   <b-pagination
                                                     class="mt-2"
                                                     v-else-if="futureAppointments.length > 5"
@@ -500,7 +500,7 @@
                                                         <small class="mt-1">{{item.starts_at | formatDateAndTime}} {{ item.location ? `(${item.location})` : '' }}</small>
                                                       </li>
                                                   </ul>
-                                                  <p v-if="pastAppointments.length === 0">No Past Appointment found.</p>
+                                                  <p v-if="pastAppointments.length === 0">{{ $t('EPR.overview.noPastAppointments') }}</p>
                                                   <b-pagination
                                                     class="mt-2"
                                                     v-else-if="pastAppointments.length > 5"
@@ -533,7 +533,7 @@
                                                         </div>
                                                     </li>
                                                 </ul>
-                                                <p v-if="completedAssignments.length === 0">No Completed Assignment found.</p>
+                                                <p v-if="completedAssignments.length === 0">{{ $t('EPR.overview.noCompletedAssignments') }}</p>
                                                   <b-pagination
                                                     class="mt-2"
                                                     v-else-if="completedAssignments.length > 5"
