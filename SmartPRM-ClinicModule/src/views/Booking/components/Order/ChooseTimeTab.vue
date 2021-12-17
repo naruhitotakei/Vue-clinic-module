@@ -1,9 +1,6 @@
 <template>
   <div v-if="dateSlots.length > 0" class="mt-5">
-    <div style="
-      padding-left: 48px;
-      padding-right: 48px;
-    ">
+    <div style="padding-left: 48px; padding-right: 48px; ">
       <slick :option="slickOptions">
         <date-card
           v-for="slot in dateSlots"
@@ -19,26 +16,24 @@
     <b-container>
       <b-row>
         <b-col md="9">
-          <template>
-            <div class="favorite-doctor text-left">
-              {{ $t('public.onlineBooking.chooseYourFavoriteDoctor') }}
-            </div>
-            <app-multiselect
-              :options="doctors"
-              label="name"
-              trackBy="name"
-              v-model="fieldset.doctors"
-              :placeholder="$t('public.onlineBooking.selectOption')"
-              :selectLabel="$t('public.onlineBooking.pressEnterToSelect')"
-              :deselectLabel="$t('public.onlineBooking.pressEnterToRemove')"
-            />
-          </template>
-          <time-selection-table
-            :items="appointmentSlotsFiltered"
-            @select-doctor="$emit('select-doctor', $event)"
-            :selectedSlot="selectedSlot"
-            :selectedDate="selectedDate"
+          <div class="favorite-doctor text-left">
+            {{ $t('public.onlineBooking.chooseYourFavoriteDoctor') }}
+          </div>
+          <app-multiselect
+            :options="doctors"
+            label="name"
+            trackBy="name"
+            v-model="filters.doctors"
+            :placeholder="$t('public.onlineBooking.selectOption')"
+            :selectLabel="$t('public.onlineBooking.pressEnterToSelect')"
+            :deselectLabel="$t('public.onlineBooking.pressEnterToRemove')"
           />
+          <div class="mt-5">
+            <time-selection-table
+              :items="appointmentSlotsFiltered"
+              :appointment-slot.sync="fieldset.appointmentSlot"
+            />
+          </div>
         </b-col>
         <b-col md="3">
           <div>
@@ -62,7 +57,7 @@
               <b-button
                 align-self="end"
                 variant="primary"
-                :disabled="!selectedSlot"
+                :disabled="fieldset.appointmentSlot == null"
                 @click="$emit('change-tab', 2)"
               >
                 {{ $t('public.onlineBooking.toReview') }}
@@ -102,11 +97,13 @@ export default defineComponent({
   },
   data: function () {
     return {
-      date: null,
       fieldset: {
-        appointmentSlot: null,
+        appointmentSlot: null
+      },
+      filters: {
         doctors: []
       },
+      date: null,
       availableDates: [],
       appointmentSlots: []
     }
@@ -161,13 +158,21 @@ export default defineComponent({
 
       for (let date = moment(startDate); date.isSameOrBefore(endDate); date.add(1, 'day')) {
         dates.push({
-          availability: this.availableDates.includes(date.format('YYYY-MM-DD'))
-            ? false
-            : date.day() === 0
-              ? 'closed'
-              : date.isAfter(moment(this.availableDates[this.availableDates.length - 1]))
-                ? 'unavailable'
-                : 'taken',
+          availability: (() => {
+            if (this.availableDates.includes(date.format('YYYY-MM-DD'))) {
+              return false
+            }
+
+            if (date.day() === 0) {
+              return 'closed'
+            }
+
+            if (date.isAfter(moment(this.availableDates[this.availableDates.length - 1]))) {
+              return 'unavailable'
+            }
+
+            return 'taken'
+          })(),
           date: date.toDate()
         })
       }
@@ -175,7 +180,16 @@ export default defineComponent({
       return dates
     },
     appointmentSlotsFiltered () {
-      const grouped = this.appointmentSlots.reduce((group, slot) => {
+      let appointmentSlots = this.appointmentSlots
+      const doctorIds = this.filters.doctors.map((slot) => slot.doctor_id)
+
+      if (doctorIds.length) {
+        appointmentSlots = appointmentSlots.filter((slot) => {
+          return doctorIds.includes(slot.doctor_id)
+        })
+      }
+
+      appointmentSlots = appointmentSlots.reduce((group, slot) => {
         if (group[slot.starts_at] == null) {
           group[slot.starts_at] = []
         }
@@ -184,18 +198,16 @@ export default defineComponent({
 
         return group
       }, {})
-      const sorted = Object.entries(grouped).sort(([a], [b]) => a - b)
-
-      return sorted.map(([dateTime, slots]) => ({
-        doctors: slots.map((slot) => ({
-          ...slot,
-          img: `/api/files/avatar/${slot.doctor_id}`
-        })),
+      appointmentSlots = Object.entries(appointmentSlots).sort(([a], [b]) => a - b)
+      appointmentSlots = appointmentSlots.map(([dateTime, slots]) => ({
+        doctors: slots,
         time: moment(dateTime).format('HH:mm'),
         totalPrice: `$${this.form.service.price}`
       }))
+
+      return appointmentSlots
     },
-    favoriteDoctors () {
+    doctors () {
       return Object.values(this.appointmentSlots.reduce((doctorById, slot) => {
         if (doctorById[slot.doctor_id] == null) {
           doctorById[slot.doctor_id] = slot
@@ -206,9 +218,20 @@ export default defineComponent({
     }
   },
   watch: {
+    fieldset: {
+      deep: true,
+      handler (value) {
+        this.$emit('update:form', {
+          ...this.form,
+          ...value
+        })
+      }
+    },
+
     'form.service.id': {
       immediate: true,
       handler: async function (serviceId) {
+        this.availableDates = []
         this.availableDates = await getAvailableDates({
           serviceId: this.form.service.id
         })
@@ -225,6 +248,7 @@ export default defineComponent({
       }
     },
     date: async function (date) {
+      this.appointmentSlots = []
       this.appointmentSlots = await getAppointmentSlots({
         serviceId: this.form.service.id,
         date: moment(date).format('YYYY-MM-DD')
