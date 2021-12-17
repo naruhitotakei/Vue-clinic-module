@@ -532,8 +532,13 @@
       "due_at": "Date",
       "assignTo": "Assign to",
       "close": "Close",
-      "save": "Save",
-      "patientAttended": "Patient Attended"
+      "save": "Save"
+    },
+    "completeAssignmentModal": {
+      "no": "No",
+      "yes": "Yes",
+      "tickAssignment": "Are you sure you want to complete this assignment?",
+      "untickAssignment": "Are you sure you want to uncomplete this assignment?"
     }
   },
   "statisticsForClinic": {
