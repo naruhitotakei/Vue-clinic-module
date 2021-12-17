@@ -372,7 +372,7 @@
                                                   <li v-for="(message,index) in smsList" :key="index + message.created_at" id="smsList" class="d-flex align-items-center justify-content-between mb-3">
                                                       <div>
                                                           <h6 :id="`message-${message.id}`">{{message.name}}</h6>
-                                                          <b-tooltip :target="`message-${message.id}`" triggers="hover" placement="right">
+                                                          <b-tooltip class="tooltip-content" :target="`message-${message.id}`" triggers="hover" placement="right">
                                                             {{ message.content }}
                                                           </b-tooltip>
                                                           <small class="mb-0">{{message.created_at | formatDateAndTime}} - {{ message.delivered_at ? $t('EPR.overview.deliveredSms') :  $t('EPR.overview.notDeliveredSms')}}</small>
@@ -398,15 +398,15 @@
                                           <iq-card>
                                               <template v-slot:body>
                                                   <div class="iq-card-header d-flex justify-content-between">
-                                                      <div class="iq-header-title">
-                                                          <div class="row justify-content-between align-items-center">
-                                                              <h4 class="card-title">{{ $t('EPR.overview.openAssignments') }}</h4>
-                                                              <button type="" class="btn btn-primary" @click.prevent="modalAssigmentShow = true">{{ $t('EPR.overview.add') }}</button>
-                                                              </div>
-                                                              <hr />
-                                                          </div>
+                                                    <div class="iq-header-title">
+                                                      <div class="row justify-content-between align-items-center">
+                                                        <h4 class="card-title">{{ $t('EPR.overview.openAssignments') }}</h4>
+                                                        <button type="" class="btn btn-primary" @click.prevent="modalAssigmentShow = true">{{ $t('EPR.overview.add') }}</button>
                                                       </div>
-                                                  <ul class="list-inline m-0 overflow-y-scroll" style="max-height: 300px;">
+                                                      <hr />
+                                                    </div>
+                                                  </div>
+                                                  <ul class="list-inline m-0 overflow-y-scroll">
                                                       <li v-for="(item,index) in assignments" :key="index + item.due_at"
                                                           class="d-flex align-items-center justify-content-between mb-3">
                                                           <div class="w-100">
@@ -466,6 +466,30 @@
                                                       </li>
                                                   </ul>
                                               </template>
+                                          </iq-card>
+                                          <iq-card>
+                                            <template v-slot:body>
+                                                <div class="iq-card-header d-flex justify-content-between">
+                                                  <div class="iq-header-title">
+                                                    <div class="row justify-content-between align-items-center">
+                                                        <h4 class="card-title">{{ $t('assignments.completedAssignments') }}</h4>
+                                                      </div>
+                                                      <hr />
+                                                  </div>
+                                                </div>
+                                                <ul class="list-inline m-0 overflow-y-scroll">
+                                                    <li v-for="(item,index) in completedAssignments" :key="index + item.due_at"
+                                                        class="d-flex align-items-center justify-content-between mb-3">
+                                                        <div class="w-100">
+                                                            <h6>{{item.description}}</h6>
+                                                            <div class="row justify-content-between pt-1 w-100 ml-0 line-height">
+                                                                <p class="mb-0">{{item.name}}</p>
+                                                                <p class="mb-0">{{item.due_at | formatDate}}</p>
+                                                            </div>
+                                                        </div>
+                                                    </li>
+                                                </ul>
+                                            </template>
                                           </iq-card>
                                       </b-col>
                                   </b-col>
@@ -1296,6 +1320,7 @@ export default {
       tempPatient: {},
       notes: [],
       assignments: [],
+      completedAssignments: [],
       pastAppointments: [],
       futureAppointments: [],
       timeSinceFirstVisit: '',
@@ -1740,6 +1765,7 @@ export default {
         this.pastAppointments.forEach(appointment => {
           appointment['appointmentStatus'] = this.decideAppointmentStatus(appointment)
         })
+        console.log(this.pastAppointments)
         this.timeSinceFirstVisit = response.length && response[0].date
       }
       )
@@ -1754,7 +1780,10 @@ export default {
     },
     getPatientAssignments (id) {
       getEnquiryAssignments(id).then(response => {
-        this.assignments = response
+        if (Array.isArray(response)) {
+          this.assignments = response.filter(todo => !todo.completed)
+          this.completedAssignments = response.filter(todo => todo.completed)
+        }
       })
     },
     getPatientInvoices (id, sort) {
