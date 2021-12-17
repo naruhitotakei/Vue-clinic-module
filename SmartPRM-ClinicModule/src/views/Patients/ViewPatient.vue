@@ -407,7 +407,7 @@
                                                     </div>
                                                   </div>
                                                   <ul class="list-inline m-0 overflow-y-scroll">
-                                                      <li v-for="(item,index) in assignments" :key="index + item.due_at"
+                                                      <li id="openList" v-for="(item,index) in openAssignments" :key="index + item.due_at"
                                                           class="d-flex align-items-center justify-content-between mb-3">
                                                           <div class="w-100">
                                                             <div>
@@ -435,6 +435,15 @@
                                                           </div>
                                                       </li>
                                                   </ul>
+                                                  <p v-if="assignments.length === 0">No Open Assignment found.</p>
+                                                  <b-pagination
+                                                    class="mt-2"
+                                                    v-else-if="assignments.length > 5"
+                                                    v-model="smsCurrentPage"
+                                                    :total-rows="assignments.length"
+                                                    :per-page="smsPerPage"
+                                                    aria-controls="openList"
+                                                ></b-pagination>
                                               </template>
                                           </iq-card>
                                           <iq-card>
@@ -449,7 +458,7 @@
                                                       </div>
                                                   </div>
                                                   <ul class="iq-timeline">
-                                                      <li v-for="(item,index) in futureAppointments" :key="index + 'future'">
+                                                      <li v-for="(item,index) in futureList" :key="index + 'future'" id="futureList">
                                                           <div v-if="item.appointmentStatus === 'Attended'" class="timeline-dots border-success"></div>
                                                           <div v-if="item.appointmentStatus === 'Canceled by clinic'" class="timeline-dots border-light"></div>
                                                           <div v-if="item.appointmentStatus === 'Canceled by patient'" class="timeline-dots border-danger"></div>
@@ -460,6 +469,15 @@
                                                           </div>
                                                       </li>
                                                   </ul>
+                                                  <p v-if="futureAppointments.length === 0">No Future Appointment found.</p>
+                                                  <b-pagination
+                                                    class="mt-2"
+                                                    v-else-if="futureAppointments.length > 5"
+                                                    v-model="futureCurrentPage"
+                                                    :total-rows="futureAppointments.length"
+                                                    :per-page="futurePerPage"
+                                                    aria-controls="futureList"
+                                                ></b-pagination>
                                               </template>
                                           </iq-card>
                                           <iq-card>
@@ -473,7 +491,7 @@
                                                     <hr />
                                                   </div>
                                                   <ul class="iq-timeline" id="pastAppointments">
-                                                      <li v-for="(item, index) in pastAppointments" :key="index + 'status'">
+                                                      <li v-for="(item, index) in pastList" :key="index + 'status'" id="pastList">
                                                         <div v-if="item.appointmentStatus === 'Attended'" class="timeline-dots border-success"></div>
                                                         <div v-if="item.appointmentStatus === 'Canceled by clinic'" class="timeline-dots border-light"></div>
                                                         <div v-if="item.appointmentStatus === 'Canceled by patient'" class="timeline-dots border-danger"></div>
@@ -482,6 +500,15 @@
                                                         <small class="mt-1">{{item.starts_at | formatDateAndTime}} {{ item.location ? `(${item.location})` : '' }}</small>
                                                       </li>
                                                   </ul>
+                                                  <p v-if="pastAppointments.length === 0">No Past Appointment found.</p>
+                                                  <b-pagination
+                                                    class="mt-2"
+                                                    v-else-if="pastAppointments.length > 5"
+                                                    v-model="pastCurrentPage"
+                                                    :total-rows="pastAppointments.length"
+                                                    :per-page="pastPerPage"
+                                                    aria-controls="pastList"
+                                                ></b-pagination>
                                               </template>
                                           </iq-card>
                                           <iq-card>
@@ -495,7 +522,7 @@
                                                   </div>
                                                 </div>
                                                 <ul class="list-inline m-0 overflow-y-scroll">
-                                                    <li v-for="(item,index) in completedAssignments" :key="index + item.due_at"
+                                                    <li id="completedList" v-for="(item,index) in completedList" :key="index + item.due_at"
                                                         class="d-flex align-items-center justify-content-between mb-3">
                                                         <div class="w-100">
                                                             <h6>{{item.description}}</h6>
@@ -506,6 +533,15 @@
                                                         </div>
                                                     </li>
                                                 </ul>
+                                                <p v-if="completedAssignments.length === 0">No Completed Assignment found.</p>
+                                                  <b-pagination
+                                                    class="mt-2"
+                                                    v-else-if="completedAssignments.length > 5"
+                                                    v-model="completedCurrentPage"
+                                                    :total-rows="completedAssignments.length"
+                                                    :per-page="completedPerPage"
+                                                    aria-controls="completedList"
+                                                ></b-pagination>
                                             </template>
                                           </iq-card>
                                       </b-col>
@@ -1229,8 +1265,24 @@ export default {
       })
     },
     openAssignments: function () {
-      let assignments = [...this.assignments]
-      return assignments.reverse()
+      return this.assignments.slice(
+        (this.openCurrentPage - 1) * this.openPerPage,
+        this.openCurrentPage * this.openPerPage)
+    },
+    completedList () {
+      return this.completedAssignments.slice(
+        (this.completedCurrentPage - 1) * this.completedPerPage,
+        this.completedCurrentPage * this.completedPerPage)
+    },
+    pastList () {
+      return this.pastAppointments.slice(
+        (this.pastCurrentPage - 1) * this.pastPerPage,
+        this.pastCurrentPage * this.pastPerPage)
+    },
+    futureList () {
+      return this.futureAppointments.slice(
+        (this.futureCurrentPage - 1) * this.futurePerPage,
+        this.futureCurrentPage * this.futurePerPage)
     },
     hideInvoicesPagination () {
       return Math.floor(this.invoices.length / this.invoicesPerPage) !== 0
@@ -1358,7 +1410,14 @@ export default {
       smsPerPage: 4,
       notesCurrentPage: 1,
       notesPerPage: 5,
-
+      completedCurrentPage: 1,
+      completedPerPage: 5,
+      openCurrentPage: 1,
+      openPerPage: 5,
+      pastCurrentPage: 1,
+      pastPerPage: 5,
+      futureCurrentPage: 1,
+      futurePerPage: 5,
       selectedInvoices: '',
       selectedDoctor: '',
       selectedProductGroup: '',
