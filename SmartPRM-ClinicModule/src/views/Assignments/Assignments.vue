@@ -37,7 +37,7 @@
                           <div>
                             <b-checkbox v-model="item.completed" name="check-button" inline
                               :key="index"
-                              @change="finishAssignment(item.id, $event, 'today')"><strong>{{ item.description }}</strong></b-checkbox>
+                              @change="finishAssignment(item.id, $event, 'myToday')"><strong>{{ item.description }}</strong></b-checkbox>
                           </div>
                           <div class="d-flex align-items-center justify-content-between">
                             <div>
@@ -146,9 +146,9 @@
                       >
                         <div :class="{ 'taskIsActive' : !item.completed}">
                           <div>
-                            <b-checkbox v-model="item.completed" :disabled="item.disabled || item.completed" name="check-button" inline
+                            <b-checkbox v-model="item.completed"  name="check-button" inline
                               :key="index"
-                              @change="finishAssignment(item.id, $event, 'today')"><strong>{{ item.description }}</strong></b-checkbox>
+                              @change="openWarningModal(item.id, $event, 'today')"><strong>{{ item.description }}</strong></b-checkbox>
                           </div>
                           <b-row>
                             <b-col cols="12" lg="6" align-self="center">
@@ -208,7 +208,7 @@
                           <div>
                             <b-checkbox v-model="item.completed" :disabled="item.disabled" name="check-button" inline
                               :key="index"
-                              @change="finishAssignment(item.id, $event, 'overdue')">
+                              @change="openWarningModal(item.id, $event, 'overdue')">
                                 <strong>{{ item.description }}</strong>
                             </b-checkbox>
                           </div>
@@ -350,7 +350,7 @@
                                 <div>
                                   <b-checkbox v-model="item.completed" :disabled="item.disabled" name="check-button" inline
                                     :key="index"
-                                    @change="finishAssignment(item.id, $event, 'future')"><strong>{{ item.description }}</strong></b-checkbox>
+                                    @change="openWarningModal(item.id, $event, 'future')"><strong>{{ item.description }}</strong></b-checkbox>
                                 </div>
                                 <b-row>
                                   <b-col cols="12" lg="6" align-self="center">
@@ -500,6 +500,21 @@
             </div>
           </div>
         </form>
+      </b-modal>
+
+      <b-modal
+        v-model="warningModal"
+        size="md"
+        title="Update Assignment"
+        :ok-title="$t('assignments.addAssignmentsModal.save')"
+        :cancel-title="$t('assignments.addAssignmentsModal.close')"
+        @ok="changeAssignmentStatus"
+        @close="closeWarningModal"
+        @cancel="closeWarningModal"
+      >
+        <div v-if="assignmentToEdit">
+          Are you sure you want to {{ assignmentToEdit.event ? 'Complete' : 'Incomplete' }} this assignment ?
+        </div>
       </b-modal>
     </b-container>
 </template>
@@ -861,10 +876,60 @@ export default {
       this.myOverdueAssignments = res
       this.myOverdueTotalRows = filtered.length
     },
+    openWarningModal (id, event, from) {
+      this.assignmentToEdit = { id, event, from }
+      this.warningModal = true
+    },
+    async closeWarningModal () {
+      if (this.assignmentToEdit) {
+        console.log(this.assignmentToEdit)
+        let array = []
+        let aIndex = null
+        if (this.assignmentToEdit.from === 'overdue') {
+          array = JSON.parse(JSON.stringify(this.overdueAssignments))
+        }
+        if (this.assignmentToEdit.from === 'future') {
+          array = JSON.parse(JSON.stringify(this.futureAssigments))
+        }
+        if (this.assignmentToEdit.from === 'today') {
+          array = JSON.parse(JSON.stringify(this.todaysAssignments))
+        }
+
+        if (array) {
+          const assignment = await array.find((assignment, index) => {
+            if (assignment.id === this.assignmentToEdit.id) {
+              aIndex = index
+              return assignment
+            }
+          })
+          if (assignment && aIndex > -1) {
+            assignment.completed = false
+            if (this.assignmentToEdit.from === 'today') {
+              this.$set(this.todaysAssignments, aIndex, assignment)
+            }
+            if (this.assignmentToEdit.from === 'overdue') {
+              this.$set(this.overdueAssignments, aIndex, assignment)
+            }
+            if (this.assignmentToEdit.from === 'future') {
+              this.$set(this.futureAssigments, aIndex, assignment)
+            }
+          }
+        }
+
+        this.warningModal = false
+      }
+    },
+    changeAssignmentStatus () {
+      if (this.assignmentToEdit) {
+        this.finishAssignment(this.assignmentToEdit.id, this.assignmentToEdit.event, this.assignmentToEdit.from)
+      }
+      this.warningModal = false
+    },
     finishAssignment (id, finished, from) {
       const completedBy = this.userId
       finishAssignment(id, finished, completedBy).then(response => {
-        if (from === 'today') {
+        this.assignmentToEdit = null
+        if (from === 'myToday') {
           this.myCompletedAssignments = this.getCompletedAssignments()
           // this.todaysAssignments = this.todaysAssignments.filter(assignment => assignment.id !== id)
         }
@@ -960,6 +1025,8 @@ export default {
       disabled: false,
       userId: null,
       modalAssigmentShow: false,
+      assignmentToEdit: null,
+      warningModal: false,
       selectEnquires: null,
       logedInUser: {},
       enquires: [],
