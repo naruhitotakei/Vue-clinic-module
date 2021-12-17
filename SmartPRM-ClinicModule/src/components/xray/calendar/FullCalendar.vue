@@ -538,6 +538,12 @@ export default {
     }
   },
   mounted () {
+    let self = this
+    window.addEventListener('keydown', function (event) {
+      if (event.key === 'Escape') {
+        self.closeModal()
+      }
+    })
     this.$nextTick(() => {
       this.$forceUpdate()
       this.$emit('updateApp', {
@@ -628,6 +634,9 @@ export default {
     getLabels (lang) {
       getLabels(lang).then(response => {
         this.colors = response
+        const lastLabel = this.colors.pop()
+        this.colors.unshift(lastLabel)
+        console.log('Colors... ', this.colors)
       })
     },
     getLabelText (type) {
