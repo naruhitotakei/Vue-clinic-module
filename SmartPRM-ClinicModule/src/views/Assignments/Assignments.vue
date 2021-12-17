@@ -505,7 +505,6 @@
       <b-modal
         v-model="warningModal"
         size="md"
-        :title="$t('assignments.completeAssignmentModal.title')"
         :ok-title="$t('assignments.completeAssignmentModal.yes')"
         :cancel-title="$t('assignments.completeAssignmentModal.no')"
         @ok="changeAssignmentStatus"
