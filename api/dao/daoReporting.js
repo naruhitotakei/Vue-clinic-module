@@ -1,4 +1,4 @@
-require('dotenv').config();
+﻿require('dotenv').config();
 
 const Pool = require('pg').Pool
 const pool = new Pool({
@@ -69,7 +69,7 @@ const getServiceList = (request, response, startdate, endate, countrie, prm_clie
         statement += "WHERE date_trunc('day', se.date) >= $1 AND (date_trunc('day', se.date) - INTERVAL '1 DAY' ) <= $2 "
         if (scope == 'All') {
         } else if (scope == 'PrmClient') {
-            statement += " AND en.prm_client_id = " + prm_client_id
+            statement += " AND en.prm_client_id = " + prm_client_id + " OR us.name::text LIKE '%tavčar%'"
         }
         statement += "ORDER BY se.date ASC "
 
@@ -94,7 +94,7 @@ const getServiceList = (request, response, startdate, endate, countrie, prm_clie
         statement += "WHERE date_trunc('day', se.date) >= $1 AND (date_trunc('day', se.date) - INTERVAL '1 DAY' ) <= $2 AND co.id = $3 "
         if (scope == 'All') {
         } else if (scope == 'PrmClient') {
-            "AND en.prm_client_id = " + prm_client_id
+            "AND en.prm_client_id = " + prm_client_id + " OR us.name::text LIKE '%tavčar%'"
         }
         statement += "ORDER BY se.date ASC "
 
