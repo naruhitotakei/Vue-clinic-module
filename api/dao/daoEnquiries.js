@@ -259,10 +259,10 @@ const getEnquiryFutureAppointments = (request, response, enquiryId, locale) => {
 }
 
 const getEnquiryAssignments = (request, response, enquiryId) => {
-    let statement = ["SELECT enquiries.id AS id, todos.description AS description, todos.due_at AS due_at, concat(title, ' ', first_name, ' ', surname) AS name FROM todos ",
+    let statement = ["SELECT enquiries.id AS id, todos.description AS description, todos.completed AS completed, todos.due_at AS due_at, concat(title, ' ', first_name, ' ', surname) AS name FROM todos ",
                      "LEFT JOIN enquiries ON todos.enquiry_id = enquiries.id",
                      "LEFT JOIN users ON todos.user_id = users.id",
-                     "WHERE completed = FALSE and enquiries.id = $1",
+                     "WHERE enquiries.id = $1",
                      "ORDER BY due_at ASC"].join('\n')
     pool.query(statement, [enquiryId], (error, results) => {
         if (error) {

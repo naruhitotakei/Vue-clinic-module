@@ -54,4 +54,8 @@ span.multiselect__option--highlight::after{
 .multiselect__tag-icon:hover{
   background: #077e8b;
 }
+
+.multiselect, .multiselect__input, .multiselect__single {
+  font-size: 13px;
+}
 </style>

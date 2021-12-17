@@ -64,6 +64,12 @@ import {
   getLimitedEnquires
 } from '../../services/enquiry'
 import { xray } from '../../config/pluginInit'
+import {
+  getEnquiryById,
+  trashEnquiry
+} from '../../services/enquiry'
+import { getDentists, getSurgeons, sso } from '../../services/userService'
+import moment from 'moment'
 export default {
   components: {
     IqCard

@@ -18,12 +18,14 @@ const getConfig = (request, response, ip, premiseId) => {
     const lang = geo != null && langByCountry[geo.country] != null
         ? langByCountry[geo.country]
         : 'en'
+
     const statement = /* sql */`
         SELECT
             prm_company_premise.premise_name as "name",
             prm_company_premise.premise_street as street,
             prm_company_premise.premise_house_number as house_number,
             prm_company_premise.premise_post_code as post_code,
+            prm_company_premise.premise_phone_number as phone_number,
             prm_company_premise.premise_city as city,
             prm_company.prm_client_id as client_id
         FROM prm_company_premise
@@ -46,7 +48,8 @@ const getConfig = (request, response, ip, premiseId) => {
             premise: {
                 name: premise.name,
                 address: `${premise.street} ${premise.house_number}, ${premise.post_code} ${premise.city}`,
-                client_id: premise.client_id
+                client_id: premise.client_id,
+                phone_number: premise.phone_number,
             }
         })
     })

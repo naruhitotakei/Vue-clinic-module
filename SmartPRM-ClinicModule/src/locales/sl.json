@@ -529,8 +529,13 @@
       "due_at": "Datum",
       "assignTo": "Zadolžen",
       "close": "Zapri",
-      "save": "Shrani",
-      "patientAttended": "Pacient se je udeležil"
+      "save": "Shrani"
+    },
+    "completeAssignmentModal": {
+      "no": "Ne",
+      "yes": "Da",
+      "tickAssignment": "Ste prepričani da želite obkljukati to nalogo?",
+      "untickAssignment": "Ste prepričani da želite odkljukati to nalogo?"
     }
   },
   "statisticsForClinic": {
