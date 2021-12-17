@@ -197,7 +197,13 @@
       "futureAppointments": "Bodoči termini",
       "pastAppointments": "Pretekli termini",
       "notSelected": "Ni izbrano",
-      "deletePatientConfirm":  "Ali ste prepričani da želite izbrisati pacienta?"
+      "deletePatientConfirm": "Ali ste prepričani da želite izbrisati pacienta?",
+      "noNotes": "Ni opomb za pacienta.",
+      "noSMS": "Ni poslanih SMS sporočil pacientu.",
+      "noOpenAssignments": "Ni odprtih nalog za pacienta.",
+      "noCompletedAssignments": "Ni zaključenih nalog za pacienta.",
+      "noFutureAppointments": "Ni bodočih terminov.",
+      "noPastAppointments": "Ni preteklih terminov."
     },
     "personalInfoTab": "Osebni podatki",
     "personalInfo": {
