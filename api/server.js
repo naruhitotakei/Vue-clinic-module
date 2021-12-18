@@ -1434,8 +1434,10 @@ app.get('/api/config', (request, response) => {
     daoConfig.getConfig(request, response, request.ip, request.query.premiseId)
 })
 
-app.use('/api/appointment-slots', require('~/controllers/appointment-slots'))
+app.use('/api/available-services', require('~/controllers/available-services'))
 app.use('/api/available-dates', require('~/controllers/available-dates'))
+app.use('/api/available-doctors', require('~/controllers/available-doctors'))
+app.use('/api/appointment-slots', require('~/controllers/appointment-slots'))
 
 app.get('/api/public/online-booking-products', (req, res) => {
     const locale = req.query.locale

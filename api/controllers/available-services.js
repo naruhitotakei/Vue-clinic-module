@@ -1,5 +1,5 @@
 const router = require('express').Router()
-const { getAvailableDates } = require('~/dao/daoAvailableDates')
+const { getAvailableServices } = require('~/dao/daoAvailableServices')
 
 module.exports = router
 
@@ -7,7 +7,7 @@ router.get('/', async (request, response) => {
   let dates
 
   try {
-    dates = await getAvailableDates(request.query)
+    dates = await getAvailableServices(request.query)
   } catch (error) {
     return response.status(500).send(error)
   }

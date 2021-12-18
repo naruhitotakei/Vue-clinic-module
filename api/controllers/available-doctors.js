@@ -1,16 +1,16 @@
 const router = require('express').Router()
-const { getAvailableDates } = require('~/dao/daoAvailableDates')
+const { getAvailableDoctors } = require('~/dao/daoAvailableDoctors')
 
 module.exports = router
 
 router.get('/', async (request, response) => {
-  let dates
+  let doctors
 
   try {
-    dates = await getAvailableDates(request.query)
+    doctors = await getAvailableDoctors(request.query)
   } catch (error) {
     return response.status(500).send(error)
   }
 
-  return response.json(dates)
+  return response.json(doctors)
 })

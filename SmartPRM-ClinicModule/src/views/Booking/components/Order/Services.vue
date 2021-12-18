@@ -1,17 +1,19 @@
 <template>
-  <div class="mt-5">
+  <div v-if="services.length > 0" class="mt-5">
     <b-table
       :items="services"
-      :fields="fields"
+      :fields="[
+        { key: 'serviceName', label: $t('public.onlineBooking.service'), tdClass: 'w-50' },
+        { key: 'time', label: $t('public.onlineBooking.time') },
+        { key: 'price', label: $t('public.onlineBooking.price') },
+        { key: 'selected', label: '', tdClass: 'checkColumn' }
+      ]"
       select-mode="single"
       responsive="sm"
       ref="selectableTable"
       selectable
       @row-selected="fieldset.service = $event[0]"
     >
-      <template #head(serviceName)>
-        <span>{{ $t('public.onlineBooking.service') }}</span>
-      </template>
       <template #cell(selected)="{ rowSelected }">
         <span :style="{ 'color': rowSelected ? '' : 'transparent' }" aria-hidden="true">&check;</span>
       </template>
@@ -47,17 +49,6 @@ export default defineComponent({
         service: null
       },
       services: []
-    }
-  },
-
-  computed: {
-    fields () {
-      return [
-        { key: 'serviceName', label: this.title, tdClass: 'w-50' },
-        { key: 'time', label: this.$t('public.onlineBooking.time') },
-        { key: 'price', label: this.$t('public.onlineBooking.price') },
-        { key: 'selected', label: ' ', tdClass: 'checkColumn' }
-      ]
     }
   },
 

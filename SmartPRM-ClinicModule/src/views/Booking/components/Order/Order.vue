@@ -63,19 +63,20 @@ export default defineComponent({
   },
 
   methods: {
-    next () {
+    next (length = 1) {
       const activeStepIndex = StepOrder.findIndex(
         ({ name }) => name === this.activeStep
       )
+      const nextStepIndex = activeStepIndex + length
 
-      if (activeStepIndex < StepOrder.length - 1) {
-        this.activeStep = StepOrder[activeStepIndex + 1].name
+      if (nextStepIndex <= StepOrder.length - 1) {
+        this.activeStep = StepOrder[activeStepIndex + length].name
 
         const lastStepIndex = StepOrder.findIndex(
           ({ name }) => name === this.lastStep
         )
 
-        if (activeStepIndex + 1 > lastStepIndex) {
+        if (nextStepIndex > lastStepIndex) {
           this.lastStep = this.activeStep
         }
 
