@@ -239,6 +239,10 @@
     </form>
   </b-modal>
 
+<b-modal v-model="confirmationModal.show" ok-title="OK" cancel-title="Cancel" @ok="confirmationModal.callback" @cancel="confirmationModal.reset">
+  <h4 class="my-4 card-title text-center">{{ confirmationModal.info && confirmationModal.info.oldResource ? $t('calendarEvent.eventMoveBetweenResources') : $t('calendarEvent.eventTimeChange') }}</h4>
+</b-modal>
+
   <AddPatientModal
     from="calendar"
     :openAddPatient="openAddPatient"
@@ -285,6 +289,23 @@ export default {
   },
   data () {
     return {
+      confirmationModal: {
+        show: false,
+        callback: () => {},
+        info: null,
+        reset: (reset = true) => {
+          if (this.confirmationModal.info && reset) {
+            this.confirmationModal.info.revert()
+          }
+          this.confirmationModal = {
+            ...this.confirmationModal,
+            show: false,
+            callback: () => {},
+            info: null
+          }
+        }
+      },
+      modalEventTimeChange: false,
       openAddPatient: false,
       calendarUpdateEvery3Min: undefined,
       eventInfo: '',
@@ -383,6 +404,7 @@ export default {
         slotMaxTime: '23:00:00',
         slotDuration: '00:15:00',
         scrollTime: '09:00:00',
+        scrollTimeReset: false,
         allDaySlot: false,
         editable: true,
         selectable: true,
@@ -392,8 +414,22 @@ export default {
         datesAboveResources: true,
         select: this.openCreateModal,
         eventClick: this.openUpdateModal,
-        eventDrop: this.eventDrop,
-        eventResize: this.eventResize,
+        eventDrop: (info) => {
+          this.confirmationModal = {
+            ...this.confirmationModal,
+            show: true,
+            info,
+            callback: () => this.eventDrop(info)
+          }
+        },
+        eventResize: (info) => {
+          this.confirmationModal = {
+            ...this.confirmationModal,
+            show: true,
+            info,
+            callback: () => this.eventResize(info)
+          }
+        },
         datesSet: this.onViewChange,
         slotLabelInterval: '01:00:00',
         eventMinHeight: 5,
@@ -657,6 +693,7 @@ export default {
           start: this.dates.start,
           end: this.dates.end
         })
+        this.confirmationModal.reset(false)
       })
     },
     updateCalendarLabel (id, appointment) {
