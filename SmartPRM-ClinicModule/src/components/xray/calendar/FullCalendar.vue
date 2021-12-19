@@ -239,6 +239,20 @@
     </form>
   </b-modal>
 
+<b-modal v-model="confirmationModal.show" ok-title="OK" cancel-title="Cancel" @ok="confirmationModal.callback" @cancel="confirmationModal.reset">
+  <h4 class="my-4 card-title text-center">{{ confirmationModal.info && confirmationModal.info.oldResource ? $t('calendarEvent.eventMoveBetweenResources') : $t('calendarEvent.eventTimeChange') }}</h4>
+</b-modal>
+
+  <div v-if="eventPopover.show">
+    <b-popover :target="eventPopover.info.el" triggers="hover">
+      <template #title>{{ eventPopover.info.event.extendedProps.patient_name }}</template>
+      <div>{{ eventPopover.info.event.extendedProps.doctorId }}</div>
+      <div>{{ eventPopover.info.event.extendedProps.prm_pr_group_name_text }}</div>
+      <div>{{ eventPopover.info.event.extendedProps.notes }}</div>
+      <div>{{ eventPopover.info.event.extendedProps.time }}</div>
+    </b-popover>
+  </div>
+
   <AddPatientModal
     from="calendar"
     :openAddPatient="openAddPatient"
@@ -285,6 +299,34 @@ export default {
   },
   data () {
     return {
+      eventPopover: {
+        show: false,
+        info: null,
+        reset: () => {
+          this.eventPopover = {
+            ...this.eventPopover,
+            show: false,
+            info: null
+          }
+        }
+      },
+      confirmationModal: {
+        show: false,
+        callback: () => {},
+        info: null,
+        reset: (reset = true) => {
+          if (this.confirmationModal.info && reset) {
+            this.confirmationModal.info.revert()
+          }
+          this.confirmationModal = {
+            ...this.confirmationModal,
+            show: false,
+            callback: () => {},
+            info: null
+          }
+        }
+      },
+      modalEventTimeChange: false,
       openAddPatient: false,
       calendarUpdateEvery3Min: undefined,
       eventInfo: '',
@@ -370,7 +412,7 @@ export default {
       dates: null,
       calendarOptions: {
         plugins: [dayGridPlugin, timeGridPlugin, interactionPlugin, resourceTimeGrid, listPlugin],
-        defaultAllDay: false,
+        defaultAllDay: true,
         headerToolbar: {
           left: 'prev,next today',
           center: 'title',
@@ -383,7 +425,8 @@ export default {
         slotMaxTime: '23:00:00',
         slotDuration: '00:15:00',
         scrollTime: '09:00:00',
-        allDaySlot: false,
+        scrollTimeReset: false,
+        allDaySlot: true,
         editable: true,
         selectable: true,
         firstDay: 1,
@@ -392,8 +435,33 @@ export default {
         datesAboveResources: true,
         select: this.openCreateModal,
         eventClick: this.openUpdateModal,
-        eventDrop: this.eventDrop,
-        eventResize: this.eventResize,
+        eventDrop: (info) => {
+          console.log(info)
+          this.confirmationModal = {
+            ...this.confirmationModal,
+            show: true,
+            info,
+            callback: () => this.eventDrop(info)
+          }
+        },
+        eventResize: (info) => {
+          this.confirmationModal = {
+            ...this.confirmationModal,
+            show: true,
+            info,
+            callback: () => this.eventResize(info)
+          }
+        },
+        eventMouseEnter: (info) => {
+          this.eventPopover = {
+            ...this.eventPopover,
+            show: true,
+            info
+          }
+        },
+        eventMouseLeave: () => {
+          this.eventPopover.reset()
+        },
         datesSet: this.onViewChange,
         slotLabelInterval: '01:00:00',
         eventMinHeight: 5,
@@ -657,6 +725,7 @@ export default {
           start: this.dates.start,
           end: this.dates.end
         })
+        this.confirmationModal.reset(false)
       })
     },
     updateCalendarLabel (id, appointment) {
@@ -733,6 +802,8 @@ export default {
         this.formData.assignmentDate = event.start
         this.formData.end = event.end
         this.formData.time = new Date(event.start).toTimeString()
+        console.log('asd', event)
+        this.formData.allDay = event.allDay
         this.updateCalendar(this.formData.id, this.formData, () => {
           event.setExtendedProp('assignmentDate', this.formData.assignmentDate)
           event.setStart(this.formData.start)
@@ -745,6 +816,8 @@ export default {
         this.formData.id = event.id
         this.formData.assignmentDate = event.start
         this.formData.end = event.end
+        console.log('asd', event)
+        this.formData.allDay = event.allDay
         this.formData.doctor_id = newResource.id
         this.formData.doctor_name = newResource.title
         this.updateCalendar(this.formData.id, this.formData, () => {
@@ -854,6 +927,7 @@ export default {
       }
     },
     openUpdateModal (selectionInfo) {
+      console.log(selectionInfo)
       // this.modalShow = true
       this.$emit('setModalShow', true)
       this.disabled = true

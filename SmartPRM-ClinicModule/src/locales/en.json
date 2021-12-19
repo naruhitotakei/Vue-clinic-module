@@ -149,7 +149,9 @@
     "product_group": "Product Group",
     "appointmentCanceledInAdvanceByClinic": "Appointment canceled by clinic",
     "appointmentCanceledInAdvanceByPatient": "Appointment canceled by patient",
-    "requiredFields": "Fields marked with * have to be filled"
+    "requiredFields": "Fields marked with * have to be filled",
+    "eventMoveBetweenResources": "Are you sure you want to move this event to another resource?",
+    "eventTimeChange": "Are you sure you want to change this event's start or end date?"
   },
   "patients": {
     "patientsHeader": "Patients",
