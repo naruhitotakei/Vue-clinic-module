@@ -3,11 +3,11 @@
     <div class="text-center">
       <b-button-group class="mt-2">
         <b-button
-          v-for="({ name, text }, index) in StepOrder"
+          v-for="({ name, text, isEnabled }, index) in stepOrder"
           :key="name"
           :variant="activeStep === name ? 'primary': null"
           @click="activeStep = name"
-          :disabled="StepOrder.findIndex((step) => step.name === lastStep) < index"
+          :disabled="isEnabled === false || stepOrder.findIndex((step) => step.name === lastStep) < index"
         >
           {{ $t(`public.onlineBooking.${text}`) }}
         </b-button>
@@ -32,12 +32,6 @@ const Step = {
   ReviewTab: 'ReviewTab'
 }
 
-const StepOrder = [
-  { name: Step.Services, text: 'pickService' },
-  { name: Step.ChooseTimeTab, text: 'chooseTime' },
-  { name: Step.ReviewTab, text: 'review' }
-]
-
 export default defineComponent({
   name: 'Order',
 
@@ -50,6 +44,8 @@ export default defineComponent({
   data () {
     return {
       form: {
+        service: null,
+        appointmentSlot: null
       },
       activeStep: Step.Services,
       lastStep: Step.Services
@@ -57,22 +53,38 @@ export default defineComponent({
   },
 
   computed: {
-    StepOrder () {
-      return StepOrder
+    stepOrder () {
+      return [
+        {
+          name: Step.Services,
+          text: 'pickService',
+          isEnabled: true
+        },
+        {
+          name: Step.ChooseTimeTab,
+          text: 'chooseTime',
+          isEnabled: this.form.service != null
+        },
+        {
+          name: Step.ReviewTab,
+          text: 'review',
+          isEnabled: this.form.service != null && this.form.appointmentSlot != null
+        }
+      ]
     }
   },
 
   methods: {
     next (length = 1) {
-      const activeStepIndex = StepOrder.findIndex(
+      const activeStepIndex = this.stepOrder.findIndex(
         ({ name }) => name === this.activeStep
       )
       const nextStepIndex = activeStepIndex + length
 
-      if (nextStepIndex <= StepOrder.length - 1) {
-        this.activeStep = StepOrder[activeStepIndex + length].name
+      if (nextStepIndex <= this.stepOrder.length - 1) {
+        this.activeStep = this.stepOrder[activeStepIndex + length].name
 
-        const lastStepIndex = StepOrder.findIndex(
+        const lastStepIndex = this.stepOrder.findIndex(
           ({ name }) => name === this.lastStep
         )
 
