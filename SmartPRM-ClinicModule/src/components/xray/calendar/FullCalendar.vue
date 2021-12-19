@@ -243,6 +243,16 @@
   <h4 class="my-4 card-title text-center">{{ confirmationModal.info && confirmationModal.info.oldResource ? $t('calendarEvent.eventMoveBetweenResources') : $t('calendarEvent.eventTimeChange') }}</h4>
 </b-modal>
 
+  <div v-if="eventPopover.show">
+    <b-popover :target="eventPopover.info.el" triggers="hover">
+      <template #title>{{ eventPopover.info.event.extendedProps.patient_name }}</template>
+      <div>{{ eventPopover.info.event.extendedProps.doctorId }}</div>
+      <div>{{ eventPopover.info.event.extendedProps.prm_pr_group_name_text }}</div>
+      <div>{{ eventPopover.info.event.extendedProps.notes }}</div>
+      <div>{{ eventPopover.info.event.extendedProps.time }}</div>
+    </b-popover>
+  </div>
+
   <AddPatientModal
     from="calendar"
     :openAddPatient="openAddPatient"
@@ -289,6 +299,17 @@ export default {
   },
   data () {
     return {
+      eventPopover: {
+        show: false,
+        info: null,
+        reset: () => {
+          this.eventPopover = {
+            ...this.eventPopover,
+            show: false,
+            info: null
+          }
+        }
+      },
       confirmationModal: {
         show: false,
         callback: () => {},
@@ -430,6 +451,16 @@ export default {
             info,
             callback: () => this.eventResize(info)
           }
+        },
+        eventMouseEnter: (info) => {
+          this.eventPopover = {
+            ...this.eventPopover,
+            show: true,
+            info
+          }
+        },
+        eventMouseLeave: () => {
+          this.eventPopover.reset()
         },
         datesSet: this.onViewChange,
         slotLabelInterval: '01:00:00',
