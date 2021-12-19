@@ -1,29 +1,27 @@
 <template>
-  <div class="container">
-    <template v-if="lang != null">
-      <div class="card my-4">
-        <div class="card-body">
-          <div class="d-flex justify-content-between">
-            <img :src="`/api/files/logo/${premise.client_id}`" alt="" style="height: 3rem; width: auto">
-            <select v-model="lang" class="language-selector" ref="languageSelector" @change="$refs.languageSelector.blur()">
-              <option
-                v-for="{ value, title} in langsOptions"
-                :key="value"
-                :value="value"
-              >
-                {{ title }}
-              </option>
-            </select>
-          </div>
-          <div class="mt-4">
-            <div>{{ premise.name }}</div>
-            <div>{{ premise.address }}</div>
-            <div>{{ premise.phone_number }}</div>
-          </div>
+  <div v-show="premise != null" class="container">
+    <div v-if="premise != null" class="card my-4">
+      <div class="card-body">
+        <div class="d-flex justify-content-between">
+          <img :src="`/api/files/logo/${premise.client_id}`" alt="" style="height: 3rem; width: auto">
+          <select v-model="lang" class="language-selector" ref="languageSelector" @change="$refs.languageSelector.blur()">
+            <option
+              v-for="{ value, title} in langsOptions"
+              :key="value"
+              :value="value"
+            >
+              {{ title }}
+            </option>
+          </select>
+        </div>
+        <div class="mt-4">
+          <div>{{ premise.name }}</div>
+          <div>{{ premise.address }}</div>
+          <div>{{ premise.phone_number }}</div>
         </div>
       </div>
-      <slot/>
-    </template>
+    </div>
+    <slot/>
   </div>
 </template>
 
@@ -37,7 +35,7 @@ export default {
   },
   data () {
     return {
-      lang: null,
+      lang: this.$route.query.lang != null ? this.$route.query.lang : 'en',
       premise: null
     }
   },
@@ -53,15 +51,17 @@ export default {
       return
     }
 
-    const { lang, premise } = await response.json()
-    this.lang = lang
+    const { premise } = await response.json()
     this.premise = premise
     window.document.title = premise.name
   },
   watch: {
-    lang (lang) {
-      this.$i18n.locale = lang
-      localize(lang)
+    lang: {
+      immediate: true,
+      handler (lang) {
+        this.$i18n.locale = lang
+        localize(lang)
+      }
     }
   }
 }
