@@ -44,16 +44,20 @@
           </div>
           <ValidationProvider
             :name="$t('public.onlineBooking.phone')"
-            rules="required|numeric|min:9|max:15"
-            v-slot="{ errors, invalid }"
+            rules="required"
+            v-slot="{ errors }"
           >
             <p>
               {{ $t('public.onlineBooking.pleaseEnterYourMobileNumber') }}
             </p>
             <b-form-group :label="$t('public.onlineBooking.phoneNumber')">
-              <b-form-input
-                v-model="fieldset.phone" type="text"
-                :class="(errors.length > 0 ? ' is-invalid' : '')"
+              <input type="hidden" v-model="fieldset.phone">
+              <VuePhoneNumberInput
+                v-model="phone"
+                @update="$event.isValid ? fieldset.phone = $event.formattedNumber: fieldset.phone = null"
+                :default-country-code="countryCode"
+                :preferred-countries="['SI', 'IT', 'AT']"
+                no-example
               />
               <div class="invalid-feedback">
                 <span>{{ errors[0] }}</span>
@@ -99,13 +103,20 @@
 
 <script>
 import { sendSms } from '@/services/booking.js'
+import VuePhoneNumberInput from 'vue-phone-number-input'
+import 'vue-phone-number-input/dist/vue-phone-number-input.css'
 
 export default {
+  components: {
+    VuePhoneNumberInput
+  },
   props: {
     form: Object
   },
   data: function () {
     return {
+      countryCode: this.$route.query.country ? this.$route.query.country : 'SI',
+      phone: null,
       fieldset: {
         firstName: null,
         lastName: null,
