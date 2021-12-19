@@ -75,7 +75,7 @@ export default defineComponent({
   },
 
   methods: {
-    next (length = 1) {
+    async next (length = 1) {
       const activeStepIndex = this.stepOrder.findIndex(
         ({ name }) => name === this.activeStep
       )
@@ -95,7 +95,10 @@ export default defineComponent({
         return
       }
 
-      console.log('submit')
+      await this.submit()
+    },
+    async submit () {
+      this.$emit('confirmed', this.form)
     }
   }
 })

@@ -21,7 +21,7 @@
         </div>
       </div>
     </div>
-    <slot/>
+    <slot :premise="premise"/>
   </div>
 </template>
 
