@@ -219,7 +219,7 @@ export default {
                 id: item.enquiry_id,
                 full_name: item.name + ' ' + item.last_name
               },
-              allDay: false,
+              allDay: item.allDay ? item.allDay : false,
               app_lb_color: item.app_lb_color,
               app_lb_type: item.app_lb_type
             }

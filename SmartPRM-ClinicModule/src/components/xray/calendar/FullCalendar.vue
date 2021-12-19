@@ -391,7 +391,7 @@ export default {
       dates: null,
       calendarOptions: {
         plugins: [dayGridPlugin, timeGridPlugin, interactionPlugin, resourceTimeGrid, listPlugin],
-        defaultAllDay: false,
+        defaultAllDay: true,
         headerToolbar: {
           left: 'prev,next today',
           center: 'title',
@@ -405,7 +405,7 @@ export default {
         slotDuration: '00:15:00',
         scrollTime: '09:00:00',
         scrollTimeReset: false,
-        allDaySlot: false,
+        allDaySlot: true,
         editable: true,
         selectable: true,
         firstDay: 1,
@@ -415,6 +415,7 @@ export default {
         select: this.openCreateModal,
         eventClick: this.openUpdateModal,
         eventDrop: (info) => {
+          console.log(info)
           this.confirmationModal = {
             ...this.confirmationModal,
             show: true,
@@ -770,6 +771,8 @@ export default {
         this.formData.assignmentDate = event.start
         this.formData.end = event.end
         this.formData.time = new Date(event.start).toTimeString()
+        console.log('asd', event)
+        this.formData.allDay = event.allDay
         this.updateCalendar(this.formData.id, this.formData, () => {
           event.setExtendedProp('assignmentDate', this.formData.assignmentDate)
           event.setStart(this.formData.start)
@@ -782,6 +785,8 @@ export default {
         this.formData.id = event.id
         this.formData.assignmentDate = event.start
         this.formData.end = event.end
+        console.log('asd', event)
+        this.formData.allDay = event.allDay
         this.formData.doctor_id = newResource.id
         this.formData.doctor_name = newResource.title
         this.updateCalendar(this.formData.id, this.formData, () => {
@@ -891,6 +896,7 @@ export default {
       }
     },
     openUpdateModal (selectionInfo) {
+      console.log(selectionInfo)
       // this.modalShow = true
       this.$emit('setModalShow', true)
       this.disabled = true
