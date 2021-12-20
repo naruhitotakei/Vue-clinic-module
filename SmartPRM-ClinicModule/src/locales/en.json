@@ -150,8 +150,8 @@
     "appointmentCanceledInAdvanceByClinic": "Appointment canceled by clinic",
     "appointmentCanceledInAdvanceByPatient": "Appointment canceled by patient",
     "requiredFields": "Fields marked with * have to be filled",
-    "eventMoveBetweenResources": "Are you sure you want to move this event to another resource?",
-    "eventTimeChange": "Are you sure you want to change this event's start or end date?"
+    "eventMoveBetweenResources": "Are you sure you want to move this appointment to another doctor?",
+    "eventTimeChange": "Are you sure you want to change this event's time?"
   },
   "patients": {
     "patientsHeader": "Patients",
@@ -222,7 +222,8 @@
       "female": "Female",
       "unspecified": "Unspecified",
       "address": "Address",
-      "postCodeCity": "Postcode, City",
+      "postCode": "Postcode",
+      "city": "City",
       "country": "Country",
       "region": "Region",
       "insurance": "Insurance number, insured at",
