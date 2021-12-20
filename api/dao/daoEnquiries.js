@@ -70,6 +70,20 @@ const getLimitedEnquiries = (request, response, user_id, accessible_user_ids, pr
     }
     statement += "ORDER BY enquiries.created_at DESC "
     statement += "LIMIT " + limit + " OFFSET " + offset
+
+    pool.query(statement, (error, results) => {
+        if (error) {
+            throw error
+        }
+        response.status(200).json(results.rows)
+    })
+}
+
+const getEnquiriesCount = (request, response) => {
+    let statement = "SELECT COUNT( * ) FROM enquiries "
+    statement += "LEFT JOIN prm_client ON prm_client.ID = enquiries.prm_client_id "
+    statement += "WHERE enquiries.trashed IS FALSE AND prm_client.client_deleted IS FALSE"
+
     pool.query(statement, (error, results) => {
         if (error) {
             throw error
@@ -334,6 +348,7 @@ const getEnquirySMS = (request, response, enquiryId) => {
 
 module.exports = {
   getEnquiries,
+  getEnquiriesCount,
   getLimitedEnquiries,
   getEnquiriesById,
   createEnquiry,

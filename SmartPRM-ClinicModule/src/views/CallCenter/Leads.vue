@@ -24,10 +24,10 @@
 
                 <b-col lg="8" class="pr-0 mt-4 pt-2 col-lg-8 d-flex" style="flex-direction: column">
                   <b-row class="d-flex mb-4">
-                    <button type="button" class="btn btn-primary mr-3" style="height: max-content">{{ $t('callCenter.leadsPage.actionCall') }}</button>
+                    <button v-if="lead.phone" type="button" class="btn btn-primary mr-3" style="height: max-content">{{ $t('callCenter.leadsPage.actionCall') }}</button>
                     <button type="button" class="btn btn-primary mr-3" style="height: max-content">{{ $t('callCenter.leadsPage.actionEdit') }}</button>
-                    <button type="button" class="btn btn-primary mr-3" style="height: max-content">{{ $t('callCenter.leadsPage.actionSendSMS') }}</button>
-                    <button type="button" class="btn btn-primary mr-3" style="height: max-content">{{ $t('callCenter.leadsPage.actionSendEmail') }}</button>
+                    <button v-if="lead.phone" type="button" class="btn btn-primary mr-3" style="height: max-content">{{ $t('callCenter.leadsPage.actionSendSMS') }}</button>
+                    <button v-if="lead.email" type="button" class="btn btn-primary mr-3" style="height: max-content">{{ $t('callCenter.leadsPage.actionSendEmail') }}</button>
                   </b-row>
                   <b-row>
                     <div class="col-2 p-md-0 text-dark">{{ $t('EPR.overview.phone') }}:</div>
@@ -42,10 +42,10 @@
 
               </b-row>
             </iq-card>
-            <div class="pagination-fixed">
+            <div v-if="leadsCount > 0" class="pagination-fixed">
               <b-pagination
                 v-model="currentPage"
-                :total-rows="6000"
+                :total-rows="leadsCount"
                 :per-page="limit"
                 aria-controls="my-table"
               ></b-pagination>
@@ -61,6 +61,7 @@
 <script>
 import IqCard from '../../components/xray/cards/iq-card.vue'
 import {
+  getLeadsCount,
   getLimitedEnquires
 } from '../../services/enquiry'
 import { xray } from '../../config/pluginInit'
@@ -71,6 +72,7 @@ export default {
   name: 'Leads',
   async mounted () {
     xray.index()
+    this.getAllLeadsCount()
     this.getLeads(this.limit, this.offset)
   },
   watch: {
@@ -82,6 +84,7 @@ export default {
   data: function () {
     return {
       isDataLoaded: false,
+      leadsCount: 0,
       leads: [],
       currentPage: 1,
       limit: 10,
@@ -89,6 +92,12 @@ export default {
     }
   },
   methods: {
+    async getAllLeadsCount () {
+      this.isDataLoaded = false
+      getLeadsCount().then(response => {
+        this.leadsCount = response[0].count
+      })
+    },
     async getLeads (dataLimit, dataOffset) {
       this.isDataLoaded = false
       getLimitedEnquires(dataLimit, dataOffset).then(response => {

@@ -10,6 +10,18 @@ export async function getEnquires (sort) {
   return rawResponse.json()
 }
 
+export async function getLeadsCount () {
+  const rawResponse = await fetch('/api/enquires_count', {
+    method: 'GET',
+    credentials: 'same-origin',
+    headers: {
+      'Accept': 'application/json',
+      'Content-Type': 'application/json'
+    }
+  })
+  return rawResponse.json()
+}
+
 export async function getLimitedEnquires (limit, offset) {
   const rawResponse = await fetch('/api/limited_enquiries?limit=' + limit + '&offset=' + offset, {
     method: 'GET',
