@@ -819,7 +819,9 @@
       "confirmationCode": "Confirmation code",
       "confirmCode": "Confirm code",
       "modifyPhoneNumber": "Modify phone number",
-      "yourDetailsHaveBeenSuccessfullyVerified": "Your details have been successfully verified. We look forward to your visit."
+      "yourDetailsHaveBeenSuccessfullyVerified": "Your details have been successfully verified. We look forward to your visit.",
+      "location": "Location",
+      "company": "Company"
     }
   }
 }

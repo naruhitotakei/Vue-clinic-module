@@ -27,7 +27,8 @@ const getConfig = (request, response, ip, premiseId) => {
             prm_company_premise.premise_post_code as post_code,
             prm_company_premise.premise_phone_number as phone_number,
             prm_company_premise.premise_city as city,
-            prm_company.prm_client_id as client_id
+            prm_company.prm_client_id as client_id,
+            prm_company.company_name as company_name
         FROM prm_company_premise
         JOIN prm_company ON prm_company_premise.company_id = prm_company.company_id
         WHERE premise_id = $1
@@ -49,6 +50,7 @@ const getConfig = (request, response, ip, premiseId) => {
                 name: premise.name,
                 address: `${premise.street} ${premise.house_number}, ${premise.post_code} ${premise.city}`,
                 client_id: premise.client_id,
+                company_name: premise.company_name,
                 phone_number: premise.phone_number,
             }
         })

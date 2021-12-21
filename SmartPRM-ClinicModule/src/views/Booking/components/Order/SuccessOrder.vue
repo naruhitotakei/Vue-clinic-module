@@ -1,30 +1,42 @@
 <template>
   <div>
-    <div>you have successfully booked an appointment</div>
+    <h3>You have successfully booked an appointment!</h3>
+    <div class="mt-3"></div>
     <div>
       {{ $t('public.onlineBooking.selectedSlot') }}:
-      {{ order.appointmentSlot.starts_at | formatFullDate({ lang: $i18n.locale }) }}
-      {{ $t('public.onlineBooking.at') }}
-      {{ time }}
+      <b>
+        {{ order.appointmentSlot.starts_at | formatFullDate({ lang: $i18n.locale }) }}
+        {{ $t('public.onlineBooking.at') }}
+        {{ time }}
+      </b>
     </div>
     <div>
       {{ $t('public.onlineBooking.location') }}:
-      {{ premise.name }}, {{ premise.address }}
+      <b>
+        {{ premise.name }}, {{ premise.address }}
+      </b>
     </div>
     <div>
       {{ $t('public.onlineBooking.company') }}:
-      {{ }}
+      <b>
+        {{ premise.company_name }}
+      </b>
     </div>
     <div>
       {{ $t('public.onlineBooking.service') }}:
-      {{ order.service.text }}
+      <b>
+        {{ order.service.text }}
+      </b>
     </div>
     <div>
       {{ $t('public.onlineBooking.doctor') }}:
-      {{ order.appointmentSlot.name }}
+      <b>
+        {{ order.appointmentSlot.name }}
+      </b>
     </div>
+    <div class="mt-3"></div>
 
-    <button @click="$emit('update:order', null)">one reservation</button>
+    <b-button variant="primary" @click="$emit('update:order', null)">Book another appointment</b-button>
   </div>
 </template>
 

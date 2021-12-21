@@ -811,7 +811,9 @@
       "confirmationCode": "Potrditvena koda",
       "confirmCode": "Potrdi kodo",
       "modifyPhoneNumber": "Spremeni telefonsko številko",
-      "yourDetailsHaveBeenSuccessfullyVerified": "Vaši podatki so bili potrjeni. Veselimo se vašega obiska."
+      "yourDetailsHaveBeenSuccessfullyVerified": "Vaši podatki so bili potrjeni. Veselimo se vašega obiska.",
+      "location": "sl - Location",
+      "company": "sl - Company"
     }
   }
 }
