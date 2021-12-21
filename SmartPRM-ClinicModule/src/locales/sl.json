@@ -811,6 +811,7 @@
       "pleaseEnterYourMobileNumber": "sl - Please enter your mobile phone number so we can verify and confirm your booking",
       "phoneNumber": "Telefonska številka",
       "phone": "Telefon",
+      "countryCode": "sl - Country code",
       "sendVerificationCode": "Pošlji potrditveno kodo",
       "theCodeHasBeenSentTo": "Koda je bila poslana na",
       "smsVerificationCode": "Sms potrditvena koda:",

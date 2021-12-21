@@ -58,6 +58,10 @@
                 :default-country-code="countryCode"
                 :preferred-countries="['SI', 'IT', 'AT']"
                 no-example
+                :translations="{
+                  countrySelectorLabel: $t('public.onlineBooking.countryCode'),
+                  phoneNumberLabel: '',
+                }"
               />
               <div class="invalid-feedback">
                 <span>{{ errors[0] }}</span>

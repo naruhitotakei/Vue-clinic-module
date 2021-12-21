@@ -814,6 +814,7 @@
       "pleaseEnterYourMobileNumber": "Please enter your mobile phone number so we can verify and confirm your booking",
       "phoneNumber": "Phone number",
       "phone": "Phone",
+      "countryCode": "Country code",
       "sendVerificationCode": "Send verification code",
       "theCodeHasBeenSentTo": "The code has been sent to",
       "smsVerificationCode": "Sms verification code:",
