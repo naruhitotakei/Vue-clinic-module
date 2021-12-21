@@ -1,109 +1,105 @@
 <template>
-  <div class="text-center">
-    <b-button-group class="mt-2">
-      <b-button :variant="activeBtnVariant(0)" @click="changeTab(0)">{{ $t('public.onlineBooking.pickService') }}</b-button>
-      <b-button :variant="activeBtnVariant(1)" @click="changeTab(1)" :disabled="!serviceChoosed">{{ $t('public.onlineBooking.chooseTime') }}</b-button>
-      <b-button :variant="activeBtnVariant(2)" @click="changeTab(2)" :disabled="!serviceChoosed || !selectedSlot">{{ $t('public.onlineBooking.review') }}</b-button>
-    </b-button-group>
+  <div>
+    <div class="text-center">
+      <b-button-group class="mt-2">
+        <b-button
+          v-for="({ name, text, isEnabled }, index) in stepOrder"
+          :key="name"
+          :variant="activeStep === name ? 'primary': null"
+          @click="activeStep = name"
+          :disabled="isEnabled === false || stepOrder.findIndex((step) => step.name === lastStep) < index"
+        >
+          {{ $t(`public.onlineBooking.${text}`) }}
+        </b-button>
+      </b-button-group>
+    </div>
 
-    <!-- <Consultations/> -->
-    <Services
-    v-if="tabIndex === 0"
-    :services="servicesList"
-    :selectedServices="selectedServices"
-    @row-selected="selectServiceHandler"
-    @change-tab="changeTab"
-    />
-    <ChooseTimeTab v-else-if="tabIndex === 1"
-    :services="selectedServices"
-    :totalPrice="totalPrice"
-    :selectedDate="selectedDate"
-    :doctor="selectedDoctor"
-    :time="selectedTime"
-    :selectedSlot="selectedSlot"
-    @select-date="dateSelectionHandler"
-    @select-doctor="doctorSelectionHandler"
-    @change-tab="changeTab"
-    />
-    <ReviewTab v-else-if="tabIndex === 2"
-    :selectedSlot="selectedSlot"
-    :services="selectedServices"
-    :totalPrice="totalPrice"
-    @change-tab="changeTab"
-    />
+    <KeepAlive>
+      <component :is="activeStep" :form.sync="form" @next="next"></component>
+    </KeepAlive>
   </div>
 </template>
 
 <script>
-import ChooseTimeTab from './ChooseTimeTab'
-import ReviewTab from './ReviewTab'
-// import { xray } from '../../../config/pluginInit'
-import Services from './Services'
-// import Consultations from './Consultations'
-import { servicesList } from '@/views/Booking/booking-data.js'
+import { defineComponent } from '@vue/composition-api'
+import ChooseTimeTab from './ChooseTimeTab.vue'
+import ReviewTab from './ReviewTab.vue'
+import Services from './Services.vue'
 
-export default {
-  components: {
-    Services,
-    ChooseTimeTab,
-    ReviewTab
-    // Consultations
-  },
+const Step = {
+  Services: 'Services',
+  ChooseTimeTab: 'ChooseTimeTab',
+  ReviewTab: 'ReviewTab'
+}
+
+export default defineComponent({
   name: 'Order',
-  data: function () {
+
+  components: {
+    ChooseTimeTab,
+    ReviewTab,
+    Services
+  },
+
+  data () {
     return {
-      tabIndex: 0,
-      timeChoosed: false,
-      servicesList,
-      selectedServices: [],
-      totalPrice: 0,
-      selectedDate: null,
-      selectedDoctor: null,
-      selectedTime: '',
-      selectedSlot: null
+      form: {
+        service: null,
+        appointmentSlot: null
+      },
+      activeStep: Step.Services,
+      lastStep: Step.Services
     }
   },
+
   computed: {
-    serviceChoosed: function () {
-      return !!this.selectedServices.length
+    stepOrder () {
+      return [
+        {
+          name: Step.Services,
+          text: 'pickService',
+          isEnabled: true
+        },
+        {
+          name: Step.ChooseTimeTab,
+          text: 'chooseTime',
+          isEnabled: this.form.service != null
+        },
+        {
+          name: Step.ReviewTab,
+          text: 'review',
+          isEnabled: this.form.service != null && this.form.appointmentSlot != null
+        }
+      ]
     }
   },
-  watch: {
-    selectedServices: {
-      immediate: true,
-      handler: function (value) {
-        this.totalPrice = value.reduce((total, service) => total + service.price, 0)
-      }
-    }
-  },
+
   methods: {
-    selectServiceHandler ({ services }) {
-      this.selectedServices = services
-    },
-    activeBtnVariant: function (tabIindex) {
-      return tabIindex === this.tabIndex ? 'primary' : null
-    },
-    dateSelectionHandler: function (date) {
-      this.selectedDate = date
-    },
-    doctorSelectionHandler: function (data) {
-      this.selectedDoctor = data.doctor
-      this.selectedTime = data.time
-      this.selectedSlot = {
-        date: this.selectedDate,
-        time: data.time,
-        doctor: data.doctor
+    async next (length = 1) {
+      const activeStepIndex = this.stepOrder.findIndex(
+        ({ name }) => name === this.activeStep
+      )
+      const nextStepIndex = activeStepIndex + length
+
+      if (nextStepIndex <= this.stepOrder.length - 1) {
+        this.activeStep = this.stepOrder[activeStepIndex + length].name
+
+        const lastStepIndex = this.stepOrder.findIndex(
+          ({ name }) => name === this.lastStep
+        )
+
+        if (nextStepIndex > lastStepIndex) {
+          this.lastStep = this.activeStep
+        }
+
+        return
       }
+
+      await this.submit()
     },
-    changeTab: function (tab) {
-      if (tab === 0) {
-        this.tabIndex = tab
-      } else if (tab === 1 && !!this.selectedServices.length) {
-        this.tabIndex = tab
-      } else if (tab === 2 && !!this.selectedServices.length && this.selectedSlot) {
-        this.tabIndex = tab
-      }
+    async submit () {
+      this.$emit('confirmed', this.form)
     }
   }
-}
+})
 </script>

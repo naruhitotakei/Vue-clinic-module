@@ -1,32 +1,38 @@
 <template>
   <div>
-  <b-container class="time-row" :class="{expanded}" fluid>
-    <b-row ref="timeRow">
-      <b-col lg="6" xl="6" v-for="(doctor, index) in doctors" :key="`title_doctor_${index}`" class="p-1">
-        <div
-        class="doctor-item d-flex align-items-center active-element p-1 rounded-circle"
-        :class="{'active': !!activeDoctor && activeDoctor.name === doctor.name}"
-        @click="$emit('select-doctor', doctor)"
-        >
-        <img class="img-fluid avatar-40 rounded-circle mr-1" :src="doctor.img" :alt="doctor.name">
-        <p class="mb-0">{{doctor.name}}</p>
-        </div>
-      </b-col>
-    </b-row>
-  </b-container>
-  <div
-    v-if="contentHeight > 60"
-    class="show-more rounded-circle mt-1"
-    @click="expanded = !expanded"
-  >
-    {{ $t('public.onlineBooking.showMore') }}
-  </div>
+    <b-container class="time-row" :class="{ expanded }" fluid>
+      <b-row ref="timeRow">
+        <b-col lg="6" xl="6" v-for="doctor in doctors" :key="doctor.id" class="p-1">
+          <div
+            class="doctor-item d-flex align-items-center active-element p-1 rounded-circle"
+            :class="{'active': !!appointmentSlot && appointmentSlot.id === doctor.id}"
+            @click="$emit('update:appointment-slot', doctor)"
+          >
+          <img class="img-fluid avatar-40 rounded-circle mr-1" :src="`/api/files/avatar/${doctor.doctor_id}`" :alt="doctor.name">
+          <p class="mb-0">{{ doctor.name }}</p>
+          </div>
+        </b-col>
+      </b-row>
+    </b-container>
+    <div
+      v-if="contentHeight > 60"
+      class="show-more rounded-circle mt-1"
+      @click="expanded = !expanded"
+    >
+      {{ $t('public.onlineBooking.showMore') }}
+    </div>
   </div>
 </template>
 
 <script>
-export default {
+import { defineComponent } from '@vue/composition-api'
+
+export default defineComponent({
   props: {
+    appointmentSlot: {
+      type: Object,
+      default: null
+    },
     doctors: Array,
     activeDoctor: Object
   },
@@ -47,8 +53,9 @@ export default {
       (this.contentHeight !== height) && (this.contentHeight = height)
     }
   }
-}
+})
 </script>
+
 <style scoped lang="scss">
 @import "~@/assets/scss/app-vars.scss";
 .time-row {

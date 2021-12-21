@@ -372,7 +372,7 @@
                                                   <li v-for="(message,index) in smsList" :key="index + message.created_at" id="smsList" class="d-flex align-items-center justify-content-between mb-3">
                                                       <div>
                                                           <h6 :id="`message-${message.id}`">{{message.name}}</h6>
-                                                          <b-tooltip class="tooltip-content" :target="`message-${message.id}`" triggers="hover" placement="right">
+                                                          <b-tooltip class="tooltip-content" :target="`message-${message.id}`" triggers="hover" placement="rightbottom">
                                                             {{ message.content }}
                                                           </b-tooltip>
                                                           <small class="mb-0">{{message.created_at | formatDateAndTime}} - {{ message.delivered_at ? $t('EPR.overview.deliveredSms') :  $t('EPR.overview.notDeliveredSms')}}</small>
@@ -2400,6 +2400,11 @@ canvas {
   {
     display: none;
   }
+}
+
+.tooltip .tooltip-inner {
+  max-width: 100% !important;
+  width: 400px !important;
 }
 
 @media (max-width: 992px) {
