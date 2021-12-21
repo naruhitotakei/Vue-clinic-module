@@ -9,10 +9,10 @@
      <b-table
       :items="[form.service]"
       :fields="[
-        { key: 'serviceName' },
-        { key: 'doctor' },
-        { key: 'time' },
-        { key: 'price' }
+        { key: 'serviceName', label: $t('public.onlineBooking.service') },
+        { key: 'doctor', label: $t('public.onlineBooking.doctor') },
+        { key: 'time', label: $t('public.onlineBooking.time') },
+        { key: 'price', label: $t('public.onlineBooking.price') }
       ]"
       responsive="sm"
     >

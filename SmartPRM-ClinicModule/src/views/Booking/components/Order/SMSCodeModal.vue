@@ -115,7 +115,9 @@ export default {
   },
   data: function () {
     return {
-      countryCode: this.$route.query.country ? this.$route.query.country : 'SI',
+      countryCode: this.$route.query.country
+        ? this.$route.query.country.toUpperCase()
+        : 'SI',
       phone: null,
       fieldset: {
         firstName: null,
