@@ -705,7 +705,6 @@ export default {
         this.colors = response
         const lastLabel = this.colors.pop()
         this.colors.unshift(lastLabel)
-        console.log('Colors... ', this.colors)
       })
     },
     getLabelText (type) {
@@ -947,6 +946,7 @@ export default {
         // eventResourceId: event.extendedProps.eventResourceId,
         location: location,
         ...event.extendedProps,
+        patient_attended: event.extendedProps.patient_attended ? event.extendedProps.patient_attended : 'Unknown',
         assignmentDate: new Date(event.extendedProps.assignmentDate)
 
       }
