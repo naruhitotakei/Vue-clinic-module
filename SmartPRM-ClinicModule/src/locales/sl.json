@@ -146,7 +146,9 @@
     "product_group": "Skupina produkta",
     "appointmentCanceledInAdvanceByClinic": "Klinika je preklicala termin",
     "appointmentCanceledInAdvanceByPatient": "Pacient je preklical termin",
-    "requiredFields": "Polja označena z * morajo biti izpolnjena"
+    "requiredFields": "Polja označena z * morajo biti izpolnjena",
+    "eventMoveBetweenResources": "Ali ste prepričani da želite preložiti ta termin na drugega zdravnika?",
+    "eventTimeChange": "Ali ste prepričani da želite spremeniti čas tega termina?"
   },
   "patients": {
     "patientsHeader": "Pacienti",
@@ -217,7 +219,8 @@
       "female": "Ženski",
       "unspecified": "Neopredeljeno",
       "address": "Naslov",
-      "postCodeCity": "Poštna številka, Mesto",
+      "postCode": "Poštna številka",
+      "city": "Mesto",
       "country": "Država",
       "region": "Regija",
       "insurance": "Številka zavarovanja, zavarovan pri",

@@ -64,7 +64,7 @@
                         </div>
                     </template>
                     <template v-slot:body>
-                        <b-table v-if="openAssignments.length > 0"
+                        <!-- <b-table v-if="openAssignments.length > 0"
                           borderless
                           id="openAssignmentsTable"
                           :items="openAssignments"
@@ -75,19 +75,55 @@
                           <template v-slot:cell(dentist)="data">
                             {{ patientsDentist(data.item) }}
                           </template>
-                        </b-table>
-                        <p v-else>{{ $t('home.noOpenAssignments') }}</p>
-                    </template>
-                    <template>
-                        <b-collapse id="collapse-6" class="mb-2"> </b-collapse>
-                        <div class="ml-4 pb-2">
-                            <b-pagination v-if="hideOpenAssignmentsPagination"
-                                          v-model="currentOpenAssignmentsPage"
-                                          :total-rows="openAssignments.length"
-                                          :per-page="openAssignmentsPerPage"
-                                          aria-controls="openAssignmentsTable">
-                            </b-pagination>
+                        </b-table> -->
+                        <!-- <template>
+                          <b-collapse id="collapse-6" class="mb-2"> </b-collapse>
+                          <div class="ml-4 pb-2">
+                              <b-pagination v-if="hideOpenAssignmentsPagination"
+                                            v-model="currentOpenAssignmentsPage"
+                                            :total-rows="openAssignments.length"
+                                            :per-page="openAssignmentsPerPage"
+                                            aria-controls="openAssignmentsTable">
+                              </b-pagination>
+                          </div>
+                      </template> -->
+                        <b-list-group class="list-group-flush" id="openTodos">
+                          <b-list-group-item
+                              v-for="(item, index) in openAssignments"
+                              :key="index"
+                          >
+                            <div :class="{ 'taskIsActive' : !item.completed}">
+                              <div>
+                                <b-checkbox v-model="item.completed" name="check-button" inline
+                                  :key="index"
+                                  @change="finishAssignment(item.id, $event)"><strong>{{ item.description }}</strong></b-checkbox>
+                              </div>
+                              <div class="d-flex align-items-center justify-content-between">
+                                <div>
+                                  <span class="text-left">{{ item.patient_name }}</span>&nbsp;
+                                  <span class="text-left">{{ patientsDentist(item) ? `(${patientsDentist(item)})` : '' }}</span>
+                                </div>
+                                <div class="d-flex align-items-center">
+                                  <span class="text-right text-width-150">{{ item.due_at | formatDate }}</span>
+                                  <!-- <b-button variant=" iq-bg-success mr-1 mb-1" size="sm" style="margin-left: 5%;" @click="editAssignments(item)">
+                                  <i class="ri-ball-pen-fill m-0"></i>
+                                </b-button> -->
+                                </div>
+                              </div>
+                            </div>
+                          </b-list-group-item>
+                      </b-list-group>
+                      <template>
+                        <div class="mt-4 ml-2">
+                            <p v-if="openAssignments.length === 0">{{ $t('home.noOpenAssignments') }}</p>
+                            <b-pagination
+                              v-if="openAssignments.length > 10"
+                              v-model="currentOpenAssignmentsPage"
+                              :total-rows="openAssignments.length"
+                              :per-page="openAssignmentsPerPage"
+                              aria-controls="openTodos"></b-pagination>
                         </div>
+                      </template>
                     </template>
                 </iq-card>
             </b-col>
@@ -393,6 +429,7 @@ import { getDoctorList, getLabels } from '@/services/calendarService'
 import { sso, getDentists } from '@/services/userService'
 import DatePicker from 'vue2-datepicker'
 import 'vue2-datepicker/index.css'
+import { finishAssignment } from '../../services/assignmentsService'
 
 import _ from 'lodash'
 const body = document.getElementsByTagName('body')
@@ -401,6 +438,7 @@ export default {
   components: { IqCard, DatePicker },
   data () {
     return {
+      userId: null,
       doctorsData: [],
       datesForCurrentWeek: [],
       dataForChart: [],
@@ -567,6 +605,7 @@ export default {
     getUserLogin () {
       sso().then(response => {
         if (typeof response !== 'string') {
+          this.userId = response.id
           getTodaysAppointments(this.$i18n.locale).then(response => {
             if (Array.isArray(response)) {
               response.map(appointment => {
@@ -731,6 +770,10 @@ export default {
           return country.hasOwnProperty('percentage')
         })
       })
+    },
+    finishAssignment (id, finished) {
+      const completedBy = this.userId
+      finishAssignment(id, finished, completedBy).then(response => {})
     }
   }
 }

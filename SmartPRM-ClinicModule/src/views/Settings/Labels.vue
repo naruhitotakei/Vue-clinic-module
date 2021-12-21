@@ -32,6 +32,9 @@
                       <strong class="loading">Loading...</strong>
                     </div>
                   </template>
+                  <template v-slot:cell(text)="data">
+                    <span :class="data.item.text === 'None' ? 'text-danger' : ''">{{ data.item.text }}</span>
+                  </template>
                   <template v-slot:cell(color)="data">
                     <span v-if="data.item.color" class="d-flex">
                        <span
@@ -126,6 +129,8 @@ export default {
       this.isDataLoaded = false
       getLabels(lang).then(data => {
         this.labels = data
+        const lastLabel = this.labels.pop()
+        this.labels.unshift(lastLabel)
         this.isDataLoaded = true
       })
     },
@@ -135,13 +140,15 @@ export default {
       })
     },
     onLabelClick (item) {
-      this.formData = {
-        id: item.id,
-        text: item.text,
-        color: item.color,
-        lang: item.language
+      if (item.text !== 'None') {
+        this.formData = {
+          id: item.id,
+          text: item.text,
+          color: item.color,
+          lang: item.language
+        }
+        this.modalLabelsShow = true
       }
-      this.modalLabelsShow = true
     },
     addLabel () {
       this.formData.lang = this.$i18n.locale
