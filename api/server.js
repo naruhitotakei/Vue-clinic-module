@@ -47,6 +47,7 @@ const daoProducts = require('./dao/daoProducts')
 const daoBusiness = require('./dao/daoBusiness')
 const daoCountries = require('./dao/daoCountries')
 const daoCalendar = require('./dao/daoCalendar')
+const daoAppointments = require('./dao/daoAppointments')
 const daoCompanies = require('./dao/daoCompanies')
 const daoLocations = require('./dao/daoLocations')
 const daoCompanyPremises = require('./dao/daoCompanyPremises')
@@ -82,6 +83,7 @@ const advPaymentsPermission = "Advance Payments"
 const offersPermission = "Offers"
 const productsPermission = "Services and Products"
 const calendarPermission = "Calendar"
+const appointmentsPermission = "Appointments"
 const locationsPermission = "Locations"
 const appointmentSlotsPermission = "Free Slots"
 const usersPermission = "Users"
@@ -295,6 +297,34 @@ app.delete('/api/calendar/label/:id', (req, res) => {
     daoCalendar.deleteAppointmentsLabel(req, res, id)
   else
     res.status(401).json("OK: user unauthorized")
+});
+
+///////////////////////////////////
+// appointments
+///////////////////////////////////
+
+app.get('/api/appointments/locations', (req, res) => {
+    if(req.session.prm_user && req.session.prm_user.permissions && checkPermission(req.session.prm_user.permissions, appointmentsPermission))
+      daoAppointments.getAllAppointmentsLocations(req, res)
+    else
+      res.status(401).json("OK: user unauthorized")
+});
+
+app.get('/api/appointments/doctors', (req, res) => {
+    if(req.session.prm_user && req.session.prm_user.permissions && checkPermission(req.session.prm_user.permissions, appointmentsPermission))
+      daoAppointments.getAllAppointmentsDoctors(req, res)
+    else
+      res.status(401).json("OK: user unauthorized")
+});
+
+app.get('/api/appointments', (req, res) => {
+    const location = req.query.location
+    const doctor = req.query.doctor
+    const date = req.query.date
+    if(req.session.prm_user && req.session.prm_user.permissions && checkPermission(req.session.prm_user.permissions, appointmentsPermission))
+        daoAppointments.getAppointments(req, res, location, doctor, date)
+    else
+        res.status(401).json("OK: user unauthorized")
 });
 
 ///////////////////////////////////
