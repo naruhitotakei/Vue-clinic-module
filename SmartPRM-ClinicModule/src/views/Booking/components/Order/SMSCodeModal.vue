@@ -8,7 +8,8 @@
   >
     <template v-if="fieldset.verificationId == null">
       <ValidationObserver v-slot="{ invalid, validate }">
-        <form @submit.prevent="validate().then(sendConfirmationCode)">
+        <!-- <form @submit.prevent="validate().then(sendConfirmationCode)"> -->
+        <form @submit.prevent="validate().then(() => fieldset.verificationId = 'verificationId')">
           <div class="d-flex">
             <ValidationProvider
               :name="$t('public.onlineBooking.firstName')"

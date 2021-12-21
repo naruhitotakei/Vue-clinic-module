@@ -806,6 +806,7 @@
       "at": "at",
       "startAt": "Start at",
       "slotsAndPrices": "Slots and Prices",
+      "doctor": "Doctor",
       "confirm": "Confirm",
       "dataConfirmed": "Data confirmed",
       "confirmationOfBooking": "Confirmation of booking",
@@ -821,7 +822,9 @@
       "confirmationCode": "Confirmation code",
       "confirmCode": "Confirm code",
       "modifyPhoneNumber": "Modify phone number",
-      "yourDetailsHaveBeenSuccessfullyVerified": "Your details have been successfully verified. We look forward to your visit."
+      "yourDetailsHaveBeenSuccessfullyVerified": "Your details have been successfully verified. We look forward to your visit.",
+      "location": "Location",
+      "company": "Company"
     }
   }
 }
