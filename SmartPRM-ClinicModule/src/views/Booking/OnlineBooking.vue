@@ -1,17 +1,15 @@
 <template>
   <public-layout>
-    <!-- Tabs with card integration -->
     <b-card>
       <Order/>
     </b-card>
-
   </public-layout>
 </template>
 
 <script>
-import { xray } from '../../config/pluginInit'
-import Order from './components/Order/Order'
-import PublicLayout from '../../layouts/PublicLayout.vue'
+import { xray } from '@/config/pluginInit'
+import Order from '@/views/Booking/components/Order/Order.vue'
+import PublicLayout from '@/layouts/PublicLayout.vue'
 
 export default {
   components: {

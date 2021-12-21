@@ -1,3 +1,9 @@
+const moduleAlias = require('module-alias')
+
+moduleAlias.addAliases({
+  '~'  : __dirname,
+})
+
 const path = require('path');
 const express = require('express');
 const fileUpload = require('express-fileupload');
@@ -13,7 +19,7 @@ var cors = require('cors')
 const app = express(),
       bodyParser = require("body-parser");
       port = 3080;
-      
+
 ///////////////////////////////////
 //
 // brute force attack configuration
@@ -66,7 +72,7 @@ app.use(bodyParser.json());
 app.use(express.static(path.join(__dirname, '../prmApp/dist')));
 app.use(session({resave: true, saveUninitialized: true, secret: 'BwhFeenj9DcRqANH', cookie: { maxAge: null }}));
 app.use(rollbar.errorHandler());
- 
+
 ///////////////////////////////////
 //
 // REST SERVER
@@ -96,8 +102,8 @@ app.post('/api/login',
     userBruteforce.getMiddleware({
         key: function(req, res, next) {
             next('req.body.loginEmail');
-        } 
-    }),       
+        }
+    }),
     async function(req, res) {
         const credentials = req.body
         req.session.prm_user = await daoUser.loginUser(req, res, credentials.loginEmail, credentials.loginPassword)
@@ -106,7 +112,7 @@ app.post('/api/login',
 
 // get loged user data
 app.get('/api/login', (req, res) => {
-   if (req.session.prm_user) { 
+   if (req.session.prm_user) {
         daoUser.getUserById(req, res, req.session.prm_user.id)
    } else {
        res.status(200).json("NOK: user not logged in")
@@ -120,29 +126,29 @@ app.get('/api/logout', (req, res) => {
 });
 
 // /api/hash?password=
-app.get('/api/hash', (req, res) => { 
+app.get('/api/hash', (req, res) => {
     var password = req.param('password');
-    daoUser.hash(req, res, password) 
+    daoUser.hash(req, res, password)
 });
 
 // /api/password
 app.post('/api/password', async function(req, res) {
     const credentials = req.body
-    if (req.session.prm_user) { 
+    if (req.session.prm_user) {
         daoUser.changePassword(req, res, req.session.prm_user.email, req.session.prm_user.prm_password_hash, credentials)
     } else {
        res.status(200).json("NOK: user not logged in")
-    }    
+    }
 });
 
 // /api/password
 app.post('/api/profile', async function(req, res) {
     const data = req.body
-    if (req.session.prm_user) { 
+    if (req.session.prm_user) {
         daoUser.editProfile(req, res, data)
     } else {
        res.status(200).json("NOK: user not logged in")
-    }    
+    }
 });
 
 // /change locale
@@ -165,11 +171,11 @@ app.put('/api/sign-in-time', (req, res) => {
 });
 
 app.get('/api/dentists', async function(req, res) {
-    if (req.session.prm_user) { 
+    if (req.session.prm_user) {
         daoUser.getDentists(req, res, req.session.prm_user.prm_client_id)
     } else {
        res.status(200).json("NOK: user not logged in")
-    }    
+    }
 });
 
 app.get('/api/surgeons', async function (req, res) {
@@ -1272,7 +1278,7 @@ app.post('/api/files/avatar', async function(req, res) {
 });
 
 app.get('/api/files/avatar', async function(req, res) {
-  if(req.session.prm_user) {  
+  if(req.session.prm_user) {
       const rv = await awsS3.download('avatar-' + req.session.prm_user.id)
       if (rv.status=='OK') {
           res.writeHead(200, {
@@ -1282,7 +1288,7 @@ app.get('/api/files/avatar', async function(req, res) {
           const download = Buffer.from(rv.data.Body)
           res.end(download)
       } else {
-          res.download('./resources/avatar-default.png', 'avatar-default.png'); 
+          res.download('./resources/avatar-default.png', 'avatar-default.png');
       }
   }
   else
@@ -1428,9 +1434,10 @@ app.get('/api/config', (request, response) => {
     daoConfig.getConfig(request, response, request.ip, request.query.premiseId)
 })
 
-app.get('/api/public/free-slots', (req, res) => {
-    daoAppointmentSlots.getFreeSlotsPublic(req, res, req.query.serviceId, req.query.date)
-});
+app.use('/api/available-services', require('~/controllers/available-services'))
+app.use('/api/available-dates', require('~/controllers/available-dates'))
+app.use('/api/available-doctors', require('~/controllers/available-doctors'))
+app.use('/api/appointment-slots', require('~/controllers/appointment-slots'))
 
 app.get('/api/public/online-booking-products', (req, res) => {
     const locale = req.query.locale

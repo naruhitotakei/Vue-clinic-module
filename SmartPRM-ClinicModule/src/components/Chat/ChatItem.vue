@@ -13,10 +13,10 @@
   </div>
 </template>
 <script>
-export default {
+export default defineComponent({
   name: 'ChatItem',
   props: {
     item: { type: Object }
   }
-}
+})
 </script>
