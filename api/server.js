@@ -333,6 +333,26 @@ app.get('/api/appointments', (req, res) => {
         res.status(401).json("OK: user unauthorized")
 });
 
+app.put('/api/appointments/update_interest', (req, res) => {
+    const appointmentID = req.body.id
+    const levelOfInterest = req.body.interest
+
+    if (req.session.prm_user && req.session.prm_user.permissions && checkPermission(req.session.prm_user.permissions, appointmentsPermission))
+        daoAppointments.updateLevelOfInterest(req, res, appointmentID, levelOfInterest)
+    else
+        res.status(401).json("OK: user unauthorized")
+});
+
+app.put('/api/appointments/update_notes', (req, res) => {
+    const appointmentID = req.body.id
+    const notes = req.body.notes
+
+    if (req.session.prm_user && req.session.prm_user.permissions && checkPermission(req.session.prm_user.permissions, appointmentsPermission))
+        daoAppointments.updateNotes(req, res, appointmentID, notes)
+    else
+        res.status(401).json("OK: user unauthorized")
+});
+
 ///////////////////////////////////
 // free slots
 ///////////////////////////////////

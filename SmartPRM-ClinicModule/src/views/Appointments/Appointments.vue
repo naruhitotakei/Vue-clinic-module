@@ -32,12 +32,13 @@
           </div>
         </template>
         <template v-slot:body>
-          <div class="card" v-for="appointment in appointments" :key="appointment.id">
+          <!-- Desktop version -->
+          <div class="card forDesktop" v-for="appointment in appointments" :key="appointment.id">
             <b-row class="card-titles no-margin">
               <b-col lg="1" md="1">
                 Time
               </b-col>
-              <b-col lg="2" md="2">
+              <b-col lg="1" md="1">
                 Name
               </b-col>
               <b-col lg="2" md="2">
@@ -49,28 +50,164 @@
               <b-col lg="2" md="2">
                 Attendance
               </b-col>
-              <b-col lg="2" md="2">
+              <b-col lg="3" md="3">
                 Interest level
               </b-col>
             </b-row>
             <b-row class="no-margin pt-2">
               <b-col lg="1" md="1">
-                <p>{{ appointment.time }}</p>
+                <p class="black-text">{{ appointment.time }}</p>
+              </b-col>
+              <b-col lg="1" md="1">
+                <p class="black-text">{{ appointment.enquiry_name + ' ' + appointment.enquiry_last_name }}</p>
               </b-col>
               <b-col lg="2" md="2">
-                <p>{{ appointment.enquiry_name + ' ' + appointment.enquiry_last_name }}</p>
-              </b-col>
-              <b-col lg="2" md="2">
-                <p>{{ appointment.product_name }}</p>
+                <p class="black-text">{{ appointment.product_name }}</p>
               </b-col>
               <b-col lg="3" md="3">
-                <p>{{ appointment.doctor_name }}</p>
+                <p class="black-text">{{ appointment.doctor_name }}</p>
               </b-col>
               <b-col lg="2" md="2">
-                -
+                <p v-if="!appointment.attendance" class="black-text">-</p>
+                <p v-if="appointment.attendance" class="black-text">{{ appointment.attendance }}</p>
               </b-col>
-              <b-col lg="2" md="2">
-                -
+              <b-col lg="3" md="3">
+                <b-button-group class="align-center button-group-style">
+                  <b-button
+                    v-if="appointment.level_of_interest == 'Not interested' || appointment.level_of_interest == 'Not Interested'"
+                    size="sm"
+                    variant="primary"
+                  >
+                    Not Interested
+                  </b-button>
+                  <b-button
+                    v-else
+                    size="sm"
+                    variant="info"
+                    @click="handleUpdateLevelOfInterest(appointment.id, 'Not Interested')"
+                  >
+                    Not Interested
+                  </b-button>
+                  <b-button
+                    v-if="appointment.level_of_interest == 'Interested'"
+                    size="sm"
+                    variant="primary"
+                  >
+                    Interested
+                  </b-button>
+                  <b-button
+                    v-else
+                    size="sm"
+                    variant="info"
+                    @click="handleUpdateLevelOfInterest(appointment.id, 'Interested')"
+                  >
+                    Interested
+                  </b-button>
+                  <b-button
+                    v-if="appointment.level_of_interest == 'Very interested' || appointment.level_of_interest == 'Very Interested'"
+                    size="sm"
+                    variant="primary"
+                  >
+                    Very Interested
+                  </b-button>
+                  <b-button
+                    v-else
+                    size="sm"
+                    variant="info"
+                    @click="handleUpdateLevelOfInterest(appointment.id, 'Very Interested')"
+                  >
+                    Very Interested
+                  </b-button>
+                </b-button-group>
+              </b-col>
+            </b-row>
+            <b-row class="no-margin pt-2 mb-3">
+              <b-form-textarea
+                id="notes-textarea"
+                placeholder="Enter notes..."
+                rows="4"
+                max-rows="6"
+                v-model="appointment.notes"
+                @blur="handleUpdateNotes($event, appointment.id)"
+              ></b-form-textarea>
+            </b-row>
+          </div>
+
+          <!-- Mobile version -->
+          <div class="card forMobile" v-for="appointment in appointments" :key="appointment.id">
+            <b-row class="no-margin flexMobileParent">
+              <b-col md="3" sm="3" class="col-title-sm">Time:</b-col>
+              <b-col md="9" sm="9" class="col-data-sm"><p class="black-text">{{ appointment.time }}</p></b-col>
+            </b-row>
+            <b-row class="no-margin flexMobileParent">
+              <b-col md="3" sm="3" class="col-title-sm">Name:</b-col>
+              <b-col md="9" sm="9" class="col-data-sm"><p class="black-text">{{ appointment.enquiry_name + ' ' + appointment.enquiry_last_name }}</p></b-col>
+            </b-row>
+            <b-row class="no-margin flexMobileParent">
+              <b-col md="3" sm="3" class="col-title-sm">Product:</b-col>
+              <b-col md="9" sm="9" class="col-data-sm"><p class="black-text">{{ appointment.product_name }}</p></b-col>
+            </b-row>
+            <b-row class="no-margin flexMobileParent">
+              <b-col md="3" sm="3" class="col-title-sm">Doctor:</b-col>
+              <b-col md="9" sm="9" class="col-data-sm"><p class="black-text">{{ appointment.doctor_name }}</p></b-col>
+            </b-row>
+            <b-row class="no-margin flexMobileParent">
+              <b-col md="3" sm="3" class="col-title-sm">Attendance:</b-col>
+              <b-col md="9" sm="9" class="col-data-sm">
+                <p v-if="!appointment.attendance" class="black-text">-</p>
+                <p v-if="appointment.attendance" class="black-text">{{ appointment.attendance }}</p>
+              </b-col>
+            </b-row>
+            <b-row class="no-margin flexMobileParent">
+              <b-col md="3" sm="3" class="col-title-sm">Interest level:</b-col>
+              <b-col md="9" sm="9" class="col-data-sm">
+                <b-button-group class="align-center button-group-style">
+                  <b-button
+                    v-if="appointment.level_of_interest == 'Not interested' || appointment.level_of_interest == 'Not Interested'"
+                    size="sm"
+                    variant="primary"
+                  >
+                    Not Interested
+                  </b-button>
+                  <b-button
+                    v-else
+                    size="sm"
+                    variant="info"
+                    @click="handleUpdateLevelOfInterest(appointment.id, 'Not Interested')"
+                  >
+                    Not Interested
+                  </b-button>
+                  <b-button
+                    v-if="appointment.level_of_interest == 'Interested'"
+                    size="sm"
+                    variant="primary"
+                  >
+                    Interested
+                  </b-button>
+                  <b-button
+                    v-else
+                    size="sm"
+                    variant="info"
+                    @click="handleUpdateLevelOfInterest(appointment.id, 'Interested')"
+                  >
+                    Interested
+                  </b-button>
+                  <b-button
+                    v-if="appointment.level_of_interest == 'Very interested' || appointment.level_of_interest == 'Very Interested'"
+                    size="sm"
+                    variant="primary"
+                  >
+                    Very Interested
+                  </b-button>
+                  <b-button
+                    v-else
+                    size="sm"
+                    variant="info"
+                    @click="handleUpdateLevelOfInterest(appointment.id, 'Very Interested')"
+                  >
+                    Very Interested
+                  </b-button>
+                </b-button-group>
               </b-col>
             </b-row>
           </div>
@@ -86,7 +223,9 @@ import { xray } from '../../config/pluginInit'
 import {
   getAppointmentsLocations,
   getAppointmentsDoctors,
-  getAppointments
+  getAppointments,
+  updateLevelOfInterest,
+  updateNotes
 } from '../../services/appointments'
 
 export default {
@@ -152,6 +291,20 @@ export default {
           })
         }
       })
+    },
+    async handleUpdateLevelOfInterest (appointmentID, levelOfInterest) {
+      updateLevelOfInterest({ 'id': appointmentID, 'interest': levelOfInterest }).then(response => {
+        if (response.success === true) {
+          this.getAppointmentsData(this.selectedLocation, this.selectedDoctor, this.dateSelected)
+        }
+      })
+    },
+    async handleUpdateNotes (e, appointmentID) {
+      updateNotes({ 'id': appointmentID, 'notes': e.target.value }).then(response => {
+        if (response.success === true) {
+          this.getAppointmentsData(this.selectedLocation, this.selectedDoctor, this.dateSelected)
+        }
+      })
     }
   }
 }
@@ -181,5 +334,70 @@ export default {
     margin-bottom: 1.5rem;
     border-bottom: 1px solid black !important;
     border-radius: 0 !important;
+  }
+  .button-group-style {
+    flex-direction: column;
+    width: 100%;
+  }
+  .button-group-style button {
+    width: 100%;
+    margin-bottom: 0.5rem !important;
+  }
+  .align-center {
+    align-items: center !important;
+  }
+  .black-text {
+    color: black;
+  }
+  #notes-textarea {
+    height: auto !important;
+  }
+  .forMobile {
+    display: none !important;
+  }
+  .flexMobileParent {
+    display: flex;
+    flex-direction: row;
+  }
+  .col-title-sm {
+    width: 30%;
+  }
+  .col-data-sm {
+    width: 70%;
+  }
+
+  /* media */
+  @media only screen and (max-width: 1401px) {
+    .filter-select {
+      min-width: 220px;
+    }
+  }
+
+   @media only screen and (max-width: 921px) {
+     .forDesktop {
+       display: none !important;
+     }
+     .forMobile {
+       display: flex !important;
+       flex-direction: column;
+     }
+   }
+
+  @media only screen and (max-width: 841px) {
+    .filters-section {
+      flex-direction: column;
+      align-items: flex-start;
+    }
+    .filter-select {
+      min-width: 300px;
+      margin-left: 0;
+      margin-bottom: 0.75rem;
+    }
+  }
+
+  @media only screen and (max-width: 481px) {
+    .filter-select {
+      min-width: 100%;
+    }
   }
 </style>

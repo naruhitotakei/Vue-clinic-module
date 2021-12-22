@@ -33,3 +33,29 @@ export async function getAppointments (filterLocation, filterDoctor, filterDate)
   })
   return rawResponse.json()
 }
+
+export async function updateLevelOfInterest (updateData) {
+  const rawResponse = await fetch('/api/appointments/update_interest', {
+    method: 'PUT',
+    credentials: 'same-origin',
+    headers: {
+      'Accept': 'application/json',
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify(updateData)
+  })
+  return rawResponse.json()
+}
+
+export async function updateNotes (updateNotesData) {
+  const rawResponse = await fetch('/api/appointments/update_notes', {
+    method: 'PUT',
+    credentials: 'same-origin',
+    headers: {
+      'Accept': 'application/json',
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify(updateNotesData)
+  })
+  return rawResponse.json()
+}

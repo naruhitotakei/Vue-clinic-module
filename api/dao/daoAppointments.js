@@ -57,8 +57,36 @@ const getAppointments = (req, res, location, doctor, date) => {
     })
 }
 
+const updateLevelOfInterest = (req, res, appointmentID, levelOfInterest) => {
+    let statement = "UPDATE appointments "
+    statement += "SET level_of_interest='" + levelOfInterest + "' "
+    statement += "WHERE id=" + appointmentID
+
+    pool.query(statement, (error, results) => {
+        if (error) {
+            throw error
+        }
+        res.status(200).json({ success: true })
+    })
+}
+
+const updateNotes = (req, res, appointmentID, notes) => {
+    let statement = "UPDATE appointments "
+    statement += "SET notes='" + notes + "' "
+    statement += "WHERE id=" + appointmentID
+
+    pool.query(statement, (error, results) => {
+        if (error) {
+            throw error
+        }
+        res.status(200).json({ success: true })
+    })
+}
+
 module.exports = {
     getAllAppointmentsLocations,
     getAllAppointmentsDoctors,
-    getAppointments
+    getAppointments,
+    updateLevelOfInterest,
+    updateNotes
 }
