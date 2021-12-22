@@ -79,30 +79,9 @@
             </b-form>
           </template>
           <template v-slot:body>
-            <div class="iq-card-body pb-0 mt-3">
-              <div class="row text-center">
-                <div class="col-sm-3 col-6">
-                  <h4 class="margin-0">€ 305 </h4>
-                  <p class="text-muted">{{ $t('statisticsForClinic.todaysIncome') }}</p>
-                </div>
-                <div class="col-sm-3 col-6">
-                  <h4 class="margin-0">€ 999 </h4>
-                  <p class="text-muted">{{ $t('statisticsForClinic.weeksIncome') }}</p>
-                </div>
-                <div class="col-sm-3 col-6">
-                  <h4 class="margin-0">€ 4999 </h4>
-                  <p class="text-muted">{{ $t('statisticsForClinic.monthsIncome') }}</p>
-                </div>
-                <div class="col-sm-3 col-6">
-                  <h4 class="margin-0">€ 90.000 </h4>
-                  <p class="text-muted">{{ $t('statisticsForClinic.yearsIncome') }}</p>
-                </div>
-              </div>
+            <div class="mt-3">
+              <apex-chart type="pie" width="100%" height="500px" :series="series" :options="chartOptions" />
             </div>
-            <div id="home-servey-chart"></div>
-            <!-- <ApexChart element="home-chart-09" :chartOption="homesurvey" v-if="$route.meta.dark"/> -->
-            <!-- <ApexChart element="home-chart-09" :chartOption="chart9" v-else/> -->
-            <apex-chart type="pie" width="100%" height="500px" :series="series" :options="chartOptions" />
           </template>
         </iq-card>
       </b-col>
@@ -163,110 +142,8 @@ export default {
       },
       series: [],
       chartOptions: {
-        // chart: {
-        //   type: 'pie',
-        //   height: 350
-        // },
         labels: []
-        // responsive: [{
-        //   breakpoint: 480,
-        //   options: {
-        //     chart: {
-        //       width: 200
-        //     },
-        //     legend: {
-        //       position: 'bottom'
-        //     }
-        //   }
-        // }]
-        // plotOptions: {
-        //   bar: {
-        //     colors: {
-        //       ranges: [{
-        //         from: -100,
-        //         to: -46,
-        //         color: '#e64141'
-        //       }, {
-        //         from: -45,
-        //         to: 0,
-        //         color: '#089bab'
-        //       }, {
-        //         from: 0,
-        //         to: 20,
-        //         color: '#FC9F5B'
-        //       }]
-        //     },
-        //     columnWidth: '80%'
-        //   }
-        // },
-        // dataLabels: {
-        //   enabled: false
-        // },
-        // yaxis: {
-        //   title: {
-        //     text: 'Total Revenue'
-        //   },
-        //   labels: {
-        //     formatter: function (y) {
-        //       return y.toLocaleString()
-        //     }
-        //   }
-        // },
-        // xaxis: {
-        //   categories: [],
-        //   labels: {
-        //   }
       }
-      // }
-      // chart9: {
-      //   series: [{
-      //     name: 'Total Revenue',
-      //     data: []
-      //   }],
-      //   chart: {
-      //     type: 'bar',
-      //     height: 350
-      //   },
-      //   plotOptions: {
-      //     bar: {
-      //       colors: {
-      //         ranges: [{
-      //           from: -100,
-      //           to: -46,
-      //           color: '#e64141'
-      //         }, {
-      //           from: -45,
-      //           to: 0,
-      //           color: '#089bab'
-      //         }, {
-      //           from: 0,
-      //           to: 20,
-      //           color: '#FC9F5B'
-      //         }]
-      //       },
-      //       columnWidth: '80%'
-      //     }
-      //   },
-      //   dataLabels: {
-      //     enabled: false
-      //   },
-      //   yaxis: {
-      //     title: {
-      //       text: 'Growth'
-      //     },
-      //     labels: {
-      //       formatter: function (y) {
-      //         return y.toFixed(0)
-      //       }
-      //     }
-      //   },
-      //   xaxis: {
-      //     categories: [],
-      //     labels: {
-      //       rotate: -90
-      //     }
-      //   }
-      // }
     }
   },
   methods: {
@@ -297,34 +174,27 @@ export default {
     setChartData (data) {
       let prNames = []
       let sumArray = []
-      // let sumOfRevenue = 0
       data.forEach(item => {
         prNames.push(item.pr_name)
-        sumArray.push(Math.floor(Number(item.sum)))
-        // sumOfRevenue += Number(item.sum)
+        const sum = Math.floor(Number(item.sum))
+        sumArray.push(sum)
       })
 
       this.series = [...sumArray]
 
       this.chartOptions = {
-        labels: [...prNames]
+        labels: [...prNames],
+        tooltip: {
+          y: {
+            formatter: function (value, { series, seriesIndex, w }) {
+              let name = String(value).replace(/\d+/g, '')
+              const numb = String(value).match(/\d/g).join('')
+              const val = name + ' ' + Number(numb).toLocaleString(undefined, { minimumFractionDigits: 0, maximumFractionDigits: 2 }) + ' €'
+              return name + ' ' + val
+            }
+          }
+        }
       }
-
-      // this.chartOptions = {
-      //   xaxis: {
-      //     categories: [...prNames]
-      //   },
-      //   yaxis: {
-      //     labels: {
-      //       formatter: function (y) {
-      //         return y.toLocaleString()
-      //       }
-      //     },
-      //     title: {
-      //       text: 'Sum of Revenue ' + sumOfRevenue.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + ' EUR'
-      //     }
-      //   }
-      // }
     },
     // getStatistics () {
     //   getClinicStatistics().then(response => {
