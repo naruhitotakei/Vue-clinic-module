@@ -1,6 +1,6 @@
 <template>
   <div class="total-card d-flex flex-column app-border overflow-hidden p-3">
-    <h4 class="primary-color" >{{ $t('public.onlineBooking.totalInfo') }}</h4>
+    <h4 class="primary-color" >{{ $t('public.onlineBooking.summary') }}</h4>
     <div class="text-left">
     <div>
       {{ $t('public.onlineBooking.date') }}:
@@ -19,18 +19,15 @@
       >
       <p class="mb-0">{{ order.appointmentSlot.name }}</p>
       </div>
+      <hr />
     </div>
     <div>
-      <div class="service-item d-flex flex-column py-2">
+      <div class="d-flex flex-column">
         <h5 class="text-left primary-color mb-1">{{ order.service.serviceName }}</h5>
         <div class="d-flex justify-content-between">
           <p class="mb-0">{{ order.service.time }}</p>
           <h5>${{ order.service.price }}</h5>
         </div>
-      </div>
-      <div class="d-flex justify-content-end align-items-end service-item pt-3">
-        <h5 class="primary-color">{{ $t('public.onlineBooking.total') }}:</h5>
-        <h4 class="ml-2">${{ order.service.price }}</h4>
       </div>
     </div>
   </div>

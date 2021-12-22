@@ -15,7 +15,7 @@
         <p class="app-font-small mb-0">{{ month }}</p>
       </div>
       <div class="price-field">
-        {{ (!availability) ? `$${totalPrice}`: availability }}
+        {{ (!availability) ? `open`: availability }}
       </div>
     </div>
   </div>

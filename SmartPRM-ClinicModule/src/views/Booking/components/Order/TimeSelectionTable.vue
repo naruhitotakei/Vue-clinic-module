@@ -43,8 +43,7 @@ export default defineComponent({
     fields () {
       return [
         { key: 'time', label: this.$t('public.onlineBooking.time') },
-        { key: 'doctors', label: this.$t('public.onlineBooking.availableDoctors') },
-        { key: 'totalPrice' }
+        { key: 'doctors', label: this.$t('public.onlineBooking.availableDoctors') }
       ]
     }
   },
