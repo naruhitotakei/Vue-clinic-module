@@ -138,7 +138,7 @@
     "viewPatient": "View Patient",
     "changeDisplayColor": "Change Appointment Color",
     "appointmentCancelled": "Appointment Cancelled by the Patient",
-    "unknown": "Unknown",
+    "unknown": "No data",
     "attended": "Attended",
     "notAttended": "Not Attended",
     "canceled": "Canceled",
