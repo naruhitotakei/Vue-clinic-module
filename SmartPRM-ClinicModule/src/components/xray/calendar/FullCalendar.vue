@@ -98,7 +98,7 @@
                                  :show-second="false"
                                  :lang="'en'"
                                  :format="'DD.MM.YYYY HH.mm'"></date-picker>
-                    <b-form-input v-if="!formData.id && !disabled" style="width: 100px; padding-top: 25px; padding-bottom: 25px;" type="number" min="1" step="5" v-model="durationMins" @input="setMinutes" placeholder="Duration" class="ml-3"></b-form-input>
+                    <b-form-input v-if="!formData.id && !disabled" style="width: 65px; padding-top: 25px; padding-bottom: 25px;" type="number" min="1" step="5" v-model="durationMins" @input="setMinutes" placeholder="Duration" class="ml-3"></b-form-input>
                     <label for="start" class="mb-0 mr-3 ml-4" :style="{ 'margin-top': '13px' }">{{ $t('calendarEvent.end') }}*</label>
                     <date-picker :disabled="disabled"
                                  required
