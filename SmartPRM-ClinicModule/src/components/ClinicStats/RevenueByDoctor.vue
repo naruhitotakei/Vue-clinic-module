@@ -101,7 +101,7 @@ export default {
           namesArray.push(item.doctor_name)
         }
 
-        dataSeries.push({ name: item.doctor_name, data: item.products })
+        // dataSeries.push({ name: item.doctor_name, data: item.products })
       })
 
       // this.series = [{
