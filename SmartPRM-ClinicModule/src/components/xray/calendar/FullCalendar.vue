@@ -356,7 +356,7 @@ export default {
       patient_attend: [
         {
           label: this.$t('calendarEvent.unknown'),
-          value: 'Unknown',
+          value: 'No data',
           checked: true
         },
         {
@@ -847,7 +847,7 @@ export default {
         end: '',
         notes: '',
         backgroundColor: 43,
-        patient_attended: 'Unknown',
+        patient_attended: 'No data',
         patient_id: '',
         patient_name: '',
         doctor_id: '',
@@ -980,7 +980,7 @@ export default {
         // eventResourceId: event.extendedProps.eventResourceId,
         location: location,
         ...event.extendedProps,
-        patient_attended: event.extendedProps.patient_attended ? event.extendedProps.patient_attended : 'Unknown',
+        patient_attended: event.extendedProps.patient_attended ? event.extendedProps.patient_attended : 'No data',
         assignmentDate: new Date(event.extendedProps.assignmentDate)
 
       }
