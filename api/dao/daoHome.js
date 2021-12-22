@@ -55,7 +55,8 @@ const getStaff = (request, response, prm_client_id, scope) => {
 }
 
 const getAssignmentsForUser = (request, response, user_id) => {
-    let statement = "SELECT description, concat(enquiries.name, ' ', enquiries.last_name) AS patient_name, prm_dentist_user_id, due_at FROM todos " 
+    let statement = "SELECT todos.*, enquiries.name AS patientname, enquiries.last_name AS patientlastname, "
+    statement += "concat(users.first_name, ' ', users.surname) AS todoname, enquiries.prm_dentist_user_id FROM todos "
     statement += "LEFT JOIN enquiries ON todos.enquiry_id = enquiries.id "
     statement += "LEFT JOIN users ON todos.user_id = users.id "
     statement += "WHERE todos.completed = false "
