@@ -10,8 +10,8 @@ const pool = new Pool({
 var moment = require('moment');
 
 const getApontments = (request, response, from, to, user_id, accessible_user_ids, selctedIds, prm_client_id, scope, lang ) => {
-    var statement = "SELECT app.id, app.starts_at, app.ends_at, app.created_at, app.note, app.product_group_id, app.enquiry_id as app_enquiry_id, app.kind, app.patient_attended, app.appointment_canceled_in_advance_by_clinic, app.doctor_id, " +
-        "app.appointment_canceled_in_advance_by_patient, app.time, app.location as app_location, app.doctor_name, app.enquiry_id, enq.name, enq.last_name, " +
+    var statement = "SELECT app.id, app.starts_at, app.ends_at, app.created_at, app.note, app.product_group_id, app.enquiry_id as app_enquiry_id, app.kind, app.patient_attended, app.appointment_canceled, app.doctor_id, app.cancelation_reason, " +
+        "app.time, app.location as app_location, app.doctor_name, app.enquiry_id, enq.name, enq.last_name, " +
         "app.attendance, app.product_id, app_s.location as app_s_location, app_s.doctor_name AS slot_doctor_name, pcl.id as prm_client_id, " +
         "pcl.client_name as prm_client_name, prd.name as prd_name, prd.group as prd_group, prd.category as prd_category, " +
         "prd.fee as prd_fee, prd.price_adjustment as prd_price_adjustment, prd.fee_type as prd_fee_type,  " +
@@ -76,19 +76,17 @@ const updateAppointments = (request, response, id, appointments) => {
     if (appointments.notes) statement += "note='" + appointments.notes + "',"
     if (appointments.patient_id) statement +="enquiry_id=" + appointments.patient_id + ","
     if (appointments.patient_attended) statement += "patient_attended='" + appointments.patient_attended + "',"
-    if (appointments.appointment_canceled_in_advance_by_patient) statement += "appointment_canceled_in_advance_by_patient=" + appointments.appointment_canceled_in_advance_by_patient + ","
-    if (appointments.appointment_canceled_in_advance_by_clinic) statement += "appointment_canceled_in_advance_by_clinic=" + appointments.appointment_canceled_in_advance_by_clinic + ","
+    if (appointments.appointment_canceled) statement += "appointment_canceled=" + appointments.appointment_canceled + ","
     if (appointments.product_groups) statement += "product_group_id='" + appointments.product_groups + "',"
     if (appointments.crmProduct) statement += "product_id=" + appointments.crmProduct + ","
     if (appointments.assignmentDate) statement += "starts_at='" + moment(appointments.assignmentDate).format('YYYY-MM-DDTHH:mm') + "', date='" + moment(appointments.assignmentDate).format('YYYY-MM-DD') + "',"
     if (appointments.backgroundColor) statement += "label_id='" + appointments.backgroundColor + "',"
     if (appointments.end) statement += "ends_at='" + moment(appointments.assignmentDate).format('YYYY-MM-DD') + 'T' + moment(appointments.end).format('HH:mm') + "',"
     if (appointments.assignmentDate) statement += "time='" + time + "',"
-    if (appointments.patient_attended === 'Attended') statement += "attendance='Attended' "
-    if (appointments.patient_attended === 'Not attended') statement += "attendance='No-show' "
-    if (appointments.patient_attended === 'Unknown') statement += "attendance='' "
-    if (appointments.appointment_canceled_in_advance_by_patient) statement += "attendance='Cancelled by Patient' "
-    if (appointments.appointment_canceled_in_advance_by_clinic) statement += "attendance='Cancelled by Lead' "
+    if (appointments.patient_attended === true) statement += "attendance='Attended' "
+    if (appointments.patient_attended === false) statement += "attendance='No-show' "
+    if (appointments.patient_attended === null) statement += "attendance='' "
+    if (appointments.appointment_canceled) statement += "attendance='Cancelled' "
     statement = statement.slice(0, -1)
     statement += " WHERE id = " + id
     pool.query(statement , (error, results) => {

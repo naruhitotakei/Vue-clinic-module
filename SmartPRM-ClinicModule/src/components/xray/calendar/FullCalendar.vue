@@ -179,13 +179,12 @@
             </template>
             <template>
                 <div class="cancelation-text font-size-18 mt-3 mb-1 row align-items-center justify-content-center w-100">
-                    <p v-if="formData.appointment_canceled_in_advance_by_clinic === true">{{ $t('calendarEvent.appointmentCanceledInAdvanceByClinic') }}</p>
-                    <p v-if="formData.appointment_canceled_in_advance_by_patient === true">{{ $t('calendarEvent.appointmentCanceledInAdvanceByPatient') }}</p>
+                    <p v-if="formData.appointment_canceled === true">{{ $t('calendarEvent.appointmentCanceled') }}</p>
                 </div>
             </template>
             <div class="modal-footer modal-footer-bt" style="width: 100%;">
                 <template v-if="disabled">
-                    <button v-if="formData.appointment_canceled_in_advance_by_clinic === false && formData.appointment_canceled_in_advance_by_patient === false || openCancelationModal === true" type="button" class="btn btn-secondary" @click="openCancelationModal = true">{{ $t('calendar.btnCancelation') }}</button>
+                    <button v-if="formData.appointment_canceled === false || openCancelationModal === true" type="button" class="btn btn-secondary" @click="openCancelationModal = true">{{ $t('calendar.btnCancelation') }}</button>
                     <button type="button" class="btn btn-secondary" @click="$emit('setModalShow', false), formData = defaultAppointment">{{ $t('calendar.btnClose') }}</button>
                     <button type="button" class="btn btn-secondary" @click="editMode">{{ $t('calendar.btnEdit') }}</button>
                     <button type="button" class="btn btn-primary" @click="viewPatient(formData.enquiry_id)">{{ $t('calendar.btnEPR') }}</button>
@@ -217,21 +216,17 @@
                      @close="closeCancelation"
                      @cancel="closeCancelation">
                 <div class="col-md-12 mb-2">
-                    <div class="d-flex justify-content-around mt-2">
+                    <div class="ml-3 mt-2">
                         <b-form-radio class="custom-radio-color"
                                       inline
-                                      v-model="formData.appointment_canceled_in_advance_by_patient"
+                                      v-model="formData.appointment_canceled"
                                       value="true"
                                       name="cancelation">
-                            {{ $t('calendarEvent.appointmentCanceledInAdvanceByPatient') }}
+                            {{ $t('calendarEvent.cancelAppointment') }}
                         </b-form-radio>
-                        <b-form-radio class="custom-radio-color"
-                                      inline
-                                      v-model="formData.appointment_canceled_in_advance_by_clinic"
-                                      value="true"
-                                      name="cancelation">
-                            {{ $t('calendarEvent.appointmentCanceledInAdvanceByClinic') }}
-                        </b-form-radio>
+                    </div>
+                    <div class="col-md-12 mt-2">
+                        <textarea row="2" v-model="formData.cancelation_reason" class="form-control form-control-disabled mt-4" id="cancelationReason" :placeholder="$t('calendarEvent.cancelationReason')" ></textarea>
                     </div>
                 </div>
             </b-modal>
@@ -356,29 +351,23 @@ export default {
       patient_attend: [
         {
           label: this.$t('calendarEvent.unknown'),
-          value: 'No data',
+          value: null,
           checked: true
         },
         {
           label: this.$t('calendarEvent.attended'),
-          value: 'Attended',
+          value: true,
           checked: false
         },
         {
           label: this.$t('calendarEvent.notAttended'),
-          value: 'Not attended',
+          value: false,
           checked: false
         }
       ],
-      appointment_canceled_in_advance_by_patient: [
+      appointment_canceled: [
         {
-          label: this.$t('calendarEvent.appointmentCanceledInAdvanceByPatient'),
-          checked: false
-        }
-      ],
-      appointment_canceled_in_advance_by_clinic: [
-        {
-          label: this.$t('calendarEvent.appointmentCanceledInAdvanceByClinic'),
+          label: this.$t('calendarEvent.appointmentCanceled'),
           checked: false
         }
       ],
@@ -401,8 +390,8 @@ export default {
         enquiry_id: '',
         product_groups: '',
         crmProduct: '',
-        appointment_canceled_in_advance_by_clinic: false,
-        appointment_canceled_in_advance_by_patient: false
+        appointment_canceled: false,
+        cancelation_reason: ''
       },
       formDataFirstModalOpened: {},
       calendarApi: null,
@@ -509,16 +498,6 @@ export default {
         this.formDataFirstModalOpened = {}
       } else {
         this.formDataFirstModalOpened = { ...this.formData }
-      }
-    },
-    'formData.appointment_canceled_in_advance_by_clinic' () {
-      if (this.formData.appointment_canceled_in_advance_by_clinic) {
-        this.formData.appointment_canceled_in_advance_by_patient = false
-      }
-    },
-    'formData.appointment_canceled_in_advance_by_patient' () {
-      if (this.formData.appointment_canceled_in_advance_by_patient) {
-        this.formData.appointment_canceled_in_advance_by_clinic = false
       }
     },
     'selectDoctor' () {
@@ -707,8 +686,7 @@ export default {
     },
     closeCancelation () {
       this.openCancelationModal = false
-      this.formData.appointment_canceled_in_advance_by_clinic = false
-      this.formData.appointment_canceled_in_advance_by_patient = false
+      this.formData.appointment_canceled = false
     },
     getLabels (lang) {
       getLabels(lang).then(response => {
@@ -741,13 +719,6 @@ export default {
       updateCalendarLabel(id, appointment).then(() => {
         // this.$emit('updateApp')
       })
-    },
-    checkRadio () {
-      if (this.formData.appointment_canceled_in_advance_by_patient) {
-        this.formData.appointment_canceled_in_advance_by_clinic = ''
-      } else {
-        this.formData.appointment_canceled_in_advance_by_patient = ''
-      }
     },
     showProps (item, prop) {
       if (this.disabled && prop === item.value) {
@@ -847,7 +818,7 @@ export default {
         end: '',
         notes: '',
         backgroundColor: 43,
-        patient_attended: 'No data',
+        patient_attended: null,
         patient_id: '',
         patient_name: '',
         doctor_id: '',
@@ -856,8 +827,7 @@ export default {
         crmProduct: '',
         location: this.locations.length === 1 ? this.locations[0].city : '',
         enquiry_id: '',
-        appointment_canceled_in_advance_by_clinic: false,
-        appointment_canceled_in_advance_by_patient: false
+        appointment_canceled: false
       }
     },
     calculateEndDate (startDate, hours, minutes) {
@@ -980,7 +950,7 @@ export default {
         // eventResourceId: event.extendedProps.eventResourceId,
         location: location,
         ...event.extendedProps,
-        patient_attended: event.extendedProps.patient_attended ? event.extendedProps.patient_attended : 'No data',
+        patient_attended: event.extendedProps.patient_attended ? event.extendedProps.patient_attended : null,
         assignmentDate: new Date(event.extendedProps.assignmentDate)
 
       }
