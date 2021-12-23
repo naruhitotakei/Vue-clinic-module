@@ -50,49 +50,34 @@ export default {
       })
     },
     setDataForChart (data) {
-      let sumArray = []
-      let namesArray = []
-      let dataSeries = []
-      data.forEach(item => {
-        const itemSum = Number(item.sum ? item.sum : 0)
-        let obj = {
-          name: item.product_name,
-          data: []
-        }
+      this.dataToExport = []
 
-        if (dataSeries.length === 0) {
-          obj.data.push(itemSum)
-          dataSeries.push(obj)
-        } else {
-          let product = dataSeries.find(value => value.name === item.product_name)
-          if (product) {
-            let existingData = Object.assign({}, product)
-            existingData.data.push(itemSum)
+      let doctors = data.map(item => item.doctor_name)
+      const uniqueDoctors = [...new Set(doctors)]
+
+      let products = data.map(item => item.product_name)
+      const uniqueProducts = [...new Set(products)]
+
+      let sumByProduct = []
+      uniqueProducts.forEach(product => {
+        const prodsByDoctor = data.filter(item => item.product_name === product)
+        const obj = { name: product, data: [] }
+        uniqueDoctors.forEach(doctor => {
+          const isProductHasDoctor = prodsByDoctor.find(item => item.doctor_name === doctor)
+          if (isProductHasDoctor) {
+            obj.data.push(Number(isProductHasDoctor.sum))
           } else {
-            obj.data.push(itemSum)
-            dataSeries.push(obj)
+            obj.data.push(0)
           }
-        }
-
-        sumArray.push(itemSum)
-        const isNameExists = namesArray.find(name => name === item.doctor_name)
-        if (!isNameExists) {
-          namesArray.push(item.doctor_name)
-        }
-
-        // dataSeries.push({ name: item.doctor_name, data: item.products })
+        })
+        sumByProduct.push(obj)
       })
 
-      // this.series = [{
-      //   data: sumArray
-      // }]
-
-      this.series = dataSeries
-      // const totalRev = sumArray.reduce((a, b) => a + b)
+      this.series = sumByProduct
 
       this.chartOptions = {
         xaxis: {
-          categories: namesArray
+          categories: uniqueDoctors
         }
       }
     }
@@ -102,6 +87,11 @@ export default {
       startDate: null,
       endDate: null,
       series: [],
+      dataToExport: [],
+      excelColumns: [
+        { label: 'Doctor', field: 'doctor' },
+        { label: 'Revenue', field: 'revenue' }
+      ],
       chartOptions: {
         chart: {
           type: 'bar',
