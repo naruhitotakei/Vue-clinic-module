@@ -36,3 +36,24 @@ function getAppointments(request, response, locale) {
     response.status(200).json(results.rows)
   })
 }
+
+async function createAppointment () {
+  const statement = /* sql */`
+    INSERT INTO appointments(
+      doctor_id,
+      doctor_name,
+      location,
+      note,
+      enquiry_id,
+      patient_attended,
+      product_id,
+      product_group_id,
+      starts_at, date,
+      label_id,
+      ends_at,
+      time,
+      created_at,
+      kind
+    )
+  `
+}

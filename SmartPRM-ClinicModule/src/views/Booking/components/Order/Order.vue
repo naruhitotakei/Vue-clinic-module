@@ -22,6 +22,7 @@
 
 <script>
 import { defineComponent } from '@vue/composition-api'
+import { createAppointment } from '@/services/appointments'
 import ChooseTimeTab from './ChooseTimeTab.vue'
 import ReviewTab from './ReviewTab.vue'
 import Services from './Services.vue'
@@ -43,10 +44,7 @@ export default defineComponent({
 
   data () {
     return {
-      form: {
-        service: null,
-        appointmentSlot: null
-      },
+      form: {},
       activeStep: Step.Services,
       lastStep: Step.Services
     }
@@ -98,7 +96,13 @@ export default defineComponent({
       await this.submit()
     },
     async submit () {
-      this.$emit('confirmed', this.form)
+      await createAppointment({
+        firstName: this.form.firstName,
+        lastName: this.form.lastName,
+        phone: this.form.phone,
+        appointmentSlotId: this.form.appointmentSlot.id
+      })
+      // this.$emit('confirmed', this.form)
     }
   }
 })

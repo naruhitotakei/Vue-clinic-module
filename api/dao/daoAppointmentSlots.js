@@ -1,6 +1,7 @@
 const dotenv = require('dotenv')
 const Pool = require('pg').Pool
 const moment = require('moment')
+const db = require('~/services/db')
 
 dotenv.config()
 const pool = new Pool({
@@ -43,6 +44,16 @@ const getFreeSlotsPublic = async ({ serviceId, date }) => {
   return await pool.query(statement, [serviceId, date])
 }
 
+async function getAppointmentSlotById(id) {
+  const statement = /* sql */`
+    SELECT * FROM appointment_slots
+    WHERE id = $1
+  `
+  const { rows } = await db.query(statement, [id])
+
+  return rows[0]
+}
+
 const createFreeSlots = (request, response, slot, prm_client_id) => {
     let time = moment(slot.start).format('YYYY-MM-DDTHH:mm')
     let statement = "INSERT INTO appointment_slots ("
@@ -75,6 +86,7 @@ const deleteFreeSlot = (request, response, id) => {
 const daoAppointmentSlots = {
     getFreeSlots,
     getFreeSlotsPublic,
+    getAppointmentSlotById,
     createFreeSlots,
     deleteFreeSlot
 }
