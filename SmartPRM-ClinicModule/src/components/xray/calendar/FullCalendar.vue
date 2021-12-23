@@ -98,7 +98,7 @@
                                  :show-second="false"
                                  :lang="'en'"
                                  :format="'DD.MM.YYYY HH.mm'"></date-picker>
-                    <!-- <strong>{{ getDurationInMinutes ? getDurationInMinutes : '' }}</strong> -->
+                    <b-form-input v-if="!formData.id && !disabled" style="width: 65px; padding-top: 25px; padding-bottom: 25px;" type="number" min="1" step="5" v-model="durationMins" @input="setMinutes" placeholder="Duration" class="ml-3"></b-form-input>
                     <label for="start" class="mb-0 mr-3 ml-4" :style="{ 'margin-top': '13px' }">{{ $t('calendarEvent.end') }}*</label>
                     <date-picker :disabled="disabled"
                                  required
@@ -110,7 +110,7 @@
                                  :minute-step="5"
                                  :show-second="false"
                                  :lang="'en'"
-                                 :format="'HH.mm'"></date-picker>
+                                 :format="'HH:mm'"></date-picker>
                 </div>
             </div>
             <div class="row align-items-center justify-content-between w-100 " v-if="!disabled || formData.notes" :class="{'mb-3': !disabled}">
@@ -299,6 +299,7 @@ export default {
   },
   data () {
     return {
+      durationMins: null,
       eventPopover: {
         show: false,
         info: null,
@@ -355,7 +356,7 @@ export default {
       patient_attend: [
         {
           label: this.$t('calendarEvent.unknown'),
-          value: 'Unknown',
+          value: 'No data',
           checked: true
         },
         {
@@ -473,10 +474,19 @@ export default {
     }
   },
   watch: {
+    durationMins (val) {
+      if (val) {
+        this.setDurationMins()
+      }
+    },
     'formData.assignmentDate' () {
       if (!this.formData.id && !this.formData.end) {
         this.formData.end = this.formData.assignmentDate
       }
+      this.setDurationMins()
+    },
+    'formData.end' () {
+      this.setDurationMins()
     },
     '$i18n.locale' () {
       this.getProductGroups(this.$i18n.locale)
@@ -574,7 +584,7 @@ export default {
     getDurationInMinutes () {
       if (this.formData.assignmentDate && this.formData.end) {
         const start = moment(this.formData.assignmentDate).format('YYYY-MM-DDTHH:mm')
-        const end = moment(this.formData.end).format('YYYY-MM-DDTHH:mm')
+        const end = moment(this.formData.end).format('HH:mm')
         let duration = moment.duration(moment(end).diff(moment(start))).asMinutes()
         if (duration && duration > 1) {
           return duration + 'Minutes'
@@ -836,8 +846,8 @@ export default {
         start: '',
         end: '',
         notes: '',
-        backgroundColor: '',
-        patient_attended: '',
+        backgroundColor: 43,
+        patient_attended: 'No data',
         patient_id: '',
         patient_name: '',
         doctor_id: '',
@@ -910,6 +920,30 @@ export default {
       this.formData.start = start
       this.formData.end = end
     },
+    setDurationMins () {
+      this.durationMins = null
+      if (this.formData.assignmentDate && this.formData.end) {
+        const start = moment(this.formData.assignmentDate).format('HH:mm')
+        const end = moment(this.formData.end).format('HH:mm')
+
+        const timeStart = new Date('01/01/2007 ' + start)
+        const timeEnd = new Date('01/01/2007 ' + end)
+
+        const duration = moment.duration(moment(timeEnd).diff(moment(timeStart))).asMinutes()
+        if (duration < 0) {
+          this.durationMins = 0
+        } else {
+          this.durationMins = duration
+        }
+      }
+    },
+    setMinutes (minutes) {
+      const value = Number(minutes)
+      if (this.formData.assignmentDate && value && (typeof value === 'number') && value > 0) {
+        const endTime = moment(this.formData.assignmentDate).add(value, 'minutes').toLocaleString()
+        this.formData.end = new Date(endTime)
+      }
+    },
     getHoursAndMinutes (hours) {
       if (hours === 24) {
         return { hours: 0, minutes: 0 }
@@ -932,13 +966,13 @@ export default {
       this.disabled = true
       let event = this.calendarApi.getEventById(selectionInfo.event.id)
       let location = this.locations.find(item => item.city === event.extendedProps.location)
-      let label = this.colors.find(color => color.id === event.extendedProps.backgroundColor)
+      // let label = this.colors.find(color => color.id === event.extendedProps.label_id)
       this.formData = {
         id: event.id,
         title: event.title,
         start: event.start,
         end: event.end,
-        backgroundColor: label,
+        backgroundColor: event.extendedProps.label_id,
         doctor_id: event.extendedProps.doctor_id,
         doctor_name: event.extendedProps.doctor_name,
         patient_id: event.extendedProps.patient_id,
@@ -946,7 +980,7 @@ export default {
         // eventResourceId: event.extendedProps.eventResourceId,
         location: location,
         ...event.extendedProps,
-        patient_attended: event.extendedProps.patient_attended ? event.extendedProps.patient_attended : 'Unknown',
+        patient_attended: event.extendedProps.patient_attended ? event.extendedProps.patient_attended : 'No data',
         assignmentDate: new Date(event.extendedProps.assignmentDate)
 
       }

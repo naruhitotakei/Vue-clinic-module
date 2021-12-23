@@ -100,14 +100,14 @@
                               </div>
                               <div class="d-flex align-items-center justify-content-between">
                                 <div>
-                                  <span class="text-left">{{ item.patient_name }}</span>&nbsp;
+                                  <span class="text-left">{{ item.patientname }} {{ item.patientlastname }}</span>&nbsp;
                                   <span class="text-left">{{ patientsDentist(item) ? `(${patientsDentist(item)})` : '' }}</span>
                                 </div>
                                 <div class="d-flex align-items-center">
                                   <span class="text-right text-width-150">{{ item.due_at | formatDate }}</span>
-                                  <!-- <b-button variant=" iq-bg-success mr-1 mb-1" size="sm" style="margin-left: 5%;" @click="editAssignments(item)">
+                                  <b-button variant=" iq-bg-success mr-1 mb-1" size="sm" style="margin-left: 5%;" @click="editAssignments(item)">
                                   <i class="ri-ball-pen-fill m-0"></i>
-                                </b-button> -->
+                                </b-button>
                                 </div>
                               </div>
                             </div>
@@ -405,6 +405,17 @@
                 </div>
             </form>
         </b-modal>
+
+        <AddEditAssignment
+          v-if="todoToEdit"
+          :modalAssigmentShow="editAssignmentModal"
+          :todo="todoToEdit"
+          :users="users"
+          :enquires="enquires"
+          @updated="getUserAssignments"
+          @close="closeAssignmentModal"
+        />
+
         <FooterStyle1>
             <template v-slot:left>
                 <li class="list-inline-item"><a href="#">{{ $t('footer.privacyPolicy') }}</a></li>
@@ -426,19 +437,25 @@ import { getLocationsList, getCountriesWithPatients, getDatesForCurrentWeek } fr
 import { visitsByCountryInAWeek, getDoctorsStatisticPerWeek } from '../../services/statistics'
 import { getProductGroups } from '@/services/products'
 import { getDoctorList, getLabels } from '@/services/calendarService'
-import { sso, getDentists } from '@/services/userService'
+import { sso, getDentists, getUsers } from '@/services/userService'
 import DatePicker from 'vue2-datepicker'
 import 'vue2-datepicker/index.css'
 import { finishAssignment } from '../../services/assignmentsService'
+import { getEnquires } from '@/services/enquiry'
+import AddEditAssignment from '@/components/Assignments/AddEditAssignment'
 
 import _ from 'lodash'
 const body = document.getElementsByTagName('body')
 export default {
   name: 'Home',
-  components: { IqCard, DatePicker },
+  components: { IqCard, DatePicker, AddEditAssignment },
   data () {
     return {
       userId: null,
+      users: [],
+      enquires: [],
+      todoToEdit: null,
+      editAssignmentModal: false,
       doctorsData: [],
       datesForCurrentWeek: [],
       dataForChart: [],
@@ -568,9 +585,11 @@ export default {
       ]
     }
   },
-  mounted () {
+  async mounted () {
     xray.index()
-    this.getUserLogin()
+    await this.getUserLogin()
+    this.getUsersList()
+    this.getEnquires()
     this.getDentists()
     this.getCountriesWithPatients()
     this.getDoctorsStatisticPerWeek()
@@ -592,6 +611,25 @@ export default {
     getDentists () {
       getDentists().then(response => {
         this.dentists = response
+      })
+    },
+    getUsersList () {
+      getUsers().then(response => {
+        this.users = response
+        this.users = this.users.map(user => {
+          const userObj = Object.assign({}, user)
+          userObj.full_name = user.name + ' ' + user.surname
+          return userObj
+        })
+      })
+    },
+    getEnquires () {
+      getEnquires().then(response => {
+        let enquires = [...response]
+        enquires.map((item, index) => {
+          enquires[index].full_name = item.name + ' ' + item.last_name
+        })
+        this.enquires = enquires
       })
     },
     patientsDentist (patient) {
@@ -653,6 +691,15 @@ export default {
           })
         }
       })
+    },
+    getUserAssignments () {
+      this.editAssignmentModal = false
+      getAssignmentsForUser().then(response => {
+        this.openAssignments = response
+      })
+    },
+    closeAssignmentModal (val) {
+      this.editAssignmentModal = false
     },
     showLabels (item) {
       if (this.disabled && this.appointmentData.label_id === item.id) {
@@ -774,6 +821,17 @@ export default {
     finishAssignment (id, finished) {
       const completedBy = this.userId
       finishAssignment(id, finished, completedBy).then(response => {})
+    },
+    editAssignments (todo) {
+      if (todo && todo.due_at) {
+        todo.due_at = moment(todo.due_at).format('YYYY-MM-DD')
+      }
+      if (todo && todo.user_id) {
+        let user = this.users.find(user => user.id === todo.user_id)
+        todo.user_id = user
+      }
+      this.todoToEdit = Object.assign({}, todo)
+      this.editAssignmentModal = true
     }
   }
 }
