@@ -204,13 +204,12 @@
                                               </div>
                                               <template>
                                                   <div class="cancelation-text font-size-18 mt-3 mb-1 row align-items-center justify-content-center w-100">
-                                                      <p v-if="formAppointments.appointment_canceled_in_advance_by_clinic === true">{{ $t('calendarEvent.appointmentCanceledInAdvanceByClinic') }}</p>
-                                                      <p v-if="formAppointments.appointment_canceled_in_advance_by_patient === true">{{ $t('calendarEvent.appointmentCanceledInAdvanceByPatient') }}</p>
+                                                      <p v-if="formAppointments.appointment_canceled === true">{{ $t('calendarEvent.appointmentCanceled') }}</p>
                                                   </div>
                                               </template>
                                               <div class="modal-footer modal-footer-bt" style="width: 100%;">
                                                   <template v-if="disabled">
-                                                      <button v-if="formAppointments.appointment_canceled_in_advance_by_clinic === false && formAppointments.appointment_canceled_in_advance_by_patient === false || openCancelationModal === true" type="button" class="btn btn-secondary" @click="openCancelationModal = true">{{ $t('calendar.btnCancelation') }}</button>
+                                                      <button v-if="formAppointments.appointment_canceled === false || openCancelationModal === true" type="button" class="btn btn-secondary" @click="openCancelationModal = true">{{ $t('calendar.btnCancelation') }}</button>
                                                       <button type="button" class="btn btn-secondary" @click="addAppointmentModal = false, formAppointments = defaultFormAppointment">{{ $t('calendar.btnClose') }}</button>
                                                       <button type="button" class="btn btn-secondary" @click="editMode">{{ $t('calendar.btnEdit') }}</button>
                                                   </template>
@@ -228,21 +227,17 @@
                                                        @close="closeCancelation"
                                                        @cancel="closeCancelation">
                                                   <div class="col-md-12 mb-2">
-                                                      <div class="d-flex justify-content-around mt-2">
+                                                      <div class="ml-3 mt-2">
                                                           <b-form-radio class="custom-radio-color"
                                                                         inline
-                                                                        v-model="formAppointments.appointment_canceled_in_advance_by_patient"
-                                                                        :value="true"
+                                                                        v-model="formAppointments.appointment_canceled"
+                                                                        value="true"
                                                                         name="cancelation">
-                                                              {{ $t('calendarEvent.appointmentCanceledInAdvanceByPatient') }}
+                                                              {{ $t('calendarEvent.cancelAppointment') }}
                                                           </b-form-radio>
-                                                          <b-form-radio class="custom-radio-color"
-                                                                        inline
-                                                                        v-model="formAppointments.appointment_canceled_in_advance_by_clinic"
-                                                                        :value="true"
-                                                                        name="cancelation">
-                                                              {{ $t('calendarEvent.appointmentCanceledInAdvanceByClinic') }}
-                                                          </b-form-radio>
+                                                      </div>
+                                                      <div class="col-md-12 mt-2">
+                                                          <textarea row="2" v-model="formAppointments.cancelation_reason" class="form-control form-control-disabled mt-4" id="cancelationReason" :placeholder="$t('calendarEvent.cancelationReason')"></textarea>
                                                       </div>
                                                   </div>
                                               </b-modal>
@@ -1465,23 +1460,23 @@ export default {
         product_groups: '',
         crmProduct: '',
         patient_attended: '',
-        appointment_canceled_in_advance_by_clinic: false,
-        appointment_canceled_in_advance_by_patient: false
+        appointment_canceled: false,
+        cancelation_reason: ''
       },
       patient_attend: [
         {
           label: this.$t('calendarEvent.unknown'),
-          value: 'Unknown',
+          value: null,
           checked: true
         },
         {
           label: this.$t('calendarEvent.attended'),
-          value: 'Attended',
+          value: true,
           checked: false
         },
         {
           label: this.$t('calendarEvent.notAttended'),
-          value: 'Not attended',
+          value: false,
           checked: false
         }
       ],
@@ -1659,14 +1654,12 @@ export default {
       }
     },
     decideAppointmentStatus (appointment) {
-      if (appointment.appointment_canceled_in_advance_by_clinic) {
-        return 'Canceled by clinic'
-      } else if (appointment.appointment_canceled_in_advance_by_patient) {
-        return 'Canceled by patient'
-      } else if (appointment.patient_attended === 'Attended') {
-        return 'Attended'
+      if (appointment.appointment_canceled) {
+        return true
+      } else if (appointment.patient_attended === true) {
+        return true
       }
-      return 'Unknown'
+      return null
     },
     cancelAppointmentModal () {
       this.formAppointments = this.defaultFormAppointment()
@@ -2058,8 +2051,8 @@ export default {
         product_groups: '',
         crmProduct: '',
         patient_attended: '',
-        appointment_canceled_in_advance_by_clinic: false,
-        appointment_canceled_in_advance_by_patient: false
+        appointment_canceled: false,
+        cancelation_reason: ''
       }
     },
     showProps (item, prop) {
@@ -2215,8 +2208,8 @@ export default {
         assignmentDate: moment(appointment.starts_at).toDate(),
         end: moment(appointment.ends_at).toDate(),
         backgroundColor: appointment.label_id,
-        appointment_canceled_in_advance_by_patient: appointment.appointment_canceled_in_advance_by_patient,
-        appointment_canceled_in_advance_by_clinic: appointment.appointment_canceled_in_advance_by_clinic
+        appointment_canceled: appointment.appointment_canceled,
+        cancelation_reason: appointment.cancelation_reason
       }
       this.addAppointmentModal = true
     },
@@ -2225,8 +2218,7 @@ export default {
     },
     closeCancelation () {
       this.openCancelationModal = false
-      this.formAppointments.appointment_canceled_in_advance_by_clinic = false
-      this.formAppointments.appointment_canceled_in_advance_by_patient = false
+      this.formAppointments.appointment_canceled = false
     },
     roundUpStartTime () {
       let startTime = new Date()

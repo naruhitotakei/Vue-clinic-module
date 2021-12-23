@@ -87,6 +87,7 @@ const updateAppointments = (request, response, id, appointments) => {
     if (appointments.patient_attended === false) statement += "attendance='No-show' "
     if (appointments.patient_attended === null) statement += "attendance='' "
     if (appointments.appointment_canceled) statement += "attendance='Cancelled' "
+    if (appointments.cancelation_reason) statement += "cancelation_reason='" + appointments.cancelation_reason + "' "
     statement = statement.slice(0, -1)
     statement += " WHERE id = " + id
     pool.query(statement , (error, results) => {
