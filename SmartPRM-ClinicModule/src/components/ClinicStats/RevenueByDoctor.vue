@@ -5,7 +5,7 @@
           <template v-slot:headerTitle>
             <h4 class="card-title mt-3">Revenue By Doctor</h4>
             <b-form @submit.prevent>
-              <b-row>
+              <b-row align-v="center">
                 <b-col cols="12" sm="6" md="4" lg="3">
                   <b-form-group>
                     <label style="padding-top: 8px;">From:</label>
@@ -83,8 +83,6 @@ export default {
         })
         sumByProduct.push(obj)
       })
-
-      console.log(this.dataToExport)
 
       this.series = sumByProduct
 

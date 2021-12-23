@@ -4,8 +4,8 @@
         <iq-card class-name="iq-card-block iq-card-stretch iq-card-height">
           <template v-slot:headerTitle>
             <h4 class="card-title mt-3">Leads Statistics</h4>
-            <b-form>
-              <b-row>
+            <b-form @submit.prevent>
+              <b-row align-v="center">
                 <b-col cols="12" sm="6" md="4" lg="3">
                   <b-form-group>
                     <label style="padding-top: 8px;">From:</label>
@@ -17,6 +17,17 @@
                     <label style="padding-top: 8px;">End:</label>
                     <b-form-input style="line-height: normal" class="date" id="exampleEnddate" type="date" v-model="leadEndDate" @change="onLeadDateChange"></b-form-input>
                   </b-form-group>
+                </b-col>
+                <b-col cols="12" sm="6" md="4" lg="3" offset-lg="3" class="text-right" v-if="dataToExport && dataToExport.length">
+                  <vue-excel-xlsx
+                    :data="dataToExport"
+                    :columns="excelColumns"
+                    :filename="'Lead Statistics'"
+                    :sheetname="'Lead Statistics'"
+                    class="btn btn-primary"
+                    >
+                    Download Excel
+                  </vue-excel-xlsx>
                 </b-col>
               </b-row>
             </b-form>
@@ -34,6 +45,7 @@
 <script>
 import IqCard from '../../components/xray/cards/iq-card'
 import { getLeadsPerDay } from '../../services/statistics'
+import moment from 'moment'
 
 export default {
   name: 'LeadsChart',
@@ -50,93 +62,70 @@ export default {
       })
     },
     setDataForChart (data) {
-      let seriesData = []
-      let enqCount = []
       let datesArray = []
-      const unknownCountries = data.filter(item => !item.country)
-      console.log(unknownCountries.length + ' Unknown Countries ... ')
-      // data = data.filter(item => !item.country)
+      let sumByCountry = []
+      let countries = []
+      this.dataToExport = []
       data.forEach(item => {
-        // Test By Country
-        // const itemDate = item.date.split('T')[0]
-        const enquires = Number(item.enquiries_count ? item.enquiries_count : 0)
-        let obj = {
-          name: item.country ? item.country : 'N/A',
-          data: []
+        // Get Unique Dates
+        const itemDate = item.date.split('T')[0]
+        const isDateExists = datesArray.find(date => date === itemDate)
+        if (!isDateExists) {
+          datesArray.push(itemDate)
         }
-        if (seriesData.length === 0) {
-          obj.data.push(enquires)
-          seriesData.push(obj)
-        } else {
-          const isCountryExists = seriesData.find(record => (record.name === item.country) || (record.name === 'N/A' && !item.country))
-          if (isCountryExists) {
-            let existingData = Object.assign({}, isCountryExists)
-            existingData.data.push(enquires)
-          } else {
-            obj.data.push(enquires)
-            seriesData.push(obj)
-          }
+
+        // Get Unique Countries
+        const isCountryExists = countries.find(country => country === item.country)
+        if (!isCountryExists && item.country) {
+          countries.push(item.country)
         }
-        datesArray.push(item.date)
-        enqCount.push(item.enquiries_count)
-        // const itemDate = item.date.split('T')[0]
-        // const isDateExists = datesArray.find(date => date === itemDate)
-        // if (!isDateExists) {
-        //   datesArray.push(itemDate)
-        // }
-
-        // let obj = {
-        //   name: item.country ? item.country : 'N/A',
-        //   data: []
-        // }
-
-        // Test By Date
-
-        // if (seriesData.length === 0) {
-        //   obj.data.push(item.enquiries_count)
-        //   seriesData.push(obj)
-        //   datesArray.push(itemDate)
-        // } else {
-        //   const isSameDateExists = seriesData.find(record => (record.date === itemDate))
-        //   if (isSameDateExists) {
-        //     let existingData = Object.assign({}, isSameDateExists)
-        //     existingData.data.push(item.enquiries_count)
-        //   } else {
-        //     obj.data.push(item.enquiries_count)
-        //     seriesData.push(obj)
-        //     datesArray.push(itemDate)
-        //   }
-        // }
       })
-      console.log('Series Length ... ', seriesData)
-      console.log('Dates Length ... ', datesArray)
-      // this.series = [{
-      //   data: enqCount
-      // }]
 
-      this.series = seriesData
+      countries.forEach(country => {
+        const itemsByCountry = data.filter(item => item.country === country)
+        const obj = { name: country, data: [] }
+        datesArray.forEach(date => {
+          const isCountryHasDate = itemsByCountry.find(item => item.date.split('T')[0] === date)
+          if (isCountryHasDate) {
+            obj.data.push(isCountryHasDate.enquiries_count ? Number(isCountryHasDate.enquiries_count) : 0)
+          } else {
+            obj.data.push(0)
+          }
+        })
+        sumByCountry.push(obj)
+      })
+
+      this.series = sumByCountry
 
       this.chartOptions = {
         xaxis: {
-          categories: [...datesArray]
-        },
-        yaxis: {
-          labels: {
-            formatter: function (y) {
-              return y
-            }
-          },
-          title: {
-            text: 'Leads Statistics'
-          }
+          type: 'datetime',
+          categories: datesArray
         }
       }
+
+      this.prepareDataForExport(data, countries)
+    },
+
+    prepareDataForExport (data, countries) {
+      // Get Data for export
+      countries.forEach(country => {
+        const sum = data.filter(item => item.country === country)
+          .map(item => item.enquiries_count && Number(item.enquiries_count))
+          .reduce((a, b) => Number(a) + Number(b))
+        this.dataToExport.push({ country, enquiries: sum.toLocaleString() })
+      })
     }
   },
   data () {
     return {
       leadStartDate: null,
       leadEndDate: null,
+      dataToExport: [],
+      excelColumns: [
+        { label: 'Country', field: 'country' },
+        { label: 'Enquiries', field: 'enquiries' }
+      ],
       series: [{
         name: 'Leads By Day',
         data: []
@@ -165,7 +154,7 @@ export default {
         },
         yaxis: {
           title: {
-            text: 'Total Revenue'
+            text: 'Lead Statistics'
           },
           labels: {
             formatter: function (y) {
@@ -175,7 +164,12 @@ export default {
         },
         xaxis: {
           type: 'datetime',
-          categories: []
+          categories: [],
+          labels: {
+            formatter: function (value, timestamp) {
+              return moment(timestamp).format('ll')
+            }
+          }
         },
         legend: {
           position: 'right',
