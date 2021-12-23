@@ -4,7 +4,7 @@
         <iq-card class-name="iq-card-block iq-card-stretch iq-card-height">
           <template v-slot:headerTitle>
             <h4 class="card-title mt-3">Revenue By Doctor</h4>
-            <b-form>
+            <b-form @submit.prevent>
               <b-row>
                 <b-col cols="12" sm="6" md="4" lg="3">
                   <b-form-group>
@@ -17,6 +17,17 @@
                     <label style="padding-top: 8px;">End:</label>
                     <b-form-input style="line-height: normal" class="date" id="exampleEnddate" type="date" v-model="endDate" @change="onDateChange"></b-form-input>
                   </b-form-group>
+                </b-col>
+                <b-col cols="12" sm="6" md="4" lg="3" offset-lg="3" class="text-right" v-if="dataToExport && dataToExport.length">
+                  <vue-excel-xlsx
+                    :data="dataToExport"
+                    :columns="excelColumns"
+                    :filename="'Revenue By Doctor'"
+                    :sheetname="'Revenue By Doctor'"
+                    class="btn btn-primary"
+                    >
+                    Download Excel
+                  </vue-excel-xlsx>
                 </b-col>
               </b-row>
             </b-form>
@@ -49,17 +60,17 @@ export default {
         this.setDataForChart(response)
       })
     },
-    setDataForChart (data) {
+    async setDataForChart (data) {
       this.dataToExport = []
 
-      let doctors = data.map(item => item.doctor_name)
+      let doctors = await data.map(item => item.doctor_name)
       const uniqueDoctors = [...new Set(doctors)]
 
-      let products = data.map(item => item.product_name)
+      let products = await data.map(item => item.product_name)
       const uniqueProducts = [...new Set(products)]
 
       let sumByProduct = []
-      uniqueProducts.forEach(product => {
+      uniqueProducts.forEach(async product => {
         const prodsByDoctor = data.filter(item => item.product_name === product)
         const obj = { name: product, data: [] }
         uniqueDoctors.forEach(doctor => {
@@ -72,6 +83,8 @@ export default {
         })
         sumByProduct.push(obj)
       })
+
+      console.log(this.dataToExport)
 
       this.series = sumByProduct
 
@@ -87,6 +100,18 @@ export default {
           }
         }
       }
+
+      this.prepareDataForExport(data, uniqueDoctors)
+    },
+
+    prepareDataForExport (data, doctors) {
+      // Get Data for export
+      doctors.forEach(doctor => {
+        const sum = data.filter(item => item.doctor_name === doctor)
+          .map(item => item.sum && Number(item.sum))
+          .reduce((a, b) => Number(a) + Number(b))
+        this.dataToExport.push({ doctor, revenue: sum.toLocaleString() + ' €' })
+      })
     }
   },
   data () {

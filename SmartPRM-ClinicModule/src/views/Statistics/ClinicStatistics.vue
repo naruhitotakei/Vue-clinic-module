@@ -61,7 +61,7 @@
         <iq-card class-name="iq-card-block iq-card-stretch iq-card-height">
           <template v-slot:headerTitle>
             <h4 class="card-title mt-3">{{ $t('statisticsForClinic.statisticsForClinicHeader') }}</h4>
-            <b-form>
+            <b-form @submit.prevent>
               <b-row align-v="center">
                 <b-col cols="12" sm="6" md="4" lg="3">
                   <b-form-group>
@@ -75,7 +75,7 @@
                     <b-form-input style="line-height: normal" class="date" id="exampleEnddate" type="date" v-model="endDate" @change="onDateChange"></b-form-input>
                   </b-form-group>
                 </b-col>
-                <b-col cols="12" sm="6" md="4" lg="3" offset-lg="3" class="text-right">
+                <b-col cols="12" sm="6" md="4" lg="3" offset-lg="3" class="text-right" v-if="dataToExport && dataToExport.length">
                   <vue-excel-xlsx
                     :data="dataToExport"
                     :columns="excelColumns"
@@ -84,7 +84,7 @@
                     class="btn btn-primary"
                     >
                     Download Excel
-                </vue-excel-xlsx>
+                  </vue-excel-xlsx>
                 </b-col>
               </b-row>
             </b-form>
