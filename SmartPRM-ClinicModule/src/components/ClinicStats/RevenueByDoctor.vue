@@ -78,6 +78,13 @@ export default {
       this.chartOptions = {
         xaxis: {
           categories: uniqueDoctors
+        },
+        yaxis: {
+          labels: {
+            formatter: function (val) {
+              return val.toLocaleString() + ' €'
+            }
+          }
         }
       }
     }
