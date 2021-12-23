@@ -224,6 +224,11 @@
               </b-col>
             </b-row>
           </div>
+
+          <b-modal v-model="showModal" title="Modal" ok-title="Save Changes" cancel-title="Close">
+            <p>Modal</p>
+          </b-modal>
+
         </template>
       </iq-card>
     </b-col>
@@ -259,6 +264,7 @@ export default {
       filterDoctors: ['All Doctors'],
       selectedDoctor: 'All Doctors',
       dateSelected: new Date().toISOString().slice(0, 10),
+      showModal: false,
       appointments: []
     }
   },
