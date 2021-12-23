@@ -121,7 +121,7 @@
                 </b-button-group>
               </b-col>
             </b-row>
-            <b-row class="no-margin pt-2 mb-3">
+            <b-row class="no-margin pt-2 mb-3 align-center">
               <b-form-textarea
                 id="notes-textarea"
                 placeholder="Enter notes..."
@@ -134,7 +134,7 @@
           </div>
 
           <!-- Mobile version -->
-          <div class="card forMobile" v-for="appointment in appointments" :key="appointment.id">
+          <div class="card forMobile" v-for="appointment in appointments" :key="appointment.id + '_mobile'">
             <b-row class="no-margin flexMobileParent">
               <b-col md="3" sm="3" class="col-title-sm">Time:</b-col>
               <b-col md="9" sm="9" class="col-data-sm"><p class="black-text">{{ appointment.time }}</p></b-col>
@@ -208,6 +208,19 @@
                     Very Interested
                   </b-button>
                 </b-button-group>
+              </b-col>
+            </b-row>
+            <b-row class="no-margin flexMobileParent">
+              <b-col md="12" sm="12" class="mt-2 mb-3 align-center display-flex">
+                <b-form-textarea
+                  id="notes-textarea"
+                  class="relative-pos"
+                  placeholder="Enter notes..."
+                  rows="4"
+                  max-rows="6"
+                  v-model="appointment.notes"
+                  @blur="handleUpdateNotes($event, appointment.id)"
+                ></b-form-textarea>
               </b-col>
             </b-row>
           </div>
@@ -364,6 +377,12 @@ export default {
   }
   .col-data-sm {
     width: 70%;
+  }
+  .display-flex {
+    display: flex;
+  }
+  .relative-pos {
+    position: relative;
   }
 
   /* media */
