@@ -55,6 +55,7 @@ const daoCountries = require('./dao/daoCountries')
 const daoCalendar = require('./dao/daoCalendar')
 const daoCompanies = require('./dao/daoCompanies')
 const daoLocations = require('./dao/daoLocations')
+const daoSmsTemplates = require('./dao/daoSmsTemplates')
 const daoCompanyPremises = require('./dao/daoCompanyPremises')
 const daoAppointmentSlots = require('./dao/daoAppointmentSlots')
 const daoOnlineBooking = require('./dao/daoOnlineBooking')
@@ -610,6 +611,18 @@ app.put('/api/users/:id', (req, res) => {
 app.get('/api/users-assignments', (req, res) => {
     if (req.session.prm_user && req.session.prm_user.permissions && checkPermission(req.session.prm_user.permissions, usersPermission)) {
         daoUser.getUsersForAssignments(req, res, req.session.prm_user.prm_client_id, getScope(req.session.prm_user.permissions, usersPermission))
+    } else {
+        res.status(401).json("OK: user unauthorized")
+    }
+});
+
+///////////////////////////////////
+// settings -> sms templates
+///////////////////////////////////
+
+app.get('/api/sms-templates', (req, res) => {
+    if (req.session.prm_user && req.session.prm_user.permissions && checkPermission(req.session.prm_user.permissions, usersPermission)) {
+        daoSmsTemplates.getSmsTemplates(req, res, req.session.prm_user.prm_client_id, getScope(req.session.prm_user.permissions, usersPermission))
     } else {
         res.status(401).json("OK: user unauthorized")
     }
