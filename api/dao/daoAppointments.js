@@ -17,7 +17,6 @@ async function createAppointment ({ enquiryId }) {
     VALUES (${Object.values(model).join(',')})
     RETURNING *
   `;
-  console.log({ enquiryId, statement });
   const result = await pool.query(statement, [enquiryId]);
 
   return result.rows[0];
