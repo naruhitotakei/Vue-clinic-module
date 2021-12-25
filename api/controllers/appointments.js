@@ -18,11 +18,10 @@ router.post('/', validateCreateAppointmentRequest, verifyPhone, async (request, 
     const appointment = await createAppointment({ enquiryId: enquiry.id })
     await updateAppointmentSlot(appointmentSlotId, { appointmentId: appointment.id })
   } catch (error) {
-    console.error(error)
     return response.sendStatus(500)
   }
 
-  return response.sendStatus(201)
+  return response.status(201).json({})
 })
 
 /**
@@ -49,20 +48,27 @@ async function validateCreateAppointmentRequest(request, response, next) {
  * @type {import('express').RequestHandler}
  */
 async function verifyPhone(request, response, next) {
-  return next()
   const { promisify } = require('util')
-  const vonage = require('./services/vonage')
+  const vonage = require('~/services/vonage')
   const verify = promisify(vonage.verify.check)
   const { verificationId, verificationCode } = request.body
   let result
 
   try {
-    result = await verify({
-      request_id: verificationId,
-      code: verificationCode,
+    result = await new Promise((resolve, reject) => {
+      vonage.verify.check({
+        request_id: verificationId,
+        code: verificationCode,
+      }, (error, result) => {
+        if (error != null) {
+          return reject(error)
+        }
+
+        return resolve(result)
+      })
     })
   } catch (error) {
-    response.status(500)
+    response.status(500).send(error)
 
     return
   }
@@ -74,7 +80,7 @@ async function verifyPhone(request, response, next) {
   }
 
   if (result.status !== '0') {
-      response.status(500)
+      response.status(500).send(result)
 
       return
   }

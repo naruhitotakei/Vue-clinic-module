@@ -100,9 +100,11 @@ export default defineComponent({
         firstName: this.form.firstName,
         lastName: this.form.lastName,
         phone: this.form.phone,
-        appointmentSlotId: this.form.appointmentSlot.id
+        appointmentSlotId: this.form.appointmentSlot.id,
+        verificationId: this.form.verificationId,
+        verificationCode: this.form.verificationCode
       })
-      // this.$emit('confirmed', this.form)
+      this.$emit('confirmed', this.form)
     }
   }
 })
