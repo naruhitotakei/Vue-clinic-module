@@ -12,9 +12,9 @@ const pool = new Pool({
 })
 
 function now() {
-  return `
-    \'${moment.tz('Europe/Ljubljana').format('YYYY-MM-DD HH:mm:ss.SSS')}\'
-  `
+  return `\'${
+    moment.tz('Europe/Ljubljana').format('YYYY-MM-DD HH:mm:ss.SSS')
+  }\'`
 }
 
 module.exports = {
