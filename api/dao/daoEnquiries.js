@@ -1,14 +1,5 @@
-require('dotenv').config();
-const Pool = require('pg').Pool
-const pool = new Pool({
-  user: process.env.POSTGRES_USER,
-  host: process.env.POSTGRES_HOST,
-  database: process.env.POSTGRES_DB,
-  password: process.env.POSTGRES_PASSWORD,
-  port: process.env.POSTGRES_PORT || 5432,
-})
 var moment = require('moment');
-const db = require('~/services/db')
+const { pool, now } = require('~/services/db')
 
 const getEnquiries = (request, response, user_id, accessible_user_ids, prm_client_id, scope, sortBy) => {
     let statement = "SELECT  enquiries.* , concat(u.title, ' ', u.first_name , ' ', u.surname) AS label, TO_CHAR(last_visit, 'DD.MM.YYYY') last_visit, TO_CHAR(next_visit, 'DD.MM.YYYY') next_visit, " +
@@ -303,7 +294,7 @@ async function getEnquiryByPhone(phoneNumber) {
     SELECT * from enquiries
     WHERE phone = $1
   `;
-  const { rows } = await db.query(statement, [phoneNumber]);
+  const { rows } = await pool.query(statement, [phoneNumber]);
 
   return rows[0];
 }
@@ -313,21 +304,15 @@ async function createEnquiryPublic({ firstName, lastName, phone }) {
     name: '$1',
     last_name: '$2',
     phone: '$3',
-    // client_id: '',
-    // region_id: '',
-    // prm_dentist_user_id: '',
-    // lead_owner_id: '',
-    // prm_client_id: '',
-    // TODO: column use UTC of Slovenia's timezone?
-    created_at: 'NOW()',
-    updated_at: 'NOW()',
+    created_at: now(),
+    updated_at: now(),
   };
   const statement = /* sql */ `
     INSERT INTO enquiries(${Object.keys(model).join(',')})
     VALUES (${Object.values(model).join(',')})
     RETURNING *
   `;
-  const result = await db.query(statement, [firstName, lastName, phone]);
+  const result = await pool.query(statement, [firstName, lastName, phone]);
 
   return result.rows[0];
 }

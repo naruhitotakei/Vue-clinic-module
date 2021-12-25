@@ -1,12 +1,12 @@
 const router = require('express').Router()
-const { getAppointmentSlotById } = require('~/dao/daoAppointmentSlots')
-const { createAppointment } = require('~/dao/daoCalendar')
 const { getEnquiryByPhone, createEnquiryPublic } = require('~/dao/daoEnquiries')
+const { createAppointment } = require('~/dao/daoAppointments')
+const { getAppointmentSlotById, updateAppointmentSlot } = require('~/dao/daoAppointmentSlots')
 
 module.exports = router
 
 router.post('/', validateCreateAppointmentRequest, verifyPhone, async (request, response) => {
-  const { phone, firstName, lastName } = request.body
+  const { phone, firstName, lastName, appointmentSlotId } = request.body
 
   try {
     let enquiry = await getEnquiryByPhone(phone)
@@ -15,12 +15,8 @@ router.post('/', validateCreateAppointmentRequest, verifyPhone, async (request, 
       enquiry = await createEnquiryPublic({ firstName, lastName, phone })
     }
 
-    console.log({ enquiry })
-    response.json(enquiry)
-
-    return
-
-    await createAppointment({ enquiryId, appointmentSlotId })
+    const appointment = await createAppointment({ enquiryId: enquiry.id })
+    await updateAppointmentSlot(appointmentSlotId, { appointmentId: appointment.id })
   } catch (error) {
     console.error(error)
     return response.sendStatus(500)
