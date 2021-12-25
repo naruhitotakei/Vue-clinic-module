@@ -20,8 +20,7 @@ const getTodaysAppointments = (request, response, user_id, prm_client_id, locale
     statement += "LEFT JOIN appointments_label ON appointments.label_id = appointments_label.id "
     statement += "LEFT JOIN appointments_label_name ON appointments_label.id = appointments_label_name.appointment_label_id "
     statement += "WHERE starts_at::DATE = CURRENT_DATE AND prm_product_group_name.language = '" + locale + "' AND appointments_label_name.language = '" + locale + "' " 
-    statement += "AND appointments.appointment_canceled_in_advance_by_patient = FALSE "
-    statement += "AND appointments.appointment_canceled_in_advance_by_clinic = FALSE "
+    statement += "AND appointments.appointment_canceled = FALSE "
     if (scope == 'All') {
     } else if (scope == 'PrmClient') {
         statement += "AND users.prm_client_id = " + prm_client_id
@@ -55,7 +54,8 @@ const getStaff = (request, response, prm_client_id, scope) => {
 }
 
 const getAssignmentsForUser = (request, response, user_id) => {
-    let statement = "SELECT description, concat(enquiries.name, ' ', enquiries.last_name) AS patient_name, prm_dentist_user_id, due_at FROM todos " 
+    let statement = "SELECT todos.*, enquiries.name AS patientname, enquiries.last_name AS patientlastname, "
+    statement += "concat(users.first_name, ' ', users.surname) AS todoname, enquiries.prm_dentist_user_id FROM todos "
     statement += "LEFT JOIN enquiries ON todos.enquiry_id = enquiries.id "
     statement += "LEFT JOIN users ON todos.user_id = users.id "
     statement += "WHERE todos.completed = false "
@@ -82,11 +82,10 @@ const updateAppointment = (request, response, id, appointment) => {
     if (appointment.note) statement += "note='" + appointment.note + "',"
     if (appointment.patient_attended) statement += "patient_attended='" + appointment.patient_attended + "',"
     if (appointment.backgroundColor) statement += "label_id=" + appointments.backgroundColor + ","
-    statement += "appointment_canceled_in_advance_by_patient=" + appointment.appointment_canceled_in_advance_by_patient + ","
-    statement += "appointment_canceled_in_advance_by_clinic=" + appointment.appointment_canceled_in_advance_by_clinic + "," 
+    if (appointment.appointment_canceled) statement += "appointment_canceled=" + appointment.appointment_canceled + ","
+    if (appointment.cancelation_reason) statement += "cancelation_reason='" + appointment.cancelation_reason + "',"
     statement = statement.slice(0, -1)
     statement += " WHERE id = " + id
-    console.log("Updating Home Appointment on BE: " + statement)
     pool.query(statement, (error, results) => {
         if (error) {
             throw error

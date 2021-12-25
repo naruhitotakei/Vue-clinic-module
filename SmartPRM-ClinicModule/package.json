@@ -60,6 +60,7 @@
     "vue": "^2.6.10",
     "vue-apexcharts": "^1.6.2",
     "vue-color": "^2.8.1",
+    "vue-excel-xlsx": "^1.0.11",
     "vue-flatpickr-component": "^8.1.5",
     "vue-i18n": "^8.15.3",
     "vue-morris": "^1.1.0",
