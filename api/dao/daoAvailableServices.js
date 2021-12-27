@@ -1,5 +1,5 @@
 const moment = require('moment-timezone')
-const db = require('~/services/db')
+const { pool } = require('~/services/db')
 
 const daoAvailableServices = {
   getAvailableServices,
@@ -33,7 +33,7 @@ async function getAvailableServices({ lang, premiseId }) {
     ORDER BY online_booking_service_name.text
   `
   const startDate = moment().tz('Europe/Ljubljana').add(1, 'day').format('YYYY-MM-DD')
-  const { rows } = await db.query(statement, [lang, premiseId, startDate])
+  const { rows } = await pool.query(statement, [lang, premiseId, startDate])
 
   return rows
 }

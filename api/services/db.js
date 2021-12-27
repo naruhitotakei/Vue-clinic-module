@@ -1,8 +1,9 @@
 const dotenv = require('dotenv')
+const moment = require('moment-timezone')
 const Pool = require('pg').Pool
 
 dotenv.config()
-const db = new Pool({
+const pool = new Pool({
   user: process.env.POSTGRES_USER,
   host: process.env.POSTGRES_HOST,
   database: process.env.POSTGRES_DB,
@@ -10,4 +11,13 @@ const db = new Pool({
   port: process.env.POSTGRES_PORT || 5432,
 })
 
-module.exports = db
+function now() {
+  return `\'${
+    moment.tz('Europe/Ljubljana').format('YYYY-MM-DD HH:mm:ss.SSS')
+  }\'`
+}
+
+module.exports = {
+  pool,
+  now,
+}
