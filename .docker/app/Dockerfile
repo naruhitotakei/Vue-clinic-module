@@ -1,5 +1,6 @@
 # ### STAGE 1: Build ###
 FROM node:14 as builder
+ENV NODE_OPTIONS="--max-old-space-size=4096"
 
 WORKDIR /app
 
