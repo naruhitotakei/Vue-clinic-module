@@ -61,8 +61,8 @@
         <iq-card class-name="iq-card-block iq-card-stretch iq-card-height">
           <template v-slot:headerTitle>
             <h4 class="card-title mt-3">{{ $t('statisticsForClinic.statisticsForClinicHeader') }}</h4>
-            <b-form>
-              <b-row>
+            <b-form @submit.prevent>
+              <b-row align-v="center">
                 <b-col cols="12" sm="6" md="4" lg="3">
                   <b-form-group>
                     <label style="padding-top: 8px;">From:</label>
@@ -74,6 +74,17 @@
                     <label style="padding-top: 8px;">End:</label>
                     <b-form-input style="line-height: normal" class="date" id="exampleEnddate" type="date" v-model="endDate" @change="onDateChange"></b-form-input>
                   </b-form-group>
+                </b-col>
+                <b-col cols="12" sm="6" md="4" lg="3" offset-lg="3" class="text-right" v-if="dataToExport && dataToExport.length">
+                  <vue-excel-xlsx
+                    :data="dataToExport"
+                    :columns="excelColumns"
+                    :filename="'Revenue By Product'"
+                    :sheetname="'Revenue By Product'"
+                    class="btn btn-primary"
+                    >
+                    Download Excel
+                  </vue-excel-xlsx>
                 </b-col>
               </b-row>
             </b-form>
@@ -116,6 +127,12 @@ export default {
       leadEndDate: null,
       attendance: 0,
       statistics: [],
+      dataToExport: [],
+      excelColumns: [
+        { label: 'Product', field: 'product' },
+        { label: 'Count', field: 'count' },
+        { label: 'Sum', field: 'sum', dataFormat: this.priceFormat }
+      ],
       slickOptions: {
         centerMode: false,
         centerPadding: '60px',
@@ -174,13 +191,23 @@ export default {
         this.setChartData(response)
       })
     },
+    priceFormat (value) {
+      return Number(value).toLocaleString(undefined, { minimumFractionDigits: 0, maximumFractionDigits: 2 }) + ' €'
+    },
     setChartData (data) {
       let prNames = []
       let sumArray = []
+      this.dataToExport = []
       data.forEach(item => {
         prNames.push(item.pr_name)
-        const sum = Math.floor(Number(item.sum))
+        const sum = Number(item.sum)
         sumArray.push(sum)
+
+        this.dataToExport.push({
+          product: item.pr_name,
+          count: item.count,
+          sum: sum
+        })
       })
 
       this.series = [...sumArray]

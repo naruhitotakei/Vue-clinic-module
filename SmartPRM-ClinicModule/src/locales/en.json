@@ -149,6 +149,9 @@
     "product_group": "Product Group",
     "appointmentCanceledInAdvanceByClinic": "Appointment canceled by clinic",
     "appointmentCanceledInAdvanceByPatient": "Appointment canceled by patient",
+    "cancelAppointment": "Cancel appointment",
+    "appointmentCanceled": "Appointment has been canceled",
+    "cancelationReason": "Cancelation reason",
     "requiredFields": "Fields marked with * have to be filled",
     "eventMoveBetweenResources": "Are you sure you want to move this appointment to another doctor?",
     "eventTimeChange": "Are you sure you want to change this event's time?"

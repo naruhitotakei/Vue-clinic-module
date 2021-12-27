@@ -4,8 +4,8 @@
         <iq-card class-name="iq-card-block iq-card-stretch iq-card-height">
           <template v-slot:headerTitle>
             <h4 class="card-title mt-3">Revenue By Doctor</h4>
-            <b-form>
-              <b-row>
+            <b-form @submit.prevent>
+              <b-row align-v="center">
                 <b-col cols="12" sm="6" md="4" lg="3">
                   <b-form-group>
                     <label style="padding-top: 8px;">From:</label>
@@ -17,6 +17,17 @@
                     <label style="padding-top: 8px;">End:</label>
                     <b-form-input style="line-height: normal" class="date" id="exampleEnddate" type="date" v-model="endDate" @change="onDateChange"></b-form-input>
                   </b-form-group>
+                </b-col>
+                <b-col cols="12" sm="6" md="4" lg="3" offset-lg="3" class="text-right" v-if="dataToExport && dataToExport.length">
+                  <vue-excel-xlsx
+                    :data="dataToExport"
+                    :columns="excelColumns"
+                    :filename="'Revenue By Doctor'"
+                    :sheetname="'Revenue By Doctor'"
+                    class="btn btn-primary"
+                    >
+                    Download Excel
+                  </vue-excel-xlsx>
                 </b-col>
               </b-row>
             </b-form>
@@ -49,52 +60,56 @@ export default {
         this.setDataForChart(response)
       })
     },
-    setDataForChart (data) {
-      let sumArray = []
-      let namesArray = []
-      let dataSeries = []
-      data.forEach(item => {
-        const itemSum = Number(item.sum ? item.sum : 0)
-        let obj = {
-          name: item.product_name,
-          data: []
-        }
+    async setDataForChart (data) {
+      this.dataToExport = []
 
-        if (dataSeries.length === 0) {
-          obj.data.push(itemSum)
-          dataSeries.push(obj)
-        } else {
-          let product = dataSeries.find(value => value.name === item.product_name)
-          if (product) {
-            let existingData = Object.assign({}, product)
-            existingData.data.push(itemSum)
+      let doctors = await data.map(item => item.doctor_name)
+      const uniqueDoctors = [...new Set(doctors)]
+
+      let products = await data.map(item => item.product_name)
+      const uniqueProducts = [...new Set(products)]
+
+      let sumByProduct = []
+      uniqueProducts.forEach(async product => {
+        const prodsByDoctor = data.filter(item => item.product_name === product)
+        const obj = { name: product, data: [] }
+        uniqueDoctors.forEach(doctor => {
+          const isProductHasDoctor = prodsByDoctor.find(item => item.doctor_name === doctor)
+          if (isProductHasDoctor) {
+            obj.data.push(Number(isProductHasDoctor.sum))
           } else {
-            obj.data.push(itemSum)
-            dataSeries.push(obj)
+            obj.data.push(0)
           }
-        }
-
-        sumArray.push(itemSum)
-        const isNameExists = namesArray.find(name => name === item.doctor_name)
-        if (!isNameExists) {
-          namesArray.push(item.doctor_name)
-        }
-
-        // dataSeries.push({ name: item.doctor_name, data: item.products })
+        })
+        sumByProduct.push(obj)
       })
 
-      // this.series = [{
-      //   data: sumArray
-      // }]
-
-      this.series = dataSeries
-      // const totalRev = sumArray.reduce((a, b) => a + b)
+      this.series = sumByProduct
 
       this.chartOptions = {
         xaxis: {
-          categories: namesArray
+          categories: uniqueDoctors
+        },
+        yaxis: {
+          labels: {
+            formatter: function (val) {
+              return val.toLocaleString() + ' €'
+            }
+          }
         }
       }
+
+      this.prepareDataForExport(data, uniqueDoctors)
+    },
+
+    prepareDataForExport (data, doctors) {
+      // Get Data for export
+      doctors.forEach(doctor => {
+        const sum = data.filter(item => item.doctor_name === doctor)
+          .map(item => item.sum && Number(item.sum))
+          .reduce((a, b) => Number(a) + Number(b))
+        this.dataToExport.push({ doctor, revenue: sum.toLocaleString() + ' €' })
+      })
     }
   },
   data () {
@@ -102,6 +117,11 @@ export default {
       startDate: null,
       endDate: null,
       series: [],
+      dataToExport: [],
+      excelColumns: [
+        { label: 'Doctor', field: 'doctor' },
+        { label: 'Revenue', field: 'revenue' }
+      ],
       chartOptions: {
         chart: {
           type: 'bar',

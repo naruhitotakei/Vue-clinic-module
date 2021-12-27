@@ -13,6 +13,7 @@ import Rollbar from 'rollbar'
 import vueNumeralFilterInstaller from 'vue-numeral-filter'
 import VueApexCharts from 'vue-apexcharts'
 import CompositionApi from '@vue/composition-api'
+import VueExcelXlsx from 'vue-excel-xlsx'
 
 global.Raphael = Raphael
 Vue.config.productionTip = false
@@ -41,6 +42,7 @@ Vue.use(vueNumeralFilterInstaller, { locale: 'en-gb' })
 Vue.use(VueApexCharts)
 Vue.use(CompositionApi)
 Vue.component('apex-chart', VueApexCharts)
+Vue.use(VueExcelXlsx)
 
 Vue.filter('percentage', function (value) {
   if (!value) return '0%'
