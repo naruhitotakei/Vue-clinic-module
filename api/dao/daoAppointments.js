@@ -83,10 +83,24 @@ const updateNotes = (req, res, appointmentID, notes) => {
     })
 }
 
+const updateAttendance = (req, res, appointmentID, attendance) => {
+    let statement = "UPDATE appointments "
+    statement += "SET attendance='" + attendance + "' "
+    statement += "WHERE id=" + appointmentID
+
+    pool.query(statement, (error, results) => {
+        if (error) {
+            throw error
+        }
+        res.status(200).json({ success: true })
+    })
+}
+
 module.exports = {
     getAllAppointmentsLocations,
     getAllAppointmentsDoctors,
     getAppointments,
     updateLevelOfInterest,
-    updateNotes
+    updateNotes,
+    updateAttendance
 }

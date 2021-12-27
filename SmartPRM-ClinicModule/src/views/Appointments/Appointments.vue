@@ -68,8 +68,42 @@
                 <p class="black-text">{{ appointment.doctor_name }}</p>
               </b-col>
               <b-col lg="2" md="2">
-                <p v-if="!appointment.attendance" class="black-text">-</p>
-                <p v-if="appointment.attendance" class="black-text">{{ appointment.attendance }}</p>
+                <div v-if="!appointment.attendance">
+                  <b-button
+                    size="sm"
+                    variant="light"
+                    class="width-50"
+                    @click="handleUpdateAttendance(appointment.id, 'Attended')"
+                  >
+                    Yes
+                  </b-button>
+                  <b-button
+                    size="sm"
+                    variant="light"
+                    class="width-50"
+                    @click="handleUpdateAttendance(appointment.id, 'No-show')"
+                  >
+                    No
+                  </b-button>
+                </div>
+                <div v-if="appointment.attendance">
+                  <b-button
+                    size="sm"
+                    :variant="appointment.attendance === 'Attended' ? 'success' : 'light'"
+                    class="width-50"
+                   @click="handleUpdateAttendance(appointment.id, 'Attended')"
+                  >
+                    Yes
+                  </b-button>
+                  <b-button
+                    size="sm"
+                    :variant="appointment.attendance !== 'Attended' ? 'danger' : 'light'"
+                    class="width-50"
+                    @click="handleUpdateAttendance(appointment.id, 'No-show')"
+                  >
+                    No
+                  </b-button>
+                </div>
               </b-col>
               <b-col lg="3" md="3">
                 <b-button-group class="align-center button-group-style">
@@ -151,11 +185,45 @@
               <b-col md="3" sm="3" class="col-title-sm">Doctor:</b-col>
               <b-col md="9" sm="9" class="col-data-sm"><p class="black-text">{{ appointment.doctor_name }}</p></b-col>
             </b-row>
-            <b-row class="no-margin flexMobileParent">
+            <b-row class="no-margin flexMobileParent mb-2">
               <b-col md="3" sm="3" class="col-title-sm">Attendance:</b-col>
               <b-col md="9" sm="9" class="col-data-sm">
-                <p v-if="!appointment.attendance" class="black-text">-</p>
-                <p v-if="appointment.attendance" class="black-text">{{ appointment.attendance }}</p>
+                <div v-if="!appointment.attendance">
+                  <b-button
+                    size="sm"
+                    variant="light"
+                    class="width-50"
+                    @click="handleUpdateAttendance(appointment.id, 'Attended')"
+                  >
+                    Yes
+                  </b-button>
+                  <b-button
+                    size="sm"
+                    variant="light"
+                    class="width-50"
+                    @click="handleUpdateAttendance(appointment.id, 'No-show')"
+                  >
+                    No
+                  </b-button>
+                </div>
+                <div v-if="appointment.attendance">
+                  <b-button
+                    size="sm"
+                    :variant="appointment.attendance === 'Attended' ? 'success' : 'light'"
+                    class="width-50"
+                    @click="handleUpdateAttendance(appointment.id, 'Attended')"
+                  >
+                    Yes
+                  </b-button>
+                  <b-button
+                    size="sm"
+                    :variant="appointment.attendance !== 'Attended' ? 'danger' : 'light'"
+                    class="width-50"
+                    @click="handleUpdateAttendance(appointment.id, 'No-show')"
+                  >
+                    No
+                  </b-button>
+                </div>
               </b-col>
             </b-row>
             <b-row class="no-margin flexMobileParent">
@@ -243,7 +311,8 @@ import {
   getAppointmentsDoctors,
   getAppointments,
   updateLevelOfInterest,
-  updateNotes
+  updateNotes,
+  updateAttendance
 } from '../../services/appointments'
 
 export default {
@@ -324,6 +393,13 @@ export default {
           this.getAppointmentsData(this.selectedLocation, this.selectedDoctor, this.dateSelected)
         }
       })
+    },
+    async handleUpdateAttendance (appointmentID, attendance) {
+      updateAttendance({ 'id': appointmentID, 'attendance': attendance }).then(response => {
+        if (response.success === true) {
+          this.getAppointmentsData(this.selectedLocation, this.selectedDoctor, this.dateSelected)
+        }
+      })
     }
   }
 }
@@ -389,6 +465,9 @@ export default {
   }
   .relative-pos {
     position: relative;
+  }
+  .width-50 {
+    width: 50px !important;
   }
 
   /* media */

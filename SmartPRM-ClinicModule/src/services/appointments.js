@@ -59,3 +59,16 @@ export async function updateNotes (updateNotesData) {
   })
   return rawResponse.json()
 }
+
+export async function updateAttendance (updateAttendanceData) {
+  const rawResponse = await fetch('/api/appointments/update_attendance', {
+    method: 'PUT',
+    credentials: 'same-origin',
+    headers: {
+      'Accept': 'application/json',
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify(updateAttendanceData)
+  })
+  return rawResponse.json()
+}

@@ -353,6 +353,16 @@ app.put('/api/appointments/update_notes', (req, res) => {
         res.status(401).json("OK: user unauthorized")
 });
 
+app.put('/api/appointments/update_attendance', (req, res) => {
+    const appointmentID = req.body.id
+    const attendance = req.body.attendance
+
+    if (req.session.prm_user && req.session.prm_user.permissions && checkPermission(req.session.prm_user.permissions, appointmentsPermission))
+        daoAppointments.updateAttendance(req, res, appointmentID, attendance)
+    else
+        res.status(401).json("OK: user unauthorized")
+});
+
 ///////////////////////////////////
 // free slots
 ///////////////////////////////////
