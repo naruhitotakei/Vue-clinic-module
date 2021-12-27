@@ -3,7 +3,20 @@
         <b-col sm="12">
         <iq-card class-name="iq-card-block iq-card-stretch iq-card-height">
           <template v-slot:headerTitle>
-            <h4 class="card-title mt-3">Revenue By Doctor</h4>
+            <div class="d-flex align-items-center justify-content-between">
+                <h4 class="card-title">Revenue By Doctor</h4>
+                <vue-excel-xlsx
+                    v-if="dataToExport && dataToExport.length"
+                    :data="dataToExport"
+                    :columns="excelColumns"
+                    :filename="'Revenue By Doctor'"
+                    :sheetname="'Revenue By Doctor'"
+                    class="btn btn-primary"
+                    >
+                    Download Excel
+                </vue-excel-xlsx>
+            </div>
+            <!-- <h4 class="card-title mt-3">Revenue By Doctor</h4>
             <b-form @submit.prevent>
               <b-row align-v="center">
                 <b-col cols="12" sm="6" md="4" lg="3">
@@ -30,11 +43,17 @@
                   </vue-excel-xlsx>
                 </b-col>
               </b-row>
-            </b-form>
+            </b-form> -->
           </template>
           <template v-slot:body>
-            <div class="mt-3">
+            <div class="mt-3" v-if="!loading && !noData">
               <apex-chart type="bar" :series="series" :options="chartOptions" />
+            </div>
+            <div class="mt-3 text-center" v-if="loading">
+                <p>Loading Revenue By Doctor...</p>
+            </div>
+            <div class="mt-3 text-center" v-if="!loading && noData">
+                <p>No data found in this date range...</p>
             </div>
           </template>
         </iq-card>
@@ -49,6 +68,31 @@ import { getRevenueByDoctor } from '../../services/statistics'
 export default {
   name: 'RevenueByDoctor',
   components: { IqCard },
+  props: {
+    start: String,
+    end: String
+  },
+  watch: {
+    start (val) {
+      if (val) {
+        this.startDate = val
+        this.onDateChange()
+      }
+    },
+    end (val) {
+      if (val) {
+        this.endDate = val
+        this.onDateChange()
+      }
+    }
+  },
+  created () {
+    if (this.start && this.end) {
+      this.startDate = this.start
+      this.endDate = this.end
+      this.onDateChange()
+    }
+  },
   methods: {
     onDateChange () {
       if (this.startDate && this.endDate) {
@@ -56,8 +100,20 @@ export default {
       }
     },
     getDoctorRevenue (start, end) {
+      this.loading = true
+      this.noData = false
       getRevenueByDoctor(start, end).then(response => {
         this.setDataForChart(response)
+        this.loading = false
+        if (response && response.length) {
+          this.noData = false
+          this.setDataForChart(response)
+        } else {
+          this.noData = true
+        }
+      }).catch(() => {
+        this.noData = false
+        this.loading = false
       })
     },
     async setDataForChart (data) {
@@ -87,6 +143,9 @@ export default {
       this.series = sumByProduct
 
       this.chartOptions = {
+        legend: {
+          position: 'right'
+        },
         xaxis: {
           categories: uniqueDoctors
         },
@@ -116,6 +175,8 @@ export default {
     return {
       startDate: null,
       endDate: null,
+      noData: false,
+      loading: true,
       series: [],
       dataToExport: [],
       excelColumns: [

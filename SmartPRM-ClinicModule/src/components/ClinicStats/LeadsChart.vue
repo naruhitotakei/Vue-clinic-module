@@ -3,7 +3,19 @@
         <b-col sm="12">
         <iq-card class-name="iq-card-block iq-card-stretch iq-card-height">
           <template v-slot:headerTitle>
-            <h4 class="card-title mt-3">Leads Statistics</h4>
+            <div class="d-flex align-items-center justify-content-between">
+                <h4 class="card-title">Leads Statistics</h4>
+                <vue-excel-xlsx
+                    :data="dataToExport"
+                    :columns="excelColumns"
+                    :filename="'Lead Statistics'"
+                    :sheetname="'Lead Statistics'"
+                    class="btn btn-primary"
+                    >
+                    Download Excel
+                  </vue-excel-xlsx>
+            </div>
+            <!-- <h4 class="card-title mt-3">Leads Statistics</h4>
             <b-form @submit.prevent>
               <b-row align-v="center">
                 <b-col cols="12" sm="6" md="4" lg="3">
@@ -30,11 +42,17 @@
                   </vue-excel-xlsx>
                 </b-col>
               </b-row>
-            </b-form>
+            </b-form> -->
           </template>
           <template v-slot:body>
-            <div class="mt-3">
+            <div class="mt-3" v-if="!loading && !noData">
               <apex-chart type="bar" :series="series" :options="chartOptions" />
+            </div>
+            <div class="mt-3 text-center" v-if="loading">
+                <p>Loading Leads Statistics...</p>
+            </div>
+            <div class="mt-3 text-center" v-if="!loading && noData">
+                <p>No data found in this date range...</p>
             </div>
           </template>
         </iq-card>
@@ -50,15 +68,56 @@ import moment from 'moment'
 export default {
   name: 'LeadsChart',
   components: { IqCard },
+  props: {
+    start: String,
+    end: String
+  },
+  watch: {
+    start (val) {
+      if (val) {
+        this.startDate = val
+        this.onDateChange()
+      }
+    },
+    end (val) {
+      if (val) {
+        this.endDate = val
+        this.onDateChange()
+      }
+    }
+  },
+  created () {
+    if (this.start && this.end) {
+      this.startDate = this.start
+      this.endDate = this.end
+      this.onDateChange()
+    }
+  },
   methods: {
-    onLeadDateChange () {
-      if (this.leadStartDate && this.leadEndDate) {
-        this.getClinicLeadStats(this.leadStartDate, this.leadEndDate)
+    // onLeadDateChange () {
+    //   if (this.leadStartDate && this.leadEndDate) {
+    //     this.getClinicLeadStats(this.leadStartDate, this.leadEndDate)
+    //   }
+    // },
+    onDateChange () {
+      if (this.startDate && this.endDate) {
+        this.getClinicLeadStats(this.startDate, this.endDate)
       }
     },
     getClinicLeadStats (start, end) {
+      this.loading = true
+      this.noData = false
       getLeadsPerDay(start, end).then(response => {
-        this.setDataForChart(response)
+        this.loading = false
+        if (response && response.length) {
+          this.noData = false
+          this.setDataForChart(response)
+        } else {
+          this.noData = true
+        }
+      }).catch(() => {
+        this.noData = false
+        this.loading = false
       })
     },
     setDataForChart (data) {
@@ -98,6 +157,30 @@ export default {
       this.series = sumByCountry
 
       this.chartOptions = {
+        chart: {
+          toolbar: {
+            show: true,
+            tools: {
+              download: true,
+              selection: false,
+              zoom: false,
+              zoomin: false,
+              zoomout: false,
+              pan: false
+            },
+            export: {
+              csv: {
+                filename: 'Leads Statistics',
+                dateFormatter (timestamp) {
+                  return new Date(timestamp).toDateString()
+                }
+              }
+            }
+          }
+        },
+        legend: {
+          position: 'right'
+        },
         xaxis: {
           type: 'datetime',
           categories: datesArray
@@ -119,8 +202,10 @@ export default {
   },
   data () {
     return {
-      leadStartDate: null,
-      leadEndDate: null,
+      startDate: null,
+      endDate: null,
+      loading: true,
+      noData: false,
       dataToExport: [],
       excelColumns: [
         { label: 'Country', field: 'country' },
@@ -134,7 +219,14 @@ export default {
         chart: {
           type: 'bar',
           height: 350,
-          stacked: true
+          stacked: true,
+          toolbar: {
+            show: true,
+            tools: {
+              pan: false,
+              zoom: false
+            }
+          }
         },
         // responsive: [{
         //   breakpoint: 480,
