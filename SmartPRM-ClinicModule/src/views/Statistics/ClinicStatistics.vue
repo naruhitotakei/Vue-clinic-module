@@ -1,6 +1,41 @@
 <template>
   <b-container fluid>
     <b-row>
+      <b-col cols="12">
+        <iq-card class-name="iq-card-block iq-card-stretch iq-card-height">
+          <template v-slot:headerTitle>
+            <b-form @submit.prevent>
+              <b-row align-v="center" class="py-2">
+                <b-col cols="12" sm="6" md="4" lg="3">
+                  <b-form-group>
+                    <label style="padding-top: 8px;">Filter</label>
+                    <b-form-select style="line-height: normal" v-model="filterBy" @change="onFilterChange">
+                      <b-form-select-option :value="null">Select Filter</b-form-select-option>
+                      <b-form-select-option :value="30">Last 30 Days</b-form-select-option>
+                      <b-form-select-option :value="90">Last 90 Days</b-form-select-option>
+                      <b-form-select-option :value="180">Last 180 Days</b-form-select-option>
+                      <b-form-select-option :value="2">Last 2 Years</b-form-select-option>
+                      <b-form-select-option :value="1">Year-To-Date</b-form-select-option>
+                    </b-form-select>
+                  </b-form-group>
+                </b-col>
+                <b-col cols="12" sm="6" md="4" lg="3">
+                  <b-form-group>
+                    <label style="padding-top: 8px;">From:</label>
+                    <b-form-input style="line-height: normal" class="date" id="exampleStartdate" type="date" v-model="startDate" @change="onDateChange"></b-form-input>
+                  </b-form-group>
+                </b-col>
+                <b-col cols="12" sm="6" md="4" lg="3">
+                  <b-form-group>
+                    <label style="padding-top: 8px;">End:</label>
+                    <b-form-input style="line-height: normal" class="date" id="exampleEnddate" type="date" v-model="endDate" @change="onDateChange"></b-form-input>
+                  </b-form-group>
+                </b-col>
+              </b-row>
+            </b-form>
+          </template>
+        </iq-card>
+      </b-col>
       <b-col lg="12">
         <b-row>
           <b-col md="6" lg="3">
@@ -56,40 +91,6 @@
             </iq-card>
           </b-col>
         </b-row>
-      </b-col>
-      <b-col cols="12">
-        <iq-card class-name="iq-card-block iq-card-stretch iq-card-height">
-          <template v-slot:headerTitle>
-            <b-form @submit.prevent>
-              <b-row align-v="center" class="py-2">
-                <b-col cols="12" sm="6" md="4" lg="3">
-                  <b-form-group>
-                    <label style="padding-top: 8px;">Filter</label>
-                    <b-form-select style="line-height: normal" v-model="filterBy" @change="onFilterChange">
-                      <b-form-select-option :value="null">Select Filter</b-form-select-option>
-                      <b-form-select-option :value="30">Last 30 Days</b-form-select-option>
-                      <b-form-select-option :value="90">Last 90 Days</b-form-select-option>
-                      <b-form-select-option :value="180">Last 180 Days</b-form-select-option>
-                      <b-form-select-option :value="2">Last 2 Years</b-form-select-option>
-                    </b-form-select>
-                  </b-form-group>
-                </b-col>
-                <b-col cols="12" sm="6" md="4" lg="3">
-                  <b-form-group>
-                    <label style="padding-top: 8px;">From:</label>
-                    <b-form-input style="line-height: normal" class="date" id="exampleStartdate" type="date" v-model="startDate" @change="onDateChange"></b-form-input>
-                  </b-form-group>
-                </b-col>
-                <b-col cols="12" sm="6" md="4" lg="3">
-                  <b-form-group>
-                    <label style="padding-top: 8px;">End:</label>
-                    <b-form-input style="line-height: normal" class="date" id="exampleEnddate" type="date" v-model="endDate" @change="onDateChange"></b-form-input>
-                  </b-form-group>
-                </b-col>
-              </b-row>
-            </b-form>
-          </template>
-        </iq-card>
       </b-col>
       <!-- <b-col sm="12">
         <iq-card class-name="iq-card-block iq-card-stretch iq-card-height">
@@ -197,7 +198,13 @@ export default {
         this.endDate = today
         this.startDate = last2YearDate
       }
-      if (value && value !== 2) {
+      if (value && value === 1) {
+        // Get first date of current year
+        const firstDateOfYear = moment().startOf('year').format('YYYY-MM-DD')
+        this.endDate = today
+        this.startDate = firstDateOfYear
+      }
+      if (value && value !== 2 && value !== 1) {
         const secondDate = moment().subtract(value, 'days').format('YYYY-MM-DD')
         this.endDate = today
         this.startDate = secondDate
