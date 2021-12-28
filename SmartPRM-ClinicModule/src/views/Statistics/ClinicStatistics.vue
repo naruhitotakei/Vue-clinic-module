@@ -44,11 +44,11 @@
           <b-col md="6" lg="3">
             <iq-card class-name="iq-card-block iq-card-stretch iq-card-height" body-class="iq-bg-primary rounded">
               <template v-slot:body>
-                <div class="d-flex align-items-center justify-content-between">
+                <div class="d-flex align-items-top justify-content-between">
                   <div class="rounded-circle iq-card-icon bg-primary" style="min-height: 60px; min-width: 60px;"><i class="ri-user-fill"></i></div>
                   <div class="text-right">
-                    <h2 class="mb-0"><span class="counter">{{ attendance }}</span></h2>
-                    <h5 class="">{{ $t('statisticsForClinic.attendance') }}</h5>
+                    <h2 class="mb-0"><span class="counter">{{ appointments }}</span></h2>
+                    <h5 class="pb-3">Appointments</h5>
                   </div>
                 </div>
               </template>
@@ -60,8 +60,8 @@
                 <div class="d-flex align-items-center justify-content-between">
                   <div class="rounded-circle iq-card-icon bg-warning"><i class="ri-women-fill"></i></div>
                   <div class="text-right">
-                    <h2 class="mb-0"><span class="counter">3450</span></h2>
-                    <h5 class="">{{ $t('statisticsForClinic.nurses') }}</h5>
+                    <h2 class="mb-0"><span class="counter">{{ attended }}</span></h2>
+                    <h5 class="">Attended</h5>
                   </div>
                 </div>
               </template>
@@ -73,8 +73,8 @@
                 <div class="d-flex align-items-center justify-content-between">
                   <div class="rounded-circle iq-card-icon bg-danger"><i class="ri-group-fill"></i></div>
                   <div class="text-right">
-                    <h2 class="mb-0"><span class="counter">3500</span></h2>
-                    <h5 class="">{{ $t('statisticsForClinic.patients') }}</h5>
+                    <h2 class="mb-0"><span class="counter">{{ serviced_patients }}</span></h2>
+                    <h5 class="">Serviced Patients</h5>
                   </div>
                 </div>
               </template>
@@ -86,8 +86,8 @@
                 <div class="d-flex align-items-center justify-content-between">
                   <div class="rounded-circle iq-card-icon bg-info"><i class="ri-hospital-line"></i></div>
                   <div class="text-right">
-                    <h2 class="mb-0"><span class="counter">4500</span></h2>
-                    <h5 class="">{{ $t('statisticsForClinic.pharmacists') }}</h5>
+                    <h2 class="mb-0"><span class="counter">{{ revenue }}</span></h2>
+                    <h5 class="">Revenue</h5>
                   </div>
                 </div>
               </template>
@@ -129,7 +129,7 @@
 <script>
 import { xray } from '../../config/pluginInit'
 import IqCard from '../../components/xray/cards/iq-card'
-import { clinicStatisticsAttendance } from '../../services/statistics'
+import { clinicStatisticsAttendance, getClinicStats } from '../../services/statistics'
 import { getDatesForCurrentYear } from '../../services/commonCodeLists'
 import RevenueByProduct from '@/components/ClinicStats/RevenueByProduct.vue'
 import LeadsChart from '@/components/ClinicStats/LeadsChart.vue'
@@ -149,8 +149,10 @@ export default {
       startDate: null,
       endDate: null,
       filterBy: null,
-      leadStartDate: null,
-      leadEndDate: null,
+      revenue: 0,
+      appointments: 0,
+      attended: 0,
+      serviced_patients: 0,
       attendance: 0,
       statistics: [],
       dataToExport: [],
@@ -212,6 +214,9 @@ export default {
         this.endDate = today
         this.startDate = secondDate
       }
+      if (value) {
+        this.getStats(this.startDate, this.endDate)
+      }
     },
     getStartDates () {
       getDatesForCurrentYear().then(response => {
@@ -219,11 +224,24 @@ export default {
         const end = response[response.length - 1]
         this.startDate = start['?column?'].split('T')[0]
         this.endDate = end['?column?'].split('T')[0]
+        this.getStats(this.startDate, this.endDate)
         // this.getClinicRevenueByProduct(this.startDate, this.endDate)
       })
     },
     onDateChange () {
       this.filterBy = null
+      this.getStats(this.startDate, this.endDate)
+    },
+
+    getStats (start, end) {
+      getClinicStats(start, end).then(response => {
+        if (response && response.revenue) {
+          this.revenue = Number(response.revenue).toLocaleString()
+          this.appointments = Number(response.appointments).toLocaleString()
+          this.attended = Number(response.attended).toLocaleString()
+          this.serviced_patients = Number(response.serviced).toLocaleString()
+        }
+      })
     },
     // getStatistics () {
     //   getClinicStatistics().then(response => {
