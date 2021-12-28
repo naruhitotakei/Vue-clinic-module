@@ -142,6 +142,23 @@ const getClinicStats = async (request, response, start, end, prm_client_id, scop
     })
 }
 
+const getNewEnquiries = (request, response, start, end, prm_client_id, scope) => {
+    let statement = "select enquiries.id, enquiries.name, enquiries.last_name, enquiries.email, enquiries.phone, enquiries.created_at AS date from enquiries "
+    statement += "WHERE date_trunc('day', enquiries.created_at) >= $1 AND date_trunc('day', enquiries.created_at) <= $2 "
+
+    if (scope == 'All') {
+    } else if (scope == 'PrmClient') {
+        statement += "AND enquiries.prm_client_id = " + prm_client_id;
+    }
+
+    pool.query(statement, [start, end], (error, results) => {
+        if (error) {
+            throw error
+        }
+        response.status(200).json(results.rows)
+    })
+}
+
 module.exports = {
   getClinicAttendance,
   getVisitsByCountryInAWeek,
@@ -149,5 +166,6 @@ module.exports = {
   getRevenueByProduct,
   getNewEnquiriesPerDay,
   getRevenueByDoctor,
-  getClinicStats
+  getClinicStats,
+  getNewEnquiries
 }

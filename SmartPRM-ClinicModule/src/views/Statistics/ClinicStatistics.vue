@@ -123,6 +123,7 @@
       <RevenueByProduct :start="startDate" :end="endDate" />
       <LeadsChart :start="startDate" :end="endDate" />
       <RevenueByDoctor :start="startDate" :end="endDate" />
+      <NewPatients :start="startDate" :end="endDate" />
     </template>
   </b-container>
 </template>
@@ -134,11 +135,18 @@ import { getDatesForCurrentYear } from '../../services/commonCodeLists'
 import RevenueByProduct from '@/components/ClinicStats/RevenueByProduct.vue'
 import LeadsChart from '@/components/ClinicStats/LeadsChart.vue'
 import RevenueByDoctor from '@/components/ClinicStats/RevenueByDoctor.vue'
+import NewPatients from '@/components/ClinicStats/NewPatients.vue'
 import moment from 'moment'
 
 export default {
   name: 'Dashboard1',
-  components: { IqCard, RevenueByProduct, LeadsChart, RevenueByDoctor },
+  components: {
+    IqCard,
+    RevenueByProduct,
+    LeadsChart,
+    RevenueByDoctor,
+    NewPatients
+  },
   mounted () {
     xray.index()
     this.getStartDates()

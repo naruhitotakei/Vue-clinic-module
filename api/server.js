@@ -1138,6 +1138,15 @@ app.get('/api/statistics/new-leads/:start/:end', (req, res) => {
         res.status(401).json("OK: user unauthorized")
 });
 
+app.get('/api/statistics/new-enquiries/:start/:end', (req, res) => {
+    const start = req.params.start
+    const end = req.params.end
+    if (req.session.prm_user && req.session.prm_user.permissions && checkPermission(req.session.prm_user.permissions, clinicStatisticsPermission))
+        daoStatistics.getNewEnquiries(req, res, start, end, req.session.prm_user.prm_client_id, getScope(req.session.prm_user.permissions, clinicStatisticsPermission))
+    else
+        res.status(401).json("OK: user unauthorized")
+});
+
 ///////////////////////////////////
 // codelist methodes
 ///////////////////////////////////
