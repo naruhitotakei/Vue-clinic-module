@@ -64,7 +64,7 @@
                         </div>
                     </template>
                     <template v-slot:body>
-                        <b-table v-if="openAssignments.length > 0"
+                        <!-- <b-table v-if="openAssignments.length > 0"
                           borderless
                           id="openAssignmentsTable"
                           :items="openAssignments"
@@ -75,19 +75,55 @@
                           <template v-slot:cell(dentist)="data">
                             {{ patientsDentist(data.item) }}
                           </template>
-                        </b-table>
-                        <p v-else>{{ $t('home.noOpenAssignments') }}</p>
-                    </template>
-                    <template>
-                        <b-collapse id="collapse-6" class="mb-2"> </b-collapse>
-                        <div class="ml-4 pb-2">
-                            <b-pagination v-if="hideOpenAssignmentsPagination"
-                                          v-model="currentOpenAssignmentsPage"
-                                          :total-rows="openAssignments.length"
-                                          :per-page="openAssignmentsPerPage"
-                                          aria-controls="openAssignmentsTable">
-                            </b-pagination>
+                        </b-table> -->
+                        <!-- <template>
+                          <b-collapse id="collapse-6" class="mb-2"> </b-collapse>
+                          <div class="ml-4 pb-2">
+                              <b-pagination v-if="hideOpenAssignmentsPagination"
+                                            v-model="currentOpenAssignmentsPage"
+                                            :total-rows="openAssignments.length"
+                                            :per-page="openAssignmentsPerPage"
+                                            aria-controls="openAssignmentsTable">
+                              </b-pagination>
+                          </div>
+                      </template> -->
+                        <b-list-group class="list-group-flush" id="openTodos">
+                          <b-list-group-item
+                              v-for="(item, index) in openAssignments"
+                              :key="index"
+                          >
+                            <div :class="{ 'taskIsActive' : !item.completed}">
+                              <div>
+                                <b-checkbox v-model="item.completed" name="check-button" inline
+                                  :key="index"
+                                  @change="finishAssignment(item.id, $event)"><strong>{{ item.description }}</strong></b-checkbox>
+                              </div>
+                              <div class="d-flex align-items-center justify-content-between">
+                                <div>
+                                  <span class="text-left">{{ item.patientname }} {{ item.patientlastname }}</span>&nbsp;
+                                  <span class="text-left">{{ patientsDentist(item) ? `(${patientsDentist(item)})` : '' }}</span>
+                                </div>
+                                <div class="d-flex align-items-center">
+                                  <span class="text-right text-width-150">{{ item.due_at | formatDate }}</span>
+                                  <b-button variant=" iq-bg-success mr-1 mb-1" size="sm" style="margin-left: 5%;" @click="editAssignments(item)">
+                                  <i class="ri-ball-pen-fill m-0"></i>
+                                </b-button>
+                                </div>
+                              </div>
+                            </div>
+                          </b-list-group-item>
+                      </b-list-group>
+                      <template>
+                        <div class="mt-4 ml-2">
+                            <p v-if="openAssignments.length === 0">{{ $t('home.noOpenAssignments') }}</p>
+                            <b-pagination
+                              v-if="openAssignments.length > 10"
+                              v-model="currentOpenAssignmentsPage"
+                              :total-rows="openAssignments.length"
+                              :per-page="openAssignmentsPerPage"
+                              aria-controls="openTodos"></b-pagination>
                         </div>
+                      </template>
                     </template>
                 </iq-card>
             </b-col>
@@ -330,7 +366,7 @@
                   </template>
                     <div class="modal-footer modal-footer-bt" style="width: 100%;">
                         <template v-if="disabled">
-                            <button v-if="appointmentData.appointment_canceled_in_advance_by_clinic === false && appointmentData.appointment_canceled_in_advance_by_patient === false || openCancelationModal === true" type="button" class="btn btn-secondary" @click="openCancelationModal = true">{{ $t('calendar.btnCancelation') }}</button>
+                            <button v-if="appointmentData.appointment_canceled === false || openCancelationModal === true" type="button" class="btn btn-secondary" @click="openCancelationModal = true">{{ $t('calendar.btnCancelation') }}</button>
                             <button type="button" class="btn btn-secondary" @click="appointmentModal = false">{{ $t('calendar.btnClose') }}</button>
                             <button type="button" class="btn btn-secondary" @click="editMode">{{ $t('calendar.btnEdit') }}</button>
                             <button type="button" class="btn btn-primary" @click="viewPatient(appointmentData.enquiry_id)">{{ $t('calendar.btnEPR') }}</button>
@@ -348,27 +384,34 @@
                              @close="closeCancelation"
                              @cancel="closeCancelation">
                         <div class="col-md-12 mb-2">
-                            <div class="d-flex justify-content-around mt-2">
+                            <div class="ml-3 mt-2">
                                 <b-form-radio class="custom-radio-color"
                                               inline
-                                              v-model="appointmentData.appointment_canceled_in_advance_by_patient"
+                                              v-model="appointmentData.appointment_canceled"
                                               value="true"
                                               name="cancelation">
-                                    {{ $t('calendarEvent.appointmentCanceledInAdvanceByPatient') }}
+                                    {{ $t('calendarEvent.cancelAppointment') }}
                                 </b-form-radio>
-                                <b-form-radio class="custom-radio-color"
-                                              inline
-                                              v-model="appointmentData.appointment_canceled_in_advance_by_clinic"
-                                              value="true"
-                                              name="cancelation">
-                                    {{ $t('calendarEvent.appointmentCanceledInAdvanceByClinic') }}
-                                </b-form-radio>
+                            </div>
+                            <div class="col-md-12 mt-2">
+                                <textarea row="2" v-model="appointmentData.cancelation_reason" class="form-control form-control-disabled mt-4" id="cancelationReason" :placeholder="$t('calendarEvent.cancelationReason')"></textarea>
                             </div>
                         </div>
                     </b-modal>
                 </div>
             </form>
         </b-modal>
+
+        <AddEditAssignment
+          v-if="todoToEdit"
+          :modalAssigmentShow="editAssignmentModal"
+          :todo="todoToEdit"
+          :users="users"
+          :enquires="enquires"
+          @updated="getUserAssignments"
+          @close="closeAssignmentModal"
+        />
+
         <FooterStyle1>
             <template v-slot:left>
                 <li class="list-inline-item"><a href="#">{{ $t('footer.privacyPolicy') }}</a></li>
@@ -390,17 +433,25 @@ import { getLocationsList, getCountriesWithPatients, getDatesForCurrentWeek } fr
 import { visitsByCountryInAWeek, getDoctorsStatisticPerWeek } from '../../services/statistics'
 import { getProductGroups } from '@/services/products'
 import { getDoctorList, getLabels } from '@/services/calendarService'
-import { sso, getDentists } from '@/services/userService'
+import { sso, getDentists, getUsers } from '@/services/userService'
 import DatePicker from 'vue2-datepicker'
 import 'vue2-datepicker/index.css'
+import { finishAssignment } from '../../services/assignmentsService'
+import { getEnquires } from '@/services/enquiry'
+import AddEditAssignment from '@/components/Assignments/AddEditAssignment'
 
 import _ from 'lodash'
 const body = document.getElementsByTagName('body')
 export default {
   name: 'Home',
-  components: { IqCard, DatePicker },
+  components: { IqCard, DatePicker, AddEditAssignment },
   data () {
     return {
+      userId: null,
+      users: [],
+      enquires: [],
+      todoToEdit: null,
+      editAssignmentModal: false,
       doctorsData: [],
       datesForCurrentWeek: [],
       dataForChart: [],
@@ -499,8 +550,8 @@ export default {
         crmProduct: '',
         label_id: '',
         backgroundColor: '',
-        appointment_canceled_in_advance_by_clinic: false,
-        appointment_canceled_in_advance_by_patient: false
+        appointment_canceled: false,
+        cancelation_reason: ''
       },
       selectedDoctor: '',
       selectedProductGroup: '',
@@ -514,25 +565,27 @@ export default {
       patient_attend: [
         {
           label: this.$t('calendarEvent.unknown'),
-          value: 'Unknown',
+          value: null,
           checked: true
         },
         {
           label: this.$t('calendarEvent.attended'),
-          value: 'Attended',
+          value: true,
           checked: false
         },
         {
           label: this.$t('calendarEvent.notAttended'),
-          value: 'Not attended',
+          value: false,
           checked: false
         }
       ]
     }
   },
-  mounted () {
+  async mounted () {
     xray.index()
-    this.getUserLogin()
+    await this.getUserLogin()
+    this.getUsersList()
+    this.getEnquires()
     this.getDentists()
     this.getCountriesWithPatients()
     this.getDoctorsStatisticPerWeek()
@@ -556,6 +609,25 @@ export default {
         this.dentists = response
       })
     },
+    getUsersList () {
+      getUsers().then(response => {
+        this.users = response
+        this.users = this.users.map(user => {
+          const userObj = Object.assign({}, user)
+          userObj.full_name = user.name + ' ' + user.surname
+          return userObj
+        })
+      })
+    },
+    getEnquires () {
+      getEnquires().then(response => {
+        let enquires = [...response]
+        enquires.map((item, index) => {
+          enquires[index].full_name = item.name + ' ' + item.last_name
+        })
+        this.enquires = enquires
+      })
+    },
     patientsDentist (patient) {
       if (this.dentists && this.dentists.length) {
         let dentist = this.dentists.find((item) => {
@@ -567,6 +639,7 @@ export default {
     getUserLogin () {
       sso().then(response => {
         if (typeof response !== 'string') {
+          this.userId = response.id
           getTodaysAppointments(this.$i18n.locale).then(response => {
             if (Array.isArray(response)) {
               response.map(appointment => {
@@ -587,8 +660,8 @@ export default {
                   patient_phone: appointment.patient_phone,
                   patient_id: appointment.patient_id,
                   patient_attended: appointment.patient_attended,
-                  appointment_canceled_in_advance_by_clinic: false,
-                  appointment_canceled_in_advance_by_patient: false
+                  appointment_canceled: false,
+                  cancelation_reason: appointment.cancelation_reason
                 })
               })
             }
@@ -614,6 +687,15 @@ export default {
           })
         }
       })
+    },
+    getUserAssignments () {
+      this.editAssignmentModal = false
+      getAssignmentsForUser().then(response => {
+        this.openAssignments = response
+      })
+    },
+    closeAssignmentModal (val) {
+      this.editAssignmentModal = false
     },
     showLabels (item) {
       if (this.disabled && this.appointmentData.label_id === item.id) {
@@ -652,19 +734,11 @@ export default {
     },
     closeCancelation () {
       this.openCancelationModal = false
-      this.appointmentData.appointment_canceled_in_advance_by_clinic = false
-      this.appointmentData.appointment_canceled_in_advance_by_patient = false
+      this.appointmentData.appointment_canceled = false
     },
     editMode (e) {
       e.preventDefault()
       this.disabled = false
-    },
-    checkRadio () {
-      if (this.appointmentData.appointment_canceled_in_advance_by_patient) {
-        this.appointmentData.appointment_canceled_in_advance_by_clinic = ''
-      } else {
-        this.appointmentData.appointment_canceled_in_advance_by_patient = ''
-      }
     },
     showProps (item, prop) {
       if (this.disabled && prop === item.value) {
@@ -731,6 +805,21 @@ export default {
           return country.hasOwnProperty('percentage')
         })
       })
+    },
+    finishAssignment (id, finished) {
+      const completedBy = this.userId
+      finishAssignment(id, finished, completedBy).then(response => {})
+    },
+    editAssignments (todo) {
+      if (todo && todo.due_at) {
+        todo.due_at = moment(todo.due_at).format('YYYY-MM-DD')
+      }
+      if (todo && todo.user_id) {
+        let user = this.users.find(user => user.id === todo.user_id)
+        todo.user_id = user
+      }
+      this.todoToEdit = Object.assign({}, todo)
+      this.editAssignmentModal = true
     }
   }
 }

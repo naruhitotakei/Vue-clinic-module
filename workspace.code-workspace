@@ -1,0 +1,13 @@
+{
+	"folders": [
+		{
+			"name": "SmartPRM-ClinicModule",
+			"path": "SmartPRM-ClinicModule"
+		},
+		{
+			"name": "api",
+			"path": "api"
+		}
+	],
+	"settings": {}
+}

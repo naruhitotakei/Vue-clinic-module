@@ -1,49 +1,38 @@
 <template>
-  <div class="mt-5">
-    <template v-if="items.length > 0">
-    <b-table
-      :items="items"
-      :fields="fields"
-      responsive="sm"
-    >
-      <template #cell(doctors)="data">
-        <time-selection-table-row
+  <b-table
+    :items="items"
+    :fields="fields"
+    responsive="sm"
+  >
+    <template #cell(doctors)="data">
+      <time-selection-table-row
         :doctors="data.value"
+        :appointment-slot="appointmentSlot"
+        @update:appointment-slot="$emit('update:appointment-slot', $event)"
         :activeDoctor="getActiveDoctor(data.item.time)"
         @select-doctor="$emit('select-doctor', {doctor: $event, time: data.item.time})"
-        />
-      </template>
-      <template #cell(selected)="{ rowSelected }">
-        <template v-if="rowSelected">
-          <span aria-hidden="true">&check;</span>
-        </template>
-      </template>
-    </b-table>
+      />
     </template>
-    <template v-else>
-      No available slots on this day
-    </template>
-  </div>
+  </b-table>
 </template>
 
 <script>
+import { defineComponent } from '@vue/composition-api'
 import TimeSelectionTableRow from './TimeSelectionTableRow.vue'
-export default {
+
+export default defineComponent({
   components: {
     TimeSelectionTableRow
   },
   props: {
-    title: String,
-    selectedIndex: {
-      type: Array,
-      default: () => []
-    },
     items: {
       type: Array,
       default: () => []
     },
-    selectedSlot: Object,
-    selectedDate: Date
+    appointmentSlot: {
+      type: Object,
+      default: null
+    }
   },
   data () {
     return {
@@ -54,8 +43,7 @@ export default {
     fields () {
       return [
         { key: 'time', label: this.$t('public.onlineBooking.time') },
-        { key: 'doctors', label: this.$t('public.onlineBooking.availableDoctors') },
-        { key: 'totalPrice', label: ' ' }
+        { key: 'doctors', label: this.$t('public.onlineBooking.availableDoctors') }
       ]
     }
   },
@@ -69,5 +57,5 @@ export default {
       return (this.selectedSlot && this.selectedDate.getDate() === this.selectedSlot.date.getDate() && time === this.selectedSlot.time) ? this.selectedSlot.doctor : null
     }
   }
-}
+})
 </script>

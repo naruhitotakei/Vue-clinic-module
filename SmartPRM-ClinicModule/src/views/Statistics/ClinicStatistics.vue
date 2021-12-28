@@ -1,6 +1,44 @@
 <template>
   <b-container fluid>
     <b-row>
+      <b-col cols="12">
+        <iq-card class-name="iq-card-block iq-card-stretch iq-card-height">
+          <template v-slot:headerTitle>
+            <b-form @submit.prevent>
+              <b-row align-v="center" class="py-2">
+                <b-col cols="12">
+                  <h4 class="card-title mt-3">{{ $t('statisticsForClinic.statisticsForClinicHeader') }}</h4>
+                </b-col>
+                <b-col cols="12" sm="6" md="4" lg="3">
+                  <b-form-group>
+                    <label style="padding-top: 8px;">Filter</label>
+                    <b-form-select style="line-height: normal" v-model="filterBy" @change="onFilterChange">
+                      <b-form-select-option :value="null">Select Filter</b-form-select-option>
+                      <b-form-select-option :value="30">Last 30 Days</b-form-select-option>
+                      <b-form-select-option :value="90">Last 90 Days</b-form-select-option>
+                      <b-form-select-option :value="180">Last 180 Days</b-form-select-option>
+                      <b-form-select-option :value="2">Last 2 Years</b-form-select-option>
+                      <b-form-select-option :value="1">Year-To-Date</b-form-select-option>
+                    </b-form-select>
+                  </b-form-group>
+                </b-col>
+                <b-col cols="12" sm="6" md="4" lg="3">
+                  <b-form-group>
+                    <label style="padding-top: 8px;">From:</label>
+                    <b-form-input style="line-height: normal" class="date" id="exampleStartdate" type="date" v-model="startDate" @change="onDateChange"></b-form-input>
+                  </b-form-group>
+                </b-col>
+                <b-col cols="12" sm="6" md="4" lg="3">
+                  <b-form-group>
+                    <label style="padding-top: 8px;">End:</label>
+                    <b-form-input style="line-height: normal" class="date" id="exampleEnddate" type="date" v-model="endDate" @change="onDateChange"></b-form-input>
+                  </b-form-group>
+                </b-col>
+              </b-row>
+            </b-form>
+          </template>
+        </iq-card>
+      </b-col>
       <b-col lg="12">
         <b-row>
           <b-col md="6" lg="3">
@@ -57,73 +95,50 @@
           </b-col>
         </b-row>
       </b-col>
-      <b-col sm="12">
+      <!-- <b-col sm="12">
         <iq-card class-name="iq-card-block iq-card-stretch iq-card-height">
           <template v-slot:headerTitle>
-            <h4 class="card-title mt-3">{{ $t('statisticsForClinic.statisticsForClinicHeader') }}</h4>
-            <b-form>
-              <b-row>
-                <b-col cols="12" sm="6" md="4" lg="3">
-                  <b-form-group>
-                    <label style="padding-top: 8px;">From:</label>
-                    <b-form-input style="line-height: normal" class="date" id="exampleStartdate" type="date" v-model="startDate" @change="onDateChange"></b-form-input>
-                  </b-form-group>
-                </b-col>
-                <b-col cols="12" sm="6" md="4" lg="3">
-                  <b-form-group>
-                    <label style="padding-top: 8px;">End:</label>
-                    <b-form-input style="line-height: normal" class="date" id="exampleEnddate" type="date" v-model="endDate" @change="onDateChange"></b-form-input>
-                  </b-form-group>
-                </b-col>
-              </b-row>
-            </b-form>
+            <div class="d-flex align-items-center justify-content-between">
+              <h4 class="card-title">{{ $t('statisticsForClinic.statisticsForClinicHeader') }}</h4>
+              <vue-excel-xlsx
+                :data="dataToExport"
+                :columns="excelColumns"
+                :filename="'Revenue By Product'"
+                :sheetname="'Revenue By Product'"
+                class="btn btn-primary"
+                >
+                Download Excel
+              </vue-excel-xlsx>
+            </div>
           </template>
           <template v-slot:body>
-            <div class="iq-card-body pb-0 mt-3">
-              <div class="row text-center">
-                <div class="col-sm-3 col-6">
-                  <h4 class="margin-0">€ 305 </h4>
-                  <p class="text-muted">{{ $t('statisticsForClinic.todaysIncome') }}</p>
-                </div>
-                <div class="col-sm-3 col-6">
-                  <h4 class="margin-0">€ 999 </h4>
-                  <p class="text-muted">{{ $t('statisticsForClinic.weeksIncome') }}</p>
-                </div>
-                <div class="col-sm-3 col-6">
-                  <h4 class="margin-0">€ 4999 </h4>
-                  <p class="text-muted">{{ $t('statisticsForClinic.monthsIncome') }}</p>
-                </div>
-                <div class="col-sm-3 col-6">
-                  <h4 class="margin-0">€ 90.000 </h4>
-                  <p class="text-muted">{{ $t('statisticsForClinic.yearsIncome') }}</p>
-                </div>
-              </div>
+            <div class="mt-3">
+              <apex-chart type="pie" width="100%" height="500px" :series="series" :options="chartOptions" />
             </div>
-            <div id="home-servey-chart"></div>
-            <!-- <ApexChart element="home-chart-09" :chartOption="homesurvey" v-if="$route.meta.dark"/> -->
-            <!-- <ApexChart element="home-chart-09" :chartOption="chart9" v-else/> -->
-            <apex-chart type="pie" width="100%" height="500px" :series="series" :options="chartOptions" />
           </template>
         </iq-card>
-      </b-col>
+      </b-col> -->
     </b-row>
-
-    <LeadsChart />
-    <RevenueByDoctor />
+    <template v-if="startDate && endDate">
+      <RevenueByProduct :start="startDate" :end="endDate" />
+      <LeadsChart :start="startDate" :end="endDate" />
+      <RevenueByDoctor :start="startDate" :end="endDate" />
+    </template>
   </b-container>
 </template>
 <script>
 import { xray } from '../../config/pluginInit'
 import IqCard from '../../components/xray/cards/iq-card'
-import { clinicStatisticsAttendance, getRevenueByProduct } from '../../services/statistics'
+import { clinicStatisticsAttendance } from '../../services/statistics'
 import { getDatesForCurrentYear } from '../../services/commonCodeLists'
+import RevenueByProduct from '@/components/ClinicStats/RevenueByProduct.vue'
 import LeadsChart from '@/components/ClinicStats/LeadsChart.vue'
 import RevenueByDoctor from '@/components/ClinicStats/RevenueByDoctor.vue'
-// import moment from 'moment'
+import moment from 'moment'
 
 export default {
   name: 'Dashboard1',
-  components: { IqCard, LeadsChart, RevenueByDoctor },
+  components: { IqCard, RevenueByProduct, LeadsChart, RevenueByDoctor },
   mounted () {
     xray.index()
     this.getStartDates()
@@ -133,10 +148,17 @@ export default {
     return {
       startDate: null,
       endDate: null,
+      filterBy: null,
       leadStartDate: null,
       leadEndDate: null,
       attendance: 0,
       statistics: [],
+      dataToExport: [],
+      excelColumns: [
+        { label: 'Product', field: 'product' },
+        { label: 'Count', field: 'count' },
+        { label: 'Sum', field: 'sum', dataFormat: this.priceFormat }
+      ],
       slickOptions: {
         centerMode: false,
         centerPadding: '60px',
@@ -163,168 +185,45 @@ export default {
       },
       series: [],
       chartOptions: {
-        // chart: {
-        //   type: 'pie',
-        //   height: 350
-        // },
-        labels: []
-        // responsive: [{
-        //   breakpoint: 480,
-        //   options: {
-        //     chart: {
-        //       width: 200
-        //     },
-        //     legend: {
-        //       position: 'bottom'
-        //     }
-        //   }
-        // }]
-        // plotOptions: {
-        //   bar: {
-        //     colors: {
-        //       ranges: [{
-        //         from: -100,
-        //         to: -46,
-        //         color: '#e64141'
-        //       }, {
-        //         from: -45,
-        //         to: 0,
-        //         color: '#089bab'
-        //       }, {
-        //         from: 0,
-        //         to: 20,
-        //         color: '#FC9F5B'
-        //       }]
-        //     },
-        //     columnWidth: '80%'
-        //   }
-        // },
-        // dataLabels: {
-        //   enabled: false
-        // },
-        // yaxis: {
-        //   title: {
-        //     text: 'Total Revenue'
-        //   },
-        //   labels: {
-        //     formatter: function (y) {
-        //       return y.toLocaleString()
-        //     }
-        //   }
-        // },
-        // xaxis: {
-        //   categories: [],
-        //   labels: {
-        //   }
+        labels: [],
+        dataLabels: {
+          enabled: false
+        }
       }
-      // }
-      // chart9: {
-      //   series: [{
-      //     name: 'Total Revenue',
-      //     data: []
-      //   }],
-      //   chart: {
-      //     type: 'bar',
-      //     height: 350
-      //   },
-      //   plotOptions: {
-      //     bar: {
-      //       colors: {
-      //         ranges: [{
-      //           from: -100,
-      //           to: -46,
-      //           color: '#e64141'
-      //         }, {
-      //           from: -45,
-      //           to: 0,
-      //           color: '#089bab'
-      //         }, {
-      //           from: 0,
-      //           to: 20,
-      //           color: '#FC9F5B'
-      //         }]
-      //       },
-      //       columnWidth: '80%'
-      //     }
-      //   },
-      //   dataLabels: {
-      //     enabled: false
-      //   },
-      //   yaxis: {
-      //     title: {
-      //       text: 'Growth'
-      //     },
-      //     labels: {
-      //       formatter: function (y) {
-      //         return y.toFixed(0)
-      //       }
-      //     }
-      //   },
-      //   xaxis: {
-      //     categories: [],
-      //     labels: {
-      //       rotate: -90
-      //     }
-      //   }
-      // }
     }
   },
   methods: {
+    onFilterChange (value) {
+      const today = moment().format('YYYY-MM-DD')
+      if (value && value === 2) {
+        // Get Last 2 years Date from now
+        const last2YearDate = moment().subtract(2, 'years').format('YYYY-MM-DD')
+        this.endDate = today
+        this.startDate = last2YearDate
+      }
+      if (value && value === 1) {
+        // Get first date of current year
+        const firstDateOfYear = moment().startOf('year').format('YYYY-MM-DD')
+        this.endDate = today
+        this.startDate = firstDateOfYear
+      }
+      if (value && value !== 2 && value !== 1) {
+        const secondDate = moment().subtract(value, 'days').format('YYYY-MM-DD')
+        this.endDate = today
+        this.startDate = secondDate
+      }
+    },
     getStartDates () {
       getDatesForCurrentYear().then(response => {
         const start = response[0]
         const end = response[response.length - 1]
         this.startDate = start['?column?'].split('T')[0]
         this.endDate = end['?column?'].split('T')[0]
-        this.getClinicRevenueByProduct(this.startDate, this.endDate)
+        // this.getClinicRevenueByProduct(this.startDate, this.endDate)
       })
     },
     onDateChange () {
-      if (this.startDate && this.endDate) {
-        this.getClinicRevenueByProduct(this.startDate, this.endDate)
-      }
-    },
-    onLeadDateChange () {
-      if (this.leadStartDate && this.leadEndDate) {
-        this.getClinicLeadStats(this.leadStartDate, this.leadEndDate)
-      }
-    },
-    getClinicRevenueByProduct (start, end) {
-      getRevenueByProduct(start, end).then(response => {
-        this.setChartData(response)
-      })
-    },
-    setChartData (data) {
-      let prNames = []
-      let sumArray = []
-      // let sumOfRevenue = 0
-      data.forEach(item => {
-        prNames.push(item.pr_name)
-        sumArray.push(Math.floor(Number(item.sum)))
-        // sumOfRevenue += Number(item.sum)
-      })
-
-      this.series = [...sumArray]
-
-      this.chartOptions = {
-        labels: [...prNames]
-      }
-
-      // this.chartOptions = {
-      //   xaxis: {
-      //     categories: [...prNames]
-      //   },
-      //   yaxis: {
-      //     labels: {
-      //       formatter: function (y) {
-      //         return y.toLocaleString()
-      //       }
-      //     },
-      //     title: {
-      //       text: 'Sum of Revenue ' + sumOfRevenue.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + ' EUR'
-      //     }
-      //   }
-      // }
+      this.filterBy = null
     },
     // getStatistics () {
     //   getClinicStatistics().then(response => {

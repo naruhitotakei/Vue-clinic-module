@@ -98,7 +98,7 @@
                                  :show-second="false"
                                  :lang="'en'"
                                  :format="'DD.MM.YYYY HH.mm'"></date-picker>
-                    <!-- <strong>{{ getDurationInMinutes ? getDurationInMinutes : '' }}</strong> -->
+                    <b-form-input v-if="!formData.id && !disabled" style="width: 65px; padding-top: 25px; padding-bottom: 25px;" type="number" min="1" step="5" v-model="durationMins" @input="setMinutes" placeholder="Duration" class="ml-3"></b-form-input>
                     <label for="start" class="mb-0 mr-3 ml-4" :style="{ 'margin-top': '13px' }">{{ $t('calendarEvent.end') }}*</label>
                     <date-picker :disabled="disabled"
                                  required
@@ -110,7 +110,7 @@
                                  :minute-step="5"
                                  :show-second="false"
                                  :lang="'en'"
-                                 :format="'HH.mm'"></date-picker>
+                                 :format="'HH:mm'"></date-picker>
                 </div>
             </div>
             <div class="row align-items-center justify-content-between w-100 " v-if="!disabled || formData.notes" :class="{'mb-3': !disabled}">
@@ -179,13 +179,12 @@
             </template>
             <template>
                 <div class="cancelation-text font-size-18 mt-3 mb-1 row align-items-center justify-content-center w-100">
-                    <p v-if="formData.appointment_canceled_in_advance_by_clinic === true">{{ $t('calendarEvent.appointmentCanceledInAdvanceByClinic') }}</p>
-                    <p v-if="formData.appointment_canceled_in_advance_by_patient === true">{{ $t('calendarEvent.appointmentCanceledInAdvanceByPatient') }}</p>
+                    <p v-if="formData.appointment_canceled === true">{{ $t('calendarEvent.appointmentCanceled') }}</p>
                 </div>
             </template>
             <div class="modal-footer modal-footer-bt" style="width: 100%;">
                 <template v-if="disabled">
-                    <button v-if="formData.appointment_canceled_in_advance_by_clinic === false && formData.appointment_canceled_in_advance_by_patient === false || openCancelationModal === true" type="button" class="btn btn-secondary" @click="openCancelationModal = true">{{ $t('calendar.btnCancelation') }}</button>
+                    <button v-if="formData.appointment_canceled === false || openCancelationModal === true" type="button" class="btn btn-secondary" @click="openCancelationModal = true">{{ $t('calendar.btnCancelation') }}</button>
                     <button type="button" class="btn btn-secondary" @click="$emit('setModalShow', false), formData = defaultAppointment">{{ $t('calendar.btnClose') }}</button>
                     <button type="button" class="btn btn-secondary" @click="editMode">{{ $t('calendar.btnEdit') }}</button>
                     <button type="button" class="btn btn-primary" @click="viewPatient(formData.enquiry_id)">{{ $t('calendar.btnEPR') }}</button>
@@ -217,27 +216,37 @@
                      @close="closeCancelation"
                      @cancel="closeCancelation">
                 <div class="col-md-12 mb-2">
-                    <div class="d-flex justify-content-around mt-2">
+                    <div class="ml-3 mt-2">
                         <b-form-radio class="custom-radio-color"
                                       inline
-                                      v-model="formData.appointment_canceled_in_advance_by_patient"
+                                      v-model="formData.appointment_canceled"
                                       value="true"
                                       name="cancelation">
-                            {{ $t('calendarEvent.appointmentCanceledInAdvanceByPatient') }}
+                            {{ $t('calendarEvent.cancelAppointment') }}
                         </b-form-radio>
-                        <b-form-radio class="custom-radio-color"
-                                      inline
-                                      v-model="formData.appointment_canceled_in_advance_by_clinic"
-                                      value="true"
-                                      name="cancelation">
-                            {{ $t('calendarEvent.appointmentCanceledInAdvanceByClinic') }}
-                        </b-form-radio>
+                    </div>
+                    <div class="col-md-12 mt-2">
+                        <textarea row="2" v-model="formData.cancelation_reason" class="form-control form-control-disabled mt-4" id="cancelationReason" :placeholder="$t('calendarEvent.cancelationReason')" ></textarea>
                     </div>
                 </div>
             </b-modal>
         </div>
     </form>
   </b-modal>
+
+<b-modal v-model="confirmationModal.show" ok-title="OK" cancel-title="Cancel" @ok="confirmationModal.callback" @cancel="confirmationModal.reset">
+  <h4 class="my-4 card-title text-center">{{ confirmationModal.info && confirmationModal.info.oldResource ? $t('calendarEvent.eventMoveBetweenResources') : $t('calendarEvent.eventTimeChange') }}</h4>
+</b-modal>
+
+  <div v-if="eventPopover.show">
+    <b-popover :target="eventPopover.info.el" triggers="hover">
+      <template #title>{{ eventPopover.info.event.extendedProps.patient_name }}</template>
+      <div>{{ eventPopover.info.event.extendedProps.doctorId }}</div>
+      <div>{{ eventPopover.info.event.extendedProps.prm_pr_group_name_text }}</div>
+      <div>{{ eventPopover.info.event.extendedProps.notes }}</div>
+      <div>{{ eventPopover.info.event.extendedProps.time }}</div>
+    </b-popover>
+  </div>
 
   <AddPatientModal
     from="calendar"
@@ -285,6 +294,35 @@ export default {
   },
   data () {
     return {
+      durationMins: null,
+      eventPopover: {
+        show: false,
+        info: null,
+        reset: () => {
+          this.eventPopover = {
+            ...this.eventPopover,
+            show: false,
+            info: null
+          }
+        }
+      },
+      confirmationModal: {
+        show: false,
+        callback: () => {},
+        info: null,
+        reset: (reset = true) => {
+          if (this.confirmationModal.info && reset) {
+            this.confirmationModal.info.revert()
+          }
+          this.confirmationModal = {
+            ...this.confirmationModal,
+            show: false,
+            callback: () => {},
+            info: null
+          }
+        }
+      },
+      modalEventTimeChange: false,
       openAddPatient: false,
       calendarUpdateEvery3Min: undefined,
       eventInfo: '',
@@ -313,29 +351,23 @@ export default {
       patient_attend: [
         {
           label: this.$t('calendarEvent.unknown'),
-          value: 'Unknown',
+          value: null,
           checked: true
         },
         {
           label: this.$t('calendarEvent.attended'),
-          value: 'Attended',
+          value: true,
           checked: false
         },
         {
           label: this.$t('calendarEvent.notAttended'),
-          value: 'Not attended',
+          value: false,
           checked: false
         }
       ],
-      appointment_canceled_in_advance_by_patient: [
+      appointment_canceled: [
         {
-          label: this.$t('calendarEvent.appointmentCanceledInAdvanceByPatient'),
-          checked: false
-        }
-      ],
-      appointment_canceled_in_advance_by_clinic: [
-        {
-          label: this.$t('calendarEvent.appointmentCanceledInAdvanceByClinic'),
+          label: this.$t('calendarEvent.appointmentCanceled'),
           checked: false
         }
       ],
@@ -358,8 +390,8 @@ export default {
         enquiry_id: '',
         product_groups: '',
         crmProduct: '',
-        appointment_canceled_in_advance_by_clinic: false,
-        appointment_canceled_in_advance_by_patient: false
+        appointment_canceled: false,
+        cancelation_reason: ''
       },
       formDataFirstModalOpened: {},
       calendarApi: null,
@@ -370,7 +402,7 @@ export default {
       dates: null,
       calendarOptions: {
         plugins: [dayGridPlugin, timeGridPlugin, interactionPlugin, resourceTimeGrid, listPlugin],
-        defaultAllDay: false,
+        defaultAllDay: true,
         headerToolbar: {
           left: 'prev,next today',
           center: 'title',
@@ -383,7 +415,8 @@ export default {
         slotMaxTime: '23:00:00',
         slotDuration: '00:15:00',
         scrollTime: '09:00:00',
-        allDaySlot: false,
+        scrollTimeReset: false,
+        allDaySlot: true,
         editable: true,
         selectable: true,
         firstDay: 1,
@@ -392,8 +425,33 @@ export default {
         datesAboveResources: true,
         select: this.openCreateModal,
         eventClick: this.openUpdateModal,
-        eventDrop: this.eventDrop,
-        eventResize: this.eventResize,
+        eventDrop: (info) => {
+          console.log(info)
+          this.confirmationModal = {
+            ...this.confirmationModal,
+            show: true,
+            info,
+            callback: () => this.eventDrop(info)
+          }
+        },
+        eventResize: (info) => {
+          this.confirmationModal = {
+            ...this.confirmationModal,
+            show: true,
+            info,
+            callback: () => this.eventResize(info)
+          }
+        },
+        eventMouseEnter: (info) => {
+          this.eventPopover = {
+            ...this.eventPopover,
+            show: true,
+            info
+          }
+        },
+        eventMouseLeave: () => {
+          this.eventPopover.reset()
+        },
         datesSet: this.onViewChange,
         slotLabelInterval: '01:00:00',
         eventMinHeight: 5,
@@ -405,10 +463,19 @@ export default {
     }
   },
   watch: {
+    durationMins (val) {
+      if (val) {
+        this.setDurationMins()
+      }
+    },
     'formData.assignmentDate' () {
       if (!this.formData.id && !this.formData.end) {
         this.formData.end = this.formData.assignmentDate
       }
+      this.setDurationMins()
+    },
+    'formData.end' () {
+      this.setDurationMins()
     },
     '$i18n.locale' () {
       this.getProductGroups(this.$i18n.locale)
@@ -431,16 +498,6 @@ export default {
         this.formDataFirstModalOpened = {}
       } else {
         this.formDataFirstModalOpened = { ...this.formData }
-      }
-    },
-    'formData.appointment_canceled_in_advance_by_clinic' () {
-      if (this.formData.appointment_canceled_in_advance_by_clinic) {
-        this.formData.appointment_canceled_in_advance_by_patient = false
-      }
-    },
-    'formData.appointment_canceled_in_advance_by_patient' () {
-      if (this.formData.appointment_canceled_in_advance_by_patient) {
-        this.formData.appointment_canceled_in_advance_by_clinic = false
       }
     },
     'selectDoctor' () {
@@ -506,7 +563,7 @@ export default {
     getDurationInMinutes () {
       if (this.formData.assignmentDate && this.formData.end) {
         const start = moment(this.formData.assignmentDate).format('YYYY-MM-DDTHH:mm')
-        const end = moment(this.formData.end).format('YYYY-MM-DDTHH:mm')
+        const end = moment(this.formData.end).format('HH:mm')
         let duration = moment.duration(moment(end).diff(moment(start))).asMinutes()
         if (duration && duration > 1) {
           return duration + 'Minutes'
@@ -629,15 +686,13 @@ export default {
     },
     closeCancelation () {
       this.openCancelationModal = false
-      this.formData.appointment_canceled_in_advance_by_clinic = false
-      this.formData.appointment_canceled_in_advance_by_patient = false
+      this.formData.appointment_canceled = false
     },
     getLabels (lang) {
       getLabels(lang).then(response => {
         this.colors = response
         const lastLabel = this.colors.pop()
         this.colors.unshift(lastLabel)
-        console.log('Colors... ', this.colors)
       })
     },
     getLabelText (type) {
@@ -657,19 +712,13 @@ export default {
           start: this.dates.start,
           end: this.dates.end
         })
+        this.confirmationModal.reset(false)
       })
     },
     updateCalendarLabel (id, appointment) {
       updateCalendarLabel(id, appointment).then(() => {
         // this.$emit('updateApp')
       })
-    },
-    checkRadio () {
-      if (this.formData.appointment_canceled_in_advance_by_patient) {
-        this.formData.appointment_canceled_in_advance_by_clinic = ''
-      } else {
-        this.formData.appointment_canceled_in_advance_by_patient = ''
-      }
     },
     showProps (item, prop) {
       if (this.disabled && prop === item.value) {
@@ -733,6 +782,8 @@ export default {
         this.formData.assignmentDate = event.start
         this.formData.end = event.end
         this.formData.time = new Date(event.start).toTimeString()
+        console.log('asd', event)
+        this.formData.allDay = event.allDay
         this.updateCalendar(this.formData.id, this.formData, () => {
           event.setExtendedProp('assignmentDate', this.formData.assignmentDate)
           event.setStart(this.formData.start)
@@ -745,6 +796,8 @@ export default {
         this.formData.id = event.id
         this.formData.assignmentDate = event.start
         this.formData.end = event.end
+        console.log('asd', event)
+        this.formData.allDay = event.allDay
         this.formData.doctor_id = newResource.id
         this.formData.doctor_name = newResource.title
         this.updateCalendar(this.formData.id, this.formData, () => {
@@ -764,8 +817,8 @@ export default {
         start: '',
         end: '',
         notes: '',
-        backgroundColor: '',
-        patient_attended: '',
+        backgroundColor: 43,
+        patient_attended: null,
         patient_id: '',
         patient_name: '',
         doctor_id: '',
@@ -774,8 +827,7 @@ export default {
         crmProduct: '',
         location: this.locations.length === 1 ? this.locations[0].city : '',
         enquiry_id: '',
-        appointment_canceled_in_advance_by_clinic: false,
-        appointment_canceled_in_advance_by_patient: false
+        appointment_canceled: false
       }
     },
     calculateEndDate (startDate, hours, minutes) {
@@ -838,6 +890,30 @@ export default {
       this.formData.start = start
       this.formData.end = end
     },
+    setDurationMins () {
+      this.durationMins = null
+      if (this.formData.assignmentDate && this.formData.end) {
+        const start = moment(this.formData.assignmentDate).format('HH:mm')
+        const end = moment(this.formData.end).format('HH:mm')
+
+        const timeStart = new Date('01/01/2007 ' + start)
+        const timeEnd = new Date('01/01/2007 ' + end)
+
+        const duration = moment.duration(moment(timeEnd).diff(moment(timeStart))).asMinutes()
+        if (duration < 0) {
+          this.durationMins = 0
+        } else {
+          this.durationMins = duration
+        }
+      }
+    },
+    setMinutes (minutes) {
+      const value = Number(minutes)
+      if (this.formData.assignmentDate && value && (typeof value === 'number') && value > 0) {
+        const endTime = moment(this.formData.assignmentDate).add(value, 'minutes').toLocaleString()
+        this.formData.end = new Date(endTime)
+      }
+    },
     getHoursAndMinutes (hours) {
       if (hours === 24) {
         return { hours: 0, minutes: 0 }
@@ -854,18 +930,19 @@ export default {
       }
     },
     openUpdateModal (selectionInfo) {
+      console.log(selectionInfo)
       // this.modalShow = true
       this.$emit('setModalShow', true)
       this.disabled = true
       let event = this.calendarApi.getEventById(selectionInfo.event.id)
       let location = this.locations.find(item => item.city === event.extendedProps.location)
-      let label = this.colors.find(color => color.id === event.extendedProps.backgroundColor)
+      // let label = this.colors.find(color => color.id === event.extendedProps.label_id)
       this.formData = {
         id: event.id,
         title: event.title,
         start: event.start,
         end: event.end,
-        backgroundColor: label,
+        backgroundColor: event.extendedProps.label_id,
         doctor_id: event.extendedProps.doctor_id,
         doctor_name: event.extendedProps.doctor_name,
         patient_id: event.extendedProps.patient_id,
@@ -873,6 +950,7 @@ export default {
         // eventResourceId: event.extendedProps.eventResourceId,
         location: location,
         ...event.extendedProps,
+        patient_attended: event.extendedProps.patient_attended ? event.extendedProps.patient_attended : null,
         assignmentDate: new Date(event.extendedProps.assignmentDate)
 
       }
@@ -930,7 +1008,7 @@ export default {
   min-height: 0 !important;
 }
 
-th {
+.fc th {
   text-align: center !important;
 }
 .fc-col-header-cell.fc-resource {

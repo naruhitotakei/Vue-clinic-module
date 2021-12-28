@@ -144,7 +144,7 @@
     "viewPatient": "View Patient",
     "changeDisplayColor": "Change Appointment Color",
     "appointmentCancelled": "Appointment Cancelled by the Patient",
-    "unknown": "Unknown",
+    "unknown": "No data",
     "attended": "Attended",
     "notAttended": "Not Attended",
     "canceled": "Canceled",
@@ -155,7 +155,12 @@
     "product_group": "Product Group",
     "appointmentCanceledInAdvanceByClinic": "Appointment canceled by clinic",
     "appointmentCanceledInAdvanceByPatient": "Appointment canceled by patient",
-    "requiredFields": "Fields marked with * have to be filled"
+    "cancelAppointment": "Cancel appointment",
+    "appointmentCanceled": "Appointment has been canceled",
+    "cancelationReason": "Cancelation reason",
+    "requiredFields": "Fields marked with * have to be filled",
+    "eventMoveBetweenResources": "Are you sure you want to move this appointment to another doctor?",
+    "eventTimeChange": "Are you sure you want to change this event's time?"
   },
   "patients": {
     "patientsHeader": "Patients",
@@ -226,7 +231,8 @@
       "female": "Female",
       "unspecified": "Unspecified",
       "address": "Address",
-      "postCodeCity": "Postcode, City",
+      "postCode": "Postcode",
+      "city": "City",
       "country": "Country",
       "region": "Region",
       "insurance": "Insurance number, insured at",
@@ -788,6 +794,7 @@
       "chooseTime": "Choose time",
       "review": "Review",
       "service": "Service",
+      "doctor": "Doctor",
       "time": "Time",
       "price": "Price",
       "taken": "taken",
@@ -799,6 +806,7 @@
       "availableDoctors": "Available Doctors",
       "showMore": "Show more...",
       "totalInfo": "Total Info",
+      "summary": "Summary",
       "date": "Date",
       "total": "Total",
       "backToServices": "Back to Services",
@@ -811,16 +819,21 @@
       "confirm": "Confirm",
       "dataConfirmed": "Data confirmed",
       "confirmationOfBooking": "Confirmation of booking",
-      "pleaseEnterYourMobileNumber": "Please enter your mobile number, so that we can contact you in case of any change.",
+      "firstName": "First name",
+      "lastName": "Last name",
+      "pleaseEnterYourMobileNumber": "Please enter your mobile phone number so we can verify and confirm your booking",
       "phoneNumber": "Phone number",
       "phone": "Phone",
+      "countryCode": "Country code",
       "sendVerificationCode": "Send verification code",
       "theCodeHasBeenSentTo": "The code has been sent to",
       "smsVerificationCode": "Sms verification code:",
       "confirmationCode": "Confirmation code",
       "confirmCode": "Confirm code",
       "modifyPhoneNumber": "Modify phone number",
-      "yourDetailsHaveBeenSuccessfullyVerified": "Your details have been successfully verified. We look forward to your visit."
+      "yourDetailsHaveBeenSuccessfullyVerified": "Your details have been successfully verified. We look forward to your visit.",
+      "location": "Location",
+      "company": "Company"
     }
   }
 }
