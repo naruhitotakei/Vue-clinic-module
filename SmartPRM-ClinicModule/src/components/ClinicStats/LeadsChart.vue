@@ -109,7 +109,7 @@ export default {
       this.noData = false
       getLeadsPerDay(start, end).then(response => {
         this.loading = false
-        if (response && response.length) {
+        if (response && response.length && Array.isArray(response)) {
           this.noData = false
           this.setDataForChart(response)
         } else {
@@ -192,12 +192,14 @@ export default {
 
     prepareDataForExport (data, countries) {
       // Get Data for export
-      countries.forEach(country => {
-        const sum = data.filter(item => item.country === country)
-          .map(item => item.enquiries_count && Number(item.enquiries_count))
-          .reduce((a, b) => Number(a) + Number(b))
-        this.dataToExport.push({ country, enquiries: sum.toLocaleString() })
-      })
+      if (Array.isArray(data) && Array.isArray(countries)) {
+        countries.forEach(country => {
+          const sum = data.filter(item => item.country === country)
+            .map(item => item.enquiries_count && Number(item.enquiries_count))
+            .reduce((a, b) => Number(a) + Number(b))
+          this.dataToExport.push({ country, enquiries: sum.toLocaleString() })
+        })
+      }
     }
   },
   data () {

@@ -137,9 +137,12 @@ export default {
       return null
     },
     patientsSurgeon: function () {
-      return this.surgeons.find((item) => {
-        return item.code === this.patient.prm_surgeon_user_id
-      })
+      if (this.surgeons && Array.isArray(this.surgeons)) {
+        return this.surgeons.find((item) => {
+          return item.code === this.patient.prm_surgeon_user_id
+        })
+      }
+      return null
     }
   },
   data: function () {

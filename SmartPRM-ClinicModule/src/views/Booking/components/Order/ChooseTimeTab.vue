@@ -28,7 +28,7 @@
             :selectLabel="$t('public.onlineBooking.pressEnterToSelect')"
             :deselectLabel="$t('public.onlineBooking.pressEnterToRemove')"
           />
-          <div v-if="appointmentSlots.length > 0" class="mt-5">
+          <div v-if="appointmentSlots && appointmentSlots.length > 0" class="mt-5">
             <time-selection-table
               :items="appointmentSlotsFiltered"
               :appointment-slot.sync="fieldset.appointmentSlot"

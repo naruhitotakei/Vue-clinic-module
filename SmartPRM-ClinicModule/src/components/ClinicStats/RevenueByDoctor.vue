@@ -165,12 +165,14 @@ export default {
 
     prepareDataForExport (data, doctors) {
       // Get Data for export
-      doctors.forEach(doctor => {
-        const sum = data.filter(item => item.doctor_name === doctor)
-          .map(item => item.sum && Number(item.sum))
-          .reduce((a, b) => Number(a) + Number(b))
-        this.dataToExport.push({ doctor, revenue: sum.toLocaleString() + ' €' })
-      })
+      if (Array.isArray(data) && Array.isArray(doctors)) {
+        doctors.forEach(doctor => {
+          const sum = data.filter(item => item.doctor_name === doctor)
+            .map(item => item.sum && Number(item.sum))
+            .reduce((a, b) => Number(a) + Number(b))
+          this.dataToExport.push({ doctor, revenue: sum.toLocaleString() + ' €' })
+        })
+      }
     }
   },
   data () {

@@ -104,7 +104,7 @@ export default {
       this.noData = false
       getNewEnquiries(start, end).then(response => {
         this.loading = false
-        if (response && response.length) {
+        if (response && response.length && Array.isArray(response)) {
           this.noData = false
           this.setDataForChart(response)
         } else {

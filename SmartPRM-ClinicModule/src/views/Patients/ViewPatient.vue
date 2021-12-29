@@ -1253,9 +1253,12 @@ export default {
       return null
     },
     patientsSurgeon: function () {
-      return this.surgeons.find((item) => {
-        return item.code === this.patient.prm_surgeon_user_id
-      })
+      if (this.surgeons && Array.isArray(this.surgeons)) {
+        return this.surgeons.find((item) => {
+          return item.code === this.patient.prm_surgeon_user_id
+        })
+      }
+      return null
     },
     openAssignments: function () {
       return this.assignments.slice(
@@ -1741,16 +1744,18 @@ export default {
     },
     getFiles () {
       getFilesWithPrefix(this.$route.params.patientId).then(data => {
-        for (let i = 0; i < data.data.Contents.length; i++) {
-          let type = data.data.Contents[i].Key.split('.')[1]
-          let image = '/api/files/' + data.data.Contents[i].Key
-          this.files.push({
-            image: image,
-            name: data.data.Contents[i].Key,
-            type: type,
-            created_at: moment(data.data.Contents[i].LastModified).format('YYYY-MM-DD'),
-            pdf: type === 'pdf'
-          })
+        if (data.data && Array.isArray(data.data.Contents)) {
+          for (let i = 0; i < data.data.Contents.length; i++) {
+            let type = data.data.Contents[i].Key.split('.')[1]
+            let image = '/api/files/' + data.data.Contents[i].Key
+            this.files.push({
+              image: image,
+              name: data.data.Contents[i].Key,
+              type: type,
+              created_at: moment(data.data.Contents[i].LastModified).format('YYYY-MM-DD'),
+              pdf: type === 'pdf'
+            })
+          }
         }
       })
     },
