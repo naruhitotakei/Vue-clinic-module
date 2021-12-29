@@ -36,11 +36,12 @@ router.post(
       return response.status(500).json(error)
     }
 
-    const { request_id } = result
+    if (result.status !== '0') {
+      return response.status(500).json(result)
+    }
+
     response.status(200).json({
-      success: true,
-      result,
-      requestId: request_id,
+      requestId: result.request_id,
     })
   },
 )
