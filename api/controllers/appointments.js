@@ -1,28 +1,38 @@
 const router = require('express').Router()
 const { getEnquiryByPhone, createEnquiryPublic } = require('~/dao/daoEnquiries')
 const { createAppointment } = require('~/dao/daoAppointments')
-const { getAppointmentSlotById, updateAppointmentSlot } = require('~/dao/daoAppointmentSlots')
+const {
+  getAppointmentSlotById,
+  updateAppointmentSlot,
+} = require('~/dao/daoAppointmentSlots')
 
 module.exports = router
 
-router.post('/', validateCreateAppointmentRequest, verifyPhone, async (request, response) => {
-  const { phone, firstName, lastName, appointmentSlotId } = request.body
+router.post(
+  '/',
+  validateCreateAppointmentRequest,
+  verifyPhone,
+  async (request, response) => {
+    const { phone, firstName, lastName, appointmentSlotId } = request.body
 
-  try {
-    let enquiry = await getEnquiryByPhone(phone)
+    try {
+      let enquiry = await getEnquiryByPhone(phone)
 
-    if (enquiry == null) {
-      enquiry = await createEnquiryPublic({ firstName, lastName, phone })
+      if (enquiry == null) {
+        enquiry = await createEnquiryPublic({ firstName, lastName, phone })
+      }
+
+      const appointment = await createAppointment({ enquiryId: enquiry.id })
+      await updateAppointmentSlot(appointmentSlotId, {
+        appointmentId: appointment.id,
+      })
+    } catch (error) {
+      return response.sendStatus(500)
     }
 
-    const appointment = await createAppointment({ enquiryId: enquiry.id })
-    await updateAppointmentSlot(appointmentSlotId, { appointmentId: appointment.id })
-  } catch (error) {
-    return response.sendStatus(500)
-  }
-
-  return response.status(201).json({})
-})
+    return response.status(201).json({})
+  },
+)
 
 /**
  * @type {import('express').RequestHandler}
@@ -30,11 +40,11 @@ router.post('/', validateCreateAppointmentRequest, verifyPhone, async (request, 
 async function validateCreateAppointmentRequest(request, response, next) {
   const { firstName, lastName, appointmentSlotId } = request.body
 
-  if(
+  if (
     typeof firstName === 'string' &&
-    firstName.length  > 0 &&
+    firstName.length > 0 &&
     typeof lastName === 'string' &&
-    lastName.length  > 0 &&
+    lastName.length > 0 &&
     (await getAppointmentSlotById(appointmentSlotId)) != null &&
     true
   ) {
@@ -56,16 +66,19 @@ async function verifyPhone(request, response, next) {
 
   try {
     result = await new Promise((resolve, reject) => {
-      vonage.verify.check({
-        request_id: verificationId,
-        code: verificationCode,
-      }, (error, result) => {
-        if (error != null) {
-          return reject(error)
-        }
+      vonage.verify.check(
+        {
+          request_id: verificationId,
+          code: verificationCode,
+        },
+        (error, result) => {
+          if (error != null) {
+            return reject(error)
+          }
 
-        return resolve(result)
-      })
+          return resolve(result)
+        },
+      )
     })
   } catch (error) {
     response.status(500).send(error)
@@ -74,15 +87,15 @@ async function verifyPhone(request, response, next) {
   }
 
   if (result.status === '16') {
-      response.status(422).json(result)
+    response.status(422).json(result)
 
-      return
+    return
   }
 
   if (result.status !== '0') {
-      response.status(500).send(result)
+    response.status(500).send(result)
 
-      return
+    return
   }
 
   next()
