@@ -611,12 +611,14 @@ export default {
     },
     getUsersList () {
       getUsers().then(response => {
-        this.users = response
-        this.users = this.users.map(user => {
-          const userObj = Object.assign({}, user)
-          userObj.full_name = user.name + ' ' + user.surname
-          return userObj
-        })
+        if (response && Array.isArray(response)) {
+          this.users = response
+          this.users = this.users.map(user => {
+            const userObj = Object.assign({}, user)
+            userObj.full_name = user.name + ' ' + user.surname
+            return userObj
+          })
+        }
       })
     },
     getEnquires () {

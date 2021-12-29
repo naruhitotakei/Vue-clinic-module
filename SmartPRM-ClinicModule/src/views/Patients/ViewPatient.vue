@@ -1,6 +1,6 @@
 <template>
   <b-container fluid>
-    <form>
+    <form v-if="patient">
       <b-row>
         <b-col lg="12">
             <iq-card body-class="p-0">

@@ -18,7 +18,7 @@
     </div>
     <div id="sidebar-scrollbar">
       <nav class="iq-sidebar-menu" :class="horizontal ? 'd-xl-none' : ''">
-        <List :items="items" :open="true" :horizontal="horizontal"/>
+        <List :items="items" :open="true" :horizontal="horizontal" @toggle="miniSidebar" />
       </nav>
       <div class="p-3"></div>
     </div>
