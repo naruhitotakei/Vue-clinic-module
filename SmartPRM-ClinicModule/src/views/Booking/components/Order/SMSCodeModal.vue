@@ -9,7 +9,7 @@
     <div v-show="fieldset.verificationId == null">
       <ValidationObserver v-slot="{ invalid, validate }">
         <form @submit.prevent="validate().then(sendConfirmationCode)">
-        <!-- <form @submit.prevent="validate().then(() => fieldset.verificationId = 'verificationId')"> -->
+          <!-- <form @submit.prevent="validate().then(() => fieldset.verificationId = 'verificationId')"> -->
           <div class="d-flex">
             <ValidationProvider
               :name="$t('public.onlineBooking.firstName')"
@@ -18,8 +18,9 @@
             >
               <b-form-group :label="$t('public.onlineBooking.firstName')">
                 <b-form-input
-                  v-model="fieldset.firstName" type="text"
-                  :class="(errors.length > 0 ? ' is-invalid' : '')"
+                  v-model="fieldset.firstName"
+                  type="text"
+                  :class="errors.length > 0 ? ' is-invalid' : ''"
                 />
                 <div class="invalid-feedback">
                   <span>{{ errors[0] }}</span>
@@ -34,8 +35,9 @@
             >
               <b-form-group :label="$t('public.onlineBooking.lastName')">
                 <b-form-input
-                  v-model="fieldset.lastName" type="text"
-                  :class="(errors.length > 0 ? ' is-invalid' : '')"
+                  v-model="fieldset.lastName"
+                  type="text"
+                  :class="errors.length > 0 ? ' is-invalid' : ''"
                 />
                 <div class="invalid-feedback">
                   <span>{{ errors[0] }}</span>
@@ -52,10 +54,14 @@
               {{ $t('public.onlineBooking.pleaseEnterYourMobileNumber') }}
             </p>
             <b-form-group :label="$t('public.onlineBooking.phoneNumber')">
-              <input type="hidden" v-model="fieldset.phone">
+              <input type="hidden" v-model="fieldset.phone" />
               <VuePhoneNumberInput
                 v-model="phone"
-                @update="$event.isValid ? fieldset.phone = $event.formattedNumber: fieldset.phone = null"
+                @update="
+                  $event.isValid
+                    ? (fieldset.phone = $event.formattedNumber)
+                    : (fieldset.phone = null)
+                "
                 :default-country-code="countryCode"
                 :preferred-countries="['SI', 'IT', 'AT']"
                 no-example
@@ -69,6 +75,15 @@
               </div>
             </b-form-group>
           </ValidationProvider>
+          <div v-if="error != null" style="color: #dc3545">
+            <template v-if="Array.isArray(error.messages)">
+              <div v-for="message of error.messages" :key="message">
+                {{ $t(`public.onlineBooking.error.${message}`) }}
+              </div>
+            </template>
+            <div v-else>Something went wrong</div>
+          </div>
+          <div class="mt-3"></div>
           <b-button type="submit" variant="primary" :disabled="invalid">
             {{ $t('public.onlineBooking.sendVerificationCode') }}
           </b-button>
@@ -78,7 +93,8 @@
 
     <div v-show="fieldset.verificationId != null">
       <div class="my-2">
-        {{ $t('public.onlineBooking.theCodeHasBeenSentTo') }} {{ fieldset.phone }}.
+        {{ $t('public.onlineBooking.theCodeHasBeenSentTo') }}
+        {{ fieldset.phone }}.
       </div>
       <ValidationProvider
         :name="$t('public.onlineBooking.confirmationCode')"
@@ -89,7 +105,7 @@
           <b-form-input
             v-model="fieldset.verificationCode"
             type="text"
-            :class="(errors.length > 0 ? ' is-invalid' : '')"
+            :class="errors.length > 0 ? ' is-invalid' : ''"
           />
           <div class="invalid-feedback">
             <span>{{ errors[0] }}</span>
@@ -108,17 +124,18 @@
 
 <script>
 import { sendSms } from '@/services/booking.js'
+import { defineComponent } from '@vue/composition-api'
 import VuePhoneNumberInput from 'vue-phone-number-input'
 import 'vue-phone-number-input/dist/vue-phone-number-input.css'
 
-export default {
+export default defineComponent({
   components: {
-    VuePhoneNumberInput
+    VuePhoneNumberInput,
   },
   props: {
-    form: Object
+    form: Object,
   },
-  data: function () {
+  data() {
     return {
       countryCode: this.$route.query.country
         ? this.$route.query.country.toUpperCase()
@@ -129,26 +146,41 @@ export default {
         lastName: null,
         phone: null,
         verificationId: null,
-        verificationCode: null
-      }
+        verificationCode: null,
+      },
+      error: null,
     }
   },
   watch: {
     fieldset: {
       deep: true,
-      handler (value) {
+      handler(value) {
         this.$emit('update:form', {
           ...this.form,
-          ...value
+          ...value,
         })
-      }
-    }
+      },
+    },
   },
   methods: {
-    sendConfirmationCode: async function () {
-      const result = await sendSms({ phone: this.fieldset.phone })
+    async sendConfirmationCode() {
+      let result
+
+      try {
+        result = await sendSms({
+          firstName: this.form.firstName,
+          lastName: this.form.lastName,
+          phone: this.form.phone,
+          appointmentSlotId: this.form.appointmentSlot.id,
+        })
+      } catch (error) {
+        this.error = error
+
+        throw error
+      }
+
       this.fieldset.verificationId = result.requestId
-    }
-  }
-}
+    },
+  },
+})
 </script>
