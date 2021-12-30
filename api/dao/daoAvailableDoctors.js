@@ -1,5 +1,5 @@
 const moment = require('moment-timezone')
-const db = require('~/services/db')
+const { pool } = require('~/services/db')
 
 const daoAvailableDoctors = {
   getAvailableDoctors,
@@ -25,7 +25,7 @@ async function getAvailableDoctors({ serviceId }) {
   `
 
   const startDate = moment().tz('Europe/Ljubljana').add(1, 'day').format('YYYY-MM-DD')
-  const { rows } = await db.query(statements, [serviceId, startDate])
+  const { rows } = await pool.query(statements, [serviceId, startDate])
 
   return rows
 }

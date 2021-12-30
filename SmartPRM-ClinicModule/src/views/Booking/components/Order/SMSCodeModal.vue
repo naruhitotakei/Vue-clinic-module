@@ -6,10 +6,10 @@
     ok-only
     :title="$t('public.onlineBooking.confirmationOfBooking')"
   >
-    <template v-if="fieldset.verificationId == null">
+    <div v-show="fieldset.verificationId == null">
       <ValidationObserver v-slot="{ invalid, validate }">
-        <!-- <form @submit.prevent="validate().then(sendConfirmationCode)"> -->
-        <form @submit.prevent="validate().then(() => fieldset.verificationId = 'verificationId')">
+        <form @submit.prevent="validate().then(sendConfirmationCode)">
+        <!-- <form @submit.prevent="validate().then(() => fieldset.verificationId = 'verificationId')"> -->
           <div class="d-flex">
             <ValidationProvider
               :name="$t('public.onlineBooking.firstName')"
@@ -74,9 +74,9 @@
           </b-button>
         </form>
       </ValidationObserver>
-    </template>
+    </div>
 
-    <template v-if="fieldset.verificationId != null">
+    <div v-show="fieldset.verificationId != null">
       <div class="my-2">
         {{ $t('public.onlineBooking.theCodeHasBeenSentTo') }} {{ fieldset.phone }}.
       </div>
@@ -102,7 +102,7 @@
           {{ $t('public.onlineBooking.modifyPhoneNumber') }}
         </b-button>
       </ValidationProvider>
-    </template>
+    </div>
   </b-modal>
 </template>
 

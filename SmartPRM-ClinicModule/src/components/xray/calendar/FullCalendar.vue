@@ -295,6 +295,7 @@ export default {
   data () {
     return {
       durationMins: null,
+      keydownListener: null,
       eventPopover: {
         show: false,
         info: null,
@@ -597,10 +598,8 @@ export default {
   mounted () {
     let self = this
     window.addEventListener('keydown', function (event) {
-      if (event.key === 'Escape') {
-        self.closeModal()
-      }
-    })
+      self.listenEvent(event)
+    }, false)
     this.$nextTick(() => {
       this.$forceUpdate()
       this.$emit('updateApp', {
@@ -620,14 +619,26 @@ export default {
   },
   beforeDestroy () {
     clearInterval(this.calendarUpdateEvery3Min)
-    window.removeEventListener('keydown')
+    window.removeEventListener('keydown', this.listenEvent, false)
   },
   methods: {
+    listenEvent (event) {
+      if (event.key === 'Escape') {
+        this.closeModal()
+      }
+    },
     closeAddPatientModal (value) {
       this.openAddPatient = value
     },
     setPatient (patient) {
-      patient.full_name = `${patient.name} ${patient.last_name}`
+      let fullName = ''
+      if (patient.name) {
+        fullName = patient.name
+      }
+      if (patient.last_name) {
+        fullName += ' ' + patient.last_name
+      }
+      patient.full_name = fullName
       this.patients.push(patient)
       this.selectedPatient = Object.assign({}, patient)
       this.openAddPatient = false

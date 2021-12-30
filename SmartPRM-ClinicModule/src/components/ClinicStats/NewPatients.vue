@@ -4,39 +4,38 @@
         <iq-card class-name="iq-card-block iq-card-stretch iq-card-height">
           <template v-slot:headerTitle>
             <div class="d-flex align-items-center justify-content-between">
-                <h4 class="card-title">Revenue By Doctor</h4>
+                <h4 class="card-title">New Patients</h4>
                 <vue-excel-xlsx
-                    v-if="dataToExport && dataToExport.length"
                     :data="dataToExport"
                     :columns="excelColumns"
-                    :filename="'Revenue By Doctor'"
-                    :sheetname="'Revenue By Doctor'"
+                    :filename="'New Patients'"
+                    :sheetname="'New Patients'"
                     class="btn btn-primary"
                     >
                     Download Excel
-                </vue-excel-xlsx>
+                  </vue-excel-xlsx>
             </div>
-            <!-- <h4 class="card-title mt-3">Revenue By Doctor</h4>
+            <!-- <h4 class="card-title mt-3">Leads Statistics</h4>
             <b-form @submit.prevent>
               <b-row align-v="center">
                 <b-col cols="12" sm="6" md="4" lg="3">
                   <b-form-group>
                     <label style="padding-top: 8px;">From:</label>
-                    <b-form-input style="line-height: normal" class="date" id="exampleStartdate" type="date" v-model="startDate" @change="onDateChange"></b-form-input>
+                    <b-form-input style="line-height: normal" class="date" id="exampleStartdate" type="date" v-model="leadStartDate" @change="onLeadDateChange"></b-form-input>
                   </b-form-group>
                 </b-col>
                 <b-col cols="12" sm="6" md="4" lg="3">
                   <b-form-group>
                     <label style="padding-top: 8px;">End:</label>
-                    <b-form-input style="line-height: normal" class="date" id="exampleEnddate" type="date" v-model="endDate" @change="onDateChange"></b-form-input>
+                    <b-form-input style="line-height: normal" class="date" id="exampleEnddate" type="date" v-model="leadEndDate" @change="onLeadDateChange"></b-form-input>
                   </b-form-group>
                 </b-col>
                 <b-col cols="12" sm="6" md="4" lg="3" offset-lg="3" class="text-right" v-if="dataToExport && dataToExport.length">
                   <vue-excel-xlsx
                     :data="dataToExport"
                     :columns="excelColumns"
-                    :filename="'Revenue By Doctor'"
-                    :sheetname="'Revenue By Doctor'"
+                    :filename="'Lead Statistics'"
+                    :sheetname="'Lead Statistics'"
                     class="btn btn-primary"
                     >
                     Download Excel
@@ -50,7 +49,7 @@
               <apex-chart type="bar" :series="series" :options="chartOptions" />
             </div>
             <div class="mt-3 text-center" v-if="loading">
-                <p>Loading Revenue By Doctor...</p>
+                <p>Loading New Patients...</p>
             </div>
             <div class="mt-3 text-center" v-if="!loading && noData">
                 <p>No data found in this date range...</p>
@@ -63,10 +62,11 @@
 
 <script>
 import IqCard from '../../components/xray/cards/iq-card'
-import { getRevenueByDoctor } from '../../services/statistics'
+import { getNewEnquiries } from '../../services/statistics'
+import moment from 'moment'
 
 export default {
-  name: 'RevenueByDoctor',
+  name: 'LeadsChart',
   components: { IqCard },
   props: {
     start: String,
@@ -96,16 +96,15 @@ export default {
   methods: {
     onDateChange () {
       if (this.startDate && this.endDate) {
-        this.getDoctorRevenue(this.startDate, this.endDate)
+        this.getNewPatients(this.startDate, this.endDate)
       }
     },
-    getDoctorRevenue (start, end) {
+    getNewPatients (start, end) {
       this.loading = true
       this.noData = false
-      getRevenueByDoctor(start, end).then(response => {
-        this.setDataForChart(response)
+      getNewEnquiries(start, end).then(response => {
         this.loading = false
-        if (response && response.length) {
+        if (response && response.length && Array.isArray(response)) {
           this.noData = false
           this.setDataForChart(response)
         } else {
@@ -117,76 +116,94 @@ export default {
       })
     },
     setDataForChart (data) {
-      if (data && Array.isArray(data)) {
-        this.dataToExport = []
+      let datesArray = []
+      let seriesData = []
+      this.dataToExport = []
+      data.forEach((item, index) => {
+        const itemDate = item.date.split('T')[0]
+        const dateIndex = datesArray.findIndex(date => date === itemDate)
+        if (dateIndex < 0) {
+          datesArray.push(itemDate)
+          seriesData.push(1)
+        }
+        if (dateIndex > -1) {
+          seriesData[dateIndex] = seriesData[dateIndex] + 1
+        }
+      })
 
-        let doctors = data.map(item => item.doctor_name)
-        const uniqueDoctors = [...new Set(doctors)]
+      this.series = [{
+        name: 'New Patients',
+        data: seriesData
+      }]
 
-        let products = data.map(item => item.product_name)
-        const uniqueProducts = [...new Set(products)]
-
-        let sumByProduct = []
-        uniqueProducts.forEach(product => {
-          const prodsByDoctor = data.filter(item => item.product_name === product)
-          const obj = { name: product, data: [] }
-          uniqueDoctors.forEach(doctor => {
-            const isProductHasDoctor = prodsByDoctor.find(item => item.doctor_name === doctor)
-            if (isProductHasDoctor) {
-              obj.data.push(Number(isProductHasDoctor.sum))
-            } else {
-              obj.data.push(0)
-            }
-          })
-          sumByProduct.push(obj)
-        })
-
-        this.series = sumByProduct
-
-        this.chartOptions = {
-          legend: {
-            position: 'right'
-          },
-          xaxis: {
-            categories: uniqueDoctors
-          },
-          yaxis: {
-            labels: {
-              formatter: function (val) {
-                return val.toLocaleString() + ' €'
+      this.chartOptions = {
+        chart: {
+          toolbar: {
+            show: true,
+            tools: {
+              download: true,
+              selection: false,
+              zoom: false,
+              zoomin: false,
+              zoomout: false,
+              pan: false
+            },
+            export: {
+              csv: {
+                filename: 'Leads Statistics',
+                dateFormatter (timestamp) {
+                  return new Date(timestamp).toDateString()
+                }
               }
             }
           }
+        },
+        legend: {
+          position: 'right'
+        },
+        xaxis: {
+          type: 'datetime',
+          categories: datesArray
         }
-
-        this.prepareDataForExport(data, uniqueDoctors)
       }
+
+      this.prepareDataForExport(data)
     },
 
-    prepareDataForExport (data, doctors) {
+    prepareDataForExport (data) {
       // Get Data for export
-      if (Array.isArray(data) && Array.isArray(doctors)) {
-        doctors.forEach(doctor => {
-          const sum = data.filter(item => item.doctor_name === doctor)
-            .map(item => item.sum && Number(item.sum))
-            .reduce((a, b) => Number(a) + Number(b))
-          this.dataToExport.push({ doctor, revenue: sum.toLocaleString() + ' €' })
-        })
-      }
+      data.forEach(item => {
+        const obj = {
+          id: item.id,
+          first_name: item.name,
+          last_name: item.last_name,
+          phone: item.phone,
+          email: item.email,
+          created_at: moment(item.date).format('ll')
+        }
+        this.dataToExport.push(obj)
+      })
     }
   },
   data () {
     return {
       startDate: null,
       endDate: null,
-      noData: false,
       loading: true,
-      series: [],
+      noData: false,
       dataToExport: [],
       excelColumns: [
-        { label: 'Doctor', field: 'doctor' },
-        { label: 'Revenue', field: 'revenue' }
+        { label: 'ID', field: 'id' },
+        { label: 'First Name', field: 'first_name' },
+        { label: 'Last Name', field: 'last_name' },
+        { label: 'Email', field: 'email' },
+        { label: 'Phone', field: 'phone' },
+        { label: 'Created At', field: 'created_at' }
       ],
+      series: [{
+        name: 'Leads By Day',
+        data: []
+      }],
       chartOptions: {
         chart: {
           type: 'bar',
@@ -198,9 +215,6 @@ export default {
               pan: false,
               zoom: false
             }
-          },
-          zoom: {
-            enabled: true
           }
         },
         plotOptions: {
@@ -209,8 +223,24 @@ export default {
             borderRadius: 10
           }
         },
+        yaxis: {
+          title: {
+            text: 'New Patients'
+          },
+          labels: {
+            formatter: function (y) {
+              return y.toLocaleString()
+            }
+          }
+        },
         xaxis: {
-          categories: []
+          type: 'datetime',
+          categories: [],
+          labels: {
+            formatter: function (value, timestamp) {
+              return moment(timestamp).format('ll')
+            }
+          }
         },
         legend: {
           position: 'right',

@@ -1,15 +1,5 @@
-const dotenv = require('dotenv')
-const Pool = require('pg').Pool
 const moment = require('moment')
-
-dotenv.config()
-const pool = new Pool({
-    user: process.env.POSTGRES_USER,
-    host: process.env.POSTGRES_HOST,
-    database: process.env.POSTGRES_DB,
-    password: process.env.POSTGRES_PASSWORD,
-    port: process.env.POSTGRES_PORT || 5432,
-})
+const { pool, now } = require('~/services/db')
 
 const getFreeSlots = (request, response, prm_client_id) => {
     let statement = "SELECT * FROM appointment_slots WHERE prm_client_id = " + prm_client_id
@@ -27,7 +17,7 @@ const getFreeSlotsPublic = async ({ serviceId, date }) => {
   const statement = /* sql */`
     SELECT
       appointment_slots.id,
-      appointment_slots.starts_at,
+      appointment_slots.starts_at::text,
       appointment_slots.doctor_id,
       concat(users.title, ' ', users.first_name, ' ', users.surname) AS name
     FROM appointment_slots JOIN users ON appointment_slots.doctor_id = users.id
@@ -72,11 +62,36 @@ const deleteFreeSlot = (request, response, id) => {
     })
 }
 
+async function getAppointmentSlotById(id) {
+  const statement = /* sql */`
+    SELECT * FROM appointment_slots
+    WHERE id = $1
+  `
+  const { rows } = await pool.query(statement, [id])
+
+  return rows[0]
+}
+
+async function updateAppointmentSlot(id, { appointmentId }) {
+  const statement = /* sql */ `
+    UPDATE appointment_slots
+    SET appointment_id = $2,
+      updated_at = ${now()}
+    WHERE id = $1
+    RETURNING *
+  `
+  const result = await pool.query(statement, [id, appointmentId]);
+
+  return result.rows[0];
+}
+
 const daoAppointmentSlots = {
     getFreeSlots,
     getFreeSlotsPublic,
+    getAppointmentSlotById,
     createFreeSlots,
-    deleteFreeSlot
+    deleteFreeSlot,
+    updateAppointmentSlot,
 }
 
 module.exports = daoAppointmentSlots

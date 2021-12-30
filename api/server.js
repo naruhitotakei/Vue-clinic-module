@@ -56,6 +56,7 @@ const daoCalendar = require('./dao/daoCalendar')
 const daoAppointments = require('./dao/daoAppointments')
 const daoCompanies = require('./dao/daoCompanies')
 const daoLocations = require('./dao/daoLocations')
+const daoSmsTemplates = require('./dao/daoSmsTemplates')
 const daoCompanyPremises = require('./dao/daoCompanyPremises')
 const daoAppointmentSlots = require('./dao/daoAppointmentSlots')
 const daoOnlineBooking = require('./dao/daoOnlineBooking')
@@ -676,6 +677,18 @@ app.get('/api/users-assignments', (req, res) => {
 });
 
 ///////////////////////////////////
+// settings -> sms templates
+///////////////////////////////////
+
+app.get('/api/sms-templates', (req, res) => {
+    if (req.session.prm_user && req.session.prm_user.permissions && checkPermission(req.session.prm_user.permissions, usersPermission)) {
+        daoSmsTemplates.getSmsTemplates(req, res, req.session.prm_user.prm_client_id, getScope(req.session.prm_user.permissions, usersPermission))
+    } else {
+        res.status(401).json("OK: user unauthorized")
+    }
+});
+
+///////////////////////////////////
 // settings -> online booking
 ///////////////////////////////////
 
@@ -1058,14 +1071,6 @@ app.get('/api/invoices/:id/items', (req, res) => {
         res.status(401).json("OK: user unauthorized")
 });
 
-app.get('/api/invoices/items/:id/enquiry-tooth', (req, res) => {
-    const id = req.params.id
-    if (req.session.prm_user && req.session.prm_user.permissions && checkPermission(req.session.prm_user.permissions, invoicesPermission))
-        daoInvoices.getEnquiryToothByInvoiceItemsId(req, res, id)
-    else
-        res.status(401).json("OK: user unauthorized")
-});
-
 app.get('/api/invoices/:id/payment-items', (req, res) => {
     const id = req.params.id
     if (req.session.prm_user && req.session.prm_user.permissions && checkPermission(req.session.prm_user.permissions, invoicesPermission))
@@ -1149,6 +1154,15 @@ app.get('/api/report/emazing/countrylist/:statrtdate/:enddate', (req, res) => {
       res.status(401).json("OK: user unauthorized")
 });
 
+app.get('/api/statistics/clinic-stats/:start/:end', (req, res) => {
+    const start = req.params.start
+    const end = req.params.end
+    if (req.session.prm_user && req.session.prm_user.permissions && checkPermission(req.session.prm_user.permissions, clinicStatisticsPermission))
+        daoStatistics.getClinicStats(req, res, start, end, req.session.prm_user.prm_client_id, getScope(req.session.prm_user.permissions, clinicStatisticsPermission))
+    else
+        res.status(401).json("OK: user unauthorized")
+});
+
 app.get('/api/statistics/revenue-by-product/:start/:end', (req, res) => {
     const start = req.params.start
     const end = req.params.end
@@ -1172,6 +1186,15 @@ app.get('/api/statistics/new-leads/:start/:end', (req, res) => {
     const end = req.params.end
     if (req.session.prm_user && req.session.prm_user.permissions && checkPermission(req.session.prm_user.permissions, clinicStatisticsPermission))
         daoStatistics.getNewEnquiriesPerDay(req, res, start, end, req.session.prm_user.prm_client_id, getScope(req.session.prm_user.permissions, clinicStatisticsPermission))
+    else
+        res.status(401).json("OK: user unauthorized")
+});
+
+app.get('/api/statistics/new-enquiries/:start/:end', (req, res) => {
+    const start = req.params.start
+    const end = req.params.end
+    if (req.session.prm_user && req.session.prm_user.permissions && checkPermission(req.session.prm_user.permissions, clinicStatisticsPermission))
+        daoStatistics.getNewEnquiries(req, res, start, end, req.session.prm_user.prm_client_id, getScope(req.session.prm_user.permissions, clinicStatisticsPermission))
     else
         res.status(401).json("OK: user unauthorized")
 });
@@ -1498,7 +1521,7 @@ app.use('/api/available-services', require('~/controllers/available-services'))
 app.use('/api/available-dates', require('~/controllers/available-dates'))
 app.use('/api/available-doctors', require('~/controllers/available-doctors'))
 app.use('/api/appointment-slots', require('~/controllers/appointment-slots'))
-
+app.use('/api/appointments', require('~/controllers/appointments'))
 app.get('/api/public/online-booking-products', (req, res) => {
     const locale = req.query.locale
     daoOnlineBooking.getOnlineBookingProductsPublic(req, res, locale)

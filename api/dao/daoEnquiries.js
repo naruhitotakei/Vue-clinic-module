@@ -1,13 +1,5 @@
-require('dotenv').config();
-const Pool = require('pg').Pool
-const pool = new Pool({
-  user: process.env.POSTGRES_USER,
-  host: process.env.POSTGRES_HOST,
-  database: process.env.POSTGRES_DB,
-  password: process.env.POSTGRES_PASSWORD,
-  port: process.env.POSTGRES_PORT || 5432,
-})
-var moment = require('moment');  
+var moment = require('moment');
+const { pool, now } = require('~/services/db')
 
 const getEnquiries = (request, response, user_id, accessible_user_ids, prm_client_id, scope, sortBy) => {
     let statement = "SELECT  enquiries.* , concat(u.title, ' ', u.first_name , ' ', u.surname) AS label, TO_CHAR(last_visit, 'DD.MM.YYYY') last_visit, TO_CHAR(next_visit, 'DD.MM.YYYY') next_visit, " +
@@ -16,23 +8,23 @@ const getEnquiries = (request, response, user_id, accessible_user_ids, prm_clien
     statement +=    "LEFT JOIN users u ON u.id = enquiries.prm_dentist_user_id  "
     statement +=    "LEFT JOIN countries ON countries.id = enquiries.country_id  "
     statement +=    "LEFT JOIN regions r ON enquiries.region_id = r.id  "
-    statement +=    "LEFT JOIN LATERAL (SELECT MAX(starts_at) AS last_visit, enquiry_id from appointments where starts_at < current_date AND enquiry_id = enquiries.id GROUP BY enquiry_id) past_d ON past_d.enquiry_id = enquiries.id  " 
-    statement +=    "LEFT JOIN LATERAL (SELECT MIN(starts_at) AS next_visit, enquiry_id from appointments where starts_at > current_date AND enquiry_id = enquiries.id GROUP BY enquiry_id) future_d ON future_d.enquiry_id = enquiries.id  " 
+    statement +=    "LEFT JOIN LATERAL (SELECT MAX(starts_at) AS last_visit, enquiry_id from appointments where starts_at < current_date AND enquiry_id = enquiries.id GROUP BY enquiry_id) past_d ON past_d.enquiry_id = enquiries.id  "
+    statement +=    "LEFT JOIN LATERAL (SELECT MIN(starts_at) AS next_visit, enquiry_id from appointments where starts_at > current_date AND enquiry_id = enquiries.id GROUP BY enquiry_id) future_d ON future_d.enquiry_id = enquiries.id  "
     statement +=    "WHERE enquiries.trashed IS FALSE "
     statement +=    "AND prm_client.client_deleted IS FALSE "
-    if (scope=='All') {        
+    if (scope=='All') {
     } else if (scope=='PrmClient') {
-        statement += "AND enquiries.prm_client_id=" + prm_client_id;  
+        statement += "AND enquiries.prm_client_id=" + prm_client_id;
     } else if (scope=='Self') {
-        statement += "AND enquiries.prm_dentist_user_id=" + user_id; 
+        statement += "AND enquiries.prm_dentist_user_id=" + user_id;
     } else if (scope==='Self&LinkedUsers') {
         statement += " AND (enquiries.prm_dentist_user_id=" + user_id;
-        if (accessible_user_ids) {           
+        if (accessible_user_ids) {
             for (const acc_id in accessible_user_ids) {
                 statement +=" OR enquiries.prm_dentist_user_id=" + accessible_user_ids[acc_id];
-            } 
+            }
         }
-        statement += ") ";    
+        statement += ") ";
     }
     statement += "ORDER BY last_name ASC"
     pool.query(statement, (error, results) => {
@@ -86,8 +78,8 @@ const createEnquiry = (req, res, enquiry, prm_client_id) => {
     if (enquiry.gender) statement += "'" + enquiry.gender + "',"
     if (enquiry.lastName) statement += "'" + enquiry.lastName + "',"
     if (enquiry.lead_owner_id) { statement += enquiry.lead_owner_id + ","} else {statement += "0,"}
-    statement += "NOW(),NOW()," 
-    statement += "false,false,"   
+    statement += "NOW(),NOW(),"
+    statement += "false,false,"
     statement += prm_client_id
     statement += ") RETURNING *"
     console.log("Adding new patient on BE: " + statement)
@@ -97,7 +89,7 @@ const createEnquiry = (req, res, enquiry, prm_client_id) => {
             throw error
         }
         res.status(200).json({ status: "OK", patient })
-    })    
+    })
 }
 
 const updateEnquiry = (req, res, id, enquiry) => {
@@ -131,7 +123,7 @@ const updateEnquiry = (req, res, id, enquiry) => {
             statement += "allergies='" + enquiry.allergies + "',"
             statement += "allergies_updated_at='" + time + "',"
             enquiry.allergies_updated_at = time
-        } 
+        }
         if (enquiry.prm_surgeon_user_id !== currentEnquiry.prm_surgeon_user_id) statement += "prm_surgeon_user_id='" + enquiry.prm_surgeon_user_id + "',"
         if (statement.length > initialUpdateStatement.length) {
             statement += "updated_at='" + time + "',"
@@ -145,7 +137,7 @@ const updateEnquiry = (req, res, id, enquiry) => {
                 if (error) {
                     throw error
                 }
-            }) 
+            })
         }
         res.status(200).json(enquiry)
     });
@@ -287,7 +279,7 @@ const getPatients = (request, response) => {
 }
 
 const getEnquirySMS = (request, response, enquiryId) => {
-    let statement = `SELECT DISTINCT ON (sms_messages.id) * FROM sms_messages 
+    let statement = `SELECT DISTINCT ON (sms_messages.id) * FROM sms_messages
     LEFT JOIN sms_templates ON sms_templates.slug = sms_messages.kind WHERE enquiry_id = ${enquiryId}`
     pool.query(statement, (error, results) => {
         if (error) {
@@ -295,6 +287,34 @@ const getEnquirySMS = (request, response, enquiryId) => {
         }
         response.status(200).json(results.rows)
     })
+}
+
+async function getEnquiryByPhone(phoneNumber) {
+  const statement = /* sql */ `
+    SELECT * from enquiries
+    WHERE phone = $1
+  `;
+  const { rows } = await pool.query(statement, [phoneNumber]);
+
+  return rows[0];
+}
+
+async function createEnquiryPublic({ firstName, lastName, phone }) {
+  const model = {
+    name: '$1',
+    last_name: '$2',
+    phone: '$3',
+    created_at: now(),
+    updated_at: now(),
+  };
+  const statement = /* sql */ `
+    INSERT INTO enquiries(${Object.keys(model).join(',')})
+    VALUES (${Object.values(model).join(',')})
+    RETURNING *
+  `;
+  const result = await pool.query(statement, [firstName, lastName, phone]);
+
+  return result.rows[0];
 }
 
 module.exports = {
@@ -313,5 +333,7 @@ module.exports = {
   createEnquiryService,
   getPatients,
   createEnquiryNotes,
-  getEnquirySMS
+  getEnquirySMS,
+  getEnquiryByPhone,
+  createEnquiryPublic,
 }

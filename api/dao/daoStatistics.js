@@ -97,11 +97,75 @@ const getNewEnquiriesPerDay = (request, response, start, end, prm_client_id, sco
     })
 }
 
+const getClinicStats = async (request, response, start, end, prm_client_id, scope) => {
+    let revenueStatement = "select SUM(services.price) AS revenue, COUNT(services.id) AS serviced_patients from services "
+    revenueStatement += "LEFT JOIN enquiries ON services.enquiry_id = enquiries.id "
+    revenueStatement += "WHERE date_trunc('day', services.date) >= $1 AND date_trunc('day', services.date) <= $2 "
+
+    let allAppointmentStatement = "select COUNT(appointments.id) AS appointments from appointments "
+    allAppointmentStatement += "LEFT JOIN public.enquiries ON appointments.enquiry_id = enquiries.id "
+    allAppointmentStatement += "WHERE date_trunc('day', appointments.date) >= $1 AND date_trunc('day', appointments.date) <= $2 "
+
+    let attendedAppointmentStatement = "select COUNT(appointments.id) AS appointments from appointments "
+    attendedAppointmentStatement += "LEFT JOIN public.enquiries ON appointments.enquiry_id = enquiries.id "
+    attendedAppointmentStatement += "WHERE appointments.patient_attended = true "
+    attendedAppointmentStatement += "AND date_trunc('day', appointments.date) >= $1 AND date_trunc('day', appointments.date) <= $2 "
+    
+    if (scope == 'All') {
+    } else if (scope == 'PrmClient') {
+        revenueStatement += "AND enquiries.prm_client_id = " + prm_client_id;
+        allAppointmentStatement += "AND enquiries.prm_client_id = " + prm_client_id;
+    }
+
+    await Promise.all([
+        pool.query(revenueStatement, [start, end]),
+        pool.query(allAppointmentStatement, [start, end]),
+        pool.query(attendedAppointmentStatement, [start, end]),
+    ]).then(result => {
+        const revenue = result[0].rows[0].revenue
+        const appointments = result[1].rows[0].appointments
+        const attended = result[2].rows[0].appointments
+        const serviced = result[0].rows[0].serviced_patients
+
+        const resp = {
+            revenue: revenue ? revenue : 0,
+            appointments: appointments ? appointments : 0,
+            attended: attended ? attended : 0,
+            serviced: serviced ? serviced : 0
+        }
+
+        response.status(200).json(resp)
+    }).catch(error => {
+        response.status(500).json({
+            message: error.message || 'Something went wrong.'
+        })
+    })
+}
+
+const getNewEnquiries = (request, response, start, end, prm_client_id, scope) => {
+    let statement = "select enquiries.id, enquiries.name, enquiries.last_name, enquiries.email, enquiries.phone, enquiries.created_at AS date from enquiries "
+    statement += "WHERE date_trunc('day', enquiries.created_at) >= $1 AND date_trunc('day', enquiries.created_at) <= $2 "
+
+    if (scope == 'All') {
+    } else if (scope == 'PrmClient') {
+        statement += "AND enquiries.prm_client_id = " + prm_client_id;
+    }
+
+    pool.query(statement, [start, end], (error, results) => {
+        if (error) {
+            throw error
+        }
+        response.status(200).json(results.rows)
+    })
+}
+
 module.exports = {
   getClinicAttendance,
   getVisitsByCountryInAWeek,
   getDoctorsStatisticPerWeek,
   getRevenueByProduct,
   getNewEnquiriesPerDay,
-  getRevenueByDoctor
+  getRevenueByDoctor,
+  getClinicStats,
+  getNewEnquiries
 }
