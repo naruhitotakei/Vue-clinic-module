@@ -13,6 +13,8 @@ Development of the patient relationship management system for a dental clinics -
 | AWS_ACCESS_KEY_ID     |    AWS S3 Access Key    |             - |
 | AWS_SECRET_ACCESS_KEY |     AWS S3 Secret Key   |             - |
 | AWS_BUCKET_NAME       |   AWS S3 bucket name    |             - |
+| VONAGE_API_KEY        |     VONAGE API Key      |             - |
+| VONAGE_API_SECRET     |   VONAGE Secret Key     |             - |
 
 ## Frontend ENV variables
 | Name              |       Description       |     Default value     |

@@ -80,13 +80,13 @@
                             <div class="col-md-6 mb-3">
                                 <label for="price">{{ $t('onlineBooking.serviceModal.price') }} (EUR) *</label>
                                 <div style="display: flex;">
-                                    <input type="number" v-model="onlineBookingData.price" class="form-control" required>
+                                    <input type="number" v-model="onlineBookingData.default_online_price" class="form-control" required>
                                 </div>
                             </div>
                             <div class="col-md-6 mb-3">
                                 <label for="duration">{{ $t('onlineBooking.serviceModal.duration') }} *</label>
                                 <div style="display: flex;">
-                                    <input type="number" v-model="onlineBookingData.duration" class="form-control" step="5" required>
+                                    <input type="number" v-model="onlineBookingData.default_duration" class="form-control" step="5" required>
                                 </div>
                             </div>
                             <div class="col-md-12 mb-3">
@@ -96,7 +96,7 @@
                                           :reduce="doctor => doctor.id"
                                           :getOptionLabel="doctor => doctor.name"
                                           class="style-chooser form-control-disabled font-size-16 ml-0 mt-1"
-                                          v-model="onlineBookingData.doctor"
+                                          v-model="onlineBookingData.doctor_id"
                                           :options="doctors"
                                           style="min-width:305px;"></v-select>
                             </div>
@@ -107,7 +107,7 @@
                                           :reduce="product_group => product_group.id"
                                           :getOptionLabel="product_group => product_group.text"
                                           class="style-chooser form-control-disabled font-size-16 ml-0 mt-1"
-                                          v-model="onlineBookingData.productGroup"
+                                          v-model="onlineBookingData.product_group_id"
                                           :options="productGroups"
                                           style="min-width:305px;"></v-select>
                             </div>
@@ -118,7 +118,7 @@
                                           :reduce="premise => premise.id"
                                           :getOptionLabel="premise => premise.name"
                                           class="style-chooser form-control-disabled font-size-16 ml-0 mt-1"
-                                          v-model="onlineBookingData.premise"
+                                          v-model="onlineBookingData.premise_id"
                                           :options="premises"
                                           style="min-width:305px;"></v-select>
                             </div>
@@ -133,7 +133,7 @@
 
 <script>
 import { xray } from '../../config/pluginInit'
-import { getOnlineBookingProducts, getOnlineBookingProductGroups, getPremises, createOnlineBookingService, deleteOnlineBookingService, updateOnlineBookingService } from '../../services/onlineBookingService'
+import { getOnlineBookingProducts, getOnlineBookingProductGroups, getOnlineBookingProductsNaming, getPremises, createOnlineBookingService, deleteOnlineBookingService, updateOnlineBookingService } from '../../services/onlineBookingService'
 import { getDoctorList } from '../../services/calendarService'
 
 export default {
@@ -158,11 +158,11 @@ export default {
         slovenian: '',
         italian: '',
         english: '',
-        price: '',
-        duration: '',
-        doctor: '',
-        productGroup: '',
-        premise: ''
+        default_online_price: '',
+        default_duration: '',
+        doctor_id: '',
+        product_group_id: '',
+        premise_id: ''
       },
       doctors: [],
       productGroups: [],
@@ -184,7 +184,7 @@ export default {
       return Math.floor(this.onlineBookingProducts.length / this.productsPerPage) !== 0
     },
     isServiceDisabled () {
-      return !this.onlineBookingData.slovenian || !this.onlineBookingData.price || !this.onlineBookingData.duration || !this.onlineBookingData.doctor || !this.onlineBookingData.productGroup || !this.onlineBookingData.premise
+      return !this.onlineBookingData.slovenian || !this.onlineBookingData.default_online_price || !this.onlineBookingData.default_duration || !this.onlineBookingData.doctor_id || !this.onlineBookingData.product_group_id || !this.onlineBookingData.premise_id
     }
   },
   methods: {
@@ -211,14 +211,15 @@ export default {
     },
     defaultOnlineBookingData () {
       return {
+        id: '',
         slovenian: '',
         italian: '',
         english: '',
-        price: '',
-        duration: '',
-        doctor: '',
-        productGroup: '',
-        premise: ''
+        default_online_price: '',
+        default_duration: '',
+        doctor_id: '',
+        product_group_id: '',
+        premise_id: ''
       }
     },
     cancelService () {
@@ -227,11 +228,11 @@ export default {
     addService () {
       if (this.onlineBookingData.id) {
         updateOnlineBookingService(this.onlineBookingData.id, this.onlineBookingData).then(() => {
-          this.getOnlineBookingProducts()
+          this.getOnlineBookingProducts(this.$i18n.locale)
         })
       } else {
         createOnlineBookingService(this.onlineBookingData).then(() => {
-          this.getOnlineBookingProducts()
+          this.getOnlineBookingProducts(this.$i18n.locale)
         })
       }
       this.onlineBookingData = this.defaultOnlineBookingData()
@@ -241,20 +242,23 @@ export default {
       this.onlineBookingProducts.splice(index, 1)
       deleteOnlineBookingService(item.id)
     },
+    populateNaming (namingArray, object) {
+      namingArray.forEach(naming => {
+        if (naming.language === 'sl') {
+          object.slovenian = naming.text
+        } else if (naming.language === 'en') {
+          object.english = naming.text
+        } else if (naming.language === 'it') {
+          object.italian = naming.text
+        }
+      })
+      return object
+    },
     openEditModal (item) {
-      this.onlineBookingData = {
-        id: item.id,
-        slovenian: item.slovenian,
-        italian: item.italian,
-        english: item.english,
-        price: item.default_online_price,
-        duration: item.default_duration,
-        doctor: item.doctor_name,
-        productGroup: item.product_group_text,
-        premise: item.premise_name
-      }
+      getOnlineBookingProductsNaming(item.id).then(response => {
+        this.onlineBookingData = this.populateNaming(response, Object.assign({}, item))
+      })
       this.modalServiceShow = true
-      console.log('Info about service: ' + JSON.stringify(item))
     }
   }
 }

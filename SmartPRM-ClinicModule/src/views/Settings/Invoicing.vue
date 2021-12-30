@@ -51,6 +51,7 @@
             <b-modal v-model="modalCompanyShow" no-close-on-backdrop size="lg" title="Add company" :ok-disabled="isCompanyDisabled" @close="cancelCompany"  @cancel="cancelCompany" :ok-title="$t('servicesAndProducts.addProductModal.save')" @ok="addCompany" :cancel-title="$t('servicesAndProducts.addProductModal.close')">
               <form>
                 <div class="form-row">
+                  <ImageUpload :src="`/api/files/logo/${companyFormData.prm_client_id}`" />
                   <div class="col-md-12 mb-3">
                       <label for="title">Company name *</label>
                       <input type="text" v-model="companyFormData.company_name" class="form-control" placeholder="Name">
@@ -428,9 +429,11 @@ import { getCompanies, createCompany, updateCompany, deleteCompany, getCompanyBy
 import { getCountriesList } from '../../services/commonCodeLists'
 import { getCompanyPremises, getPremiseById, checkElectronicDeviceIdUniquness, checkBusinessIdUniquness, getCompanyPremiseDevices, createPremise, updatePremise, deletePremise, getPremiseDeviceById, createPremiseDevice, updatePremiseDevice, deletePremiseDevice } from '../../services/companyPremises'
 import moment from 'moment'
+import ImageUpload from '@/components/ImageUpload.vue'
 
 export default {
   components: {
+    ImageUpload
   },
   mounted () {
     xray.index()
@@ -451,7 +454,7 @@ export default {
       return !this.premiseFormData.company_id || !this.premiseFormData.premise_name || !this.premiseFormData.premise_street ||
         !this.premiseFormData.premise_house_number || !this.premiseFormData.premise_city || !this.premiseFormData.premise_post_code ||
         !this.premiseFormData.premise_country_code || !this.premiseFormData.premise_community || !this.premiseFormData.premise_cadastral_number ||
-        !this.premiseFormData.building_number || !this.premiseFormData.building_section_number || !this.premiseFormData.special_notes ||
+        !this.premiseFormData.building_number || !this.premiseFormData.building_section_number ||
         !this.premiseFormData.validity_date || !this.premiseFormData.business_premise_id || !this.isBusinessPremiseIdUnique
     },
     isDeviceDisabled () {

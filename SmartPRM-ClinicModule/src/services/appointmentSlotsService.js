@@ -9,8 +9,8 @@ export async function getFreeSlots () {
   return rawResponse.json()
 }
 
-export async function getFreeSlotsPublic (params) {
-  const rawResponse = await fetch(`/api/public/free-slots?${new URLSearchParams(params)}`, {
+export async function getAppointmentSlots (params) {
+  const rawResponse = await fetch(`/api/appointment-slots?${new URLSearchParams(params)}`, {
     method: 'GET',
     credentials: 'same-origin',
     headers: {

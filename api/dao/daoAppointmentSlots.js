@@ -1,13 +1,5 @@
-require('dotenv').config();
-const Pool = require('pg').Pool
-const pool = new Pool({
-    user: process.env.POSTGRES_USER,
-    host: process.env.POSTGRES_HOST,
-    database: process.env.POSTGRES_DB,
-    password: process.env.POSTGRES_PASSWORD,
-    port: process.env.POSTGRES_PORT || 5432,
-})
-let moment = require('moment');
+const moment = require('moment')
+const { pool, now } = require('~/services/db')
 
 const getFreeSlots = (request, response, prm_client_id) => {
     let statement = "SELECT * FROM appointment_slots WHERE prm_client_id = " + prm_client_id
@@ -21,20 +13,24 @@ const getFreeSlots = (request, response, prm_client_id) => {
     })
 }
 
-const getFreeSlotsPublic = (request, response, serviceId, date) => {
-    let statement = "SELECT appointment_slots.id, appointment_slots.starts_at, appointment_slots.doctor_id, " +
-                    "concat(users.title, ' ', users.first_name, ' ', users.surname) AS name FROM appointment_slots "
-    statement += "JOIN users ON appointment_slots.doctor_id = users.id WHERE appointment_slots.doctor_id IN (SELECT doctor_id FROM online_booking_users_bridge WHERE online_booking_id = $1 ) "
-    statement += "AND appointment_slots.starts_at::date = $2::date "
-    statement += "AND appointment_slots.appointment_id IS NULL "
-    statement += "ORDER BY appointment_slots.starts_at "
-    console.log("Fetching online booking on BE: " + statement)
-    pool.query(statement, [serviceId, date], (error, results) => {
-        if (error) {
-            throw error
-        }
-        response.status(200).json(results.rows)
-    })
+const getFreeSlotsPublic = async ({ serviceId, date }) => {
+  const statement = /* sql */`
+    SELECT
+      appointment_slots.id,
+      appointment_slots.starts_at::text,
+      appointment_slots.doctor_id,
+      concat(users.title, ' ', users.first_name, ' ', users.surname) AS name
+    FROM appointment_slots JOIN users ON appointment_slots.doctor_id = users.id
+    WHERE appointment_slots.doctor_id IN (
+      SELECT doctor_id FROM online_booking_users_bridge
+      WHERE online_booking_id = $1
+    )
+    AND appointment_slots.starts_at::date = $2::date
+    AND appointment_slots.appointment_id IS NULL
+    ORDER BY appointment_slots.starts_at
+  `
+
+  return await pool.query(statement, [serviceId, date])
 }
 
 const createFreeSlots = (request, response, slot, prm_client_id) => {
@@ -66,10 +62,36 @@ const deleteFreeSlot = (request, response, id) => {
     })
 }
 
+async function getAppointmentSlotById(id) {
+  const statement = /* sql */`
+    SELECT * FROM appointment_slots
+    WHERE id = $1
+  `
+  const { rows } = await pool.query(statement, [id])
 
-module.exports = {
+  return rows[0]
+}
+
+async function updateAppointmentSlot(id, { appointmentId }) {
+  const statement = /* sql */ `
+    UPDATE appointment_slots
+    SET appointment_id = $2,
+      updated_at = ${now()}
+    WHERE id = $1
+    RETURNING *
+  `
+  const result = await pool.query(statement, [id, appointmentId]);
+
+  return result.rows[0];
+}
+
+const daoAppointmentSlots = {
     getFreeSlots,
     getFreeSlotsPublic,
+    getAppointmentSlotById,
     createFreeSlots,
-    deleteFreeSlot
+    deleteFreeSlot,
+    updateAppointmentSlot,
 }
+
+module.exports = daoAppointmentSlots

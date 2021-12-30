@@ -10,8 +10,10 @@ const pool = new Pool({
 
 const getAssignments = (request, response, scope, userid, accessible_user_ids, prmClientId, due) =>  {
     var condition = null;
+    var condition2 = null;
     if (due == "today") {
-        condition = "WHERE (todos.due_at = now()::date) OR completed_at = now()::date"
+        condition = "WHERE (todos.due_at = now()::date)"
+        condition2 ="OR completed_at = now()::date"
     } else if (due == "future") {
         condition = "WHERE (todos.due_at > now()::date) AND completed = false"
     } else if (due == "past") {
@@ -29,7 +31,7 @@ const getAssignments = (request, response, scope, userid, accessible_user_ids, p
                          "concat(users.first_name, ' ', users.surname) AS todoname, enquiries.prm_dentist_user_id FROM todos",
                          "LEFT JOIN enquiries ON todos.enquiry_id = enquiries.id",
                          "LEFT JOIN users ON todos.user_id = users.id",
-                         condition,
+                         condition, condition2,
                          "ORDER BY todos.due_at ASC"].join('\n') 
         pool.query(statement, (error, results) => {
             if (error) {
@@ -38,12 +40,14 @@ const getAssignments = (request, response, scope, userid, accessible_user_ids, p
             response.status(200).json(results.rows)
         })
     } else if (scope == "PrmClient") {
+        var prmClientCondition = due == "today" ? "OR completed_at = now()::date AND enquiries.prm_client_id = " + prmClientId : null
         var statement = ["SELECT todos.*, enquiries.name AS patientname, enquiries.last_name AS patientlastname, " +
                         "concat(users.first_name, ' ', users.surname) AS todoname, enquiries.prm_dentist_user_id FROM todos",
                         "LEFT JOIN enquiries ON todos.enquiry_id = enquiries.id",
                         "LEFT JOIN users ON todos.user_id = users.id",
                         condition,
                         "AND enquiries.prm_client_id = " + prmClientId,
+                        prmClientCondition,
                         "ORDER BY todos.due_at ASC"].join('\n')
         pool.query(statement, (error, results) => {
             if (error) {
@@ -51,13 +55,15 @@ const getAssignments = (request, response, scope, userid, accessible_user_ids, p
             }
             response.status(200).json(results.rows)
         }) 
-    } else if (scope == "Self") {       
+    } else if (scope == "Self") {
+        var selfCondition = due == "today" ? "OR completed_at = now()::date AND users.id = " + userid : null
         var statement = ["SELECT todos.*, enquiries.name AS patientname, enquiries.last_name AS patientlastname, " +
                         "concat(users.first_name, ' ', users.surname) AS todoname, enquiries.prm_dentist_user_id FROM todos",
                         "LEFT JOIN enquiries ON todos.enquiry_id = enquiries.id",
                          "LEFT JOIN users ON todos.user_id = users.id",
                          condition,
                          "AND users.id=" + userid,
+                         selfCondition,
                          "ORDER BY todos.due_at ASC"].join('\n') 
         pool.query(statement, (error, results) => {
             if (error) {
@@ -74,13 +80,15 @@ const getAssignments = (request, response, scope, userid, accessible_user_ids, p
             } 
         }
         conditionScope += ")";
+        var selfAndLinkedCondition = due == "today" ? "OR completed_at = now()::date " + conditionScope : null
         var statement = ["SELECT todos.*, enquiries.name AS patientname, enquiries.last_name AS patientlastname, " +
                          "concat(users.first_name, ' ', users.surname) AS todoname, enquiries.prm_dentist_user_id FROM todos",
                          "LEFT JOIN enquiries ON todos.enquiry_id = enquiries.id",
                          "LEFT JOIN users ON todos.user_id = users.id",                        
                          condition,
                          conditionScope,
-                         "ORDER BY todos.due_at ASC"].join('\n') 
+                         selfAndLinkedCondition,
+                         "ORDER BY todos.due_at ASC"].join('\n')
         pool.query(statement, (error, results) => {
             if (error) {
                 throw error

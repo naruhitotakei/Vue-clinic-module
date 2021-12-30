@@ -272,8 +272,13 @@ const getProductCategoryNaming = (request, response, id) => {
     })
 }
 
-const getOldProducts = (request, response) =>  {
-    pool.query("SELECT * FROM products", (error, results) => {
+const getOldProducts = (request, response, prm_client_id, scope) => {
+    let statement = "SELECT DISTINCT ON (name) * FROM products LEFT JOIN prm_product_group ON products.prm_product_group_id = prm_product_group.product_group_id "
+    if (scope == 'All') {
+    } else if (scope == 'PrmClient') {
+        "WHERE prm_product_group.prm_client_id = " + prm_client_id
+    }
+    pool.query(statement, (error, results) => {
         if (error) {
             throw error
         }

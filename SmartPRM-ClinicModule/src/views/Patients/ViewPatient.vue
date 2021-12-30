@@ -1,6 +1,6 @@
 <template>
   <b-container fluid>
-    <form>
+    <form v-if="patient">
       <b-row>
         <b-col lg="12">
             <iq-card body-class="p-0">
@@ -31,7 +31,7 @@
                                                   <b-button type="button" variant=" iq-bg-danger mr-1 mb-1" size="sm" @click="modalTrashPatient = true"><i class="ri-delete-bin-7-fill m-0"></i></b-button>
                                               </b-col>
                                               <b-modal v-model="modalTrashPatient" ok-title="OK" cancel-title="Cancel" @ok="trashPatient" @cancel="modalTrashPatient = false">
-                                                  <h4 class="my-4 card-title text-center">Are you sure you want to delete the patient?</h4>
+                                                  <h4 class="my-4 card-title text-center">{{ $t('EPR.overview.deletePatientConfirm') }}</h4>
                                               </b-modal>
                                               <div class="user-profile text-center">
                                                   <img v-if="patient.gender == 'female'" src="../../assets/images/user/11.png" alt="profile-img" class="avatar-130 img-fluid">
@@ -174,7 +174,7 @@
                                                                             inline
                                                                             v-model="formAppointments.patient_attended"
                                                                             :value="item.value"
-                                                                            :key="index"
+                                                                            :key="index + 'attended'"
                                                                             v-if="showProps(item, formAppointments.patient_attended)">
                                                                   {{ item.label }}
                                                               </b-form-radio>
@@ -191,7 +191,7 @@
                                                           <b-form-radio class="custom-radio-color labels"
                                                                         inline
                                                                         v-model="formAppointments.backgroundColor"
-                                                                        :key="index"
+                                                                        :key="index + 'color'"
                                                                         :reduce="item => item.id"
                                                                         :value="item.id"
                                                                         :style="{'background': item.color}"
@@ -204,13 +204,12 @@
                                               </div>
                                               <template>
                                                   <div class="cancelation-text font-size-18 mt-3 mb-1 row align-items-center justify-content-center w-100">
-                                                      <p v-if="formAppointments.appointment_canceled_in_advance_by_clinic === true">{{ $t('calendarEvent.appointmentCanceledInAdvanceByClinic') }}</p>
-                                                      <p v-if="formAppointments.appointment_canceled_in_advance_by_patient === true">{{ $t('calendarEvent.appointmentCanceledInAdvanceByPatient') }}</p>
+                                                      <p v-if="formAppointments.appointment_canceled === true">{{ $t('calendarEvent.appointmentCanceled') }}</p>
                                                   </div>
                                               </template>
                                               <div class="modal-footer modal-footer-bt" style="width: 100%;">
                                                   <template v-if="disabled">
-                                                      <button v-if="formAppointments.appointment_canceled_in_advance_by_clinic === false && formAppointments.appointment_canceled_in_advance_by_patient === false || openCancelationModal === true" type="button" class="btn btn-secondary" @click="openCancelationModal = true">{{ $t('calendar.btnCancelation') }}</button>
+                                                      <button v-if="formAppointments.appointment_canceled === false || openCancelationModal === true" type="button" class="btn btn-secondary" @click="openCancelationModal = true">{{ $t('calendar.btnCancelation') }}</button>
                                                       <button type="button" class="btn btn-secondary" @click="addAppointmentModal = false, formAppointments = defaultFormAppointment">{{ $t('calendar.btnClose') }}</button>
                                                       <button type="button" class="btn btn-secondary" @click="editMode">{{ $t('calendar.btnEdit') }}</button>
                                                   </template>
@@ -228,21 +227,17 @@
                                                        @close="closeCancelation"
                                                        @cancel="closeCancelation">
                                                   <div class="col-md-12 mb-2">
-                                                      <div class="d-flex justify-content-around mt-2">
+                                                      <div class="ml-3 mt-2">
                                                           <b-form-radio class="custom-radio-color"
                                                                         inline
-                                                                        v-model="formAppointments.appointment_canceled_in_advance_by_patient"
-                                                                        :value="true"
+                                                                        v-model="formAppointments.appointment_canceled"
+                                                                        value="true"
                                                                         name="cancelation">
-                                                              {{ $t('calendarEvent.appointmentCanceledInAdvanceByPatient') }}
+                                                              {{ $t('calendarEvent.cancelAppointment') }}
                                                           </b-form-radio>
-                                                          <b-form-radio class="custom-radio-color"
-                                                                        inline
-                                                                        v-model="formAppointments.appointment_canceled_in_advance_by_clinic"
-                                                                        :value="true"
-                                                                        name="cancelation">
-                                                              {{ $t('calendarEvent.appointmentCanceledInAdvanceByClinic') }}
-                                                          </b-form-radio>
+                                                      </div>
+                                                      <div class="col-md-12 mt-2">
+                                                          <textarea row="2" v-model="formAppointments.cancelation_reason" class="form-control form-control-disabled mt-4" id="cancelationReason" :placeholder="$t('calendarEvent.cancelationReason')"></textarea>
                                                       </div>
                                                   </div>
                                               </b-modal>
@@ -336,14 +331,23 @@
                                                       <hr />
                                                   </div>
                                               </div>
-                                              <ul class="list-inline m-0 overflow-y-scroll pl-2 pr-2" style="max-height: 300px;">
-                                                  <li v-for="(note,index) in notes" :key="index + note.created_at" class="d-flex align-items-center justify-content-between mb-3">
+                                              <ul class="list-inline m-0 pl-2 pr-2">
+                                                  <li v-for="(note,index) in notesList" :key="index + note.created_at" id="notesList" class="d-flex align-items-center justify-content-between mb-3">
                                                       <div>
                                                           <h6>{{note.content}}</h6>
-                                                          <p class="mb-0">{{note.created_at | formatDate}} - <span class="ml-0">{{ note.user_name }}</span></p>
+                                                          <small class="mb-0">{{note.created_at | formatDate}} - <span class="ml-0">{{ note.user_name }}</span></small>
                                                       </div>
                                                   </li>
                                               </ul>
+                                              <p v-if="notes.length === 0">{{ $t('EPR.overview.noNotes') }}</p>
+                                              <b-pagination
+                                                class="mt-4"
+                                                v-else-if="notes.length > 5"
+                                                v-model="notesCurrentPage"
+                                                :total-rows="notes.length"
+                                                :per-page="notesPerPage"
+                                                aria-controls="notesList"
+                                              ></b-pagination>
                                           </template>
                                       </iq-card>
                                   </b-col>
@@ -360,13 +364,25 @@
                                                   </div>
                                               </div>
                                               <ul class="list-inline m-0 overflow-y-scroll pl-2 pr-2" style="max-height: 300px;">
-                                                  <li v-for="(message,index) in smsMessages" :key="index + message.created_at" class="d-flex align-items-center justify-content-between mb-3">
+                                                  <li v-for="(message,index) in smsList" :key="index + message.created_at" id="smsList" class="d-flex align-items-center justify-content-between mb-3">
                                                       <div>
-                                                          <h6>{{message.content}}</h6>
-                                                          <p class="mb-0">{{message.created_at | formatDateAndTime}} - {{ message.delivered_at ? $t('EPR.overview.deliveredSms') :  $t('EPR.overview.notDeliveredSms')}}</p>
+                                                          <h6 :id="`message-${message.id}`">{{message.name}}</h6>
+                                                          <b-tooltip class="tooltip-content" :target="`message-${message.id}`" triggers="hover" placement="rightbottom">
+                                                            {{ message.content }}
+                                                          </b-tooltip>
+                                                          <small class="mb-0">{{message.created_at | formatDateAndTime}} - {{ message.delivered_at ? $t('EPR.overview.deliveredSms') :  $t('EPR.overview.notDeliveredSms')}}</small>
                                                       </div>
                                                   </li>
                                               </ul>
+                                              <p v-if="smsMessages.length === 0">{{ $t('EPR.overview.noSMS') }}</p>
+                                              <b-pagination
+                                                class="mt-2"
+                                                v-else-if="smsMessages.length > 4"
+                                                v-model="smsCurrentPage"
+                                                :total-rows="smsMessages.length"
+                                                :per-page="smsPerPage"
+                                                aria-controls="smsList"
+                                            ></b-pagination>
                                           </template>
                                       </iq-card>
                                   </b-col>
@@ -377,26 +393,52 @@
                                           <iq-card>
                                               <template v-slot:body>
                                                   <div class="iq-card-header d-flex justify-content-between">
-                                                      <div class="iq-header-title">
-                                                          <div class="row justify-content-between align-items-center">
-                                                              <h4 class="card-title">{{ $t('EPR.overview.openAssignments') }}</h4>
-                                                              <button type="" class="btn btn-primary" @click.prevent="modalAssigmentShow = true">{{ $t('EPR.overview.add') }}</button>
-                                                              </div>
-                                                              <hr />
-                                                          </div>
+                                                    <div class="iq-header-title">
+                                                      <div class="row justify-content-between align-items-center">
+                                                        <h4 class="card-title">{{ $t('EPR.overview.openAssignments') }}</h4>
+                                                        <button type="" class="btn btn-primary" @click.prevent="modalAssigmentShow = true">{{ $t('EPR.overview.add') }}</button>
                                                       </div>
-                                                  <ul class="list-inline m-0 overflow-y-scroll" style="max-height: 300px;">
-                                                      <li v-for="(item,index) in assignments" :key="index + item.due_at"
+                                                      <hr />
+                                                    </div>
+                                                  </div>
+                                                  <ul class="list-inline m-0 overflow-y-scroll">
+                                                      <li id="openList" v-for="(item,index) in openAssignments" :key="index + item.due_at"
                                                           class="d-flex align-items-center justify-content-between mb-3">
                                                           <div class="w-100">
-                                                              <h6 :class="{'red-text': isItOverdue(item.due_at)}">{{item.description}}</h6>
+                                                            <div>
+                                                              <b-checkbox v-model="item.completed" name="check-button" inline
+                                                                :key="index"
+                                                                @change="finishAssignment(item.id, $event)"><strong :class="{'red-text': isItOverdue(item.due_at)}">{{ item.description }}</strong></b-checkbox>
+                                                            </div>
+                                                            <div class="d-flex align-items-center justify-content-between">
+                                                              <div>
+                                                                <span class="text-left">{{ item.name }} {{ item.patientlastname }}</span>&nbsp;
+                                                                <span class="text-left">{{ getPatientsDentist(item) ? `(${getPatientsDentist(item)})` : '' }}</span>
+                                                              </div>
+                                                              <div class="d-flex align-items-center">
+                                                                <span class="text-right text-width-150">{{ item.due_at | formatDate }}</span>
+                                                                <!-- <b-button variant=" iq-bg-success mr-1 mb-1" size="sm" style="margin-left: 5%;" @click="editAssignments(item)">
+                                                                  <i class="ri-ball-pen-fill m-0"></i>
+                                                                </b-button> -->
+                                                              </div>
+                                                            </div>
+                                                              <!-- <h6 >{{item.description}}</h6>
                                                               <div class="row justify-content-between pt-1 w-100 ml-0 line-height">
                                                                   <p class="mb-0">{{item.name}}</p>
                                                                   <p class="mb-0">{{item.due_at | formatDate}}</p>
-                                                              </div>
+                                                              </div> -->
                                                           </div>
                                                       </li>
                                                   </ul>
+                                                  <p v-if="assignments.length === 0">{{ $t('EPR.overview.noOpenAssignments') }}</p>
+                                                  <b-pagination
+                                                    class="mt-2"
+                                                    v-else-if="assignments.length > 5"
+                                                    v-model="smsCurrentPage"
+                                                    :total-rows="assignments.length"
+                                                    :per-page="smsPerPage"
+                                                    aria-controls="openList"
+                                                ></b-pagination>
                                               </template>
                                           </iq-card>
                                           <iq-card>
@@ -411,38 +453,91 @@
                                                       </div>
                                                   </div>
                                                   <ul class="iq-timeline">
-                                                      <li v-for="(item,index) in futureAppointments" :key="index">
+                                                      <li v-for="(item,index) in futureList" :key="index + 'future'" id="futureList">
                                                           <div v-if="item.appointmentStatus === 'Attended'" class="timeline-dots border-success"></div>
                                                           <div v-if="item.appointmentStatus === 'Canceled by clinic'" class="timeline-dots border-light"></div>
                                                           <div v-if="item.appointmentStatus === 'Canceled by patient'" class="timeline-dots border-danger"></div>
                                                           <div v-if="item.appointmentStatus === 'Unknown'" class="timeline-dots border-warning"></div>
                                                           <div @click="openEditAppointmentModal(item)" style="cursor: pointer;">
                                                               <h6>{{item.product_group_text}}<span class="float-right">{{item.note}}</span></h6>
-                                                              <small class="mt-1">{{item.starts_at | formatDateAndTime}}</small>
+                                                              <small class="mt-1">{{item.starts_at | formatDateAndTime}} {{ item.location ? `(${item.location})` : '' }}</small>
                                                           </div>
                                                       </li>
                                                   </ul>
+                                                  <p v-if="futureAppointments.length === 0">{{ $t('EPR.overview.noFutureAppointments') }}</p>
+                                                  <b-pagination
+                                                    class="mt-2"
+                                                    v-else-if="futureAppointments.length > 5"
+                                                    v-model="futureCurrentPage"
+                                                    :total-rows="futureAppointments.length"
+                                                    :per-page="futurePerPage"
+                                                    aria-controls="futureList"
+                                                ></b-pagination>
                                               </template>
                                           </iq-card>
                                           <iq-card>
                                               <template v-slot:body>
-                                                  <div class="iq-card-header d-flex justify-content-between">
+                                                  <div class="iq-card-header">
+                                                    <div class="row justify-content-between align-items-center">
                                                       <div class="iq-header-title">
-                                                          <h4 class="card-title">{{ $t('EPR.overview.pastAppointments') }}</h4>
-                                                          <hr />
+                                                        <h4 class="card-title">{{ $t('EPR.overview.pastAppointments') }}</h4>
                                                       </div>
+                                                    </div>
+                                                    <hr />
                                                   </div>
                                                   <ul class="iq-timeline" id="pastAppointments">
-                                                      <li v-for="(item, index) in pastAppointments" :key="index">
+                                                      <li v-for="(item, index) in pastList" :key="index + 'status'" id="pastList">
                                                         <div v-if="item.appointmentStatus === 'Attended'" class="timeline-dots border-success"></div>
                                                         <div v-if="item.appointmentStatus === 'Canceled by clinic'" class="timeline-dots border-light"></div>
                                                         <div v-if="item.appointmentStatus === 'Canceled by patient'" class="timeline-dots border-danger"></div>
                                                         <div v-if="item.appointmentStatus === 'Unknown'" class="timeline-dots border-warning"></div>
                                                         <h6 @click="openEditAppointmentModal(item)" class="clickable">{{item.product_group_text}}<span class="float-right">{{item.note}}</span></h6>
-                                                        <small class="mt-1">{{item.starts_at | formatDateAndTime}}</small>
+                                                        <small class="mt-1">{{item.starts_at | formatDateAndTime}} {{ item.location ? `(${item.location})` : '' }}</small>
                                                       </li>
                                                   </ul>
+                                                  <p v-if="pastAppointments.length === 0">{{ $t('EPR.overview.noPastAppointments') }}</p>
+                                                  <b-pagination
+                                                    class="mt-2"
+                                                    v-else-if="pastAppointments.length > 5"
+                                                    v-model="pastCurrentPage"
+                                                    :total-rows="pastAppointments.length"
+                                                    :per-page="pastPerPage"
+                                                    aria-controls="pastList"
+                                                ></b-pagination>
                                               </template>
+                                          </iq-card>
+                                          <iq-card>
+                                            <template v-slot:body>
+                                                <div class="iq-card-header d-flex justify-content-between">
+                                                  <div class="iq-header-title">
+                                                    <div class="row justify-content-between align-items-center">
+                                                        <h4 class="card-title">{{ $t('assignments.completedAssignments') }}</h4>
+                                                      </div>
+                                                      <hr />
+                                                  </div>
+                                                </div>
+                                                <ul class="list-inline m-0 overflow-y-scroll">
+                                                    <li id="completedList" v-for="(item,index) in completedList" :key="index + item.due_at"
+                                                        class="d-flex align-items-center justify-content-between mb-3">
+                                                        <div class="w-100">
+                                                            <h6>{{item.description}}</h6>
+                                                            <div class="row justify-content-between pt-1 w-100 ml-0 line-height">
+                                                                <p class="mb-0">{{item.name}}</p>
+                                                                <p class="mb-0">{{item.due_at | formatDate}}</p>
+                                                            </div>
+                                                        </div>
+                                                    </li>
+                                                </ul>
+                                                <p v-if="completedAssignments.length === 0">{{ $t('EPR.overview.noCompletedAssignments') }}</p>
+                                                  <b-pagination
+                                                    class="mt-2"
+                                                    v-else-if="completedAssignments.length > 5"
+                                                    v-model="completedCurrentPage"
+                                                    :total-rows="completedAssignments.length"
+                                                    :per-page="completedPerPage"
+                                                    aria-controls="completedList"
+                                                ></b-pagination>
+                                            </template>
                                           </iq-card>
                                       </b-col>
                                   </b-col>
@@ -520,28 +615,35 @@
                                                   <b-form-input :disabled="disabledData" name="address" class="form-control-disabled font-size-12" v-model="patient.address_line_1" style="line-height: 22px;">
                                                   </b-form-input>
                                               </b-form-group>
-                                              <b-form-group class="col-md-12 align-items-center mt-1" :class="{'mb-0': disabledData}" style="justify-content: space-between;" label-cols-sm="4" label-for="city" :label="$t('EPR.personalInfo.postCodeCity')">
-                                                  <b-form-input :disabled="disabledData" class="col-md-4 form-control-disabled font-size-12 mt-1" style="float: left;" v-model="patient.post_code" type="text"></b-form-input>
-                                                  <v-select :disabled="disabledData"
-                                                            class="col-md-8 form-control-disabled style-chooser"
-                                                            :class="{'margin-top-city': disabledData}"
-                                                            style="float: right;" v-model="patient.city"
-                                                            :clearable="false" :options="filteredMunicipalities"
-                                                            :reduce="city => city.municipality_name"
-                                                            :getOptionLabel="getMunicipalityLabel"
-                                                            @input="onCityChange"></v-select>
+                                              <b-form-group class="col-md-12 align-items-center mt-1" :class="{'mb-0': disabledData}" style="justify-content: space-between;" label-cols-sm="4" label-for="city" :label="$t('EPR.personalInfo.postCode')">
+                                                  <b-form-input :disabled="disabledData" class="col-md-12 form-control-disabled font-size-12 mt-1" style="float: left;" v-model="patient.post_code" type="text"></b-form-input>
                                               </b-form-group>
-                                              <b-form-group class="col-md-12 align-items-center " :class="{'mb-0': disabledData}" label-cols-sm="4" label-for="country" :label="$t('EPR.personalInfo.country')">
+                                              <b-form-group class="col-md-12 form-control-disabled font-size-12 mt-1" :class="{'mb-0': disabledData}" label-cols-sm="4" label-for="country" :label="$t('EPR.personalInfo.country')">
                                                   <v-select :disabled="disabledData" label="name" :clearable="false"
                                                             :reduce="country => country.id"
                                                             class="style-chooser form-control-disabled font-size-12"
                                                             v-model="patient.country_id" :options="countries"></v-select>
                                               </b-form-group>
                                               <b-form-group class="col-md-12 align-items-center" :class="{'mb-0': disabledData}" label-cols-sm="4" label-for="region" :label="$t('EPR.personalInfo.region')">
-                                                  <v-select class="style-chooser form-control-disabled font-size-12" :clearable="false"
-                                                            :reduce="region => region.code" :disabled="disabledData"
+                                                  <v-select :clearable="false"
+                                                            :reduce="region => region.code"
+                                                            :disabled="disabledData"
                                                             v-model="patient.region_id"
-                                                            :options="filteredRegions"></v-select>
+                                                            class="style-chooser form-control-disabled font-size-12"
+                                                            :options="filteredRegions">
+                                                  </v-select>
+                                              </b-form-group>
+                                              <b-form-group class="col-md-12 align-items-center" :class="{'mb-0': disabledData}" label-cols-sm="4" label-for="region" :label="$t('EPR.personalInfo.city')">
+                                                  <v-select v-model="patient.city"
+                                                            :clearable="false"
+                                                            :disabled="disabledData"
+                                                            :options="filteredMunicipalities"
+                                                            :reduce="city => city.municipality_name"
+                                                            :getOptionLabel="getMunicipalityLabel"
+                                                            @input="onCityChange"
+                                                            class="style-chooser form-control-disabled font-size-12">
+                                                  </v-select>
+                                                  <!-- <b-form-input :disabled="disabledData" class="col-md-5 form-control-disabled font-size-12" style="float: right;" name="insured_at" type="text" v-model="patient.insured_at"></b-form-input> -->
                                               </b-form-group>
                                               <b-form-group class="col-md-12 align-items-center" :class="{'mb-0': disabledData}" label-cols-sm="4" label-for="insurance" :label="$t('EPR.personalInfo.insurance')">
                                                   <b-form-input :disabled="disabledData" class="col-md-5 form-control-disabled font-size-12" style="float: left;" name="insurance_no" type="text" v-model="patient.insurance_no"></b-form-input>
@@ -816,15 +918,16 @@
                       <iq-card>
                           <template v-slot:body>
                             <h3 class="card-title" style="margin-top: 10px;">{{ $t('EPR.invoices.servicesSummary') }}</h3>
-                            <div class="btn-add-patient mb-4 mt-0">
-                                <b-button variant="primary" @click="modalServiceShow = true"><i class="ri-add-line mr-2"></i>{{ $t('EPR.invoices.addService') }}</b-button>
+                            <div class="mb-4 mt-0 d-flex align-items-center justify-content-between">
+                              <h5><strong>Sum of services: {{ getSumOfServices() | formatPrice }}</strong></h5>
+                              <b-button variant="primary" @click="modalServiceShow = true"><i class="ri-add-line mr-2"></i>{{ $t('EPR.invoices.addService') }}</b-button>
                             </div>
                               <b-table small
-                                       id="patient-services"
-                                       :items="services"
-                                       :fields="servicesSummaryColumns"
-                                       :per-page="servicesPerPage"
-                                       :current-page="currentServicesPage"></b-table>
+                                id="patient-services"
+                                :items="services"
+                                :fields="servicesSummaryColumns"
+                                :per-page="servicesPerPage"
+                                :current-page="currentServicesPage"></b-table>
                           </template>
                           <template>
                               <b-collapse id="collapse-6" class="mb-2"> </b-collapse>
@@ -961,7 +1064,7 @@
       <form>
         <div class="form-row">
           <div class="col-md-12 mb-3" v-if="users">
-            <label for="title">{{ $t('assignments.addAssignmentsModal.users') }} *</label>
+            <label for="title">{{ $t('assignments.addAssignmentsModal.assignTo') }} *</label>
             <v-select
                 taggable
                 :clearable="false"
@@ -970,6 +1073,9 @@
                 :options="users"
                 v-model="formData.user"
             >
+              <template v-slot:selected-option="data">
+                {{ data.label }}
+              </template>
             </v-select>
           </div>
           <div class="col-md-12 mb-3">
@@ -1033,7 +1139,7 @@
                 v-model="selectedInvoices"
                 :name="item.value"
                 :value="item.value"
-                :key="item.value"
+                :key="item.value + 'value'"
             >{{ item.label }}
             </b-form-radio>
           </template>
@@ -1058,6 +1164,7 @@ import {
   createEnquiryNotes,
   trashEnquiry
 } from '../../services/enquiry'
+import { finishAssignment } from '../../services/assignmentsService'
 import { getDentists, getSurgeons, getLegacyDoctors, getUsersForAssignments, sso } from '../../services/userService'
 import { getCountriesList, getRegionsList, getLocationsList, getMunicipalitiesList } from '../../services/commonCodeLists'
 import moment from 'moment'
@@ -1078,6 +1185,7 @@ export default {
   },
   mounted () {
     xray.index()
+    this.getUserLogin()
     this.getPatient(this.patientId)
     this.getPatientNotes(this.patientId)
     this.getPatientPastAppointments(this.patientId, this.$i18n.locale)
@@ -1095,7 +1203,6 @@ export default {
     this.getUsersForAssignments()
     this.getFiles()
     this.getLocations()
-    this.getUserLogin()
     this.getSms()
     this.getDoctors()
     this.getProductGroups(this.$i18n.locale)
@@ -1129,16 +1236,16 @@ export default {
       })
     },
     filteredMunicipalities () {
-      if (this.patient.country_id) {
+      if (this.patient.region_id) {
         return this.municipalities.filter(item => {
-          return item.country_id === this.patient.country_id
+          return item.region_id === this.patient.region_id
         })
       } else {
         return this.municipalities
       }
     },
     patientsDentist: function () {
-      if (this.dentists && this.dentists.length) {
+      if (this.dentists && Array.isArray(this.dentists) && this.dentists.length) {
         return this.dentists.find((item) => {
           return item.code === this.patient.prm_dentist_user_id
         })
@@ -1146,13 +1253,32 @@ export default {
       return null
     },
     patientsSurgeon: function () {
-      return this.surgeons.find((item) => {
-        return item.code === this.patient.prm_surgeon_user_id
-      })
+      if (this.surgeons && Array.isArray(this.surgeons)) {
+        return this.surgeons.find((item) => {
+          return item.code === this.patient.prm_surgeon_user_id
+        })
+      }
+      return null
     },
     openAssignments: function () {
-      let assignments = [...this.assignments]
-      return assignments.reverse()
+      return this.assignments.slice(
+        (this.openCurrentPage - 1) * this.openPerPage,
+        this.openCurrentPage * this.openPerPage)
+    },
+    completedList () {
+      return this.completedAssignments.slice(
+        (this.completedCurrentPage - 1) * this.completedPerPage,
+        this.completedCurrentPage * this.completedPerPage)
+    },
+    pastList () {
+      return this.pastAppointments.slice(
+        (this.pastCurrentPage - 1) * this.pastPerPage,
+        this.pastCurrentPage * this.pastPerPage)
+    },
+    futureList () {
+      return this.futureAppointments.slice(
+        (this.futureCurrentPage - 1) * this.futurePerPage,
+        this.futureCurrentPage * this.futurePerPage)
     },
     hideInvoicesPagination () {
       return Math.floor(this.invoices.length / this.invoicesPerPage) !== 0
@@ -1162,6 +1288,16 @@ export default {
     },
     hideSummaryPagination () {
       return Math.floor(this.services.length / this.servicesPerPage) !== 0
+    },
+    smsList () {
+      return this.smsMessages.slice(
+        (this.smsCurrentPage - 1) * this.smsPerPage,
+        this.smsCurrentPage * this.smsPerPage)
+    },
+    notesList () {
+      return this.notes.slice(
+        (this.notesCurrentPage - 1) * this.notesPerPage,
+        this.notesCurrentPage * this.notesPerPage)
     },
     filesSortBy () {
       if (this.sortBy === '') {
@@ -1233,7 +1369,8 @@ export default {
   },
   data () {
     return {
-      logedInUser: {},
+      loggedInUser: {},
+      userId: null,
       calendarApi: null,
       patientId: this.$route.params.patientId,
       modalAssigmentShow: false,
@@ -1250,6 +1387,7 @@ export default {
       tempPatient: {},
       notes: [],
       assignments: [],
+      completedAssignments: [],
       pastAppointments: [],
       futureAppointments: [],
       timeSinceFirstVisit: '',
@@ -1264,6 +1402,18 @@ export default {
       doctors: [],
       product_groups: [],
       smsMessages: [],
+      smsCurrentPage: 1,
+      smsPerPage: 4,
+      notesCurrentPage: 1,
+      notesPerPage: 5,
+      completedCurrentPage: 1,
+      completedPerPage: 5,
+      openCurrentPage: 1,
+      openPerPage: 5,
+      pastCurrentPage: 1,
+      pastPerPage: 5,
+      futureCurrentPage: 1,
+      futurePerPage: 5,
       selectedInvoices: '',
       selectedDoctor: '',
       selectedProductGroup: '',
@@ -1313,23 +1463,23 @@ export default {
         product_groups: '',
         crmProduct: '',
         patient_attended: '',
-        appointment_canceled_in_advance_by_clinic: false,
-        appointment_canceled_in_advance_by_patient: false
+        appointment_canceled: false,
+        cancelation_reason: ''
       },
       patient_attend: [
         {
           label: this.$t('calendarEvent.unknown'),
-          value: 'Unknown',
+          value: null,
           checked: true
         },
         {
           label: this.$t('calendarEvent.attended'),
-          value: 'Attended',
+          value: true,
           checked: false
         },
         {
           label: this.$t('calendarEvent.notAttended'),
-          value: 'Not attended',
+          value: false,
           checked: false
         }
       ],
@@ -1450,9 +1600,9 @@ export default {
         {
           label: this.$t('EPR.servicesSummaryColumn.servicePrice'),
           key: 'price',
-          class: 'text-left',
+          class: 'price-column',
           formatter: value => {
-            return value + ' EUR'
+            return this.$options.filters.formatPrice(value)
           }
         },
         { label: this.$t('reportingEmazing.servicesListColumn.serviceDoctor'), key: 'doctor', class: 'text-left' },
@@ -1487,16 +1637,32 @@ export default {
     }
   },
   methods: {
-    decideAppointmentStatus (appointment) {
-      if (appointment.appointment_canceled_in_advance_by_clinic) {
-        return 'Canceled by clinic'
-      } else if (appointment.appointment_canceled_in_advance_by_patient) {
-        return 'Canceled by patient'
-      } else if (appointment.patient_attended === 'Attended') {
-        return 'Attended'
-      } else if (appointment.patient_attended === 'Unknown' || !appointment.patient_attended) {
-        return 'Unknown'
+    getSumOfServices () {
+      let sum = 0
+      if (this.services && Array.isArray(this.services) && this.services.length) {
+        this.services.forEach(item => {
+          if (item.price) {
+            sum += Number(item.price)
+          }
+        })
       }
+      return sum
+    },
+    getPatientsDentist (patient) {
+      if (this.dentists && this.dentists.length) {
+        let dentist = this.dentists.find((item) => {
+          return item.code === patient.prm_dentist_user_id
+        })
+        return dentist && dentist.label
+      }
+    },
+    decideAppointmentStatus (appointment) {
+      if (appointment.appointment_canceled) {
+        return true
+      } else if (appointment.patient_attended === true) {
+        return true
+      }
+      return null
     },
     cancelAppointmentModal () {
       this.formAppointments = this.defaultFormAppointment()
@@ -1578,16 +1744,18 @@ export default {
     },
     getFiles () {
       getFilesWithPrefix(this.$route.params.patientId).then(data => {
-        for (let i = 0; i < data.data.Contents.length; i++) {
-          let type = data.data.Contents[i].Key.split('.')[1]
-          let image = '/api/files/' + data.data.Contents[i].Key
-          this.files.push({
-            image: image,
-            name: data.data.Contents[i].Key,
-            type: type,
-            created_at: moment(data.data.Contents[i].LastModified).format('YYYY-MM-DD'),
-            pdf: type === 'pdf'
-          })
+        if (data.data && Array.isArray(data.data.Contents)) {
+          for (let i = 0; i < data.data.Contents.length; i++) {
+            let type = data.data.Contents[i].Key.split('.')[1]
+            let image = '/api/files/' + data.data.Contents[i].Key
+            this.files.push({
+              image: image,
+              name: data.data.Contents[i].Key,
+              type: type,
+              created_at: moment(data.data.Contents[i].LastModified).format('YYYY-MM-DD'),
+              pdf: type === 'pdf'
+            })
+          }
         }
       })
     },
@@ -1693,7 +1861,10 @@ export default {
     },
     getPatientAssignments (id) {
       getEnquiryAssignments(id).then(response => {
-        this.assignments = response
+        if (Array.isArray(response)) {
+          this.assignments = response.filter(todo => !todo.completed)
+          this.completedAssignments = response.filter(todo => todo.completed)
+        }
       })
     },
     getPatientInvoices (id, sort) {
@@ -1885,8 +2056,8 @@ export default {
         product_groups: '',
         crmProduct: '',
         patient_attended: '',
-        appointment_canceled_in_advance_by_clinic: false,
-        appointment_canceled_in_advance_by_patient: false
+        appointment_canceled: false,
+        cancelation_reason: ''
       }
     },
     showProps (item, prop) {
@@ -1911,10 +2082,25 @@ export default {
       })
     },
     addNotes () {
-      this.notesFormData.user_id = this.logedInUser.id
+      this.notesFormData.user_id = this.loggedInUser.id
       createEnquiryNotes(this.notesFormData).then(() => {
         this.getPatientNotes(this.patientId)
         this.cancelNotes()
+      })
+    },
+    finishAssignment (id, finished) {
+      const completedBy = this.userId
+      finishAssignment(id, finished, completedBy).then(response => {
+        if (finished) {
+          const open = this.assignments.find(todo => {
+            if (todo.id === id) {
+              todo.completed = true
+              this.completedAssignments.push(todo)
+              return todo
+            }
+          })
+          this.assignments = this.assignments.filter(todo => todo.id !== open.id)
+        }
       })
     },
     chooseInvoice () {
@@ -1989,13 +2175,16 @@ export default {
     getDoctors () {
       getDoctorList().then((response) => {
         this.doctors = response
-        this.formAppointments.doctor_id = response.find(doctor => doctor.name === this.logedInUser.name)
+        if (Array.isArray(response)) {
+          this.formAppointments.doctor_id = response.find(doctor => doctor.name === this.loggedInUser.name)
+        }
       })
     },
     getUserLogin () {
       sso().then(response => {
         if (typeof response !== 'string') {
-          this.logedInUser = response
+          this.loggedInUser = response
+          this.userId = response.id
         }
       })
     },
@@ -2006,7 +2195,9 @@ export default {
     },
     getOldProducts () {
       getOldProducts().then((response) => {
-        this.products = response
+        if (Array.isArray(response)) {
+          this.products = response.filter(pr => pr.prm_client_id === this.loggedInUser.prm_client_id)
+        }
       })
     },
     openEditAppointmentModal (appointment) {
@@ -2022,8 +2213,8 @@ export default {
         assignmentDate: moment(appointment.starts_at).toDate(),
         end: moment(appointment.ends_at).toDate(),
         backgroundColor: appointment.label_id,
-        appointment_canceled_in_advance_by_patient: appointment.appointment_canceled_in_advance_by_patient,
-        appointment_canceled_in_advance_by_clinic: appointment.appointment_canceled_in_advance_by_clinic
+        appointment_canceled: appointment.appointment_canceled,
+        cancelation_reason: appointment.cancelation_reason
       }
       this.addAppointmentModal = true
     },
@@ -2032,8 +2223,7 @@ export default {
     },
     closeCancelation () {
       this.openCancelationModal = false
-      this.formAppointments.appointment_canceled_in_advance_by_clinic = false
-      this.formAppointments.appointment_canceled_in_advance_by_patient = false
+      this.formAppointments.appointment_canceled = false
     },
     roundUpStartTime () {
       let startTime = new Date()
@@ -2154,8 +2344,7 @@ export default {
 .style-chooser .vs__search::placeholder,
 .style-chooser .vs__dropdown-toggle,
 .style-chooser .vs__dropdown-menu {
-    border-radius: 10px;
-    min-height: 45px;
+  border-radius: 4px;
 }
 
 .vs--disabled .vs__dropdown-toggle, .vs--disabled .vs__clear, .vs--disabled .vs__search, .vs--disabled .vs__selected, .vs--disabled .vs__open-indicator {
@@ -2182,6 +2371,14 @@ export default {
   }
 }
 
+th.price-column {
+  text-align: left;
+}
+
+td.price-column {
+  text-align: right;
+}
+
 div.preview canvas{
   max-width: 110px;
   display: block;
@@ -2200,6 +2397,11 @@ canvas {
   {
     display: none;
   }
+}
+
+.tooltip .tooltip-inner {
+  max-width: 100% !important;
+  width: 400px !important;
 }
 
 @media (max-width: 992px) {

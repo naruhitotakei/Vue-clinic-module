@@ -10,8 +10,20 @@ export async function getOnlineBookingProducts (locale) {
   return rawResponse.json()
 }
 
+export async function getOnlineBookingProductsNaming (id) {
+  const rawResponse = await fetch('/api/online-booking-products/' + id + '/naming', {
+    method: 'GET',
+    credentials: 'same-origin',
+    headers: {
+      'Accept': 'application/json',
+      'Content-Type': 'application/json'
+    }
+  })
+  return rawResponse.json()
+}
+
 export async function getOnlineBookingProductsPublic (locale) {
-  const rawResponse = await fetch('/api/public/online-booking-products/' + locale, {
+  const rawResponse = await fetch(`/api/public/online-booking-products/?${new URLSearchParams({ locale })}`, {
     method: 'GET',
     credentials: 'same-origin',
     headers: {

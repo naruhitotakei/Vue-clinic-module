@@ -1,3 +1,9 @@
+const moduleAlias = require('module-alias')
+
+moduleAlias.addAliases({
+  '~'  : __dirname,
+})
+
 const path = require('path');
 const express = require('express');
 const fileUpload = require('express-fileupload');
@@ -13,7 +19,7 @@ var cors = require('cors')
 const app = express(),
       bodyParser = require("body-parser");
       port = 3080;
-      
+
 ///////////////////////////////////
 //
 // brute force attack configuration
@@ -49,10 +55,12 @@ const daoCountries = require('./dao/daoCountries')
 const daoCalendar = require('./dao/daoCalendar')
 const daoCompanies = require('./dao/daoCompanies')
 const daoLocations = require('./dao/daoLocations')
+const daoSmsTemplates = require('./dao/daoSmsTemplates')
 const daoCompanyPremises = require('./dao/daoCompanyPremises')
 const daoAppointmentSlots = require('./dao/daoAppointmentSlots')
 const daoOnlineBooking = require('./dao/daoOnlineBooking')
 const awsS3 = require('./services/awsS3')
+const daoConfig = require('./dao/daoConfig')
 
 app.use(fileUpload({
     createParentPath: true
@@ -65,7 +73,7 @@ app.use(bodyParser.json());
 app.use(express.static(path.join(__dirname, '../prmApp/dist')));
 app.use(session({resave: true, saveUninitialized: true, secret: 'BwhFeenj9DcRqANH', cookie: { maxAge: null }}));
 app.use(rollbar.errorHandler());
- 
+
 ///////////////////////////////////
 //
 // REST SERVER
@@ -95,8 +103,8 @@ app.post('/api/login',
     userBruteforce.getMiddleware({
         key: function(req, res, next) {
             next('req.body.loginEmail');
-        } 
-    }),       
+        }
+    }),
     async function(req, res) {
         const credentials = req.body
         req.session.prm_user = await daoUser.loginUser(req, res, credentials.loginEmail, credentials.loginPassword)
@@ -105,7 +113,7 @@ app.post('/api/login',
 
 // get loged user data
 app.get('/api/login', (req, res) => {
-   if (req.session.prm_user) { 
+   if (req.session.prm_user) {
         daoUser.getUserById(req, res, req.session.prm_user.id)
    } else {
        res.status(200).json("NOK: user not logged in")
@@ -119,29 +127,29 @@ app.get('/api/logout', (req, res) => {
 });
 
 // /api/hash?password=
-app.get('/api/hash', (req, res) => { 
+app.get('/api/hash', (req, res) => {
     var password = req.param('password');
-    daoUser.hash(req, res, password) 
+    daoUser.hash(req, res, password)
 });
 
 // /api/password
 app.post('/api/password', async function(req, res) {
     const credentials = req.body
-    if (req.session.prm_user) { 
+    if (req.session.prm_user) {
         daoUser.changePassword(req, res, req.session.prm_user.email, req.session.prm_user.prm_password_hash, credentials)
     } else {
        res.status(200).json("NOK: user not logged in")
-    }    
+    }
 });
 
 // /api/password
 app.post('/api/profile', async function(req, res) {
     const data = req.body
-    if (req.session.prm_user) { 
+    if (req.session.prm_user) {
         daoUser.editProfile(req, res, data)
     } else {
        res.status(200).json("NOK: user not logged in")
-    }    
+    }
 });
 
 // /change locale
@@ -164,11 +172,11 @@ app.put('/api/sign-in-time', (req, res) => {
 });
 
 app.get('/api/dentists', async function(req, res) {
-    if (req.session.prm_user) { 
+    if (req.session.prm_user) {
         daoUser.getDentists(req, res, req.session.prm_user.prm_client_id)
     } else {
        res.status(200).json("NOK: user not logged in")
-    }    
+    }
 });
 
 app.get('/api/surgeons', async function (req, res) {
@@ -180,10 +188,10 @@ app.get('/api/surgeons', async function (req, res) {
 });
 
 app.get('/api/legacy-doctors', async function (req, res) {
-    if (req.session.prm_user) {
-        daoUser.getLegacyDoctors(req, res)
+    if (req.session.prm_user && req.session.prm_user.permissions && checkPermission(req.session.prm_user.permissions, enquiriesPermission)) {
+        daoUser.getLegacyDoctors(req, res, req.session.prm_user.prm_client_id, getScope(req.session.prm_user.permissions, enquiriesPermission))
     } else {
-        res.status(200).json("NOK: user not logged in")
+        res.status(401).json("OK: user unauthorized")
     }
 });
 
@@ -466,7 +474,7 @@ app.get('/api/productGroups/:id/product-naming', (req, res) => {
 
 app.get('/api/old-products/', (req, res) => {
     if(req.session.prm_user && req.session.prm_user.permissions && checkPermission(req.session.prm_user.permissions, productsPermission))
-        daoProducts.getOldProducts(req, res)
+        daoProducts.getOldProducts(req, res, req.session.prm_user.prm_client_id, getScope(req.session.prm_user.permissions, productsPermission))
     else
         res.status(401).json("OK: user unauthorized")
 });
@@ -609,6 +617,18 @@ app.get('/api/users-assignments', (req, res) => {
 });
 
 ///////////////////////////////////
+// settings -> sms templates
+///////////////////////////////////
+
+app.get('/api/sms-templates', (req, res) => {
+    if (req.session.prm_user && req.session.prm_user.permissions && checkPermission(req.session.prm_user.permissions, usersPermission)) {
+        daoSmsTemplates.getSmsTemplates(req, res, req.session.prm_user.prm_client_id, getScope(req.session.prm_user.permissions, usersPermission))
+    } else {
+        res.status(401).json("OK: user unauthorized")
+    }
+});
+
+///////////////////////////////////
 // settings -> online booking
 ///////////////////////////////////
 
@@ -619,6 +639,14 @@ app.get('/api/online-booking-products/:locale', (req, res) => {
     } else {
         res.status(401).json("OK: user unauthorized")
     }
+});
+
+app.get('/api/online-booking-products/:id/naming', (req, res) => {
+    const id = req.params.id
+    if (req.session.prm_user && req.session.prm_user.permissions && checkPermission(req.session.prm_user.permissions, onlineBookingPermission))
+        daoOnlineBooking.getOnlineBookingProductNaming(req, res, id)
+    else
+        res.status(401).json("OK: user unauthorized")
 });
 
 app.get('/api/online-booking-product-groups/:locale', (req, res) => {
@@ -1009,9 +1037,8 @@ app.get('/api/offers', (req, res) => {
 // statistics & Reporting
 ///////////////////////////////////
 app.get('/api/statistics/clinic', (req, res) => {
-  const clinicId = 123 // todo - get it from session
   if(req.session.prm_user && req.session.prm_user.permissions && checkPermission(req.session.prm_user.permissions, clinicStatisticsPermission))
-      daoReporting.getClinicStatistics(req, res, clinicId)
+      daoReporting.getClinicStatistics(req, res, req.session.prm_user.prm_client_id, getScope(req.session.prm_user.permissions, clinicStatisticsPermission))
   else
       res.status(401).json("OK: user unauthorized")
 });
@@ -1067,6 +1094,51 @@ app.get('/api/report/emazing/countrylist/:statrtdate/:enddate', (req, res) => {
       res.status(401).json("OK: user unauthorized")
 });
 
+app.get('/api/statistics/clinic-stats/:start/:end', (req, res) => {
+    const start = req.params.start
+    const end = req.params.end
+    if (req.session.prm_user && req.session.prm_user.permissions && checkPermission(req.session.prm_user.permissions, clinicStatisticsPermission))
+        daoStatistics.getClinicStats(req, res, start, end, req.session.prm_user.prm_client_id, getScope(req.session.prm_user.permissions, clinicStatisticsPermission))
+    else
+        res.status(401).json("OK: user unauthorized")
+});
+
+app.get('/api/statistics/revenue-by-product/:start/:end', (req, res) => {
+    const start = req.params.start
+    const end = req.params.end
+    if (req.session.prm_user && req.session.prm_user.permissions && checkPermission(req.session.prm_user.permissions, clinicStatisticsPermission))
+        daoStatistics.getRevenueByProduct(req, res, start, end, req.session.prm_user.prm_client_id, getScope(req.session.prm_user.permissions, clinicStatisticsPermission))
+    else
+        res.status(401).json("OK: user unauthorized")
+});
+
+app.get('/api/statistics/revenue-by-doctor/:start/:end', (req, res) => {
+    const start = req.params.start
+    const end = req.params.end
+    if (req.session.prm_user && req.session.prm_user.permissions && checkPermission(req.session.prm_user.permissions, clinicStatisticsPermission))
+        daoStatistics.getRevenueByDoctor(req, res, start, end, req.session.prm_user.prm_client_id, getScope(req.session.prm_user.permissions, clinicStatisticsPermission))
+    else
+        res.status(401).json("OK: user unauthorized")
+});
+
+app.get('/api/statistics/new-leads/:start/:end', (req, res) => {
+    const start = req.params.start
+    const end = req.params.end
+    if (req.session.prm_user && req.session.prm_user.permissions && checkPermission(req.session.prm_user.permissions, clinicStatisticsPermission))
+        daoStatistics.getNewEnquiriesPerDay(req, res, start, end, req.session.prm_user.prm_client_id, getScope(req.session.prm_user.permissions, clinicStatisticsPermission))
+    else
+        res.status(401).json("OK: user unauthorized")
+});
+
+app.get('/api/statistics/new-enquiries/:start/:end', (req, res) => {
+    const start = req.params.start
+    const end = req.params.end
+    if (req.session.prm_user && req.session.prm_user.permissions && checkPermission(req.session.prm_user.permissions, clinicStatisticsPermission))
+        daoStatistics.getNewEnquiries(req, res, start, end, req.session.prm_user.prm_client_id, getScope(req.session.prm_user.permissions, clinicStatisticsPermission))
+    else
+        res.status(401).json("OK: user unauthorized")
+});
+
 ///////////////////////////////////
 // codelist methodes
 ///////////////////////////////////
@@ -1099,8 +1171,8 @@ app.get('/api/codelist/clients', (req, res) => {
     daoCodeLists.getClients(req, res)
 });
 
-app.get('/api/codelist/week-dates', (req, res) => {
-    daoCodeLists.getDatesForCurrentWeek(req, res)
+app.get('/api/codelist/year-dates', (req, res) => {
+    daoCodeLists.getDatesForCurrentYear(req, res)
 });
 
 ///////////////////////////////////
@@ -1229,7 +1301,7 @@ app.post('/api/files/avatar', async function(req, res) {
 });
 
 app.get('/api/files/avatar', async function(req, res) {
-  if(req.session.prm_user) {  
+  if(req.session.prm_user) {
       const rv = await awsS3.download('avatar-' + req.session.prm_user.id)
       if (rv.status=='OK') {
           res.writeHead(200, {
@@ -1239,7 +1311,7 @@ app.get('/api/files/avatar', async function(req, res) {
           const download = Buffer.from(rv.data.Body)
           res.end(download)
       } else {
-          res.download('./resources/avatar-default.png', 'avatar-default.png'); 
+          res.download('./resources/avatar-default.png', 'avatar-default.png');
       }
   }
   else
@@ -1329,12 +1401,14 @@ app.post('/api/booking/sendsms', (req, res) => {
         vonage.verify.request({
             number: phone,
             brand: 'SMART PRM Dental'
-        }, (error, { request_id }) => {
+        }, (error, result) => {
             if (error) {
                 res.status(500)
             } else {
+                const { request_id } = result
                 res.status(200).json({
                     success: true,
+                    result,
                     requestId: request_id,
                 })
             }
@@ -1372,7 +1446,7 @@ app.post('/api/booking/confirm-and-save', (req, res) => {
                 return
             }
 
-            res.status(200).json({ success: true, code, selectedSlot })
+            res.status(200).json({ success: true, code, selectedSlot, result })
         })
     } else {
         res.status(400).json("No confirmation code")
@@ -1380,26 +1454,43 @@ app.post('/api/booking/confirm-and-save', (req, res) => {
 });
 
 app.get('/api/config', (request, response) => {
-    const geoip = require('geoip-lite')
-    const geo = geoip.lookup(request.ip)
-    // Example for local testing with IP from Slovenia
-    // const geo = geoip.lookup('109.182.0.0')
-    const lang = geo != null ? langByCountry[geo.country] : 'en'
-    
-    response.json({
-        lang,
-    })
+    daoConfig.getConfig(request, response, request.ip, request.query.premiseId)
 })
 
-const langByCountry = {
-    'SI': 'sl'
-}
-
-app.get('/api/public/free-slots', (req, res) => {
-    daoAppointmentSlots.getFreeSlotsPublic(req, res, req.query.serviceId, req.query.date)
+app.use('/api/available-services', require('~/controllers/available-services'))
+app.use('/api/available-dates', require('~/controllers/available-dates'))
+app.use('/api/available-doctors', require('~/controllers/available-doctors'))
+app.use('/api/appointment-slots', require('~/controllers/appointment-slots'))
+app.use('/api/appointments', require('~/controllers/appointments'))
+app.get('/api/public/online-booking-products', (req, res) => {
+    const locale = req.query.locale
+    daoOnlineBooking.getOnlineBookingProductsPublic(req, res, locale)
 });
 
-app.get('/api/public/online-booking-products/:locale', (req, res) => {
-    const locale = req.params.locale
-    daoOnlineBooking.getOnlineBookingProductsPublic(req, res, locale)
+app.post('/api/files/logo/:id', async function(req, res) {
+    if(req.session.prm_user == null) {
+        res.status(401).send("user unauthorized")
+
+        return
+    }
+
+    const { id } = req.params
+    const { logo } = req.files
+    const rv = await awsS3.upload( `logo-${id}`, logo.data, logo.mimetype, `logo-${id}`, 'logo')
+
+    res.status(200).json(rv.status)
+})
+
+app.get('/api/files/logo/:id', async function (req, res) {
+    let id = req.params.id
+    const rv = await awsS3.download(`logo-${id}`)
+
+    if (rv.status !== 'OK') {
+        res.download('./resources/avatar-default.png', 'avatar-default.png');
+
+        return
+    }
+
+    const download = Buffer.from(rv.data.Body)
+    res.end(download)
 });
