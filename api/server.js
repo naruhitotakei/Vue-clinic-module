@@ -53,6 +53,7 @@ const daoProducts = require('./dao/daoProducts')
 const daoBusiness = require('./dao/daoBusiness')
 const daoCountries = require('./dao/daoCountries')
 const daoCalendar = require('./dao/daoCalendar')
+const daoAppointments = require('./dao/daoAppointments')
 const daoCompanies = require('./dao/daoCompanies')
 const daoLocations = require('./dao/daoLocations')
 const daoSmsTemplates = require('./dao/daoSmsTemplates')
@@ -89,6 +90,7 @@ const advPaymentsPermission = "Advance Payments"
 const offersPermission = "Offers"
 const productsPermission = "Services and Products"
 const calendarPermission = "Calendar"
+const appointmentsPermission = "Appointments"
 const locationsPermission = "Locations"
 const appointmentSlotsPermission = "Free Slots"
 const usersPermission = "Users"
@@ -302,6 +304,64 @@ app.delete('/api/calendar/label/:id', (req, res) => {
     daoCalendar.deleteAppointmentsLabel(req, res, id)
   else
     res.status(401).json("OK: user unauthorized")
+});
+
+///////////////////////////////////
+// appointments
+///////////////////////////////////
+
+app.get('/api/appointments/locations', (req, res) => {
+    if(req.session.prm_user && req.session.prm_user.permissions && checkPermission(req.session.prm_user.permissions, appointmentsPermission))
+      daoAppointments.getAllAppointmentsLocations(req, res)
+    else
+      res.status(401).json("OK: user unauthorized")
+});
+
+app.get('/api/appointments/doctors', (req, res) => {
+    if(req.session.prm_user && req.session.prm_user.permissions && checkPermission(req.session.prm_user.permissions, appointmentsPermission))
+      daoAppointments.getAllAppointmentsDoctors(req, res)
+    else
+      res.status(401).json("OK: user unauthorized")
+});
+
+app.get('/api/appointments', (req, res) => {
+    const location = req.query.location
+    const doctor = req.query.doctor
+    const date = req.query.date
+    if(req.session.prm_user && req.session.prm_user.permissions && checkPermission(req.session.prm_user.permissions, appointmentsPermission))
+        daoAppointments.getAppointments(req, res, location, doctor, date)
+    else
+        res.status(401).json("OK: user unauthorized")
+});
+
+app.put('/api/appointments/update_interest', (req, res) => {
+    const appointmentID = req.body.id
+    const levelOfInterest = req.body.interest
+
+    if (req.session.prm_user && req.session.prm_user.permissions && checkPermission(req.session.prm_user.permissions, appointmentsPermission))
+        daoAppointments.updateLevelOfInterest(req, res, appointmentID, levelOfInterest)
+    else
+        res.status(401).json("OK: user unauthorized")
+});
+
+app.put('/api/appointments/update_notes', (req, res) => {
+    const appointmentID = req.body.id
+    const notes = req.body.notes
+
+    if (req.session.prm_user && req.session.prm_user.permissions && checkPermission(req.session.prm_user.permissions, appointmentsPermission))
+        daoAppointments.updateNotes(req, res, appointmentID, notes)
+    else
+        res.status(401).json("OK: user unauthorized")
+});
+
+app.put('/api/appointments/update_attendance', (req, res) => {
+    const appointmentID = req.body.id
+    const attendance = req.body.attendance
+
+    if (req.session.prm_user && req.session.prm_user.permissions && checkPermission(req.session.prm_user.permissions, appointmentsPermission))
+        daoAppointments.updateAttendance(req, res, appointmentID, attendance)
+    else
+        res.status(401).json("OK: user unauthorized")
 });
 
 ///////////////////////////////////
