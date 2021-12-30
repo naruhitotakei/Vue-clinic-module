@@ -220,7 +220,6 @@ const updateInvoices = (request, response, id, invoice) => {
 const createPaymentMethod = (invoiceId, paymentMethod, amount, paid) => {
     let statement = "INSERT INTO payment_item(invoice_id, amount, type, paid, created_at"
     statement+= ") VALUES (" + invoiceId + "," + amount + ",'" + paymentMethod + "'," + paid + ",NOW())"
-    console.log('createPaymentMethod:', statement)
     pool.query(statement, (error, results) => {
         if (error) {
             throw error
@@ -234,7 +233,6 @@ const updatePaymentMethod = (id, paymentMethod, amount, paid) => {
     if (amount) statement += "amount='" + amount + "',"
     statement = statement.slice(0, -1)
     statement += " WHERE id = " + id
-    console.log('updatePaymentMethod:', statement)
     pool.query(statement, (error, results) => {
         if (error) {
             throw error
@@ -247,7 +245,6 @@ const createInoviceItem = (item, invoiceId, enquiryId, shouldSaveTeethAndSurface
     let teeth = item.teeth.toString()
     let surfaces = item.surfaces.toString()
     let statement = "INSERT INTO invoice_item(invoice_id, product_id, product_name, product_price, invoiced_quantity, discount, product_vat_tax_rate, product_tax_amount, net_amount, teeth, surfaces, comment, created_date) VALUES (" + invoiceId + "," + item.item.product_id + ",'" + item.item.product_name + "'," + item.item.product_price + "," + item.quantity + ","+ item.discount + "," + item.item.tax_rate + "," + item.item.tax_amount + "," + net_amount + ",'" + teeth + "','" + surfaces + "','" + item.comment + "',NOW()) RETURNING id"
-    console.log('createInoviceItem:', statement)
     pool.query(statement, (error, results) => {
         if (error) {
             throw error
@@ -277,7 +274,6 @@ const updateInoviceItem = (item, invoiceItemId, enquiryId, shouldSaveTeethAndSur
     if (item.item.tax_rate) statement += "product_vat_tax_rate='" + item.item.tax_rate + "',"
     if (item.item.tax_amount) statement += "product_tax_amount='" + item.item.tax_amount + "',"
     statement += "net_amount='" + net_amount + "' WHERE id = " + invoiceItemId
-    console.log('updateInoviceItem:', statement)
     pool.query(statement, (error, results) => {
         if (error) {
             throw error
@@ -320,7 +316,6 @@ const createToothLog = (toothId, surfaces, comment) => {
     if (surfaces.includes('L')) statement += "true,"
     statement = statement.slice(0, -1)
     statement += ")"
-    console.log('createToothLog: ' + statement)
     pool.query(statement, (error, results) => {
         if (error) {
             throw error
@@ -344,7 +339,6 @@ const createInvoiceItemTooth = (toothId, invoiceItemId, surfaces, comment) => {
     if (surfaces.includes('L')) statement += "true,"
     statement = statement.slice(0, -1)
     statement += ")"
-    console.log('createInvoiceItemTooth: ' + statement)
     pool.query(statement, (error, results) => {
         if (error) {
             throw error
