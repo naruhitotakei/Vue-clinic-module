@@ -291,8 +291,8 @@ import {
 import {
   getLeadsCount,
   getLimitedEnquires,
-  getEnquiryPastAppointments
-  // getEnquiryNotes
+  getEnquiryPastAppointments,
+  getEnquiryNotes
 } from '../../services/enquiry'
 import { xray } from '../../config/pluginInit'
 import moment from 'moment'
@@ -365,6 +365,16 @@ export default {
               personal_dentist: obj.label
             }
           ))
+
+          let newLeadsArr = [...this.leads]
+
+          newLeadsArr.map((lead, key) => {
+            getEnquiryNotes(lead.id).then(res => {
+              newLeadsArr[key].notes = res.reverse().slice(0, 5)
+            })
+          })
+
+          this.leads = [...newLeadsArr]
         }
       })
     },
