@@ -98,7 +98,7 @@
       </div>
       <ValidationProvider
         :name="$t('public.onlineBooking.confirmationCode')"
-        rules="required|min:4"
+        rules="required|min:4|max:4|numeric"
         v-slot="{ errors, invalid }"
       >
         <b-form-group :label="$t('public.onlineBooking.smsVerificationCode')">
@@ -111,7 +111,7 @@
             <span>{{ errors[0] }}</span>
           </div>
         </b-form-group>
-        <b-button variant="primary" :disabled="invalid" @click="$emit('next')">
+        <b-button variant="primary" :disabled="invalid" @click="verify">
           {{ $t('public.onlineBooking.confirmCode') }}
         </b-button>
         <b-button variant="link" @click="fieldset.verificationId = null">
@@ -123,6 +123,7 @@
 </template>
 
 <script>
+import { createAppointment } from '@/services/appointments'
 import { sendSms } from '@/services/booking.js'
 import { defineComponent } from '@vue/composition-api'
 import VuePhoneNumberInput from 'vue-phone-number-input'
@@ -180,6 +181,23 @@ export default defineComponent({
       }
 
       this.fieldset.verificationId = result.requestId
+    },
+    async verify() {
+      try {
+        await createAppointment({
+          firstName: this.form.firstName,
+          lastName: this.form.lastName,
+          phone: this.form.phone,
+          appointmentSlotId: this.form.appointmentSlot.id,
+          verificationId: this.form.verificationId,
+          verificationCode: this.form.verificationCode,
+        })
+      } catch (error) {
+        //
+        throw error
+      }
+
+      this.$emit('next')
     },
   },
 })

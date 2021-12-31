@@ -18,7 +18,7 @@ router.post(
 
     try {
       result = await new Promise((resolve, reject) => {
-        vonage.verify.request(
+        const verify = vonage.verify.request(
           {
             number: phone,
             brand: 'SMART PRM Dental',
@@ -65,7 +65,7 @@ router.post(
         appointmentId: appointment.id,
       })
     } catch (error) {
-      return response.sendStatus(500)
+      return response.status(500).json(error)
     }
 
     return response.status(201).json({})

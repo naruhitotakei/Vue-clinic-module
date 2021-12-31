@@ -1,4 +1,4 @@
-const { pool, now } = require('~/services/db')
+const { now, insert } = require('~/services/db')
 
 const daoAppointments = {
   createAppointment,
@@ -7,18 +7,12 @@ const daoAppointments = {
 module.exports = daoAppointments
 
 async function createAppointment({ enquiryId }) {
-  const model = {
-    enquiry_id: '$1',
-    kind: 'Posvet',
-    created_at: now(),
-    updated_at: now(),
-  }
-  const statement = /* sql */ `
-    INSERT INTO appointments(${Object.keys(model).join(',')})
-    VALUES (${Object.values(model).join(',')})
-    RETURNING *
-  `
-  const result = await pool.query(statement, [enquiryId])
+  const timestamp = now()
 
-  return result.rows[0]
+  return insert('appointments', {
+    enquiry_id: enquiryId,
+    kind: 'Posvet',
+    created_at: timestamp,
+    updated_at: timestamp,
+  })
 }
