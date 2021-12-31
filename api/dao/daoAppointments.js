@@ -9,6 +9,7 @@ module.exports = daoAppointments
 async function createAppointment({ enquiryId }) {
   const model = {
     enquiry_id: '$1',
+    kind: 'Posvet',
     created_at: now(),
     updated_at: now(),
   }
