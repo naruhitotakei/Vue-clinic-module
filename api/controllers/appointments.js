@@ -18,7 +18,7 @@ router.post(
 
     try {
       result = await new Promise((resolve, reject) => {
-        const verify = vonage.verify.request(
+        vonage.verify.request(
           {
             number: phone,
             brand: 'SMART PRM Dental',
