@@ -36,7 +36,7 @@ router.post(
       return response.status(500).json(error)
     }
 
-    if (result.status !== '0') {
+    if (['0', '10'].includes(result.status) === false) {
       return response.status(500).json(result)
     }
 
