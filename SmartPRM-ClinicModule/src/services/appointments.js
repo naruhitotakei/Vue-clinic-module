@@ -1,87 +1,99 @@
-export async function getAppointmentsLocations () {
+export async function getAppointmentsLocations() {
   const rawResponse = await fetch('/api/appointments/locations', {
     method: 'GET',
     credentials: 'same-origin',
     headers: {
       'Accept': 'application/json',
-      'Content-Type': 'application/json'
-    }
+      'Content-Type': 'application/json',
+    },
   })
   return rawResponse.json()
 }
 
-export async function getAppointmentsDoctors () {
+export async function getAppointmentsDoctors() {
   const rawResponse = await fetch('/api/appointments/doctors', {
     method: 'GET',
     credentials: 'same-origin',
     headers: {
       'Accept': 'application/json',
-      'Content-Type': 'application/json'
-    }
+      'Content-Type': 'application/json',
+    },
   })
   return rawResponse.json()
 }
 
-export async function getAppointments (filterLocation, filterDoctor, filterDate) {
-  const rawResponse = await fetch('/api/appointments?location=' + filterLocation + '&doctor=' + filterDoctor + '&date=' + filterDate, {
-    method: 'GET',
-    credentials: 'same-origin',
-    headers: {
-      'Accept': 'application/json',
-      'Content-Type': 'application/json'
-    }
-  })
+export async function getAppointments(
+  filterLocation,
+  filterDoctor,
+  filterDate,
+) {
+  const rawResponse = await fetch(
+    '/api/appointments?location=' +
+      filterLocation +
+      '&doctor=' +
+      filterDoctor +
+      '&date=' +
+      filterDate,
+    {
+      method: 'GET',
+      credentials: 'same-origin',
+      headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json',
+      },
+    },
+  )
   return rawResponse.json()
 }
 
-export async function updateLevelOfInterest (updateData) {
+export async function updateLevelOfInterest(updateData) {
   const rawResponse = await fetch('/api/appointments/update_interest', {
     method: 'PUT',
     credentials: 'same-origin',
     headers: {
       'Accept': 'application/json',
-      'Content-Type': 'application/json'
+      'Content-Type': 'application/json',
     },
-    body: JSON.stringify(updateData)
+    body: JSON.stringify(updateData),
   })
   return rawResponse.json()
 }
 
-export async function updateNotes (updateNotesData) {
+export async function updateNotes(updateNotesData) {
   const rawResponse = await fetch('/api/appointments/update_notes', {
     method: 'PUT',
     credentials: 'same-origin',
     headers: {
       'Accept': 'application/json',
-      'Content-Type': 'application/json'
+      'Content-Type': 'application/json',
     },
-    body: JSON.stringify(updateNotesData)
+    body: JSON.stringify(updateNotesData),
   })
   return rawResponse.json()
 }
 
-export async function updateAttendance (updateAttendanceData) {
+export async function updateAttendance(updateAttendanceData) {
   const rawResponse = await fetch('/api/appointments/update_attendance', {
     method: 'PUT',
     credentials: 'same-origin',
     headers: {
       'Accept': 'application/json',
-      'Content-Type': 'application/json'
+      'Content-Type': 'application/json',
     },
-    body: JSON.stringify(updateAttendanceData)
+    body: JSON.stringify(updateAttendanceData),
   })
   return rawResponse.json()
 }
 
-export async function createAppointment (payload) {
+export async function createAppointment(payload) {
   const rawResponse = await fetch(`/api/appointments`, {
     method: 'POST',
     credentials: 'same-origin',
     headers: {
       'Accept': 'application/json',
-      'Content-type': 'application/json'
+      'Content-type': 'application/json',
     },
-    body: JSON.stringify(payload)
+    body: JSON.stringify(payload),
   })
   return rawResponse.json()
 }

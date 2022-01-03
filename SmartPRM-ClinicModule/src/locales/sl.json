@@ -824,7 +824,11 @@
       "modifyPhoneNumber": "Spremeni telefonsko številko",
       "yourDetailsHaveBeenSuccessfullyVerified": "Vaši podatki so bili potrjeni. Veselimo se vašega obiska.",
       "location": "Lokacija",
-      "company": "Podjetje"
+      "company": "Podjetje",
+      "error": {
+        "over-order": "sl - You can't book more than two appointments with same phone number.",
+        "unavailable-slot": "sl - Your selected slot is already booked."
+      }
     }
   }
 }
