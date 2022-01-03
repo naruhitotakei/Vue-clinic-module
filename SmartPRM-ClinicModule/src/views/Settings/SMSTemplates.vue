@@ -17,22 +17,22 @@
 <script>
 import { xray } from '../../config/pluginInit'
 import {
-  getSmsTemplates
+  getSmsTemplates,
 } from '../../services/smsTemplates'
 
 export default {
   name: 'SMSTemplates',
-  mounted () {
+  mounted() {
     xray.index()
     this.getSmsTemplatesData()
   },
-  data: function () {
+  data: function() {
     return {
-      smsTemplates: []
+      smsTemplates: [],
     }
   },
   methods: {
-    async getSmsTemplatesData () {
+    async getSmsTemplatesData() {
       getSmsTemplates().then(response => {
         if (Array.isArray(response)) {
           response.map(obj => {
@@ -40,8 +40,8 @@ export default {
           })
         }
       })
-    }
-  }
+    },
+  },
 }
 </script>
 

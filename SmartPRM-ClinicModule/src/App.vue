@@ -8,9 +8,9 @@ export default {
   name: 'App',
   components: {
   },
-  mounted () {
+  mounted() {
     xray.mainIndex()
-  }
+  },
 }
 </script>
 <style lang="scss">

@@ -1,18 +1,18 @@
 export default {
-  displayNavTicket (context, payload) {
+  displayNavTicket(context, payload) {
     context.commit('displayNavTicket', payload)
   },
-  displaySidebarTicket (context, payload) {
+  displaySidebarTicket(context, payload) {
     context.commit('displaySidebarTicket', payload)
   },
-  resetTicket (context, payload) {
+  resetTicket(context, payload) {
     context.commit('updateNumberOfTicket', 0)
   },
-  addTicket (context, payload) {
+  addTicket(context, payload) {
     let count = payload + 1
     context.commit('updateNumberOfTicket', count)
   },
-  removeTicket (context, payload) {
+  removeTicket(context, payload) {
     let count
     if (payload > 0) {
       count = payload - 1
@@ -21,5 +21,5 @@ export default {
       context.commit('displaySidebarTicket', false)
     }
     context.commit('updateNumberOfTicket', count)
-  }
+  },
 }

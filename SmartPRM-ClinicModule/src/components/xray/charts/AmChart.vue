@@ -18,9 +18,9 @@ export default {
     element: { type: String, default: 'am-chart' },
     type: { type: String, default: 'bar' },
     option: { type: (Object, Array), default: () => {} },
-    height: { type: Number, default: 500 }
+    height: { type: Number, default: 500 },
   },
-  mounted () {
+  mounted() {
     let chart
     switch (this.type) {
       case 'line':
@@ -95,7 +95,7 @@ export default {
     }
   },
   methods: {
-    line (chart) {
+    line(chart) {
       chart.colors.list = []
       for (let j = 0; j < this.option.colors.length; j++) {
         chart.colors.list.push(am4core.color(this.option.colors[j]))
@@ -106,7 +106,7 @@ export default {
       categoryAxis.renderer.grid.template.location = 0
       categoryAxis.renderer.minGridDistance = 30
 
-      categoryAxis.renderer.labels.template.adapter.add('dy', function (dy, target) {
+      categoryAxis.renderer.labels.template.adapter.add('dy', function(dy, target) {
         // eslint-disable-next-line no-self-compare
         if (target.dataItem && target.dataItem.index & 2 === 2) {
           return dy + 25
@@ -129,7 +129,7 @@ export default {
       columnTemplate.strokeWidth = 2
       columnTemplate.strokeOpacity = 1
     },
-    column (chart) {
+    column(chart) {
       chart.exporting.menu = new am4core.ExportMenu()
       /* Create axes */
 
@@ -173,7 +173,7 @@ export default {
 
       chart.data = this.option.data
     },
-    mixesColumn (chart) {
+    mixesColumn(chart) {
       chart.colors.list = []
       for (let j = 0; j < this.option.colors.length; j++) {
         chart.colors.list.push(am4core.color(this.option.colors[j]))
@@ -209,7 +209,7 @@ export default {
       chart.cursor.lineX.disabled = true
       chart.cursor.lineY.disabled = true
     },
-    stacked (chart) {
+    stacked(chart) {
       chart.colors.list = []
       for (let j = 0; j < this.option.colors.length; j++) {
         chart.colors.list.push(am4core.color(this.option.colors[j]))
@@ -227,7 +227,7 @@ export default {
       // Create series
       let _this = this
       // eslint-disable-next-line no-inner-declarations
-      function createSeries (field, name) {
+      function createSeries(field, name) {
         // Set up series
         let series = chart.series.push(new am4charts.ColumnSeries())
         series.name = name
@@ -255,7 +255,7 @@ export default {
       // Legend
       chart.legend = new am4charts.Legend()
     },
-    barLine (chart) {
+    barLine(chart) {
       chart.colors.list = []
       for (let j = 0; j < this.option.colors.length; j++) {
         chart.colors.list.push(am4core.color(this.option.colors[j]))
@@ -304,7 +304,7 @@ export default {
       // add legend
       chart.legend = new am4charts.Legend()
     },
-    dataBased (chart) {
+    dataBased(chart) {
       chart.colors.list = []
       for (let j = 0; j < this.option.colors.length; j++) {
         chart.colors.list.push(am4core.color(this.option.colors[j]))
@@ -365,7 +365,7 @@ export default {
       dateAxis.start = 0.79
       dateAxis.keepSelection = true
     },
-    lineZoomH (chart) {
+    lineZoomH(chart) {
       chart.colors.list = []
       for (let j = 0; j < this.option.colors.length; j++) {
         chart.colors.list.push(am4core.color(this.option.colors[j]))
@@ -402,7 +402,7 @@ export default {
       chart.cursor.xAxis = dateAxis
       chart.cursor.snapToSeries = series
     },
-    lineZoomV (chart) {
+    lineZoomV(chart) {
       chart.colors.list = []
       for (let j = 0; j < this.option.colors.length; j++) {
         chart.colors.list.push(am4core.color(this.option.colors[j]))
@@ -434,7 +434,7 @@ export default {
       chart.cursor.behavior = 'zoomY'
       chart.cursor.lineX.disabled = true
     },
-    radar (chart) {
+    radar(chart) {
       chart.data = this.option.data
       /* Create axes */
       var categoryAxis = chart.xAxes.push(new am4charts.CategoryAxis())
@@ -451,7 +451,7 @@ export default {
       series.name = this.option.labels[0]
       series.strokeWidth = 3
     },
-    polarScatter (chart) {
+    polarScatter(chart) {
       chart.data = this.option.data
       /* Create axes */
       /* Create axes */
@@ -495,7 +495,7 @@ export default {
         { 'x': 43, 'y': 7.3 },
         { 'x': 15, 'y': 7.5 },
         { 'x': 43, 'y': 4.3 },
-        { 'x': 90, 'y': 9.9 }
+        { 'x': 90, 'y': 9.9 },
       ]
 
       let series2 = chart.series.push(new am4charts.RadarSeries())
@@ -529,7 +529,7 @@ export default {
         { 'x': 172, 'y': 4.1 },
         { 'x': 140, 'y': 7.3 },
         { 'x': 161, 'y': 2.3 },
-        { 'x': 141, 'y': 0.9 }
+        { 'x': 141, 'y': 0.9 },
       ]
 
       let series3 = chart.series.push(new am4charts.RadarSeries())
@@ -559,7 +559,7 @@ export default {
         { 'x': 296, 'y': 3.1 },
         { 'x': 279, 'y': 4.3 },
         { 'x': 379, 'y': 5.6 },
-        { 'x': 175, 'y': 6.8 }
+        { 'x': 175, 'y': 6.8 },
       ]
 
       /* Add legend */
@@ -568,7 +568,7 @@ export default {
       /* Add cursor */
       chart.cursor = new am4charts.RadarCursor()
     },
-    polar (chart) {
+    polar(chart) {
       chart.data = this.option.data
       let categoryAxis = chart.xAxes.push(new am4charts.CategoryAxis())
       categoryAxis.dataFields.category = 'direction'
@@ -604,7 +604,7 @@ export default {
       series.strokeWidth = 3
       series.fillOpacity = 0.2
     },
-    pie (chart) {
+    pie(chart) {
       chart.data = this.option.data
       let series = chart.series.push(new am4charts.PieSeries3D())
       series.colors.list = []
@@ -614,7 +614,7 @@ export default {
       series.dataFields.value = this.option.value[0]
       series.dataFields.category = this.option.category[0]
     },
-    lineBar (chart) {
+    lineBar(chart) {
       chart.colors.list = [am4core.color('#827af3')]
       if (this.$route.meta.dark) {
         chart.stroke = am4core.color('#8c91b6')
@@ -627,7 +627,7 @@ export default {
         'Ca',
         'Ja',
         'Ri',
-        'An'
+        'An',
       ]
 
       for (let i = 0; i < names.length; i++) {
@@ -646,7 +646,7 @@ export default {
       categoryAxis.renderer.labels.template.horizontalCenter = 'left'
       categoryAxis.renderer.labels.template.location = 0.5
 
-      categoryAxis.renderer.labels.template.adapter.add('dx', function (dx, target) {
+      categoryAxis.renderer.labels.template.adapter.add('dx', function(dx, target) {
         return -target.maxRight / 2
       })
 
@@ -669,7 +669,7 @@ export default {
       series.bullets.create(am4charts.CircleBullet)
       chart.cursor = new am4charts.XYCursor()
     },
-    map () {
+    map() {
       // Themes begin
       if (this.$route.meta.dark) {
         am4core.useTheme(am4themes_dark)
@@ -697,7 +697,7 @@ export default {
       chart.homeZoomLevel = 2.5
       chart.homeGeoPoint = {
         latitude: 51,
-        longitude: -23
+        longitude: -23,
       }
 
       // Create map polygon series
@@ -727,43 +727,43 @@ export default {
         'title': 'London',
         'latitude': 51.5002,
         'longitude': -0.1262,
-        'scale': 1
+        'scale': 1,
       }, {
         'svgPath': targetSVG,
         'title': 'Brussels',
         'latitude': 50.8371,
         'longitude': 4.3676,
-        'scale': 0.5
+        'scale': 0.5,
       }, {
         'svgPath': targetSVG,
         'title': 'Prague',
         'latitude': 50.0878,
         'longitude': 14.4205,
-        'scale': 0.5
+        'scale': 0.5,
       }, {
         'svgPath': targetSVG,
         'title': 'Bratislava',
         'latitude': 48.2116,
         'longitude': 17.1547,
-        'scale': 0.5
+        'scale': 0.5,
       }, {
         'svgPath': targetSVG,
         'title': 'Kiev',
         'latitude': 50.4422,
         'longitude': 30.5367,
-        'scale': 0.5
+        'scale': 0.5,
       }, {
         'svgPath': targetSVG,
         'title': 'Paris',
         'latitude': 48.8567,
         'longitude': 2.3510,
-        'scale': 0.5
+        'scale': 0.5,
       }, {
         'svgPath': targetSVG,
         'title': 'New York',
         'latitude': 40.43,
         'longitude': -74,
-        'scale': 0.5
+        'scale': 0.5,
       } ]
 
       // Add lines
@@ -784,90 +784,90 @@ export default {
           'multiGeoLine': [
             [
               { 'latitude': 51.5002, 'longitude': -0.1262 },
-              { 'latitude': 50.4422, 'longitude': 30.5367 }
-            ]
-          ]
+              { 'latitude': 50.4422, 'longitude': 30.5367 },
+            ],
+          ],
         },
         {
           'multiGeoLine': [
             [
               { 'latitude': 51.5002, 'longitude': -0.1262 },
-              { 'latitude': 40.4300, 'longitude': -74.0000 }
-            ]
-          ]
+              { 'latitude': 40.4300, 'longitude': -74.0000 },
+            ],
+          ],
         }, {
           'multiGeoLine': [
             [
               { 'latitude': 51.5002, 'longitude': -0.1262 },
-              { 'latitude': 64.1353, 'longitude': -21.8952 }
-            ]
-          ]
+              { 'latitude': 64.1353, 'longitude': -21.8952 },
+            ],
+          ],
         }, {
           'multiGeoLine': [
             [
               { 'latitude': 51.5002, 'longitude': -0.1262 },
-              { 'latitude': 37.9792, 'longitude': 23.7166 }
-            ]
-          ]
+              { 'latitude': 37.9792, 'longitude': 23.7166 },
+            ],
+          ],
         }, {
           'multiGeoLine': [
             [
               { 'latitude': 51.5002, 'longitude': -0.1262 },
-              { 'latitude': 38.7072, 'longitude': -9.1355 }
-            ]
-          ]
+              { 'latitude': 38.7072, 'longitude': -9.1355 },
+            ],
+          ],
         }, {
           'multiGeoLine': [
             [
               { 'latitude': 51.5002, 'longitude': -0.1262 },
-              { 'latitude': 55.7558, 'longitude': 37.6176 }
-            ]
-          ]
+              { 'latitude': 55.7558, 'longitude': 37.6176 },
+            ],
+          ],
         }, {
           'multiGeoLine': [
             [
               { 'latitude': 51.5002, 'longitude': -0.1262 },
-              { 'latitude': 44.8048, 'longitude': 20.4781 }
-            ]
-          ]
+              { 'latitude': 44.8048, 'longitude': 20.4781 },
+            ],
+          ],
         }, {
           'multiGeoLine': [
             [
               { 'latitude': 51.5002, 'longitude': -0.1262 },
-              { 'latitude': 48.2116, 'longitude': 17.1547 }
-            ]
-          ]
+              { 'latitude': 48.2116, 'longitude': 17.1547 },
+            ],
+          ],
         }, {
           'multiGeoLine': [
             [
               { 'latitude': 51.5002, 'longitude': -0.1262 },
-              { 'latitude': 46.0514, 'longitude': 14.5060 }
-            ]
-          ]
+              { 'latitude': 46.0514, 'longitude': 14.5060 },
+            ],
+          ],
         }, {
           'multiGeoLine': [
             [
               { 'latitude': 51.5002, 'longitude': -0.1262 },
-              { 'latitude': 40.4167, 'longitude': -3.7033 }
-            ]
-          ]
+              { 'latitude': 40.4167, 'longitude': -3.7033 },
+            ],
+          ],
         }, {
           'multiGeoLine': [
             [
               { 'latitude': 51.5002, 'longitude': -0.1262 },
-              { 'latitude': 59.3328, 'longitude': 18.0645 }
-            ]
-          ]
+              { 'latitude': 59.3328, 'longitude': 18.0645 },
+            ],
+          ],
         }, {
           'multiGeoLine': [
             [
               { 'latitude': 51.5002, 'longitude': -0.1262 },
-              { 'latitude': 46.9480, 'longitude': 7.4481 }
-            ]
-          ]
+              { 'latitude': 46.9480, 'longitude': 7.4481 },
+            ],
+          ],
         }]
     },
-    linierChart (chart) {
+    linierChart(chart) {
       chart.colors.list = [am4core.color('#827af3'), am4core.color('#6ce6f4')]
       if (this.$route.meta.dark) {
         chart.stroke = am4core.color('#8c91b6')
@@ -888,7 +888,7 @@ export default {
         'Mar',
         'Cur',
         'Shl',
-        'Meg'
+        'Meg',
       ]
 
       for (let i = 0; i < names.length; i++) {
@@ -909,7 +909,7 @@ export default {
       categoryAxis.renderer.labels.template.location = 0.5
       categoryAxis.renderer.inside = true
 
-      categoryAxis.renderer.labels.template.adapter.add('dx', function (dx, target) {
+      categoryAxis.renderer.labels.template.adapter.add('dx', function(dx, target) {
         return -target.maxRight / 2
       })
 
@@ -939,7 +939,7 @@ export default {
 
       chart.cursor = new am4charts.XYCursor()
     },
-    radialPieChart (chart) {
+    radialPieChart(chart) {
       chart.hiddenState.properties.opacity = 0
       chart.data = this.option
 
@@ -964,43 +964,43 @@ export default {
 
       chart.legend = new am4charts.Legend()
     },
-    dash3 (chart) {
+    dash3(chart) {
       chart.data = [{
         'country': 'USA',
-        'visits': 2025
+        'visits': 2025,
       }, {
         'country': 'China',
-        'visits': 1882
+        'visits': 1882,
       }, {
         'country': 'Japan',
-        'visits': 1809
+        'visits': 1809,
       }, {
         'country': 'Germany',
-        'visits': 1322
+        'visits': 1322,
       }, {
         'country': 'UK',
-        'visits': 1122
+        'visits': 1122,
       }, {
         'country': 'France',
-        'visits': 1114
+        'visits': 1114,
       }, {
         'country': 'India',
-        'visits': 984
+        'visits': 984,
       }, {
         'country': 'Spain',
-        'visits': 711
+        'visits': 711,
       }, {
         'country': 'Netherlands',
-        'visits': 665
+        'visits': 665,
       }, {
         'country': 'Russia',
-        'visits': 580
+        'visits': 580,
       }, {
         'country': 'South Korea',
-        'visits': 443
+        'visits': 443,
       }, {
         'country': 'Canada',
-        'visits': 441
+        'visits': 441,
       }]
 
       chart.innerRadius = am4core.percent(40)
@@ -1038,7 +1038,7 @@ export default {
         am4core.color('#279fac'),
         am4core.color('#ffb57e'),
         am4core.color('#279fac'),
-        am4core.color('#ffb57e')
+        am4core.color('#ffb57e'),
       ]
 
       chart.zoomOutButton.disabled = true
@@ -1062,7 +1062,7 @@ export default {
       chart.cursor.behavior = 'none'
       chart.cursor.lineX.disabled = true
       chart.cursor.lineY.disabled = true
-    }
-  }
+    },
+  },
 }
 </script>

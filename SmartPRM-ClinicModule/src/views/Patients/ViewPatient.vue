@@ -1162,7 +1162,7 @@ import {
   getEnquiryServices,
   createEnquiryService,
   createEnquiryNotes,
-  trashEnquiry
+  trashEnquiry,
 } from '../../services/enquiry'
 import { finishAssignment } from '../../services/assignmentsService'
 import { getDentists, getSurgeons, getLegacyDoctors, getUsersForAssignments, sso } from '../../services/userService'
@@ -1181,9 +1181,9 @@ const $ = require('jquery')
 export default {
   name: 'ViewPatient',
   components: {
-    DatePicker
+    DatePicker,
   },
-  mounted () {
+  mounted() {
     xray.index()
     this.getUserLogin()
     this.getPatient(this.patientId)
@@ -1210,32 +1210,32 @@ export default {
     this.getLabels(this.$i18n.locale)
   },
   computed: {
-    isSaveDisabled () {
+    isSaveDisabled() {
       return !this.formAppointments.patient_id || !this.formAppointments.location || !this.selectedDoctor || !this.selectedProductGroup || !this.formAppointments.assignmentDate || !this.formAppointments.end
     },
-    isServiceDisabled () {
+    isServiceDisabled() {
       return !this.formService.product_id || !this.formService.price || !this.formService.created_at || !this.formService.payment_method || !this.formService.doctor_id
     },
-    isOkDisabled () {
+    isOkDisabled() {
       return !this.formData.due_at || !this.formData.description
     },
-    isOkDisabledNotes () {
+    isOkDisabledNotes() {
       return !this.notesFormData.content
     },
-    fullName () {
+    fullName() {
       return this.patient.name + ' ' + this.patient.last_name
     },
-    filteredRegions () {
+    filteredRegions() {
       return this.regions.filter((item) => {
         return item.country_id === this.patient.country_id
       })
     },
-    filteredRegionsCity () {
+    filteredRegionsCity() {
       return this.regions.filter((item) => {
         return item.code === this.patient.city.region_id
       })
     },
-    filteredMunicipalities () {
+    filteredMunicipalities() {
       if (this.patient.region_id) {
         return this.municipalities.filter(item => {
           return item.region_id === this.patient.region_id
@@ -1244,7 +1244,7 @@ export default {
         return this.municipalities
       }
     },
-    patientsDentist: function () {
+    patientsDentist: function() {
       if (this.dentists && Array.isArray(this.dentists) && this.dentists.length) {
         return this.dentists.find((item) => {
           return item.code === this.patient.prm_dentist_user_id
@@ -1252,7 +1252,7 @@ export default {
       }
       return null
     },
-    patientsSurgeon: function () {
+    patientsSurgeon: function() {
       if (this.surgeons && Array.isArray(this.surgeons)) {
         return this.surgeons.find((item) => {
           return item.code === this.patient.prm_surgeon_user_id
@@ -1260,46 +1260,46 @@ export default {
       }
       return null
     },
-    openAssignments: function () {
+    openAssignments: function() {
       return this.assignments.slice(
         (this.openCurrentPage - 1) * this.openPerPage,
         this.openCurrentPage * this.openPerPage)
     },
-    completedList () {
+    completedList() {
       return this.completedAssignments.slice(
         (this.completedCurrentPage - 1) * this.completedPerPage,
         this.completedCurrentPage * this.completedPerPage)
     },
-    pastList () {
+    pastList() {
       return this.pastAppointments.slice(
         (this.pastCurrentPage - 1) * this.pastPerPage,
         this.pastCurrentPage * this.pastPerPage)
     },
-    futureList () {
+    futureList() {
       return this.futureAppointments.slice(
         (this.futureCurrentPage - 1) * this.futurePerPage,
         this.futureCurrentPage * this.futurePerPage)
     },
-    hideInvoicesPagination () {
+    hideInvoicesPagination() {
       return Math.floor(this.invoices.length / this.invoicesPerPage) !== 0
     },
-    hideOffersPagination () {
+    hideOffersPagination() {
       return Math.floor(this.offers.length / this.offersPerPage) !== 0
     },
-    hideSummaryPagination () {
+    hideSummaryPagination() {
       return Math.floor(this.services.length / this.servicesPerPage) !== 0
     },
-    smsList () {
+    smsList() {
       return this.smsMessages.slice(
         (this.smsCurrentPage - 1) * this.smsPerPage,
         this.smsCurrentPage * this.smsPerPage)
     },
-    notesList () {
+    notesList() {
       return this.notes.slice(
         (this.notesCurrentPage - 1) * this.notesPerPage,
         this.notesCurrentPage * this.notesPerPage)
     },
-    filesSortBy () {
+    filesSortBy() {
       if (this.sortBy === '') {
         let files = [...this.files]
         return files.sort((a, b) => {
@@ -1351,23 +1351,23 @@ export default {
         })
       }
       return this.files
-    }
+    },
   },
   filters: {
-    fromNowDate (val) {
+    fromNowDate(val) {
       if (!val) {
         return '-'
       }
       return moment(val).fromNow()
     },
-    formatDate (val) {
+    formatDate(val) {
       if (!val) {
         return '-'
       }
       return moment(val).format('DD-MM-YYYY')
-    }
+    },
   },
-  data () {
+  data() {
     return {
       loggedInUser: {},
       userId: null,
@@ -1420,24 +1420,24 @@ export default {
       invoicesType: [
         {
           label: this.$t('EPR.invoice'),
-          value: 'new-invoice'
+          value: 'new-invoice',
         },
         {
           label: this.$t('EPR.advPayment'),
-          value: 'new-adv-payment'
+          value: 'new-adv-payment',
         },
         {
           label: this.$t('EPR.offer'),
-          value: 'offer'
-        }
+          value: 'offer',
+        },
       ],
       colors: [],
       formData: {
         enquiry: {
-          id: +this.$route.params.patientId
+          id: +this.$route.params.patientId,
         },
         due_at: null,
-        user: {}
+        user: {},
       },
       formService: {
         title: '',
@@ -1447,7 +1447,7 @@ export default {
         price: '',
         doctor_id: '',
         payment_method: '',
-        fee: ''
+        fee: '',
       },
       formAppointments: {
         id: '',
@@ -1464,34 +1464,34 @@ export default {
         crmProduct: '',
         patient_attended: '',
         appointment_canceled: false,
-        cancelation_reason: ''
+        cancelation_reason: '',
       },
       patient_attend: [
         {
           label: this.$t('calendarEvent.unknown'),
           value: null,
-          checked: true
+          checked: true,
         },
         {
           label: this.$t('calendarEvent.attended'),
           value: true,
-          checked: false
+          checked: false,
         },
         {
           label: this.$t('calendarEvent.notAttended'),
           value: false,
-          checked: false
-        }
+          checked: false,
+        },
       ],
       notesFormData: {
         enquiry_id: +this.$route.params.patientId,
         content: '',
-        user_id: null
+        user_id: null,
       },
       paymentMethodOptions: [
         { id: 1, name: 'Cash', label: this.$t('paymentMethods.cash') },
         { id: 2, name: 'Credit card', label: this.$t('paymentMethods.creditCard') },
-        { id: 3, name: 'Bank Account', label: this.$t('paymentMethods.bankAccount') }
+        { id: 3, name: 'Bank Account', label: this.$t('paymentMethods.bankAccount') },
       ],
       currentInvoicePage: 1,
       invoicesPerPage: 10,
@@ -1509,11 +1509,11 @@ export default {
         { value: 'type', text: this.$t('EPR.files.fileType'), sort: 'asc' },
         { value: 'type', text: this.$t('EPR.files.fileType'), sort: 'desc' },
         { value: 'created_at', text: this.$t('EPR.files.fileCreatedAt'), sort: 'asc' },
-        { value: 'created_at', text: this.$t('EPR.files.fileCreatedAt'), sort: 'desc' }
+        { value: 'created_at', text: this.$t('EPR.files.fileCreatedAt'), sort: 'desc' },
       ],
       sortOptionsInvoice: [
         { value: 'invoice_type', text: this.$t('EPR.invoices.filters.invoice_type'), sort: 'asc' },
-        { value: 'invoice_type', text: this.$t('EPR.invoices.filters.invoice_type'), sort: 'desc' }
+        { value: 'invoice_type', text: this.$t('EPR.invoices.filters.invoice_type'), sort: 'desc' },
       ],
       files: [],
       disabled: true,
@@ -1522,7 +1522,7 @@ export default {
       disabledAllergies: true,
       disabledDoctors: true,
       doctor: {
-        profile: require('../../assets/images/user/1.jpg')
+        profile: require('../../assets/images/user/1.jpg'),
       },
       user: {
         profile_image: require('../../assets/images/user/11.png'),
@@ -1549,7 +1549,7 @@ export default {
         surgeon: 'Dr. Nika Klemenc',
         dentist: 'Dr. Miha Breznik',
         background: require('../../assets/images/page-img/profile-bg.jpg'),
-        profile: require('../../assets/images/user/11.png')
+        profile: require('../../assets/images/user/11.png'),
       },
       countries: [],
       regions: [],
@@ -1564,7 +1564,7 @@ export default {
           class: 'text-left',
           formatter: value => {
             return moment(value).format('YYYY-MM-DD')
-          }
+          },
         },
         { label: this.$t('EPR.invoicesColumn.issuedBy'), key: 'operator_name', class: 'text-left' },
         { label: this.$t('EPR.invoicesColumn.amount'), key: 'charges_sum', class: 'text-left' },
@@ -1577,15 +1577,15 @@ export default {
             }
             return item.total_with_vat === item.paid_amount ? this.$t('invoices.paid') : this.$t('invoices.partiallyPaid')
           },
-          filterByFormatted: true
+          filterByFormatted: true,
         },
         { label: this.$t('EPR.invoicesColumn.verificationStatus'),
           key: 'verification_status',
           class: 'text-left',
           formatter: (value, key, item) => {
             return this.$t(item.verification_status)
-          }
-        }
+          },
+        },
       ],
       servicesSummaryColumns: [
         { label: this.$t('EPR.servicesSummaryColumn.serviceTitle'), key: 'product_name', class: 'text-left' },
@@ -1595,7 +1595,7 @@ export default {
           class: 'text-left',
           formatter: value => {
             return moment(value).format('DD.MM.YYYY')
-          }
+          },
         },
         {
           label: this.$t('EPR.servicesSummaryColumn.servicePrice'),
@@ -1603,10 +1603,10 @@ export default {
           class: 'price-column',
           formatter: value => {
             return this.$options.filters.formatPrice(value)
-          }
+          },
         },
         { label: this.$t('reportingEmazing.servicesListColumn.serviceDoctor'), key: 'doctor', class: 'text-left' },
-        { label: this.$t('EPR.servicesSummaryColumn.paymentMethod'), key: 'payment_method', class: 'text-left' }
+        { label: this.$t('EPR.servicesSummaryColumn.paymentMethod'), key: 'payment_method', class: 'text-left' },
       ],
       columnsOffers: [
         { label: this.$t('EPR.offersColumn.no'), key: 'invoice_number', class: 'text-left' },
@@ -1616,28 +1616,28 @@ export default {
           class: 'text-left',
           formatter: value => {
             return moment(value).format('DD/MM/YYYY')
-          }
+          },
         },
         { label: this.$t('EPR.offersColumn.issuedBy'), key: 'operator_name', class: 'text-left' },
-        { label: this.$t('EPR.offersColumn.amount'), key: 'total_with_vat', class: 'text-left' }
+        { label: this.$t('EPR.offersColumn.amount'), key: 'total_with_vat', class: 'text-left' },
       ],
-      numberOfVisits: 0
+      numberOfVisits: 0,
     }
   },
   watch: {
-    'formAppointments.assignmentDate' () {
+    'formAppointments.assignmentDate'() {
       if (!this.formAppointments.id) {
         this.formAppointments.end = new Date(moment(this.formAppointments.assignmentDate).add('0', 'hours').add('15', 'minutes'))
       }
     },
-    '$i18n.locale' () {
+    '$i18n.locale'() {
       this.getProductGroups(this.$i18n.locale)
       this.getPatientPastAppointments(this.patientId, this.$i18n.locale)
       this.getPatientFutureAppointments(this.patientId, this.$i18n.locale)
-    }
+    },
   },
   methods: {
-    getSumOfServices () {
+    getSumOfServices() {
       let sum = 0
       if (this.services && Array.isArray(this.services) && this.services.length) {
         this.services.forEach(item => {
@@ -1648,7 +1648,7 @@ export default {
       }
       return sum
     },
-    getPatientsDentist (patient) {
+    getPatientsDentist(patient) {
       if (this.dentists && this.dentists.length) {
         let dentist = this.dentists.find((item) => {
           return item.code === patient.prm_dentist_user_id
@@ -1656,7 +1656,7 @@ export default {
         return dentist && dentist.label
       }
     },
-    decideAppointmentStatus (appointment) {
+    decideAppointmentStatus(appointment) {
       if (appointment.appointment_canceled) {
         return true
       } else if (appointment.patient_attended === true) {
@@ -1664,14 +1664,14 @@ export default {
       }
       return null
     },
-    cancelAppointmentModal () {
+    cancelAppointmentModal() {
       this.formAppointments = this.defaultFormAppointment()
       this.disabled = true
     },
-    cancelService () {
+    cancelService() {
       this.formService = this.defaultFormService()
     },
-    defaultFormService () {
+    defaultFormService() {
       return {
         title: '',
         product_id: '',
@@ -1679,41 +1679,41 @@ export default {
         created_at: moment().format('YYYY-MM-DD'),
         price: '',
         doctor_id: '',
-        payment_method: ''
+        payment_method: '',
       }
     },
-    isItOverdue (date) {
+    isItOverdue(date) {
       return moment().isAfter(date)
     },
-    getSms () {
+    getSms() {
       getEnquirySMS(this.patientId).then(response => {
         this.smsMessages = response
       })
     },
-    checkIfImageType (type) {
+    checkIfImageType(type) {
       let imageTypes = ['jpg', 'png', 'jpeg']
       let result = _.includes(imageTypes, type)
       return result
     },
-    checkIfOtherType (type) {
+    checkIfOtherType(type) {
       let otherTypes = ['dicom', 'txt', 'plain']
       let showFileImage = _.includes(otherTypes, type)
       return showFileImage
     },
-    getLabels (lang) {
+    getLabels(lang) {
       getLabels(lang).then(response => {
         this.colors = response
       })
     },
-    goToFiles () {
+    goToFiles() {
       $('#myTab a[href="#files"]').tab('show')
     },
-    onCityChange () {
+    onCityChange() {
     },
-    sortSelectedInvoice () {
+    sortSelectedInvoice() {
       this.getPatientInvoices(this.patientId, this.sortByInvoice.sort.toUpperCase())
     },
-    uploadFile (e) {
+    uploadFile(e) {
       var files = e.target.files || e.dataTransfer.files
       if (files.length) {
         this.$bvToast.show('upload-file')
@@ -1727,14 +1727,14 @@ export default {
             name: this.$route.params.patientId + '-' + Date.now() + '.' + e.target.files[0].type.split('/')[1],
             type: e.target.files[0].type.split('/')[1],
             created_at: moment(Date.now()).format('YYYY-MM-DD'),
-            pdf: e.target.files[0].type.split('/')[1] === 'pdf'
+            pdf: e.target.files[0].type.split('/')[1] === 'pdf',
           }
           this.files.push(file)
         }
         let type = data.data.split('.')[5]
         let img = data.data.split('/')[3]
         let file = {
-          image: `/api/files/${img}`
+          image: `/api/files/${img}`,
         }
         if (type === 'tiff') {
           this.tiffConvertToCanvas(file, this.files.length)
@@ -1742,7 +1742,7 @@ export default {
         this.$bvToast.hide('upload-file')
       })
     },
-    getFiles () {
+    getFiles() {
       getFilesWithPrefix(this.$route.params.patientId).then(data => {
         if (data.data && Array.isArray(data.data.Contents)) {
           for (let i = 0; i < data.data.Contents.length; i++) {
@@ -1753,13 +1753,13 @@ export default {
               name: data.data.Contents[i].Key,
               type: type,
               created_at: moment(data.data.Contents[i].LastModified).format('YYYY-MM-DD'),
-              pdf: type === 'pdf'
+              pdf: type === 'pdf',
             })
           }
         }
       })
     },
-    downloadFile (file) {
+    downloadFile(file) {
       let fileName = file.name
       downloadFile(fileName).then(response => {
         console.log(response)
@@ -1772,14 +1772,14 @@ export default {
         fileLink.click()
       })
     },
-    tiffConvertToCanvas (file, index, preview) {
+    tiffConvertToCanvas(file, index, preview) {
       let type = file.image.split('.')[1]
       if (type === 'tiff') {
         let canvas = null
         const xhr = new XMLHttpRequest()
         xhr.open('GET', file.image)
         xhr.responseType = 'arraybuffer'
-        xhr.onload = function (e) {
+        xhr.onload = function(e) {
           const buffer = xhr.response
           const tiff = new Tiff({ buffer: buffer })
           canvas = tiff.toCanvas()
@@ -1795,18 +1795,18 @@ export default {
         xhr.send()
       }
     },
-    changeGeneralNotes (e) {
+    changeGeneralNotes(e) {
       this.generalNotes = this.notesGeneral.replace(/\n/g, '<br>')
     },
-    selectedUser (val) {
+    selectedUser(val) {
     },
-    getOptionLabel (option) {
+    getOptionLabel(option) {
       return (option && option.label) || ''
     },
-    getMunicipalityLabel (city) {
+    getMunicipalityLabel(city) {
       return (city && city.municipality_name)
     },
-    createBillingDetails () {
+    createBillingDetails() {
       let details = ''
       if (this.patient.name) details += this.patient.name
       if (this.patient.last_name) details += ' ' + this.patient.last_name
@@ -1820,7 +1820,7 @@ export default {
       if (this.patient.email) details += 'Email: ' + this.patient.email
       return details
     },
-    getPatient (id) {
+    getPatient(id) {
       getEnquiryById(id).then(response => {
         this.patient = response[0]
         if (this.patient.date_of_birth !== null) {
@@ -1832,7 +1832,7 @@ export default {
       }
       )
     },
-    getPatientNotes (id) {
+    getPatientNotes(id) {
       getEnquiryNotes(id).then(response => {
         if (Array.isArray(response)) {
           this.notes = response.reverse()
@@ -1840,7 +1840,7 @@ export default {
       }
       )
     },
-    getPatientPastAppointments (id, lang) {
+    getPatientPastAppointments(id, lang) {
       getEnquiryPastAppointments(id, lang).then(response => {
         this.pastAppointments = _.takeRight(response, 5)
         this.numberOfVisits = response.length
@@ -1851,7 +1851,7 @@ export default {
       }
       )
     },
-    getPatientFutureAppointments (id, lang) {
+    getPatientFutureAppointments(id, lang) {
       getEnquiryFutureAppointments(id, lang).then(response => {
         this.futureAppointments = _.takeRight(response, 5)
         this.futureAppointments.forEach(appointment => {
@@ -1859,7 +1859,7 @@ export default {
         })
       })
     },
-    getPatientAssignments (id) {
+    getPatientAssignments(id) {
       getEnquiryAssignments(id).then(response => {
         if (Array.isArray(response)) {
           this.assignments = response.filter(todo => !todo.completed)
@@ -1867,22 +1867,22 @@ export default {
         }
       })
     },
-    getPatientInvoices (id, sort) {
+    getPatientInvoices(id, sort) {
       getEnquiryInvoices(id, sort).then(response => {
         this.invoices = response
       })
     },
-    getPatientOffers (id) {
+    getPatientOffers(id) {
       getEnquiryOffers(id).then(response => {
         this.offers = response
       })
     },
-    getPatientServices (id) {
+    getPatientServices(id) {
       getEnquiryServices(id).then(response => {
         this.services = response
       })
     },
-    createPatientService () {
+    createPatientService() {
       this.formService.title = this.formService.product.name
       this.calculateFee()
       createEnquiryService(this.patientId, this.formService).then(response => {
@@ -1891,126 +1891,126 @@ export default {
         this.formService = this.defaultFormService()
       })
     },
-    calculateFee () {
+    calculateFee() {
       if (this.formService.product.fee_type === 'RELATIVE') {
         this.formService.fee = (this.formService.price - this.formService.product.price_adjustment) * this.formService.product.fee
       } else {
         this.formService.fee = this.formService.product.fee
       }
     },
-    setServiceProductId () {
+    setServiceProductId() {
       this.formService.product_id = this.formService.product.id
     },
-    getDentists () {
+    getDentists() {
       getDentists().then(response => {
         this.dentists = response
       })
     },
-    getLegacyDoctors () {
+    getLegacyDoctors() {
       getLegacyDoctors().then(response => {
         this.legacyDoctors = response
       })
     },
-    getSurgeons () {
+    getSurgeons() {
       getSurgeons().then(response => {
         this.surgeons = response
       })
     },
-    getCountries () {
+    getCountries() {
       getCountriesList().then(response => {
         this.countries = response
       })
     },
-    getRegions () {
+    getRegions() {
       getRegionsList().then(response => {
         this.regions = response
       })
     },
-    getMunicipalities () {
+    getMunicipalities() {
       getMunicipalitiesList().then(response => {
         this.municipalities = response
       })
     },
-    invoiceSelected (item) {
+    invoiceSelected(item) {
       this.$router.push({ path: `/documents/invoices/${item.invoice_id}` })
     },
-    addInvoice () {
+    addInvoice() {
       this.modalInvoiceShow = true
     },
-    editPatientData () {
+    editPatientData() {
       this.disabledData = !this.disabledData
       this.tempPatient = Object.assign({}, this.patient)
     },
-    editPatientNotes () {
+    editPatientNotes() {
       this.disabledNotes = !this.disabledNotes
       this.tempPatient = Object.assign({}, this.patient)
     },
-    editPatientAllergies () {
+    editPatientAllergies() {
       this.disabledAllergies = !this.disabledAllergies
       this.tempPatient = Object.assign({}, this.patient)
     },
-    editPatientDoctors () {
+    editPatientDoctors() {
       this.disabledDoctors = !this.disabledDoctors
       this.tempPatient = Object.assign({}, this.patient)
     },
-    cancelEditingPatientData () {
+    cancelEditingPatientData() {
       this.disabledData = !this.disabledData
       this.patient = this.tempPatient
     },
-    cancelEditingPatientNotes () {
+    cancelEditingPatientNotes() {
       this.disabledNotes = !this.disabledNotes
       this.patient = this.tempPatient
     },
-    cancelEditingPatientAllergies () {
+    cancelEditingPatientAllergies() {
       this.disabledAllergies = !this.disabledAllergies
       this.patient = this.tempPatient
     },
-    cancelEditingPatientDoctors () {
+    cancelEditingPatientDoctors() {
       this.disabledDoctors = !this.disabledDoctors
       this.patient = this.tempPatient
     },
-    updatePatient () {
+    updatePatient() {
       this.patient.general_notes = this.generalNotes
       updateEnquiry(this.patientId, this.patient).then((response) => {
         this.patient = response
         this.$bvToast.show('b-toaster-bottom-right')
       })
     },
-    trashPatient () {
+    trashPatient() {
       trashEnquiry(this.patientId).then(() => {
         this.$router.push({ path: `/patients` })
       })
     },
-    addOffer () {
+    addOffer() {
 
     },
-    add_file () {
+    add_file() {
     },
-    resetForm () {
+    resetForm() {
       this.user = {
         profile_image: require('../../assets/images/user/11.png'),
         background: require('../../assets/images/page-img/profile-bg.jpg'),
-        profile: require('../../assets/images/user/11.png')
+        profile: require('../../assets/images/user/11.png'),
       }
     },
-    submitData () {
+    submitData() {
       this.disabledData = true
       this.updatePatient()
       // this.$refs['my-modal'].show() prikazi modal ukoliko dodje do greske neke
     },
-    submitNotes () {
+    submitNotes() {
       this.disabledNotes = true
       this.updatePatient()
     },
-    submitAllergies () {
+    submitAllergies() {
       this.disabledAllergies = true
       this.updatePatient()
     },
-    submitDoctors () {
+    submitDoctors() {
       this.disabledDoctors = true
       this.updatePatient()
     },
-    previewImage: function (event) {
+    previewImage: function(event) {
       const input = event.target
       if (input.files && input.files[0]) {
         const reader = new FileReader()
@@ -2020,26 +2020,26 @@ export default {
         reader.readAsDataURL(input.files[0])
       }
     },
-    sortSelected (value) {
+    sortSelected(value) {
       let array = [value]
       this.sortOn = array
     },
-    getUsersForAssignments () {
+    getUsersForAssignments() {
       getUsersForAssignments().then(response => {
         this.users = response
       })
     },
-    defaultFormData () {
+    defaultFormData() {
       return {
         enquiry: {
-          id: +this.patientId
+          id: +this.patientId,
         },
         description: '',
         due_at: null,
-        user: {}
+        user: {},
       }
     },
-    defaultFormAppointment () {
+    defaultFormAppointment() {
       this.selectedDoctor = null
       this.selectedProductGroup = null
       return {
@@ -2057,38 +2057,38 @@ export default {
         crmProduct: '',
         patient_attended: '',
         appointment_canceled: false,
-        cancelation_reason: ''
+        cancelation_reason: '',
       }
     },
-    showProps (item, prop) {
+    showProps(item, prop) {
       if (this.disabled && prop === item.value) {
         return true
       } else if (!this.disabled) {
         return true
       }
     },
-    cancelAssignments () {
+    cancelAssignments() {
       this.formData = this.defaultFormData()
     },
-    dateDisabled (ymd, date) {
+    dateDisabled(ymd, date) {
       const weekday = date.getDay()
       const day = date.getDate()
       return weekday === 0 || weekday === 6 || day === 13
     },
-    addAssignments () {
+    addAssignments() {
       createAssignments(this.formData).then(() => {
         this.getPatientAssignments(this.patientId)
         this.formData = this.defaultFormData()
       })
     },
-    addNotes () {
+    addNotes() {
       this.notesFormData.user_id = this.loggedInUser.id
       createEnquiryNotes(this.notesFormData).then(() => {
         this.getPatientNotes(this.patientId)
         this.cancelNotes()
       })
     },
-    finishAssignment (id, finished) {
+    finishAssignment(id, finished) {
       const completedBy = this.userId
       finishAssignment(id, finished, completedBy).then(response => {
         if (finished) {
@@ -2103,7 +2103,7 @@ export default {
         }
       })
     },
-    chooseInvoice () {
+    chooseInvoice() {
       switch (this.selectedInvoices) {
         case 'new-invoice':
           return this.$router.push({ path: `/documents/invoices/${this.patient.id}/${this.selectedInvoices}` })
@@ -2114,14 +2114,14 @@ export default {
         default:
       }
     },
-    cancelNotes () {
+    cancelNotes() {
       this.notesFormData.content = ''
     },
-    cancelInvoices () {
+    cancelInvoices() {
       this.modalInvoiceShow = false
       this.selectedInvoices = ''
     },
-    openAddAppointmentModal () {
+    openAddAppointmentModal() {
       this.addAppointmentModal = true
       this.findDentist(this.patient.prm_dentist_user_id)
       this.formAppointments.backgroundColor = 136
@@ -2130,23 +2130,23 @@ export default {
       this.formAppointments.assignmentDate = this.roundUpStartTime()
       this.disabled = false
     },
-    findDentist (dentistId) {
+    findDentist(dentistId) {
       let doctor = this.doctors.find(doctor => doctor.id === dentistId)
       this.selectedDoctor = doctor
     },
-    closeAppointmentModal () {
+    closeAppointmentModal() {
       this.addAppointmentModal = false
       this.formAppointments = this.defaultFormAppointment()
       this.disabled = true
     },
-    updateCalendar (id, appointment) {
+    updateCalendar(id, appointment) {
       updateCalendar(id, appointment).then(() => {
         this.addAppointmentModal = false
         this.getPatientPastAppointments(this.patientId, this.$i18n.locale)
         this.getPatientFutureAppointments(this.patientId, this.$i18n.locale)
       })
     },
-    saveAppointment  () {
+    saveAppointment() {
       this.addAppointmentModal = false
       this.formAppointments.patient_id = this.patient.id
       this.formAppointments.doctor_id = this.selectedDoctor.id
@@ -2164,7 +2164,7 @@ export default {
       this.disabled = true
       this.formAppointments = this.defaultFormAppointment()
     },
-    getLocations () {
+    getLocations() {
       getLocationsList().then(response => {
         this.locations = response
         if (response.length === 1) {
@@ -2172,7 +2172,7 @@ export default {
         }
       })
     },
-    getDoctors () {
+    getDoctors() {
       getDoctorList().then((response) => {
         this.doctors = response
         if (Array.isArray(response)) {
@@ -2180,7 +2180,7 @@ export default {
         }
       })
     },
-    getUserLogin () {
+    getUserLogin() {
       sso().then(response => {
         if (typeof response !== 'string') {
           this.loggedInUser = response
@@ -2188,19 +2188,19 @@ export default {
         }
       })
     },
-    getProductGroups (lang) {
+    getProductGroups(lang) {
       getProductGroups(lang).then((response) => {
         this.product_groups = response
       })
     },
-    getOldProducts () {
+    getOldProducts() {
       getOldProducts().then((response) => {
         if (Array.isArray(response)) {
           this.products = response.filter(pr => pr.prm_client_id === this.loggedInUser.prm_client_id)
         }
       })
     },
-    openEditAppointmentModal (appointment) {
+    openEditAppointmentModal(appointment) {
       this.findDentist(appointment.doctor_id)
       this.formAppointments = {
         id: appointment.appointment_id,
@@ -2214,24 +2214,24 @@ export default {
         end: moment(appointment.ends_at).toDate(),
         backgroundColor: appointment.label_id,
         appointment_canceled: appointment.appointment_canceled,
-        cancelation_reason: appointment.cancelation_reason
+        cancelation_reason: appointment.cancelation_reason,
       }
       this.addAppointmentModal = true
     },
-    editMode () {
+    editMode() {
       this.disabled = false
     },
-    closeCancelation () {
+    closeCancelation() {
       this.openCancelationModal = false
       this.formAppointments.appointment_canceled = false
     },
-    roundUpStartTime () {
+    roundUpStartTime() {
       let startTime = new Date()
       startTime.setHours(startTime.getHours() + Math.ceil(startTime.getMinutes() / 60))
       startTime.setMinutes(0, 0, 0)
       return startTime
-    }
-  }
+    },
+  },
 }
 </script>
 

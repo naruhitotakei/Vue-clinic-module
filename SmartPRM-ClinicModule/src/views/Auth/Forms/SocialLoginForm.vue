@@ -18,20 +18,20 @@ export default {
     socialProviders: [
       {
         type: 'google',
-        icon: 'ri-google-line'
+        icon: 'ri-google-line',
       },
       {
         type: 'facebook',
-        icon: 'ri-facebook-box-line'
-      }
+        icon: 'ri-facebook-box-line',
+      },
       /* {
         type: 'twitter',
         icon: 'ri-twitter-line'
       } */
-    ]
+    ],
   }),
   methods: {
-    socialLogin (type) {
+    socialLogin(type) {
       let firebaseProvider = new firebase.auth.GoogleAuthProvider()
       if (type === 'facebook') {
         firebaseProvider = new firebase.auth.FacebookAuthProvider()
@@ -49,13 +49,13 @@ export default {
               name: firebaseUser.displayName,
               mobileNo: firebaseUser.phoneNumber,
               email: firebaseUser.email,
-              profileImage: firebaseUser.photoURL
-            }
+              profileImage: firebaseUser.photoURL,
+            },
           })
           localStorage.setItem('user', JSON.stringify(firebaseUser))
           this.$router.push({ name: 'mini.dashboard.home-1' })
         }).catch()
-    }
-  }
+    },
+  },
 }
 </script>

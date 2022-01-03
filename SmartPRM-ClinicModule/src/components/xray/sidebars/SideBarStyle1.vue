@@ -35,12 +35,12 @@ export default {
     items: { type: Array },
     logo: { type: String, default: require('../../../assets/images/logo.png') },
     horizontal: { type: Boolean },
-    toggleButton: { type: Boolean, default: true }
+    toggleButton: { type: Boolean, default: true },
   },
   components: {
-    List
+    List,
   },
-  mounted () {
+  mounted() {
     const element = document.querySelectorAll('.iq-sidebar-menu li a')
     Array.from(element, (elem) => {
       elem.addEventListener('click', (e) => {
@@ -62,13 +62,13 @@ export default {
     })
   },
   methods: {
-    miniSidebar () {
+    miniSidebar() {
       this.$emit('toggle')
-    }
+    },
   },
-  data () {
+  data() {
     return {
     }
-  }
+  },
 }
 </script>

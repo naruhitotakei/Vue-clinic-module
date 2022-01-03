@@ -83,45 +83,45 @@ export default {
   },
   name: 'Offers',
   computed: {
-    hidePagination () {
+    hidePagination() {
       return Math.floor(this.totalRows / this.perPage) !== 0
-    }
+    },
   },
   methods: {
-    default () {
+    default() {
       return {
         offer_no: this.rows.length,
         patient_name: '',
         date: '',
         issued_by: '',
-        amount: ''
+        amount: '',
       }
     },
-    add_offer () {
+    add_offer() {
     },
-    filterSelected (value) {
+    filterSelected(value) {
       let array = [value]
       this.filterOn = array
     },
-    onFiltered (filteredItems) {
+    onFiltered(filteredItems) {
       this.totalRows = filteredItems.length
       this.currentPage = 1
     },
-    getOffers () {
+    getOffers() {
       getOffers().then(response => {
         this.offers = _.orderBy(response, ['invoice_time', 'invoice_number'], ['desc', 'desc'])
         this.setTotalRows(this.offers.length)
         this.toggleDataLoaded()
       })
     },
-    setTotalRows (number) {
+    setTotalRows(number) {
       this.totalRows = number
     },
-    toggleDataLoaded () {
+    toggleDataLoaded() {
       this.isDataLoaded = !this.isDataLoaded
-    }
+    },
   },
-  data  () {
+  data() {
     return {
       dropDownText: '',
       selected: this.value,
@@ -130,7 +130,7 @@ export default {
         { value: 'patient_name', text: 'Patient Name' },
         { value: 'date', text: 'Date' },
         { value: 'issue_by', text: 'Issued by' },
-        { value: 'amount', text: 'Amount' }
+        { value: 'amount', text: 'Amount' },
       ],
       offers: [],
       filter: '',
@@ -147,7 +147,7 @@ export default {
           formatter: (value, key, item) => {
             return item.enquiries_name + ' ' + item.enquiries_last_name
           },
-          filterByFormatted: true
+          filterByFormatted: true,
         },
         { label: this.$t('offers.offersColumn.date'),
           key: 'invoice_time',
@@ -155,17 +155,17 @@ export default {
           formatter: value => {
             return moment(value).format('DD-MM-YYYY')
           },
-          filterByFormatted: true
+          filterByFormatted: true,
         },
         { label: this.$t('offers.offersColumn.issuedBy'), key: 'operator_name', class: 'text-left' },
-        { label: this.$t('offers.offersColumn.amount'), key: 'total_with_vat', class: 'text-left' }
-      ]
+        { label: this.$t('offers.offersColumn.amount'), key: 'total_with_vat', class: 'text-left' },
+      ],
     }
   },
-  mounted () {
+  mounted() {
     xray.index()
     this.getOffers()
-  }
+  },
 }
 </script>
 

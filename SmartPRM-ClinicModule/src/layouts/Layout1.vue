@@ -234,9 +234,9 @@ export default {
   components: {
     Loader,
     SideBarStyle1,
-    NavBarStyle1
+    NavBarStyle1,
   },
-  mounted () {
+  mounted() {
     this.getUserLogin()
     this.updateRadio()
   },
@@ -244,22 +244,22 @@ export default {
     ...mapGetters({
       selectedLang: 'Setting/langState',
       langsOptions: 'Setting/langOptionState',
-      colors: 'Setting/colorState'
+      colors: 'Setting/colorState',
     }),
-    getAvatarUrl: function () {
+    getAvatarUrl: function() {
       return '/api/files/avatar'
     },
-    isEditDisabled () {
+    isEditDisabled() {
       return !this.logedInUser.first_name || !this.logedInUser.surname || !this.logedInUser.email
-    }
+    },
   },
   watch: {
-    '$i18n.locale': function (code) {
+    '$i18n.locale': function(code) {
       localize(code)
-    }
+    },
   },
   // sidebarTicket
-  data () {
+  data() {
     return {
       user: {
         fname: '',
@@ -279,7 +279,7 @@ export default {
         role: '',
         gender: '',
         dob: '',
-        url: ''
+        url: '',
       },
       avatar_version: Math.random(),
       avatarURL: '/api/files/avatar',
@@ -287,7 +287,7 @@ export default {
         old_password: '',
         new_password: '',
         confirm_password: '',
-        email: ''
+        email: '',
       },
       profileModalShow: false,
       accountModalShow: false,
@@ -300,7 +300,7 @@ export default {
         { value: { enter: 'zoomIn', exit: 'zoomOut' }, text: 'Zoom' },
         { value: { enter: 'fadeInUp', exit: 'fadeOutDown' }, text: 'Fade' },
         { value: { enter: 'slideInLeft', exit: 'slideOutRight' }, text: 'Slide' },
-        { value: { enter: 'rotateInDownLeft', exit: 'rotateOutDownLeft' }, text: 'Roll' }
+        { value: { enter: 'rotateInDownLeft', exit: 'rotateOutDownLeft' }, text: 'Roll' },
       ],
       horizontalMenu: HorizontalItems,
       verticalMenu: SideBarItems,
@@ -314,19 +314,19 @@ export default {
         { image: require('../assets/images/user/02.jpg'), name: 'Dr. Silvija Lenart', date: '14 Jun' },
         { image: require('../assets/images/user/03.jpg'), name: 'Dr. Irma Medved', date: '16 Avg' },
         { image: require('../assets/images/user/04.jpg'), name: 'Dr. Petra Maver', date: '21 Sept' },
-        { image: require('../assets/images/user/05.jpg'), name: 'Dr. Damjan Ahlin', date: '29 Sept' }
+        { image: require('../assets/images/user/05.jpg'), name: 'Dr. Damjan Ahlin', date: '29 Sept' },
       ],
       notification: [
         { image: require('../assets/images/user/01.jpg'), name: 'Dr. Bojan Jernejc', date: '23 ur nazaj', description: 'Slike pacienta' },
         { image: require('../assets/images/user/02.jpg'), name: 'Dr. Silvija Lenart', date: '14 ur nazaj', description: 'Operacija' },
         { image: require('../assets/images/user/03.jpg'), name: 'Dr. Irma Medved', date: '16 ur nazaj', description: 'Rentgen' },
         { image: require('../assets/images/user/04.jpg'), name: 'Dr. Petra Maver', date: '21 ur nazaj', description: 'Kartoteka pacienta' },
-        { image: require('../assets/images/user/05.jpg'), name: 'Dr. Damjan Ahlin', date: '11 ur nazaj', description: 'Nov termin' }
-      ]
+        { image: require('../assets/images/user/05.jpg'), name: 'Dr. Damjan Ahlin', date: '11 ur nazaj', description: 'Nov termin' },
+      ],
     }
   },
   methods: {
-    setOpenMenu () {
+    setOpenMenu() {
       this.openMenu = !this.openMenu
       if (this.openMenu) {
         document.querySelector('body').style.overflow = 'hidden'
@@ -334,14 +334,14 @@ export default {
         document.querySelector('body').style.overflow = 'auto'
       }
     },
-    onButtonClick () {
+    onButtonClick() {
       this.isSelecting = true
       window.addEventListener('focus', () => {
         this.isSelecting = false
       }, { once: true })
       this.$refs.uploader.click()
     },
-    async onFileChanged (e) {
+    async onFileChanged(e) {
       this.selectedFile = e.target.files[0]
       // todo check size
       uploadAvatar(this.selectedFile)
@@ -350,33 +350,33 @@ export default {
       this.avatar_version = Math.random()
       this.avatarURL === '/api/files/avatar' ? this.avatarURL = './api/files/avatar' : this.avatarURL = '/api/files/avatar'
     },
-    sleep (ms) {
+    sleep(ms) {
       return new Promise((resolve) => {
         setTimeout(resolve, ms)
       })
     },
-    callModal (args) {
+    callModal(args) {
       if (args === 'edit') {
         this.profileModalShow = true
       } else {
         this.accountModalShow = true
       }
     },
-    editProfile () {
+    editProfile() {
       editProfile(this.logedInUser).then(() => {
         this.getUserLogin()
         // this.$bvToast.show('b-toaster-bottom-right')
       })
     },
-    settingData () {
+    settingData() {
       let profile = {
         email: this.logedInUser.email,
-        prm_locale: this.logedInUser.prm_locale
+        prm_locale: this.logedInUser.prm_locale,
       }
       let password = {
         oldpassword: this.formData.old_password,
         password1: this.formData.new_password,
-        password2: this.formData.confirm_password
+        password2: this.formData.confirm_password,
       }
       this.changeLang(profile)
       if (this.formData.new_password && this.formData.new_password.length >= 8) {
@@ -386,37 +386,37 @@ export default {
         this.formData.confirm_password = ''
       }
     },
-    changeLang (profile) {
+    changeLang(profile) {
       changeLang(profile).then(() => {
         this.$bvToast.show('b-toaster-bottom-right')
       })
     },
-    changePassword (oldPassword, newPassword1, newPassword2) {
+    changePassword(oldPassword, newPassword1, newPassword2) {
       changePassword(oldPassword, newPassword1, newPassword2).then(() => {
         this.$bvToast.show('b-toaster-bottom-right')
       })
     },
-    updateRadio () {
+    updateRadio() {
       this.horizontal = this.$store.getters['Setting/horizontalMenuState']
       this.mini = this.$store.getters['Setting/miniSidebarState']
     },
-    sidebarHorizontal () {
+    sidebarHorizontal() {
       this.$store.dispatch('Setting/horizontalMenuAction')
       this.updateRadio()
     },
-    sidebarMini () {
+    sidebarMini() {
       xray.triggerSet()
       this.$store.dispatch('Setting/miniSidebarAction')
       this.updateRadio()
     },
-    rtlChange () {
+    rtlChange() {
       if (this.rtl) {
         this.rtlRemove()
       } else {
         this.rtlAdd()
       }
     },
-    changeColor (code) {
+    changeColor(code) {
       document.documentElement.style.setProperty('--iq-primary', code.primary)
       document.documentElement.style.setProperty('--iq-primary-light', code.primaryLight)
       if (this.darkMode) {
@@ -425,12 +425,12 @@ export default {
         document.documentElement.style.setProperty('--iq-bg-light-color', code.bodyBgLight)
       }
     },
-    reset () {
+    reset() {
       this.changeColor({ primary: '#827af3', primaryLight: '#b47af3', bodyBgLight: '#efeefd', bodyBgDark: '#1d203f' })
       this.animated = { enter: 'zoomIn', exit: 'zoomOut' }
       this.light()
     },
-    getUserLogin () {
+    getUserLogin() {
       sso().then(response => {
         if (typeof response !== 'string') {
           this.logedInUser = response
@@ -441,12 +441,12 @@ export default {
         }
       })
     },
-    userLogout () {
+    userLogout() {
       logout()
       this.logedInUser = {}
       this.$router.push({ name: 'auth1.sign-in' })
     },
-    filterMenu (sideBarItems) {
+    filterMenu(sideBarItems) {
       var rVal = []
       for (var menuCnt = 0; menuCnt < sideBarItems.length; menuCnt++) {
         if (this.permissionContains(sideBarItems[menuCnt].title)) {
@@ -464,14 +464,14 @@ export default {
       }
       return rVal
     },
-    permissionContains (resourceName) {
+    permissionContains(resourceName) {
       if (!this.logedInUser) return false
       for (var i = 0; i < this.logedInUser.permissions.length; i++) {
         if (this.logedInUser.permissions[i].resource_name === resourceName) return true
       }
       return false
     },
-    langChange (lang) {
+    langChange(lang) {
       this.langChangeState(lang)
       this.$i18n.locale = lang
       this.logedInUser.prm_locale = lang
@@ -487,9 +487,9 @@ export default {
     ...mapActions({
       langChangeState: 'Setting/setLangAction',
       rtlAdd: 'Setting/setRtlAction',
-      rtlRemove: 'Setting/removeRtlAction'
-    })
-  }
+      rtlRemove: 'Setting/removeRtlAction',
+    }),
+  },
 }
 </script>
 <style>

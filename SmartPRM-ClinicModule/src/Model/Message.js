@@ -1,7 +1,7 @@
 import { is } from 'ramda'
 
 export default class Message {
-  constructor (message = {}) {
+  constructor(message = {}) {
     this.id = is(Number, message.id) ? message.id : 0
     this.text = is(String, message.text) ? message.text : ''
     this.time = is(String, message.time) ? message.time : ''

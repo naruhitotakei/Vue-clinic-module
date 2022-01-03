@@ -108,7 +108,7 @@
 import { xray } from '../../config/pluginInit'
 import {
   getEnquiryById,
-  trashEnquiry
+  trashEnquiry,
 } from '../../services/enquiry'
 import { getDentists, getSurgeons, sso } from '../../services/userService'
 import moment from 'moment'
@@ -116,7 +116,7 @@ export default {
   components: {
   },
   name: 'Leads',
-  mounted () {
+  mounted() {
     xray.index()
     // this.getUserLogin()
     // this.getPatient(this.patientId)
@@ -128,7 +128,7 @@ export default {
     //   return this.patient.name + ' ' + this.patient.last_name
     // },
 
-    patientsDentist: function () {
+    patientsDentist: function() {
       if (this.dentists && Array.isArray(this.dentists) && this.dentists.length) {
         return this.dentists.find((item) => {
           return item.code === this.patient.prm_dentist_user_id
@@ -136,33 +136,33 @@ export default {
       }
       return null
     },
-    patientsSurgeon: function () {
+    patientsSurgeon: function() {
       if (this.surgeons && Array.isArray(this.surgeons)) {
         return this.surgeons.find((item) => {
           return item.code === this.patient.prm_surgeon_user_id
         })
       }
       return null
-    }
+    },
   },
-  data: function () {
+  data: function() {
     return {
       loggedInUser: null,
       modalTrashPatient: false,
       patient: {},
       dentists: [],
-      surgeons: []
+      surgeons: [],
     }
   },
   methods: {
-    getUserLogin () {
+    getUserLogin() {
       sso().then(response => {
         if (typeof response !== 'string') {
           this.loggedInUser = response
         }
       })
     },
-    getPatient (id) {
+    getPatient(id) {
       getEnquiryById(id).then(response => {
         this.patient = response[0]
         if (this.patient.date_of_birth !== null) {
@@ -174,21 +174,21 @@ export default {
       }
       )
     },
-    getDentists () {
+    getDentists() {
       getDentists().then(response => {
         this.dentists = response
       })
     },
-    getSurgeons () {
+    getSurgeons() {
       getSurgeons().then(response => {
         this.surgeons = response
       })
     },
-    trashPatient () {
+    trashPatient() {
       trashEnquiry(this.patientId).then(() => {
         this.$router.push({ path: `/patients` })
       })
-    }
-  }
+    },
+  },
 }
 </script>

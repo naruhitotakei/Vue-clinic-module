@@ -32,40 +32,40 @@ export default {
   props: {
     selectedServices: {
       type: Array,
-      default: () => []
+      default: () => [],
     },
     list: {
       type: Array,
-      default: () => []
+      default: () => [],
     },
     title: String,
-    tabId: String
+    tabId: String,
   },
-  data () {
+  data() {
     return {
       selectMode: 'single',
-      selected: []
+      selected: [],
     }
   },
   computed: {
-    fields () {
+    fields() {
       return [
         { key: 'serviceName', label: this.title, tdClass: 'w-50' },
         { key: 'time', label: this.$t('public.onlineBooking.time') },
         { key: 'price', label: this.$t('public.onlineBooking.price') },
-        { key: 'selected', label: ' ', tdClass: 'checkColumn' }
+        { key: 'selected', label: ' ', tdClass: 'checkColumn' },
       ]
-    }
+    },
   },
   methods: {
-    selectedRowHandler: function (data) {
+    selectedRowHandler: function(data) {
       this.selected = data
       this.$emit('row-selected')
     },
-    getSelectedItems: function () {
+    getSelectedItems: function() {
       return this.selected
     },
-    setSelectedItems: function () {
+    setSelectedItems: function() {
       const services = servicesList.find(serv => serv.title === this.title).list
       this.selectedServices.forEach(service => {
         const index = services.findIndex(searchedService => {
@@ -73,11 +73,11 @@ export default {
         })
         index !== -1 && this.$refs.selectableTable.selectRow(index)
       })
-    }
+    },
   },
-  mounted () {
+  mounted() {
     (!!this.$refs.selectableTable && !!this.selectedServices.length) && this.setSelectedItems()
-  }
+  },
 }
 </script>
 <style>

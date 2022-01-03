@@ -10,14 +10,14 @@ export default {
   components: {
   },
   name: 'MissingServices',
-  mounted () {
+  mounted() {
     xray.index()
   },
-  data: function () {
+  data: function() {
     return {
     }
   },
   methods: {
-  }
+  },
 }
 </script>

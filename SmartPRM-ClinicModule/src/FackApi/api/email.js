@@ -6,7 +6,7 @@ export const inboxEmailData = [
     title: 'Jopour Xiong (Me)',
     subject: 'Mackenzie Niko (@Mackenzieniko) has sent you a direct message on Twitter!  – ',
     emailTime: '08:00 am',
-    profileImage: require('./../../assets/images/user/1.jpg')
+    profileImage: require('./../../assets/images/user/1.jpg'),
   },
   {
     is_selected: false,
@@ -14,7 +14,7 @@ export const inboxEmailData = [
     favorite: false,
     title: 'Deray Billings',
     subject: 'Megan Allen (@meganallen) has sent you a direct message on Twitter!  ',
-    emailTime: '08:00 am'
+    emailTime: '08:00 am',
   },
   {
     is_selected: false,
@@ -22,7 +22,7 @@ export const inboxEmailData = [
     favorite: true,
     title: 'Lauren Drury (Me)',
     subject: 'Dixa Horton (@dixahorton) has sent you a direct message on Twitter!  ',
-    emailTime: '11:49 am'
+    emailTime: '11:49 am',
   },
   {
     is_selected: false,
@@ -30,7 +30,7 @@ export const inboxEmailData = [
     favorite: false,
     title: 'Fabian Ros (Me)',
     subject: 'Jecno Mac (@jecnomac) has sent you a direct message on Twitter!  ',
-    emailTime: '11:49 am'
+    emailTime: '11:49 am',
   },
   {
     is_selected: false,
@@ -38,7 +38,7 @@ export const inboxEmailData = [
     favorite: true,
     title: 'Megan Allen (Me)',
     subject: 'Eb Begg (@ebbegg) has sent you a direct message on Twitter!  ',
-    emailTime: '11:49 am'
+    emailTime: '11:49 am',
   },
   {
     is_selected: false,
@@ -46,7 +46,7 @@ export const inboxEmailData = [
     favorite: false,
     title: 'Jopour Xiong (Me)',
     subject: 'Mackenzie Niko (@mackenzieniko) has sent you a direct message on Twitter!  ',
-    emailTime: '11:49 am'
+    emailTime: '11:49 am',
   },
   {
     is_selected: false,
@@ -54,7 +54,7 @@ export const inboxEmailData = [
     favorite: true,
     title: 'Deray Billings (Me)',
     subject: 'Jecno Mac (@jecnomac) has sent you a direct message on Twitter!  ',
-    emailTime: '11:49 am'
+    emailTime: '11:49 am',
   },
   {
     is_selected: false,
@@ -62,7 +62,7 @@ export const inboxEmailData = [
     favorite: true,
     title: 'Deray Billings',
     subject: 'Megan Allen (@meganallen) has sent you a direct message on Twitter!  ',
-    emailTime: '08:00 am'
+    emailTime: '08:00 am',
   },
   {
     is_selected: false,
@@ -70,7 +70,7 @@ export const inboxEmailData = [
     favorite: true,
     title: 'Lauren Drury (Me)',
     subject: 'Dixa Horton (@dixahorton) has sent you a direct message on Twitter!  ',
-    emailTime: '11:49 am'
+    emailTime: '11:49 am',
   },
   {
     is_selected: false,
@@ -78,7 +78,7 @@ export const inboxEmailData = [
     favorite: false,
     title: 'Fabian Ros (Me)',
     subject: 'Jecno Mac (@jecnomac) has sent you a direct message on Twitter!  ',
-    emailTime: '11:49 am'
+    emailTime: '11:49 am',
   },
   {
     is_selected: false,
@@ -86,7 +86,7 @@ export const inboxEmailData = [
     favorite: false,
     title: 'Megan Allen (Me)',
     subject: 'Eb Begg (@ebbegg) has sent you a direct message on Twitter!  ',
-    emailTime: '11:49 am'
+    emailTime: '11:49 am',
   },
   {
     is_selected: false,
@@ -94,7 +94,7 @@ export const inboxEmailData = [
     favorite: false,
     title: 'Jopour Xiong (Me)',
     subject: 'Mackenzie Niko (@mackenzieniko) has sent you a direct message on Twitter!  ',
-    emailTime: '11:49 am'
+    emailTime: '11:49 am',
   },
   {
     is_selected: false,
@@ -102,8 +102,8 @@ export const inboxEmailData = [
     favorite: false,
     title: 'Deray Billings (Me)',
     subject: 'Jecno Mac (@jecnomac) has sent you a direct message on Twitter!  ',
-    emailTime: '11:49 am'
-  }
+    emailTime: '11:49 am',
+  },
 ]
 
 export const starredEmailsData = [
@@ -113,7 +113,7 @@ export const starredEmailsData = [
     favorite: false,
     title: 'Deray Billings (Me)',
     subject: 'Jecno Mac (@jecnomac) has sent you a direct message on Twitter!  ',
-    emailTime: '11:49 am'
+    emailTime: '11:49 am',
   },
   {
     is_selected: false,
@@ -121,7 +121,7 @@ export const starredEmailsData = [
     favorite: false,
     title: 'Deray Billings',
     subject: 'Megan Allen (@meganallen) has sent you a direct message on Twitter!  ',
-    emailTime: '08:00 am'
+    emailTime: '08:00 am',
   },
   {
     is_selected: false,
@@ -129,7 +129,7 @@ export const starredEmailsData = [
     favorite: false,
     title: 'Lauren Drury (Me)',
     subject: 'Dixa Horton (@dixahorton) has sent you a direct message on Twitter!  ',
-    emailTime: '11:49 am'
+    emailTime: '11:49 am',
   },
   {
     is_selected: false,
@@ -137,7 +137,7 @@ export const starredEmailsData = [
     favorite: false,
     title: 'Fabian Ros (Me)',
     subject: 'Jecno Mac (@jecnomac) has sent you a direct message on Twitter!  ',
-    emailTime: '11:49 am'
+    emailTime: '11:49 am',
   },
   {
     is_selected: false,
@@ -145,7 +145,7 @@ export const starredEmailsData = [
     favorite: false,
     title: 'Megan Allen (Me)',
     subject: 'Eb Begg (@ebbegg) has sent you a direct message on Twitter!  ',
-    emailTime: '11:49 am'
+    emailTime: '11:49 am',
   },
   {
     is_selected: false,
@@ -153,7 +153,7 @@ export const starredEmailsData = [
     favorite: false,
     title: 'Jopour Xiong (Me)',
     subject: 'Mackenzie Niko (@mackenzieniko) has sent you a direct message on Twitter!  ',
-    emailTime: '11:49 am'
+    emailTime: '11:49 am',
   },
   {
     is_selected: false,
@@ -161,8 +161,8 @@ export const starredEmailsData = [
     favorite: false,
     title: 'Deray Billings (Me)',
     subject: 'Jecno Mac (@jecnomac) has sent you a direct message on Twitter!  ',
-    emailTime: '11:49 am'
-  }
+    emailTime: '11:49 am',
+  },
 ]
 
 export const deletedEmailsData = [
@@ -172,7 +172,7 @@ export const deletedEmailsData = [
     favorite: false,
     title: 'Megan Allen (Me)',
     subject: 'Eb Begg (@ebbegg) has sent you a direct message on Twitter!  ',
-    emailTime: '11:49 am'
+    emailTime: '11:49 am',
   },
   {
     is_selected: false,
@@ -180,7 +180,7 @@ export const deletedEmailsData = [
     favorite: false,
     title: 'Jopour Xiong (Me)',
     subject: 'Mackenzie Niko (@mackenzieniko) has sent you a direct message on Twitter!  ',
-    emailTime: '11:49 am'
+    emailTime: '11:49 am',
   },
   {
     is_selected: false,
@@ -188,7 +188,7 @@ export const deletedEmailsData = [
     favorite: false,
     title: 'Deray Billings (Me)',
     subject: 'Jecno Mac (@jecnomac) has sent you a direct message on Twitter!  ',
-    emailTime: '11:49 am'
+    emailTime: '11:49 am',
   },
   {
     is_selected: false,
@@ -196,7 +196,7 @@ export const deletedEmailsData = [
     favorite: false,
     title: 'Fabian Ros (Me)',
     subject: 'Jecno Mac (@jecnomac) has sent you a direct message on Twitter!  ',
-    emailTime: '11:49 am'
+    emailTime: '11:49 am',
   },
   {
     is_selected: false,
@@ -204,7 +204,7 @@ export const deletedEmailsData = [
     favorite: false,
     title: 'Deray Billings (Me)',
     subject: 'Jecno Mac (@jecnomac) has sent you a direct message on Twitter!  ',
-    emailTime: '11:49 am'
+    emailTime: '11:49 am',
   },
   {
     is_selected: false,
@@ -212,7 +212,7 @@ export const deletedEmailsData = [
     favorite: false,
     title: 'Deray Billings',
     subject: 'Megan Allen (@meganallen) has sent you a direct message on Twitter!  ',
-    emailTime: '08:00 am'
+    emailTime: '08:00 am',
   },
   {
     is_selected: false,
@@ -220,7 +220,7 @@ export const deletedEmailsData = [
     favorite: false,
     title: 'Lauren Drury (Me)',
     subject: 'Dixa Horton (@dixahorton) has sent you a direct message on Twitter!  ',
-    emailTime: '11:49 am'
+    emailTime: '11:49 am',
   },
   {
     is_selected: false,
@@ -228,7 +228,7 @@ export const deletedEmailsData = [
     favorite: false,
     title: 'Fabian Ros (Me)',
     subject: 'Jecno Mac (@jecnomac) has sent you a direct message on Twitter!  ',
-    emailTime: '11:49 am'
+    emailTime: '11:49 am',
   },
   {
     is_selected: false,
@@ -236,8 +236,8 @@ export const deletedEmailsData = [
     favorite: false,
     title: 'Megan Allen (Me)',
     subject: 'Eb Begg (@ebbegg) has sent you a direct message on Twitter!  ',
-    emailTime: '11:49 am'
-  }
+    emailTime: '11:49 am',
+  },
 ]
 
 export const spamEmailsData = [
@@ -247,7 +247,7 @@ export const spamEmailsData = [
     favorite: false,
     title: 'Deray Billings',
     subject: 'Megan Allen (@meganallen) has sent you a direct message on Twitter!  ',
-    emailTime: '08:00 am'
+    emailTime: '08:00 am',
   },
   {
     is_selected: false,
@@ -255,7 +255,7 @@ export const spamEmailsData = [
     favorite: false,
     title: 'Lauren Drury (Me)',
     subject: 'Dixa Horton (@dixahorton) has sent you a direct message on Twitter!  ',
-    emailTime: '11:49 am'
+    emailTime: '11:49 am',
   },
   {
     is_selected: false,
@@ -263,7 +263,7 @@ export const spamEmailsData = [
     favorite: false,
     title: 'Fabian Ros (Me)',
     subject: 'Jecno Mac (@jecnomac) has sent you a direct message on Twitter!  ',
-    emailTime: '11:49 am'
+    emailTime: '11:49 am',
   },
   {
     is_selected: false,
@@ -271,7 +271,7 @@ export const spamEmailsData = [
     favorite: false,
     title: 'Megan Allen (Me)',
     subject: 'Eb Begg (@ebbegg) has sent you a direct message on Twitter!  ',
-    emailTime: '11:49 am'
+    emailTime: '11:49 am',
   },
   {
     is_selected: false,
@@ -279,7 +279,7 @@ export const spamEmailsData = [
     favorite: false,
     title: 'Jopour Xiong (Me)',
     subject: 'Mackenzie Niko (@mackenzieniko) has sent you a direct message on Twitter!  ',
-    emailTime: '11:49 am'
+    emailTime: '11:49 am',
   },
   {
     is_selected: false,
@@ -287,7 +287,7 @@ export const spamEmailsData = [
     favorite: false,
     title: 'Deray Billings (Me)',
     subject: 'Jecno Mac (@jecnomac) has sent you a direct message on Twitter!  ',
-    emailTime: '11:49 am'
+    emailTime: '11:49 am',
   },
   {
     is_selected: false,
@@ -295,7 +295,7 @@ export const spamEmailsData = [
     favorite: false,
     title: 'Deray Billings',
     subject: 'Megan Allen (@meganallen) has sent you a direct message on Twitter!  ',
-    emailTime: '08:00 am'
+    emailTime: '08:00 am',
   },
   {
     is_selected: false,
@@ -303,8 +303,8 @@ export const spamEmailsData = [
     favorite: false,
     title: 'Lauren Drury (Me)',
     subject: 'Dixa Horton (@dixahorton) has sent you a direct message on Twitter!  ',
-    emailTime: '11:49 am'
-  }
+    emailTime: '11:49 am',
+  },
 ]
 
 export const draftEmailsData = [
@@ -314,7 +314,7 @@ export const draftEmailsData = [
     favorite: false,
     title: 'Deray Billings',
     subject: 'Megan Allen (@meganallen) has sent you a direct message on Twitter!  ',
-    emailTime: '08:00 am'
+    emailTime: '08:00 am',
   },
   {
     is_selected: false,
@@ -322,7 +322,7 @@ export const draftEmailsData = [
     favorite: false,
     title: 'Lauren Drury (Me)',
     subject: 'Dixa Horton (@dixahorton) has sent you a direct message on Twitter!  ',
-    emailTime: '11:49 am'
+    emailTime: '11:49 am',
   },
   {
     is_selected: false,
@@ -330,7 +330,7 @@ export const draftEmailsData = [
     favorite: false,
     title: 'Fabian Ros (Me)',
     subject: 'Jecno Mac (@jecnomac) has sent you a direct message on Twitter!  ',
-    emailTime: '11:49 am'
+    emailTime: '11:49 am',
   },
   {
     is_selected: false,
@@ -338,7 +338,7 @@ export const draftEmailsData = [
     favorite: false,
     title: 'Megan Allen (Me)',
     subject: 'Eb Begg (@ebbegg) has sent you a direct message on Twitter!  ',
-    emailTime: '11:49 am'
+    emailTime: '11:49 am',
   },
   {
     is_selected: false,
@@ -346,8 +346,8 @@ export const draftEmailsData = [
     favorite: false,
     title: 'Jopour Xiong (Me)',
     subject: 'Mackenzie Niko (@mackenzieniko) has sent you a direct message on Twitter!  ',
-    emailTime: '11:49 am'
-  }
+    emailTime: '11:49 am',
+  },
 ]
 
 export const sendEmailData = [
@@ -357,7 +357,7 @@ export const sendEmailData = [
     favorite: false,
     title: 'Lauren Drury (Me)',
     subject: 'Dixa Horton (@dixahorton) has sent you a direct message on Twitter!  ',
-    emailTime: '11:49 am'
+    emailTime: '11:49 am',
   },
   {
     is_selected: false,
@@ -365,7 +365,7 @@ export const sendEmailData = [
     favorite: false,
     title: 'Fabian Ros (Me)',
     subject: 'Jecno Mac (@jecnomac) has sent you a direct message on Twitter!  ',
-    emailTime: '11:49 am'
+    emailTime: '11:49 am',
   },
   {
     is_selected: false,
@@ -373,7 +373,7 @@ export const sendEmailData = [
     favorite: false,
     title: 'Megan Allen (Me)',
     subject: 'Eb Begg (@ebbegg) has sent you a direct message on Twitter!  ',
-    emailTime: '11:49 am'
+    emailTime: '11:49 am',
   },
   {
     is_selected: false,
@@ -381,7 +381,7 @@ export const sendEmailData = [
     favorite: false,
     title: 'Jopour Xiong (Me)',
     subject: 'Mackenzie Niko (@mackenzieniko) has sent you a direct message on Twitter!  ',
-    emailTime: '11:49 am'
+    emailTime: '11:49 am',
   },
   {
     is_selected: false,
@@ -389,7 +389,7 @@ export const sendEmailData = [
     favorite: false,
     title: 'Deray Billings (Me)',
     subject: 'Jecno Mac (@jecnomac) has sent you a direct message on Twitter!  ',
-    emailTime: '11:49 am'
+    emailTime: '11:49 am',
   },
   {
     is_selected: false,
@@ -397,7 +397,7 @@ export const sendEmailData = [
     favorite: false,
     title: 'Deray Billings',
     subject: 'Megan Allen (@meganallen) has sent you a direct message on Twitter!  ',
-    emailTime: '08:00 am'
+    emailTime: '08:00 am',
   },
   {
     is_selected: false,
@@ -405,7 +405,7 @@ export const sendEmailData = [
     favorite: false,
     title: 'Lauren Drury (Me)',
     subject: 'Dixa Horton (@dixahorton) has sent you a direct message on Twitter!  ',
-    emailTime: '11:49 am'
+    emailTime: '11:49 am',
   },
   {
     is_selected: false,
@@ -413,7 +413,7 @@ export const sendEmailData = [
     favorite: false,
     title: 'Deray Billings',
     subject: 'Megan Allen (@meganallen) has sent you a direct message on Twitter!  ',
-    emailTime: '08:00 am'
+    emailTime: '08:00 am',
   },
   {
     is_selected: false,
@@ -421,7 +421,7 @@ export const sendEmailData = [
     favorite: false,
     title: 'Jopour Xiong (Me)',
     subject: 'Mackenzie Niko (@mackenzieniko) has sent you a direct message on Twitter!  ',
-    emailTime: '11:49 am'
+    emailTime: '11:49 am',
   },
   {
     is_selected: false,
@@ -429,7 +429,7 @@ export const sendEmailData = [
     favorite: false,
     title: 'Deray Billings (Me)',
     subject: 'Jecno Mac (@jecnomac) has sent you a direct message on Twitter!  ',
-    emailTime: '11:49 am'
+    emailTime: '11:49 am',
   },
   {
     is_selected: false,
@@ -437,7 +437,7 @@ export const sendEmailData = [
     favorite: false,
     title: 'Lauren Drury (Me)',
     subject: 'Dixa Horton (@dixahorton) has sent you a direct message on Twitter!  ',
-    emailTime: '11:49 am'
+    emailTime: '11:49 am',
   },
   {
     is_selected: false,
@@ -445,7 +445,7 @@ export const sendEmailData = [
     favorite: false,
     title: 'Fabian Ros (Me)',
     subject: 'Jecno Mac (@jecnomac) has sent you a direct message on Twitter!  ',
-    emailTime: '11:49 am'
+    emailTime: '11:49 am',
   },
   {
     is_selected: false,
@@ -453,7 +453,7 @@ export const sendEmailData = [
     favorite: false,
     title: 'Megan Allen (Me)',
     subject: 'Eb Begg (@ebbegg) has sent you a direct message on Twitter!  ',
-    emailTime: '11:49 am'
+    emailTime: '11:49 am',
   },
   {
     is_selected: false,
@@ -461,7 +461,7 @@ export const sendEmailData = [
     favorite: false,
     title: 'Jopour Xiong (Me)',
     subject: 'Mackenzie Niko (@mackenzieniko) has sent you a direct message on Twitter!  ',
-    emailTime: '11:49 am'
+    emailTime: '11:49 am',
   },
   {
     is_selected: false,
@@ -469,6 +469,6 @@ export const sendEmailData = [
     favorite: false,
     title: 'Deray Billings (Me)',
     subject: 'Jecno Mac (@jecnomac) has sent you a direct message on Twitter!  ',
-    emailTime: '11:49 am'
-  }
+    emailTime: '11:49 am',
+  },
 ]

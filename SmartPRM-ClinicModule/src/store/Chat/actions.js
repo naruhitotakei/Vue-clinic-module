@@ -1,14 +1,14 @@
 export default {
-  listAction (context, payload) {
+  listAction(context, payload) {
     return new Promise((resolve, reject) => {
       context.commit('listCommit', payload)
       resolve()
     })
   },
-  videoCallAction (context, payload) {
+  videoCallAction(context, payload) {
     return new Promise((resolve, reject) => {
       context.commit('videoCallCommit', payload)
       resolve()
     })
-  }
+  },
 }

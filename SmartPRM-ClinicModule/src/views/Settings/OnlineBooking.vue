@@ -140,14 +140,14 @@ export default {
   name: 'OnlineBooking',
   components: {
   },
-  mounted () {
+  mounted() {
     xray.index()
     this.getOnlineBookingProducts(this.$i18n.locale)
     this.getDoctors()
     this.getOnlineBookingProductGroups(this.$i18n.locale)
     this.getPremises()
   },
-  data: function () {
+  data: function() {
     return {
       onlineBookingProducts: [],
       isProductDataLoaded: false,
@@ -162,7 +162,7 @@ export default {
         default_duration: '',
         doctor_id: '',
         product_group_id: '',
-        premise_id: ''
+        premise_id: '',
       },
       doctors: [],
       productGroups: [],
@@ -174,42 +174,42 @@ export default {
         { label: this.$t('onlineBooking.onlineBookingColumns.doctor'), key: 'doctor_name', class: 'text-left' },
         { label: this.$t('onlineBooking.onlineBookingColumns.productGroup'), key: 'product_group_text', class: 'text-left' },
         { label: this.$t('onlineBooking.onlineBookingColumns.premise'), key: 'premise_name', class: 'text-left' },
-        { label: this.$t('onlineBooking.onlineBookingColumns.action'), key: 'action', class: 'text-center' }
+        { label: this.$t('onlineBooking.onlineBookingColumns.action'), key: 'action', class: 'text-center' },
       ],
-      modalServiceShow: false
+      modalServiceShow: false,
     }
   },
   computed: {
-    hideProductsPagination () {
+    hideProductsPagination() {
       return Math.floor(this.onlineBookingProducts.length / this.productsPerPage) !== 0
     },
-    isServiceDisabled () {
+    isServiceDisabled() {
       return !this.onlineBookingData.slovenian || !this.onlineBookingData.default_online_price || !this.onlineBookingData.default_duration || !this.onlineBookingData.doctor_id || !this.onlineBookingData.product_group_id || !this.onlineBookingData.premise_id
-    }
+    },
   },
   methods: {
-    getOnlineBookingProducts (locale) {
+    getOnlineBookingProducts(locale) {
       getOnlineBookingProducts(locale).then(response => {
         this.onlineBookingProducts = response
         this.isProductDataLoaded = true
       })
     },
-    getDoctors () {
+    getDoctors() {
       getDoctorList().then(response => {
         this.doctors = response
       })
     },
-    getOnlineBookingProductGroups (lang) {
+    getOnlineBookingProductGroups(lang) {
       getOnlineBookingProductGroups(lang).then(response => {
         this.productGroups = response
       })
     },
-    getPremises () {
+    getPremises() {
       getPremises().then(response => {
         this.premises = response
       })
     },
-    defaultOnlineBookingData () {
+    defaultOnlineBookingData() {
       return {
         id: '',
         slovenian: '',
@@ -219,13 +219,13 @@ export default {
         default_duration: '',
         doctor_id: '',
         product_group_id: '',
-        premise_id: ''
+        premise_id: '',
       }
     },
-    cancelService () {
+    cancelService() {
       this.onlineBookingData = this.defaultOnlineBookingData()
     },
-    addService () {
+    addService() {
       if (this.onlineBookingData.id) {
         updateOnlineBookingService(this.onlineBookingData.id, this.onlineBookingData).then(() => {
           this.getOnlineBookingProducts(this.$i18n.locale)
@@ -237,12 +237,12 @@ export default {
       }
       this.onlineBookingData = this.defaultOnlineBookingData()
     },
-    removeService (item) {
+    removeService(item) {
       let index = this.onlineBookingProducts.indexOf(item)
       this.onlineBookingProducts.splice(index, 1)
       deleteOnlineBookingService(item.id)
     },
-    populateNaming (namingArray, object) {
+    populateNaming(namingArray, object) {
       namingArray.forEach(naming => {
         if (naming.language === 'sl') {
           object.slovenian = naming.text
@@ -254,13 +254,13 @@ export default {
       })
       return object
     },
-    openEditModal (item) {
+    openEditModal(item) {
       getOnlineBookingProductsNaming(item.id).then(response => {
         this.onlineBookingData = this.populateNaming(response, Object.assign({}, item))
       })
       this.modalServiceShow = true
-    }
-  }
+    },
+  },
 }
 </script>
 

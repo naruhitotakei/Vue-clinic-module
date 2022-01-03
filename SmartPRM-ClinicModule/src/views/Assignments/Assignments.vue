@@ -611,9 +611,9 @@ import AppMultiselect from '../Booking/components/Controls/AppMultiselect.vue'
 export default {
   name: 'Assignments',
   components: {
-    AppMultiselect
+    AppMultiselect,
   },
-  async mounted () {
+  async mounted() {
     xray.index()
     await this.getUserLogin()
     this.getDentists()
@@ -622,43 +622,43 @@ export default {
     this.getEnquires()
   },
   computed: {
-    getLocale () {
+    getLocale() {
       return this.$store.getters['Setting/langState'].value ? this.$store.getters['Setting/langState'].value : this.$store.getters['Setting/langState']
     },
-    isOkDisabled () {
+    isOkDisabled() {
       return !this.formData.due_at || !this.formData.description
     },
-    myTodayList () {
+    myTodayList() {
       return this.myTodayAssignments.slice(
         (this.myTodayCurrentPage - 1) * this.myTodayPerPage,
         this.myTodayCurrentPage * this.myTodayPerPage)
     },
-    otherUserTodayList () {
+    otherUserTodayList() {
       return this.todaysAssignments.slice(
         (this.todayCurrentPage - 1) * this.todayPerPage,
         this.todayCurrentPage * this.todayPerPage)
     },
-    myFutureList () {
+    myFutureList() {
       return this.myFutureAssignments.slice(
         (this.myFutureCurrentPage - 1) * this.myFuturePerPage,
         this.myFutureCurrentPage * this.myFuturePerPage)
     },
-    otherUserFutureList () {
+    otherUserFutureList() {
       return this.futureAssigments.slice(
         (this.futureCurrentPage - 1) * this.futurePerPage,
         this.futureCurrentPage * this.futurePerPage)
     },
-    otherUserOverDueList () {
+    otherUserOverDueList() {
       return this.overdueAssignments.slice(
         (this.overdueCurrentPage - 1) * this.overduePerPage,
         this.overdueCurrentPage * this.overduePerPage)
     },
-    myOverDueList () {
+    myOverDueList() {
       return this.myOverdueAssignments.slice(
         (this.myOverdueCurrentPage - 1) * this.myOverduePerPage,
         this.myOverdueCurrentPage * this.myOverduePerPage)
     },
-    filterOverdueByUser () {
+    filterOverdueByUser() {
       if (this.filterOverdue && this.filterOverdue.length) {
         let filteredAssignments = []
         this.filterOverdue.forEach(item => {
@@ -668,33 +668,33 @@ export default {
         return filteredAssignments
       }
       return this.overdueAssignments
-    }
+    },
   },
   watch: {
-    filterOverdue (val) {
+    filterOverdue(val) {
       if (val && val.length) {
         this.filterOverDueItems()
       } else {
         this.overdueAssignments = [...this.allOverdueAssignments]
       }
     },
-    filterFuture (val) {
+    filterFuture(val) {
       if (val && val.length) {
         this.filterFutureItems()
       } else {
         this.futureAssigments = [...this.allFutureAssignments]
       }
     },
-    filterToday (val) {
+    filterToday(val) {
       if (val && val.length) {
         this.filterTodayItems()
       } else {
         this.todaysAssignments = [...this.allTodayAssignments]
       }
-    }
+    },
   },
   methods: {
-    filterOverDueItems () {
+    filterOverDueItems() {
       if (this.filterOverdue && this.filterOverdue.length) {
         let filteredAssignments = []
         this.filterOverdue.forEach(item => {
@@ -706,7 +706,7 @@ export default {
         this.overdueAssignments = [...this.allOverdueAssignments]
       }
     },
-    filterFutureItems () {
+    filterFutureItems() {
       if (this.filterFuture && this.filterFuture.length) {
         let filteredAssignments = []
         this.filterFuture.forEach(item => {
@@ -718,7 +718,7 @@ export default {
         this.futureAssigments = [...this.allFutureAssignments]
       }
     },
-    filterTodayItems () {
+    filterTodayItems() {
       if (this.filterToday && this.filterToday.length) {
         let filteredAssignments = []
         this.filterToday.forEach(item => {
@@ -730,7 +730,7 @@ export default {
         this.todaysAssignments = [...this.allTodayAssignments]
       }
     },
-    editAssignments (assignment) {
+    editAssignments(assignment) {
       let enquiry = this.enquires.find(item => item.id === assignment.enquiry_id)
       let user = this.users.find(user => user.id === assignment.user_id)
       this.formData = {
@@ -738,11 +738,11 @@ export default {
         enquiry: enquiry,
         description: assignment.description,
         due_at: moment(assignment.due_at).format('YYYY-MM-DD'),
-        user_id: user
+        user_id: user,
       }
       this.modalAssigmentShow = true
     },
-    getUsersList () {
+    getUsersList() {
       getUsers().then(response => {
         if (response && Array.isArray(response)) {
           this.users = response
@@ -754,7 +754,7 @@ export default {
         }
       })
     },
-    getAssignments () {
+    getAssignments() {
       getAssignments('today').then(response => {
         // this.todaysAssignments = response
         // this.todaysTotalRows = response.length
@@ -798,7 +798,7 @@ export default {
         }
       })
     },
-    getCompletedAssignments () {
+    getCompletedAssignments() {
       if (this.myTodayAssignments.length) {
         const total = this.myTodayAssignments.length
         const completed = this.myTodayAssignments.filter(assignment => assignment.completed)
@@ -806,50 +806,50 @@ export default {
       }
       return null
     },
-    getUsersInPastAssignments () {
+    getUsersInPastAssignments() {
       this.pastAssignmentUsers = []
       this.pastAssignmentUsers = this.allOverdueAssignments
         .filter(item => item.todoname)
         .map(item => item.todoname)
       this.pastAssignmentUsers = [...new Set(this.pastAssignmentUsers)]
     },
-    getUsersInFutureAssignments () {
+    getUsersInFutureAssignments() {
       this.futureAssignmentUsers = []
       this.futureAssignmentUsers = this.allFutureAssignments
         .filter(item => item.todoname)
         .map(item => item.todoname && item.todoname)
       this.futureAssignmentUsers = [...new Set(this.futureAssignmentUsers)]
     },
-    getUsersInTodayAssignments () {
+    getUsersInTodayAssignments() {
       this.todayAssignmentUsers = []
       this.todayAssignmentUsers = this.allTodayAssignments
         .filter(item => item.todoname)
         .map(item => item.todoname && item.todoname)
       this.todayAssignmentUsers = [...new Set(this.todayAssignmentUsers)]
     },
-    setMyFutureAssignments (assignments) {
+    setMyFutureAssignments(assignments) {
       let filtered = assignments.filter(assignment => assignment.user_id === this.formData.user_id)
       this.myFutureAssignments = filtered
       this.myFutureTotalRows = filtered.length
     },
-    setOtherUsersFutureAssignments (assignments) {
+    setOtherUsersFutureAssignments(assignments) {
       let filtered = assignments.filter(assignment => assignment.user_id !== this.formData.user_id)
       this.futureAssigments = filtered
       this.allFutureAssignments = filtered
       this.futureTotalRows = filtered.length
     },
-    setMyTodayAssignments (assignments) {
+    setMyTodayAssignments(assignments) {
       let filtered = assignments.filter(assignment => assignment.user_id === this.formData.user_id)
       this.myTodayAssignments = filtered
       this.myTodaysTotalRows = filtered.length
     },
-    setOtherUserTodayAssignments (assignments) {
+    setOtherUserTodayAssignments(assignments) {
       let filtered = assignments.filter(assignment => assignment.user_id !== this.formData.user_id)
       this.todaysAssignments = filtered
       this.allTodayAssignments = filtered
       this.todaysTotalRows = filtered.length
     },
-    setOtherUsersOverdueAssignments (assignments) {
+    setOtherUsersOverdueAssignments(assignments) {
       // let res = []
       let filtered = assignments.filter(assignment => assignment.user_id !== this.formData.user_id)
       // if (filtered.length > 10) {
@@ -864,7 +864,7 @@ export default {
       this.allOverdueAssignments = [...filtered]
       this.overdueTotalRows = filtered.length
     },
-    setMyOverdueAssignments (assignments) {
+    setMyOverdueAssignments(assignments) {
       let res = []
       let filtered = assignments.filter(assignment => assignment.user_id === this.formData.user_id)
       if (filtered > 10) {
@@ -878,11 +878,11 @@ export default {
       this.myOverdueAssignments = res
       this.myOverdueTotalRows = filtered.length
     },
-    openWarningModal (id, event, from) {
+    openWarningModal(id, event, from) {
       this.assignmentToEdit = { id, event, from }
       this.warningModal = true
     },
-    async closeWarningModal () {
+    async closeWarningModal() {
       if (this.assignmentToEdit) {
         console.log(this.assignmentToEdit)
         let array = []
@@ -921,13 +921,13 @@ export default {
         this.warningModal = false
       }
     },
-    changeAssignmentStatus () {
+    changeAssignmentStatus() {
       if (this.assignmentToEdit) {
         this.finishAssignment(this.assignmentToEdit.id, this.assignmentToEdit.event, this.assignmentToEdit.from)
       }
       this.warningModal = false
     },
-    finishAssignment (id, finished, from) {
+    finishAssignment(id, finished, from) {
       const completedBy = this.userId
       finishAssignment(id, finished, completedBy).then(response => {
         this.assignmentToEdit = null
@@ -949,7 +949,7 @@ export default {
         }
       })
     },
-    getEnquires () {
+    getEnquires() {
       getEnquires().then(response => {
         let enquires = [...response]
         enquires.map((item, index) => {
@@ -958,14 +958,14 @@ export default {
         this.enquires = enquires
       })
     },
-    getDifferenceDate (date) {
+    getDifferenceDate(date) {
       return Math.floor((Date.parse(new Date(Date.now())) - Date.parse(date)) / 86400000)
     },
-    addNewAssignment () {
+    addNewAssignment() {
       this.formData.user_id = null
       this.modalAssigmentShow = true
     },
-    addAssignments () {
+    addAssignments() {
       if (this.formData.id) {
         let data = Object.assign({}, this.formData)
         if (typeof this.formData.user_id === 'object') {
@@ -988,19 +988,19 @@ export default {
         })
       }
     },
-    defaultFormData () {
+    defaultFormData() {
       return {
         enquiry: null,
         description: '',
         due_at: null,
-        user_id: 0
+        user_id: 0,
       }
     },
-    cancelAssignments () {
+    cancelAssignments() {
       this.formData = this.defaultFormData()
       this.getUserLogin()
     },
-    getUserLogin () {
+    getUserLogin() {
       sso().then(response => {
         if (typeof response !== 'string') {
           this.formData.user_id = response.id
@@ -1008,21 +1008,21 @@ export default {
         }
       })
     },
-    getDentists () {
+    getDentists() {
       getDentists().then(response => {
         this.dentists = response
       })
     },
-    patientsDentist (patient) {
+    patientsDentist(patient) {
       if (this.dentists && this.dentists.length) {
         let dentist = this.dentists.find((item) => {
           return item.code === patient.prm_dentist_user_id
         })
         return dentist && dentist.label
       }
-    }
+    },
   },
-  data () {
+  data() {
     return {
       disabled: false,
       userId: null,
@@ -1075,20 +1075,20 @@ export default {
       users: [],
       bool: [
         { label: 'Completed', checked: true },
-        { label: 'Completed', checked: false }
+        { label: 'Completed', checked: false },
       ],
       state: [
         { label: 'False/Inactive', checked: false, disabled: false },
-        { label: 'True/Active', checked: true, disabled: false }
+        { label: 'True/Active', checked: true, disabled: false },
       ],
       formData: {
         id: 0,
         enquiry: {},
         description: '',
         due_at: null,
-        user_id: 0
-      }
+        user_id: 0,
+      },
     }
-  }
+  },
 }
 </script>

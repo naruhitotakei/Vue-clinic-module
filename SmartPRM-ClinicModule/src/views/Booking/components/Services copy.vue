@@ -21,20 +21,20 @@
 import { serviceData } from '../booking-data'
 export default {
   name: 'Services',
-  data () {
+  data() {
     return {
       checked: true,
       indeterminate: true,
-      serviceData: serviceData
+      serviceData: serviceData,
       // consultation: consultation,
       // services: services
     }
   },
   methods: {
-    toggleIndeterminate () {
+    toggleIndeterminate() {
       this.indeterminate = !this.indeterminate
-    }
-  }
+    },
+  },
 }
 </script>
 <style lang="scss" scoped>

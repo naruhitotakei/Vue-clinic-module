@@ -8,21 +8,21 @@ export default {
   props: {
     option: {
       type: Object,
-      required: true
+      required: true,
     },
     className: {
       type: String,
-      default: 'bodymovin'
-    }
+      default: 'bodymovin',
+    },
   },
-  mounted () {
+  mounted() {
     lottie.loadAnimation({
       container: this.$refs.lavContainer,
       renderer: 'svg',
       loop: true,
       autoplay: true,
-      animationData: this.option
+      animationData: this.option,
     })
-  }
+  },
 }
 </script>

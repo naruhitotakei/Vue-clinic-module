@@ -31,28 +31,28 @@ export default defineComponent({
   props: {
     appointmentSlot: {
       type: Object,
-      default: null
+      default: null,
     },
     doctors: Array,
-    activeDoctor: Object
+    activeDoctor: Object,
   },
-  data: function () {
+  data: function() {
     return {
       contentHeight: 0,
-      expanded: false
+      expanded: false,
     }
   },
-  mounted () {
+  mounted() {
     this.setContentHeight(this.$refs.timeRow.offsetHeight)
   },
-  updated () {
+  updated() {
     this.setContentHeight(this.$refs.timeRow.offsetHeight)
   },
   methods: {
-    setContentHeight: function (height) {
+    setContentHeight: function(height) {
       (this.contentHeight !== height) && (this.contentHeight = height)
-    }
-  }
+    },
+  },
 })
 </script>
 

@@ -74,40 +74,40 @@ export default {
   name: 'TreeView',
   props: ['item', 'isOpened'],
   comments: {
-    TreeView
+    TreeView,
   },
-  data () {
+  data() {
     return {
-      isOpen: !!this.isOpened
+      isOpen: !!this.isOpened,
     }
   },
   computed: {
-    isFolder: function () {
+    isFolder: function() {
       return this.item.children &&
           this.item.children.length
     },
-    hasGroupOpenSlot () {
+    hasGroupOpenSlot() {
       return !!this.$slots.groupOpened
     },
-    hasGroupCloseSlot () {
+    hasGroupCloseSlot() {
       return !!this.$slots.groupClosed
     },
-    hasItemSlot () {
+    hasItemSlot() {
       return !!this.$slots.item
-    }
+    },
   },
   methods: {
-    toggle: function () {
+    toggle: function() {
       if (this.isFolder) {
         this.isOpen = !this.isOpen
       }
     },
-    makeFolder: function () {
+    makeFolder: function() {
       if (!this.isFolder) {
         this.$emit('make-folder', this.item)
         this.isOpen = true
       }
-    }
-  }
+    },
+  },
 }
 </script>

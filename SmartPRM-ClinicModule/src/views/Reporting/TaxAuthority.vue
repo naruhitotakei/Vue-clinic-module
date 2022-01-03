@@ -11,14 +11,14 @@ export default {
   components: {
   },
   name: 'TaxAuthority',
-  data: function () {
+  data: function() {
     return {
     }
   },
   methods: {
   },
-  mounted () {
+  mounted() {
     xray.index()
-  }
+  },
 }
 </script>

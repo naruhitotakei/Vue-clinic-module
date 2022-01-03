@@ -18,6 +18,6 @@
 </template>
 <script>
 export default {
-  name: 'RecoverPassword1'
+  name: 'RecoverPassword1',
 }
 </script>

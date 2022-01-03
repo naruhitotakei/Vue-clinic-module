@@ -70,23 +70,23 @@ export default {
   components: { IqCard },
   props: {
     start: String,
-    end: String
+    end: String,
   },
   watch: {
-    start (val) {
+    start(val) {
       if (val) {
         this.startDate = val
         this.onDateChange()
       }
     },
-    end (val) {
+    end(val) {
       if (val) {
         this.endDate = val
         this.onDateChange()
       }
-    }
+    },
   },
-  created () {
+  created() {
     if (this.start && this.end) {
       this.startDate = this.start
       this.endDate = this.end
@@ -99,12 +99,12 @@ export default {
     //     this.getClinicLeadStats(this.leadStartDate, this.leadEndDate)
     //   }
     // },
-    onDateChange () {
+    onDateChange() {
       if (this.startDate && this.endDate) {
         this.getClinicLeadStats(this.startDate, this.endDate)
       }
     },
-    getClinicLeadStats (start, end) {
+    getClinicLeadStats(start, end) {
       this.loading = true
       this.noData = false
       getLeadsPerDay(start, end).then(response => {
@@ -120,7 +120,7 @@ export default {
         this.loading = false
       })
     },
-    setDataForChart (data) {
+    setDataForChart(data) {
       let datesArray = []
       let sumByCountry = []
       let countries = []
@@ -166,31 +166,31 @@ export default {
               zoom: false,
               zoomin: false,
               zoomout: false,
-              pan: false
+              pan: false,
             },
             export: {
               csv: {
                 filename: 'Leads Statistics',
-                dateFormatter (timestamp) {
+                dateFormatter(timestamp) {
                   return new Date(timestamp).toDateString()
-                }
-              }
-            }
-          }
+                },
+              },
+            },
+          },
         },
         legend: {
-          position: 'right'
+          position: 'right',
         },
         xaxis: {
           type: 'datetime',
-          categories: datesArray
-        }
+          categories: datesArray,
+        },
       }
 
       this.prepareDataForExport(data, countries)
     },
 
-    prepareDataForExport (data, countries) {
+    prepareDataForExport(data, countries) {
       // Get Data for export
       if (Array.isArray(data) && Array.isArray(countries)) {
         countries.forEach(country => {
@@ -200,9 +200,9 @@ export default {
           this.dataToExport.push({ country, enquiries: sum.toLocaleString() })
         })
       }
-    }
+    },
   },
-  data () {
+  data() {
     return {
       startDate: null,
       endDate: null,
@@ -211,11 +211,11 @@ export default {
       dataToExport: [],
       excelColumns: [
         { label: 'Country', field: 'country' },
-        { label: 'Enquiries', field: 'enquiries' }
+        { label: 'Enquiries', field: 'enquiries' },
       ],
       series: [{
         name: 'Leads By Day',
-        data: []
+        data: [],
       }],
       chartOptions: {
         chart: {
@@ -226,9 +226,9 @@ export default {
             show: true,
             tools: {
               pan: false,
-              zoom: false
-            }
-          }
+              zoom: false,
+            },
+          },
         },
         // responsive: [{
         //   breakpoint: 480,
@@ -243,37 +243,37 @@ export default {
         plotOptions: {
           bar: {
             horizontal: false,
-            borderRadius: 10
-          }
+            borderRadius: 10,
+          },
         },
         yaxis: {
           title: {
-            text: 'Lead Statistics'
+            text: 'Lead Statistics',
           },
           labels: {
-            formatter: function (y) {
+            formatter: function(y) {
               return y.toLocaleString()
-            }
-          }
+            },
+          },
         },
         xaxis: {
           type: 'datetime',
           categories: [],
           labels: {
-            formatter: function (value, timestamp) {
+            formatter: function(value, timestamp) {
               return moment(timestamp).format('ll')
-            }
-          }
+            },
+          },
         },
         legend: {
           position: 'right',
-          offsetY: 40
+          offsetY: 40,
         },
         fill: {
-          opacity: 1
-        }
-      }
+          opacity: 1,
+        },
+      },
     }
-  }
+  },
 }
 </script>

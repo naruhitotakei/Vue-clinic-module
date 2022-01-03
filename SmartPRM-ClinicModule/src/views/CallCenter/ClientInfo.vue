@@ -10,14 +10,14 @@ export default {
   components: {
   },
   name: 'ClientInfo',
-  mounted () {
+  mounted() {
     xray.index()
   },
-  data: function () {
+  data: function() {
     return {
     }
   },
   methods: {
-  }
+  },
 }
 </script>

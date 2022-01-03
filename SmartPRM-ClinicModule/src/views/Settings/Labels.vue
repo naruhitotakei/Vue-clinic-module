@@ -90,18 +90,18 @@ import { Chrome } from 'vue-color'
 
 export default {
   components: {
-    'chrome-picker': Chrome
+    'chrome-picker': Chrome,
   },
   name: 'Labels',
-  mounted () {
+  mounted() {
     xray.index()
     this.getLabels(this.$i18n.locale)
   },
-  data: function () {
+  data: function() {
     return {
       columns: [
         { label: this.$t('labels.labelsColumns.labelText'), key: 'text', class: 'text-left' },
-        { label: this.$t('labels.labelsColumns.labelColor'), key: 'color', class: 'text-left' }
+        { label: this.$t('labels.labelsColumns.labelColor'), key: 'color', class: 'text-left' },
         // { label: this.$t('labels.labelsColumns.labelAction'), key: 'action', class: 'text-center action-column' }
       ],
       labels: [],
@@ -110,22 +110,22 @@ export default {
       formData: {
         id: '',
         text: '',
-        color: ''
-      }
+        color: '',
+      },
     }
   },
   watch: {
-    '$i18n.locale' () {
+    '$i18n.locale'() {
       this.getLabels(this.$i18n.locale)
-    }
+    },
   },
   computed: {
-    isDisabled () {
+    isDisabled() {
       return !this.formData.text || !this.formData.color
-    }
+    },
   },
   methods: {
-    getLabels (lang) {
+    getLabels(lang) {
       this.isDataLoaded = false
       getLabels(lang).then(data => {
         this.labels = data
@@ -134,23 +134,23 @@ export default {
         this.isDataLoaded = true
       })
     },
-    deleteItem (item) {
+    deleteItem(item) {
       deleteCalendarLabel(item.id).then(data => {
         this.getLabels(this.$i18n.locale)
       })
     },
-    onLabelClick (item) {
+    onLabelClick(item) {
       if (item.text !== 'None') {
         this.formData = {
           id: item.id,
           text: item.text,
           color: item.color,
-          lang: item.language
+          lang: item.language,
         }
         this.modalLabelsShow = true
       }
     },
-    addLabel () {
+    addLabel() {
       this.formData.lang = this.$i18n.locale
       if (!this.formData.id) {
         createCalendarLabel(this.formData).then(data => {
@@ -166,16 +166,16 @@ export default {
         })
       }
     },
-    cancelLabel () {
+    cancelLabel() {
       this.formData = this.defaultFormData()
     },
-    defaultFormData () {
+    defaultFormData() {
       return {
         text: '',
-        color: ''
+        color: '',
       }
-    }
-  }
+    },
+  },
 }
 </script>
 

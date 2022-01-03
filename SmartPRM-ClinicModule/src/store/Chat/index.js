@@ -4,7 +4,7 @@ import mutations from './mutations'
 
 const state = {
   chat: [],
-  videoCall: false
+  videoCall: false,
 }
 
 export default {
@@ -12,5 +12,5 @@ export default {
   state,
   getters,
   actions,
-  mutations
+  mutations,
 }

@@ -13,12 +13,12 @@ export default {
   components: {
   },
   name: 'Map',
-  data: function () {
+  data: function() {
     return {
     }
   },
   methods: {
-  }
+  },
   // mounted () {
   //   xray.index()
   // }

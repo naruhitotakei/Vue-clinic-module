@@ -8,9 +8,9 @@ module.exports = {
   configureWebpack: {
     plugins: [
       new webpack.ProvidePlugin({
-        mapboxgl: 'mapbox-gl'
-      })
-    ]
+        mapboxgl: 'mapbox-gl',
+      }),
+    ],
   },
 
   pluginOptions: {
@@ -18,17 +18,17 @@ module.exports = {
       locale: 'en',
       fallbackLocale: 'en',
       localeDir: 'locales',
-      enableInSFC: false
-    }
+      enableInSFC: false,
+    },
   },
-  
+
   devServer: {
     disableHostCheck: true,
     proxy: {
       '^/api': {
         target: process.env.API_URL || 'http://localhost:3080',
-        changeOrigin: true
+        changeOrigin: true,
       },
-    }
-  }
+    },
+  },
 }

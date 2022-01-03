@@ -117,12 +117,12 @@ export default {
   components: {
   },
   name: 'BusinessCustomers',
-  data: function () {
+  data: function() {
     return {
       options: [
         {
-          title: 'tete'
-        }
+          title: 'tete',
+        },
       ],
       business: [],
       countries: [],
@@ -140,7 +140,7 @@ export default {
         { label: this.$t('business.businessColumn.businessZIPCode'), key: 'zip_code', class: 'text-left' },
         { label: this.$t('business.businessColumn.businessCountry'), key: 'countries_name', class: 'text-left' },
         { label: this.$t('business.addBusinessModal.vatNumber'), key: 'vat_number', class: 'text-left' },
-        { label: this.$t('business.businessColumn.businessAction'), key: 'action', class: 'text-center' }
+        { label: this.$t('business.businessColumn.businessAction'), key: 'action', class: 'text-center' },
       ],
       formData: {
         id: null,
@@ -150,29 +150,29 @@ export default {
         city: '',
         zip_code: '',
         country_code: '',
-        vat_number: ''
-      }
+        vat_number: '',
+      },
     }
   },
   computed: {
-    isOkDisabled () {
+    isOkDisabled() {
       return !this.formData.name || !this.formData.address || !this.formData.city || !this.formData.zip_code || !this.formData.country_code
-    }
+    },
   },
   methods: {
-    getCountries () {
+    getCountries() {
       getCountries().then(response => {
         this.countries = response
       })
     },
-    getBusiness () {
+    getBusiness() {
       getBusiness('en').then(response => {
         this.isBusinessDataLoaded = true
         this.business = response
         this.businessTotalRows = response.length
       })
     },
-    editBusiness (item) {
+    editBusiness(item) {
       getBusinessByID(item.id)
       this.formData = {
         id: item.id,
@@ -185,12 +185,12 @@ export default {
         country_code: {
           id: item.countries_id,
           code: item.code,
-          name: item.countries_name
-        }
+          name: item.countries_name,
+        },
       }
       this.modalBusinessShow = true
     },
-    addBusiness () {
+    addBusiness() {
       if (this.formData.id) {
         updateBusiness(this.formData.id, this.formData).then(() => {
           this.getBusiness()
@@ -202,29 +202,29 @@ export default {
       }
       this.formData = this.defaultFormData()
     },
-    removeBusiness (item) {
+    removeBusiness(item) {
       let index = this.business.indexOf(item)
       this.business.splice(index, 1)
       deleteBusiness(item.id)
     },
-    defaultFormData () {
+    defaultFormData() {
       return {
         name: '',
         email: '',
         address: '',
         city: '',
-        vat_number: ''
+        vat_number: '',
       }
     },
-    cancelBusiness () {
+    cancelBusiness() {
       this.formData = this.defaultFormData()
-    }
+    },
   },
-  mounted () {
+  mounted() {
     xray.index()
     this.getBusiness()
     this.getCountries()
-  }
+  },
 }
 </script>
 

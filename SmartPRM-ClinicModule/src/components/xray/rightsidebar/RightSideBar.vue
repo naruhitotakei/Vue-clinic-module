@@ -19,38 +19,38 @@
 <script>
 export default {
   name: 'RightSideBarStyle1',
-  data () {
+  data() {
     return {
       rightSideBarMini: false,
-      miniClass: ''
+      miniClass: '',
     }
   },
   props: {
-    toggleClass: { type: String, default: '' }
+    toggleClass: { type: String, default: '' },
   },
   computed: {
-    hasIconSlot () {
+    hasIconSlot() {
       return !!this.$slots.icon
     },
-    hasOpenIconSlot () {
+    hasOpenIconSlot() {
       return !!this.$slots.openIcon
     },
-    hasCloseIconSlot () {
+    hasCloseIconSlot() {
       return !!this.$slots.closeIcon
-    }
+    },
   },
   methods: {
-    toggleMini () {
+    toggleMini() {
       this.rightSideBarMini = !this.rightSideBarMini
       this.checkRightSideBar()
     },
-    checkRightSideBar () {
+    checkRightSideBar() {
       if (this.rightSideBarMini) {
         this.miniClass = 'right-sidebar'
       } else {
         this.miniClass = ''
       }
-    }
-  }
+    },
+  },
 }
 </script>

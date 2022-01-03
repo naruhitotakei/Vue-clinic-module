@@ -48,17 +48,17 @@ export default defineComponent({
   props: {
     order: {
       type: Object,
-      required: true
+      required: true,
     },
     premise: {
       type: Object,
-      required: true
-    }
+      required: true,
+    },
   },
   computed: {
-    time () {
+    time() {
       return moment(this.order.appointmentSlot.starts_at).format('HH:mm')
-    }
-  }
+    },
+  },
 })
 </script>

@@ -10,14 +10,14 @@ export default {
   components: {
   },
   name: 'CallCenterDashboard',
-  mounted () {
+  mounted() {
     xray.index()
   },
-  data: function () {
+  data: function() {
     return {
     }
   },
   methods: {
-  }
+  },
 }
 </script>

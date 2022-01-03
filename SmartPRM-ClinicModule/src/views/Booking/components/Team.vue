@@ -13,12 +13,12 @@ export default {
   components: {
   },
   name: 'Team',
-  data: function () {
+  data: function() {
     return {
     }
   },
   methods: {
-  }
+  },
   // mounted () {
   //   xray.index()
   // }

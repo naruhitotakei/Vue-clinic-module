@@ -40,40 +40,40 @@ export default {
   props: {
     src: {
       type: String,
-      required: true
-    }
+      required: true,
+    },
   },
-  data () {
+  data() {
     return {
-      version: ''
+      version: '',
     }
   },
   watch: {
-    src () {
+    src() {
       this.version = ''
-    }
+    },
   },
   methods: {
-    onButtonClick () {
+    onButtonClick() {
       this.$refs.uploader.click()
     },
-    async onFileChanged (event) {
+    async onFileChanged(event) {
       const data = new FormData()
       data.append('logo', event.target.files[0])
       await uploadFile(this.src, data)
       this.version = `?version=${new Date().getTime()}`
-    }
-  }
+    },
+  },
 }
 
-async function uploadFile (url, data) {
+async function uploadFile(url, data) {
   const rawResponse = await fetch(url, {
     method: 'POST',
     credentials: 'same-origin',
     headers: {
-      'Accept': 'application/json'
+      'Accept': 'application/json',
     },
-    body: data
+    body: data,
   })
 
   return rawResponse.json()

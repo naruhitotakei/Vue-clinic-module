@@ -11,14 +11,14 @@ export default {
   components: {
   },
   name: 'Doctor',
-  data: function () {
+  data: function() {
     return {
     }
   },
   methods: {
   },
-  mounted () {
+  mounted() {
     xray.index()
-  }
+  },
 }
 </script>

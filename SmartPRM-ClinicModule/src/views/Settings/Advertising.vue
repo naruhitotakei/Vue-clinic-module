@@ -11,15 +11,15 @@ export default {
   components: {
   },
   name: 'Advertising',
-  mounted () {
+  mounted() {
     xray.index()
   },
-  data: function () {
+  data: function() {
     return {
     }
   },
   methods: {
-  }
+  },
 }
 </script>
 

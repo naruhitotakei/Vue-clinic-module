@@ -44,29 +44,29 @@ export default {
     title: { type: String, default: 'Dashboard' },
     logo: { type: String, default: require('../../../assets/images/smallPRM-logo-white.png') },
     horizontal: { type: Boolean, default: false },
-    items: { type: Array }
+    items: { type: Array },
   },
-  mounted () {
+  mounted() {
     document.addEventListener('click', this.closeSearch, true)
   },
   components: {
-    List
+    List,
   },
   computed: {
   },
-  data () {
+  data() {
     return {
       sidebar: SideBarItems,
       globalSearch: '',
       showSearch: false,
-      showMenu: false
+      showMenu: false,
     }
   },
   methods: {
-    miniSidebar () {
+    miniSidebar() {
       this.$emit('toggle')
-    }
-  }
+    },
+  },
 }
 </script>
 
