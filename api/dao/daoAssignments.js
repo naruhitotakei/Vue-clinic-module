@@ -12,16 +12,16 @@ const getAssignments = (request, response, scope, userid, accessible_user_ids, p
     var condition = null;
     var condition2 = null;
     if (due == "today") {
-        condition = "WHERE (todos.due_at = now()::date)"
+        condition = "WHERE todos.trashed = false AND (todos.due_at = now()::date)"
         condition2 ="OR completed_at = now()::date"
     } else if (due == "future") {
-        condition = "WHERE (todos.due_at > now()::date) AND completed = false"
+        condition = "WHERE (todos.due_at > now()::date) AND completed = false AND todos.trashed = false"
     } else if (due == "past") {
-        condition = "WHERE (todos.due_at < now()::date)  AND completed = false"
+        condition = "WHERE (todos.due_at < now()::date)  AND completed = false AND todos.trashed = false"
     } else if (due == "finished") {
-        condition = "WHERE ( (date_trunc('month', todos.updated_at) + INTERVAL '1 MONTH') > now()::date  ) AND completed = true"
+        condition = "WHERE ( (date_trunc('month', todos.updated_at) + INTERVAL '1 MONTH') > now()::date  ) AND completed = true AND todos.trashed = false"
     } else if (due == "all") {
-      condition = "WHERE completed = false"
+      condition = "WHERE completed = false AND todos.trashed = false"
     } else {
         response.status(200).json("NOK: Unknown due " + due)
         return

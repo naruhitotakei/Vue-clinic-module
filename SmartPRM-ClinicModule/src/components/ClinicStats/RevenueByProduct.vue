@@ -107,6 +107,7 @@ export default {
       })
 
       this.series = [...sumArray]
+      let self = this
 
       this.chartOptions = {
         labels: [...prNames],
@@ -122,10 +123,8 @@ export default {
         tooltip: {
           y: {
             formatter: function (value, { series, seriesIndex, w }) {
-              let name = String(value).replace(/\d+/g, '')
               const numb = String(value).match(/\d/g).join('')
-              const val = name + ' ' + Number(numb).toLocaleString() + ' €'
-              return name + ' ' + val
+              return self.priceFormat(numb)
             }
           }
         }
