@@ -883,6 +883,8 @@ export default {
       this.disabled = false
       this.formData = this.defaultAppointment()
       this.modalTitle = ''
+      this.selectedPatient = ''
+      this.selectedProductGroup = ''
       this.$emit('setModalShow', true)
       // this.formData.resourceId = selectionInfo.resource.id
       this.selectedDoctor = this.doctors.find(doctor => doctor.id === +selectionInfo.resource.id)
