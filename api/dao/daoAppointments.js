@@ -8,10 +8,15 @@ const pool = new Pool({
   port: process.env.POSTGRES_PORT || 5432,
 })
 
-const getAllAppointmentsLocations = (req, res) => {
-  let statement = 'SELECT location FROM appointments '
-  statement += "WHERE location IS NOT NULL AND location <> ''"
-  statement += 'GROUP BY location'
+const getAllAppointmentsLocations = (req, res, scope, prm_client_id) => {
+  let statement = "SELECT location FROM appointments "
+  statement += "LEFT JOIN locations ON appointments.location = locations.city "
+  statement += "WHERE location IS NOT NULL AND location <> '' "
+  if (scope == 'All') {
+  } else if (scope == 'PrmClient') {
+    statement += " AND locations.prm_client_id = " + prm_client_id + " "
+  }
+  statement += "GROUP BY location"
 
   pool.query(statement, (error, results) => {
     if (error) {
@@ -21,10 +26,15 @@ const getAllAppointmentsLocations = (req, res) => {
   })
 }
 
-const getAllAppointmentsDoctors = (req, res) => {
-  let statement = 'SELECT doctor_name FROM appointments '
-  statement += "WHERE doctor_name IS NOT NULL AND doctor_name <> ''"
-  statement += 'GROUP BY doctor_name'
+const getAllAppointmentsDoctors = (req, res, scope, prm_client_id) => {
+  let statement = "SELECT DISTINCT ON(doctor_id) doctor_name, doctor_id FROM appointments "
+  statement += "LEFT JOIN users ON users.id = appointments.doctor_id "
+  statement += "WHERE doctor_name IS NOT NULL AND doctor_name <> '' "
+  if (scope == 'All') {
+  } else if (scope == 'PrmClient') {
+    statement += "AND users.prm_client_id = " + prm_client_id + " "
+  }
+  statement += "GROUP BY doctor_name, doctor_id"
 
   pool.query(statement, (error, results) => {
     if (error) {
@@ -47,7 +57,7 @@ const getAppointments = (req, res, location, doctor, date) => {
     statement += " AND location='" + location + "'"
   }
   if (doctor !== 'All Doctors') {
-    statement += " AND doctor_name='" + doctor + "'"
+    statement += " AND doctor_name= " + doctor + " "
   }
 
   pool.query(statement, (error, results) => {
@@ -62,7 +72,7 @@ const updateLevelOfInterest = (req, res, appointmentID, levelOfInterest) => {
   let statement = 'UPDATE appointments '
   statement += "SET level_of_interest='" + levelOfInterest + "' "
   statement += 'WHERE id=' + appointmentID
-
+  console.log("Updating level of interest: " + statement)
   pool.query(statement, (error, results) => {
     if (error) {
       throw error

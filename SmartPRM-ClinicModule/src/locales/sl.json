@@ -16,7 +16,9 @@
     "search": "Iskanje",
     "searchBy": "Išči po",
     "sortBy": "Razvrsti po",
-    "country": "Država"
+    "country": "Država",
+    "yes": "Da",
+    "no": "Ne"
   },
   "documents": {
     "offers": "Ponudbe",
@@ -152,6 +154,20 @@
     "requiredFields": "Polja označena z * morajo biti izpolnjena",
     "eventMoveBetweenResources": "Ali ste prepričani da želite preložiti ta termin na drugega zdravnika?",
     "eventTimeChange": "Ali ste prepričani da želite spremeniti čas tega termina?"
+  },
+  "appointments": {
+    "header": "Termini",
+    "filters": "Filtriraj",
+    "time": "Čas",
+    "patient": "Pacient",
+    "product": "Produkt",
+    "doctor": "Zdravnik",
+    "attendance": "Prisotnost",
+    "interest": "Zanimanje za poseg",
+    "notInterested": "Ne zanima",
+    "interested": "Zanima",
+    "veryInterested": "Zelo zanima",
+    "enterNotes": "Vpiši Opombe..."
   },
   "patients": {
     "patientsHeader": "Pacienti",

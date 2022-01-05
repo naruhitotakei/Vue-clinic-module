@@ -312,14 +312,14 @@ app.delete('/api/calendar/label/:id', (req, res) => {
 
 app.get('/api/appointments/locations', (req, res) => {
     if(req.session.prm_user && req.session.prm_user.permissions && checkPermission(req.session.prm_user.permissions, appointmentsPermission))
-      daoAppointments.getAllAppointmentsLocations(req, res)
+      daoAppointments.getAllAppointmentsLocations(req, res, getScope(req.session.prm_user.permissions, appointmentsPermission), req.session.prm_user.prm_client_id)
     else
       res.status(401).json("OK: user unauthorized")
 });
 
 app.get('/api/appointments/doctors', (req, res) => {
     if(req.session.prm_user && req.session.prm_user.permissions && checkPermission(req.session.prm_user.permissions, appointmentsPermission))
-      daoAppointments.getAllAppointmentsDoctors(req, res)
+      daoAppointments.getAllAppointmentsDoctors(req, res, getScope(req.session.prm_user.permissions, appointmentsPermission), req.session.prm_user.prm_client_id)
     else
       res.status(401).json("OK: user unauthorized")
 });

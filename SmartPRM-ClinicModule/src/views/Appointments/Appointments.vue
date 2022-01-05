@@ -3,9 +3,9 @@
     <b-col lg="12" md="12">
       <iq-card>
         <template v-slot:headerTitle>
-          <h3 class="mb-3 mt-2">Appointments</h3>
+          <h3 class="mb-3 mt-2">{{ $t('appointments.header') }}</h3>
           <div class="filters-section d-flex mb-2">
-            <h5>Filters</h5>
+            <h5>{{ $t('appointments.filters') }}</h5>
             <div class="filter-select">
               <v-select
                 :options="filterLocations"
@@ -36,35 +36,35 @@
           <div class="card forDesktop" v-for="appointment in appointments" :key="appointment.id">
             <b-row class="card-titles no-margin">
               <b-col lg="1" md="1">
-                Time
-              </b-col>
-              <b-col lg="1" md="1">
-                Name
+                {{ $t('appointments.time') }}
               </b-col>
               <b-col lg="2" md="2">
-                Product
-              </b-col>
-              <b-col lg="3" md="3">
-                Doctor
+                {{ $t('appointments.patient') }}
               </b-col>
               <b-col lg="2" md="2">
-                Attendance
+                {{ $t('appointments.product') }}
               </b-col>
-              <b-col lg="3" md="3">
-                Interest level
+              <b-col lg="2" md="2">
+                {{ $t('appointments.doctor') }}
+              </b-col>
+              <b-col lg="2" md="2">
+                {{ $t('appointments.attendance') }}
+              </b-col>
+              <b-col lg="2" md="2">
+                {{ $t('appointments.interest') }}
               </b-col>
             </b-row>
             <b-row class="no-margin pt-2">
               <b-col lg="1" md="1">
                 <p class="black-text">{{ appointment.time }}</p>
               </b-col>
-              <b-col lg="1" md="1">
+              <b-col lg="2" md="2">
                 <p class="black-text">{{ appointment.enquiry_name + ' ' + appointment.enquiry_last_name }}</p>
               </b-col>
               <b-col lg="2" md="2">
                 <p class="black-text">{{ appointment.product_name }}</p>
               </b-col>
-              <b-col lg="3" md="3">
+              <b-col lg="2" md="2">
                 <p class="black-text">{{ appointment.doctor_name }}</p>
               </b-col>
               <b-col lg="2" md="2">
@@ -75,7 +75,7 @@
                     class="width-50"
                     @click="handleUpdateAttendance(appointment.id, 'Attended')"
                   >
-                    Yes
+                    {{ $t('shared.yes') }}
                   </b-button>
                   <b-button
                     size="sm"
@@ -83,7 +83,7 @@
                     class="width-50"
                     @click="handleUpdateAttendance(appointment.id, 'No-show')"
                   >
-                    No
+                    {{ $t('shared.no') }}
                   </b-button>
                 </div>
                 <div v-if="appointment.attendance">
@@ -93,7 +93,7 @@
                     class="width-50"
                    @click="handleUpdateAttendance(appointment.id, 'Attended')"
                   >
-                    Yes
+                    {{ $t('shared.yes') }}
                   </b-button>
                   <b-button
                     size="sm"
@@ -101,18 +101,63 @@
                     class="width-50"
                     @click="handleUpdateAttendance(appointment.id, 'No-show')"
                   >
-                    No
+                    {{ $t('shared.no') }}
                   </b-button>
                 </div>
               </b-col>
               <b-col lg="3" md="3">
+                 <!-- <b-form-group class="align-center my-1">
+                  <b-form-radio
+                    v-if="appointment.level_of_interest == 'Not interested' || appointment.level_of_interest == 'Not Interested'"
+                    name="interestLevel"
+                    checked
+                  >
+                    {{ $t('appointments.notInterested') }}
+                  </b-form-radio>
+                  <b-form-radio
+                    v-else
+                    name="interestLevel"
+                    @change="handleUpdateLevelOfInterest(appointment.id, 'Not Interested')"
+                  >
+                    {{ $t('appointments.notInterested') }}
+                  </b-form-radio>
+                  <b-form-radio
+                    v-if="appointment.level_of_interest == 'Interested'"
+                    name="interestLevel"
+                    checked
+                  >
+                    {{ $t('appointments.interested') }}
+                  </b-form-radio>
+                  <b-form-radio
+                    v-else
+                    name="interestLevel"
+                    @change="handleUpdateLevelOfInterest(appointment.id, 'Interested')"
+                  >
+                    {{ $t('appointments.interested') }}
+                  </b-form-radio>
+                  <b-form-radio
+                    v-if="appointment.level_of_interest == 'Very interested' || appointment.level_of_interest == 'Very Interested'"
+                    name="interestLevel"
+                    checked
+                  >
+                    {{ $t('appointments.veryInterested') }}
+                  </b-form-radio>
+                  <b-form-radio
+                    v-else
+                    name="interestLevel"
+                    @change="handleUpdateLevelOfInterest(appointment.id, 'Very Interested')"
+                  >
+                    {{ $t('appointments.veryInterested') }}
+                  </b-form-radio>
+                </b-form-group>
+                      -->
                 <b-button-group class="align-center button-group-style">
                   <b-button
                     v-if="appointment.level_of_interest == 'Not interested' || appointment.level_of_interest == 'Not Interested'"
                     size="sm"
                     variant="primary"
                   >
-                    Not Interested
+                    {{ $t('appointments.notInterested') }}
                   </b-button>
                   <b-button
                     v-else
@@ -120,14 +165,14 @@
                     variant="info"
                     @click="handleUpdateLevelOfInterest(appointment.id, 'Not Interested')"
                   >
-                    Not Interested
+                    {{ $t('appointments.notInterested') }}
                   </b-button>
                   <b-button
                     v-if="appointment.level_of_interest == 'Interested'"
                     size="sm"
                     variant="primary"
                   >
-                    Interested
+                    {{ $t('appointments.interested') }}
                   </b-button>
                   <b-button
                     v-else
@@ -135,14 +180,14 @@
                     variant="info"
                     @click="handleUpdateLevelOfInterest(appointment.id, 'Interested')"
                   >
-                    Interested
+                    {{ $t('appointments.interested') }}
                   </b-button>
                   <b-button
                     v-if="appointment.level_of_interest == 'Very interested' || appointment.level_of_interest == 'Very Interested'"
                     size="sm"
                     variant="primary"
                   >
-                    Very Interested
+                    {{ $t('appointments.veryInterested') }}
                   </b-button>
                   <b-button
                     v-else
@@ -150,7 +195,7 @@
                     variant="info"
                     @click="handleUpdateLevelOfInterest(appointment.id, 'Very Interested')"
                   >
-                    Very Interested
+                    {{ $t('appointments.veryInterested') }}
                   </b-button>
                 </b-button-group>
               </b-col>
@@ -158,7 +203,7 @@
             <b-row class="no-margin pt-2 mb-3 align-center">
               <b-form-textarea
                 id="notes-textarea"
-                placeholder="Enter notes..."
+                :placeholder="$t('appointments.enterNotes')"
                 rows="4"
                 max-rows="6"
                 v-model="appointment.notes"
@@ -170,23 +215,23 @@
           <!-- Mobile version -->
           <div class="card forMobile" v-for="appointment in appointments" :key="appointment.id + '_mobile'">
             <b-row class="no-margin flexMobileParent">
-              <b-col md="3" sm="3" class="col-title-sm">Time:</b-col>
+              <b-col md="3" sm="3" class="col-title-sm">{{ $t('appointments.time') }}:</b-col>
               <b-col md="9" sm="9" class="col-data-sm"><p class="black-text">{{ appointment.time }}</p></b-col>
             </b-row>
             <b-row class="no-margin flexMobileParent">
-              <b-col md="3" sm="3" class="col-title-sm">Name:</b-col>
+              <b-col md="3" sm="3" class="col-title-sm">{{ $t('appointments.patient') }}:</b-col>
               <b-col md="9" sm="9" class="col-data-sm"><p class="black-text">{{ appointment.enquiry_name + ' ' + appointment.enquiry_last_name }}</p></b-col>
             </b-row>
             <b-row class="no-margin flexMobileParent">
-              <b-col md="3" sm="3" class="col-title-sm">Product:</b-col>
+              <b-col md="3" sm="3" class="col-title-sm">{{ $t('appointments.product') }}:</b-col>
               <b-col md="9" sm="9" class="col-data-sm"><p class="black-text">{{ appointment.product_name }}</p></b-col>
             </b-row>
             <b-row class="no-margin flexMobileParent">
-              <b-col md="3" sm="3" class="col-title-sm">Doctor:</b-col>
+              <b-col md="3" sm="3" class="col-title-sm">{{ $t('appointments.doctor') }}:</b-col>
               <b-col md="9" sm="9" class="col-data-sm"><p class="black-text">{{ appointment.doctor_name }}</p></b-col>
             </b-row>
             <b-row class="no-margin flexMobileParent mb-2">
-              <b-col md="3" sm="3" class="col-title-sm">Attendance:</b-col>
+              <b-col md="3" sm="3" class="col-title-sm">{{ $t('appointments.attendance') }}:</b-col>
               <b-col md="9" sm="9" class="col-data-sm">
                 <div v-if="!appointment.attendance">
                   <b-button
@@ -195,7 +240,7 @@
                     class="width-50"
                     @click="handleUpdateAttendance(appointment.id, 'Attended')"
                   >
-                    Yes
+                    {{ $t('shared.yes') }}
                   </b-button>
                   <b-button
                     size="sm"
@@ -203,7 +248,7 @@
                     class="width-50"
                     @click="handleUpdateAttendance(appointment.id, 'No-show')"
                   >
-                    No
+                    {{ $t('shared.no') }}
                   </b-button>
                 </div>
                 <div v-if="appointment.attendance">
@@ -213,7 +258,7 @@
                     class="width-50"
                     @click="handleUpdateAttendance(appointment.id, 'Attended')"
                   >
-                    Yes
+                    {{ $t('shared.yes') }}
                   </b-button>
                   <b-button
                     size="sm"
@@ -221,13 +266,13 @@
                     class="width-50"
                     @click="handleUpdateAttendance(appointment.id, 'No-show')"
                   >
-                    No
+                    {{ $t('shared.no') }}
                   </b-button>
                 </div>
               </b-col>
             </b-row>
             <b-row class="no-margin flexMobileParent">
-              <b-col md="3" sm="3" class="col-title-sm">Interest level:</b-col>
+              <b-col md="3" sm="3" class="col-title-sm">{{ $t('appointments.interest') }}:</b-col>
               <b-col md="9" sm="9" class="col-data-sm">
                 <b-button-group class="align-center button-group-style">
                   <b-button
@@ -235,7 +280,7 @@
                     size="sm"
                     variant="primary"
                   >
-                    Not Interested
+                    {{ $t('appointments.notInterested') }}
                   </b-button>
                   <b-button
                     v-else
@@ -243,14 +288,14 @@
                     variant="info"
                     @click="handleUpdateLevelOfInterest(appointment.id, 'Not Interested')"
                   >
-                    Not Interested
+                    {{ $t('appointments.notInterested') }}
                   </b-button>
                   <b-button
                     v-if="appointment.level_of_interest == 'Interested'"
                     size="sm"
                     variant="primary"
                   >
-                    Interested
+                    {{ $t('appointments.interested') }}
                   </b-button>
                   <b-button
                     v-else
@@ -258,14 +303,14 @@
                     variant="info"
                     @click="handleUpdateLevelOfInterest(appointment.id, 'Interested')"
                   >
-                    Interested
+                    {{ $t('appointments.interested') }}
                   </b-button>
                   <b-button
                     v-if="appointment.level_of_interest == 'Very interested' || appointment.level_of_interest == 'Very Interested'"
                     size="sm"
                     variant="primary"
                   >
-                    Very Interested
+                    {{ $t('appointments.veryInterested') }}
                   </b-button>
                   <b-button
                     v-else
@@ -273,7 +318,7 @@
                     variant="info"
                     @click="handleUpdateLevelOfInterest(appointment.id, 'Very Interested')"
                   >
-                    Very Interested
+                    {{ $t('appointments.veryInterested') }}
                   </b-button>
                 </b-button-group>
               </b-col>
@@ -283,7 +328,7 @@
                 <b-form-textarea
                   id="notes-textarea"
                   class="relative-pos"
-                  placeholder="Enter notes..."
+                  :placeholder="$t('appointments.enterNotes')"
                   rows="4"
                   max-rows="6"
                   v-model="appointment.notes"
