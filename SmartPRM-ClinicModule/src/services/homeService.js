@@ -33,16 +33,3 @@ export async function getAssignmentsForUser () {
   })
   return rawResponse.json()
 }
-
-export async function updateAppointment (id, appointment) {
-  const rawResponse = await fetch('/api/home/appointment/' + id, {
-    method: 'PUT',
-    credentials: 'same-origin',
-    headers: {
-      'Accept': 'application/json',
-      'Content-Type': 'application/json'
-    },
-    body: JSON.stringify(appointment)
-  })
-  return rawResponse.json()
-}
