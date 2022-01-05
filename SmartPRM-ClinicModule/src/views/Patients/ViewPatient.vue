@@ -194,10 +194,10 @@
                                                                         :key="index + 'color'"
                                                                         :reduce="item => item.id"
                                                                         :value="item.id"
-                                                                        :style="{'background': item.color}"
+                                                                        :style="{'border': '1px solid ' + item.color}"
                                                                         :disabled="disabled"
                                                                         name="labels">
-                                                              <p class="text-white m-0 py-1 pr-2">{{ item.text }}</p>
+                                                              <p class="m-0 py-1 pr-2" :style="{'color': item.color}">{{ item.text }}</p>
                                                           </b-form-radio>
                                                       </template>
                                                   </div>
@@ -1703,6 +1703,8 @@ export default {
     getLabels (lang) {
       getLabels(lang).then(response => {
         this.colors = response
+        const lastLabel = this.colors.pop()
+        this.colors.unshift(lastLabel)
       })
     },
     goToFiles () {
