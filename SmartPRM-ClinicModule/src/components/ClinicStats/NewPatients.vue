@@ -228,7 +228,7 @@ export default {
             text: 'New Patients',
           },
           labels: {
-            formatter: function(y) {
+            formatter: function (y) {
               return y.toLocaleString()
             },
           },
@@ -237,7 +237,7 @@ export default {
           type: 'datetime',
           categories: [],
           labels: {
-            formatter: function(value, timestamp) {
+            formatter: function (value, timestamp) {
               return moment(timestamp).format('ll')
             },
           },

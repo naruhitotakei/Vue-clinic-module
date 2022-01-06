@@ -30,22 +30,22 @@ import bgImage from '../../assets/images/login/2.png'
 export default {
   name: 'AuthLayout1',
   components: {
-    Loader
+    Loader,
   },
-  mounted () {
+  mounted() {
     xray.index()
   },
-  data () {
+  data() {
     return {
       slickOptions: {
         slidesToShow: 1,
         arrows: false,
-        dots: true
+        dots: true,
       },
       logo: logo,
-      bgImageURL: bgImage
+      bgImageURL: bgImage,
     }
-  }
+  },
 }
 </script>
 <style lang="scss">

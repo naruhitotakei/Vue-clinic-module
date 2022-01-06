@@ -18,6 +18,6 @@
 </template>
 <script>
 export default {
-  name: 'FooterStyle1'
+  name: 'FooterStyle1',
 }
 </script>

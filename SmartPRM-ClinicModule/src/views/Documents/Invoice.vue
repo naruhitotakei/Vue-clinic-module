@@ -205,21 +205,21 @@ import BigNumber from 'bignumber.js'
 export default {
   name: 'Invoice',
   components: {
-    QrcodeVue
+    QrcodeVue,
   },
-  mounted () {
+  mounted() {
     xray.index()
     this.getInvoice(this.invoiceId)
     this.getItems(this.invoiceId)
     this.getPaymentItems(this.invoiceId)
   },
   computed: {
-    invoiceHeader () {
+    invoiceHeader() {
       return this.invoiceNumber.includes('.') ? this.$t('invoice.draft') : this.invoiceNumber
-    }
+    },
   },
   methods: {
-    getInvoice (id) {
+    getInvoice(id) {
       getInvoiceById(id).then(response => {
         this.invoices = response
         this.invoice = response[0]
@@ -238,7 +238,7 @@ export default {
       }
       )
     },
-    getItems (id) {
+    getItems(id) {
       getItemsOfInvoiceById(id).then(response => {
         this.items = response
         this.items.forEach(item => {
@@ -247,7 +247,7 @@ export default {
         })
       })
     },
-    getTeeth (teeth) {
+    getTeeth(teeth) {
       if (teeth === '') {
         return []
       } else if (teeth.includes(',')) {
@@ -256,7 +256,7 @@ export default {
         return new Array(teeth)
       }
     },
-    getSurfaces (surfaces) {
+    getSurfaces(surfaces) {
       if (surfaces === '') {
         return []
       } else if (surfaces.includes(',')) {
@@ -265,12 +265,12 @@ export default {
         return new Array(surfaces)
       }
     },
-    getPaymentItems (id) {
+    getPaymentItems(id) {
       getPaymentItemsOfInvoiceById(id).then(response => {
         this.payments = response
       })
     },
-    calculateQRCode () {
+    calculateQRCode() {
       let hexaNumber = new BigNumber(this.invoice.zoi, 16)
       let decimalNumber = hexaNumber.toString(10)
       this.decimalZoi = (decimalNumber.length < 39) ? '0'.repeat(39 - decimalNumber.length) + decimalNumber : decimalNumber
@@ -278,14 +278,14 @@ export default {
       this.qrCode = this.decimalZoi + this.invoice.operator_tax_number + timeStamp
       this.calculateControlNumber()
     },
-    calculateControlNumber () {
+    calculateControlNumber() {
       let sum = 0
       for (let c of this.qrCode) {
         sum += parseInt(c)
       }
       this.qrCode += sum % 10
     },
-    exportToPDF () {
+    exportToPDF() {
       this.calculateQRCode()
       this.calculatePdfNumber()
       this.dateOfServicePdf = moment(this.dateOfService).format('DD.MM.YYYY')
@@ -294,17 +294,17 @@ export default {
         filename: this.invoice.invoice_number + '.pdf',
         image: { type: 'jpeg', quality: 0.98 },
         html2canvas: { y: 240 },
-        jsPDF: { unit: 'mm', format: 'a3' }
+        jsPDF: { unit: 'mm', format: 'a3' },
       }
       var source = window.document.getElementById('printInvoice')
       html2pdf().set(options).from(source).save()
     },
-    calculatePdfNumber () {
+    calculatePdfNumber() {
       let premiseNumber = this.premiseId < 10 ? '0' + this.premiseId : this.premiseId
       this.pdfNumber = premiseNumber + '-' + this.deviceName + '-' + this.invoice.invoice_number
-    }
+    },
   },
-  data () {
+  data() {
     return {
       invoiceId: this.$route.params.invoiceId,
       invoiceNumber: '',
@@ -314,53 +314,53 @@ export default {
         {
           key: 'id',
           label: '#',
-          class: 'text-left'
+          class: 'text-left',
         },
         {
           key: 'product_name',
           label: this.$t('invoice.invoiceDetailColumn.item'),
-          class: 'text-left'
+          class: 'text-left',
         },
         {
           key: 'invoiced_quantity',
           label: this.$t('invoice.invoiceDetailColumn.quantity'),
-          class: 'text-left'
+          class: 'text-left',
         },
         { label: this.$t('invoices.newInvoice.newInvoiceDetails.teeth'),
           key: 'teeth',
-          class: 'text-left'
+          class: 'text-left',
         },
         { label: this.$t('invoices.newInvoice.newInvoiceDetails.surface'),
           key: 'surfaces',
-          class: 'text-left'
+          class: 'text-left',
         },
         {
           key: 'product_price',
           label: this.$t('invoice.invoiceDetailColumn.price'),
-          class: 'text-left'
+          class: 'text-left',
         },
         {
           key: 'discount',
           label: this.$t('invoice.invoiceDetailColumn.discount'),
-          class: 'text-left'
+          class: 'text-left',
         },
         {
           key: 'net_amount',
           label: this.$t('advPayments.advPaymentsColumn.amount'),
-          class: 'text-left'
-        }
+          class: 'text-left',
+        },
       ],
       invoiceSummaryFields: [
         {
           label: this.$t('invoice.invoiceSummaryColumn.paymentMethod'),
           key: 'type',
-          class: 'text-left'
+          class: 'text-left',
         },
         {
           label: this.$t('advPayments.advPaymentsColumn.amount'),
           key: 'amount',
-          class: 'text-left'
-        }
+          class: 'text-left',
+        },
       ],
       invoiceColumns: [
         { label: this.$t('invoice.invoiceInfo.invoiceStatus'),
@@ -369,7 +369,7 @@ export default {
           formatter: (value, key, item) => {
             return this.$t(item.verification_status)
           },
-          filterByFormatted: true
+          filterByFormatted: true,
         },
         { label: this.$t('invoice.invoiceInfo.paymentStatus'),
           key: 'payment_status',
@@ -392,7 +392,7 @@ export default {
           },
           class: 'text-left' },
         { label: this.$t('invoice.invoiceInfo.invoiceIssuedIn'), key: 'company_city', class: 'text-left' },
-        { label: this.$t('invoice.invoiceInfo.invoiceIssuedBy'), key: 'operator_name', class: 'text-left' }
+        { label: this.$t('invoice.invoiceInfo.invoiceIssuedBy'), key: 'operator_name', class: 'text-left' },
       ],
       invoice: null,
       invoices: [],
@@ -406,9 +406,9 @@ export default {
       premiseId: '',
       invoiceTime: '',
       pdfNumber: '',
-      deviceName: ''
+      deviceName: '',
     }
-  }
+  },
 }
 </script>
 

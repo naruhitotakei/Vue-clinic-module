@@ -597,7 +597,7 @@ export default {
   },
   mounted() {
     let self = this
-    window.addEventListener('keydown', function(event) {
+    window.addEventListener('keydown', function (event) {
       self.listenEvent(event)
     }, false)
     this.$nextTick(() => {

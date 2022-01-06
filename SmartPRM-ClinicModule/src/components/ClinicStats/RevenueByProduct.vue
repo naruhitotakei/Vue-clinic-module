@@ -115,14 +115,14 @@ export default {
           enabled: false,
         },
         legend: {
-          formatter: function(seriesName, opts) {
+          formatter: function (seriesName, opts) {
             const percentage = parseFloat(opts.w.globals.seriesPercent[opts.seriesIndex]).toFixed(1) + '%'
             return seriesName + ' - ' + percentage
           },
         },
         tooltip: {
           y: {
-            formatter: function(value, { series, seriesIndex, w }) {
+            formatter: function (value, { series, seriesIndex, w }) {
               const numb = String(value).match(/\d/g).join('')
               return self.$options.filters.formatPrice(numb)
             },

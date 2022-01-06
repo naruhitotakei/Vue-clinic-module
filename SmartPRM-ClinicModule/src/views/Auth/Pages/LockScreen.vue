@@ -19,6 +19,6 @@
 </template>
 <script>
 export default {
-  name: 'LockScreen1'
+  name: 'LockScreen1',
 }
 </script>

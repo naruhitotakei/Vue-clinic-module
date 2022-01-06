@@ -10,7 +10,7 @@ export default {
   components: {
   },
   name: 'MissingServices',
-  mounted () {
+  mounted() {
     xray.index()
   },
   data: function () {
@@ -18,6 +18,6 @@ export default {
     }
   },
   methods: {
-  }
+  },
 }
 </script>

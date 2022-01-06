@@ -19,19 +19,19 @@ export default {
     toggleShow: { type: String, default: '' },
     mediaClass: { type: String, default: '' },
     miniToggle: { type: Boolean, default: false },
-    closeButton: { type: Boolean, default: true }
+    closeButton: { type: Boolean, default: true },
   },
-  data () {
+  data() {
     return {
-      active: false
+      active: false,
     }
   },
   methods: {
-    toggleContent () {
+    toggleContent() {
       let selector = document.querySelector(this.toggleShow)
       selector.classList.add('show')
     },
-    checkToggle (type) {
+    checkToggle(type) {
       if (this.link === type) {
         switch (type) {
           case 'media':
@@ -42,7 +42,7 @@ export default {
       } else {
         this.active = true
       }
-    }
-  }
+    },
+  },
 }
 </script>

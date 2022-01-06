@@ -152,7 +152,7 @@ export default {
           },
           yaxis: {
             labels: {
-              formatter: function(val) {
+              formatter: function (val) {
                 return this.$options.filters.formatPrice(val)
               },
             },

@@ -17,16 +17,16 @@ export default {
   components: {
     Order,
     SuccessOrder,
-    PublicLayout
+    PublicLayout,
   },
   name: 'OnlineBookingPublic',
   data: function () {
     return {
-      order: null
+      order: null,
     }
   },
-  mounted () {
+  mounted() {
     xray.index()
-  }
+  },
 }
 </script>

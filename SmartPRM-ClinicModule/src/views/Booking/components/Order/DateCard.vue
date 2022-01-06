@@ -30,16 +30,16 @@ export default defineComponent({
     date: Date,
     availability: [String, Boolean],
     active: Boolean,
-    totalPrice: Number
+    totalPrice: Number,
   },
   computed: {
-    day () {
+    day() {
       return getDayOfWeek(this.date, { lang: this.$i18n.locale })
     },
-    month () {
+    month() {
       return getMonthName(this.date, { lang: this.$i18n.locale })
-    }
-  }
+    },
+  },
 })
 </script>
 

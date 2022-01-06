@@ -94,9 +94,9 @@ export default {
   components: {
   },
   computed: {
-    hidePaymentsPagination () {
+    hidePaymentsPagination() {
       return Math.floor(this.advPayments.length / this.perPage) !== 0
-    }
+    },
   },
   name: 'AdvPayments',
   data: function () {
@@ -108,7 +108,7 @@ export default {
         { value: 'patient_name', text: 'Patient Name' },
         { value: 'date', text: 'Date' },
         { value: 'issued_by', text: 'Issued by' },
-        { value: 'amount', text: 'Invoice amount' }
+        { value: 'amount', text: 'Invoice amount' },
       ],
       modalShow: false,
       advPayments: [],
@@ -127,7 +127,7 @@ export default {
           formatter: (value, key, item) => {
             return item.invoice_number === 'invoice.draft' ? this.$t(item.invoice_number) : item.invoice_number
           },
-          filterByFormatted: true
+          filterByFormatted: true,
         },
         {
           label: this.$t('advPayments.advPaymentsColumn.patientName'),
@@ -136,7 +136,7 @@ export default {
           formatter: (value, key, item) => {
             return item.enquiries_name + ' ' + item.enquiries_last_name
           },
-          filterByFormatted: true
+          filterByFormatted: true,
         },
         {
           label: this.$t('advPayments.advPaymentsColumn.date'),
@@ -145,52 +145,52 @@ export default {
           formatter: value => {
             return moment(value).format('DD-MM-YYYY')
           },
-          filterByFormatted: true
+          filterByFormatted: true,
         },
         { label: this.$t('advPayments.advPaymentsColumn.issuedBy'), key: 'operator_name', class: 'text-left' },
-        { label: this.$t('advPayments.advPaymentsColumn.amount'), key: 'lines_sum', class: 'text-left' }
-      ]
+        { label: this.$t('advPayments.advPaymentsColumn.amount'), key: 'lines_sum', class: 'text-left' },
+      ],
     }
   },
   methods: {
-    getPatients () {
+    getPatients() {
       getPatients().then(response => {
         this.patients = response
       })
     },
-    paymentSelected (item) {
+    paymentSelected(item) {
       this.$router.push({ path: `/documents/advance-payments/${item.invoice_id}` })
     },
-    filterSelected (value) {
+    filterSelected(value) {
       let array = [value]
       this.filterOn = array
     },
-    addAdvPayment () {
+    addAdvPayment() {
       this.$router.push({ path: `/documents/advance-payments/${this.selectedPatient.id}/new-adv-payment` })
     },
-    getAdvPayments () {
+    getAdvPayments() {
       getAdvPayments().then(response => {
         this.advPayments = _.orderBy(response, ['invoice_time', 'invoice_number'], ['desc', 'desc'])
         this.setTotalRows(this.advPayments.length)
         this.toggleDataLoaded()
       })
     },
-    onFiltered (filteredItems) {
+    onFiltered(filteredItems) {
       this.totalRows = filteredItems.length
       this.currentPage = 1
     },
-    setTotalRows (number) {
+    setTotalRows(number) {
       this.totalRows = number
     },
-    toggleDataLoaded () {
+    toggleDataLoaded() {
       this.isDataLoaded = !this.isDataLoaded
-    }
+    },
   },
-  mounted () {
+  mounted() {
     xray.index()
     this.getAdvPayments()
     this.getPatients()
-  }
+  },
 }
 </script>
 

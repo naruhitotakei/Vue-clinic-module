@@ -433,7 +433,7 @@ export default {
       getDatesForCurrentWeek().then(response => {
         let temp = _.map(response, '?column?')
         this.dates = temp
-        this.datesForCurrentWeek = _.map(temp, function(date) {
+        this.datesForCurrentWeek = _.map(temp, function (date) {
           return moment(date).format('DD-MM-YYYY')
         })
         this.prepareDataForChart()
@@ -445,7 +445,7 @@ export default {
     },
     getDoctorsStatisticPerWeek() {
       getDoctorsStatisticPerWeek().then(response => {
-        this.doctorsData = _.map(response, function(element) {
+        this.doctorsData = _.map(response, function (element) {
           let parsedElement = Object.assign({}, element)
           parsedElement.starts_at = moment(parsedElement.starts_at).format('DD-MM-YYYY')
           return parsedElement
@@ -479,19 +479,19 @@ export default {
     getVisitsByCountryInAWeek() {
       visitsByCountryInAWeek().then(response => {
         let visitsByCountry = response
-        this.totalVisits = _.sumBy(visitsByCountry, function(o) { return +o.count })
+        this.totalVisits = _.sumBy(visitsByCountry, function (o) { return +o.count })
         if (visitsByCountry && Array.isArray(visitsByCountry)) {
           visitsByCountry.forEach(element => {
             element.percentage = (element.count / this.totalVisits * 100).toFixed(2)
           })
         }
 
-        this.countriesWithPatients = _.map(this.countriesWithPatients, function(country) {
+        this.countriesWithPatients = _.map(this.countriesWithPatients, function (country) {
           return _.assign(country, _.find(visitsByCountry, {
             name: country.name,
           }))
         })
-        this.countriesWithPatients = _.filter(this.countriesWithPatients, function(country) {
+        this.countriesWithPatients = _.filter(this.countriesWithPatients, function (country) {
           return country.hasOwnProperty('percentage')
         })
       })

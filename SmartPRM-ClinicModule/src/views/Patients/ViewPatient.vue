@@ -1258,7 +1258,7 @@ export default {
         return this.municipalities
       }
     },
-    patientsDentist: function() {
+    patientsDentist: function () {
       if (this.dentists && Array.isArray(this.dentists) && this.dentists.length) {
         return this.dentists.find((item) => {
           return item.code === this.patient.prm_dentist_user_id
@@ -1266,7 +1266,7 @@ export default {
       }
       return null
     },
-    patientsSurgeon: function() {
+    patientsSurgeon: function () {
       if (this.surgeons && Array.isArray(this.surgeons)) {
         return this.surgeons.find((item) => {
           return item.code === this.patient.prm_surgeon_user_id
@@ -1274,7 +1274,7 @@ export default {
       }
       return null
     },
-    openAssignments: function() {
+    openAssignments: function () {
       return this.assignments.slice(
         (this.openCurrentPage - 1) * this.openPerPage,
         this.openCurrentPage * this.openPerPage)
@@ -1795,7 +1795,7 @@ export default {
         const xhr = new XMLHttpRequest()
         xhr.open('GET', file.image)
         xhr.responseType = 'arraybuffer'
-        xhr.onload = function(e) {
+        xhr.onload = function (e) {
           const buffer = xhr.response
           const tiff = new Tiff({ buffer: buffer })
           canvas = tiff.toCanvas()
@@ -2026,7 +2026,7 @@ export default {
       this.disabledDoctors = true
       this.updatePatient()
     },
-    previewImage: function(event) {
+    previewImage: function (event) {
       const input = event.target
       if (input.files && input.files[0]) {
         const reader = new FileReader()

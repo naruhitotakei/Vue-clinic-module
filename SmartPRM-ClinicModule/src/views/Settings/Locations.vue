@@ -129,7 +129,7 @@
 import { xray } from '../../config/pluginInit'
 import { getLocationsList, getInactiveLocationsList, createLocation, updateLocation, toggleActivity } from '../../services/locations'
 export default {
-  mounted () {
+  mounted() {
     xray.index()
     this.getLocations()
     this.getInactiveLocations()
@@ -137,12 +137,12 @@ export default {
   components: {
   },
   computed: {
-    hideLocationsPagination () {
+    hideLocationsPagination() {
       return Math.floor(this.locations.length / this.locationsPerPage) !== 0
     },
-    isOkDisabled () {
+    isOkDisabled() {
       return !this.formData.name || !this.formData.city || !this.formData.address
-    }
+    },
   },
   name: 'Locations',
   data: function () {
@@ -160,66 +160,66 @@ export default {
         id: '',
         name: '',
         city: '',
-        address: ''
+        address: '',
       },
       columns: [
         { label: this.$t('settingsLocations.locationsColumn.name'), key: 'name', class: 'text-left' },
         { label: this.$t('settingsLocations.locationsColumn.city'), key: 'city', class: 'text-left' },
         { label: this.$t('settingsLocations.locationsColumn.address'), key: 'address', class: 'text-left' },
-        { label: this.$t('settingsLocations.locationsColumn.action'), key: 'action', class: 'text-center' }
+        { label: this.$t('settingsLocations.locationsColumn.action'), key: 'action', class: 'text-center' },
       ],
       inactiveColumns: [
         { label: this.$t('settingsLocations.locationsColumn.name'), key: 'i_name', class: 'text-left' },
         { label: this.$t('settingsLocations.locationsColumn.city'), key: 'i_city', class: 'text-left' },
         { label: this.$t('settingsLocations.locationsColumn.address'), key: 'i_address', class: 'text-left' },
-        { label: this.$t('settingsLocations.locationsColumn.action'), key: 'i_action', class: 'text-center' }
-      ]
+        { label: this.$t('settingsLocations.locationsColumn.action'), key: 'i_action', class: 'text-center' },
+      ],
     }
   },
   methods: {
-    defaultFormData () {
+    defaultFormData() {
       return {
         name: '',
         city: '',
-        address: ''
+        address: '',
       }
     },
-    getLocations () {
+    getLocations() {
       getLocationsList().then(response => {
         this.locations = response
         this.isDataLoaded = true
       })
     },
-    getInactiveLocations () {
+    getInactiveLocations() {
       getInactiveLocationsList().then(response => {
         this.inactiveLocations = response
         this.isInactiveDataLoaded = true
       })
     },
-    openEditModal (item) {
+    openEditModal(item) {
       this.editLocationModal = true
       this.formData = item
     },
-    openAddLocation () {
+    openAddLocation() {
       this.addLocationModal = true
       this.formData = this.defaultFormData()
     },
-    addLocation () {
+    addLocation() {
       createLocation(this.formData).then(() => {
         this.getLocations()
       })
     },
-    editLocation () {
+    editLocation() {
       updateLocation(this.formData.id, this.formData).then(() => {
         this.getLocations()
       })
     },
-    setActivity (item) {
+    setActivity(item) {
       toggleActivity(item.id).then(() => {
         this.getLocations()
         this.getInactiveLocations()
       })
-    }
-  }
+    },
+  },
 }
 </script>

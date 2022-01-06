@@ -22,32 +22,32 @@ import TimeSelectionTableRow from './TimeSelectionTableRow.vue'
 
 export default defineComponent({
   components: {
-    TimeSelectionTableRow
+    TimeSelectionTableRow,
   },
   props: {
     items: {
       type: Array,
-      default: () => []
+      default: () => [],
     },
     appointmentSlot: {
       type: Object,
-      default: null
-    }
+      default: null,
+    },
   },
-  data () {
+  data() {
     return {
-      selected: []
+      selected: [],
     }
   },
   computed: {
-    fields () {
+    fields() {
       return [
         { key: 'time', label: this.$t('public.onlineBooking.time') },
-        { key: 'doctors', label: this.$t('public.onlineBooking.availableDoctors') }
+        { key: 'doctors', label: this.$t('public.onlineBooking.availableDoctors') },
       ]
-    }
+    },
   },
-  mounted () {
+  mounted() {
     // this.selectedIndexes.forEach(itemIndex => {
     //   this.$refs.selectableTable.selectRow(itemIndex)
     // })
@@ -55,7 +55,7 @@ export default defineComponent({
   methods: {
     getActiveDoctor: function (time) {
       return (this.selectedSlot && this.selectedDate.getDate() === this.selectedSlot.date.getDate() && time === this.selectedSlot.time) ? this.selectedSlot.doctor : null
-    }
-  }
+    },
+  },
 })
 </script>
