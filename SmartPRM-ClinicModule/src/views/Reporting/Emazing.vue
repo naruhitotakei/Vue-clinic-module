@@ -5,19 +5,19 @@
             <h5 class="card-title">Revenue Statistics</h5>
             <div class="row">
               <div class="col-sm-3 col-12">
-                <h4 class="margin-0">€ {{ todayRevenue.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 }) }} </h4>
+                <h4 class="margin-0">{{ todayRevenue ? todayRevenue : 0 | formatPrice }} </h4>
                 <p class="text-muted">{{ $t('statisticsForClinic.todaysIncome') }}</p>
               </div>
               <div class="col-sm-3 col-12">
-                <h4 class="margin-0">€ {{ weeklyRevenue.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 }) }} </h4>
+                <h4 class="margin-0">{{ weeklyRevenue | formatPrice }} </h4>
                 <p class="text-muted">{{ $t('statisticsForClinic.weeksIncome') }}</p>
               </div>
               <div class="col-sm-3 col-12">
-                <h4 class="margin-0">€ {{ monthlyRevenue.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 }) }} </h4>
+                <h4 class="margin-0">{{ monthlyRevenue | formatPrice }} </h4>
                 <p class="text-muted">{{ $t('statisticsForClinic.monthsIncome') }}</p>
               </div>
               <div class="col-sm-3 col-12">
-                <h4 class="margin-0">€ {{ yearlyRevenue.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 }) }} </h4>
+                <h4 class="margin-0">{{ yearlyRevenue | formatPrice }} </h4>
                 <p class="text-muted">{{ $t('statisticsForClinic.yearsIncome') }}</p>
               </div>
             </div>
@@ -154,10 +154,10 @@ import _ from 'lodash'
 
 export default {
   components: {
-    IqCard
+    IqCard,
   },
   name: 'Emazing',
-  data: function () {
+  data: function() {
     return {
       fromdate: null,
       todate: null,
@@ -166,14 +166,14 @@ export default {
       servicesListTotalCount: 0,
       servicesListTotalFee: 0,
       countrySelectOptions: [
-        { value: null, text: this.$t('reportingEmazing.countrySelect') }
+        { value: null, text: this.$t('reportingEmazing.countrySelect') },
       ],
       periodSelectOptions: [
         { value: null, text: this.$t('reportingEmazing.periodSelect') },
         { value: '1', text: this.$t('reportingEmazing.currentMonth') },
         { value: '2', text: this.$t('reportingEmazing.lastMonth') },
         { value: '3', text: this.$t('reportingEmazing.thisYear') },
-        { value: '4', text: this.$t('reportingEmazing.lastYear') }
+        { value: '4', text: this.$t('reportingEmazing.lastYear') },
       ],
       countrySelect: null,
       periodSelect: null,
@@ -181,7 +181,7 @@ export default {
         { label: this.$t('reportingEmazing.servicesSummaryColumn.serviceTitle'), key: 'service_title', class: 'text-left' },
         { label: this.$t('reportingEmazing.servicesSummaryColumn.serviceCount'), key: 'count', class: 'text-left' },
         { label: this.$t('reportingEmazing.servicesSummaryColumn.serviceAmount'), key: 'sum', class: 'text-left' },
-        { label: this.$t('reportingEmazing.servicesSummaryColumn.serviceFee'), key: 'fee', class: 'text-left' }
+        { label: this.$t('reportingEmazing.servicesSummaryColumn.serviceFee'), key: 'fee', class: 'text-left' },
       ],
       servicesSummaryItems: [],
       servicesListColumns: [
@@ -193,7 +193,7 @@ export default {
         { label: this.$t('reportingEmazing.servicesListColumn.serviceDate'), key: 'date', formatter: (value, key, item) => { return this.formatDateString(value) } },
         { label: this.$t('reportingEmazing.servicesListColumn.serviceCountry'), key: 'fee', class: 'text-left' },
         { label: this.$t('reportingEmazing.servicesListColumn.serviceRegion'), key: 'fee', class: 'text-left' },
-        { label: this.$t('reportingEmazing.servicesListColumn.serviceMunicipality'), key: 'fee', class: 'text-left' }
+        { label: this.$t('reportingEmazing.servicesListColumn.serviceMunicipality'), key: 'fee', class: 'text-left' },
       ],
       servicesListItems: [],
       revenueList: [],
@@ -204,12 +204,12 @@ export default {
       todayRevenue: 0,
       revenueChartSeries: [{
         name: 'Revenue',
-        data: []
+        data: [],
       }],
       revenueChartOptions: {
         chart: {
           type: 'bar',
-          height: 350
+          height: 350,
         },
         plotOptions: {
           bar: {
@@ -217,48 +217,48 @@ export default {
               ranges: [{
                 from: -100,
                 to: -46,
-                color: '#F15B46'
+                color: '#F15B46',
               }, {
                 from: -45,
                 to: 0,
-                color: '#FEB019'
-              }]
+                color: '#FEB019',
+              }],
             },
-            columnWidth: '80%'
-          }
+            columnWidth: '80%',
+          },
         },
         dataLabels: {
-          enabled: false
+          enabled: false,
         },
         yaxis: {
           title: {
-            text: 'EUR'
+            text: 'EUR',
           },
           labels: {
-            formatter: function (y) {
+            formatter: function(y) {
               return y.toLocaleString()
-            }
-          }
+            },
+          },
         },
         xaxis: {
           type: 'datetime',
           categories: [],
           labels: {
-            rotate: -90
-          }
-        }
-      }
+            rotate: -90,
+          },
+        },
+      },
     }
   },
   watch: {
-    'servicesSummaryItemsJSON' () {
-    }
+    'servicesSummaryItemsJSON'() {
+    },
   },
   methods: {
-    formatNumber (num) {
+    formatNumber(num) {
       return num.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1.')
     },
-    exportReportToExcel (tableName) {
+    exportReportToExcel(tableName) {
       let table = this.$refs[tableName]
       console.log('Table')
       console.log(table)
@@ -275,14 +275,14 @@ export default {
       this.$refs[`excel-${tableName}`].download = documentName + ' ' + date
       return true
     },
-    getClinicStats () {
+    getClinicStats() {
       getClinicStatistics().then(response => {
         this.setRevenueData(response)
       }).catch(error => {
         console.log(error)
       })
     },
-    async setRevenueData (data) {
+    async setRevenueData(data) {
       this.revenueList = []
       const weekly = data.weekly
       const monthly = data.monthly
@@ -322,36 +322,36 @@ export default {
           this.totalRevenue += Number(item.revenue)
         })
         this.revenueChartSeries = [{
-          data: this.revenueList
+          data: this.revenueList,
         }]
         this.revenueChartOptions = {
           xaxis: {
-            categories: [...datesArray]
+            categories: [...datesArray],
           },
           yaxis: {
             labels: {
-              formatter: function (y) {
+              formatter: function(y) {
                 return y.toLocaleString()
-              }
+              },
             },
             title: {
-              text: this.totalRevenue.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + ' EUR'
-            }
-          }
+              text: this.totalRevenue.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + ' EUR',
+            },
+          },
         }
       }
     },
-    onFromChange () {
+    onFromChange() {
       this.getServicesReport()
       this.getServicesList()
       this.getCountryList()
     },
-    onToChange () {
+    onToChange() {
       this.getServicesReport()
       this.getServicesList()
       this.getCountryList()
     },
-    onPeriodChange () {
+    onPeriodChange() {
       if (this.periodSelect === '1') {
         let today = new Date()
         let firstThisMonth = new Date()
@@ -392,12 +392,12 @@ export default {
       this.getServicesList()
       this.getCountryList()
     },
-    onCountryChange () {
+    onCountryChange() {
       this.getServicesReport()
       this.getServicesList()
       this.getCountryList()
     },
-    getServicesReport () {
+    getServicesReport() {
       getEmazingServicesReport(this.fromdate, this.todate, this.countrySelect).then(response => {
         if (typeof response !== 'string') {
           let res = _.groupBy(response, 'group')
@@ -436,7 +436,7 @@ export default {
         }
       })
     },
-    getServicesList () {
+    getServicesList() {
       getServiceList(this.fromdate, this.todate, this.countrySelect).then(response => {
         if (typeof response !== 'string') {
           this.servicesListTotalCount = 0
@@ -461,7 +461,7 @@ export default {
         }
       })
     },
-    getCountryList () {
+    getCountryList() {
       getCountryList(this.fromdate, this.todate).then(response => {
         if (typeof response !== 'string') {
           this.countrySelectOptions = []
@@ -480,29 +480,29 @@ export default {
         }
       })
     },
-    formatDate (date) {
+    formatDate(date) {
       var ye = new Intl.DateTimeFormat('en', { year: 'numeric' }).format(date)
       var mo = new Intl.DateTimeFormat('en', { month: '2-digit' }).format(date)
       var da = new Intl.DateTimeFormat('en', { day: '2-digit' }).format(date)
       return (`${ye}-${mo}-${da}`)
     },
-    formatDateString (dateString) {
+    formatDateString(dateString) {
       var date = Date.parse(dateString)
       var ye = new Intl.DateTimeFormat('en', { year: 'numeric' }).format(date)
       var mo = new Intl.DateTimeFormat('en', { month: 'numeric' }).format(date)
       var da = new Intl.DateTimeFormat('en', { day: 'numeric' }).format(date)
       return (`${da}. ${mo}. ${ye}`)
-    }
+    },
   },
   computed: {
-    getServicesSummary () {
+    getServicesSummary() {
       return this.servicesSummaryItems
     },
-    getServicesSummaryJSON () {
+    getServicesSummaryJSON() {
       return this.servicesSummaryItemsJSON
-    }
+    },
   },
-  mounted () {
+  mounted() {
     xray.index()
     var today = new Date()
     var firstThisMonth = new Date()
@@ -513,7 +513,7 @@ export default {
     this.getServicesReport()
     this.getServicesList()
     this.getCountryList()
-  }
+  },
 }
 </script>
 <style lang="scss">
