@@ -103,7 +103,6 @@ export default {
       this.loading = true
       this.noData = false
       getRevenueByDoctor(start, end).then(response => {
-        this.setDataForChart(response)
         this.loading = false
         if (response && response.length) {
           this.noData = false
@@ -131,9 +130,9 @@ export default {
           const prodsByDoctor = data.filter(item => item.product_name === product)
           const obj = { name: product, data: [] }
           uniqueDoctors.forEach(doctor => {
-            const isProductHasDoctor = prodsByDoctor.find(item => item.doctor_name === doctor)
-            if (isProductHasDoctor) {
-              obj.data.push(Number(isProductHasDoctor.sum))
+            const isDoctorHasProduct = prodsByDoctor.find(item => item.doctor_name === doctor)
+            if (isDoctorHasProduct) {
+              obj.data.push(Number(isDoctorHasProduct.sum))
             } else {
               obj.data.push(0)
             }
@@ -144,18 +143,44 @@ export default {
         this.series = sumByProduct
 
         this.chartOptions = {
-          legend: {
-            position: 'right',
+          dataLabels: {
+            enabled: false,
+          },
+          chart: {
+            type: 'bar',
+            height: 350,
+            stacked: true,
+            toolbar: {
+              show: true,
+            },
+            zoom: {
+              enabled: true,
+            },
+          },
+          responsive: [{
+            breakpoint: 480,
+            options: {
+              legend: {
+                position: 'bottom',
+                offsetX: -10,
+                offsetY: 0,
+              },
+            },
+          }],
+          plotOptions: {
+            bar: {
+              horizontal: false,
+            },
           },
           xaxis: {
             categories: uniqueDoctors,
           },
-          yaxis: {
-            labels: {
-              formatter: function(val) {
-                return this.$options.filters.formatPrice(val)
-              },
-            },
+          legend: {
+            position: 'right',
+            offsetY: 40,
+          },
+          fill: {
+            opacity: 1,
           },
         }
 
@@ -194,19 +219,24 @@ export default {
           stacked: true,
           toolbar: {
             show: true,
-            tools: {
-              pan: false,
-              zoom: false,
-            },
           },
           zoom: {
             enabled: true,
           },
         },
+        responsive: [{
+          breakpoint: 480,
+          options: {
+            legend: {
+              position: 'bottom',
+              offsetX: -10,
+              offsetY: 0,
+            },
+          },
+        }],
         plotOptions: {
           bar: {
             horizontal: false,
-            borderRadius: 10,
           },
         },
         xaxis: {

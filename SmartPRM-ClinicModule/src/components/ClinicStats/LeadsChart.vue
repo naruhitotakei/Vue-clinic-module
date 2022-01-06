@@ -157,7 +157,13 @@ export default {
       this.series = sumByCountry
 
       this.chartOptions = {
+        dataLabels: {
+          enabled: false,
+        },
         chart: {
+          type: 'bar',
+          height: 350,
+          stacked: true,
           toolbar: {
             show: true,
             tools: {

@@ -137,7 +137,13 @@ export default {
       }]
 
       this.chartOptions = {
+        dataLabels: {
+          enabled: false,
+        },
         chart: {
+          type: 'bar',
+          height: 350,
+          stacked: false,
           toolbar: {
             show: true,
             tools: {
@@ -158,12 +164,36 @@ export default {
             },
           },
         },
-        legend: {
-          position: 'right',
+        plotOptions: {
+          bar: {
+            horizontal: false,
+          },
+        },
+        yaxis: {
+          title: {
+            text: 'New Patients',
+          },
+          labels: {
+            formatter: function(y) {
+              return y.toLocaleString()
+            },
+          },
         },
         xaxis: {
           type: 'datetime',
           categories: datesArray,
+          labels: {
+            formatter: function(value, timestamp) {
+              return moment(timestamp).format('ll')
+            },
+          },
+        },
+        legend: {
+          position: 'right',
+          offsetY: 40,
+        },
+        fill: {
+          opacity: 1,
         },
       }
 
@@ -205,50 +235,22 @@ export default {
         data: [],
       }],
       chartOptions: {
-        chart: {
-          type: 'bar',
-          height: 350,
-          stacked: true,
-          toolbar: {
-            show: true,
-            tools: {
-              pan: false,
-              zoom: false,
-            },
-          },
-        },
-        plotOptions: {
-          bar: {
-            horizontal: false,
-            borderRadius: 10,
-          },
-        },
-        yaxis: {
-          title: {
-            text: 'New Patients',
-          },
-          labels: {
-            formatter: function(y) {
-              return y.toLocaleString()
-            },
-          },
-        },
-        xaxis: {
-          type: 'datetime',
-          categories: [],
-          labels: {
-            formatter: function(value, timestamp) {
-              return moment(timestamp).format('ll')
-            },
-          },
-        },
-        legend: {
-          position: 'right',
-          offsetY: 40,
-        },
-        fill: {
-          opacity: 1,
-        },
+        // xaxis: {
+        //   type: 'datetime',
+        //   categories: [],
+        //   labels: {
+        //     formatter: function(value, timestamp) {
+        //       return moment(timestamp).format('ll')
+        //     },
+        //   },
+        // },
+        // legend: {
+        //   position: 'right',
+        //   offsetY: 40,
+        // },
+        // fill: {
+        //   opacity: 1,
+        // },
       },
     }
   },
