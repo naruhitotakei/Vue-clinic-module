@@ -16,8 +16,8 @@
             <div class="filter-select">
               <v-select
                 :options="filterDoctors"
-                :value="selectedDoctor"
                 v-model="selectedDoctor"
+                :reduce="(option) => option.value"
               ></v-select>
             </div>
             <div class="filter-select">
@@ -385,7 +385,7 @@ export default defineComponent({
     return {
       filterLocations: ['All Locations'],
       selectedLocation: 'All Locations',
-      filterDoctors: ['All Doctors'],
+      filterDoctors: [{ value: 'All Doctors', label: 'All Doctors' }],
       selectedDoctor: 'All Doctors',
       dateSelected: new Date().toISOString().slice(0, 10),
       showModal: false,
@@ -432,7 +432,10 @@ export default defineComponent({
       getAppointmentsDoctors().then((response) => {
         if (Array.isArray(response)) {
           response.map((obj) => {
-            this.filterDoctors.push(obj.doctor_name)
+            this.filterDoctors.push({
+              value: obj.doctor_id,
+              label: obj.doctor_name,
+            })
           })
         }
       })
