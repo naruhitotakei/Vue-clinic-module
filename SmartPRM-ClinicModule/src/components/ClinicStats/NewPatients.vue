@@ -179,7 +179,7 @@ export default {
           last_name: item.last_name,
           phone: item.phone,
           email: item.email,
-          created_at: moment(item.date).format('ll'),
+          created_at: moment(item.date).format('DD/MM/YYYY'),
         }
         this.dataToExport.push(obj)
       })

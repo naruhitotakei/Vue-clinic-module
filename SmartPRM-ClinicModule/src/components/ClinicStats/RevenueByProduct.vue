@@ -72,7 +72,7 @@ export default {
       }
     },
     priceFormat(value) {
-      return Number(value).toLocaleString('es-ES', { minimumFractionDigits: 0, maximumFractionDigits: 2 }) + ' €'
+      return this.$options.filters.formatPrice(value)
     },
     getClinicRevenueByProduct(start, end) {
       this.loading = true
@@ -124,7 +124,7 @@ export default {
           y: {
             formatter: function(value, { series, seriesIndex, w }) {
               const numb = String(value).match(/\d/g).join('')
-              return self.priceFormat(numb)
+              return self.$options.filters.formatPrice(numb)
             },
           },
         },

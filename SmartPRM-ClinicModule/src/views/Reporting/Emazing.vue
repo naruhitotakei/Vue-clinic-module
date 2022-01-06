@@ -236,7 +236,7 @@ export default {
           },
           labels: {
             formatter: function(y) {
-              return y.toLocaleString()
+              return this.$options.filters.formatPrice(y)
             },
           },
         },
@@ -331,11 +331,11 @@ export default {
           yaxis: {
             labels: {
               formatter: function(y) {
-                return y.toLocaleString()
+                return this.$options.filters.formatPrice(y)
               },
             },
             title: {
-              text: this.totalRevenue.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + ' EUR',
+              text: this.$options.filters.formatPrice(this.totalRevenue),
             },
           },
         }

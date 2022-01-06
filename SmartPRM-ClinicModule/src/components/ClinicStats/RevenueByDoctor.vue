@@ -153,7 +153,7 @@ export default {
           yaxis: {
             labels: {
               formatter: function(val) {
-                return val.toLocaleString() + ' €'
+                return this.$options.filters.formatPrice(val)
               },
             },
           },
@@ -170,7 +170,7 @@ export default {
           const sum = data.filter(item => item.doctor_name === doctor)
             .map(item => item.sum && Number(item.sum))
             .reduce((a, b) => Number(a) + Number(b))
-          this.dataToExport.push({ doctor, revenue: sum.toLocaleString() + ' €' })
+          this.dataToExport.push({ doctor, revenue: this.$options.filters.formatPrice(sum) })
         })
       }
     },

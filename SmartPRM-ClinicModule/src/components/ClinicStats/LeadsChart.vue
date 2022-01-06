@@ -197,7 +197,7 @@ export default {
           const sum = data.filter(item => item.country === country)
             .map(item => item.enquiries_count && Number(item.enquiries_count))
             .reduce((a, b) => Number(a) + Number(b))
-          this.dataToExport.push({ country, enquiries: sum.toLocaleString() })
+          this.dataToExport.push({ country, enquiries: this.$options.filters.formatPrice(sum) })
         })
       }
     },
