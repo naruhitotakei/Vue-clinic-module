@@ -38,7 +38,11 @@
                           <div>
                             <b-checkbox v-model="item.completed" name="check-button" inline
                               :key="index"
-                              @change="finishAssignment(item.id, $event, 'myToday')"><strong>{{ item.description }}</strong></b-checkbox>
+                              @change="finishAssignment(item.id, $event, 'myToday')"
+                            >
+                              <strong v-if="!item.completed">{{ item.description }}</strong>
+                              <strong :style="{ color: '#aaa' }" v-else>{{ item.description }}</strong>
+                            </b-checkbox>
                           </div>
                           <div class="d-flex align-items-center justify-content-between">
                             <div>
@@ -98,7 +102,10 @@
                         <div>
                           <b-checkbox v-model="item.completed" name="check-button" inline
                             :key="index"
-                            @change="finishAssignment(item.id, $event, 'myoverdue')"><strong>{{ item.description }}</strong></b-checkbox>
+                            @change="finishAssignment(item.id, $event, 'myoverdue')">
+                              <strong v-if="!item.completed">{{ item.description }}</strong>
+                              <strong :style="{ color: '#aaa' }" v-else>{{ item.description }}</strong>
+                            </b-checkbox>
                         </div>
                         <div class="d-flex align-items-center justify-content-between">
                           <div>
@@ -150,7 +157,10 @@
                           <div>
                             <b-checkbox v-model="item.completed"  name="check-button" inline
                               :key="index"
-                              @change="openWarningModal(item.id, $event, 'today')"><strong>{{ item.description }}</strong></b-checkbox>
+                              @change="openWarningModal(item.id, $event, 'today')">
+                              <strong v-if="!item.completed">{{ item.description }}</strong>
+                              <strong :style="{ color: '#aaa' }" v-else>{{ item.description }}</strong>
+                            </b-checkbox>
                           </div>
                           <b-row>
                             <b-col cols="12" lg="6" align-self="center">
@@ -211,7 +221,8 @@
                             <b-checkbox v-model="item.completed" :disabled="item.disabled" name="check-button" inline
                               :key="index"
                               @change="openWarningModal(item.id, $event, 'overdue')">
-                                <strong>{{ item.description }}</strong>
+                                <strong v-if="!item.completed">{{ item.description }}</strong>
+                                <strong :style="{ color: '#aaa' }" v-else>{{ item.description }}</strong>
                             </b-checkbox>
                           </div>
                           <b-row>
@@ -305,7 +316,10 @@
                                 <div>
                                   <b-checkbox v-model="item.completed" :disabled="item.disabled" name="check-button" inline
                                     :key="index"
-                                    @change="finishAssignment(item.id, $event, 'myFuture')"><strong>{{ item.description }}</strong></b-checkbox>
+                                    @change="finishAssignment(item.id, $event, 'myFuture')">
+                                    <strong v-if="!item.completed">{{ item.description }}</strong>
+                                    <strong :style="{ color: '#aaa' }" v-else>{{ item.description }}</strong>
+                                  </b-checkbox>
                                 </div>
                                 <div class="d-flex align-items-center justify-content-between">
                                   <div>
@@ -354,7 +368,10 @@
                                 <div>
                                   <b-checkbox v-model="item.completed" :disabled="item.disabled" name="check-button" inline
                                     :key="index"
-                                    @change="openWarningModal(item.id, $event, 'future')"><strong>{{ item.description }}</strong></b-checkbox>
+                                    @change="openWarningModal(item.id, $event, 'future')">
+                                      <strong v-if="!item.completed">{{ item.description }}</strong>
+                                      <strong :style="{ color: '#aaa' }" v-else>{{ item.description }}</strong>
+                                    </b-checkbox>
                                 </div>
                                 <b-row>
                                   <b-col cols="12" lg="6" align-self="center">
@@ -529,7 +546,7 @@
 }
 
 .taskIsActive {
-    color: black;
+  color: black;
 }
 
 .checkbox-assignment {
@@ -599,6 +616,10 @@ body  .custom-control-label::after {
 
   .custom-control-label {
     margin-top: 3px !important;
+  }
+
+  span.strong-description {
+    color: red !important;
   }
 
 }

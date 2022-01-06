@@ -234,11 +234,6 @@ export default {
           title: {
             text: 'EUR',
           },
-          labels: {
-            formatter: function(y) {
-              return this.$options.filters.formatPrice(y)
-            },
-          },
         },
         xaxis: {
           type: 'datetime',
@@ -274,6 +269,9 @@ export default {
       }
       this.$refs[`excel-${tableName}`].download = documentName + ' ' + date
       return true
+    },
+    formatPrice(price) {
+      return this.$options.filters.formatPrice(price)
     },
     getClinicStats() {
       getClinicStatistics().then(response => {
@@ -331,11 +329,11 @@ export default {
           yaxis: {
             labels: {
               formatter: function(y) {
-                return this.$options.filters.formatPrice(y)
+                return y
               },
             },
             title: {
-              text: this.$options.filters.formatPrice(this.totalRevenue),
+              text: this.formatPrice(this.totalRevenue),
             },
           },
         }

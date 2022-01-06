@@ -92,8 +92,11 @@
                                 <div :class="{ 'taskIsActive' : !item.completed}">
                                     <div>
                                         <b-checkbox v-model="item.completed" name="check-button" inline
-                                                    :key="index"
-                                                    @change="finishAssignment(item.id, $event)"><strong>{{ item.description }}</strong></b-checkbox>
+                                          :key="index"
+                                          @change="finishAssignment(item.id, $event)">
+                                          <strong v-if="!item.completed">{{ item.description }}</strong>
+                                          <strong :style="{ color: '#aaa' }" v-else>{{ item.description }}</strong>
+                                        </b-checkbox>
                                     </div>
                                     <div class="d-flex align-items-center justify-content-between">
                                         <div>
