@@ -844,6 +844,8 @@
       "yourDetailsHaveBeenSuccessfullyVerified": "Your details have been successfully verified. We look forward to your visit.",
       "location": "Location",
       "company": "Company",
+      "bookingSuccessful": "You have successfully booked an appointment!",
+      "bookAnotherAppointment": "Book another appointment",
       "error": {
         "over-order": "You can't book more than two appointments with same phone number.",
         "unavailable-slot": "Your selected slot is already booked."

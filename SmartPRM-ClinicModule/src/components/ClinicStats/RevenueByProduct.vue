@@ -42,23 +42,23 @@ export default {
   components: { IqCard },
   props: {
     start: String,
-    end: String
+    end: String,
   },
   watch: {
-    start (val) {
+    start(val) {
       if (val) {
         this.startDate = val
         this.onDateChange()
       }
     },
-    end (val) {
+    end(val) {
       if (val) {
         this.endDate = val
         this.onDateChange()
       }
-    }
+    },
   },
-  created () {
+  created() {
     if (this.start && this.end) {
       this.startDate = this.start
       this.endDate = this.end
@@ -66,15 +66,15 @@ export default {
     }
   },
   methods: {
-    onDateChange () {
+    onDateChange() {
       if (this.startDate && this.endDate) {
         this.getClinicRevenueByProduct(this.startDate, this.endDate)
       }
     },
-    priceFormat (value) {
-      return Number(value).toLocaleString(undefined, { minimumFractionDigits: 0, maximumFractionDigits: 2 }) + ' €'
+    priceFormat(value) {
+      return this.$options.filters.formatPrice(value)
     },
-    getClinicRevenueByProduct (start, end) {
+    getClinicRevenueByProduct(start, end) {
       this.loading = true
       this.noData = false
       getRevenueByProduct(start, end).then(response => {
@@ -90,7 +90,7 @@ export default {
         this.loading = false
       })
     },
-    setChartData (data) {
+    setChartData(data) {
       let prNames = []
       let sumArray = []
       this.dataToExport = []
@@ -102,7 +102,7 @@ export default {
         this.dataToExport.push({
           product: item.pr_name,
           count: item.count,
-          sum: sum
+          sum: sum,
         })
       })
 
@@ -112,26 +112,26 @@ export default {
       this.chartOptions = {
         labels: [...prNames],
         dataLabels: {
-          enabled: false
+          enabled: false,
         },
         legend: {
-          formatter: function (seriesName, opts) {
+          formatter: function(seriesName, opts) {
             const percentage = parseFloat(opts.w.globals.seriesPercent[opts.seriesIndex]).toFixed(1) + '%'
             return seriesName + ' - ' + percentage
-          }
+          },
         },
         tooltip: {
           y: {
-            formatter: function (value, { series, seriesIndex, w }) {
+            formatter: function(value, { series, seriesIndex, w }) {
               const numb = String(value).match(/\d/g).join('')
-              return self.priceFormat(numb)
-            }
-          }
-        }
+              return self.$options.filters.formatPrice(numb)
+            },
+          },
+        },
       }
-    }
+    },
   },
-  data () {
+  data() {
     return {
       startDate: null,
       endDate: null,
@@ -141,16 +141,16 @@ export default {
       excelColumns: [
         { label: 'Product', field: 'product' },
         { label: 'Count', field: 'count' },
-        { label: 'Sum', field: 'sum', dataFormat: this.priceFormat }
+        { label: 'Sum', field: 'sum', dataFormat: this.priceFormat },
       ],
       series: [],
       chartOptions: {
         labels: [],
         dataLabels: {
-          enabled: false
-        }
-      }
+          enabled: false,
+        },
+      },
     }
-  }
+  },
 }
 </script>

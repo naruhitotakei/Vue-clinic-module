@@ -276,7 +276,7 @@ import {
   getDoctorList,
   updateCalendar,
   updateCalendarLabel,
-  getLabels
+  getLabels,
 } from '@/services/calendarService'
 import DatePicker from 'vue2-datepicker'
 import 'vue2-datepicker/index.css'
@@ -284,15 +284,15 @@ import AddPatientModal from '@/components/Patients/AddPatientModal.vue'
 
 export default {
   components: {
-    calendar, DatePicker, AddPatientModal
+    calendar, DatePicker, AddPatientModal,
   },
   props: {
     resourcesOuter: Array,
     events: Array,
     modalShow: Object,
-    selectDoctor: Object
+    selectDoctor: Object,
   },
-  data () {
+  data() {
     return {
       durationMins: null,
       keydownListener: null,
@@ -303,9 +303,9 @@ export default {
           this.eventPopover = {
             ...this.eventPopover,
             show: false,
-            info: null
+            info: null,
           }
-        }
+        },
       },
       confirmationModal: {
         show: false,
@@ -319,9 +319,9 @@ export default {
             ...this.confirmationModal,
             show: false,
             callback: () => {},
-            info: null
+            info: null,
           }
-        }
+        },
       },
       modalEventTimeChange: false,
       openAddPatient: false,
@@ -342,35 +342,35 @@ export default {
       state: [
         {
           label: 'Attended',
-          value: true
+          value: true,
         },
         {
           label: 'Not Attended',
-          value: false
-        }
+          value: false,
+        },
       ],
       patient_attend: [
         {
           label: this.$t('calendarEvent.unknown'),
           value: null,
-          checked: true
+          checked: true,
         },
         {
           label: this.$t('calendarEvent.attended'),
           value: true,
-          checked: false
+          checked: false,
         },
         {
           label: this.$t('calendarEvent.notAttended'),
           value: false,
-          checked: false
-        }
+          checked: false,
+        },
       ],
       appointment_canceled: [
         {
           label: this.$t('calendarEvent.appointmentCanceled'),
-          checked: false
-        }
+          checked: false,
+        },
       ],
       isDataLoaded: false,
       colors: [],
@@ -392,7 +392,7 @@ export default {
         product_groups: '',
         crmProduct: '',
         appointment_canceled: false,
-        cancelation_reason: ''
+        cancelation_reason: '',
       },
       formDataFirstModalOpened: {},
       calendarApi: null,
@@ -407,7 +407,7 @@ export default {
         headerToolbar: {
           left: 'prev,next today',
           center: 'title',
-          right: 'dayGridMonth,resourceTimeGridWeek,resourceTimeGridDay'
+          right: 'dayGridMonth,resourceTimeGridWeek,resourceTimeGridDay',
         },
         initialView: 'resourceTimeGridWeek',
         resources: this.resourcesOuter,
@@ -432,7 +432,7 @@ export default {
             ...this.confirmationModal,
             show: true,
             info,
-            callback: () => this.eventDrop(info)
+            callback: () => this.eventDrop(info),
           }
         },
         eventResize: (info) => {
@@ -440,14 +440,14 @@ export default {
             ...this.confirmationModal,
             show: true,
             info,
-            callback: () => this.eventResize(info)
+            callback: () => this.eventResize(info),
           }
         },
         eventMouseEnter: (info) => {
           this.eventPopover = {
             ...this.eventPopover,
             show: true,
-            info
+            info,
           }
         },
         eventMouseLeave: () => {
@@ -459,36 +459,36 @@ export default {
         expandRows: true,
         nowIndicator: true,
         fixedWeekCount: false,
-        locale: this.calendarLocale
-      }
+        locale: this.calendarLocale,
+      },
     }
   },
   watch: {
-    durationMins (val) {
+    durationMins(val) {
       if (val) {
         this.setDurationMins()
       }
     },
-    'formData.assignmentDate' () {
+    'formData.assignmentDate'() {
       if (!this.formData.id && !this.formData.end) {
         this.formData.end = this.formData.assignmentDate
       }
       this.setDurationMins()
     },
-    'formData.end' () {
+    'formData.end'() {
       this.setDurationMins()
     },
-    '$i18n.locale' () {
+    '$i18n.locale'() {
       this.getProductGroups(this.$i18n.locale)
       this.getLabels(this.$i18n.locale)
     },
     'calendarLocale': {
       immediate: true,
-      handler () {
+      handler() {
         this.calendarOptions.locale = this.calendarLocale
-      }
+      },
     },
-    'modalShow.show' () {
+    'modalShow.show'() {
       if (!this.formData.id) {
         this.disabled = false
         // this.formData.doctorId = this.selectDoctor.title
@@ -501,18 +501,18 @@ export default {
         this.formDataFirstModalOpened = { ...this.formData }
       }
     },
-    'selectDoctor' () {
+    'selectDoctor'() {
       this.$nextTick(() => {
         this.formData.doctorId = this.selectDoctor.title
       })
     },
-    'colorsLabel' () {
+    'colorsLabel'() {
       this.colors = this.colorsLabel
     },
-    'events' () {
+    'events'() {
       this.setEventsTitle()
     },
-    'isDataLoaded' (data) {
+    'isDataLoaded'(data) {
       if (data) {
         this.$nextTick(() => {
           this.calendarApi = this.$refs.calendar.getApi()
@@ -520,36 +520,36 @@ export default {
         })
       }
     },
-    '$refs.calendar' () {
+    '$refs.calendar'() {
     },
-    'isSelectable' () {
+    'isSelectable'() {
       if (this.calendarApi) this.calendarApi.setOption('selectable', this.isSelectable)
     },
-    'resourcesOuter' () {
+    'resourcesOuter'() {
       this.setResourcesName()
       this.setResourcesView()
       if (this.calendarApi) {
         this.calendarApi.render()
       }
     },
-    'eventAndResources' (data) {
+    'eventAndResources'(data) {
       if (data.events.length >= 0 && data.resources.length > 0) {
         this.isDataLoaded = true
       }
     },
-    'viewName' () {
+    'viewName'() {
       this.setResourcesName()
       this.setResourcesView()
       this.setEventsTitle()
     },
-    'dates' (newDates, oldDates) {
+    'dates'(newDates, oldDates) {
       if (!oldDates || (oldDates.startStr !== newDates.startStr || oldDates.endStr !== newDates.endStr)) {
         this.$emit('updateApp', {
           start: newDates.start,
-          end: newDates.end
+          end: newDates.end,
         })
       }
-    }
+    },
   },
   computed: {
     /* detectMinTime () {
@@ -561,7 +561,7 @@ export default {
         }
       })
     }, */
-    getDurationInMinutes () {
+    getDurationInMinutes() {
       if (this.formData.assignmentDate && this.formData.end) {
         const start = moment(this.formData.assignmentDate).format('YYYY-MM-DDTHH:mm')
         const end = moment(this.formData.end).format('HH:mm')
@@ -573,38 +573,38 @@ export default {
       }
       return null
     },
-    calendarLocale () {
+    calendarLocale() {
       return this.$i18n.locale === 'sl' ? slLocale : enLocale
     },
-    isSelectable () {
+    isSelectable() {
       return !this.viewName.includes('dayGridMonth')
     },
-    getEvents () {
+    getEvents() {
       return this.events
     },
-    getColors () {
+    getColors() {
       return this.colorsLabel
     },
-    isSaveDisabled () {
+    isSaveDisabled() {
       return !this.selectedPatient || !this.formData.location || !this.selectedDoctor || !this.selectedProductGroup || !this.formData.assignmentDate || !this.formData.end
     },
-    eventAndResources () {
+    eventAndResources() {
       return {
         events: this.events,
-        resources: this.resourcesOuter
+        resources: this.resourcesOuter,
       }
-    }
+    },
   },
-  mounted () {
+  mounted() {
     let self = this
-    window.addEventListener('keydown', function (event) {
+    window.addEventListener('keydown', function(event) {
       self.listenEvent(event)
     }, false)
     this.$nextTick(() => {
       this.$forceUpdate()
       this.$emit('updateApp', {
         start: moment().startOf('month').format('YYYY-MM-DD'),
-        end: moment().endOf('month').format('YYYY-MM-DD')
+        end: moment().endOf('month').format('YYYY-MM-DD'),
       })
     })
     this.getPatients()
@@ -617,20 +617,20 @@ export default {
       this.updateCalendar()
     }, 1000 * 3 * 60) // 1000 => 1 second, 3 * 60 => 3 minutes
   },
-  beforeDestroy () {
+  beforeDestroy() {
     clearInterval(this.calendarUpdateEvery3Min)
     window.removeEventListener('keydown', this.listenEvent, false)
   },
   methods: {
-    listenEvent (event) {
+    listenEvent(event) {
       if (event.key === 'Escape') {
         this.closeModal()
       }
     },
-    closeAddPatientModal (value) {
+    closeAddPatientModal(value) {
       this.openAddPatient = value
     },
-    setPatient (patient) {
+    setPatient(patient) {
       let fullName = ''
       if (patient.name) {
         fullName = patient.name
@@ -643,7 +643,7 @@ export default {
       this.selectedPatient = Object.assign({}, patient)
       this.openAddPatient = false
     },
-    closeNewEditModal () {
+    closeNewEditModal() {
       const isDataChanged = JSON.stringify(this.formDataFirstModalOpened) !== JSON.stringify(this.formData)
       if (isDataChanged) {
         this.$bvModal.show('data-not-saved')
@@ -652,131 +652,131 @@ export default {
         this.formData = this.defaultAppointment()
       }
     },
-    notSavedModalClose () {
+    notSavedModalClose() {
       this.$bvModal.hide('data-not-saved')
       this.$emit('setModalShow', false)
       this.formData = this.defaultAppointment()
     },
-    notSavedModalSave () {
+    notSavedModalSave() {
       this.$bvModal.hide('data-not-saved')
       this.saveAppointment()
     },
-    setEventsTitle () {
+    setEventsTitle() {
       if (this.calendarOptions) {
         if (this.viewName === 'dayGridMonth') {
           this.calendarOptions.events = this.events.map(e => ({
             ...e,
-            title: `${e.patient_name} - ${e.prm_pr_group_name_text}`
+            title: `${e.patient_name} - ${e.prm_pr_group_name_text}`,
           }))
         } else {
           this.calendarOptions.events = this.events
         }
       }
     },
-    setResourcesName () {
+    setResourcesName() {
       if (this.viewName === 'resourceTimeGridWeek') {
         this.calendarOptions.resources = this.resourcesOuter.map(r => ({
           ...r,
-          title: `${r.doctorInfo.first_name[0]}. ${r.doctorInfo.surname}`
+          title: `${r.doctorInfo.first_name[0]}. ${r.doctorInfo.surname}`,
         }))
       } else {
         this.calendarOptions.resources = this.resourcesOuter
       }
     },
-    setResourcesView () {
+    setResourcesView() {
       if (this.viewName === 'resourceTimeGridWeek' && (this.resourcesOuter.length > 2 || window.innerWidth < 1200)) {
         this.calendarOptions.resourceLabelClassNames = 'weekly'
       } else {
         this.calendarOptions.resourceLabelClassNames = ''
       }
     },
-    findPatientsDoctor (patient) {
+    findPatientsDoctor(patient) {
       if (!this.selectedDoctor) {
         this.selectedDoctor = this.doctors.find(doctor => doctor.id === patient.prm_dentist_user_id)
       }
     },
-    closeCancelation () {
+    closeCancelation() {
       this.openCancelationModal = false
       this.formData.appointment_canceled = false
     },
-    getLabels (lang) {
+    getLabels(lang) {
       getLabels(lang).then(response => {
         this.colors = response
         const lastLabel = this.colors.pop()
         this.colors.unshift(lastLabel)
       })
     },
-    getLabelText (type) {
+    getLabelText(type) {
       const label = this.colors.find(color => color.type === type)
       return label.text
     },
-    closeModal () {
+    closeModal() {
       this.$emit('setModalShow', false)
       this.formData = this.defaultAppointment()
       this.selectedDoctor = null
       this.selectedProductGroup = null
       this.selectedPatient = null
     },
-    updateCalendar (id, appointment) {
+    updateCalendar(id, appointment) {
       updateCalendar(id, appointment).then(() => {
         this.$emit('updateApp', {
           start: this.dates.start,
-          end: this.dates.end
+          end: this.dates.end,
         })
         this.confirmationModal.reset(false)
       })
     },
-    updateCalendarLabel (id, appointment) {
+    updateCalendarLabel(id, appointment) {
       updateCalendarLabel(id, appointment).then(() => {
         // this.$emit('updateApp')
       })
     },
-    showProps (item, prop) {
+    showProps(item, prop) {
       if (this.disabled && prop === item.value) {
         return true
       } else if (!this.disabled) {
         return true
       }
     },
-    showLabels (item) {
+    showLabels(item) {
       if (this.disabled && this.formData.label_id === item.id) {
         return true
       } else if (!this.disabled) {
         return true
       }
     },
-    getProductGroups (lang) {
+    getProductGroups(lang) {
       getProductGroups(lang).then(response => {
         this.product_groups = response
       })
     },
-    editMode (e) {
+    editMode(e) {
       e.preventDefault()
       this.disabled = false
     },
-    viewPatient (id) {
+    viewPatient(id) {
       this.$router.push(`/patients/${id}`)
     },
-    getPatients () {
+    getPatients() {
       getPatients().then(response => {
         this.patients = response
       })
     },
-    getLocations () {
+    getLocations() {
       getLocationsList().then(response => {
         this.locations = response
       })
     },
-    getDoctors () {
+    getDoctors() {
       getDoctorList().then((data) => {
         this.doctors = data
       })
     },
-    onViewChange (info) {
+    onViewChange(info) {
       this.viewName = info.view.type
       this.dates = info
     },
-    eventResize (info) {
+    eventResize(info) {
       let event = this.calendarApi.getEventById(info.event.id)
       this.formData.id = event.id
       this.formData.assignmentDate = event.start
@@ -786,7 +786,7 @@ export default {
         event.setEnd(this.formData.end)
       }, () => info.revert())
     },
-    eventDrop (info) {
+    eventDrop(info) {
       if (info.view.type === 'dayGridMonth') {
         let event = this.calendarApi.getEventById(info.event.id)
         this.formData.id = event.id
@@ -820,7 +820,7 @@ export default {
         }, () => info.revert())
       }
     },
-    defaultAppointment () {
+    defaultAppointment() {
       return {
         id: '',
         title: '',
@@ -838,13 +838,13 @@ export default {
         crmProduct: '',
         location: this.locations.length === 1 ? this.locations[0].city : '',
         enquiry_id: '',
-        appointment_canceled: false
+        appointment_canceled: false,
       }
     },
-    calculateEndDate (startDate, hours, minutes) {
+    calculateEndDate(startDate, hours, minutes) {
       return moment(startDate).add(hours, 'hours').add(minutes, 'minutes').format('YYYY-MM-DDTHH:mm')
     },
-    saveAppointment () {
+    saveAppointment() {
       this.formData.doctor_id = this.selectedDoctor.id
       this.formData.doctor_name = this.selectedDoctor.name
       this.formData.patient_id = this.selectedPatient.id
@@ -855,7 +855,7 @@ export default {
         createCalendar(this.formData).then(() => {
           this.$emit('updateApp', {
             start: this.dates.start,
-            end: this.dates.end
+            end: this.dates.end,
           })
           this.formData = this.defaultAppointment()
           this.$emit('setModalShow', false)
@@ -879,7 +879,7 @@ export default {
         this.$emit('setModalShow', false)
       }
     },
-    openCreateModal (selectionInfo) {
+    openCreateModal(selectionInfo) {
       this.disabled = false
       this.formData = this.defaultAppointment()
       this.modalTitle = ''
@@ -894,7 +894,7 @@ export default {
       this.formData.end = new Date(selectionInfo.endStr)
       // this.setAssignmentDateAndDuration(selectionInfo.start, selectionInfo.end)
     },
-    setAssignmentDateAndDuration (start, end) {
+    setAssignmentDateAndDuration(start, end) {
       this.formData.assignmentDate = moment(start).format('YYYY-MM-DDTHH:mm')
       let temp = moment.duration(moment(end).diff(moment(start))).asHours()
       let hourseAndMinutes = this.getHoursAndMinutes(temp)
@@ -903,7 +903,7 @@ export default {
       this.formData.start = start
       this.formData.end = end
     },
-    setDurationMins () {
+    setDurationMins() {
       this.durationMins = null
       if (this.formData.assignmentDate && this.formData.end) {
         const start = moment(this.formData.assignmentDate).format('HH:mm')
@@ -920,14 +920,14 @@ export default {
         }
       }
     },
-    setMinutes (minutes) {
+    setMinutes(minutes) {
       const value = Number(minutes)
       if (this.formData.assignmentDate && value && (typeof value === 'number') && value > 0) {
         const endTime = moment(this.formData.assignmentDate).add(value, 'minutes').toLocaleString()
         this.formData.end = new Date(endTime)
       }
     },
-    getHoursAndMinutes (hours) {
+    getHoursAndMinutes(hours) {
       if (hours === 24) {
         return { hours: 0, minutes: 0 }
       } else if (hours > 1) {
@@ -942,7 +942,7 @@ export default {
         return { hours: 0, minutes: 60 * hours }
       }
     },
-    openUpdateModal (selectionInfo) {
+    openUpdateModal(selectionInfo) {
       console.log(selectionInfo)
       // this.modalShow = true
       this.$emit('setModalShow', true)
@@ -964,15 +964,15 @@ export default {
         location: location,
         ...event.extendedProps,
         patient_attended: event.extendedProps.patient_attended ? event.extendedProps.patient_attended : null,
-        assignmentDate: new Date(event.extendedProps.assignmentDate)
+        assignmentDate: new Date(event.extendedProps.assignmentDate),
 
       }
       this.selectedDoctor = event.extendedProps.doctorId
       this.selectedPatient = event.extendedProps.patientId.full_name
       this.selectedProductGroup = event.extendedProps.prm_pr_group_name_text
       this.modalTitle = this.formData.title
-    }
-  }
+    },
+  },
 }
 </script>
 

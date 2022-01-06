@@ -86,7 +86,7 @@
                 <div class="d-flex align-items-center justify-content-between">
                   <div class="rounded-circle iq-card-icon bg-info"><i class="ri-hospital-line"></i></div>
                   <div class="text-right">
-                    <h2 class="mb-0"><span class="counter">{{ revenue }}</span></h2>
+                    <h2 class="mb-0"><span class="counter">{{ revenue | formatPrice }}</span></h2>
                     <h5 class="">Revenue</h5>
                   </div>
                 </div>
@@ -131,7 +131,7 @@
 import { xray } from '../../config/pluginInit'
 import IqCard from '../../components/xray/cards/iq-card'
 import { clinicStatisticsAttendance, getClinicStats } from '../../services/statistics'
-import { getDatesForCurrentYear } from '../../services/commonCodeLists'
+// import { getDatesForCurrentYear } from '../../services/commonCodeLists'
 import RevenueByProduct from '@/components/ClinicStats/RevenueByProduct.vue'
 import LeadsChart from '@/components/ClinicStats/LeadsChart.vue'
 import RevenueByDoctor from '@/components/ClinicStats/RevenueByDoctor.vue'
@@ -145,14 +145,14 @@ export default {
     RevenueByProduct,
     LeadsChart,
     RevenueByDoctor,
-    NewPatients
+    NewPatients,
   },
-  mounted () {
+  mounted() {
     xray.index()
     this.getStartDates()
     this.getAttendance()
   },
-  data () {
+  data() {
     return {
       startDate: null,
       endDate: null,
@@ -167,7 +167,7 @@ export default {
       excelColumns: [
         { label: 'Product', field: 'product' },
         { label: 'Count', field: 'count' },
-        { label: 'Sum', field: 'sum', dataFormat: this.priceFormat }
+        { label: 'Sum', field: 'sum', dataFormat: this.priceFormat },
       ],
       slickOptions: {
         centerMode: false,
@@ -181,29 +181,29 @@ export default {
             arrows: false,
             centerMode: true,
             centerPadding: '30',
-            slidesToShow: 3
-          }
+            slidesToShow: 3,
+          },
         }, {
           breakpoint: 480,
           settings: {
             arrows: false,
             centerMode: true,
             centerPadding: '15',
-            slidesToShow: 1
-          }
-        }]
+            slidesToShow: 1,
+          },
+        }],
       },
       series: [],
       chartOptions: {
         labels: [],
         dataLabels: {
-          enabled: false
-        }
-      }
+          enabled: false,
+        },
+      },
     }
   },
   methods: {
-    onFilterChange (value) {
+    onFilterChange(value) {
       const today = moment().format('YYYY-MM-DD')
       if (value && value === 2) {
         // Get Last 2 years Date from now
@@ -226,25 +226,27 @@ export default {
         this.getStats(this.startDate, this.endDate)
       }
     },
-    getStartDates () {
-      getDatesForCurrentYear().then(response => {
-        const start = response[0]
-        const end = response[response.length - 1]
-        this.startDate = start['?column?'].split('T')[0]
-        this.endDate = end['?column?'].split('T')[0]
-        this.getStats(this.startDate, this.endDate)
-        // this.getClinicRevenueByProduct(this.startDate, this.endDate)
-      })
+    getStartDates() {
+      this.endDate = moment().format('YYYY-MM-DD')
+      this.startDate = moment().add(-30, 'days').format('YYYY-MM-DD')
+      this.getStats(this.startDate, this.endDate)
+      // getDatesForCurrentYear().then(response => {
+      //   const start = response[0]
+      //   const end = response[response.length - 1]
+      //   this.startDate = start['?column?'].split('T')[0]
+      //   this.endDate = end['?column?'].split('T')[0]
+      //   this.getStats(this.startDate, this.endDate)
+      // })
     },
-    onDateChange () {
+    onDateChange() {
       this.filterBy = null
       this.getStats(this.startDate, this.endDate)
     },
 
-    getStats (start, end) {
+    getStats(start, end) {
       getClinicStats(start, end).then(response => {
         if (response && response.revenue) {
-          this.revenue = Number(response.revenue).toLocaleString()
+          this.revenue = Number(response.revenue)
           this.appointments = Number(response.appointments).toLocaleString()
           this.attended = Number(response.attended).toLocaleString()
           this.serviced_patients = Number(response.serviced).toLocaleString()
@@ -266,7 +268,7 @@ export default {
     //     }
     //   })
     // },
-    getAttendance () {
+    getAttendance() {
       clinicStatisticsAttendance().then(response => {
         if (typeof response !== 'string') {
           this.attendance = response[0].count
@@ -274,8 +276,8 @@ export default {
           console.error(response)
         }
       })
-    }
-  }
+    },
+  },
 }
 </script>
 
