@@ -86,7 +86,9 @@
                 </template> -->
                         <b-list-group class="list-group-flush" id="openTodos">
                             <b-list-group-item v-for="(item, index) in openAssignments"
-                                               :key="index">
+                              :key="index"
+                              :style="{'background': getDifferenceDate(item.due_at) === 1 && '#ffeeba' || getDifferenceDate(item.due_at) > 1 && '#f5c6cb'}"
+                            >
                                 <div :class="{ 'taskIsActive' : !item.completed}">
                                     <div>
                                         <b-checkbox v-model="item.completed" name="check-button" inline
@@ -245,7 +247,7 @@ const body = document.getElementsByTagName('body')
 export default {
   name: 'Home',
   components: { IqCard, AddEditAssignment },
-  data () {
+  data() {
     return {
       userId: null,
       users: [],
@@ -266,12 +268,12 @@ export default {
             show: true,
             tools: {
               pan: false,
-              zoom: false
-            }
+              zoom: false,
+            },
           },
           zoom: {
-            enabled: true
-          }
+            enabled: true,
+          },
         },
         colors: ['#089bab', '#ffb177', '#00d0ff', '#e64141', '#00ca00', '#777D74', '#374948', '#6610f2'],
         responsive: [{
@@ -280,29 +282,29 @@ export default {
             legend: {
               position: 'bottom',
               offsetX: -10,
-              offsetY: 0
-            }
-          }
+              offsetY: 0,
+            },
+          },
         }],
         plotOptions: {
           bar: {
             horizontal: false,
-            borderRadius: 10
-          }
+            borderRadius: 10,
+          },
         },
         xaxis: {
           type: 'datetime',
           categories: ['01/01/2011 GMT', '01/02/2011 GMT', '01/03/2011 GMT', '01/04/2011 GMT',
-            '01/05/2011 GMT', '01/06/2011 GMT'
-          ]
+            '01/05/2011 GMT', '01/06/2011 GMT',
+          ],
         },
         legend: {
           position: 'right',
-          offsetY: 40
+          offsetY: 40,
         },
         fill: {
-          opacity: 1
-        }
+          opacity: 1,
+        },
       },
       totalVisits: 0,
       countriesWithPatients: [],
@@ -312,7 +314,7 @@ export default {
         { label: this.$t('home.todaysAppointmentsColumn.productGroup'), key: 'product_group_name', class: 'text-left' },
         { label: this.$t('home.todaysAppointmentsColumn.doctor'), key: 'doctor_name', class: 'text-left' },
         { label: this.$t('home.todaysAppointmentsColumn.time'), key: 'time', class: 'text-left' },
-        { label: this.$t('home.todaysAppointmentsColumn.contact'), key: 'patient_phone', class: 'text-left' }
+        { label: this.$t('home.todaysAppointmentsColumn.contact'), key: 'patient_phone', class: 'text-left' },
       ],
       staff: [],
       a: 13,
@@ -325,8 +327,8 @@ export default {
           label: this.$t('home.openAssignmentsColumn.dueAt'),
           key: 'due_at',
           class: 'text-center',
-          formatter: value => { return moment(value).format('ddd, D MMM') }
-        }
+          formatter: value => { return moment(value).format('ddd, D MMM') },
+        },
       ],
       todaysAppointmentsPerPage: 10,
       currentTodaysAppointmentsPage: 1,
@@ -334,10 +336,10 @@ export default {
       currentOpenAssignmentsPage: 1,
       disabled: true,
       doctors: [],
-      dentists: []
+      dentists: [],
     }
   },
-  async mounted () {
+  async mounted() {
     xray.index()
     await this.getUserLogin()
     this.getUsersList()
@@ -348,20 +350,23 @@ export default {
     body[0].classList.add('sidebar-main-menu')
   },
   computed: {
-    hideTodaysAppointmentsPagination () {
+    hideTodaysAppointmentsPagination() {
       return Math.floor(this.todaysAppointments.length / this.todaysAppointmentsPerPage) !== 0
     },
-    hideOpenAssignmentsPagination () {
+    hideOpenAssignmentsPagination() {
       return Math.floor(this.openAssignments.length / this.openAssignmentsPerPage) !== 0
-    }
+    },
   },
   methods: {
-    getDentists () {
+    getDifferenceDate(date) {
+      return Math.floor((Date.parse(new Date(Date.now())) - Date.parse(date)) / 86400000)
+    },
+    getDentists() {
       getDentists().then(response => {
         this.dentists = response
       })
     },
-    getUsersList () {
+    getUsersList() {
       getUsers().then(response => {
         if (response && Array.isArray(response)) {
           this.users = response
@@ -373,7 +378,7 @@ export default {
         }
       })
     },
-    getEnquires () {
+    getEnquires() {
       getEnquires().then(response => {
         let enquires = [...response]
         enquires.map((item, index) => {
@@ -382,7 +387,7 @@ export default {
         this.enquires = enquires
       })
     },
-    patientsDentist (patient) {
+    patientsDentist(patient) {
       if (this.dentists && this.dentists.length) {
         let dentist = this.dentists.find((item) => {
           return item.code === patient.prm_dentist_user_id
@@ -390,7 +395,7 @@ export default {
         return dentist && dentist.label ? dentist.label : 'N/A'
       }
     },
-    getUserLogin () {
+    getUserLogin() {
       sso().then(response => {
         if (typeof response !== 'string') {
           this.userId = response.id
@@ -407,44 +412,44 @@ export default {
         }
       })
     },
-    getUserAssignments () {
+    getUserAssignments() {
       this.editAssignmentModal = false
       getAssignmentsForUser().then(response => {
         this.openAssignments = response
       })
     },
-    closeAssignmentModal (val) {
+    closeAssignmentModal(val) {
       this.editAssignmentModal = false
     },
-    getTodaysAppointmentsList (locale) {
+    getTodaysAppointmentsList(locale) {
       getTodaysAppointments(locale).then(response => {
         this.todaysAppointments = response
       })
     },
-    getDatesForCurrentWeek () {
+    getDatesForCurrentWeek() {
       getDatesForCurrentWeek().then(response => {
         let temp = _.map(response, '?column?')
         this.dates = temp
-        this.datesForCurrentWeek = _.map(temp, function (date) {
+        this.datesForCurrentWeek = _.map(temp, function(date) {
           return moment(date).format('DD-MM-YYYY')
         })
         this.prepareDataForChart()
       })
     },
-    editMode (e) {
+    editMode(e) {
       e.preventDefault()
       this.disabled = false
     },
-    getDoctorsStatisticPerWeek () {
+    getDoctorsStatisticPerWeek() {
       getDoctorsStatisticPerWeek().then(response => {
-        this.doctorsData = _.map(response, function (element) {
+        this.doctorsData = _.map(response, function(element) {
           let parsedElement = Object.assign({}, element)
           parsedElement.starts_at = moment(parsedElement.starts_at).format('DD-MM-YYYY')
           return parsedElement
         })
       })
     },
-    prepareDataForChart () {
+    prepareDataForChart() {
       this.doctors.forEach(doctor => {
         let tempObj = {}
         tempObj.name = doctor.name
@@ -462,37 +467,37 @@ export default {
       })
       this.chartOptions = { ...this.chartOptions, ...{ series: this.dataForChart, xaxis: { categories: this.dates } } }
     },
-    getCountriesWithPatients () {
+    getCountriesWithPatients() {
       getCountriesWithPatients().then(response => {
         this.countriesWithPatients = response
         this.getVisitsByCountryInAWeek()
       })
     },
-    getVisitsByCountryInAWeek () {
+    getVisitsByCountryInAWeek() {
       visitsByCountryInAWeek().then(response => {
         let visitsByCountry = response
-        this.totalVisits = _.sumBy(visitsByCountry, function (o) { return +o.count })
+        this.totalVisits = _.sumBy(visitsByCountry, function(o) { return +o.count })
         if (visitsByCountry && Array.isArray(visitsByCountry)) {
           visitsByCountry.forEach(element => {
             element.percentage = (element.count / this.totalVisits * 100).toFixed(2)
           })
         }
 
-        this.countriesWithPatients = _.map(this.countriesWithPatients, function (country) {
+        this.countriesWithPatients = _.map(this.countriesWithPatients, function(country) {
           return _.assign(country, _.find(visitsByCountry, {
-            name: country.name
+            name: country.name,
           }))
         })
-        this.countriesWithPatients = _.filter(this.countriesWithPatients, function (country) {
+        this.countriesWithPatients = _.filter(this.countriesWithPatients, function(country) {
           return country.hasOwnProperty('percentage')
         })
       })
     },
-    finishAssignment (id, finished) {
+    finishAssignment(id, finished) {
       const completedBy = this.userId
       finishAssignment(id, finished, completedBy).then(response => {})
     },
-    editAssignments (todo) {
+    editAssignments(todo) {
       if (todo && todo.due_at) {
         todo.due_at = moment(todo.due_at).format('YYYY-MM-DD')
       }
@@ -502,8 +507,8 @@ export default {
       }
       this.todoToEdit = Object.assign({}, todo)
       this.editAssignmentModal = true
-    }
-  }
+    },
+  },
 }
 </script>
 
