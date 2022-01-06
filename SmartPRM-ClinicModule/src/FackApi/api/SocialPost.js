@@ -1,7 +1,7 @@
 export const Posts = [
   {
     images: [
-      require('../../assets/images/page-img/p1.jpg')
+      require('../../assets/images/page-img/p1.jpg'),
     ],
     image: require('../../assets/images/page-img/p1.jpg'),
     description: 'Lorem Ipsum is simply dummy text of the printing and typesetting industry.',
@@ -13,14 +13,14 @@ export const Posts = [
     user: { profile: require('../../assets/images/page-img/g1.jpg'), name: 'Nik Jon' },
     comments: [
       { image: require('../../assets/images/user/04.jpg'), user: { name: 'Paul Molive', msg: 'Lorem ipsum dolor sit amet', time: '5 min' }, is_commentLike: true },
-      { image: require('../../assets/images/user/03.jpg'), user: { name: 'Paul Molive', msg: 'Lorem ipsum dolor sit amet', time: '5 min' }, is_commentLike: true }
-    ]
+      { image: require('../../assets/images/user/03.jpg'), user: { name: 'Paul Molive', msg: 'Lorem ipsum dolor sit amet', time: '5 min' }, is_commentLike: true },
+    ],
   },
   {
     images: [
       require('../../assets/images/page-img/p1.jpg'),
       require('../../assets/images/page-img/p1.jpg'),
-      require('../../assets/images/page-img/p1.jpg')
+      require('../../assets/images/page-img/p1.jpg'),
     ],
     image: require('../../assets/images/page-img/p1.jpg'),
     description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. ',
@@ -33,14 +33,14 @@ export const Posts = [
     user: { profile: require('../../assets/images/page-img/g2.jpg'), name: 'John' },
     comments: [
       { image: require('../../assets/images/user/01.jpg'), user: { name: 'Paul Molive', msg: 'Lorem ipsum dolor sit amet', time: '5 min' }, is_commentLike: true },
-      { image: require('../../assets/images/user/02.jpg'), user: { name: 'Paul Molive', msg: 'Lorem ipsum dolor sit amet', time: '5 min' }, is_commentLike: true }
-    ]
+      { image: require('../../assets/images/user/02.jpg'), user: { name: 'Paul Molive', msg: 'Lorem ipsum dolor sit amet', time: '5 min' }, is_commentLike: true },
+    ],
   },
   {
     images: [
       require('../../assets/images/page-img/p1.jpg'),
       require('../../assets/images/page-img/p1.jpg'),
-      require('../../assets/images/page-img/p1.jpg')
+      require('../../assets/images/page-img/p1.jpg'),
     ],
     image: require('../../assets/images/page-img/p1.jpg'),
     description: null,
@@ -53,14 +53,14 @@ export const Posts = [
     user: { profile: require('../../assets/images/page-img/g3.jpg'), name: 'Jack' },
     comments: [
       { image: require('../../assets/images/user/01.jpg'), user: { name: 'Paul Molive', msg: 'Lorem ipsum dolor sit amet', time: '5 min' }, is_commentLike: true },
-      { image: require('../../assets/images/user/02.jpg'), user: { name: 'Paul Molive', msg: 'Lorem ipsum dolor sit amet', time: '5 min' }, is_commentLike: true }
-    ]
+      { image: require('../../assets/images/user/02.jpg'), user: { name: 'Paul Molive', msg: 'Lorem ipsum dolor sit amet', time: '5 min' }, is_commentLike: true },
+    ],
   },
   {
     images: [
       require('../../assets/images/page-img/p1.jpg'),
       require('../../assets/images/page-img/p1.jpg'),
-      require('../../assets/images/page-img/p1.jpg')
+      require('../../assets/images/page-img/p1.jpg'),
     ],
     image: null,
     description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. ',
@@ -73,7 +73,7 @@ export const Posts = [
     user: { profile: require('../../assets/images/page-img/g3.jpg'), name: 'Jack' },
     comments: [
       { image: require('../../assets/images/user/04.jpg'), user: { name: 'Paul Molive', msg: 'Lorem ipsum dolor sit amet', time: '5 min' }, is_commentLike: true },
-      { image: require('../../assets/images/user/03.jpg'), user: { name: 'Paul Molive', msg: 'Lorem ipsum dolor sit amet', time: '5 min' }, is_commentLike: true }
-    ]
-  }
+      { image: require('../../assets/images/user/03.jpg'), user: { name: 'Paul Molive', msg: 'Lorem ipsum dolor sit amet', time: '5 min' }, is_commentLike: true },
+    ],
+  },
 ]

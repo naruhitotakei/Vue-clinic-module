@@ -12,7 +12,7 @@ export default new Vuex.Store({
   modules: {
     Setting,
     Chat,
-    Patients
+    Patients,
   },
   state: {
   },
@@ -22,5 +22,5 @@ export default new Vuex.Store({
   },
   getters: {
   },
-  strict: debug
+  strict: debug,
 })

@@ -16,8 +16,8 @@
             <div class="filter-select">
               <v-select
                 :options="filterDoctors"
-                :value="selectedDoctor"
                 v-model="selectedDoctor"
+                :reduce="(option) => option.value"
               ></v-select>
             </div>
             <div class="filter-select">
@@ -25,15 +25,23 @@
                 class="date"
                 id="filter-datepicker"
                 v-model="dateSelected"
-                :date-format-options="{ year: 'numeric', month: '2-digit', day: '2-digit' }"
+                :date-format-options="{
+                  year: 'numeric',
+                  month: '2-digit',
+                  day: '2-digit',
+                }"
                 placeholder="yyyy-mm-dd"
-            ></b-form-datepicker>
+              ></b-form-datepicker>
             </div>
           </div>
         </template>
         <template v-slot:body>
           <!-- Desktop version -->
-          <div class="card forDesktop" v-for="appointment in appointments" :key="appointment.id">
+          <div
+            class="card forDesktop"
+            v-for="appointment in appointments"
+            :key="appointment.id"
+          >
             <b-row class="card-titles no-margin">
               <b-col lg="1" md="1">
                 {{ $t('appointments.time') }}
@@ -59,7 +67,13 @@
                 <p class="black-text">{{ appointment.time }}</p>
               </b-col>
               <b-col lg="2" md="2">
-                <p class="black-text">{{ appointment.enquiry_name + ' ' + appointment.enquiry_last_name }}</p>
+                <p class="black-text">
+                  {{
+                    appointment.enquiry_name +
+                    ' ' +
+                    appointment.enquiry_last_name
+                  }}
+                </p>
               </b-col>
               <b-col lg="2" md="2">
                 <p class="black-text">{{ appointment.product_name }}</p>
@@ -89,15 +103,21 @@
                 <div v-if="appointment.attendance">
                   <b-button
                     size="sm"
-                    :variant="appointment.attendance === 'Attended' ? 'success' : 'light'"
+                    :variant="
+                      appointment.attendance === 'Attended'
+                        ? 'success'
+                        : 'light'
+                    "
                     class="width-50"
-                   @click="handleUpdateAttendance(appointment.id, 'Attended')"
+                    @click="handleUpdateAttendance(appointment.id, 'Attended')"
                   >
                     {{ $t('shared.yes') }}
                   </b-button>
                   <b-button
                     size="sm"
-                    :variant="appointment.attendance !== 'Attended' ? 'danger' : 'light'"
+                    :variant="
+                      appointment.attendance !== 'Attended' ? 'danger' : 'light'
+                    "
                     class="width-50"
                     @click="handleUpdateAttendance(appointment.id, 'No-show')"
                   >
@@ -106,98 +126,21 @@
                 </div>
               </b-col>
               <b-col lg="3" md="3">
-                 <!-- <b-form-group class="align-center my-1">
+                <b-form-group class="align-center my-1">
                   <b-form-radio
-                    v-if="appointment.level_of_interest == 'Not interested' || appointment.level_of_interest == 'Not Interested'"
-                    name="interestLevel"
-                    checked
+                    v-for="[value, label] of [
+                      ['Not interested', 'notInterested'],
+                      ['Interested', 'interested'],
+                      ['Very interested', 'veryInterested'],
+                    ]"
+                    :key="value"
+                    v-model="appointment.level_of_interest"
+                    :value="value"
+                    @change="handleUpdateLevelOfInterest(appointment.id, value)"
                   >
-                    {{ $t('appointments.notInterested') }}
-                  </b-form-radio>
-                  <b-form-radio
-                    v-else
-                    name="interestLevel"
-                    @change="handleUpdateLevelOfInterest(appointment.id, 'Not Interested')"
-                  >
-                    {{ $t('appointments.notInterested') }}
-                  </b-form-radio>
-                  <b-form-radio
-                    v-if="appointment.level_of_interest == 'Interested'"
-                    name="interestLevel"
-                    checked
-                  >
-                    {{ $t('appointments.interested') }}
-                  </b-form-radio>
-                  <b-form-radio
-                    v-else
-                    name="interestLevel"
-                    @change="handleUpdateLevelOfInterest(appointment.id, 'Interested')"
-                  >
-                    {{ $t('appointments.interested') }}
-                  </b-form-radio>
-                  <b-form-radio
-                    v-if="appointment.level_of_interest == 'Very interested' || appointment.level_of_interest == 'Very Interested'"
-                    name="interestLevel"
-                    checked
-                  >
-                    {{ $t('appointments.veryInterested') }}
-                  </b-form-radio>
-                  <b-form-radio
-                    v-else
-                    name="interestLevel"
-                    @change="handleUpdateLevelOfInterest(appointment.id, 'Very Interested')"
-                  >
-                    {{ $t('appointments.veryInterested') }}
+                    {{ $t(`appointments.${label}`) }}
                   </b-form-radio>
                 </b-form-group>
-                      -->
-                <b-button-group class="align-center button-group-style">
-                  <b-button
-                    v-if="appointment.level_of_interest == 'Not interested' || appointment.level_of_interest == 'Not Interested'"
-                    size="sm"
-                    variant="primary"
-                  >
-                    {{ $t('appointments.notInterested') }}
-                  </b-button>
-                  <b-button
-                    v-else
-                    size="sm"
-                    variant="info"
-                    @click="handleUpdateLevelOfInterest(appointment.id, 'Not Interested')"
-                  >
-                    {{ $t('appointments.notInterested') }}
-                  </b-button>
-                  <b-button
-                    v-if="appointment.level_of_interest == 'Interested'"
-                    size="sm"
-                    variant="primary"
-                  >
-                    {{ $t('appointments.interested') }}
-                  </b-button>
-                  <b-button
-                    v-else
-                    size="sm"
-                    variant="info"
-                    @click="handleUpdateLevelOfInterest(appointment.id, 'Interested')"
-                  >
-                    {{ $t('appointments.interested') }}
-                  </b-button>
-                  <b-button
-                    v-if="appointment.level_of_interest == 'Very interested' || appointment.level_of_interest == 'Very Interested'"
-                    size="sm"
-                    variant="primary"
-                  >
-                    {{ $t('appointments.veryInterested') }}
-                  </b-button>
-                  <b-button
-                    v-else
-                    size="sm"
-                    variant="info"
-                    @click="handleUpdateLevelOfInterest(appointment.id, 'Very Interested')"
-                  >
-                    {{ $t('appointments.veryInterested') }}
-                  </b-button>
-                </b-button-group>
               </b-col>
             </b-row>
             <b-row class="no-margin pt-2 mb-3 align-center">
@@ -213,25 +156,53 @@
           </div>
 
           <!-- Mobile version -->
-          <div class="card forMobile" v-for="appointment in appointments" :key="appointment.id + '_mobile'">
+          <div
+            class="card forMobile"
+            v-for="appointment in appointments"
+            :key="appointment.id + '_mobile'"
+          >
             <b-row class="no-margin flexMobileParent">
-              <b-col md="3" sm="3" class="col-title-sm">{{ $t('appointments.time') }}:</b-col>
-              <b-col md="9" sm="9" class="col-data-sm"><p class="black-text">{{ appointment.time }}</p></b-col>
+              <b-col md="3" sm="3" class="col-title-sm"
+                >{{ $t('appointments.time') }}:</b-col
+              >
+              <b-col md="9" sm="9" class="col-data-sm"
+                ><p class="black-text">{{ appointment.time }}</p></b-col
+              >
             </b-row>
             <b-row class="no-margin flexMobileParent">
-              <b-col md="3" sm="3" class="col-title-sm">{{ $t('appointments.patient') }}:</b-col>
-              <b-col md="9" sm="9" class="col-data-sm"><p class="black-text">{{ appointment.enquiry_name + ' ' + appointment.enquiry_last_name }}</p></b-col>
+              <b-col md="3" sm="3" class="col-title-sm"
+                >{{ $t('appointments.patient') }}:</b-col
+              >
+              <b-col md="9" sm="9" class="col-data-sm"
+                ><p class="black-text">
+                  {{
+                    appointment.enquiry_name +
+                    ' ' +
+                    appointment.enquiry_last_name
+                  }}
+                </p></b-col
+              >
             </b-row>
             <b-row class="no-margin flexMobileParent">
-              <b-col md="3" sm="3" class="col-title-sm">{{ $t('appointments.product') }}:</b-col>
-              <b-col md="9" sm="9" class="col-data-sm"><p class="black-text">{{ appointment.product_name }}</p></b-col>
+              <b-col md="3" sm="3" class="col-title-sm"
+                >{{ $t('appointments.product') }}:</b-col
+              >
+              <b-col md="9" sm="9" class="col-data-sm"
+                ><p class="black-text">{{ appointment.product_name }}</p></b-col
+              >
             </b-row>
             <b-row class="no-margin flexMobileParent">
-              <b-col md="3" sm="3" class="col-title-sm">{{ $t('appointments.doctor') }}:</b-col>
-              <b-col md="9" sm="9" class="col-data-sm"><p class="black-text">{{ appointment.doctor_name }}</p></b-col>
+              <b-col md="3" sm="3" class="col-title-sm"
+                >{{ $t('appointments.doctor') }}:</b-col
+              >
+              <b-col md="9" sm="9" class="col-data-sm"
+                ><p class="black-text">{{ appointment.doctor_name }}</p></b-col
+              >
             </b-row>
             <b-row class="no-margin flexMobileParent mb-2">
-              <b-col md="3" sm="3" class="col-title-sm">{{ $t('appointments.attendance') }}:</b-col>
+              <b-col md="3" sm="3" class="col-title-sm"
+                >{{ $t('appointments.attendance') }}:</b-col
+              >
               <b-col md="9" sm="9" class="col-data-sm">
                 <div v-if="!appointment.attendance">
                   <b-button
@@ -254,7 +225,11 @@
                 <div v-if="appointment.attendance">
                   <b-button
                     size="sm"
-                    :variant="appointment.attendance === 'Attended' ? 'success' : 'light'"
+                    :variant="
+                      appointment.attendance === 'Attended'
+                        ? 'success'
+                        : 'light'
+                    "
                     class="width-50"
                     @click="handleUpdateAttendance(appointment.id, 'Attended')"
                   >
@@ -262,7 +237,9 @@
                   </b-button>
                   <b-button
                     size="sm"
-                    :variant="appointment.attendance !== 'Attended' ? 'danger' : 'light'"
+                    :variant="
+                      appointment.attendance !== 'Attended' ? 'danger' : 'light'
+                    "
                     class="width-50"
                     @click="handleUpdateAttendance(appointment.id, 'No-show')"
                   >
@@ -272,11 +249,16 @@
               </b-col>
             </b-row>
             <b-row class="no-margin flexMobileParent">
-              <b-col md="3" sm="3" class="col-title-sm">{{ $t('appointments.interest') }}:</b-col>
+              <b-col md="3" sm="3" class="col-title-sm"
+                >{{ $t('appointments.interest') }}:</b-col
+              >
               <b-col md="9" sm="9" class="col-data-sm">
                 <b-button-group class="align-center button-group-style">
                   <b-button
-                    v-if="appointment.level_of_interest == 'Not interested' || appointment.level_of_interest == 'Not Interested'"
+                    v-if="
+                      appointment.level_of_interest == 'Not interested' ||
+                      appointment.level_of_interest == 'Not Interested'
+                    "
                     size="sm"
                     variant="primary"
                   >
@@ -286,7 +268,12 @@
                     v-else
                     size="sm"
                     variant="info"
-                    @click="handleUpdateLevelOfInterest(appointment.id, 'Not Interested')"
+                    @click="
+                      handleUpdateLevelOfInterest(
+                        appointment.id,
+                        'Not Interested',
+                      )
+                    "
                   >
                     {{ $t('appointments.notInterested') }}
                   </b-button>
@@ -301,12 +288,17 @@
                     v-else
                     size="sm"
                     variant="info"
-                    @click="handleUpdateLevelOfInterest(appointment.id, 'Interested')"
+                    @click="
+                      handleUpdateLevelOfInterest(appointment.id, 'Interested')
+                    "
                   >
                     {{ $t('appointments.interested') }}
                   </b-button>
                   <b-button
-                    v-if="appointment.level_of_interest == 'Very interested' || appointment.level_of_interest == 'Very Interested'"
+                    v-if="
+                      appointment.level_of_interest == 'Very interested' ||
+                      appointment.level_of_interest == 'Very Interested'
+                    "
                     size="sm"
                     variant="primary"
                   >
@@ -316,7 +308,12 @@
                     v-else
                     size="sm"
                     variant="info"
-                    @click="handleUpdateLevelOfInterest(appointment.id, 'Very Interested')"
+                    @click="
+                      handleUpdateLevelOfInterest(
+                        appointment.id,
+                        'Very Interested',
+                      )
+                    "
                   >
                     {{ $t('appointments.veryInterested') }}
                   </b-button>
@@ -324,7 +321,11 @@
               </b-col>
             </b-row>
             <b-row class="no-margin flexMobileParent">
-              <b-col md="12" sm="12" class="mt-2 mb-3 align-center display-flex">
+              <b-col
+                md="12"
+                sm="12"
+                class="mt-2 mb-3 align-center display-flex"
+              >
                 <b-form-textarea
                   id="notes-textarea"
                   class="relative-pos"
@@ -338,10 +339,14 @@
             </b-row>
           </div>
 
-          <b-modal v-model="showModal" title="Modal" ok-title="Save Changes" cancel-title="Close">
+          <b-modal
+            v-model="showModal"
+            title="Modal"
+            ok-title="Save Changes"
+            cancel-title="Close"
+          >
             <p>Modal</p>
           </b-modal>
-
         </template>
       </iq-card>
     </b-col>
@@ -349,6 +354,7 @@
 </template>
 
 <script>
+import { defineComponent } from '@vue/composition-api'
 import IqCard from '../../components/xray/cards/iq-card.vue'
 import { xray } from '../../config/pluginInit'
 import {
@@ -357,196 +363,236 @@ import {
   getAppointments,
   updateLevelOfInterest,
   updateNotes,
-  updateAttendance
+  updateAttendance,
 } from '../../services/appointments'
 
-export default {
+export default defineComponent({
   components: {
-    IqCard
+    IqCard,
   },
   name: 'Appointments',
-  mounted () {
+  mounted() {
     xray.index()
     this.getAppointmentsLocationsData()
     this.getAppointmentsDoctorsData()
-    this.getAppointmentsData(this.selectedLocation, this.selectedDoctor, this.dateSelected)
+    this.getAppointmentsData(
+      this.selectedLocation,
+      this.selectedDoctor,
+      this.dateSelected,
+    )
   },
-  data: function () {
+  data() {
     return {
       filterLocations: ['All Locations'],
       selectedLocation: 'All Locations',
-      filterDoctors: ['All Doctors'],
+      filterDoctors: [{ value: 'All Doctors', label: 'All Doctors' }],
       selectedDoctor: 'All Doctors',
       dateSelected: new Date().toISOString().slice(0, 10),
       showModal: false,
-      appointments: []
+      appointments: [],
     }
   },
   watch: {
-    selectedLocation (newLocation) {
+    selectedLocation(newLocation) {
       this.selectedLocation = newLocation
-      this.getAppointmentsData(this.selectedLocation, this.selectedDoctor, this.dateSelected)
+      this.getAppointmentsData(
+        this.selectedLocation,
+        this.selectedDoctor,
+        this.dateSelected,
+      )
     },
-    selectedDoctor (newDoctor) {
+    selectedDoctor(newDoctor) {
       this.selectedDoctor = newDoctor
-      this.getAppointmentsData(this.selectedLocation, this.selectedDoctor, this.dateSelected)
+      this.getAppointmentsData(
+        this.selectedLocation,
+        this.selectedDoctor,
+        this.dateSelected,
+      )
     },
-    dateSelected (newDate) {
+    dateSelected(newDate) {
       this.dateSelected = newDate
-      this.getAppointmentsData(this.selectedLocation, this.selectedDoctor, this.dateSelected)
-    }
+      this.getAppointmentsData(
+        this.selectedLocation,
+        this.selectedDoctor,
+        this.dateSelected,
+      )
+    },
   },
   methods: {
-    async getAppointmentsLocationsData () {
-      getAppointmentsLocations().then(response => {
+    async getAppointmentsLocationsData() {
+      getAppointmentsLocations().then((response) => {
         if (Array.isArray(response)) {
-          response.map(obj => {
+          response.map((obj) => {
             this.filterLocations.push(obj.location)
           })
         }
       })
     },
-    async getAppointmentsDoctorsData () {
-      getAppointmentsDoctors().then(response => {
+    async getAppointmentsDoctorsData() {
+      getAppointmentsDoctors().then((response) => {
         if (Array.isArray(response)) {
-          response.map(obj => {
-            this.filterDoctors.push(obj.doctor_name)
+          response.map((obj) => {
+            this.filterDoctors.push({
+              value: obj.doctor_id,
+              label: obj.doctor_name,
+            })
           })
         }
       })
     },
-    async getAppointmentsData (filterLocation, filterDoctor, filterDate) {
-      getAppointments(filterLocation, filterDoctor, filterDate).then(response => {
-        this.appointments = []
-        if (Array.isArray(response)) {
-          response.map(obj => {
-            this.appointments.push(obj)
-          })
+    async getAppointmentsData(filterLocation, filterDoctor, filterDate) {
+      getAppointments(filterLocation, filterDoctor, filterDate).then(
+        (response) => {
+          this.appointments = []
+          if (Array.isArray(response)) {
+            response.map((obj) => {
+              this.appointments.push(obj)
+            })
+          }
+        },
+      )
+    },
+    async handleUpdateLevelOfInterest(appointmentID, levelOfInterest) {
+      updateLevelOfInterest({
+        id: appointmentID,
+        interest: levelOfInterest,
+      }).then((response) => {
+        if (response.success === true) {
+          this.getAppointmentsData(
+            this.selectedLocation,
+            this.selectedDoctor,
+            this.dateSelected,
+          )
         }
       })
     },
-    async handleUpdateLevelOfInterest (appointmentID, levelOfInterest) {
-      updateLevelOfInterest({ 'id': appointmentID, 'interest': levelOfInterest }).then(response => {
-        if (response.success === true) {
-          this.getAppointmentsData(this.selectedLocation, this.selectedDoctor, this.dateSelected)
-        }
-      })
+    async handleUpdateNotes(e, appointmentID) {
+      updateNotes({ id: appointmentID, notes: e.target.value }).then(
+        (response) => {
+          if (response.success === true) {
+            this.getAppointmentsData(
+              this.selectedLocation,
+              this.selectedDoctor,
+              this.dateSelected,
+            )
+          }
+        },
+      )
     },
-    async handleUpdateNotes (e, appointmentID) {
-      updateNotes({ 'id': appointmentID, 'notes': e.target.value }).then(response => {
-        if (response.success === true) {
-          this.getAppointmentsData(this.selectedLocation, this.selectedDoctor, this.dateSelected)
-        }
-      })
+    async handleUpdateAttendance(appointmentID, attendance) {
+      updateAttendance({ id: appointmentID, attendance: attendance }).then(
+        (response) => {
+          if (response.success === true) {
+            this.getAppointmentsData(
+              this.selectedLocation,
+              this.selectedDoctor,
+              this.dateSelected,
+            )
+          }
+        },
+      )
     },
-    async handleUpdateAttendance (appointmentID, attendance) {
-      updateAttendance({ 'id': appointmentID, 'attendance': attendance }).then(response => {
-        if (response.success === true) {
-          this.getAppointmentsData(this.selectedLocation, this.selectedDoctor, this.dateSelected)
-        }
-      })
-    }
-  }
-}
+  },
+})
 </script>
 
 <style>
+.filters-section {
+  flex-direction: row;
+  align-items: center;
+}
+.filter-select {
+  min-width: 300px;
+  margin-left: 1rem;
+}
+.vs__clear {
+  display: none !important;
+}
+.no-margin {
+  margin-left: 0 !important;
+  margin-right: 0 !important;
+}
+.card-titles {
+  border-bottom: 1px solid #dbdbdb;
+}
+.card {
+  padding-top: 0.5rem;
+  margin-bottom: 1.5rem;
+  border-bottom: 1px solid black !important;
+  border-radius: 0 !important;
+}
+.button-group-style {
+  flex-direction: column;
+  width: 100%;
+}
+.button-group-style button {
+  width: 100%;
+  margin-bottom: 0.5rem !important;
+}
+.align-center {
+  align-items: center !important;
+}
+.black-text {
+  color: black;
+}
+#notes-textarea {
+  height: auto !important;
+}
+.forMobile {
+  display: none !important;
+}
+.flexMobileParent {
+  display: flex;
+  flex-direction: row;
+}
+.col-title-sm {
+  width: 30%;
+}
+.col-data-sm {
+  width: 70%;
+}
+.display-flex {
+  display: flex;
+}
+.relative-pos {
+  position: relative;
+}
+.width-50 {
+  width: 50px !important;
+}
+
+/* media */
+@media only screen and (max-width: 1401px) {
+  .filter-select {
+    min-width: 220px;
+  }
+}
+
+@media only screen and (max-width: 921px) {
+  .forDesktop {
+    display: none !important;
+  }
+  .forMobile {
+    display: flex !important;
+    flex-direction: column;
+  }
+}
+
+@media only screen and (max-width: 841px) {
   .filters-section {
-    flex-direction: row;
-    align-items: center;
+    flex-direction: column;
+    align-items: flex-start;
   }
   .filter-select {
     min-width: 300px;
-    margin-left: 1rem;
+    margin-left: 0;
+    margin-bottom: 0.75rem;
   }
-  .vs__clear {
-    display: none !important;
-  }
-  .no-margin {
-    margin-left: 0 !important;
-    margin-right: 0 !important;
-  }
-  .card-titles {
-    border-bottom: 1px solid #dbdbdb;
-  }
-  .card {
-    padding-top: 0.5rem;
-    margin-bottom: 1.5rem;
-    border-bottom: 1px solid black !important;
-    border-radius: 0 !important;
-  }
-  .button-group-style {
-    flex-direction: column;
-    width: 100%;
-  }
-  .button-group-style button {
-    width: 100%;
-    margin-bottom: 0.5rem !important;
-  }
-  .align-center {
-    align-items: center !important;
-  }
-  .black-text {
-    color: black;
-  }
-  #notes-textarea {
-    height: auto !important;
-  }
-  .forMobile {
-    display: none !important;
-  }
-  .flexMobileParent {
-    display: flex;
-    flex-direction: row;
-  }
-  .col-title-sm {
-    width: 30%;
-  }
-  .col-data-sm {
-    width: 70%;
-  }
-  .display-flex {
-    display: flex;
-  }
-  .relative-pos {
-    position: relative;
-  }
-  .width-50 {
-    width: 50px !important;
-  }
+}
 
-  /* media */
-  @media only screen and (max-width: 1401px) {
-    .filter-select {
-      min-width: 220px;
-    }
+@media only screen and (max-width: 481px) {
+  .filter-select {
+    min-width: 100%;
   }
-
-   @media only screen and (max-width: 921px) {
-     .forDesktop {
-       display: none !important;
-     }
-     .forMobile {
-       display: flex !important;
-       flex-direction: column;
-     }
-   }
-
-  @media only screen and (max-width: 841px) {
-    .filters-section {
-      flex-direction: column;
-      align-items: flex-start;
-    }
-    .filter-select {
-      min-width: 300px;
-      margin-left: 0;
-      margin-bottom: 0.75rem;
-    }
-  }
-
-  @media only screen and (max-width: 481px) {
-    .filter-select {
-      min-width: 100%;
-    }
-  }
+}
 </style>

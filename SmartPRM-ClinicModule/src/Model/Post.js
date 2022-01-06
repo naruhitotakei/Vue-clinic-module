@@ -1,7 +1,7 @@
 import { is } from 'ramda'
 
 export default class Post {
-  constructor (post = {}) {
+  constructor(post = {}) {
     this.id = is(String, post.id) ? post.id : ''
     this.images = is(Array, post.images) ? post.images : []
     this.description = is(String, post.description) ? post.description : ''
