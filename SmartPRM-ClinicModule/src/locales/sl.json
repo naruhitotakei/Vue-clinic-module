@@ -801,7 +801,7 @@
       "chooseTime": "Izberite termin",
       "review": "Pregled",
       "service": "Storitev",
-      "doctor": "Zdravnik",
+      "doctor": "Zobozdravnik",
       "time": "Čas",
       "price": "Cena",
       "taken": "Zasedeno",
@@ -813,11 +813,11 @@
       "availableDoctors": "Prosti zdravniki",
       "showMore": "Pokaži več",
       "totalInfo": "Popolni podatki",
-      "summary": "sl - Summary",
+      "summary": "Povzetek",
       "date": "Datum",
       "total": "Skupaj",
       "backToServices": "Nazaj na storitve",
-      "toReview": "Na pregled",
+      "toReview": "Potrdi datum",
       "checkSelectedSlotAndConfirmReservation": "Obkljukajte izbrane termine in potrdite rezervacijo.",
       "selectedSlot": "Izbran termin",
       "at": "ob",
@@ -841,9 +841,11 @@
       "yourDetailsHaveBeenSuccessfullyVerified": "Vaši podatki so bili potrjeni. Veselimo se vašega obiska.",
       "location": "Lokacija",
       "company": "Podjetje",
+      "bookingSuccessful": "Vaš termin je rezerviran!",
+      "bookAnotherAppointment": "Rezerviraj nov termin",
       "error": {
-        "over-order": "sl - You can't book more than two appointments with same phone number.",
-        "unavailable-slot": "sl - Your selected slot is already booked."
+        "over-order": "Ni možno zapolniti več kot dva termina iz iste telefonske številke.",
+        "unavailable-slot": "Vaš izbrani termin je že zaseden."
       }
     }
   }
