@@ -194,10 +194,10 @@
                                                                         :key="index + 'color'"
                                                                         :reduce="item => item.id"
                                                                         :value="item.id"
-                                                                        :style="{'background': item.color}"
+                                                                        :style="{'border': '1px solid ' + item.color}"
                                                                         :disabled="disabled"
                                                                         name="labels">
-                                                              <p class="text-white m-0 py-1 pr-2">{{ item.text }}</p>
+                                                              <p class="m-0 py-1 pr-2" :style="{'color': item.color}">{{ item.text }}</p>
                                                           </b-form-radio>
                                                       </template>
                                                   </div>
@@ -300,24 +300,40 @@
                               </b-col>
                               <b-col>
                                   <b-col md="14">
-                                      <b-card class="iq-card" v-if="patient.general_notes">
-                                          <b-card-title>{{ $t('EPR.overview.generalNotes') }}</b-card-title>
-                                          <hr />
-                                          <b-card-text class="text-black" v-html="patient.general_notes"></b-card-text>
-                                          <!-- <b-card-text><small class="text-muted">{{ $t('EPR.overview.generalNotesUpdated') }} {{patient.general_notes_updated_at | fromNowDate}}</small></b-card-text> -->
-                                      </b-card>
+                                      <iq-card v-if="patient.general_notes">
+                                          <template v-slot:body>
+                                              <div class="iq-card-header d-flex justify-content-between">
+                                                  <div class="iq-header-title">
+                                                      <div class="row justify-content-between align-items-center">
+                                                          <h4 class="card-title">{{ $t('EPR.overview.generalNotes') }}</h4>
+                                                      </div>
+                                                      <hr />
+                                                  </div>
+                                              </div>
+                                              <div>
+                                                  <iq-card-text class="text-black ml-1" v-html="patient.general_notes"></iq-card-text>
+                                                  <!-- <b-card-text><small class="text-muted">{{ $t('EPR.overview.generalNotesUpdated') }} {{patient.general_notes_updated_at | fromNowDate}}</small></b-card-text> -->
+                                              </div>
+                                          </template>
+                                      </iq-card>
                                   </b-col>
                                   <b-col md="14">
-                                      <b-card text-variant="white"
-                                              bg-variant="danger"
-                                              class="iq-card"
-                                              v-if="patient.allergies">
-                                          <b-card-title class="text-white">{{ $t('EPR.overview.allergies') }}</b-card-title>
-                                          <blockquote class="blockquote mb-0">
-                                              <p class="font-size-14">{{patient.allergies}}</p>
-                                              <!--<footer class="blockquote-footer text-white font-size-12">{{ $t('EPR.overview.allergiesUpdated') }} {{patient.allergies_updated_at | fromNowDate}}</footer> -->
-                                          </blockquote>
-                                      </b-card>
+                                      <iq-card v-if="patient.allergies" class="allergies">
+                                          <template v-slot:body>
+                                              <div class="iq-card-header d-flex justify-content-between">
+                                                  <div class="iq-header-title">
+                                                      <div class="row justify-content-between align-items-center">
+                                                          <h4 class="card-title text-white">{{ $t('EPR.overview.allergies') }}</h4>
+                                                      </div>
+                                                      <hr />
+                                                  </div>
+                                              </div>
+                                              <div>
+                                                  <iq-card-text v-html="patient.allergies" class="ml-1"></iq-card-text>
+                                                  <!-- <b-card-text><small class="text-muted">{{ $t('EPR.overview.generalNotesUpdated') }} {{patient.general_notes_updated_at | fromNowDate}}</small></b-card-text> -->
+                                              </div>
+                                          </template>
+                                      </iq-card>
                                   </b-col>
                                   <b-col md="14">
                                       <iq-card>
@@ -374,7 +390,7 @@
                                                       </div>
                                                   </li>
                                               </ul>
-                                              <p v-if="smsMessages.length === 0">{{ $t('EPR.overview.noSMS') }}</p>
+                                              <p v-if="smsMessages.length === 0" class="ml-1">{{ $t('EPR.overview.noSMS') }}</p>
                                               <b-pagination
                                                 class="mt-2"
                                                 v-else-if="smsMessages.length > 4"
@@ -412,8 +428,8 @@
                                                             </div>
                                                             <div class="d-flex align-items-center justify-content-between">
                                                               <div>
-                                                                <span class="text-left">{{ item.name }} {{ item.patientlastname }}</span>&nbsp;
-                                                                <span class="text-left">{{ getPatientsDentist(item) ? `(${getPatientsDentist(item)})` : '' }}</span>
+                                                                <span class="text-left ml-1">{{ item.name }} {{ item.patientlastname }}</span>&nbsp;
+                                                                <span class="text-left ml-1">{{ getPatientsDentist(item) ? `(${getPatientsDentist(item)})` : '' }}</span>
                                                               </div>
                                                               <div class="d-flex align-items-center">
                                                                 <span class="text-right text-width-150">{{ item.due_at | formatDate }}</span>
@@ -454,10 +470,9 @@
                                                   </div>
                                                   <ul class="iq-timeline">
                                                       <li v-for="(item,index) in futureList" :key="index + 'future'" id="futureList">
-                                                          <div v-if="item.appointmentStatus === 'Attended'" class="timeline-dots border-success"></div>
-                                                          <div v-if="item.appointmentStatus === 'Canceled by clinic'" class="timeline-dots border-light"></div>
-                                                          <div v-if="item.appointmentStatus === 'Canceled by patient'" class="timeline-dots border-danger"></div>
-                                                          <div v-if="item.appointmentStatus === 'Unknown'" class="timeline-dots border-warning"></div>
+                                                          <div v-if="item.appointmentStatus === true" class="timeline-dots border-success"></div>
+                                                          <div v-if="item.appointmentStatus === false" class="timeline-dots border-danger"></div>
+                                                          <div v-if="item.appointmentStatus === null" class="timeline-dots border-warning"></div>
                                                           <div @click="openEditAppointmentModal(item)" style="cursor: pointer;">
                                                               <h6>{{item.product_group_text}}<span class="float-right">{{item.note}}</span></h6>
                                                               <small class="mt-1">{{item.starts_at | formatDateAndTime}} {{ item.location ? `(${item.location})` : '' }}</small>
@@ -487,10 +502,9 @@
                                                   </div>
                                                   <ul class="iq-timeline" id="pastAppointments">
                                                       <li v-for="(item, index) in pastList" :key="index + 'status'" id="pastList">
-                                                        <div v-if="item.appointmentStatus === 'Attended'" class="timeline-dots border-success"></div>
-                                                        <div v-if="item.appointmentStatus === 'Canceled by clinic'" class="timeline-dots border-light"></div>
-                                                        <div v-if="item.appointmentStatus === 'Canceled by patient'" class="timeline-dots border-danger"></div>
-                                                        <div v-if="item.appointmentStatus === 'Unknown'" class="timeline-dots border-warning"></div>
+                                                        <div v-if="item.appointmentStatus === true" class="timeline-dots border-success"></div>
+                                                        <div v-if="item.appointmentStatus === false" class="timeline-dots border-danger"></div>
+                                                        <div v-if="item.appointmentStatus === null" class="timeline-dots border-warning"></div>
                                                         <h6 @click="openEditAppointmentModal(item)" class="clickable">{{item.product_group_text}}<span class="float-right">{{item.note}}</span></h6>
                                                         <small class="mt-1">{{item.starts_at | formatDateAndTime}} {{ item.location ? `(${item.location})` : '' }}</small>
                                                       </li>
@@ -615,16 +629,16 @@
                                                   <b-form-input :disabled="disabledData" name="address" class="form-control-disabled font-size-12" v-model="patient.address_line_1" style="line-height: 22px;">
                                                   </b-form-input>
                                               </b-form-group>
-                                              <b-form-group class="col-md-12 align-items-center mt-1" :class="{'mb-0': disabledData}" style="justify-content: space-between;" label-cols-sm="4" label-for="city" :label="$t('EPR.personalInfo.postCode')">
-                                                  <b-form-input :disabled="disabledData" class="col-md-12 form-control-disabled font-size-12 mt-1" style="float: left;" v-model="patient.post_code" type="text"></b-form-input>
+                                              <b-form-group class="col-md-12 align-items-center" :class="{'mb-0': disabledData}" style="justify-content: space-between;" label-cols-sm="4" label-for="city" :label="$t('EPR.personalInfo.postCode')">
+                                                  <b-form-input :disabled="disabledData" class="form-control-disabled font-size-12" style="float: left;" v-model="patient.post_code" type="text"></b-form-input>
                                               </b-form-group>
-                                              <b-form-group class="col-md-12 form-control-disabled font-size-12 mt-1" :class="{'mb-0': disabledData}" label-cols-sm="4" label-for="country" :label="$t('EPR.personalInfo.country')">
+                                              <b-form-group class="col-md-12 align-items-center" :class="{'mb-1': disabledData}" label-cols-sm="4" label-for="country" :label="$t('EPR.personalInfo.country')">
                                                   <v-select :disabled="disabledData" label="name" :clearable="false"
                                                             :reduce="country => country.id"
                                                             class="style-chooser form-control-disabled font-size-12"
                                                             v-model="patient.country_id" :options="countries"></v-select>
                                               </b-form-group>
-                                              <b-form-group class="col-md-12 align-items-center" :class="{'mb-0': disabledData}" label-cols-sm="4" label-for="region" :label="$t('EPR.personalInfo.region')">
+                                              <b-form-group class="col-md-12 align-items-center" :class="{'mb-1': disabledData}" label-cols-sm="4" label-for="region" :label="$t('EPR.personalInfo.region')">
                                                   <v-select :clearable="false"
                                                             :reduce="region => region.code"
                                                             :disabled="disabledData"
@@ -1658,7 +1672,7 @@ export default {
     },
     decideAppointmentStatus(appointment) {
       if (appointment.appointment_canceled) {
-        return true
+        return false
       } else if (appointment.patient_attended === true) {
         return true
       }
@@ -1703,6 +1717,8 @@ export default {
     getLabels(lang) {
       getLabels(lang).then(response => {
         this.colors = response
+        const lastLabel = this.colors.pop()
+        this.colors.unshift(lastLabel)
       })
     },
     goToFiles() {
@@ -2402,6 +2418,11 @@ canvas {
 .tooltip .tooltip-inner {
   max-width: 100% !important;
   width: 400px !important;
+}
+
+.allergies {
+    background-color: #f81c34 !important;
+    color: white !important;
 }
 
 @media (max-width: 992px) {

@@ -83,10 +83,10 @@ const updateAppointments = (request, response, id, appointments) => {
     if (appointments.backgroundColor) statement += "label_id='" + appointments.backgroundColor + "',"
     if (appointments.end) statement += "ends_at='" + moment(appointments.assignmentDate).format('YYYY-MM-DD') + 'T' + moment(appointments.end).format('HH:mm') + "',"
     if (appointments.assignmentDate) statement += "time='" + time + "',"
-    if (appointments.patient_attended === true) statement += "attendance='Attended' "
-    if (appointments.patient_attended === false) statement += "attendance='No-show' "
-    if (appointments.patient_attended === null) statement += "attendance='' "
-    if (appointments.appointment_canceled) statement += "attendance='Cancelled' "
+    if (appointments.patient_attended === true) statement += "attendance='Attended',"
+    if (appointments.patient_attended === false) statement += "attendance='No-show',"
+    if (appointments.patient_attended === null) statement += "attendance='',"
+    if (appointments.appointment_canceled) statement += "attendance='Cancelled',"
     if (appointments.cancelation_reason) statement += "cancelation_reason='" + appointments.cancelation_reason + "' "
     statement = statement.slice(0, -1)
     statement += " WHERE id = " + id

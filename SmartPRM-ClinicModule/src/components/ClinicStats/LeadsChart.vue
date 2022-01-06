@@ -157,7 +157,13 @@ export default {
       this.series = sumByCountry
 
       this.chartOptions = {
+        dataLabels: {
+          enabled: false,
+        },
         chart: {
+          type: 'bar',
+          height: 350,
+          stacked: true,
           toolbar: {
             show: true,
             tools: {
@@ -197,7 +203,7 @@ export default {
           const sum = data.filter(item => item.country === country)
             .map(item => item.enquiries_count && Number(item.enquiries_count))
             .reduce((a, b) => Number(a) + Number(b))
-          this.dataToExport.push({ country, enquiries: sum.toLocaleString() })
+          this.dataToExport.push({ country, enquiries: this.$options.filters.formatPrice(sum) })
         })
       }
     },

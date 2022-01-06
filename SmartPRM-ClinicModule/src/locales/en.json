@@ -16,7 +16,9 @@
     "search": "Search",
     "searchBy": "Search By",
     "sortBy": "Sort By",
-    "country": "Country"
+    "country": "Country",
+    "yes": "Yes",
+    "no": "No"
   },
   "documents": {
     "offers": "Offers",
@@ -155,6 +157,20 @@
     "requiredFields": "Fields marked with * have to be filled",
     "eventMoveBetweenResources": "Are you sure you want to move this appointment to another doctor?",
     "eventTimeChange": "Are you sure you want to change this event's time?"
+  },
+  "appointments": {
+    "header": "Appointments",
+    "filters": "Filters",
+    "time": "Time",
+    "patient": "Patient",
+    "product": "Product",
+    "doctor": "Doctor",
+    "attendance": "Attendance",
+    "interest": "Interest level",
+    "notInterested": "Not interested",
+    "interested": "Interested",
+    "veryInterested": "Very interested",
+    "enterNotes": "Enter notes..."
   },
   "patients": {
     "patientsHeader": "Patients",
@@ -791,6 +807,7 @@
       "doctor": "Doctor",
       "time": "Time",
       "price": "Price",
+      "open": "open",
       "taken": "taken",
       "closed": "closed",
       "chooseYourFavoriteDoctor": "Choose your favorite doctor",
@@ -828,6 +845,8 @@
       "yourDetailsHaveBeenSuccessfullyVerified": "Your details have been successfully verified. We look forward to your visit.",
       "location": "Location",
       "company": "Company",
+      "bookingSuccessful": "You have successfully booked an appointment!",
+      "bookAnotherAppointment": "Book another appointment",
       "error": {
         "over-order": "You can't book more than two appointments with same phone number.",
         "unavailable-slot": "Your selected slot is already booked."

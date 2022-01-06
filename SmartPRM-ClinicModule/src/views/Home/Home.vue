@@ -7,19 +7,19 @@
                         <h4 class="card-title">{{ $t('home.todaysAppointments') }}</h4>
                     </template>
                     <!-- <template v-slot:headerAction>
-                    <b-dropdown size="lg p-0"  variant="link" toggle-class="text-decoration-none" no-caret>
-                  <template v-slot:button-content>
-                        <span class="dropdown-toggle p-0" id="dropdownMenuButton5" data-toggle="dropdown">
-                          <i class="ri-more-fill m-0 text-primary"></i>
-                        </span>
-                  </template>
-                  <b-dropdown-item href="#"><i class="ri-eye-fill mr-2"></i>{{ $t('home.newAppointmentsDropDown.view') }}</b-dropdown-item>
-                  <b-dropdown-item href="#"><i class="ri-delete-bin-6-fill mr-2"></i>{{ $t('home.newAppointmentsDropDown.delete') }}</b-dropdown-item>
-                  <b-dropdown-item href="#"><i class="ri-pencil-fill mr-2"></i>{{ $t('home.newAppointmentsDropDown.edit') }}</b-dropdown-item>
-                  <b-dropdown-item href="#"><i class="ri-printer-fill mr-2"></i>{{ $t('home.newAppointmentsDropDown.print') }}</b-dropdown-item>
-                  <b-dropdown-item href="#"><i class="ri-file-download-fill mr-2"></i>{{ $t('home.newAppointmentsDropDown.download') }}</b-dropdown-item>
-                </b-dropdown>
-                </template> -->
+                <b-dropdown size="lg p-0"  variant="link" toggle-class="text-decoration-none" no-caret>
+              <template v-slot:button-content>
+                    <span class="dropdown-toggle p-0" id="dropdownMenuButton5" data-toggle="dropdown">
+                      <i class="ri-more-fill m-0 text-primary"></i>
+                    </span>
+              </template>
+              <b-dropdown-item href="#"><i class="ri-eye-fill mr-2"></i>{{ $t('home.newAppointmentsDropDown.view') }}</b-dropdown-item>
+              <b-dropdown-item href="#"><i class="ri-delete-bin-6-fill mr-2"></i>{{ $t('home.newAppointmentsDropDown.delete') }}</b-dropdown-item>
+              <b-dropdown-item href="#"><i class="ri-pencil-fill mr-2"></i>{{ $t('home.newAppointmentsDropDown.edit') }}</b-dropdown-item>
+              <b-dropdown-item href="#"><i class="ri-printer-fill mr-2"></i>{{ $t('home.newAppointmentsDropDown.print') }}</b-dropdown-item>
+              <b-dropdown-item href="#"><i class="ri-file-download-fill mr-2"></i>{{ $t('home.newAppointmentsDropDown.download') }}</b-dropdown-item>
+            </b-dropdown>
+            </template> -->
                     <template v-slot:body>
                         <b-table v-if="todaysAppointments.length > 0"
                                  borderless
@@ -30,9 +30,6 @@
                                  :current-page="currentTodaysAppointmentsPage">
                             <template v-slot:cell(patient_name)="data">
                                 <router-link tag="span" :to="'/patients/' + data.item.patient_id" style="cursor:pointer;" class="style-chooser form-control-disabled">{{ data.item.patient_name }}</router-link>
-                            </template>
-                            <template v-slot:cell(product_group_name)="data">
-                                <p @click="openAppointmentModal(data.item)" style="cursor: pointer;" class="p-0 m-0">{{ data.item.product_group_name }}</p>
                             </template>
                         </b-table>
                         <p v-else>{{ $t('home.noAppointmentsToday') }}</p>
@@ -65,65 +62,75 @@
                     </template>
                     <template v-slot:body>
                         <!-- <b-table v-if="openAssignments.length > 0"
-                          borderless
-                          id="openAssignmentsTable"
-                          :items="openAssignments"
-                          :fields="openAssignmentsColumns"
-                          :per-page="openAssignmentsPerPage"
-                          :current-page="currentOpenAssignmentsPage"
-                        >
-                          <template v-slot:cell(dentist)="data">
-                            {{ patientsDentist(data.item) }}
-                          </template>
-                        </b-table> -->
+                  borderless
+                  id="openAssignmentsTable"
+                  :items="openAssignments"
+                  :fields="openAssignmentsColumns"
+                  :per-page="openAssignmentsPerPage"
+                  :current-page="currentOpenAssignmentsPage"
+                >
+                  <template v-slot:cell(dentist)="data">
+                    {{ patientsDentist(data.item) }}
+                  </template>
+                </b-table> -->
                         <!-- <template>
-                          <b-collapse id="collapse-6" class="mb-2"> </b-collapse>
-                          <div class="ml-4 pb-2">
-                              <b-pagination v-if="hideOpenAssignmentsPagination"
-                                            v-model="currentOpenAssignmentsPage"
-                                            :total-rows="openAssignments.length"
-                                            :per-page="openAssignmentsPerPage"
-                                            aria-controls="openAssignmentsTable">
-                              </b-pagination>
-                          </div>
-                      </template> -->
+                    <b-collapse id="collapse-6" class="mb-2"> </b-collapse>
+                    <div class="ml-4 pb-2">
+                        <b-pagination v-if="hideOpenAssignmentsPagination"
+                                      v-model="currentOpenAssignmentsPage"
+                                      :total-rows="openAssignments.length"
+                                      :per-page="openAssignmentsPerPage"
+                                      aria-controls="openAssignmentsTable">
+                        </b-pagination>
+                    </div>
+                </template> -->
                         <b-list-group class="list-group-flush" id="openTodos">
-                          <b-list-group-item
-                              v-for="(item, index) in openAssignments"
+                            <b-list-group-item v-for="(item, index) in openAssignments"
                               :key="index"
-                          >
-                            <div :class="{ 'taskIsActive' : !item.completed}">
-                              <div>
-                                <b-checkbox v-model="item.completed" name="check-button" inline
-                                  :key="index"
-                                  @change="finishAssignment(item.id, $event)"><strong>{{ item.description }}</strong></b-checkbox>
-                              </div>
-                              <div class="d-flex align-items-center justify-content-between">
-                                <div>
-                                  <span class="text-left">{{ item.patientname }} {{ item.patientlastname }}</span>&nbsp;
-                                  <span class="text-left">{{ patientsDentist(item) ? `(${patientsDentist(item)})` : '' }}</span>
+                              :style="{'background': getDifferenceDate(item.due_at) === 1 && '#ffeeba' || getDifferenceDate(item.due_at) > 1 && '#f5c6cb'}"
+                            >
+                                <div :class="{ 'taskIsActive' : !item.completed}">
+                                    <div>
+                                        <b-checkbox v-model="item.completed" name="check-button" inline
+                                          :key="index"
+                                          @change="finishAssignment(item.id, $event)">
+                                          <strong v-if="!item.completed">{{ item.description }}</strong>
+                                          <strong :style="{ color: '#aaa' }" v-else>{{ item.description }}</strong>
+                                        </b-checkbox>
+                                    </div>
+                                    <div class="d-flex align-items-center justify-content-between">
+                                        <div>
+                                            <span class="text-left">{{ item.patientname }} {{ item.patientlastname }}</span>&nbsp;
+                                            <span class="text-left">{{ patientsDentist(item) ? `(${patientsDentist(item)})` : '' }}</span>
+                                        </div>
+                                        <div class="d-flex align-items-center">
+                                            <span class="text-right text-width-150">{{ item.due_at | formatDate }}</span>
+                                            <b-button variant=" iq-bg-success mr-1 mb-1" size="sm" style="margin-left: 5%;" @click="editAssignments(item)">
+                                                <i class="ri-ball-pen-fill m-0"></i>
+                                            </b-button>
+                                        </div>
+                                    </div>
                                 </div>
-                                <div class="d-flex align-items-center">
-                                  <span class="text-right text-width-150">{{ item.due_at | formatDate }}</span>
-                                  <b-button variant=" iq-bg-success mr-1 mb-1" size="sm" style="margin-left: 5%;" @click="editAssignments(item)">
-                                  <i class="ri-ball-pen-fill m-0"></i>
-                                </b-button>
-                                </div>
-                              </div>
+                            </b-list-group-item>
+                        </b-list-group>
+                        <template>
+                            <div class="mt-4 ml-2">
+                                <p v-if="openAssignments.length === 0">{{ $t('home.noOpenAssignments') }}</p>
+                                <b-pagination v-if="openAssignments.length > 10"
+                                              v-model="currentOpenAssignmentsPage"
+                                              :total-rows="openAssignments.length"
+                                              :per-page="openAssignmentsPerPage"
+                                              aria-controls="openTodos"></b-pagination>
                             </div>
-                          </b-list-group-item>
-                      </b-list-group>
-                      <template>
-                        <div class="mt-4 ml-2">
-                            <p v-if="openAssignments.length === 0">{{ $t('home.noOpenAssignments') }}</p>
-                            <b-pagination
-                              v-if="openAssignments.length > 10"
-                              v-model="currentOpenAssignmentsPage"
-                              :total-rows="openAssignments.length"
-                              :per-page="openAssignmentsPerPage"
-                              aria-controls="openTodos"></b-pagination>
-                        </div>
-                      </template>
+                        </template>
+                    </template>
+                </iq-card>
+                <iq-card class-name="iq-card-block iq-card-stretch">
+                    <template v-slot:headerTitle>
+                        <h4 class="card-title">{{ $t('home.appointmentChart') }}</h4>
+                    </template>
+                    <template v-slot:body>
+                        <apex-chart type="bar" height="350" :options="chartOptions" :series="series"></apex-chart>
                     </template>
                 </iq-card>
             </b-col>
@@ -142,265 +149,66 @@
                                 </div>
                                 <div class="iq-card-header-toolbar d-flex align-items-center">
                                     <!--<b-dropdown size="lg"  variant="link" toggle-class="p-0 text-decoration-none" no-caret>
-                                  <template v-slot:button-content class="p-0">
-                                  <span class="dropdown-toggle p-0" id="dropdownMenuButton6" data-toggle="dropdown">
-                                    <i class="ri-more-2-line"></i>
-                                  </span>
-                                  </template>
-                                  <b-dropdown-item href="#"><i class="ri-eye-line mr-2"></i>{{ $t('home.doctorsListDropDown.view') }}</b-dropdown-item>
-                                  <b-dropdown-item href="#"><i class="ri-bookmark-line mr-2"></i>{{ $t('home.doctorsListDropDown.appointment') }}</b-dropdown-item>
-                                </b-dropdown> -->
+                              <template v-slot:button-content class="p-0">
+                              <span class="dropdown-toggle p-0" id="dropdownMenuButton6" data-toggle="dropdown">
+                                <i class="ri-more-2-line"></i>
+                              </span>
+                              </template>
+                              <b-dropdown-item href="#"><i class="ri-eye-line mr-2"></i>{{ $t('home.doctorsListDropDown.view') }}</b-dropdown-item>
+                              <b-dropdown-item href="#"><i class="ri-bookmark-line mr-2"></i>{{ $t('home.doctorsListDropDown.appointment') }}</b-dropdown-item>
+                            </b-dropdown> -->
                                 </div>
                             </li>
                         </ul>
                     </template>
                 </iq-card>
                 <iq-card class-name="iq-card-block iq-card-stretch">
-                  <template v-slot:headerTitle>
-                    <h4 class="card-title">{{ $t('home.patientsByCountry') }}</h4>
-                  </template>
-                  <template v-slot:body>
-                    <div class="iq-details" :class="{'mt-3': index !== 0}" v-for="(country, index) in countriesWithPatients" :key="index">
-                      <span class="title text-dark">{{country.name}}</span>
-                      <div class="percentage float-right text-primary">{{country.percentage ? country.percentage : 0}} <span>%</span></div>
-                      <div class="iq-progress-bar-linear d-inline-block w-100">
-                        <b-progress :value="country.percentage ? country.percentage : 0" class="pr-bar" :key="index"></b-progress>
-                      </div>
-                    </div>
-                  </template>
-                </iq-card>
-            </b-col>
-            <b-col lg="8">
-              <iq-card class-name="iq-card-block iq-card-stretch">
-                  <template v-slot:headerTitle>
-                    <h4 class="card-title">{{ $t('home.appointmentChart') }}</h4>
-                  </template>
-                  <template v-slot:body>
-                    <apex-chart type="bar" height="350" :options="chartOptions" :series="series"></apex-chart>
-                  </template>
+                    <template v-slot:headerTitle>
+                        <h4 class="card-title">{{ $t('home.patientsByCountry') }}</h4>
+                    </template>
+                    <template v-slot:body>
+                        <div class="iq-details" :class="{'mt-3': index !== 0}" v-for="(country, index) in countriesWithPatients" :key="index">
+                            <span class="title text-dark">{{country.name}}</span>
+                            <div class="percentage float-right text-primary">{{country.percentage ? country.percentage : 0}} <span>%</span></div>
+                            <div class="iq-progress-bar-linear d-inline-block w-100">
+                                <b-progress :value="country.percentage ? country.percentage : 0" class="pr-bar" :key="index"></b-progress>
+                            </div>
+                        </div>
+                    </template>
                 </iq-card>
             </b-col>
             <b-col lg="3">
                 <!--<iq-card>
-              <template v-slot:headerTitle>
-                  <h4 class="card-title">{{ $t('home.todaysSchedule') }}</h4>
-              </template>
-              <template v-slot:body>
-                <ul class="m-0 p-0 today-schedule">
-                  <li class="d-flex">
-                    <div class="schedule-icon"><i class="ri-checkbox-blank-circle-fill text-primary" /></div>
-                    <div class="schedule-text"> <span>Implant</span>
-                      <span>09:00 to 12:00</span></div>
-                  </li>
-                  <li class="d-flex">
-                    <div class="schedule-icon"><i class="ri-checkbox-blank-circle-fill text-success" /></div>
-                    <div class="schedule-text"> <span>Invisalign</span>
-                      <span>09:00 to 12:00</span></div>
-                  </li>
-                </ul>
-              </template>
-            </iq-card>-->
+          <template v-slot:headerTitle>
+              <h4 class="card-title">{{ $t('home.todaysSchedule') }}</h4>
+          </template>
+          <template v-slot:body>
+            <ul class="m-0 p-0 today-schedule">
+              <li class="d-flex">
+                <div class="schedule-icon"><i class="ri-checkbox-blank-circle-fill text-primary" /></div>
+                <div class="schedule-text"> <span>Implant</span>
+                  <span>09:00 to 12:00</span></div>
+              </li>
+              <li class="d-flex">
+                <div class="schedule-icon"><i class="ri-checkbox-blank-circle-fill text-success" /></div>
+                <div class="schedule-text"> <span>Invisalign</span>
+                  <span>09:00 to 12:00</span></div>
+              </li>
+            </ul>
+          </template>
+        </iq-card>-->
             </b-col>
             <!--<b-col lg="12">
-          <iq-card>
-            <template v-slot:headerTitle>
-              <h4 class="card-title">{{ $t('home.activityStatistics') }}</h4>
-            </template>
-            <template v-slot:body>
-              <ApexChart element="patient-chart-01" :chartOption="chart5"/>
-            </template>
-          </iq-card>
-        </b-col>-->
+      <iq-card>
+        <template v-slot:headerTitle>
+          <h4 class="card-title">{{ $t('home.activityStatistics') }}</h4>
+        </template>
+        <template v-slot:body>
+          <ApexChart element="patient-chart-01" :chartOption="chart5"/>
+        </template>
+      </iq-card>
+    </b-col>-->
         </b-row>
-        <!-- Appointment Modal-->
-        <b-modal v-model="appointmentModal"
-                 no-close-on-esc
-                 no-close-on-backdrop
-                 size="lg"
-                 :title="$t('calendar.appointmentDetails')"
-                 hide-footer>
-            <form class="calendar-modal">
-                <div class="form-row">
-                    <div class="row align-items-center justify-content-between w-100 " :class="{'mb-3': !disabled}">
-                        <div class="col-md-3">
-                            <label for="patient" class="pt-1 mb-0">{{ $t('calendarEvent.patient') }} *</label>
-                        </div>
-                        <div class="col-md-9">
-                            <router-link tag="span" :to="'/patients/' + appointmentData.patient_id" style="cursor:pointer;" class="ml-2 text-black style-chooser form-control-disabled font-size-16">{{ appointmentData.patient_name }}</router-link>
-                        </div>
-                    </div>
-                    <div class="row align-items-center justify-content-between w-100 " :class="{'mb-3': !disabled}">
-                        <div class="col-md-3">
-                            <label for="location" class="mb-0 mt-2">{{ $t('calendarEvent.location') }} *</label>
-                        </div>
-                        <div class="col-md-9">
-                            <v-select :disabled="disabled"
-                                      :clearable="false"
-                                      label="city"
-                                      :reduce="location => location.id"
-                                      class="style-chooser form-control-disabled font-size-16 ml-0 mt-1"
-                                      v-model="appointmentData.location"
-                                      :options="locations"
-                                      style="min-width:305px;"></v-select>
-                        </div>
-                    </div>
-                    <div class="row align-items-center justify-content-between w-100 " :class="{'mb-3': !disabled}">
-                        <div class="col-md-3">
-                            <label for="doctor" class="mr-2 mb-0 pt-1">{{ $t('calendarEvent.doctor') }} *</label>
-                        </div>
-                        <div class="col-md-9">
-                            <v-select :disabled="disabled"
-                                      :clearable="false"
-                                      label="doctor"
-                                      class="style-chooser form-control-disabled font-size-16"
-                                      v-model="selectedDoctor"
-                                      :options="doctors"
-                                      style="min-width: 305px;"></v-select>
-                        </div>
-                    </div>
-                    <div class="row align-items-center justify-content-between w-100 " :class="{'mb-3': !disabled}">
-                        <div class="col-md-3 pl-3 pr-0">
-                            <label for="patient" class="mb-0 pt-1">{{ $t('calendarEvent.product_group') }} *</label>
-                        </div>
-                        <div class="col-md-9">
-                            <v-select :disabled="disabled"
-                                      :clearable="false"
-                                      label="product_group_name"
-                                      class="style-chooser form-control-disabled font-size-16"
-                                      v-model="selectedProductGroup"
-                                      :options="product_groups"></v-select>
-                        </div>
-                    </div>
-                    <div class="row align-items-center justify-content-between w-100 pt-2 " :class="{'mb-3': !disabled}">
-                        <div class="col-md-3">
-                            <label for="start" class="mb-0" :style="{ 'margin-top': '13px' }">{{ $t('calendarEvent.start') }} *</label>
-                        </div>
-                        <div class="col-md-9 d-flex align-items-center">
-                            <date-picker :disabled="disabled"
-                                         class="form-control form-control-disabled font-size-16"
-                                         :class="{'no-border margin-left': disabled}"
-                                         v-model="appointmentData.start_time"
-                                         :style="{ 'height': !disabled ? '53px' : '45px' }"
-                                         type="datetime"
-                                         :minute-step="5"
-                                         :show-second="false"
-                                         :lang="'en'"
-                                         :format="'DD.MM.YYYY HH.mm'"></date-picker>
-                            <label for="start" class="mb-0" :style="{ 'margin-top': '13px' }">{{ $t('calendarEvent.end') }}*</label>
-                            <date-picker :disabled="disabled"
-                                         required
-                                         class="form-control form-control-disabled font-size-16"
-                                         :class="{'no-border': disabled}"
-                                         :style="{ 'height': !disabled ? '53px' : '45px' }"
-                                         v-model="appointmentData.end_time"
-                                         type="time"
-                                         :minute-step="5"
-                                         :show-second="false"
-                                         :lang="'en'"
-                                         :format="'HH.mm'"></date-picker>
-                        </div>
-                    </div>
-                    <div class="row align-items-center justify-content-between w-100" v-if="!disabled || appointmentData.note" :class="{'mb-3': !disabled}">
-                        <div class="col-md-3">
-                            <label for="note">{{ $t('calendarEvent.note') }}</label>
-                        </div>
-                        <div class="col-md-9">
-                            <textarea :disabled="disabled" row="2" v-model="appointmentData.note" class="form-control form-control-disabled font-size-16 mt-3" placeholder="Add your note here for event!" id="note"></textarea>
-                        </div>
-                    </div>
-                    <template v-if="!disabled || appointmentData.patient_attended">
-                      <div v-if="!disabled" class="row align-items-center justify-content-between w-100 pt-1" :class="{'mb-3': !disabled}">
-                          <div class="col-md-3">
-                              <label for="color" class="mb-0">{{ $t('calendarEvent.patient_attended') }}</label><br>
-                          </div>
-                          <div class="col-md-9">
-                              <template v-for="(item,index) in patient_attend">
-                                  <b-form-radio class="custom-radio-patient font-size-16"
-                                                inline
-                                                v-model="appointmentData.patient_attended"
-                                                :value="item.value"
-                                                :key="index"
-                                                v-if="showProps(item, appointmentData.patient_attended)">
-                                      {{ item.label }}
-                                  </b-form-radio>
-                              </template>
-                          </div>
-                      </div>
-                      <div v-else class="row align-items-center justify-content-between w-100 pt-1" :class="{'mb-3': !disabled}">
-                          <div class="col-md-3">
-                              <label for="color" class="mb-0">{{ $t('calendarEvent.patient_attended') }}</label><br>
-                          </div>
-                          <div class="col-md-9">
-                            <span class="font-size-16 text-black pl-2 ml-1 text-capitalize">{{ appointmentData.patient_attended }}</span>
-                          </div>
-                      </div>
-                  </template>
-                  <template v-if="!disabled || appointmentData.backgroundColor || appointmentData.app_lb_type">
-                    <div v-if="!disabled" class="row align-items-center justify-content-between w-100 pt-3 mb-3">
-                        <div class="col-md-3">
-                            <label for="color" class="mt-1 ml-1">{{ $t('calendarEvent.labels') }}</label><br>
-                        </div>
-                        <div class="col-md-9 mb-1">
-                            <template v-for="(item,index) in colors">
-                                <b-form-radio class="custom-radio-color font-size-16 labels"
-                                              inline
-                                              v-model="appointmentData.backgroundColor"
-                                              :key="index"
-                                              :value="item.id"
-                                              :style="{'border': '1px solid ' + item.color}"
-                                              name="labels"
-                                              v-if="showLabels(item)">
-                                    <p class="m-0 py-1 pr-2" :style="{'color': item.color}">{{ item.text }}</p>
-                                </b-form-radio>
-                            </template>
-                        </div>
-                    </div>
-                    <div v-else class="row align-items-center justify-content-between w-100 pt-3 mb-3">
-                        <div class="col-md-3">
-                            <label for="color" class="mt-1 ml-1">{{ $t('calendarEvent.labels') }}</label><br>
-                        </div>
-                        <div class="col-md-9">
-                          <span class="font-size-16 text-black pl-2 ml-1 text-capitalize">{{ getLabelText(appointmentData.backgroundColor) }}</span>
-                        </div>
-                    </div>
-                  </template>
-                    <div class="modal-footer modal-footer-bt" style="width: 100%;">
-                        <template v-if="disabled">
-                            <button v-if="appointmentData.appointment_canceled === false || openCancelationModal === true" type="button" class="btn btn-secondary" @click="openCancelationModal = true">{{ $t('calendar.btnCancelation') }}</button>
-                            <button type="button" class="btn btn-secondary" @click="appointmentModal = false">{{ $t('calendar.btnClose') }}</button>
-                            <button type="button" class="btn btn-secondary" @click="editMode">{{ $t('calendar.btnEdit') }}</button>
-                            <button type="button" class="btn btn-primary" @click="viewPatient(appointmentData.enquiry_id)">{{ $t('calendar.btnEPR') }}</button>
-                        </template>
-                        <template v-if="!disabled">
-                            <button type="button" class="btn btn-secondary" @click="appointmentModal = false, disabled = true">{{ $t('calendar.btnClose') }}</button>
-                            <button type="button" class="btn btn-primary" @click="updateAppointment">{{ $t('calendar.btnSave') }}</button>
-                        </template>
-                    </div>
-                    <b-modal v-model="openCancelationModal"
-                             :ok-title="$t('calendar.btnSave')"
-                             :cancel-title="$t('calendar.btnCancel')"
-                             :title="$t('calendar.btnCancelation')"
-                             @ok="updateAppointment"
-                             @close="closeCancelation"
-                             @cancel="closeCancelation">
-                        <div class="col-md-12 mb-2">
-                            <div class="ml-3 mt-2">
-                                <b-form-radio class="custom-radio-color"
-                                              inline
-                                              v-model="appointmentData.appointment_canceled"
-                                              value="true"
-                                              name="cancelation">
-                                    {{ $t('calendarEvent.cancelAppointment') }}
-                                </b-form-radio>
-                            </div>
-                            <div class="col-md-12 mt-2">
-                                <textarea row="2" v-model="appointmentData.cancelation_reason" class="form-control form-control-disabled mt-4" id="cancelationReason" :placeholder="$t('calendarEvent.cancelationReason')"></textarea>
-                            </div>
-                        </div>
-                    </b-modal>
-                </div>
-            </form>
-        </b-modal>
 
         <AddEditAssignment
           v-if="todoToEdit"
@@ -427,15 +235,12 @@
 <script>
 import IqCard from '../../components/xray/cards/iq-card'
 import { xray } from '../../config/pluginInit'
-import { getTodaysAppointments, getStaff, getAssignmentsForUser, updateAppointment } from '../../services/homeService'
+import { getTodaysAppointments, getStaff, getAssignmentsForUser } from '../../services/homeService'
 import moment from 'moment'
-import { getLocationsList, getCountriesWithPatients, getDatesForCurrentWeek } from '../../services/commonCodeLists'
+import { getCountriesWithPatients, getDatesForCurrentWeek } from '../../services/commonCodeLists'
 import { visitsByCountryInAWeek, getDoctorsStatisticPerWeek } from '../../services/statistics'
-import { getProductGroups } from '@/services/products'
-import { getDoctorList, getLabels } from '@/services/calendarService'
+import { getDoctorList } from '@/services/calendarService'
 import { sso, getDentists, getUsers } from '@/services/userService'
-import DatePicker from 'vue2-datepicker'
-import 'vue2-datepicker/index.css'
 import { finishAssignment } from '../../services/assignmentsService'
 import { getEnquires } from '@/services/enquiry'
 import AddEditAssignment from '@/components/Assignments/AddEditAssignment'
@@ -444,14 +249,13 @@ import _ from 'lodash'
 const body = document.getElementsByTagName('body')
 export default {
   name: 'Home',
-  components: { IqCard, DatePicker, AddEditAssignment },
+  components: { IqCard, AddEditAssignment },
   data() {
     return {
       userId: null,
       users: [],
       enquires: [],
       todoToEdit: null,
-      editAssignmentModal: false,
       doctorsData: [],
       datesForCurrentWeek: [],
       dataForChart: [],
@@ -533,52 +337,9 @@ export default {
       currentTodaysAppointmentsPage: 1,
       openAssignmentsPerPage: 5,
       currentOpenAssignmentsPage: 1,
-      appointmentData: {
-        id: '',
-        patient_name: '',
-        start_time: '',
-        time: '',
-        end_time: '',
-        note: '',
-        patient_attended: '',
-        doctor_id: '',
-        doctor_name: '',
-        location: '',
-        patient_id: '',
-        product_group: '',
-        productGroupName: '',
-        crmProduct: '',
-        label_id: '',
-        backgroundColor: '',
-        appointment_canceled: false,
-        cancelation_reason: '',
-      },
-      selectedDoctor: '',
-      selectedProductGroup: '',
       disabled: true,
-      locations: [],
-      product_groups: [],
       doctors: [],
       dentists: [],
-      appointmentModal: false,
-      openCancelationModal: false,
-      patient_attend: [
-        {
-          label: this.$t('calendarEvent.unknown'),
-          value: null,
-          checked: true,
-        },
-        {
-          label: this.$t('calendarEvent.attended'),
-          value: true,
-          checked: false,
-        },
-        {
-          label: this.$t('calendarEvent.notAttended'),
-          value: false,
-          checked: false,
-        },
-      ],
     }
   },
   async mounted() {
@@ -600,9 +361,8 @@ export default {
     },
   },
   methods: {
-    getLabelText(type) {
-      const label = this.colors.find(color => color.type === type)
-      return label.text
+    getDifferenceDate(date) {
+      return Math.floor((Date.parse(new Date(Date.now())) - Date.parse(date)) / 86400000)
     },
     getDentists() {
       getDentists().then(response => {
@@ -642,50 +402,15 @@ export default {
       sso().then(response => {
         if (typeof response !== 'string') {
           this.userId = response.id
-          getTodaysAppointments(this.$i18n.locale).then(response => {
-            if (Array.isArray(response)) {
-              response.map(appointment => {
-                this.todaysAppointments.push({
-                  id: appointment.id,
-                  patient_name: appointment.patient_name,
-                  location: appointment.location,
-                  doctor_id: appointment.doctor_id,
-                  doctor_name: appointment.doctor_name,
-                  product_group: appointment.product_group_name,
-                  product_group_id: appointment.product_group_id,
-                  product_group_name: appointment.product_group_name,
-                  start_time: new Date(appointment.starts_at),
-                  time: appointment.time,
-                  end_time: new Date(appointment.ends_at),
-                  note: appointment.note,
-                  backgroundColor: appointment.label_name,
-                  patient_phone: appointment.patient_phone,
-                  patient_id: appointment.patient_id,
-                  patient_attended: appointment.patient_attended,
-                  appointment_canceled: false,
-                  cancelation_reason: appointment.cancelation_reason,
-                })
-              })
-            }
-          })
           getStaff().then(response => {
             this.staff = response
           })
           getAssignmentsForUser().then(response => {
             this.openAssignments = response
           })
-          getLocationsList().then(response => {
-            this.locations = response
-          })
-          getProductGroups(this.$i18n.locale).then(response => {
-            this.product_groups = response
-          })
           getDoctorList().then((data) => {
             this.doctors = data
             this.getDatesForCurrentWeek()
-          })
-          getLabels(this.$i18n.locale).then(response => {
-            this.colors = response
           })
         }
       })
@@ -698,13 +423,6 @@ export default {
     },
     closeAssignmentModal(val) {
       this.editAssignmentModal = false
-    },
-    showLabels(item) {
-      if (this.disabled && this.appointmentData.label_id === item.id) {
-        return true
-      } else if (!this.disabled) {
-        return true
-      }
     },
     getTodaysAppointmentsList(locale) {
       getTodaysAppointments(locale).then(response => {
@@ -721,39 +439,9 @@ export default {
         this.prepareDataForChart()
       })
     },
-    updateAppointment(info) {
-      this.todaysAppointments.splice(0, this.todaysAppointments.length)
-      this.appointmentData.doctor_id = this.selectedDoctor.id
-      this.appointmentData.doctor_name = this.selectedDoctor.name
-      this.appointmentData.product_group = this.selectedProductGroup.product_group_id
-      this.appointmentData.productGroupName = this.selectedProductGroup.product_group_name
-      this.appointmentData.crmProduct = this.selectedProductGroup.crm_product_id
-      updateAppointment(this.appointmentData.id, this.appointmentData).then(() => {
-        this.disabled = true
-        this.appointmentModal = false
-        this.getTodaysAppointmentsList(this.$i18n.locale)
-      })
-    },
-    closeCancelation() {
-      this.openCancelationModal = false
-      this.appointmentData.appointment_canceled = false
-    },
     editMode(e) {
       e.preventDefault()
       this.disabled = false
-    },
-    showProps(item, prop) {
-      if (this.disabled && prop === item.value) {
-        return true
-      } else if (!this.disabled) {
-        return true
-      }
-    },
-    openAppointmentModal(item) {
-      this.appointmentData = item
-      this.appointmentModal = true
-      this.selectedDoctor = item.doctor_name
-      this.selectedProductGroup = item.product_group_name
     },
     getDoctorsStatisticPerWeek() {
       getDoctorsStatisticPerWeek().then(response => {

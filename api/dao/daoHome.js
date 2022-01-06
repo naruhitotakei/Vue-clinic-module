@@ -69,34 +69,8 @@ const getAssignmentsForUser = (request, response, user_id) => {
     })
 }
 
-const updateAppointment = (request, response, id, appointment) => {
-    let statement = "UPDATE appointments SET "
-    if (appointment.location) statement += "location='" + appointment.location + "',"
-    if (appointment.doctor_id) statement += "doctor_id=" + appointment.doctor_id + ","
-    if (appointment.doctor_name) statement += "doctor_name='" + appointment.doctor_name + "',"
-    if (appointment.product_group) statement += "product_group_id=" + appointment.product_group + ","
-    if (appointment.crmProduct) statement += "product_id=" + appointment.crmProduct + ","
-    if (appointment.start_time) statement += "starts_at='" + moment(appointment.start_time).format('YYYY-MM-DDTHH:mm') + "',"
-    if (appointment.time) statement += "time='" + moment(appointment.start_time).format('HH:mm') + "',"
-    if (appointment.end_time) statement += "ends_at='" + moment(appointment.end_time).format('YYYY-MM-DDTHH:mm') + "',"
-    if (appointment.note) statement += "note='" + appointment.note + "',"
-    if (appointment.patient_attended) statement += "patient_attended='" + appointment.patient_attended + "',"
-    if (appointment.backgroundColor) statement += "label_id=" + appointments.backgroundColor + ","
-    if (appointment.appointment_canceled) statement += "appointment_canceled=" + appointment.appointment_canceled + ","
-    if (appointment.cancelation_reason) statement += "cancelation_reason='" + appointment.cancelation_reason + "',"
-    statement = statement.slice(0, -1)
-    statement += " WHERE id = " + id
-    pool.query(statement, (error, results) => {
-        if (error) {
-            throw error
-        }
-        response.status(200).json(results)
-    })
-}
-
 module.exports = {
     getTodaysAppointments,
     getStaff,
-    getAssignmentsForUser,
-    updateAppointment
+    getAssignmentsForUser
 }

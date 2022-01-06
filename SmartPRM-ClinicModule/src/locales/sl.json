@@ -16,7 +16,9 @@
     "search": "Iskanje",
     "searchBy": "Išči po",
     "sortBy": "Razvrsti po",
-    "country": "Država"
+    "country": "Država",
+    "yes": "Da",
+    "no": "Ne"
   },
   "documents": {
     "offers": "Ponudbe",
@@ -152,6 +154,20 @@
     "requiredFields": "Polja označena z * morajo biti izpolnjena",
     "eventMoveBetweenResources": "Ali ste prepričani da želite preložiti ta termin na drugega zdravnika?",
     "eventTimeChange": "Ali ste prepričani da želite spremeniti čas tega termina?"
+  },
+  "appointments": {
+    "header": "Termini",
+    "filters": "Filtriraj",
+    "time": "Čas",
+    "patient": "Pacient",
+    "product": "Produkt",
+    "doctor": "Zdravnik",
+    "attendance": "Prisotnost",
+    "interest": "Zanimanje za poseg",
+    "notInterested": "Ne zanima",
+    "interested": "Zanima",
+    "veryInterested": "Zelo zanima",
+    "enterNotes": "Vpiši Opombe..."
   },
   "patients": {
     "patientsHeader": "Pacienti",
@@ -785,11 +801,12 @@
       "chooseTime": "Izberite termin",
       "review": "Pregled",
       "service": "Storitev",
-      "doctor": "Zdravnik",
+      "doctor": "Zobozdravnik",
       "time": "Čas",
       "price": "Cena",
-      "taken": "Zasedeno",
-      "closed": "Zaprto",
+      "open": "prosto",
+      "taken": "zasedeno",
+      "closed": "zaprto",
       "chooseYourFavoriteDoctor": "Izberite zdravnika",
       "selectOption": "Izberite možnost",
       "pressEnterToSelect": "Pritisnite enter, da izberete",
@@ -797,11 +814,11 @@
       "availableDoctors": "Prosti zdravniki",
       "showMore": "Pokaži več",
       "totalInfo": "Popolni podatki",
-      "summary": "sl - Summary",
+      "summary": "Povzetek",
       "date": "Datum",
       "total": "Skupaj",
       "backToServices": "Nazaj na storitve",
-      "toReview": "Na pregled",
+      "toReview": "Potrdi datum",
       "checkSelectedSlotAndConfirmReservation": "Obkljukajte izbrane termine in potrdite rezervacijo.",
       "selectedSlot": "Izbran termin",
       "at": "ob",
@@ -825,9 +842,11 @@
       "yourDetailsHaveBeenSuccessfullyVerified": "Vaši podatki so bili potrjeni. Veselimo se vašega obiska.",
       "location": "Lokacija",
       "company": "Podjetje",
+      "bookingSuccessful": "Vaš termin je rezerviran!",
+      "bookAnotherAppointment": "Rezerviraj nov termin",
       "error": {
-        "over-order": "sl - You can't book more than two appointments with same phone number.",
-        "unavailable-slot": "sl - Your selected slot is already booked."
+        "over-order": "Ni možno zapolniti več kot dva termina iz iste telefonske številke.",
+        "unavailable-slot": "Vaš izbrani termin je že zaseden."
       }
     }
   }

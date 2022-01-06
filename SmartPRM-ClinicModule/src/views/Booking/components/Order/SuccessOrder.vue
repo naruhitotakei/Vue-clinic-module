@@ -1,6 +1,6 @@
 <template>
   <div>
-    <h3>You have successfully booked an appointment!</h3>
+    <h3>{{ $t('public.onlineBooking.bookingSuccessful') }}</h3>
     <div class="mt-3"></div>
     <div>
       {{ $t('public.onlineBooking.selectedSlot') }}:
@@ -36,7 +36,7 @@
     </div>
     <div class="mt-3"></div>
 
-    <b-button variant="primary" @click="$emit('update:order', null)">Book another appointment</b-button>
+    <b-button variant="primary" @click="$emit('update:order', null)">{{ $t('public.onlineBooking.bookAnotherAppointment') }}</b-button>
   </div>
 </template>
 

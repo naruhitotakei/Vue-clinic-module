@@ -5,19 +5,19 @@
             <h5 class="card-title">Revenue Statistics</h5>
             <div class="row">
               <div class="col-sm-3 col-12">
-                <h4 class="margin-0">€ {{ todayRevenue.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 }) }} </h4>
+                <h4 class="margin-0">{{ todayRevenue ? todayRevenue : 0 | formatPrice }} </h4>
                 <p class="text-muted">{{ $t('statisticsForClinic.todaysIncome') }}</p>
               </div>
               <div class="col-sm-3 col-12">
-                <h4 class="margin-0">€ {{ weeklyRevenue.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 }) }} </h4>
+                <h4 class="margin-0">{{ weeklyRevenue | formatPrice }} </h4>
                 <p class="text-muted">{{ $t('statisticsForClinic.weeksIncome') }}</p>
               </div>
               <div class="col-sm-3 col-12">
-                <h4 class="margin-0">€ {{ monthlyRevenue.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 }) }} </h4>
+                <h4 class="margin-0">{{ monthlyRevenue | formatPrice }} </h4>
                 <p class="text-muted">{{ $t('statisticsForClinic.monthsIncome') }}</p>
               </div>
               <div class="col-sm-3 col-12">
-                <h4 class="margin-0">€ {{ yearlyRevenue.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 }) }} </h4>
+                <h4 class="margin-0">{{ yearlyRevenue | formatPrice }} </h4>
                 <p class="text-muted">{{ $t('statisticsForClinic.yearsIncome') }}</p>
               </div>
             </div>
@@ -61,7 +61,7 @@
             <b-table-simple ref="table1" class="table-t">
               <thead>
               <tr>
-                <th v-for="(item,index) in servicesSummaryColumns" :key="index" :class="item.key === 'item' ? 'text-left' : ''">{{ item.label }}</th>
+                <th v-for="(item,index) in servicesSummaryColumns" :key="index" :class="item.key === 'item' ? 'text-left' : ''" class="text-center">{{ item.label }}</th>
               </tr>
               </thead>
               <tbody class="text-center">
@@ -69,22 +69,22 @@
                 <tr :key="bodyKey" class="main-row">
                   <td style="max-width: 200px"><span class="font-weight-bold">{{ bodyKey }}</span></td>
                   <td><span class="font-weight-bold">{{ body.group_count }}</span></td>
-                  <td><span class="font-weight-bold">{{ formatNumber(Math.trunc(body.group_amount)) }}&#8364;</span></td>
-                  <td><span class="font-weight-bold">{{ formatNumber(Math.trunc(body.group_fee)) }}&#8364;</span></td>
+                  <td><span class="font-weight-bold">{{ formatNumber(Math.trunc(body.group_amount)) }} &#8364;</span></td>
+                  <td><span class="font-weight-bold">{{ formatNumber(Math.trunc(body.group_fee)) }} &#8364;</span></td>
                 </tr>
                   <template v-for="(item, index) in body" >
                    <tr :key="Math.random(index + 1000)">
                      <td  style="max-width: 200px">{{ item.service_title }}</td>
                      <td class="td-count">{{ item.count }}</td>
-                     <td>{{ formatNumber(Math.trunc(item.sum)) }}&#8364;</td>
-                     <td>{{ formatNumber(Math.trunc(item.fee_sum)) }}&#8364;</td>
+                     <td>{{ formatNumber(Math.trunc(item.sum)) }} &#8364;</td>
+                     <td>{{ formatNumber(Math.trunc(item.fee_sum)) }} &#8364;</td>
                    </tr>
                   </template>
               </template>
               <tr v-if="servicesSummaryTotalCount">
                 <td><span class="font-weight-bold"> Total: </span></td>
                 <td><span class="font-weight-bold">{{formatNumber(Math.trunc(servicesSummaryTotalCount))}}</span></td>
-                <td><span class="font-weight-bold">{{formatNumber(Math.trunc(servicesSummaryTotalAmount))}}&#8364;</span></td>
+                <td><span class="font-weight-bold">{{formatNumber(Math.trunc(servicesSummaryTotalAmount))}} &#8364;</span></td>
                 <td><span class="font-weight-bold">{{formatNumber(Math.trunc(servicesSummaryTotalFee))}} &#8364;</span></td>
               </tr>
               </tbody>
@@ -101,7 +101,7 @@
             <b-table-simple ref="table2" class="table-t">
               <thead>
               <tr>
-                <th v-for="(item,index) in servicesListColumns" :key="index" :class="item.key === 'item' ? 'text-left' : ''">{{ item.label }}</th>
+                <th v-for="(item,index) in servicesListColumns" :key="index" :class="item.key === 'item' ? 'text-left' : ''" class="text-center">{{ item.label }}</th>
               </tr>
               </thead>
               <tbody class="text-center">
@@ -122,8 +122,8 @@
                     <td class="text-center"><span >{{ item.doctor }}</span></td>
                     <td class="text-center"><span >{{ item.service_title}}</span></td>
                     <td class="text-center"><router-link tag="span" :to="'/patients/'+ item.enquiry_id" class="clickable">{{ item.name }} {{ item.last_name}}  </router-link></td>
-                    <td class="text-center"><span>{{ formatNumber(Math.trunc(item.price))}}&#8364;</span></td>
-                    <td class="text-center"><span>{{ formatNumber(Math.trunc(item.fee))}}&#8364;</span></td>
+                    <td class="text-center"><span>{{ formatNumber(Math.trunc(item.price))}} &#8364;</span></td>
+                    <td class="text-center"><span>{{ formatNumber(Math.trunc(item.fee))}} &#8364;</span></td>
                     <td class="text-center"><span >{{ formatDateString(item.date)}}</span></td>
                     <td class="text-center"><span >{{ item.country}}</span></td>
                     <td class="text-center"><span >{{ item.region}}</span></td>
@@ -135,8 +135,8 @@
                   <td><span class="font-weight-bold"> Total: </span></td>
                   <td><span class="font-weight-bold"></span></td>
                   <td><span class="font-weight-bold"></span></td>
-                  <td> <span class="font-weight-bold">{{formatNumber(Math.trunc(servicesListTotalCount))}}&#8364;</span></td>
-                  <td> <span class="font-weight-bold">{{formatNumber(Math.trunc(servicesListTotalFee))}}&#8364;</span></td>
+                  <td> <span class="font-weight-bold">{{formatNumber(Math.trunc(servicesListTotalCount))}} &#8364;</span></td>
+                  <td> <span class="font-weight-bold">{{formatNumber(Math.trunc(servicesListTotalFee))}} &#8364;</span></td>
               </tr>
               </tbody>
             </b-table-simple>
@@ -234,11 +234,6 @@ export default {
           title: {
             text: 'EUR',
           },
-          labels: {
-            formatter: function (y) {
-              return y.toLocaleString()
-            },
-          },
         },
         xaxis: {
           type: 'datetime',
@@ -274,6 +269,9 @@ export default {
       }
       this.$refs[`excel-${tableName}`].download = documentName + ' ' + date
       return true
+    },
+    formatPrice(price) {
+      return this.$options.filters.formatPrice(price)
     },
     getClinicStats() {
       getClinicStatistics().then(response => {
@@ -331,11 +329,11 @@ export default {
           yaxis: {
             labels: {
               formatter: function (y) {
-                return y.toLocaleString()
+                return y
               },
             },
             title: {
-              text: this.totalRevenue.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + ' EUR',
+              text: this.formatPrice(this.totalRevenue),
             },
           },
         }

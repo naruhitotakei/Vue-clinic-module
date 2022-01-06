@@ -27,7 +27,7 @@ Vue.filter('formatInvoiceDate', function (value) {
 Vue.filter('formatDateAssignments', function (value, lang) {
   if (value) {
     switch (lang) {
-      case 'en' :
+      case 'en':
         moment.locale('en')
         break
       case 'sl':
@@ -46,7 +46,7 @@ Vue.filter('formatFullDate', function (value, { lang = 'en' } = {}) {
 
 Vue.filter('formatTime', function (value) {
   if (value) {
-    return value + '\''
+    return value + "'"
   }
 })
 
@@ -57,7 +57,10 @@ Vue.filter('formatMoney', function (value) {
 })
 
 Vue.filter('formatPrice', function (value) {
-  if (value) {
-    return Number(value).toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + ' EUR'
+  if (value || value === 0) {
+    return new Intl.NumberFormat('de-DE', {
+      style: 'currency',
+      currency: 'EUR',
+    }).format(Number(value))
   }
 })
