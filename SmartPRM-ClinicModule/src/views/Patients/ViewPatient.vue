@@ -632,13 +632,13 @@
                                               <b-form-group class="col-md-12 align-items-center" :class="{'mb-0': disabledData}" style="justify-content: space-between;" label-cols-sm="4" label-for="city" :label="$t('EPR.personalInfo.postCode')">
                                                   <b-form-input :disabled="disabledData" class="form-control-disabled font-size-12" style="float: left;" v-model="patient.post_code" type="text"></b-form-input>
                                               </b-form-group>
-                                              <b-form-group class="col-md-12 form-control-disabled font-size-12 mt-1" :class="{'mb-0': disabledData}" label-cols-sm="4" label-for="country" :label="$t('EPR.personalInfo.country')">
+                                              <b-form-group class="col-md-12 align-items-center" :class="{'mb-1': disabledData}" label-cols-sm="4" label-for="country" :label="$t('EPR.personalInfo.country')">
                                                   <v-select :disabled="disabledData" label="name" :clearable="false"
                                                             :reduce="country => country.id"
                                                             class="style-chooser form-control-disabled font-size-12"
                                                             v-model="patient.country_id" :options="countries"></v-select>
                                               </b-form-group>
-                                              <b-form-group class="col-md-12 align-items-center mt-1" :class="{'mb-0': disabledData}" label-cols-sm="4" label-for="region" :label="$t('EPR.personalInfo.region')">
+                                              <b-form-group class="col-md-12 align-items-center" :class="{'mb-1': disabledData}" label-cols-sm="4" label-for="region" :label="$t('EPR.personalInfo.region')">
                                                   <v-select :clearable="false"
                                                             :reduce="region => region.code"
                                                             :disabled="disabledData"
@@ -647,7 +647,7 @@
                                                             :options="filteredRegions">
                                                   </v-select>
                                               </b-form-group>
-                                              <b-form-group class="col-md-12 align-items-center mt-1" :class="{'mb-0': disabledData}" label-cols-sm="4" label-for="region" :label="$t('EPR.personalInfo.city')">
+                                              <b-form-group class="col-md-12 align-items-center" :class="{'mb-0': disabledData}" label-cols-sm="4" label-for="region" :label="$t('EPR.personalInfo.city')">
                                                   <v-select v-model="patient.city"
                                                             :clearable="false"
                                                             :disabled="disabledData"
