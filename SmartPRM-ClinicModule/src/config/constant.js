@@ -1,3 +1,3 @@
 export default {
-  webBaseURL: process.env.MIX_APP_URL
+  webBaseURL: process.env.MIX_APP_URL,
 }

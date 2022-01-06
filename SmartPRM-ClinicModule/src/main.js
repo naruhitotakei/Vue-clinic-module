@@ -21,7 +21,7 @@ Vue.config.productionTip = false
 Vue.prototype.$rollbar = new Rollbar({
   accessToken: 'b4f975b7b8cd4107ac1b6fce59b1b774',
   captureUncaught: true,
-  captureUnhandledRejections: true
+  captureUnhandledRejections: true,
 })
 
 // If you have already set up a global error handler,
@@ -33,7 +33,7 @@ Vue.config.errorHandler = (err, vm, info) => {
   throw err // rethrow
 }
 
-Vue.filter('euro', function (value) {
+Vue.filter('euro', function(value) {
   if (!value) return '0 €'
   return value + ' €'
 })
@@ -44,7 +44,7 @@ Vue.use(CompositionApi)
 Vue.component('apex-chart', VueApexCharts)
 Vue.use(VueExcelXlsx)
 
-Vue.filter('percentage', function (value) {
+Vue.filter('percentage', function(value) {
   if (!value) return '0%'
   return value + '%'
 })
@@ -52,7 +52,7 @@ let vm = new Vue({
   router,
   store,
   i18n,
-  render: h => h(App)
+  render: h => h(App),
 }).$mount('#app')
 
 window.vm = vm

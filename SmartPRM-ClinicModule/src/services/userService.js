@@ -1,167 +1,167 @@
-export async function login (loginEmail, loginPassword) {
+export async function login(loginEmail, loginPassword) {
   const rawResponse = await fetch('/api/login', {
     method: 'POST',
     credentials: 'same-origin',
     headers: {
       'Accept': 'application/json',
-      'Content-Type': 'application/json'
+      'Content-Type': 'application/json',
     },
-    body: JSON.stringify({ 'loginEmail': loginEmail, 'loginPassword': loginPassword })
+    body: JSON.stringify({ 'loginEmail': loginEmail, 'loginPassword': loginPassword }),
   })
   return rawResponse.json()
 }
 
-export async function sso () {
+export async function sso() {
   const rawResponse = await fetch('/api/login', {
     credentials: 'same-origin',
     headers: {
-      'Accept': 'application/json'
-    }
+      'Accept': 'application/json',
+    },
   })
   return rawResponse.json()
 }
 
-export async function logout () {
+export async function logout() {
   await fetch('/api/logout', {
     credentials: 'same-origin',
     headers: {
-      'Accept': 'application/json'
-    }
+      'Accept': 'application/json',
+    },
   })
 }
 
-export async function changePassword (oldPassword, newPassword1, newPassword2) {
+export async function changePassword(oldPassword, newPassword1, newPassword2) {
   const rawResponse = await fetch('/api/password', {
     method: 'POST',
     credentials: 'same-origin',
     headers: {
       'Accept': 'application/json',
-      'Content-Type': 'application/json'
+      'Content-Type': 'application/json',
     },
-    body: JSON.stringify({ 'oldpassword': oldPassword, 'password1': newPassword1, 'password2': newPassword2 })
+    body: JSON.stringify({ 'oldpassword': oldPassword, 'password1': newPassword1, 'password2': newPassword2 }),
   })
   return rawResponse.json()
 }
 
-export async function editProfile (profile) {
+export async function editProfile(profile) {
   const rawResponse = await fetch('/api/profile', {
     method: 'POST',
     credentials: 'same-origin',
     headers: {
       'Accept': 'application/json',
-      'Content-Type': 'application/json'
+      'Content-Type': 'application/json',
     },
-    body: JSON.stringify(profile)
+    body: JSON.stringify(profile),
   })
   return rawResponse.json()
 }
 
-export async function changeLang (profile) {
+export async function changeLang(profile) {
   const rawResponse = await fetch('/api/profile/change-lang', {
     method: 'POST',
     credentials: 'same-origin',
     headers: {
       'Accept': 'application/json',
-      'Content-Type': 'application/json'
+      'Content-Type': 'application/json',
     },
-    body: JSON.stringify(profile)
+    body: JSON.stringify(profile),
   })
   return rawResponse.json()
 }
 
-export async function getDentists () {
+export async function getDentists() {
   const rawResponse = await fetch('/api/dentists', {
     method: 'GET',
     credentials: 'same-origin',
     headers: {
       'Accept': 'application/json',
-      'Content-Type': 'application/json'
-    }
+      'Content-Type': 'application/json',
+    },
   })
   return rawResponse.json()
 }
 
-export async function getSurgeons () {
+export async function getSurgeons() {
   const rawResponse = await fetch('/api/surgeons', {
     method: 'GET',
     credentials: 'same-origin',
     headers: {
       'Accept': 'application/json',
-      'Content-Type': 'application/json'
-    }
+      'Content-Type': 'application/json',
+    },
   })
   return rawResponse.json()
 }
 
-export async function getLegacyDoctors () {
+export async function getLegacyDoctors() {
   const rawResponse = await fetch('/api/legacy-doctors', {
     method: 'GET',
     credentials: 'same-origin',
     headers: {
       'Accept': 'application/json',
-      'Content-Type': 'application/json'
-    }
+      'Content-Type': 'application/json',
+    },
   })
   return rawResponse.json()
 }
 
-export async function getUsers () {
+export async function getUsers() {
   const rawResponse = await fetch('/api/users', {
     method: 'GET',
     credentials: 'same-origin',
     headers: {
       'Accept': 'application/json',
-      'Content-Type': 'application/json'
-    }
+      'Content-Type': 'application/json',
+    },
   })
   return rawResponse.json()
 }
 
-export async function getUsersForAssignments () {
+export async function getUsersForAssignments() {
   const rawResponse = await fetch('/api/users-assignments', {
     method: 'GET',
     credentials: 'same-origin',
     headers: {
       'Accept': 'application/json',
-      'Content-Type': 'application/json'
-    }
+      'Content-Type': 'application/json',
+    },
   })
   return rawResponse.json()
 }
 
-export async function getRoles () {
+export async function getRoles() {
   const rawResponse = await fetch('/api/users-roles', {
     method: 'GET',
     credentials: 'same-origin',
     headers: {
       'Accept': 'application/json',
-      'Content-Type': 'application/json'
-    }
+      'Content-Type': 'application/json',
+    },
   })
   return rawResponse.json()
 }
 
-export async function updateUser (id, user) {
+export async function updateUser(id, user) {
   const rawResponse = await fetch('/api/users/' + id, {
     method: 'PUT',
     credentials: 'same-origin',
     headers: {
       'Accept': 'application/json',
-      'Content-Type': 'application/json'
+      'Content-Type': 'application/json',
     },
-    body: JSON.stringify(user)
+    body: JSON.stringify(user),
   })
   return rawResponse.json()
 }
 
-export async function recordSignInTime () {
+export async function recordSignInTime() {
   const rawResponse = await fetch('/api/sign-in-time', {
     method: 'PUT',
     credentials: 'same-origin',
     headers: {
       'Accept': 'application/json',
-      'Content-Type': 'application/json'
-    }
+      'Content-Type': 'application/json',
+    },
   })
   return rawResponse.json()
 }

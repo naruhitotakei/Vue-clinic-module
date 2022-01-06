@@ -16,7 +16,7 @@ export const Users = [
   new User({ id: 12, name: 'Paul Molive', role: 'Game Developer', image: require('../../assets/images/user/05.jpg'), isActive: false }),
   new User({ id: 13, name: 'Bob Frapples', role: 'Web Developer', image: require('../../assets/images/user/03.jpg'), isActive: false }),
   new User({ id: 14, name: 'Barb Ackue', role: 'Ios Developer', image: require('../../assets/images/user/04.jpg'), isActive: true }),
-  new User({ id: 15, name: 'Greta Life', role: 'App Developer', image: require('../../assets/images/user/08.jpg'), isActive: true })
+  new User({ id: 15, name: 'Greta Life', role: 'App Developer', image: require('../../assets/images/user/08.jpg'), isActive: true }),
 ]
 
 export const MessagesUser1 = [
@@ -30,7 +30,7 @@ export const MessagesUser1 = [
   new Message({ text: 'Hey John, I am looking for the best admin template. Could you please help me to find it out?', userId: 15, me: false, time: '7:08' }),
   new Message({ text: 'Absolutely!\n' + 'Xray Dashboard is the responsive bootstrap 4 admin template.', userId: 5, me: true, time: '7:10' }),
   new Message({ text: 'Looks clean and fresh UI.', userId: 15, me: false, time: '7:12' }),
-  new Message({ text: 'Okay Thanks...', userId: 5, me: true, time: '7:20' })
+  new Message({ text: 'Okay Thanks...', userId: 5, me: true, time: '7:20' }),
 ]
 
 export const MessagesUser2 = [
@@ -44,7 +44,7 @@ export const MessagesUser2 = [
   new Message(),
   new Message(),
   new Message(),
-  new Message()
+  new Message(),
 ]
 
 export const MessagesUser3 = [
@@ -58,7 +58,7 @@ export const MessagesUser3 = [
   new Message(),
   new Message(),
   new Message(),
-  new Message()
+  new Message(),
 ]
 export const MessagesUser4 = [
   new Message(),
@@ -71,5 +71,5 @@ export const MessagesUser4 = [
   new Message(),
   new Message(),
   new Message(),
-  new Message()
+  new Message(),
 ]

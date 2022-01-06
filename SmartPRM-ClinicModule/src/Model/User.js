@@ -1,7 +1,7 @@
 import { is } from 'ramda'
 
 export default class User {
-  constructor (user = {}) {
+  constructor(user = {}) {
     this.id = is(Number, user.id) ? user.id : 0
     this.name = is(String, user.name) ? user.name : ''
     this.image = is(String, user.image) ? user.image : ''

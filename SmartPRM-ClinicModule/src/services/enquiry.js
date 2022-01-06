@@ -1,145 +1,145 @@
-export async function getEnquires (sort) {
+export async function getEnquires(sort) {
   const rawResponse = await fetch('/api/enquiries?sort=' + sort, {
     method: 'GET',
     credentials: 'same-origin',
     headers: {
       'Accept': 'application/json',
-      'Content-Type': 'application/json'
-    }
+      'Content-Type': 'application/json',
+    },
   })
   return rawResponse.json()
 }
 
-export async function getEnquiryById (id) {
+export async function getEnquiryById(id) {
   const rawResponse = await fetch('/api/enquiries/' + id, {
     method: 'GET',
     credentials: 'same-origin',
     headers: {
       'Accept': 'application/json',
-      'Content-Type': 'application/json'
-    }
+      'Content-Type': 'application/json',
+    },
   })
   return rawResponse.json()
 }
 
-export async function getEnquiryServices (id) {
+export async function getEnquiryServices(id) {
   const rawResponse = await fetch(`/api/enquiries/${id}/services`, {
     method: 'GET',
     credentials: 'same-origin',
     headers: {
       'Accept': 'application/json',
-      'Content-Type': 'application/json'
-    }
+      'Content-Type': 'application/json',
+    },
   })
   return rawResponse.json()
 }
 
-export async function createEnquiryService (id, service) {
+export async function createEnquiryService(id, service) {
   const rawResponse = await fetch(`/api/enquiries/${id}/services`, {
     method: 'POST',
     credentials: 'same-origin',
     headers: {
       'Accept': 'application/json',
-      'Content-Type': 'application/json'
+      'Content-Type': 'application/json',
     },
-    body: JSON.stringify(service)
+    body: JSON.stringify(service),
   })
   return rawResponse.json()
 }
 
-export async function getEnquiryNotes (id) {
+export async function getEnquiryNotes(id) {
   const rawResponse = await fetch(`/api/enquiries/${id}/notes`, {
     method: 'GET',
     credentials: 'same-origin',
     headers: {
       'Accept': 'application/json',
-      'Content-Type': 'application/json'
-    }
+      'Content-Type': 'application/json',
+    },
   })
   return rawResponse.json()
 }
 
-export async function createEnquiryNotes (notes) {
+export async function createEnquiryNotes(notes) {
   const rawResponse = await fetch(`/api/enquiries/notes`, {
     method: 'POST',
     credentials: 'same-origin',
     headers: {
       'Accept': 'application/json',
-      'Content-Type': 'application/json'
+      'Content-Type': 'application/json',
     },
-    body: JSON.stringify(notes)
+    body: JSON.stringify(notes),
   })
   return rawResponse.json()
 }
 
-export async function getEnquiryPastAppointments (id, locale) {
+export async function getEnquiryPastAppointments(id, locale) {
   const rawResponse = await fetch(`/api/enquiries/${id}/${locale}/past-appointments`, {
     method: 'GET',
     credentials: 'same-origin',
     headers: {
       'Accept': 'application/json',
-      'Content-Type': 'application/json'
-    }
+      'Content-Type': 'application/json',
+    },
   })
   return rawResponse.json()
 }
 
-export async function getEnquiryFutureAppointments (id, locale) {
+export async function getEnquiryFutureAppointments(id, locale) {
   const rawResponse = await fetch(`/api/enquiries/${id}/${locale}/future-appointments`, {
     method: 'GET',
     credentials: 'same-origin',
     headers: {
       'Accept': 'application/json',
-      'Content-Type': 'application/json'
-    }
+      'Content-Type': 'application/json',
+    },
   })
   return rawResponse.json()
 }
 
-export async function getEnquiryAssignments (id) {
+export async function getEnquiryAssignments(id) {
   const rawResponse = await fetch(`/api/enquiries/${id}/assignments`, {
     method: 'GET',
     credentials: 'same-origin',
     headers: {
       'Accept': 'application/json',
-      'Content-Type': 'application/json'
-    }
+      'Content-Type': 'application/json',
+    },
   })
   return rawResponse.json()
 }
 
-export async function getEnquiryInvoices (id, sort) {
+export async function getEnquiryInvoices(id, sort) {
   const rawResponse = await fetch(`/api/enquiries/${id}/invoices?sort=${sort}`, {
     method: 'GET',
     credentials: 'same-origin',
     headers: {
       'Accept': 'application/json',
-      'Content-Type': 'application/json'
-    }
+      'Content-Type': 'application/json',
+    },
   })
   return rawResponse.json()
 }
 
-export async function getEnquirySMS (id) {
+export async function getEnquirySMS(id) {
   const rawResponse = await fetch(`/api/enquiries/${id}/sms`, {
     method: 'GET',
     credentials: 'same-origin',
     headers: {
       'Accept': 'application/json',
-      'Content-Type': 'application/json'
-    }
+      'Content-Type': 'application/json',
+    },
   })
   return rawResponse.json()
 }
 
-export async function getEnquiryOffers (id) {
+export async function getEnquiryOffers(id) {
   const rawResponse = await fetch(`/api/enquiries/${id}/offers`, {
     method: 'GET',
     credentials: 'same-origin',
     headers: {
       'Accept': 'application/json',
-      'Content-Type': 'application/json'
-    }
+      'Content-Type': 'application/json',
+    },
   })
   return rawResponse.json()
 }
@@ -158,52 +158,52 @@ export async function getEnquiryOffers (id) {
 //   last_name: 'priimek',
 //   lead_owner_id: 0
 // }
-export async function createEnquiry (enquiry) {
+export async function createEnquiry(enquiry) {
   const rawResponse = await fetch('/api/enquiries/', {
     method: 'POST',
     credentials: 'same-origin',
     headers: {
       'Accept': 'application/json',
-      'Content-Type': 'application/json'
+      'Content-Type': 'application/json',
     },
-    body: JSON.stringify(enquiry)
+    body: JSON.stringify(enquiry),
   })
   return rawResponse.json()
 }
 
-export async function updateEnquiry (id, enquiry) {
+export async function updateEnquiry(id, enquiry) {
   const rawResponse = await fetch('/api/enquiries/' + id + '/update-enquiry', {
     method: 'PUT',
     credentials: 'same-origin',
     headers: {
       'Accept': 'application/json',
-      'Content-Type': 'application/json'
+      'Content-Type': 'application/json',
     },
-    body: JSON.stringify(enquiry)
+    body: JSON.stringify(enquiry),
   })
   return rawResponse.json()
 }
 
-export async function trashEnquiry (id) {
+export async function trashEnquiry(id) {
   const rawResponse = await fetch('/api/enquiries/' + id + '/trashed', {
     method: 'PUT',
     credentials: 'same-origin',
     headers: {
       'Accept': 'application/json',
-      'Content-Type': 'application/json'
-    }
+      'Content-Type': 'application/json',
+    },
   })
   return rawResponse.json()
 }
 
-export async function getPatients () {
+export async function getPatients() {
   const rawResponse = await fetch('/api/patients', {
     method: 'GET',
     credentials: 'same-origin',
     headers: {
       'Accept': 'application/json',
-      'Content-Type': 'application/json'
-    }
+      'Content-Type': 'application/json',
+    },
   })
   return rawResponse.json()
 }
