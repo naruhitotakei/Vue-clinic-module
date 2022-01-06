@@ -4,7 +4,7 @@ let j = 0
 for (let i = 1; i <= 30; i++) {
   days.push({
     date: i,
-    day: dayName[j]
+    day: dayName[j],
   })
   j++
   if (j > 6) {

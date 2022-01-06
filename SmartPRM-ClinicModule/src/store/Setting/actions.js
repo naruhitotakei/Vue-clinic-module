@@ -1,12 +1,12 @@
 export default {
-  horizontalMenuAction (context, payload) {
+  horizontalMenuAction(context, payload) {
     if (context.state.horizontalMenu) {
       context.commit('horizontalMenuCommit', false)
     } else {
       context.commit('horizontalMenuCommit', true)
     }
   },
-  miniSidebarAction (context, payload) {
+  miniSidebarAction(context, payload) {
     return new Promise((resolve, reject) => {
       if (context.state.miniSidebarMenu) {
         context.commit('miniSidebarCommit', false)
@@ -17,34 +17,34 @@ export default {
       }
     })
   },
-  authUserAction (context, payload) {
+  authUserAction(context, payload) {
     context.commit('authUserCommit', payload)
   },
-  addUserAction (context, payload) {
+  addUserAction(context, payload) {
     context.commit('addUserCommit', payload)
   },
-  activePageAction (context, payload) {
+  activePageAction(context, payload) {
     context.commit('activePageCommit', payload)
   },
-  addBookmarkAction (context, payload) {
+  addBookmarkAction(context, payload) {
     context.commit('addBookmarkCommit', payload)
   },
-  removeBookmarkAction (context, payload) {
+  removeBookmarkAction(context, payload) {
     context.commit('removeBookmarkCommit', payload)
   },
-  setLangAction (context, payload) {
+  setLangAction(context, payload) {
     context.commit('setLangCommit', payload)
   },
-  setRtlAction (context, payload) {
+  setRtlAction(context, payload) {
     document.getElementsByTagName('html')[0].setAttribute('dir', 'rtl')
     let body = document.getElementsByTagName('body')
     body[0].classList.add('rtl')
     body[0].classList.remove('light')
   },
-  removeRtlAction (context, payload) {
+  removeRtlAction(context, payload) {
     document.getElementsByTagName('html')[0].setAttribute('dir', 'ltr')
     let body = document.getElementsByTagName('body')
     body[0].classList.remove('rtl')
     body[0].classList.add('light')
-  }
+  },
 }

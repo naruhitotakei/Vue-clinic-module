@@ -1,5 +1,5 @@
 export default {
-  createAppointments (context, payload) {
+  createAppointments(context, payload) {
     context.commit('createAppointments', payload)
-  }
+  },
 }

@@ -1,4 +1,4 @@
-﻿import getters from './getters'
+import getters from './getters'
 import actions from './actions'
 import mutations from './mutations'
 import SideBarItems from '../../FackApi/json/GlobalSearch'
@@ -9,7 +9,7 @@ const state = {
   lang: { title: 'English', value: 'en', image: require('../../assets/images/small/flag-11.png') },
   langOption: [
     { title: 'English', value: 'en', image: require('../../assets/images/small/flag-11.png') },
-    { title: 'Slovenščina', value: 'sl', image: require('../../assets/images/small/flag-800.png') }
+    { title: 'Slovenščina', value: 'sl', image: require('../../assets/images/small/flag-800.png') },
     /* { title: 'Arabic', value: 'ar', image: require('../../assets/images/small/flag-500.png') },
     { title: 'Chinese', value: 'chi', image: require('../../assets/images/small/flag-300.png') },
     { title: 'Hindi', value: 'hi', image: require('../../assets/images/small/flag-100.png') },
@@ -23,12 +23,12 @@ const state = {
     { primary: '#c76464', primaryLight: '#f3c37a', bodyBgLight: '#fff8ea', bodyBgDark: '#1d203f' },
     { primary: '#c764ad', primaryLight: '#de8ba9', bodyBgLight: '#ffeaf5', bodyBgDark: '#1d203f' },
     { primary: '#64c7ac', primaryLight: '#a3f37a', bodyBgLight: '#f0ffea', bodyBgDark: '#1d203f' },
-    { primary: '#8ac764', primaryLight: '#dbf37a', bodyBgLight: '#f7ffea', bodyBgDark: '#1d203f' }
+    { primary: '#8ac764', primaryLight: '#dbf37a', bodyBgLight: '#f7ffea', bodyBgDark: '#1d203f' },
   ],
   authUser: {
     auth: false,
     authType: false,
-    user: {}
+    user: {},
   },
   users: [
     {
@@ -37,8 +37,8 @@ const state = {
       mobileNo: null,
       email: 'admin@xray.com',
       profileImage: null,
-      password: 'admin123'
-    }
+      password: 'admin123',
+    },
   ],
   globalSearch: SideBarItems,
   bookmark: [
@@ -46,32 +46,32 @@ const state = {
       title: 'Video Chat',
       link: { 'name': 'app.chat' },
       is_icon_class: true,
-      icon: 'ri-message-line'
+      icon: 'ri-message-line',
     },
     {
       title: 'Product Listing',
       link: { 'name': 'app.e-commerce.index' },
       is_icon_class: true,
-      icon: 'ri-file-list-line'
+      icon: 'ri-file-list-line',
     },
     {
       title: 'Social App',
       link: { 'name': 'social.list' },
       is_icon_class: true,
-      icon: 'ri-question-answer-line'
+      icon: 'ri-question-answer-line',
     },
     {
       title: 'Todo',
       link: { name: 'app.todo' },
       is_icon_class: true,
-      icon: 'ri-chat-check-line'
+      icon: 'ri-chat-check-line',
     },
     {
       title: 'Inbox',
       link: { 'name': 'app.email' },
       is_icon_class: true,
-      icon: 'ri-inbox-line'
-    }
+      icon: 'ri-inbox-line',
+    },
 
   ],
   activePage: {
@@ -79,14 +79,14 @@ const state = {
     breadCrumb: [
       {
         html: '<i class="ri-home-4-line mr-1 float-left"></i>Home',
-        to: { name: 'mini.dashboard.home' }
+        to: { name: 'mini.dashboard.home' },
       },
       {
         text: '',
-        href: '#'
-      }
-    ]
-  }
+        href: '#',
+      },
+    ],
+  },
 }
 
 export default {
@@ -94,5 +94,5 @@ export default {
   state,
   getters,
   actions,
-  mutations
+  mutations,
 }

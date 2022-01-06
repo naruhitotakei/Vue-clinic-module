@@ -1,8 +1,8 @@
 export default {
-  listCommit (state, data) {
+  listCommit(state, data) {
     state.chat = data
   },
-  videoCallCommit (state, data) {
+  videoCallCommit(state, data) {
     state.videoCall = data
-  }
+  },
 }

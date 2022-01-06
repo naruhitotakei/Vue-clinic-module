@@ -5,7 +5,7 @@ import mutations from './mutations'
 const state = {
   navTicket: false,
   numberOfTicket: 0,
-  sidebarTicket: false
+  sidebarTicket: false,
 }
 
 export default {
@@ -13,5 +13,5 @@ export default {
   state,
   getters,
   actions,
-  mutations
+  mutations,
 }

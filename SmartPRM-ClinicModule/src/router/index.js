@@ -66,32 +66,32 @@ const authChildRoutes = (prop, mode = false) => [
     path: 'sign-in',
     name: prop + '.sign-in',
     meta: { dark: mode, auth: true },
-    component: SignIn
+    component: SignIn,
   },
   {
     path: 'sign-up',
     name: prop + '.sign-up',
     meta: { dark: mode, auth: true },
-    component: SignUp
+    component: SignUp,
   },
   {
     path: 'password-reset',
     name: prop + '.password-reset',
     meta: { dark: mode, auth: true },
-    component: RecoverPassword
+    component: RecoverPassword,
   },
   {
     path: 'lock-screen',
     name: prop + '.lock-screen',
     meta: { dark: mode, auth: true },
-    component: LockScreen
+    component: LockScreen,
   },
   {
     path: 'confirm-mail',
     name: prop + '.confirm-mail',
     meta: { dark: mode, auth: true },
-    component: ConfirmMail
-  }
+    component: ConfirmMail,
+  },
 ]
 
 const childRoutes = (prop, mode) => [
@@ -99,103 +99,103 @@ const childRoutes = (prop, mode) => [
     path: '/',
     name: prop + '.home',
     meta: { dark: mode, auth: true, name: 'Home' },
-    component: Home
+    component: Home,
   },
   {
     path: 'call-center-dashboard',
     name: prop + '.call-center-dashboard',
     meta: { dark: mode, auth: true, name: 'Call Center Dashboard' },
-    component: CallCenterDashboard
+    component: CallCenterDashboard,
   },
   {
     path: 'calendar',
     name: prop + '.calendar',
     meta: { dark: mode, auth: true, name: 'Calendar' },
-    component: Calendar
+    component: Calendar,
   },
   {
     path: 'appointments',
     name: prop + '.appointments',
     meta: { dark: mode, auth: true, name: 'Appointments' },
-    component: Appointments
+    component: Appointments,
   },
   {
     path: 'patients',
     name: prop + '.patients',
     meta: { dark: mode, auth: true, name: 'Editable' },
-    component: Patients
+    component: Patients,
   },
   {
     path: 'assignments',
     name: prop + '.assignments',
     meta: { dark: mode, auth: true, name: 'assignments' },
-    component: Assignments
+    component: Assignments,
   },
   {
     path: 'online-booking/:clientId/:locationId',
     name: prop + '.online-booking',
     meta: { dark: mode, auth: true, name: 'online-booking' },
-    component: OnlineBookingPublic
-  }
+    component: OnlineBookingPublic,
+  },
 ]
 const documentChildRoute = (prop, mode) => [
   {
     path: 'invoices',
     name: prop + '.invoices',
     meta: { dark: mode, auth: true, name: 'Invoices' },
-    component: Invoices
+    component: Invoices,
   },
   {
     path: 'invoices/:invoiceId',
     name: prop + '.invoiceId',
     meta: { dark: mode, auth: true, name: 'Invoice' },
-    component: Invoice
+    component: Invoice,
   },
   {
     path: 'invoices/:invoiceId/draft/patient/:patientId',
     name: prop + '.draftInvoice',
     meta: { dark: mode, auth: true, name: 'Invoice' },
     props: true,
-    component: NewInvoice
+    component: NewInvoice,
   },
   {
     path: 'invoices/:patientId/new-invoice',
     name: prop + '.newInvoice',
     meta: { dark: mode, auth: true, name: 'Invoice' },
-    component: NewInvoice
+    component: NewInvoice,
   },
   {
     path: 'advance-payments',
     name: prop + '.advance-payments',
     meta: { dark: mode, auth: true, name: 'Advance Payments' },
-    component: AdvPayments
+    component: AdvPayments,
   },
   {
     path: 'advance-payments/:advPaymentId',
     name: prop + '.advance-payments',
     meta: { dark: mode, auth: true, name: 'Advance Payments' },
-    component: AdvPayment
+    component: AdvPayment,
   },
   {
     path: 'advance-payments/:patientId/new-adv-payment',
     name: prop + '.new-adv-payment',
     meta: { dark: mode, auth: true, name: 'Advance Payments' },
-    component: NewAdvPayment
+    component: NewAdvPayment,
   },
   {
     path: 'offers',
     name: prop + '.offers',
     meta: { dark: mode, auth: true, name: 'Offers' },
-    component: Offers
-  }
+    component: Offers,
+  },
 ]
 const patientChildRoute = (prop, mode) => [
   {
     path: ':patientId',
     name: prop + '.patientId',
     meta: { dark: mode, auth: true, name: 'ViewPatient' },
-    component: ViewPatient
-  }
+    component: ViewPatient,
+  },
 ]
 
 const statisticsChildRoute = (prop, mode = false) => [
@@ -203,14 +203,14 @@ const statisticsChildRoute = (prop, mode = false) => [
     path: 'statistics-for-clinic',
     name: prop + '.statistics-for-clinic',
     meta: { dark: mode, auth: true, name: 'Statistics for Clinic' },
-    component: ClinicStatistics
+    component: ClinicStatistics,
   },
   {
     path: 'personal-statistics',
     name: prop + '.personal-statistics',
     meta: { dark: mode, auth: true, name: 'Personal Statistics' },
-    component: PersonalStatistics
-  }
+    component: PersonalStatistics,
+  },
 ]
 
 const reportingChildRoute = (prop, mode = false) => [
@@ -218,20 +218,20 @@ const reportingChildRoute = (prop, mode = false) => [
     path: 'emazing',
     name: prop + '.emazing',
     meta: { dark: mode, auth: true, name: 'Emazing' },
-    component: Emazing
+    component: Emazing,
   },
   {
     path: 'doctor',
     name: prop + '.doctor',
     meta: { dark: mode, auth: true, name: 'Doctor' },
-    component: Doctor
+    component: Doctor,
   },
   {
     path: 'tax-authority',
     name: prop + '.tax-authority',
     meta: { dark: mode, auth: true, name: 'Tax Authority' },
-    component: TaxAuthority
-  }
+    component: TaxAuthority,
+  },
 ]
 
 const callCenterChildRoute = (prop, mode = false) => [
@@ -239,38 +239,38 @@ const callCenterChildRoute = (prop, mode = false) => [
     path: 'leads',
     name: prop + '.leads',
     meta: { dark: mode, auth: true, name: 'Leads' },
-    component: Leads
+    component: Leads,
   },
   {
     path: 'client-info',
     name: prop + '.client-info',
     meta: { dark: mode, auth: true, name: 'Client Info' },
-    component: ClientInfo
+    component: ClientInfo,
   },
   {
     path: 'KPIs',
     name: prop + '.KPIs',
     meta: { dark: mode, auth: true, name: 'KPIs' },
-    component: KPIs
+    component: KPIs,
   },
   {
     path: 'work-report',
     name: prop + '.work-report',
     meta: { dark: mode, auth: true, name: 'Work Report' },
-    component: WorkReport
+    component: WorkReport,
   },
   {
     path: 'activity-report',
     name: prop + '.activity-report',
     meta: { dark: mode, auth: true, name: 'Activity Report' },
-    component: ActivityReport
+    component: ActivityReport,
   },
   {
     path: 'missing-services',
     name: prop + '.missing-services',
     meta: { dark: mode, auth: true, name: 'Missing Services' },
-    component: MissingServices
-  }
+    component: MissingServices,
+  },
 ]
 
 const settingsChildRoute = (prop, mode = false) => [
@@ -278,68 +278,68 @@ const settingsChildRoute = (prop, mode = false) => [
     path: 'users',
     name: prop + '.users',
     meta: { dark: mode, auth: true, name: 'Users' },
-    component: Users
+    component: Users,
   },
   {
     path: 'locations',
     name: prop + '.locations',
     meta: { dark: mode, auth: true, name: 'Locations' },
-    component: Locations
+    component: Locations,
   },
   {
     path: 'services-and-products',
     name: prop + '.services-and-products',
     meta: { dark: mode, auth: true, name: 'Services And Products' },
-    component: ServicesAndProducts
+    component: ServicesAndProducts,
   },
   {
     path: 'invoicing',
     name: prop + '.invoicing',
     meta: { dark: mode, auth: true, name: 'Invoicing' },
-    component: Invoicing
+    component: Invoicing,
   },
   {
     path: 'business-customers',
     name: prop + '.business-customers',
     meta: { dark: mode, auth: true, name: 'Business Customers' },
-    component: BusinessCustomers
+    component: BusinessCustomers,
   },
   {
     path: 'free-slots',
     name: prop + '.free-slots',
     meta: { dark: mode, auth: true, name: 'Free Slots' },
-    component: FreeSlots
+    component: FreeSlots,
   },
   {
     path: 'sms-templates',
     name: prop + '.sms-templates',
     meta: { dark: mode, auth: true, name: 'SMS Templates' },
-    component: SMSTemplates
+    component: SMSTemplates,
   },
   {
     path: 'mail-templates',
     name: prop + '.mail-templates',
     meta: { dark: mode, auth: true, name: 'Mail Templates' },
-    component: MailTemplates
+    component: MailTemplates,
   },
   {
     path: 'advertising',
     name: prop + '.advertising',
     meta: { dark: mode, auth: true, name: 'Advertising' },
-    component: Advertising
+    component: Advertising,
   },
   {
     path: 'labels',
     name: prop + '.labels',
     meta: { dark: mode, auth: true, name: 'Labels' },
-    component: Labels
+    component: Labels,
   },
   {
     path: 'online-booking',
     name: prop + '.online-booking',
     meta: { dark: mode, auth: true, name: 'Online Booking' },
-    component: OnlineBooking
-  }
+    component: OnlineBooking,
+  },
 ]
 
 const routes = [
@@ -348,69 +348,69 @@ const routes = [
     name: 'dashboard',
     component: Layout1,
     meta: { auth: true },
-    children: childRoutes('dashboard')
+    children: childRoutes('dashboard'),
   },
   {
     path: '/documents',
     name: 'documents',
     component: Layout1,
     meta: { auth: true },
-    children: documentChildRoute('documents')
+    children: documentChildRoute('documents'),
   },
   {
     path: '/patients',
     name: 'patients',
     component: Layout1,
     meta: { auth: true },
-    children: patientChildRoute('patients')
+    children: patientChildRoute('patients'),
   },
   {
     path: '/statistics',
     name: 'statistics',
     component: Layout1,
     meta: { auth: true },
-    children: statisticsChildRoute('statistics')
+    children: statisticsChildRoute('statistics'),
   },
   {
     path: '/reporting',
     name: 'reporting',
     component: Layout1,
     meta: { auth: true },
-    children: reportingChildRoute('reporting')
+    children: reportingChildRoute('reporting'),
   },
   {
     path: '/call-center',
     name: 'call-center',
     component: Layout1,
     meta: { auth: true },
-    children: callCenterChildRoute('call-center')
+    children: callCenterChildRoute('call-center'),
   },
   {
     path: '/settings',
     name: 'settings',
     component: Layout1,
     meta: { auth: true },
-    children: settingsChildRoute('settings')
+    children: settingsChildRoute('settings'),
   },
   {
     path: '/auth',
     name: 'auth1',
     component: AuthLayout1,
     meta: { auth: true },
-    children: authChildRoutes('auth1')
+    children: authChildRoutes('auth1'),
   },
   {
     path: '/public',
     name: 'public',
     component: OnlineBookingPublic,
-    meta: { auth: false }
-  }
+    meta: { auth: false },
+  },
 ]
 
 const router = new VueRouter({
   mode: 'history',
   base: process.env.VUE_APP_BASE_URL,
-  routes
+  routes,
 })
 
 export default router

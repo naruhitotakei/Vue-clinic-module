@@ -3,7 +3,7 @@ import actions from './actions'
 import mutations from './mutations'
 
 const state = {
-  calendarApi: null
+  calendarApi: null,
 }
 
 export default {
@@ -11,5 +11,5 @@ export default {
   state,
   getters,
   actions,
-  mutations
+  mutations,
 }
