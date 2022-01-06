@@ -58,6 +58,6 @@ Vue.filter('formatMoney', function(value) {
 
 Vue.filter('formatPrice', function(value) {
   if (value || value === 0) {
-    return Number(value).toLocaleString('es-ES', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + ' €'
+    return new Intl.NumberFormat('de-DE', { style: 'currency', currency: 'EUR' }).format(Number(value))
   }
 })

@@ -86,7 +86,7 @@
                 <div class="d-flex align-items-center justify-content-between">
                   <div class="rounded-circle iq-card-icon bg-info"><i class="ri-hospital-line"></i></div>
                   <div class="text-right">
-                    <h2 class="mb-0"><span class="counter">{{ revenue }}</span></h2>
+                    <h2 class="mb-0"><span class="counter">{{ revenue | formatPrice }}</span></h2>
                     <h5 class="">Revenue</h5>
                   </div>
                 </div>
@@ -246,7 +246,7 @@ export default {
     getStats(start, end) {
       getClinicStats(start, end).then(response => {
         if (response && response.revenue) {
-          this.revenue = Number(response.revenue).toLocaleString('es-ES', { minimumFractionDigits: 2, maximumFractionDigits: 2 })
+          this.revenue = Number(response.revenue)
           this.appointments = Number(response.appointments).toLocaleString()
           this.attended = Number(response.attended).toLocaleString()
           this.serviced_patients = Number(response.serviced).toLocaleString()
