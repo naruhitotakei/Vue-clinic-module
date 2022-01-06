@@ -33,7 +33,7 @@ Vue.config.errorHandler = (err, vm, info) => {
   throw err // rethrow
 }
 
-Vue.filter('euro', function(value) {
+Vue.filter('euro', function (value) {
   if (!value) return '0 €'
   return value + ' €'
 })
@@ -44,7 +44,7 @@ Vue.use(CompositionApi)
 Vue.component('apex-chart', VueApexCharts)
 Vue.use(VueExcelXlsx)
 
-Vue.filter('percentage', function(value) {
+Vue.filter('percentage', function (value) {
   if (!value) return '0%'
   return value + '%'
 })
