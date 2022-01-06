@@ -58,32 +58,32 @@ export const xray = {
     Store.dispatch('Setting/activePageAction', obj)
   },
   progressBar() {
-    $('.iq-progress-bar > span').each(function() {
+    $('.iq-progress-bar > span').each(function () {
       let progressBar = $(this)
       let width = $(this).data('percent')
       progressBar.css({
         'transition': 'width 2s',
       })
 
-      setTimeout(function() {
+      setTimeout(function () {
         progressBar.css('width', width + '%')
       }, 100)
     })
 
-    $('.progress-bar-vertical > span').each(function() {
+    $('.progress-bar-vertical > span').each(function () {
       let progressBar = $(this)
       let height = $(this).data('percent')
       progressBar.css({
         'transition': 'height 2s',
       })
 
-      setTimeout(function() {
+      setTimeout(function () {
         progressBar.css('height', height + '%')
       }, 100)
     })
   },
   fixedHeader() {
-    $(window).scroll(function() {
+    $(window).scroll(function () {
       if ($(window).scrollTop() >= 75) {
         $('.iq-top-navbar').addClass('fixed-header')
       } else {
@@ -92,7 +92,7 @@ export const xray = {
     })
   },
   ripple() {
-    $(document).on('click', '.iq-waves-effect', function(e) {
+    $(document).on('click', '.iq-waves-effect', function (e) {
       // Remove any old one
       $('.ripple').remove()
       // Setup
@@ -128,7 +128,7 @@ export const xray = {
   fullscreen() {
     const elementExist = this.checkElement('class', 'iq-full-screen')
     if (elementExist) {
-      $(document).on('click', '.iq-full-screen', function() {
+      $(document).on('click', '.iq-full-screen', function () {
         let elem = $(this)
         if (!document.fullscreenElement &&
           !document.mozFullScreenElement &&
@@ -194,7 +194,7 @@ export const xray = {
   sideBarToggle() {
     const elementExist = this.checkElement('class', 'iq-sidebar-menu')
     if (elementExist) {
-      $('.iq-sidebar-menu li').click(function(ele) {
+      $('.iq-sidebar-menu li').click(function (ele) {
         $('.iq-sidebar-menu li').has('.iq-submenu').removeClass('active')
         $(this).has('.iq-submenu').toggleClass('active')
       })
@@ -202,10 +202,10 @@ export const xray = {
   },
 
   navBarAction() {
-    $(document).on('click', '.iq-sub-dropdown', function(e) {
+    $(document).on('click', '.iq-sub-dropdown', function (e) {
       e.stopPropagation()
     })
-    $(document).on('click', function(e) {
+    $(document).on('click', function (e) {
       let myTargetElement = e.target
       let selector, mainElement
       if ($(myTargetElement).hasClass('search-toggle') || $(myTargetElement).parent().hasClass('search-toggle') || $(myTargetElement).parent().parent().hasClass('search-toggle')) {
@@ -277,7 +277,7 @@ export const xray = {
   },
 
   AccordianInit() {
-    $(document).on('click', '.iq-accordion .iq-accordion-block', function() {
+    $(document).on('click', '.iq-accordion .iq-accordion-block', function () {
       if ($(this).children('div.accordion-details ').is(':hidden')) {
         $('.iq-accordion .iq-accordion-block').removeClass('accordion-active').children('div.accordion-details ').slideUp('slow')
         $(this).toggleClass('accordion-active').children('div.accordion-details ').slideDown('slow')
@@ -288,7 +288,7 @@ export const xray = {
   getActiveLink(item, activeRoute) {
     let active = false
     if (item.children !== undefined) {
-      item.children.filter(function(child) {
+      item.children.filter(function (child) {
         if (child.link.name === activeRoute) {
           active = true
         }
@@ -318,16 +318,16 @@ export const xray = {
     Snackbar.show(data)
   },
   chat() {
-    $('#chat-start').click(function() {
+    $('#chat-start').click(function () {
       $('.chat-data-left').toggleClass('show')
     })
-    $('.close-btn-res').click(function() {
+    $('.close-btn-res').click(function () {
       $('.chat-data-left').removeClass('show')
     })
-    $('.iq-chat-ui li').click(function() {
+    $('.iq-chat-ui li').click(function () {
       $('.chat-data-left').removeClass('show')
     })
-    $('.sidebar-toggle').click(function() {
+    $('.sidebar-toggle').click(function () {
       $('.chat-data-left').addClass('show')
     })
   },
@@ -368,22 +368,22 @@ export const xray = {
 
 export const animation = {
   easing: {
-    linear: function(progress) {
+    linear: function (progress) {
       return progress
     },
-    quadratic: function(progress) {
+    quadratic: function (progress) {
       return Math.pow(progress, 2)
     },
-    swing: function(progress) {
+    swing: function (progress) {
       return 0.5 - Math.cos(progress * Math.PI) / 2
     },
-    circ: function(progress) {
+    circ: function (progress) {
       return 1 - Math.sin(Math.acos(progress))
     },
-    back: function(progress, x) {
+    back: function (progress, x) {
       return Math.pow(progress, 2) * ((x + 1) * progress - x)
     },
-    bounce: function(progress) {
+    bounce: function (progress) {
       // eslint-disable-next-line no-unused-vars
       for (let a = 0, b = 1, result; 1; a += b, b /= 2) {
         if (progress >= (7 - 4 * a) / 11) {
@@ -391,13 +391,13 @@ export const animation = {
         }
       }
     },
-    elastic: function(progress, x) {
+    elastic: function (progress, x) {
       return Math.pow(2, 10 * (progress - 1)) * Math.cos(20 * Math.PI * x / 3 * progress)
     },
   },
-  animate: function(options) {
+  animate: function (options) {
     let start = new Date()
-    let id = setInterval(function() {
+    let id = setInterval(function () {
       let timePassed = new Date() - start
       let progress = timePassed / options.duration
       if (progress > 1) {
@@ -411,15 +411,15 @@ export const animation = {
       }
     }, options.delay || 10)
   },
-  fadeOut: function(element, options) {
+  fadeOut: function (element, options) {
     let to = 1
     this.animate({
       duration: options.duration,
-      delta: function(progress) {
+      delta: function (progress) {
         progress = this.progress
         return animation.easing.swing(progress)
       },
-      step: function(delta) {
+      step: function (delta) {
         if (element == null) {
           return
         }
@@ -428,15 +428,15 @@ export const animation = {
       },
     })
   },
-  fadeIn: function(element, options) {
+  fadeIn: function (element, options) {
     let to = 0
     this.animate({
       duration: options.duration,
-      delta: function(progress) {
+      delta: function (progress) {
         progress = this.progress
         return animation.easing.swing(progress)
       },
-      step: function(delta) {
+      step: function (delta) {
         if (element == null) {
           return
         }
