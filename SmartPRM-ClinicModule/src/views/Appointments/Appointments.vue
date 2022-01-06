@@ -126,116 +126,21 @@
                 </div>
               </b-col>
               <b-col lg="3" md="3">
-                <!-- <b-form-group class="align-center my-1">
+                <b-form-group class="align-center my-1">
                   <b-form-radio
-                    v-if="appointment.level_of_interest == 'Not interested' || appointment.level_of_interest == 'Not Interested'"
-                    name="interestLevel"
-                    checked
+                    v-for="[value, label] of [
+                      ['Not interested', 'notInterested'],
+                      ['Interested', 'interested'],
+                      ['Very interested', 'veryInterested'],
+                    ]"
+                    :key="value"
+                    v-model="appointment.level_of_interest"
+                    :value="value"
+                    @change="handleUpdateLevelOfInterest(appointment.id, value)"
                   >
-                    {{ $t('appointments.notInterested') }}
-                  </b-form-radio>
-                  <b-form-radio
-                    v-else
-                    name="interestLevel"
-                    @change="handleUpdateLevelOfInterest(appointment.id, 'Not Interested')"
-                  >
-                    {{ $t('appointments.notInterested') }}
-                  </b-form-radio>
-                  <b-form-radio
-                    v-if="appointment.level_of_interest == 'Interested'"
-                    name="interestLevel"
-                    checked
-                  >
-                    {{ $t('appointments.interested') }}
-                  </b-form-radio>
-                  <b-form-radio
-                    v-else
-                    name="interestLevel"
-                    @change="handleUpdateLevelOfInterest(appointment.id, 'Interested')"
-                  >
-                    {{ $t('appointments.interested') }}
-                  </b-form-radio>
-                  <b-form-radio
-                    v-if="appointment.level_of_interest == 'Very interested' || appointment.level_of_interest == 'Very Interested'"
-                    name="interestLevel"
-                    checked
-                  >
-                    {{ $t('appointments.veryInterested') }}
-                  </b-form-radio>
-                  <b-form-radio
-                    v-else
-                    name="interestLevel"
-                    @change="handleUpdateLevelOfInterest(appointment.id, 'Very Interested')"
-                  >
-                    {{ $t('appointments.veryInterested') }}
+                    {{ $t(`appointments.${label}`) }}
                   </b-form-radio>
                 </b-form-group>
-                      -->
-                <b-button-group class="align-center button-group-style">
-                  <b-button
-                    v-if="
-                      appointment.level_of_interest == 'Not interested' ||
-                      appointment.level_of_interest == 'Not Interested'
-                    "
-                    size="sm"
-                    variant="primary"
-                  >
-                    {{ $t('appointments.notInterested') }}
-                  </b-button>
-                  <b-button
-                    v-else
-                    size="sm"
-                    variant="info"
-                    @click="
-                      handleUpdateLevelOfInterest(
-                        appointment.id,
-                        'Not Interested',
-                      )
-                    "
-                  >
-                    {{ $t('appointments.notInterested') }}
-                  </b-button>
-                  <b-button
-                    v-if="appointment.level_of_interest == 'Interested'"
-                    size="sm"
-                    variant="primary"
-                  >
-                    {{ $t('appointments.interested') }}
-                  </b-button>
-                  <b-button
-                    v-else
-                    size="sm"
-                    variant="info"
-                    @click="
-                      handleUpdateLevelOfInterest(appointment.id, 'Interested')
-                    "
-                  >
-                    {{ $t('appointments.interested') }}
-                  </b-button>
-                  <b-button
-                    v-if="
-                      appointment.level_of_interest == 'Very interested' ||
-                      appointment.level_of_interest == 'Very Interested'
-                    "
-                    size="sm"
-                    variant="primary"
-                  >
-                    {{ $t('appointments.veryInterested') }}
-                  </b-button>
-                  <b-button
-                    v-else
-                    size="sm"
-                    variant="info"
-                    @click="
-                      handleUpdateLevelOfInterest(
-                        appointment.id,
-                        'Very Interested',
-                      )
-                    "
-                  >
-                    {{ $t('appointments.veryInterested') }}
-                  </b-button>
-                </b-button-group>
               </b-col>
             </b-row>
             <b-row class="no-margin pt-2 mb-3 align-center">
@@ -449,6 +354,7 @@
 </template>
 
 <script>
+import { defineComponent } from '@vue/composition-api'
 import IqCard from '../../components/xray/cards/iq-card.vue'
 import { xray } from '../../config/pluginInit'
 import {
@@ -460,7 +366,7 @@ import {
   updateAttendance,
 } from '../../services/appointments'
 
-export default {
+export default defineComponent({
   components: {
     IqCard,
   },
@@ -584,7 +490,7 @@ export default {
       )
     },
   },
-}
+})
 </script>
 
 <style>
