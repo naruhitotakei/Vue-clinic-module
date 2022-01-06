@@ -8,7 +8,7 @@ import VueSlick from 'vue-slick'
 export default {
   name: 'Slick',
   components: {
-    VueSlick
+    VueSlick,
   },
   props: {
     option: { type: Object,
@@ -25,26 +25,26 @@ export default {
               arrows: false,
               centerMode: true,
               centerPadding: '30',
-              slidesToShow: 1
-            }
+              slidesToShow: 1,
+            },
           }, {
             breakpoint: 480,
             settings: {
               arrows: false,
               centerMode: true,
               centerPadding: '15',
-              slidesToShow: 1
-            }
+              slidesToShow: 1,
+            },
           }],
           nextArrow: '<a href="#" class="ri-arrow-left-s-line left"></a>',
-          prevArrow: '<a href="#" class="ri-arrow-right-s-line right"></a>'
+          prevArrow: '<a href="#" class="ri-arrow-right-s-line right"></a>',
         }
-      }
-    }
+      },
+    },
   },
-  data () {
+  data() {
     return {
     }
-  }
+  },
 }
 </script>

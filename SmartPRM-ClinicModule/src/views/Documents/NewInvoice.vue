@@ -357,15 +357,15 @@ import BigNumber from 'bignumber.js'
 export default {
   name: 'NewInvoice',
   components: {
-    QrcodeVue
+    QrcodeVue,
   },
-  mounted () {
+  mounted() {
     xray.index()
     this.getLoggedInUser()
     this.getPatient()
     this.getProducts()
   },
-  data () {
+  data() {
     return {
       showPdf: false,
       detailColumns: [
@@ -378,13 +378,13 @@ export default {
         { label: this.$t('invoices.newInvoice.newInvoiceDetails.price'), key: 'product_price', class: 'text-left narrow-column' },
         { label: this.$t('invoices.newInvoice.newInvoiceDetails.discount'), key: 'discount', class: 'text-left narrow-column' },
         { label: this.$t('invoices.newInvoice.newInvoiceDetails.amount'), key: 'total', class: 'text-left narrow-column' },
-        { label: this.$t('invoices.newInvoice.newInvoiceDetails.action'), key: 'action', class: 'text-center action-column' }
+        { label: this.$t('invoices.newInvoice.newInvoiceDetails.action'), key: 'action', class: 'text-center action-column' },
       ],
       items: [
         {
           table_id: 1,
           item: {
-            name: ''
+            name: '',
           },
           quantity: '1',
           teeth: '',
@@ -392,40 +392,40 @@ export default {
           comment: '',
           discount: '0',
           total: '0',
-          editable: true
-        }
+          editable: true,
+        },
       ],
       paymentMethods: [
         {
           type: null,
           amount: 0,
-          paid: false
-        }
+          paid: false,
+        },
       ],
       paymentMethodOptions: [
         { id: 1, name: 'Cash', label: this.$t('paymentMethods.cash') },
         { id: 2, name: 'Credit card', label: this.$t('paymentMethods.creditCard') },
-        { id: 3, name: 'Bank Account', label: this.$t('paymentMethods.bankAccount') }
+        { id: 3, name: 'Bank Account', label: this.$t('paymentMethods.bankAccount') },
       ],
       paymentMethodColumns: [
         {
           key: 'type',
-          label: this.$t('paymentMethod')
+          label: this.$t('paymentMethod'),
         },
         {
           key: 'amount',
           label: this.$t('paymentMethodsColumn.amount'),
-          class: 'action-column'
+          class: 'action-column',
         },
         {
           key: 'paid',
           label: this.$t('paymentMethodsColumn.paid'),
-          class: 'text-center action-column'
+          class: 'text-center action-column',
         },
         { label: this.$t('servicesAndProducts.productGroupColumn.productGroupAction'),
           key: 'action',
-          class: 'text-center action-column'
-        }
+          class: 'text-center action-column',
+        },
 
       ],
       teethOptions: ['11', '12', '13', '14', '15', '16', '17', '18', '21', '22', '23', '24', '25', '26', '27', '28', '31', '32', '33', '34', '35', '36', '37', '38', '41', '42', '43', '44', '45', '46', '47', '48', '51', '52', '53', '54', '55', '61', '62', '63', '64', '65', '71', '72', '73', '74', '75'],
@@ -468,30 +468,30 @@ export default {
       qrCode: '',
       paymentStatus: '',
       pdfNumber: '',
-      pdfName: ''
+      pdfName: '',
     }
   },
   computed: {
-    isInvoiceStatusIssued () {
+    isInvoiceStatusIssued() {
       return this.status === 'invoice.issued'
-    }
+    },
   },
   methods: {
-    addPaymentMethod () {
+    addPaymentMethod() {
       this.paymentMethods.push(this.defaultPaymentMethod())
     },
-    defaultPaymentMethod () {
+    defaultPaymentMethod() {
       return {
         type: null,
         amount: 0,
-        paid: false
+        paid: false,
       }
     },
-    removePaymentMethod (item) {
+    removePaymentMethod(item) {
       let index = this.paymentMethods.indexOf(item)
       this.paymentMethods.splice(index, 1)
     },
-    exportToPDF () {
+    exportToPDF() {
       this.calculateQRCode()
       this.calculatePdfNumber()
       this.setPdfName()
@@ -501,22 +501,22 @@ export default {
         filename: this.pdfName + '.pdf',
         image: { type: 'jpeg', quality: 0.98 },
         html2canvas: { y: 300 },
-        jsPDF: { unit: 'mm', format: 'a3' }
+        jsPDF: { unit: 'mm', format: 'a3' },
       }
       var source = window.document.getElementById('printInvoice')
       html2pdf().set(options).from(source).save()
     },
-    setPdfName () {
+    setPdfName() {
       this.pdfName = this.invoiceNumber === 'invoice.draft' ? this.$t('invoice.draft') : this.invoiceNumber
     },
-    calculatePdfNumber () {
+    calculatePdfNumber() {
       let year = moment().format('YY')
       let premiseNumber = this.issuedIn.premise_id < 10 ? '0' + this.issuedIn.premise_id : this.issuedIn.premise_id
       let invoiceNumber = this.invoiceNumber === 'invoice.draft' ? this.$t('invoice.draft').toLowerCase() : this.invoiceNumber
       let zeroFill = _.padStart(invoiceNumber, 5, '0')
       this.pdfNumber = premiseNumber + '-' + this.device.device_name + '-' + year + zeroFill
     },
-    getInvoiceTotal () {
+    getInvoiceTotal() {
       let totalCount = 0
       let totalSubCount = 0
       if (this.items.length === 0) {
@@ -532,23 +532,23 @@ export default {
         this.discount = (this.subTotal - this.invoiceTotal).toFixed(2)
       }
     },
-    submitSummary (item) {
+    submitSummary(item) {
       item.editable = false
       item.dueDate = moment(item.dueDate).add(item.dueDateNumber, 'days').format('DD MMM, YYYY')
     },
-    editSummary (item) {
+    editSummary(item) {
       item.editable = true
     },
-    getPrice (item) {
+    getPrice(item) {
       this.selectedItemName = item.name
     },
-    calculatePrice (productPrice, quantity, discount) {
+    calculatePrice(productPrice, quantity, discount) {
       return productPrice ? quantity * (productPrice - (productPrice * discount / 100)) : 0
     },
-    calculatePriceBeforeDiscount (item) {
+    calculatePriceBeforeDiscount(item) {
       return item.item.product_price ? item.quantity * item.item.product_price : 0
     },
-    getLoggedInUser () {
+    getLoggedInUser() {
       sso().then(response => {
         this.logedInUser = response
         getCompanyById(this.logedInUser.prm_company_id).then(response => {
@@ -561,19 +561,19 @@ export default {
         })
       })
     },
-    findDevicesForPremise (value) {
+    findDevicesForPremise(value) {
       getDevicesForPremise(value.premise_id).then(response => {
         this.devices = response
         this.device = this.devices[0]
       })
     },
-    getPatient () {
+    getPatient() {
       getEnquiryById(this.patientId).then(response => {
         this.patient = response[0]
         this.createBillingDetails(this.patient)
       })
     },
-    createBillingDetails (selectedPatient) {
+    createBillingDetails(selectedPatient) {
       let details = ''
       if (selectedPatient.name) details += selectedPatient.name
       if (selectedPatient.last_name) details += ' ' + selectedPatient.last_name
@@ -587,7 +587,7 @@ export default {
       if (selectedPatient.email) details += 'Email: ' + selectedPatient.email
       this.billingDetails = details
     },
-    getProducts () {
+    getProducts() {
       getProducts('sl').then(response => {
         this.products = response
         if (this.invoiceId) {
@@ -598,11 +598,11 @@ export default {
         }
       })
     },
-    edit (item) {
+    edit(item) {
       item.editable = true
       this.isEditMode = true
     },
-    submit (item) {
+    submit(item) {
       item.total = this.calculatePrice(item.item.product_price, item.quantity, item.discount).toFixed(2)
       item.editable = false
       this.getInvoiceTotal()
@@ -611,15 +611,15 @@ export default {
       }
       this.isEditMode = false
     },
-    remove (item) {
+    remove(item) {
       let index = this.items.indexOf(item)
       this.items.splice(index, 1)
       this.getInvoiceTotal()
     },
-    add () {
+    add() {
       this.items.push(this.default())
     },
-    default () {
+    default() {
       return {
         table_id: this.items.length + 1,
         item: {},
@@ -629,43 +629,43 @@ export default {
         comment: '',
         discount: '0',
         total: '0',
-        editable: true
+        editable: true,
       }
     },
-    calculatePaymentTotal () {
+    calculatePaymentTotal() {
       this.paymentTotal = _.reduce(this.paymentMethods, function (sum, item) {
         return sum + parseFloat(item.amount)
       }, 0)
     },
-    calculatePayedAmount () {
+    calculatePayedAmount() {
       let payed = _.filter(this.paymentMethods, function (method) { return method.paid })
       this.paidAmount = _.reduce(payed, function (sum, item) {
         return sum + parseFloat(item.amount)
       }, 0)
     },
-    saveAsDraft () {
+    saveAsDraft() {
       this.status = 'invoice.draft'
       this.invoiceNumber = 'invoice.draft'
       this.deviceId = this.device ? this.device.device_id : ''
       this.prepareInvoice()
       if (this.isInoiceValid()) this.createInvoice()
     },
-    saveInvoice () {
+    saveInvoice() {
       this.status = 'invoice.issued'
       this.deviceId = this.device ? this.device.device_id : ''
       this.generateInvoiceNumber()
     },
-    generateReferenceCode () {
+    generateReferenceCode() {
       let premiseNumber = this.issuedIn.premise_id < 10 ? '0' + this.issuedIn.premise_id : this.issuedIn.premise_id
       let year = moment().format('YY')
       let zeroFill = _.padStart(this.invoiceNumber, 5, '0')
       this.referenceCode = 'R-' + year + '-' + this.invoiceNumber
       this.referenceCodeFurs = premiseNumber + '-' + this.device.device_name + '-' + year + zeroFill
     },
-    generateInvoiceNumber () {
+    generateInvoiceNumber() {
       let data = {
         business_premise_id: this.issuedIn.business_premise_id,
-        draft: 'invoice.draft'
+        draft: 'invoice.draft',
       }
       getSerialForInvoiceNumberBasedOnType(data).then(response => {
         let number = parseInt(response[0].count) + 1
@@ -680,10 +680,10 @@ export default {
         })
       })
     },
-    findProduct (productId) {
+    findProduct(productId) {
       return _.find(this.products, function (prod) { return prod.product_id === productId })
     },
-    fetchItemsAndPaymentMethods () {
+    fetchItemsAndPaymentMethods() {
       getItemsOfInvoiceById(this.invoiceId).then(response => {
         let responseItems = []
         response.forEach((element, index) => {
@@ -697,7 +697,7 @@ export default {
             editable: false,
             teeth: this.getTeeth(element.teeth),
             surfaces: this.getSurfaces(element.surfaces),
-            comment: element.comment
+            comment: element.comment,
           }
           responseItems.push(item)
         })
@@ -708,7 +708,7 @@ export default {
         this.paymentMethods = items
       })
     },
-    getTeeth (teeth) {
+    getTeeth(teeth) {
       if (teeth === '') {
         return []
       } else if (teeth.includes(',')) {
@@ -717,7 +717,7 @@ export default {
         return new Array(teeth)
       }
     },
-    getSurfaces (surfaces) {
+    getSurfaces(surfaces) {
       if (surfaces === '') {
         return []
       } else if (surfaces.includes(',')) {
@@ -726,7 +726,7 @@ export default {
         return new Array(surfaces)
       }
     },
-    createInvoice () {
+    createInvoice() {
       if (!this.isItemValid()) this.items.pop()
       if (!this.invoiceId) {
         createInvoice(this.invoice).then(response => {
@@ -746,14 +746,14 @@ export default {
         })
       }
     },
-    redirectToDetailsPage () {
+    redirectToDetailsPage() {
       this.$router.push({ path: `/documents/invoices/${this.invoiceId}` })
     },
-    isItemValid () {
+    isItemValid() {
       let item = _.last(this.items)
       return parseFloat(item.total) > 0
     },
-    isInoiceValid () {
+    isInoiceValid() {
       this.calculatePaymentTotal()
       let valid = true
       if (this.invoiceTotal !== this.paymentTotal.toFixed(2)) {
@@ -770,7 +770,7 @@ export default {
       }
       return valid
     },
-    calculateQRCode () {
+    calculateQRCode() {
       let hexaNumber = new BigNumber(this.zoi, 16)
       let decimalNumber = hexaNumber.toString(10)
       this.decimalZoi = (decimalNumber.length < 39) ? '0'.repeat(39 - decimalNumber.length) + decimalNumber : decimalNumber
@@ -778,21 +778,21 @@ export default {
       this.qrCode = this.decimalZoi + this.logedInUser.tax_number + timeStamp
       this.calculateControlNumber()
     },
-    calculateControlNumber () {
+    calculateControlNumber() {
       let sum = 0
       for (let c of this.qrCode) {
         sum += parseInt(c)
       }
       this.qrCode += sum % 10
     },
-    calculatePaymentStatus () {
+    calculatePaymentStatus() {
       if (this.paidAmount === 0) {
         this.paymentStatus = 'Unpaid'
       } else {
         this.paymentStatus = this.paidAmount === parseFloat(this.invoiceTotal) ? 'Paid' : 'Partialy Paid'
       }
     },
-    prepareInvoice () {
+    prepareInvoice() {
       this.calculatePayedAmount()
       this.calculatePaymentStatus()
       let temp = {
@@ -827,11 +827,11 @@ export default {
         verification_status: this.status,
         payment_status: this.paymentStatus,
         reference_code: this.referenceCode,
-        reference_code_furs: this.referenceCodeFurs
+        reference_code_furs: this.referenceCodeFurs,
       }
       this.invoice = _.assignIn(this.invoice, this.patient, this.usersCompany, temp)
-    }
-  }
+    },
+  },
 }
 </script>
 

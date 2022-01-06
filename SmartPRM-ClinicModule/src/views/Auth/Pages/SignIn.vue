@@ -14,7 +14,7 @@ export default {
   name: 'SignIn',
   components: { SignInForm },
   data: () => ({}),
-  mounted () {
+  mounted() {
     const loggedIn = localStorage.getItem('access_token')
     if (loggedIn !== undefined && loggedIn !== null) {
       this.$router.push({ name: 'mini.dashboard.home-2' })
@@ -23,8 +23,8 @@ export default {
   methods: {
     loginOAuth0: function () {
       new auth0.WebAuth(constant.auth0Config).authorize()
-    }
-  }
+    },
+  },
 }
 </script>
 <style lang="scss">

@@ -14,9 +14,9 @@ export default {
   components: { SignUpForm },
   data: () => ({}),
   methods: {
-    loginOAuth0 () {
+    loginOAuth0() {
       new auth0.WebAuth(constant.auth0Config).authorize()
-    }
-  }
+    },
+  },
 }
 </script>

@@ -433,9 +433,9 @@ import ImageUpload from '@/components/ImageUpload.vue'
 
 export default {
   components: {
-    ImageUpload
+    ImageUpload,
   },
-  mounted () {
+  mounted() {
     xray.index()
     this.getCompanyPremises()
     this.getCompanyPremiseDevices()
@@ -444,31 +444,31 @@ export default {
     this.getLoggedInUser()
   },
   computed: {
-    isCompanyDisabled () {
+    isCompanyDisabled() {
       return !this.companyFormData.company_name || !this.companyFormData.company_address_line_1 || !this.companyFormData.company_post_code ||
         !this.companyFormData.company_city || !this.companyFormData.company_country_code || !this.companyFormData.company_iban ||
         !this.companyFormData.company_tax_registration_number || !this.companyFormData.company_issuer || !this.companyFormData.company_serial ||
         !this.companyFormData.cert_file || !this.companyFormData.key_file || !this.companyFormData.company_legal_registration_identifier
     },
-    isPremiseDisabled () {
+    isPremiseDisabled() {
       return !this.premiseFormData.company_id || !this.premiseFormData.premise_name || !this.premiseFormData.premise_street ||
         !this.premiseFormData.premise_house_number || !this.premiseFormData.premise_city || !this.premiseFormData.premise_post_code ||
         !this.premiseFormData.premise_country_code || !this.premiseFormData.premise_community || !this.premiseFormData.premise_cadastral_number ||
         !this.premiseFormData.building_number || !this.premiseFormData.building_section_number ||
         !this.premiseFormData.validity_date || !this.premiseFormData.business_premise_id || !this.isBusinessPremiseIdUnique
     },
-    isDeviceDisabled () {
+    isDeviceDisabled() {
       return !this.deviceFormData.company_premise_id || !this.deviceFormData.device_name || !this.isElectronicDeviceIdUnique
     },
-    hideCompaniesPagination () {
+    hideCompaniesPagination() {
       return Math.floor(this.companies.length / this.companiesPerPage) !== 0
     },
-    hidePremisesPagination () {
+    hidePremisesPagination() {
       return Math.floor(this.premises.length / this.premisesPerPage) !== 0
     },
-    hideDevicesPagination () {
+    hideDevicesPagination() {
       return Math.floor(this.devices.length / this.devicesPerPage) !== 0
-    }
+    },
   },
   name: 'Invoicing',
   data: function () {
@@ -478,14 +478,14 @@ export default {
         { label: 'Premise name', key: 'premise_name', class: 'text-left' },
         { label: 'Address', key: 'premise_address', class: 'text-left' },
         { label: 'City', key: 'premise_city', class: 'text-left' },
-        { label: 'Action', key: 'action', class: 'text-center' }
+        { label: 'Action', key: 'action', class: 'text-center' },
       ],
       companyColumns: [
         { label: 'Name', key: 'company_name', class: 'text-left' },
         { label: 'Address', key: 'company_address_line_1', class: 'text-left' },
         { label: 'City', key: 'company_city', class: 'text-left' },
         { label: 'Tax number', key: 'company_tax_registration_number', class: 'text-left' },
-        { label: 'Action', key: 'action', class: 'text-center' }
+        { label: 'Action', key: 'action', class: 'text-center' },
       ],
       companyFormData: {
         company_name: '',
@@ -502,11 +502,11 @@ export default {
         company_subject: '',
         company_issuer: '',
         company_serial: '',
-        vat_payer: false
+        vat_payer: false,
       },
       vatPayerOptions: [
         { code: true, label: 'Yes' },
-        { code: false, label: 'No' }
+        { code: false, label: 'No' },
       ],
       premiseFormData: {
         company_id: '',
@@ -523,12 +523,12 @@ export default {
         building_section_number: '',
         special_notes: '',
         validity_date: moment().format('YYYY-MM-DD'),
-        business_premise_id: ''
+        business_premise_id: '',
       },
       deviceFormData: {
         company_premise_id: '',
         device_name: '',
-        electronic_device_id: ''
+        electronic_device_id: '',
       },
       modalPremiseShow: false,
       modalDeviceShow: false,
@@ -548,46 +548,46 @@ export default {
         { label: 'Company name', key: 'company_name', class: 'text-left' },
         { label: 'Premise name', key: 'premise_name', class: 'text-left' },
         { label: 'Device name', key: 'device_name', class: 'text-left' },
-        { label: 'Action', key: 'action', class: 'text-center' }
+        { label: 'Action', key: 'action', class: 'text-center' },
       ],
       currentDevicePage: 1,
       devicesPerPage: 20,
       isBusinessPremiseIdUnique: true,
       isElectronicDeviceIdUnique: true,
       timer: null,
-      clientId: null
+      clientId: null,
     }
   },
   methods: {
-    getCountries () {
+    getCountries() {
       getCountriesList().then(response => {
         this.countries = response
       })
     },
-    getLoggedInUser () {
+    getLoggedInUser() {
       sso().then(response => {
         this.clientId = response.prm_client_id
       })
     },
-    getCompanyPremises () {
+    getCompanyPremises() {
       getCompanyPremises().then(response => {
         this.isPremiseDataLoaded = true
         this.premises = response
       })
     },
-    getCompanies () {
+    getCompanies() {
       getCompanies().then(response => {
         this.isCompanyDataLoaded = true
         this.companies = response
       })
     },
-    getCompanyPremiseDevices () {
+    getCompanyPremiseDevices() {
       getCompanyPremiseDevices().then(response => {
         this.isDeviceDataLoaded = true
         this.devices = response
       })
     },
-    defaultPremiseFormData () {
+    defaultPremiseFormData() {
       return {
         company_name: '',
         premise_address: '',
@@ -605,17 +605,17 @@ export default {
         building_section_number: '',
         special_notes: '',
         validity_date: moment().format('YYYY-MM-DD'),
-        business_premise_id: ''
+        business_premise_id: '',
       }
     },
-    defaultDeviceFormData () {
+    defaultDeviceFormData() {
       return {
         company_premise_id: '',
         device_name: '',
-        electronic_device_id: ''
+        electronic_device_id: '',
       }
     },
-    defaultCompanyFormData () {
+    defaultCompanyFormData() {
       return {
         company_name: '',
         company_address_line_1: '',
@@ -631,24 +631,24 @@ export default {
         company_subject: '',
         company_issuer: '',
         company_serial: '',
-        vat_payer: ''
+        vat_payer: '',
       }
     },
-    editCompany (item) {
+    editCompany(item) {
       getCompanyById(item.company_id).then(response => {
         this.companyFormData = Object.assign({}, response[0])
         this.modalCompanyShow = true
       })
     },
-    removeCompany (item) {
+    removeCompany(item) {
       let index = this.companies.indexOf(item)
       this.companies.splice(index, 1)
       deleteCompany(item.company_id)
     },
-    setCurrentCompanyePage () {
+    setCurrentCompanyePage() {
       this.currentCompanyPage = 1
     },
-    addCompany () {
+    addCompany() {
       this.companyFormData.prm_client_id = this.clientId
       this.setCurrentCompanyePage()
       if (this.companyFormData.company_id) {
@@ -662,25 +662,25 @@ export default {
       }
       this.companyFormData = this.defaultPremiseFormData()
     },
-    cancelCompany () {
+    cancelCompany() {
       this.companyFormData = this.defaultCompanyFormData()
     },
-    editPremise (item) {
+    editPremise(item) {
       getPremiseById(item.premise_id).then(response => {
         this.premiseFormData = Object.assign({}, response[0])
         this.premiseFormData.validity_date = moment(response[0].validity_date).format('YYYY-MM-DD')
         this.modalPremiseShow = true
       })
     },
-    removePremise (item) {
+    removePremise(item) {
       let index = this.premises.indexOf(item)
       this.premises.splice(index, 1)
       deletePremise(item.premise_id)
     },
-    setCurrentPremisePage () {
+    setCurrentPremisePage() {
       this.currentPremisePage = 1
     },
-    addPremise () {
+    addPremise() {
       this.setCurrentPremisePage()
       if (this.premiseFormData.premise_id) {
         updatePremise(this.premiseFormData.premise_id, this.premiseFormData).then(() => {
@@ -693,7 +693,7 @@ export default {
       }
       this.premiseFormData = this.defaultPremiseFormData()
     },
-    checkBusinessIdUniquness () {
+    checkBusinessIdUniquness() {
       if (this.timer) {
         clearTimeout(this.timer)
         this.timer = null
@@ -705,7 +705,7 @@ export default {
         })
       }, 1000)
     },
-    checkElectronicDeviceId () {
+    checkElectronicDeviceId() {
       if (this.timer) {
         clearTimeout(this.timer)
         this.timer = null
@@ -717,27 +717,27 @@ export default {
         })
       }, 1000)
     },
-    cancelPremise () {
+    cancelPremise() {
       this.premiseFormData = this.defaultPremiseFormData()
     },
-    cancelDevice () {
+    cancelDevice() {
       this.deviceFormData = this.defaultDeviceFormData()
     },
-    editDevice (item) {
+    editDevice(item) {
       getPremiseDeviceById(item.device_id).then(response => {
         this.deviceFormData = Object.assign({}, response[0])
         this.modalDeviceShow = true
       })
     },
-    removeDevice (item) {
+    removeDevice(item) {
       let index = this.devices.indexOf(item)
       this.devices.splice(index, 1)
       deletePremiseDevice(item.device_id)
     },
-    setCurrentDevicePage () {
+    setCurrentDevicePage() {
       this.currentDevicePage = 1
     },
-    addDevice () {
+    addDevice() {
       this.setCurrentDevicePage()
       if (this.deviceFormData.device_id) {
         updatePremiseDevice(this.deviceFormData.device_id, this.deviceFormData).then(() => {
@@ -749,8 +749,8 @@ export default {
         })
       }
       this.deviceFormData = this.defaultDeviceFormData()
-    }
-  }
+    },
+  },
 }
 </script>
 <style lang="scss">

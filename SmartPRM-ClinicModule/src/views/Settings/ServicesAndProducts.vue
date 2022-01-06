@@ -347,7 +347,7 @@ import { mapGetters } from 'vuex'
 export default {
   components: {
   },
-  mounted () {
+  mounted() {
     xray.index()
     this.getProducts()
     this.getProductCategories()
@@ -356,21 +356,21 @@ export default {
     this.getTaxRates()
   },
   computed: {
-    isProductDisabled () {
+    isProductDisabled() {
       return !this.formData.slovenian || !this.formData.product_price || !this.formData.product_group_id || !this.formData.product_type_id
     },
-    isGroupDisabled () {
+    isGroupDisabled() {
       return !this.formGroupData.slovenian || !this.formGroupData.category_id || !this.formGroupData.fee
     },
-    isCategoryDisabled () {
+    isCategoryDisabled() {
       return !this.formCategoryData.slovenian
     },
     ...mapGetters({
-      selectedLang: 'Setting/langState'
+      selectedLang: 'Setting/langState',
     }),
-    hideCategoryPagination () {
+    hideCategoryPagination() {
       return Math.floor(this.productCategories.length / this.productCategoriesPerPage) !== 0
-    }
+    },
   },
   name: 'ServicesAndProducts',
   data: function () {
@@ -380,7 +380,7 @@ export default {
         { label: this.$t('servicesAndProducts.productColumn.productPrice'), key: 'product_price', class: 'text-left' },
         { label: this.$t('servicesAndProducts.productColumn.productGroup'), key: 'product_group_id', class: 'text-left' },
         { label: this.$t('servicesAndProducts.productColumn.productType'), key: 'product_type_id', class: 'text-left' },
-        { label: this.$t('servicesAndProducts.productColumn.productAction'), key: 'action', class: 'text-center' }
+        { label: this.$t('servicesAndProducts.productColumn.productAction'), key: 'action', class: 'text-center' },
       ],
       formData: {
         slovenian: '',
@@ -390,7 +390,7 @@ export default {
         product_price: '',
         product_group_id: '',
         product_type_id: '',
-        tax_rate: ''
+        tax_rate: '',
       },
       formGroupData: {
         slovenian: '',
@@ -398,13 +398,13 @@ export default {
         german: '',
         english: '',
         category_id: '',
-        fee: ''
+        fee: '',
       },
       formCategoryData: {
         slovenian: '',
         italian: '',
         german: '',
-        english: ''
+        english: '',
       },
       modalProductShow: false,
       modalGroupShow: false,
@@ -423,50 +423,50 @@ export default {
         { label: this.$t('servicesAndProducts.productGroupColumn.productGroupName'), key: 'product_group_name', class: 'text-left' },
         { label: this.$t('servicesAndProducts.productGroupColumn.productGroupCategory'), key: 'category_id', class: 'text-left category-column' },
         { label: this.$t('servicesAndProducts.productGroupColumn.productGroupFee'), key: 'fee', class: 'text-left' },
-        { label: this.$t('servicesAndProducts.productGroupColumn.productGroupAction'), key: 'action', class: 'text-center' }
+        { label: this.$t('servicesAndProducts.productGroupColumn.productGroupAction'), key: 'action', class: 'text-center' },
       ],
       currentProductGroupPage: 1,
       productGroupsPerPage: 20,
       productCategoryColumns: [
         { label: this.$t('servicesAndProducts.productCategoryColumn.productCategoryName'), key: 'category_name', class: 'text-left' },
-        { label: this.$t('servicesAndProducts.productCategoryColumn.productCategoryAction'), key: 'action', class: 'text-center' }
+        { label: this.$t('servicesAndProducts.productCategoryColumn.productCategoryAction'), key: 'action', class: 'text-center' },
       ],
       currentProductCategoryPage: 1,
       productCategoriesPerPage: 20,
-      tempProductCategory: null
+      tempProductCategory: null,
     }
   },
   methods: {
-    getProducts () {
+    getProducts() {
       // let locale = this.getLocale()
       getProducts('sl').then(response => {
         this.isProductDataLoaded = true
         this.products = response
       })
     },
-    getLocale () {
+    getLocale() {
       return this.selectedLang.value ? this.selectedLang.value : this.selectedLang
     },
-    getProductCategories () {
+    getProductCategories() {
       // let locale = this.getLocale()
       getProductCategories('sl').then(response => {
         this.isProductCategoryDataLoaded = true
         this.productCategories = response
       })
     },
-    getProductGroups () {
+    getProductGroups() {
       // let locale = this.getLocale()
       getProductGroups('sl').then(response => {
         this.isProductGroupDataLoaded = true
         this.productGroups = response
       })
     },
-    getProductTypes () {
+    getProductTypes() {
       getProductTypes().then(response => {
         this.productTypes = response
       })
     },
-    defaultFormData () {
+    defaultFormData() {
       return {
         product_name: '',
         slovenian: '',
@@ -476,42 +476,42 @@ export default {
         product_price: '',
         product_group_id: '',
         product_type_id: '',
-        tax_rate: ''
+        tax_rate: '',
       }
     },
-    defaultFormGroupData () {
+    defaultFormGroupData() {
       return {
         slovenian: '',
         italian: '',
         german: '',
         english: '',
         category_id: '',
-        fee: ''
+        fee: '',
       }
     },
-    defaultFormCategoryData () {
+    defaultFormCategoryData() {
       return {
         slovenian: '',
         italian: '',
         german: '',
-        english: ''
+        english: '',
       }
     },
-    editProduct (item) {
+    editProduct(item) {
       getProductNaming(item.product_id).then(response => {
         this.formData = this.populateNaming(response, Object.assign({}, item))
       })
       this.modalProductShow = true
     },
-    removeProduct (item) {
+    removeProduct(item) {
       let index = this.products.indexOf(item)
       this.products.splice(index, 1)
       deleteProduct(item.product_id)
     },
-    setCurrentProductPage () {
+    setCurrentProductPage() {
       this.currentProductPage = 1
     },
-    addProduct () {
+    addProduct() {
       this.setCurrentProductPage()
       if (this.formData.product_id) {
         updateProduct(this.formData.product_id, this.formData).then(() => {
@@ -524,30 +524,30 @@ export default {
       }
       this.formData = this.defaultFormData()
     },
-    cancelProduct () {
+    cancelProduct() {
       this.formData = this.defaultFormData()
     },
-    cancelCategory () {
+    cancelCategory() {
       this.formCategoryData = this.defaultFormCategoryData()
     },
-    cancelGroup () {
+    cancelGroup() {
       this.formGroupData = this.defaultFormGroupData()
     },
-    editProductGroup (item) {
+    editProductGroup(item) {
       getProductGroupNaming(item.product_group_id).then(response => {
         this.formGroupData = this.populateNaming(response, Object.assign({}, item))
       })
       this.modalGroupShow = true
     },
-    removeProductGroup (item) {
+    removeProductGroup(item) {
       let index = this.productGroups.indexOf(item)
       this.productGroups.splice(index, 1)
       deleteProductGroup(item.product_group_id)
     },
-    setCurrentProductGroupPage () {
+    setCurrentProductGroupPage() {
       this.currentProductGroupPage = 1
     },
-    addProductGroup () {
+    addProductGroup() {
       this.setCurrentProductGroupPage()
       if (this.formGroupData.product_group_id) {
         updateProductGroup(this.formGroupData.product_group_id, this.formGroupData).then(() => {
@@ -560,13 +560,13 @@ export default {
       }
       this.formGroupData = this.defaultFormGroupData()
     },
-    editProductCategory (item) {
+    editProductCategory(item) {
       getProductCategoryNaming(item.category_id).then(response => {
         this.formCategoryData = this.populateNaming(response, Object.assign({}, item))
       })
       this.modalCategoryShow = true
     },
-    populateNaming (namingArray, object) {
+    populateNaming(namingArray, object) {
       namingArray.forEach(naming => {
         if (naming.language === 'sl') {
           object.slovenian = naming.text
@@ -580,15 +580,15 @@ export default {
       })
       return object
     },
-    removeProductCategory (item) {
+    removeProductCategory(item) {
       let index = this.productCategories.indexOf(item)
       deleteProductCategory(item.category_id)
       this.productCategories.splice(index, 1)
     },
-    setCurrentProductCategoryPage () {
+    setCurrentProductCategoryPage() {
       this.currentProductCategoryPage = 1
     },
-    addProductCategory () {
+    addProductCategory() {
       this.setCurrentProductCategoryPage()
       if (this.formCategoryData.category_id) {
         updateProductCategory(this.formCategoryData.category_id, this.formCategoryData).then(() => {
@@ -601,13 +601,13 @@ export default {
       }
       this.formCategoryData = this.defaultFormCategoryData()
     },
-    getTaxRates () {
+    getTaxRates() {
       let id = 1
       getTaxRateList(id).then(response => {
         this.taxRates = response
       })
-    }
-  }
+    },
+  },
 }
 </script>
 <style lang="scss">

@@ -20,12 +20,12 @@ export default {
   name: 'ToggleContent',
   props: {
     bodyClass: { type: String, default: '' },
-    center: { type: Boolean }
+    center: { type: Boolean },
   },
   methods: {
-    dismiss () {
+    dismiss() {
       this.$refs.removeContent.classList.remove('show')
-    }
-  }
+    },
+  },
 }
 </script>

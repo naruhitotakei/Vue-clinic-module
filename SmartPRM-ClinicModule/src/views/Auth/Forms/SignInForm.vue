@@ -61,20 +61,20 @@ export default {
     user: {
       email: '',
       password: '',
-      data: null
-    }
+      data: null,
+    },
   }),
-  mounted () {
+  mounted() {
     this.user.email = this.$props.email
     this.user.password = this.$props.password
   },
   computed: {
     ...mapGetters({
-      stateUsers: 'Setting/usersState'
-    })
+      stateUsers: 'Setting/usersState',
+    }),
   },
   methods: {
-    onSubmit () {
+    onSubmit() {
       login(this.user.email, this.user.password).then(response => {
         if (typeof response === 'string' && response.startsWith('NOK')) {
           alert(response)
@@ -99,10 +99,10 @@ export default {
         }
       })
     },
-    created () {
+    created() {
       this.sso()
-    }
-  }
+    },
+  },
 }
 </script>
 

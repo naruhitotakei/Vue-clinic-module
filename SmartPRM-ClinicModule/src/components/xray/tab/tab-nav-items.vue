@@ -18,28 +18,28 @@ export default {
     dataToggle: { type: String, default: 'tab' },
     href: { type: String, default: '' },
     title: { type: String, default: '' },
-    liClass: { type: String, default: 'nav-item' }
+    liClass: { type: String, default: 'nav-item' },
   },
-  mounted () {
+  mounted() {
     if (this.active) {
       this.className = 'show active'
     }
   },
   computed: {
-    hasTitleSlot () {
+    hasTitleSlot() {
       return !!this.$slots.title
     },
-    url () {
+    url() {
       if (this.href === '') {
         return '#' + this.ariaControls
       }
       return this.href
+    },
+  },
+  data() {
+    return {
+      className: '',
     }
   },
-  data () {
-    return {
-      className: ''
-    }
-  }
 }
 </script>

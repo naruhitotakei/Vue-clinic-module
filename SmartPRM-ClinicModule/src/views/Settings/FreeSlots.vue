@@ -1,4 +1,4 @@
-﻿<template>
+<template>
     <b-container fluid class="calendar-page">
         <iq-card class="p-3">
             <!-- Free Slots Header --><!---->
@@ -184,7 +184,7 @@ export default {
   name: 'FullCalendar',
   props: {
   },
-  data () {
+  data() {
     return {
       allDoctorsCheck: true,
       slots: [],
@@ -197,7 +197,7 @@ export default {
         dayGridPlugin,
         timeGridPlugin,
         interactionPlugin,
-        listPlugin
+        listPlugin,
       ],
       calendarOptions: {
         plugins: [dayGridPlugin, timeGridPlugin, interactionPlugin, listPlugin],
@@ -214,11 +214,11 @@ export default {
         headerToolbar: {
           left: 'prev,next today',
           center: 'title',
-          right: 'dayGridMonth,timeGridWeek,timeGridDay'
+          right: 'dayGridMonth,timeGridWeek,timeGridDay',
         },
         events: this.getSlots,
         select: this.createFreeSlots,
-        eventClick: this.showFreeSlot
+        eventClick: this.showFreeSlot,
       },
       openFreeSlotsModal: false,
       viewFreeSlotModal: false,
@@ -229,24 +229,24 @@ export default {
         location: '',
         doctor: '',
         start: '',
-        end: ''
+        end: '',
       },
       editable: true,
       disabled: false,
-      calendarApi: null
+      calendarApi: null,
     }
   },
   components: {
     VueFullCalendar, // make the <VueFullCalendar> tag available
-    DatePicker
+    DatePicker,
   },
-  mounted () {
+  mounted() {
     this.getFreeSlotsList()
     this.getDoctors()
     this.getLocations()
   },
   computed: {
-    getSlots () {
+    getSlots() {
       if (!this.check.length) {
         return this.slots
       }
@@ -259,10 +259,10 @@ export default {
         })
       })
       return slots
-    }
+    },
   },
   methods: {
-    getFreeSlotsList () {
+    getFreeSlotsList() {
       getFreeSlots().then(response => {
         if (Array.isArray(response)) {
           response.map(slot => {
@@ -271,30 +271,30 @@ export default {
               title: slot.doctor_name,
               start: moment(slot.starts_at).format('YYYY-MM-DDTHH:mm'),
               end: moment(slot.starts_at).add('0', 'hours').add('15', 'minutes').format('YYYY-MM-DDTHH:mm'),
-              backgroundColor: slot.appointment_id ? '#F1773A' : '#64D6E8'
+              backgroundColor: slot.appointment_id ? '#F1773A' : '#64D6E8',
             })
           })
           this.reFetchSlots++
         }
       })
     },
-    getDoctors () {
+    getDoctors() {
       getDoctorList().then(response => {
         this.doctors = response
       })
     },
-    getLocations () {
+    getLocations() {
       getLocationsList().then(response => {
         this.locations = response
       })
     },
-    allDoctorsFunc () {
+    allDoctorsFunc() {
       this.check = []
       this.doctors.map(doctor => {
         doctor.checked = false
       })
     },
-    checkData (item) {
+    checkData(item) {
       this.selectDoctor = item
       this.doctors.map(doctor => {
         if (doctor.name === item.name) {
@@ -322,56 +322,56 @@ export default {
         })
       }
     },
-    createFreeSlots (slotsInfo) {
+    createFreeSlots(slotsInfo) {
       this.openFreeSlotsModal = true
       this.slotData = this.defaultSlotData()
       this.slotData.start = new Date(slotsInfo.startStr)
       this.slotData.end = new Date(slotsInfo.endStr)
     },
-    getDoctorLabel (doctor) {
+    getDoctorLabel(doctor) {
       return (doctor && doctor.name)
     },
-    addFreeSlots () {
+    addFreeSlots() {
       createFreeSlots(this.slotData).then(() => {
         this.openFreeSlotsModal = false
         this.slotData = this.defaultSlotData()
         this.getFreeSlotsList()
       })
     },
-    defaultSlotData () {
+    defaultSlotData() {
       return {
         id: '',
         location: '',
         doctor: '',
         start: '',
-        end: ''
+        end: '',
       }
     },
-    showFreeSlot (slotInfo) {
+    showFreeSlot(slotInfo) {
       this.viewFreeSlotModal = true
       this.disabled = true
       this.slotData = {
         id: slotInfo.event.id,
         doctor: slotInfo.event.title,
         start: slotInfo.event.start,
-        end: slotInfo.event.end
+        end: slotInfo.event.end,
       }
     },
-    deleteSlot (slot) {
+    deleteSlot(slot) {
       let index = this.slots.indexOf(slot)
       this.slots.splice(index, 1)
       deleteFreeSlot(this.slotData.id)
       this.viewFreeSlotModal = false
       this.getFreeSlotsList()
-    }
+    },
   },
   watch: {
-    'allDoctorsCheck' () {
+    'allDoctorsCheck'() {
     },
-    'getSlots' () {
+    'getSlots'() {
       this.calendarOptions.events = this.getSlots
-    }
-  }
+    },
+  },
 }
 </script>
 

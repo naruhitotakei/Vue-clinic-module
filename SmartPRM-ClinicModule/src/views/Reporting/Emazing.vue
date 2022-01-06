@@ -157,7 +157,7 @@ export default {
     IqCard,
   },
   name: 'Emazing',
-  data: function() {
+  data: function () {
     return {
       fromdate: null,
       todate: null,
@@ -328,7 +328,7 @@ export default {
           },
           yaxis: {
             labels: {
-              formatter: function(y) {
+              formatter: function (y) {
                 return y
               },
             },

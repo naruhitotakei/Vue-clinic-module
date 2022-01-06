@@ -130,7 +130,7 @@ import { userAvatarUpload } from '../../services/upDownLoad'
 
 export default {
   name: 'UserList',
-  data () {
+  data() {
     return {
       users: [],
       roles: [],
@@ -147,70 +147,70 @@ export default {
         role_name: '',
         mail: '',
         phone: '',
-        img: ''
-      }
+        img: '',
+      },
     }
   },
-  mounted () {
+  mounted() {
     xray.index()
     this.getUserList()
     this.getRolesList()
   },
-  firestore () {
+  firestore() {
     return {
     }
   },
   components: {
   },
-  beforeMount () {
+  beforeMount() {
   },
   methods: {
-    getUserList () {
+    getUserList() {
       getUsers().then(response => {
         this.users = response
       })
     },
-    getRolesList () {
+    getRolesList() {
       getRoles().then(response => {
         this.roles = response
       })
     },
-    editUser () {
+    editUser() {
       updateUser(this.formData.id, this.formData).then(() => {
         this.editProfileShowModal = false
         this.getUserList()
       })
     },
-    openProfileModal (user) {
+    openProfileModal(user) {
       this.editProfileShowModal = true
       for (var key in user) {
         if (user[key] === 'null') { user[key] = '' }
       }
       this.formData = user
     },
-    onButtonClick () {
+    onButtonClick() {
       this.isSelecting = true
       window.addEventListener('focus', () => {
         this.isSelecting = false
       }, { once: true })
       this.$refs.uploader.click()
     },
-    async onFileChanged (e) {
+    async onFileChanged(e) {
       this.selectedFile = e.target.files[0]
       // todo check size
       await userAvatarUpload(this.selectedFile, this.formData.id, Math.random())
       await this.sleep(1000)
     },
-    sleep (ms) {
+    sleep(ms) {
       return new Promise((resolve) => {
         setTimeout(resolve, ms)
       })
-    }
+    },
   },
   computed: {
-    isEditDisabled () {
+    isEditDisabled() {
       return !this.formData.name || !this.formData.mail || !this.formData.surname
-    }
-  }
+    },
+  },
 }
 </script>

@@ -66,24 +66,24 @@ export default {
   props: {
     modalAssigmentShow: {
       type: Boolean,
-      default: false
+      default: false,
     },
     todo: {
       type: Object,
       required: true,
-      default: null
+      default: null,
     },
     users: Array,
-    enquires: Array
+    enquires: Array,
   },
 
   computed: {
-    isOkDisabled () {
+    isOkDisabled() {
       return !this.formData.due_at || !this.formData.description
-    }
+    },
   },
 
-  created () {
+  created() {
     if (this.todo) {
       this.formData = Object.assign({}, this.todo)
     }
@@ -92,14 +92,14 @@ export default {
   watch: {
     todo: {
       deep: true,
-      handler (val) {
+      handler(val) {
         this.formData = Object.assign({}, val)
-      }
-    }
+      },
+    },
   },
 
   methods: {
-    addAssignments () {
+    addAssignments() {
       if (this.formData.id) {
         let data = Object.assign({}, this.formData)
         if (typeof this.formData.user_id === 'object') {
@@ -118,15 +118,15 @@ export default {
         })
       }
     },
-    cancelAssignments () {
+    cancelAssignments() {
       this.$emit('close', false)
-    }
+    },
   },
 
-  data () {
+  data() {
     return {
-      formData: null
+      formData: null,
     }
-  }
+  },
 }
 </script>

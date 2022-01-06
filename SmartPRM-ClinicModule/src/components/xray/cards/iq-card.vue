@@ -25,23 +25,23 @@ export default {
     className: { type: String, default: '' },
     bodyClass: { type: String, default: '' },
     headerClass: { type: String, default: '' },
-    footerClass: { type: String, default: '' }
+    footerClass: { type: String, default: '' },
   },
-  mounted () {
+  mounted() {
   },
   computed: {
-    hasHeaderTitleSlot () {
+    hasHeaderTitleSlot() {
       return !!this.$slots.headerTitle
     },
-    hasHeaderActionSlot () {
+    hasHeaderActionSlot() {
       return !!this.$slots.headerAction
     },
-    hasBodySlot () {
+    hasBodySlot() {
       return !!this.$slots.body
     },
-    hasFooterSlot () {
+    hasFooterSlot() {
       return !!this.$slots.footer
-    }
-  }
+    },
+  },
 }
 </script>

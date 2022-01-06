@@ -6,12 +6,12 @@ import { Chart } from 'highcharts-vue'
 export default {
   name: 'HighChart',
   props: {
-    option: { type: Object }
+    option: { type: Object },
   },
-  mounted () {
+  mounted() {
   },
   components: {
-    highcharts: Chart
-  }
+    highcharts: Chart,
+  },
 }
 </script>

@@ -10,7 +10,7 @@ export default {
     id: { type: String, default: '' },
     active: { type: Boolean, default: false },
     role: { type: String, default: 'tabpanel' },
-    ariaLabelledBy: { type: String, default: '' }
-  }
+    ariaLabelledBy: { type: String, default: '' },
+  },
 }
 </script>

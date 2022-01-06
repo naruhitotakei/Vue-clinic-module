@@ -80,30 +80,30 @@ export default defineComponent({
     DateCard,
     TimeSelectionTable,
     TotalOrderInfo,
-    AppMultiselect
+    AppMultiselect,
   },
   props: {
     form: {
       type: Object,
-      required: true
-    }
+      required: true,
+    },
   },
   data: function () {
     return {
       fieldset: {
-        appointmentSlot: null
+        appointmentSlot: null,
       },
       filters: {
-        doctors: []
+        doctors: [],
       },
       date: null,
       availableDates: [],
       availableDoctors: [],
-      appointmentSlots: []
+      appointmentSlots: [],
     }
   },
   computed: {
-    slickOptions () {
+    slickOptions() {
       return {
         infinite: false,
         slidesToShow: 7,
@@ -112,20 +112,20 @@ export default defineComponent({
         responsive: [
           {
             breakpoint: 1200,
-            settings: { slidesToShow: 6 }
+            settings: { slidesToShow: 6 },
           },
           {
             breakpoint: 992,
-            settings: { slidesToShow: 4 }
+            settings: { slidesToShow: 4 },
           },
           {
             breakpoint: 768,
-            settings: { slidesToShow: 3 }
+            settings: { slidesToShow: 3 },
           },
           {
             breakpoint: 576,
-            settings: { slidesToShow: 2 }
-          }
+            settings: { slidesToShow: 2 },
+          },
         ],
         prevArrow: /* html */`
           <a href="#" class="ri-arrow-left-s-line left" style="
@@ -138,10 +138,10 @@ export default defineComponent({
             margin-right: -48px;
             background: transparent;
           "></a>
-        `
+        `,
       }
     },
-    dateSlots () {
+    dateSlots() {
       if (this.availableDates.length === 0) {
         return []
       }
@@ -167,13 +167,13 @@ export default defineComponent({
 
             return 'taken'
           })(),
-          date: date.toDate()
+          date: date.toDate(),
         })
       }
 
       return dates
     },
-    appointmentSlotsFiltered () {
+    appointmentSlotsFiltered() {
       let appointmentSlots = this.appointmentSlots
       const doctorIds = this.filters.doctors.map((doctor) => doctor.id)
 
@@ -196,12 +196,12 @@ export default defineComponent({
       appointmentSlots = appointmentSlots.map(([dateTime, slots]) => ({
         doctors: slots,
         time: moment(dateTime).format('HH:mm'),
-        totalPrice: `$${this.form.service.price}`
+        totalPrice: `$${this.form.service.price}`,
       }))
 
       return appointmentSlots
     },
-    doctors () {
+    doctors() {
       return Object.values(this.appointmentSlots.reduce((doctorById, slot) => {
         if (doctorById[slot.doctor_id] == null) {
           doctorById[slot.doctor_id] = slot
@@ -209,57 +209,57 @@ export default defineComponent({
 
         return doctorById
       }, {}))
-    }
+    },
   },
   watch: {
     fieldset: {
       deep: true,
-      handler (value) {
+      handler(value) {
         this.$emit('update:form', {
           ...this.form,
-          ...value
+          ...value,
         })
-      }
+      },
     },
 
     'form.service.id': {
       immediate: true,
       handler: async function (serviceId) {
         await Promise.all([
-          (async () => {
+          (async() => {
             this.fieldset.appointmentSlot = null
             this.availableDates = []
             this.availableDates = await getAvailableDates({
-              serviceId: this.form.service.id
+              serviceId: this.form.service.id,
             })
             this.date = moment(this.availableDates[0]).toDate()
             this.appointmentSlots = []
             this.appointmentSlots = await getAppointmentSlots({
               serviceId,
-              date: moment(this.date).format('YYYY-MM-DD')
+              date: moment(this.date).format('YYYY-MM-DD'),
             })
             this.fieldset.appointmentSlot = this.appointmentSlots[0]
           })(),
-          (async () => {
+          (async() => {
             this.filters.doctors = []
             this.availableDoctors = []
             this.availableDoctors = await getAvailableDoctors({
-              serviceId: this.form.service.id
+              serviceId: this.form.service.id,
             })
-          })()
+          })(),
         ])
-      }
+      },
     },
     date: async function (date) {
       this.fieldset.appointmentSlot = null
       this.appointmentSlots = []
       this.appointmentSlots = await getAppointmentSlots({
         serviceId: this.form.service.id,
-        date: moment(date).format('YYYY-MM-DD')
+        date: moment(date).format('YYYY-MM-DD'),
       })
       this.fieldset.appointmentSlot = this.appointmentSlots[0]
-    }
-  }
+    },
+  },
 })
 </script>
 

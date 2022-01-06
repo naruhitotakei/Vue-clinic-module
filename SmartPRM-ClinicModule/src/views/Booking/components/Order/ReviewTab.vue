@@ -64,16 +64,16 @@ import SMSCodeModal from './SMSCodeModal.vue'
 
 export default defineComponent({
   components: {
-    SMSCodeModal
+    SMSCodeModal,
   },
   props: {
-    form: Object
+    form: Object,
   },
   computed: {
-    time () {
+    time() {
       return moment(this.form.appointmentSlot.starts_at).format('HH:mm')
-    }
-  }
+    },
+  },
 })
 </script>
 

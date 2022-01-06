@@ -18,7 +18,7 @@ export default {
     }
   },
   methods: {
-  }
+  },
   // mounted () {
   //   xray.index()
   // }

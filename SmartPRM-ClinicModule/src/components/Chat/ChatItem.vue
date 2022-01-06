@@ -1,9 +1,12 @@
 <template>
   <div class="d-flex align-items-center">
     <div class="avatar mr-3">
-      <img :src="item.image" :alt="item.image" class="avatar-50 rounded">
+      <img :src="item.image" :alt="item.image" class="avatar-50 rounded" />
       <span class="avatar-status">
-        <i class="ri-checkbox-blank-circle-fill" :class="`text-${item.status}`"/>
+        <i
+          class="ri-checkbox-blank-circle-fill"
+          :class="`text-${item.status}`"
+        />
       </span>
     </div>
     <div class="chat-sidebar-name">
@@ -13,10 +16,12 @@
   </div>
 </template>
 <script>
+import { defineComponent } from '@vue/composition-api'
+
 export default defineComponent({
   name: 'ChatItem',
   props: {
-    item: { type: Object }
-  }
+    item: { type: Object },
+  },
 })
 </script>

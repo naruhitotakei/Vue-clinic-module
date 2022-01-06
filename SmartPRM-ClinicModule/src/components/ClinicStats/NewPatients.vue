@@ -1,21 +1,21 @@
 <template>
-    <b-row>
-        <b-col sm="12">
-        <iq-card class-name="iq-card-block iq-card-stretch iq-card-height">
-          <template v-slot:headerTitle>
-            <div class="d-flex align-items-center justify-content-between">
-                <h4 class="card-title">New Patients</h4>
-                <vue-excel-xlsx
-                    :data="dataToExport"
-                    :columns="excelColumns"
-                    :filename="'New Patients'"
-                    :sheetname="'New Patients'"
-                    class="btn btn-primary"
-                    >
-                    Download Excel
-                  </vue-excel-xlsx>
-            </div>
-            <!-- <h4 class="card-title mt-3">Leads Statistics</h4>
+  <b-row>
+    <b-col sm="12">
+      <iq-card class-name="iq-card-block iq-card-stretch iq-card-height">
+        <template v-slot:headerTitle>
+          <div class="d-flex align-items-center justify-content-between">
+            <h4 class="card-title">New Patients</h4>
+            <vue-excel-xlsx
+              :data="dataToExport"
+              :columns="excelColumns"
+              :filename="'New Patients'"
+              :sheetname="'New Patients'"
+              class="btn btn-primary"
+            >
+              Download Excel
+            </vue-excel-xlsx>
+          </div>
+          <!-- <h4 class="card-title mt-3">Leads Statistics</h4>
             <b-form @submit.prevent>
               <b-row align-v="center">
                 <b-col cols="12" sm="6" md="4" lg="3">
@@ -43,21 +43,21 @@
                 </b-col>
               </b-row>
             </b-form> -->
-          </template>
-          <template v-slot:body>
-            <div class="mt-3" v-if="!loading && !noData">
-              <apex-chart type="bar" :series="series" :options="chartOptions" />
-            </div>
-            <div class="mt-3 text-center" v-if="loading">
-                <p>Loading New Patients...</p>
-            </div>
-            <div class="mt-3 text-center" v-if="!loading && noData">
-                <p>No data found in this date range...</p>
-            </div>
-          </template>
-        </iq-card>
-      </b-col>
-    </b-row>
+        </template>
+        <template v-slot:body>
+          <div class="mt-3" v-if="!loading && !noData">
+            <apex-chart type="bar" :series="series" :options="chartOptions" />
+          </div>
+          <div class="mt-3 text-center" v-if="loading">
+            <p>Loading New Patients...</p>
+          </div>
+          <div class="mt-3 text-center" v-if="!loading && noData">
+            <p>No data found in this date range...</p>
+          </div>
+        </template>
+      </iq-card>
+    </b-col>
+  </b-row>
 </template>
 
 <script>
@@ -102,18 +102,20 @@ export default {
     getNewPatients(start, end) {
       this.loading = true
       this.noData = false
-      getNewEnquiries(start, end).then(response => {
-        this.loading = false
-        if (response && response.length && Array.isArray(response)) {
+      getNewEnquiries(start, end)
+        .then((response) => {
+          this.loading = false
+          if (response && response.length && Array.isArray(response)) {
+            this.noData = false
+            this.setDataForChart(response)
+          } else {
+            this.noData = true
+          }
+        })
+        .catch(() => {
           this.noData = false
-          this.setDataForChart(response)
-        } else {
-          this.noData = true
-        }
-      }).catch(() => {
-        this.noData = false
-        this.loading = false
-      })
+          this.loading = false
+        })
     },
     setDataForChart(data) {
       let datesArray = []
@@ -121,7 +123,7 @@ export default {
       this.dataToExport = []
       data.forEach((item, index) => {
         const itemDate = item.date.split('T')[0]
-        const dateIndex = datesArray.findIndex(date => date === itemDate)
+        const dateIndex = datesArray.findIndex((date) => date === itemDate)
         if (dateIndex < 0) {
           datesArray.push(itemDate)
           seriesData.push(1)
@@ -131,10 +133,12 @@ export default {
         }
       })
 
-      this.series = [{
-        name: 'New Patients',
-        data: seriesData,
-      }]
+      this.series = [
+        {
+          name: 'New Patients',
+          data: seriesData,
+        },
+      ]
 
       this.chartOptions = {
         dataLabels: {
@@ -202,7 +206,7 @@ export default {
 
     prepareDataForExport(data) {
       // Get Data for export
-      data.forEach(item => {
+      data.forEach((item) => {
         const obj = {
           id: item.id,
           first_name: item.name,
@@ -230,10 +234,12 @@ export default {
         { label: 'Phone', field: 'phone' },
         { label: 'Created At', field: 'created_at' },
       ],
-      series: [{
-        name: 'Leads By Day',
-        data: [],
-      }],
+      series: [
+        {
+          name: 'Leads By Day',
+          data: [],
+        },
+      ],
       chartOptions: {
         // xaxis: {
         //   type: 'datetime',

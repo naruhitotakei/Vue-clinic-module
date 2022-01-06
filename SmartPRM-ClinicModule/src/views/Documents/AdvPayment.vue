@@ -186,15 +186,15 @@ import BigNumber from 'bignumber.js'
 export default {
   name: 'AdvPayment',
   components: {
-    QrcodeVue
+    QrcodeVue,
   },
-  mounted () {
+  mounted() {
     xray.index()
     this.getInvoice(this.advPaymentId)
     this.getPaymentItems(this.advPaymentId)
   },
   methods: {
-    getInvoice (id) {
+    getInvoice(id) {
       getInvoiceById(id).then(response => {
         this.invoices = response
         this.invoice = response[0]
@@ -214,17 +214,17 @@ export default {
       }
       )
     },
-    getPaymentItems (id) {
+    getPaymentItems(id) {
       getPaymentItemsOfInvoiceById(id).then(response => {
         this.payments = response
       })
     },
-    getItems (id) {
+    getItems(id) {
       getItemsOfInvoiceById(id).then(response => {
         this.items = response
       })
     },
-    calculateQRCode () {
+    calculateQRCode() {
       let hexaNumber = new BigNumber(this.invoice.zoi, 16)
       let decimalNumber = hexaNumber.toString(10)
       this.decimalZoi = (decimalNumber.length < 39) ? '0'.repeat(39 - decimalNumber.length) + decimalNumber : decimalNumber
@@ -232,31 +232,31 @@ export default {
       this.qrCode = this.decimalZoi + this.invoice.operator_tax_number + timeStamp
       this.calculateControlNumber()
     },
-    calculateControlNumber () {
+    calculateControlNumber() {
       let sum = 0
       for (let c of this.qrCode) {
         sum += parseInt(c)
       }
       this.qrCode += sum % 10
     },
-    exportToPDF () {
+    exportToPDF() {
       this.calculateQRCode()
       this.calculatePdfNumber()
       let options = {
         filename: this.invoice.invoice_number + '.pdf',
         image: { type: 'jpeg', quality: 0.98 },
         html2canvas: { y: 240 },
-        jsPDF: { unit: 'mm', format: 'a3' }
+        jsPDF: { unit: 'mm', format: 'a3' },
       }
       var source = window.document.getElementById('printInvoice')
       html2pdf().set(options).from(source).save()
     },
-    calculatePdfNumber () {
+    calculatePdfNumber() {
       let premiseNumber = this.premiseId < 10 ? '0' + this.premiseId : this.premiseId
       this.pdfNumber = premiseNumber + '-' + this.deviceName + '-' + this.invoice.invoice_number
-    }
+    },
   },
-  data () {
+  data() {
     return {
       advPaymentId: this.$route.params.advPaymentId,
       invoiceNumber: '',
@@ -265,18 +265,18 @@ export default {
       invoiceDetails: [
         {
           name: this.$t('advPayment.advPaymentHeader'),
-          total: ''
-        }
+          total: '',
+        },
       ],
       invoiceSummaryFields: [
         {
           key: 'type',
-          label: this.$t('invoice.invoiceSummaryColumn.paymentMethod')
+          label: this.$t('invoice.invoiceSummaryColumn.paymentMethod'),
         },
         {
           key: 'amount',
-          label: this.$t('advPayments.advPaymentsColumn.amount')
-        }
+          label: this.$t('advPayments.advPaymentsColumn.amount'),
+        },
       ],
       invoiceColumns: [
         { label: this.$t('invoice.invoiceInfo.invoiceStatus'),
@@ -285,7 +285,7 @@ export default {
           formatter: (value, key, item) => {
             return this.$t(item.verification_status)
           },
-          filterByFormatted: true
+          filterByFormatted: true,
         },
         { label: this.$t('invoice.invoiceInfo.paymentStatus'),
           key: 'payment_status',
@@ -308,7 +308,7 @@ export default {
           },
           class: 'text-left' },
         { label: this.$t('invoice.invoiceInfo.invoiceIssuedIn'), key: 'company_city', class: 'text-left' },
-        { label: this.$t('invoice.invoiceInfo.invoiceIssuedBy'), key: 'operator_name', class: 'text-left' }
+        { label: this.$t('invoice.invoiceInfo.invoiceIssuedBy'), key: 'operator_name', class: 'text-left' },
       ],
       invoice: null,
       invoices: [],
@@ -320,9 +320,9 @@ export default {
       payments: [],
       premiseId: '',
       pdfNumber: '',
-      deviceName: ''
+      deviceName: '',
     }
-  }
+  },
 }
 </script>
 

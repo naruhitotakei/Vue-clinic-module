@@ -39,13 +39,13 @@ import { defineComponent } from '@vue/composition-api'
 
 export default defineComponent({
   props: {
-    order: Object
+    order: Object,
   },
   computed: {
-    time () {
+    time() {
       return moment(this.order.appointmentSlot.starts_at).format('HH:mm')
-    }
-  }
+    },
+  },
 })
 </script>
 

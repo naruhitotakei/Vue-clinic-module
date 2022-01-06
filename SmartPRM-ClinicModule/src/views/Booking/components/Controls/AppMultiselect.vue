@@ -17,7 +17,7 @@ import Multiselect from 'vue-multiselect'
 
 export default {
   components: {
-    Multiselect
+    Multiselect,
   },
   props: [
     'options',
@@ -26,7 +26,7 @@ export default {
     'value',
     'placeholder',
     'selectLabel',
-    'deselectLabel'
+    'deselectLabel',
   ],
   computed: {
     selectValue: {
@@ -35,9 +35,9 @@ export default {
       },
       set: function (val) {
         this.$emit('input', val)
-      }
-    }
-  }
+      },
+    },
+  },
 }
 </script>
 <style src="vue-multiselect/dist/vue-multiselect.min.css"></style>
