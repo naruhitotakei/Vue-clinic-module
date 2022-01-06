@@ -14,7 +14,7 @@ export default {
   mounted() {
     xray.index()
   },
-  data: function() {
+  data: function () {
     return {
     }
   },

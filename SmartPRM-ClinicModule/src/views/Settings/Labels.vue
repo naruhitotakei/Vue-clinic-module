@@ -97,7 +97,7 @@ export default {
     xray.index()
     this.getLabels(this.$i18n.locale)
   },
-  data: function() {
+  data: function () {
     return {
       columns: [
         { label: this.$t('labels.labelsColumns.labelText'), key: 'text', class: 'text-left' },

@@ -99,7 +99,7 @@ export default {
     },
   },
   name: 'AdvPayments',
-  data: function() {
+  data: function () {
     return {
       dropDownText: '',
       selected: this.value,

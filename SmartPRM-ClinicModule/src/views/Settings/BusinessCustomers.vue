@@ -117,7 +117,7 @@ export default {
   components: {
   },
   name: 'BusinessCustomers',
-  data: function() {
+  data: function () {
     return {
       options: [
         {

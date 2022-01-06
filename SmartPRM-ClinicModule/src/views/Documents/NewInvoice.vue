@@ -627,13 +627,13 @@ export default {
       }
     },
     calculatePaymentTotal() {
-      this.paymentTotal = _.reduce(this.paymentMethods, function(sum, item) {
+      this.paymentTotal = _.reduce(this.paymentMethods, function (sum, item) {
         return sum + parseFloat(item.amount)
       }, 0)
     },
     calculatePayedAmount() {
-      let payed = _.filter(this.paymentMethods, function(method) { return method.paid })
-      this.paidAmount = _.reduce(payed, function(sum, item) {
+      let payed = _.filter(this.paymentMethods, function (method) { return method.paid })
+      this.paidAmount = _.reduce(payed, function (sum, item) {
         return sum + parseFloat(item.amount)
       }, 0)
     },
@@ -675,7 +675,7 @@ export default {
       })
     },
     findProduct(productId) {
-      return _.find(this.products, function(prod) { return prod.product_id === productId })
+      return _.find(this.products, function (prod) { return prod.product_id === productId })
     },
     fetchItemsAndPaymentMethods() {
       getItemsOfInvoiceById(this.invoiceId).then(response => {
@@ -703,7 +703,7 @@ export default {
       })
     },
     getTeeth(data) {
-      return _.map(data, function(item) {
+      return _.map(data, function (item) {
         return item.number.toString()
       })
     },

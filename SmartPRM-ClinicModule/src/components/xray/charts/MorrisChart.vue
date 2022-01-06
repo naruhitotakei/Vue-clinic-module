@@ -71,7 +71,7 @@ export default {
     },
     minMax(objects, field) {
       var result = {}
-      return objects.reduce(function(valorAnterior, valorActual, indice, vector) {
+      return objects.reduce(function (valorAnterior, valorActual, indice, vector) {
         if (indice === 1) {
           result['min'] = valorAnterior
           result['max'] = valorAnterior

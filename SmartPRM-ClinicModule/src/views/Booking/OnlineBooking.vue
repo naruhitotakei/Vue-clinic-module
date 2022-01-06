@@ -20,7 +20,7 @@ export default {
     PublicLayout,
   },
   name: 'OnlineBookingPublic',
-  data: function() {
+  data: function () {
     return {
       order: null,
     }

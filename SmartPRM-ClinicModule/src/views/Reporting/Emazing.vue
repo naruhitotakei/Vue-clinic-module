@@ -157,7 +157,7 @@ export default {
     IqCard,
   },
   name: 'Emazing',
-  data: function() {
+  data: function () {
     return {
       fromdate: null,
       todate: null,
@@ -235,7 +235,7 @@ export default {
             text: 'EUR',
           },
           labels: {
-            formatter: function(y) {
+            formatter: function (y) {
               return y.toLocaleString()
             },
           },
@@ -330,7 +330,7 @@ export default {
           },
           yaxis: {
             labels: {
-              formatter: function(y) {
+              formatter: function (y) {
                 return y.toLocaleString()
               },
             },

@@ -58,14 +58,14 @@ export default {
     },
   },
   methods: {
-    selectedRowHandler: function(data) {
+    selectedRowHandler: function (data) {
       this.selected = data
       this.$emit('row-selected')
     },
-    getSelectedItems: function() {
+    getSelectedItems: function () {
       return this.selected
     },
-    setSelectedItems: function() {
+    setSelectedItems: function () {
       const services = servicesList.find(serv => serv.title === this.title).list
       this.selectedServices.forEach(service => {
         const index = services.findIndex(searchedService => {

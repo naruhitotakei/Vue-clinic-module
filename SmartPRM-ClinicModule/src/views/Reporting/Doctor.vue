@@ -11,7 +11,7 @@ export default {
   components: {
   },
   name: 'Doctor',
-  data: function() {
+  data: function () {
     return {
     }
   },

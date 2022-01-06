@@ -134,7 +134,7 @@ export default {
             xAxis: {
               allowDecimals: false,
               labels: {
-                formatter: function() {
+                formatter: function () {
                   return this.value // clean, unformatted number for year
                 },
               },
@@ -147,7 +147,7 @@ export default {
                 text: 'Nuclear weapon states',
               },
               labels: {
-                formatter: function() {
+                formatter: function () {
                   return this.value / 1000 + 'k'
                 },
               },
@@ -277,11 +277,11 @@ export default {
               animation: HighCharts.svg, // don't animate in old IE
               marginRight: 10,
               events: {
-                load: function() {
+                load: function () {
                   // set up the updating of the chart each second
                   let series = this.series.length && this.series[0]
                   if (series) {
-                    setInterval(function() {
+                    setInterval(function () {
                       let x = (new Date()).getTime() // current time
                       let y = Math.random()
                       series.finishedAnimating && series.addPoint([x, y], true, true)
@@ -303,7 +303,7 @@ export default {
               announceNewData: {
                 enabled: true,
                 minAnnounceInterval: 15000,
-                announcementFormatter: function(allSeries, newSeries, newPoint) {
+                announcementFormatter: function (allSeries, newSeries, newPoint) {
                   if (newPoint) {
                     return 'New point added. Value: ' + newPoint.y
                   }
@@ -344,7 +344,7 @@ export default {
             series: [{
               name: 'Random data',
               color: '#0084ff',
-              data: (function() {
+              data: (function () {
                 // generate an array of random data
                 var data = []
                 var time = (new Date()).getTime()
@@ -477,7 +477,7 @@ export default {
             xAxis: {
               allowDecimals: false,
               labels: {
-                formatter: function() {
+                formatter: function () {
                   return this.value // clean, unformatted number for year
                 },
               },
@@ -490,7 +490,7 @@ export default {
                 text: 'Nuclear weapon states',
               },
               labels: {
-                formatter: function() {
+                formatter: function () {
                   return this.value / 1000 + 'k'
                 },
               },
@@ -740,7 +740,7 @@ export default {
             },
             accessibility: {
               point: {
-                descriptionFormatter: function(point) {
+                descriptionFormatter: function (point) {
                   var index = point.index + 1
                   var category = point.category
                   var val = Math.abs(point.y)
@@ -788,7 +788,7 @@ export default {
                 text: null,
               },
               labels: {
-                formatter: function() {
+                formatter: function () {
                   return Math.abs(this.value) + '%'
                 },
               },

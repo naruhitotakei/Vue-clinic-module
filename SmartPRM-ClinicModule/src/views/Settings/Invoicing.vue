@@ -471,7 +471,7 @@ export default {
     },
   },
   name: 'Invoicing',
-  data: function() {
+  data: function () {
     return {
       premiseColumns: [
         { label: 'Company name', key: 'company_name', class: 'text-left' },

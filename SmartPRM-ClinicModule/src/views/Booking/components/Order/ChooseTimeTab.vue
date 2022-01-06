@@ -88,7 +88,7 @@ export default defineComponent({
       required: true,
     },
   },
-  data: function() {
+  data: function () {
     return {
       fieldset: {
         appointmentSlot: null,
@@ -224,7 +224,7 @@ export default defineComponent({
 
     'form.service.id': {
       immediate: true,
-      handler: async function(serviceId) {
+      handler: async function (serviceId) {
         await Promise.all([
           (async() => {
             this.fieldset.appointmentSlot = null
@@ -250,7 +250,7 @@ export default defineComponent({
         ])
       },
     },
-    date: async function(date) {
+    date: async function (date) {
       this.fieldset.appointmentSlot = null
       this.appointmentSlots = []
       this.appointmentSlots = await getAppointmentSlots({

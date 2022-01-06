@@ -82,7 +82,7 @@ export default {
     }
   },
   computed: {
-    isFolder: function() {
+    isFolder: function () {
       return this.item.children &&
           this.item.children.length
     },
@@ -97,12 +97,12 @@ export default {
     },
   },
   methods: {
-    toggle: function() {
+    toggle: function () {
       if (this.isFolder) {
         this.isOpen = !this.isOpen
       }
     },
-    makeFolder: function() {
+    makeFolder: function () {
       if (!this.isFolder) {
         this.$emit('make-folder', this.item)
         this.isOpen = true

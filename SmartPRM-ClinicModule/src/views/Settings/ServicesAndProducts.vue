@@ -373,7 +373,7 @@ export default {
     },
   },
   name: 'ServicesAndProducts',
-  data: function() {
+  data: function () {
     return {
       productColumns: [
         { label: this.$t('servicesAndProducts.productColumn.productName'), key: 'product_name', class: 'text-left' },

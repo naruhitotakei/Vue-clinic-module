@@ -15,10 +15,10 @@ export default {
   },
   mounted() {
     let _this = this
-    window.$('#' + this.id + ' a').on('click', function(e) {
+    window.$('#' + this.id + ' a').on('click', function (e) {
       window.$(this).tab('show')
     })
-    window.$('#' + this.id + ' a').on('shown.bs.tab', function(event) {
+    window.$('#' + this.id + ' a').on('shown.bs.tab', function (event) {
       _this.$emit('change', event)
     })
   },

@@ -147,7 +147,7 @@ export default {
     this.getOnlineBookingProductGroups(this.$i18n.locale)
     this.getPremises()
   },
-  data: function() {
+  data: function () {
     return {
       onlineBookingProducts: [],
       isProductDataLoaded: false,

@@ -53,7 +53,7 @@ export default defineComponent({
     // })
   },
   methods: {
-    getActiveDoctor: function(time) {
+    getActiveDoctor: function (time) {
       return (this.selectedSlot && this.selectedDate.getDate() === this.selectedSlot.date.getDate() && time === this.selectedSlot.time) ? this.selectedSlot.doctor : null
     },
   },

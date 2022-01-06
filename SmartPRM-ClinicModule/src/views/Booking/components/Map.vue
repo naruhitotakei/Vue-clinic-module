@@ -13,7 +13,7 @@ export default {
   components: {
   },
   name: 'Map',
-  data: function() {
+  data: function () {
     return {
     }
   },

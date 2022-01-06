@@ -128,7 +128,7 @@ export default {
     //   return this.patient.name + ' ' + this.patient.last_name
     // },
 
-    patientsDentist: function() {
+    patientsDentist: function () {
       if (this.dentists && Array.isArray(this.dentists) && this.dentists.length) {
         return this.dentists.find((item) => {
           return item.code === this.patient.prm_dentist_user_id
@@ -136,7 +136,7 @@ export default {
       }
       return null
     },
-    patientsSurgeon: function() {
+    patientsSurgeon: function () {
       if (this.surgeons && Array.isArray(this.surgeons)) {
         return this.surgeons.find((item) => {
           return item.code === this.patient.prm_surgeon_user_id
@@ -145,7 +145,7 @@ export default {
       return null
     },
   },
-  data: function() {
+  data: function () {
     return {
       loggedInUser: null,
       modalTrashPatient: false,

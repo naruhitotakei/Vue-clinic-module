@@ -115,7 +115,7 @@ export default {
     },
   },
   name: 'Invoices',
-  data: function() {
+  data: function () {
     return {
       dropDownText: '',
       selected: this.value,

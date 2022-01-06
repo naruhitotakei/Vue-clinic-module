@@ -91,7 +91,7 @@ export default {
         }
       })
     },
-    sso: function() {
+    sso: function () {
       sso().then(response => {
         if (typeof response !== 'string') {
           this.data = response

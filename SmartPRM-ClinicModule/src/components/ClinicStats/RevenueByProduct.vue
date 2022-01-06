@@ -114,14 +114,14 @@ export default {
           enabled: false,
         },
         legend: {
-          formatter: function(seriesName, opts) {
+          formatter: function (seriesName, opts) {
             const percentage = parseFloat(opts.w.globals.seriesPercent[opts.seriesIndex]).toFixed(1) + '%'
             return seriesName + ' - ' + percentage
           },
         },
         tooltip: {
           y: {
-            formatter: function(value, { series, seriesIndex, w }) {
+            formatter: function (value, { series, seriesIndex, w }) {
               let name = String(value).replace(/\d+/g, '')
               const numb = String(value).match(/\d/g).join('')
               const val = name + ' ' + Number(numb).toLocaleString() + ' €'

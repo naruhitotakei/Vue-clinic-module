@@ -10,10 +10,10 @@ export default {
     let _this = this
     let selector = '#' + _this.element
     let chart = new ApexCharts(document.querySelector(selector), _this.chartOption)
-    setTimeout(function() {
+    setTimeout(function () {
       chart.render()
       if (_this.isLive) {
-        setInterval(function() {
+        setInterval(function () {
           _this.getNewSeries(_this.lastDate, {
             min: 10,
             max: 90,

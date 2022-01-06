@@ -106,7 +106,7 @@ export default {
       categoryAxis.renderer.grid.template.location = 0
       categoryAxis.renderer.minGridDistance = 30
 
-      categoryAxis.renderer.labels.template.adapter.add('dy', function(dy, target) {
+      categoryAxis.renderer.labels.template.adapter.add('dy', function (dy, target) {
         // eslint-disable-next-line no-self-compare
         if (target.dataItem && target.dataItem.index & 2 === 2) {
           return dy + 25
@@ -646,7 +646,7 @@ export default {
       categoryAxis.renderer.labels.template.horizontalCenter = 'left'
       categoryAxis.renderer.labels.template.location = 0.5
 
-      categoryAxis.renderer.labels.template.adapter.add('dx', function(dx, target) {
+      categoryAxis.renderer.labels.template.adapter.add('dx', function (dx, target) {
         return -target.maxRight / 2
       })
 
@@ -909,7 +909,7 @@ export default {
       categoryAxis.renderer.labels.template.location = 0.5
       categoryAxis.renderer.inside = true
 
-      categoryAxis.renderer.labels.template.adapter.add('dx', function(dx, target) {
+      categoryAxis.renderer.labels.template.adapter.add('dx', function (dx, target) {
         return -target.maxRight / 2
       })
 

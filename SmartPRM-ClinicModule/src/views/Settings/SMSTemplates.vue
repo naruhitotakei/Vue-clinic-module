@@ -26,7 +26,7 @@ export default {
     xray.index()
     this.getSmsTemplatesData()
   },
-  data: function() {
+  data: function () {
     return {
       smsTemplates: [],
     }

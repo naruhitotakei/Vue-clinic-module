@@ -30,10 +30,10 @@ export default {
   ],
   computed: {
     selectValue: {
-      get: function() {
+      get: function () {
         return this.value
       },
-      set: function(val) {
+      set: function (val) {
         this.$emit('input', val)
       },
     },

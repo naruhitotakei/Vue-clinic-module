@@ -246,7 +246,7 @@ export default {
       langsOptions: 'Setting/langOptionState',
       colors: 'Setting/colorState',
     }),
-    getAvatarUrl: function() {
+    getAvatarUrl: function () {
       return '/api/files/avatar'
     },
     isEditDisabled() {
@@ -254,7 +254,7 @@ export default {
     },
   },
   watch: {
-    '$i18n.locale': function(code) {
+    '$i18n.locale': function (code) {
       localize(code)
     },
   },

@@ -145,7 +145,7 @@ export default {
     },
   },
   name: 'Locations',
-  data: function() {
+  data: function () {
     return {
       isDataLoaded: false,
       isInactiveDataLoaded: false,

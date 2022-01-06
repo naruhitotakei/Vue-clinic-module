@@ -1560,7 +1560,7 @@ export default {
       let countrySeries = chart.series.push(new am4maps.MapPolygonSeries())
       countrySeries.useGeodata = true
       countrySeries.hide()
-      countrySeries.geodataSource.events.on('done', function(ev) {
+      countrySeries.geodataSource.events.on('done', function (ev) {
         worldSeries.hide()
         countrySeries.show()
       })
@@ -1575,7 +1575,7 @@ export default {
       hoverState.properties.fill = chart.colors.getIndex(9)
 
       // Set up click events
-      worldPolygon.events.on('hit', function(ev) {
+      worldPolygon.events.on('hit', function (ev) {
         ev.target.series.chart.zoomToMapObject(ev.target)
         let map = ev.target.dataItem.dataContext.map
         if (map) {
@@ -1605,7 +1605,7 @@ export default {
       chart.zoomControl = new am4maps.ZoomControl()
 
       let homeButton = new am4core.Button()
-      homeButton.events.on('hit', function() {
+      homeButton.events.on('hit', function () {
         worldSeries.show()
         countrySeries.hide()
         chart.goHome()

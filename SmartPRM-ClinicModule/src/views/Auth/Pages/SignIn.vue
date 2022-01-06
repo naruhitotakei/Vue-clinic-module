@@ -21,7 +21,7 @@ export default {
     }
   },
   methods: {
-    loginOAuth0: function() {
+    loginOAuth0: function () {
       new auth0.WebAuth(constant.auth0Config).authorize()
     },
   },

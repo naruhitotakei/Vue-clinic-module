@@ -36,7 +36,7 @@ export default defineComponent({
     doctors: Array,
     activeDoctor: Object,
   },
-  data: function() {
+  data: function () {
     return {
       contentHeight: 0,
       expanded: false,
@@ -49,7 +49,7 @@ export default defineComponent({
     this.setContentHeight(this.$refs.timeRow.offsetHeight)
   },
   methods: {
-    setContentHeight: function(height) {
+    setContentHeight: function (height) {
       (this.contentHeight !== height) && (this.contentHeight = height)
     },
   },
