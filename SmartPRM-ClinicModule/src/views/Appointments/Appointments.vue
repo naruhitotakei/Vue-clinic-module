@@ -67,12 +67,15 @@
                 <p class="black-text">{{ appointment.time }}</p>
               </b-col>
               <b-col lg="2" md="2">
-                <p class="black-text">
+                <p class="black-text mb-0">
                   {{
                     appointment.enquiry_name +
                     ' ' +
                     appointment.enquiry_last_name
                   }}
+                </p>
+                <p class="black-text">
+                    {{ appointment.enquiry_phone }}
                 </p>
               </b-col>
               <b-col lg="2" md="2">
@@ -162,48 +165,48 @@
             :key="appointment.id + '_mobile'"
           >
             <b-row class="no-margin flexMobileParent">
-              <b-col md="3" sm="3" class="col-title-sm"
+              <b-col md="2" sm="2" class="col-title-sm"
                 >{{ $t('appointments.time') }}:</b-col
               >
-              <b-col md="9" sm="9" class="col-data-sm"
+              <b-col md="3" sm="3" class="col-data-sm"
                 ><p class="black-text">{{ appointment.time }}</p></b-col
               >
-            </b-row>
-            <b-row class="no-margin flexMobileParent">
-              <b-col md="3" sm="3" class="col-title-sm"
+              <b-col md="2" sm="2" class="col-title-sm"
                 >{{ $t('appointments.patient') }}:</b-col
               >
-              <b-col md="9" sm="9" class="col-data-sm"
-                ><p class="black-text">
+              <b-col md="3" sm="3" class="col-data-sm"
+                ><p class="black-text mb-0">
                   {{
                     appointment.enquiry_name +
                     ' ' +
                     appointment.enquiry_last_name
                   }}
-                </p></b-col
+                </p>
+                 <p class="black-text">
+                     {{ appointment.enquiry_phone }}
+                 </p>
+                </b-col
               >
             </b-row>
             <b-row class="no-margin flexMobileParent">
-              <b-col md="3" sm="3" class="col-title-sm"
+              <b-col md="2" sm="2" class="col-title-sm"
                 >{{ $t('appointments.product') }}:</b-col
               >
-              <b-col md="9" sm="9" class="col-data-sm"
+              <b-col md="3" sm="3" class="col-data-sm"
                 ><p class="black-text">{{ appointment.product_name }}</p></b-col
               >
-            </b-row>
-            <b-row class="no-margin flexMobileParent">
-              <b-col md="3" sm="3" class="col-title-sm"
+              <b-col md="2" sm="2" class="col-title-sm"
                 >{{ $t('appointments.doctor') }}:</b-col
               >
-              <b-col md="9" sm="9" class="col-data-sm"
+              <b-col md="3" sm="3" class="col-data-sm"
                 ><p class="black-text">{{ appointment.doctor_name }}</p></b-col
               >
             </b-row>
             <b-row class="no-margin flexMobileParent mb-2">
-              <b-col md="3" sm="3" class="col-title-sm"
+              <b-col md="2" sm="2" class="col-title-sm mt-2"
                 >{{ $t('appointments.attendance') }}:</b-col
               >
-              <b-col md="9" sm="9" class="col-data-sm">
+              <b-col md="3" sm="3" class="col-data-sm mt-2">
                 <div v-if="!appointment.attendance">
                   <b-button
                     size="sm"
@@ -247,77 +250,23 @@
                   </b-button>
                 </div>
               </b-col>
-            </b-row>
-            <b-row class="no-margin flexMobileParent">
-              <b-col md="3" sm="3" class="col-title-sm"
+              <b-col md="2" sm="2" class="col-title-sm"
                 >{{ $t('appointments.interest') }}:</b-col
               >
-              <b-col md="9" sm="9" class="col-data-sm">
-                <b-button-group class="align-center button-group-style">
-                  <b-button
-                    v-if="
-                      appointment.level_of_interest == 'Not interested' ||
-                      appointment.level_of_interest == 'Not Interested'
-                    "
-                    size="sm"
-                    variant="primary"
-                  >
-                    {{ $t('appointments.notInterested') }}
-                  </b-button>
-                  <b-button
-                    v-else
-                    size="sm"
-                    variant="info"
-                    @click="
-                      handleUpdateLevelOfInterest(
-                        appointment.id,
-                        'Not Interested',
-                      )
-                    "
-                  >
-                    {{ $t('appointments.notInterested') }}
-                  </b-button>
-                  <b-button
-                    v-if="appointment.level_of_interest == 'Interested'"
-                    size="sm"
-                    variant="primary"
-                  >
-                    {{ $t('appointments.interested') }}
-                  </b-button>
-                  <b-button
-                    v-else
-                    size="sm"
-                    variant="info"
-                    @click="
-                      handleUpdateLevelOfInterest(appointment.id, 'Interested')
-                    "
-                  >
-                    {{ $t('appointments.interested') }}
-                  </b-button>
-                  <b-button
-                    v-if="
-                      appointment.level_of_interest == 'Very interested' ||
-                      appointment.level_of_interest == 'Very Interested'
-                    "
-                    size="sm"
-                    variant="primary"
-                  >
-                    {{ $t('appointments.veryInterested') }}
-                  </b-button>
-                  <b-button
-                    v-else
-                    size="sm"
-                    variant="info"
-                    @click="
-                      handleUpdateLevelOfInterest(
-                        appointment.id,
-                        'Very Interested',
-                      )
-                    "
-                  >
-                    {{ $t('appointments.veryInterested') }}
-                  </b-button>
-                </b-button-group>
+              <b-col md="3" sm="3" class="col-data-sm">
+                  <b-form-group class="align-center">
+                      <b-form-radio v-for="[value, label] of [
+                      ['Not interested', 'notInterested'],
+                      ['Interested', 'interested'],
+                      ['Very interested', 'veryInterested'],
+                    ]"
+                                    :key="value"
+                                    v-model="appointment.level_of_interest"
+                                    :value="value"
+                                    @change="handleUpdateLevelOfInterest(appointment.id, value)">
+                          {{ $t(`appointments.${label}`) }}
+                      </b-form-radio>
+                  </b-form-group>
               </b-col>
             </b-row>
             <b-row class="no-margin flexMobileParent">

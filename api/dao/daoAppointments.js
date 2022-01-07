@@ -55,6 +55,7 @@ const getAppointments = async (req, res, location, doctor, date) => {
     WHERE date = $1
     AND ($2::text IS NULL OR appointments.location = $2::text)
     AND ($3::int IS NULL OR appointments.doctor_id = $3::int)
+    ORDER BY starts_at
   `
   let result
 
