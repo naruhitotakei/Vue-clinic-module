@@ -36,11 +36,11 @@
   },
   "callCenter": {
     "leads": "Leadi",
-    "clientInfo": "Podatki o Klientu",
+    "clientInfo": "Podatki o klientu",
     "KPIs": "KPIs",
-    "workReport": "Poročila o Delu",
-    "activityReport": "Poročila o Aktivnosti",
-    "missingServices": "Manjkajoče Storitve"
+    "workReport": "Poročila o delu",
+    "activityReport": "Poročila o aktivnosti",
+    "missingServices": "Manjkajoče storitve"
   },
   "settings": {
     "users": "Uporabniki",
