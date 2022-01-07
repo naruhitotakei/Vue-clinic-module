@@ -58,7 +58,7 @@
              <h5 class="card-title">{{ $t('reportingEmazing.servicesSummary') }}</h5>
              <a href="#" ref="excel-table1" class="btn btn-primary" @click="exportReportToExcel('table1')">Download Excel</a>
            </div>
-            <b-table-simple ref="table1" class="table-t">
+            <b-table-simple ref="table1" id="table1" class="table-t">
               <thead>
               <tr>
                 <th v-for="(item,index) in servicesSummaryColumns" :key="index" :class="item.key === 'item' ? 'text-left' : ''" class="text-center">{{ item.label }}</th>
@@ -98,7 +98,7 @@
               <a href="#" ref="excel-table2" class="btn btn-primary" @click="exportReportToExcel('table2')">Download Excel</a>
             </div>
 <!--            <b-table small :items="servicesListItems" :fields="servicesListColumns" class="mb-0"></b-table>-->
-            <b-table-simple ref="table2" class="table-t">
+            <b-table-simple ref="table2" id="table2" class="table-t">
               <thead>
               <tr>
                 <th v-for="(item,index) in servicesListColumns" :key="index" :class="item.key === 'item' ? 'text-left' : ''" class="text-center">{{ item.label }}</th>
@@ -150,6 +150,7 @@ import IqCard from '../../components/xray/cards/iq-card.vue'
 import { xray } from '../../config/pluginInit'
 import { getCountryList, getEmazingServicesReport, getServiceList, getClinicStatistics } from '../../services/reporting'
 import _ from 'lodash'
+import XLSX from 'xlsx'
 // import moment from 'moment'
 
 export default {
@@ -254,21 +255,33 @@ export default {
       return num.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1.')
     },
     exportReportToExcel(tableName) {
-      let table = this.$refs[tableName]
-      console.log('Table')
-      console.log(table)
-      let euro = /€/gi
-      let html = table.$el.outerHTML.replace(euro, '&euro;')
-      this.$refs[`excel-${tableName}`].href = 'data:application/vnd.ms-excel,' + encodeURIComponent(html)
+      var elt = document.getElementById(tableName)
       let documentName = ''
-      let date = new Date().toLocaleString()
       if (tableName === 'table1') {
         documentName = 'Services Summary export'
       } else {
         documentName = 'Services List export'
       }
-      this.$refs[`excel-${tableName}`].download = documentName + ' ' + date
-      return true
+
+      var wb = XLSX.utils.table_to_book(elt, { sheet: documentName })
+
+      return XLSX.writeFile(wb, (documentName + '.xlsx'))
+
+      // let table = this.$refs[tableName]
+      // console.log('Table')
+      // console.log(table)
+      // let euro = /€/gi
+      // let html = table.$el.outerHTML.replace(euro, '&euro;')
+      // this.$refs[`excel-${tableName}`].href = 'data:application/vnd.ms-excel,' + encodeURIComponent(html)
+      // let documentName = ''
+      // let date = new Date().toLocaleString()
+      // if (tableName === 'table1') {
+      //   documentName = 'Services Summary export'
+      // } else {
+      //   documentName = 'Services List export'
+      // }
+      // this.$refs[`excel-${tableName}`].download = documentName + ' ' + date
+      // return true
     },
     formatPrice(price) {
       return this.$options.filters.formatPrice(price)
@@ -489,7 +502,7 @@ export default {
       var ye = new Intl.DateTimeFormat('en', { year: 'numeric' }).format(date)
       var mo = new Intl.DateTimeFormat('en', { month: 'numeric' }).format(date)
       var da = new Intl.DateTimeFormat('en', { day: 'numeric' }).format(date)
-      return (`${da}. ${mo}. ${ye}`)
+      return (`${da}/${mo}/${ye}`)
     },
   },
   computed: {
