@@ -129,6 +129,8 @@ async function throttleVerificationRequest(request, response, next) {
     ) {
       return response.status(401).send({
         messages: 'throttled',
+        status: '17',
+        end_at: verification.created_at,
       })
     }
 
@@ -175,9 +177,12 @@ async function verifyPhone(request, response, next) {
   }
 
   if (result.status === '17') {
-    await insert('failed_phone_verifications', { phone })
+    const verification = await insert('failed_phone_verifications', { phone })
 
-    return response.status(422).json(result)
+    return response.status(422).json({
+      ...result,
+      end_at: verification.created_at,
+    })
   }
 
   if (result.status !== '0') {
