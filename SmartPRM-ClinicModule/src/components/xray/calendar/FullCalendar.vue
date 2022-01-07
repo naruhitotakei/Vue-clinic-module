@@ -85,11 +85,11 @@
             </div>
             <div class="row align-items-center justify-content-between w-100 pt-2 " :class="{'mb-3': !disabled}">
                 <div class="col-md-3">
-                    <label for="start" class="mb-0" :style="{ 'margin-top': '13px' }">{{ $t('calendarEvent.start') }} *</label>
+                    <label for="start" class="mb-0">{{ $t('calendarEvent.start') }} *</label>
                 </div>
                 <div class="col-md-9 d-flex align-items-center">
                     <date-picker :disabled="disabled"
-                                 class="form-control form-control-disabled font-size-16"
+                                 class="form-control form-control-disabled font-size-16 date-picker-padding"
                                  :class="{'no-border margin-left': disabled}"
                                  :style="{ 'height': !disabled ? '53px' : '45px' }"
                                  v-model="formData.assignmentDate"
@@ -98,11 +98,11 @@
                                  :show-second="false"
                                  :lang="'en'"
                                  :format="'DD.MM.YYYY HH.mm'"></date-picker>
-                    <b-form-input v-if="!formData.id && !disabled" style="width: 65px; padding-top: 25px; padding-bottom: 25px;" type="number" min="1" step="5" v-model="durationMins" @input="setMinutes" placeholder="Duration" class="ml-3"></b-form-input>
-                    <label for="start" class="mb-0 mr-3 ml-4" :style="{ 'margin-top': '13px' }">{{ $t('calendarEvent.end') }}*</label>
+                    <b-form-input v-if="!formData.id && !disabled" style="width: 65px; padding-top: 25px; padding-bottom: 25px;" type="number" min="1" step="5" v-model="durationMins" @input="setMinutes" placeholder="Duration" class="ml-3 font-size-16"></b-form-input>
+                    <label for="start" class="mb-0 mr-3 ml-4">{{ $t('calendarEvent.end') }}*</label>
                     <date-picker :disabled="disabled"
                                  required
-                                 class="form-control form-control-disabled font-size-16"
+                                 class="form-control form-control-disabled font-size-16 date-picker-padding"
                                  :class="{'no-border': disabled}"
                                  :style="{ 'height': !disabled ? '53px' : '45px' }"
                                  v-model="formData.end"
@@ -1113,6 +1113,10 @@ body .wrapper .custom-control-label::after {
  .form-control .mx-input {
    border: none;
    box-shadow: none;
+ }
+
+ .date-picker-padding {
+   padding: 0.175rem 0.75rem !important;
  }
 
  .fc-widget-content .fc-scroller {
