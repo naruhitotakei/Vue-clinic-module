@@ -518,7 +518,7 @@ export default defineComponent({
 .card {
   padding-top: 0.5rem;
   margin-bottom: 1.5rem;
-  border-bottom: 1px solid black !important;
+  border-bottom: 1px solid black;
   border-radius: 0 !important;
 }
 .button-group-style {

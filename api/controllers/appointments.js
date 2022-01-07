@@ -5,12 +5,15 @@ const {
   getAppointmentSlotById,
   updateAppointmentSlot,
 } = require('~/dao/daoAppointmentSlots')
+const { pool, now, insert } = require('~/services/db')
+const moment = require('moment')
 
 module.exports = router
 
 router.post(
   '/request',
   validateCreateAppointmentRequest,
+  throttleVerificationRequest,
   async (request, response) => {
     const { phone } = request.body
     const vonage = require('~/services/vonage')
@@ -108,9 +111,43 @@ async function validateCreateAppointmentRequest(request, response, next) {
 /**
  * @type {import('express').RequestHandler}
  */
+async function throttleVerificationRequest(request, response, next) {
+  const { phone } = request.body
+  const statement = /* sql */ `
+    SELECT created_at::text as created_at FROM failed_phone_verifications
+    WHERE phone = $1
+  `
+  const result = await pool.query(statement, [phone])
+  const verification = result.rows[0]
+
+  if (verification != null) {
+    if (
+      moment
+        .utc(verification.created_at)
+        .add(5, 'minutes')
+        .isAfter(moment.utc())
+    ) {
+      return response.status(401).send({
+        messages: 'throttled',
+      })
+    }
+
+    const statement = /* sql */ `
+      DELETE FROM failed_phone_verifications
+      WHERE phone = $1
+    `
+    await pool.query(statement, [phone])
+  }
+
+  next()
+}
+
+/**
+ * @type {import('express').RequestHandler}
+ */
 async function verifyPhone(request, response, next) {
   const vonage = require('~/services/vonage')
-  const { verificationId, verificationCode } = request.body
+  const { verificationId, verificationCode, phone } = request.body
   let result
 
   try {
@@ -137,6 +174,12 @@ async function verifyPhone(request, response, next) {
     return response.status(422).json(result)
   }
 
+  if (result.status === '17') {
+    await insert('failed_phone_verifications', { phone })
+
+    return response.status(422).json(result)
+  }
+
   if (result.status !== '0') {
     return response.status(500).send(result)
   }
@@ -145,7 +188,6 @@ async function verifyPhone(request, response, next) {
 }
 
 async function countActiveAppointmentSlotsByPhone(phone) {
-  const { pool, now } = require('~/services/db')
   const statement = /* sql */ `
     SELECT COUNT(*) FROM appointment_slots
     JOIN appointments ON appointment_slots.appointment_id = appointments.id
