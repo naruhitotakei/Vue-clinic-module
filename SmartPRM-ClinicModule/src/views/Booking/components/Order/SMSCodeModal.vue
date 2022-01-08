@@ -130,7 +130,12 @@
             </div>
           </b-form-group>
           <div v-if="error != null" style="color: #dc3545">
-            <template v-if="error.status === '16'">
+            <template v-if="Array.isArray(error.messages)">
+              <div v-for="message of error.messages" :key="message">
+                {{ $t(`public.onlineBooking.error.${message}`) }}
+              </div>
+            </template>
+            <template v-else-if="error.status === '16'">
               <div>
                 {{ $t(`public.onlineBooking.error.incorrect-code`) }}
               </div>
