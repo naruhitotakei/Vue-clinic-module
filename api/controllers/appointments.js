@@ -121,16 +121,13 @@ async function throttleVerificationRequest(request, response, next) {
   const verification = result.rows[0]
 
   if (verification != null) {
-    if (
-      moment
-        .utc(verification.created_at)
-        .add(5, 'minutes')
-        .isAfter(moment.utc())
-    ) {
+    const endAt = moment.utc(verification.created_at).add(5, 'minutes')
+
+    if (endAt.isAfter(moment.utc())) {
       return response.status(401).send({
         messages: 'throttled',
         status: '17',
-        end_at: verification.created_at,
+        end_at: endAt.toISOString(),
       })
     }
 
@@ -177,12 +174,9 @@ async function verifyPhone(request, response, next) {
   }
 
   if (result.status === '17') {
-    const verification = await insert('failed_phone_verifications', { phone })
+    await insert('failed_phone_verifications', { phone })
 
-    return response.status(422).json({
-      ...result,
-      end_at: verification.created_at,
-    })
+    return throttleVerificationRequest(request, response, next)
   }
 
   if (result.status !== '0') {

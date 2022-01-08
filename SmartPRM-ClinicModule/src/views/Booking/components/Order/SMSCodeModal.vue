@@ -6,12 +6,26 @@
     ok-only
     :title="$t('public.onlineBooking.confirmationOfBooking')"
   >
-    <div v-show="error != null && error.status === '17'">Throttled</div>
+    <div
+      v-show="error != null && error.status === '17'"
+      style="
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+      "
+    >
+      <div>
+        {{ $t('public.onlineBooking.error.excessive-verification-attempts') }}
+      </div>
+      <div style="font-size: 2rem">
+        {{ countdown }}
+      </div>
+    </div>
     <div v-show="error == null || error.status !== '17'">
       <div v-show="fieldset.verificationId == null">
         <ValidationObserver v-slot="{ invalid, validate }">
           <form @submit.prevent="validate().then(sendConfirmationCode)">
-            <!-- <form @submit.prevent="validate().then(() => fieldset.verificationId = 'verificationId')"> -->
             <div class="d-flex">
               <ValidationProvider
                 :name="$t('public.onlineBooking.firstName')"
@@ -115,10 +129,27 @@
               <span>{{ errors[0] }}</span>
             </div>
           </b-form-group>
+          <div v-if="error != null" style="color: #dc3545">
+            <template v-if="error.status === '16'">
+              <div>
+                {{ $t(`public.onlineBooking.error.incorrect-code`) }}
+              </div>
+            </template>
+            <div v-else>Something went wrong</div>
+          </div>
+          <div class="mt-3"></div>
           <b-button variant="primary" :disabled="invalid" @click="verify">
             {{ $t('public.onlineBooking.confirmCode') }}
           </b-button>
-          <b-button variant="link" @click="fieldset.verificationId = null">
+          <b-button
+            variant="link"
+            @click="
+              () => {
+                fieldset.verificationId = null
+                error = null
+              }
+            "
+          >
             {{ $t('public.onlineBooking.modifyPhoneNumber') }}
           </b-button>
         </ValidationProvider>
@@ -131,6 +162,7 @@
 import { createAppointment } from '@/services/appointments'
 import { sendSms } from '@/services/booking.js'
 import { defineComponent } from '@vue/composition-api'
+import moment from 'moment'
 import VuePhoneNumberInput from 'vue-phone-number-input'
 import 'vue-phone-number-input/dist/vue-phone-number-input.css'
 
@@ -155,6 +187,8 @@ export default defineComponent({
         verificationCode: null,
       },
       error: null,
+      countdown: '00:00',
+      countdownIntervalId: null,
     }
   },
   watch: {
@@ -168,8 +202,13 @@ export default defineComponent({
       },
     },
   },
+  destroyed() {
+    clearInterval(this.countdownIntervalId)
+  },
   methods: {
     async sendConfirmationCode() {
+      this.error = null
+
       let result
 
       try {
@@ -182,12 +221,18 @@ export default defineComponent({
       } catch (error) {
         this.error = error
 
+        if (error.status === '17') {
+          this.throttle(error.end_at)
+        }
+
         throw error
       }
 
       this.fieldset.verificationId = result.requestId
     },
     async verify() {
+      this.error = null
+
       try {
         await createAppointment({
           firstName: this.form.firstName,
@@ -199,10 +244,29 @@ export default defineComponent({
         })
       } catch (error) {
         this.error = error
+
+        if (error.status === '17') {
+          this.throttle(error.end_at)
+        }
+
         throw error
       }
 
       this.$emit('next')
+    },
+    throttle(until) {
+      const endAt = moment(until)
+      this.countdownIntervalId = setInterval(() => {
+        const diffInSecs = endAt.diff(moment(), 'seconds')
+
+        this.countdown = `${Math.floor(diffInSecs / 60)
+          .toString()
+          .padStart(2, '0')}:${(diffInSecs % 60).toString().padStart(2, '0')}`
+      }, 1000)
+      setTimeout(() => {
+        clearInterval(this.countdownIntervalId)
+        this.error = null
+      }, endAt.diff(moment(), 'ms'))
     },
   },
 })
