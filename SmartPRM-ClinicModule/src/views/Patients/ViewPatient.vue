@@ -311,7 +311,7 @@
                                                   </div>
                                               </div>
                                               <div>
-                                                  <iq-card-text class="text-black ml-1" v-html="patient.general_notes"></iq-card-text>
+                                                  <div class="text-black ml-1" v-html="patient.general_notes"></div>
                                                   <!-- <b-card-text><small class="text-muted">{{ $t('EPR.overview.generalNotesUpdated') }} {{patient.general_notes_updated_at | fromNowDate}}</small></b-card-text> -->
                                               </div>
                                           </template>
@@ -329,7 +329,7 @@
                                                   </div>
                                               </div>
                                               <div>
-                                                  <iq-card-text v-html="patient.allergies" class="ml-1"></iq-card-text>
+                                                  <div v-html="patient.allergies" class="ml-1"></div>
                                                   <!-- <b-card-text><small class="text-muted">{{ $t('EPR.overview.generalNotesUpdated') }} {{patient.general_notes_updated_at | fromNowDate}}</small></b-card-text> -->
                                               </div>
                                           </template>
@@ -424,7 +424,7 @@
                                                             <div>
                                                               <b-checkbox v-model="item.completed" name="check-button" inline
                                                                 :key="index"
-                                                                @change="finishAssignment(item.id, $event)"><strong :class="{'red-text': isItOverdue(item.due_at)}">{{ item.description }}</strong></b-checkbox>
+                                                                @change="completeAssignment(item.id, $event)"><strong :class="{'red-text': isItOverdue(item.due_at)}">{{ item.description }}</strong></b-checkbox>
                                                             </div>
                                                             <div class="d-flex align-items-center justify-content-between">
                                                               <div>
@@ -2104,18 +2104,15 @@ export default {
         this.cancelNotes()
       })
     },
-    finishAssignment(id, finished) {
+    completeAssignment(id, finished) {
       const completedBy = this.userId
       finishAssignment(id, finished, completedBy).then(response => {
         if (finished) {
-          const open = this.assignments.find(todo => {
-            if (todo.id === id) {
-              todo.completed = true
-              this.completedAssignments.push(todo)
-              return todo
-            }
-          })
-          this.assignments = this.assignments.filter(todo => todo.id !== open.id)
+          let open = this.assignments.find(todo => todo.id === id)
+          open.completed = true
+          this.completedAssignments.push(open)
+
+          this.assignments = this.assignments.filter(todo => todo.id !== id)
         }
       })
     },
