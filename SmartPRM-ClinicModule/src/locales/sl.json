@@ -807,6 +807,7 @@
       "open": "prosto",
       "taken": "zasedeno",
       "closed": "zaprto",
+      "unavailable": "sl - unavailable",
       "chooseYourFavoriteDoctor": "Izberite zdravnika",
       "selectOption": "Izberite možnost",
       "pressEnterToSelect": "Pritisnite enter, da izberete",

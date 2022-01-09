@@ -67,9 +67,7 @@ export default defineComponent({
       return this.store.services.map((service) => ({
         ...service,
         serviceName: service.text,
-        time: `${service.default_duration} ${this.$t(
-          'public.onlineBooking.minutes',
-        )}`,
+        time: `${service.default_duration} min`,
         price: parseFloat(service.default_online_price),
         priceFormatted: `$${parseFloat(service.default_online_price)}`,
       }))
