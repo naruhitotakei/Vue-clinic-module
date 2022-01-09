@@ -7,6 +7,7 @@ const {
 } = require('~/dao/daoAppointmentSlots')
 const { pool, now, insert } = require('~/services/db')
 const moment = require('moment')
+const dbEventEmitter = require('~/events/db')
 
 module.exports = router
 
@@ -54,7 +55,14 @@ router.post(
   validateCreateAppointmentRequest,
   verifyPhone,
   async (request, response) => {
-    const { phone, firstName, lastName, appointmentSlotId } = request.body
+    const {
+      phone,
+      firstName,
+      lastName,
+      premiseId,
+      serviceId,
+      appointmentSlotId,
+    } = request.body
 
     try {
       let enquiry = await getEnquiryByPhone(phone)
@@ -62,10 +70,15 @@ router.post(
       if (enquiry == null) {
         enquiry = await createEnquiryPublic({ firstName, lastName, phone })
       }
-
       const appointment = await createAppointment({ enquiryId: enquiry.id })
       await updateAppointmentSlot(appointmentSlotId, {
         appointmentId: appointment.id,
+      })
+      dbEventEmitter.emit('appointment-created', {
+        ...appointment,
+        premiseId,
+        serviceId,
+        appointmentSlotId,
       })
     } catch (error) {
       return response.status(500).json(error)

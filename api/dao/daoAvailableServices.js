@@ -8,12 +8,12 @@ const daoAvailableServices = {
 module.exports = daoAvailableServices
 
 async function getAvailableServices({ lang, premiseId }) {
-  const statement = /* sql */`
+  const statement = /* sql */ `
     SELECT
-        online_booking_service.id,
-        online_booking_service.default_duration,
-        online_booking_service.default_online_price,
-        online_booking_service_name.text
+      online_booking_service.id,
+      online_booking_service.default_duration,
+      online_booking_service.default_online_price,
+      online_booking_service_name.text
     FROM online_booking_service
     JOIN online_booking_service_name
     ON online_booking_service.id = online_booking_service_name.online_booking_id
@@ -23,16 +23,19 @@ async function getAvailableServices({ lang, premiseId }) {
       WHERE premise_id = $2
     )
     AND online_booking_service.id IN (
-        SELECT DISTINCT online_booking_users_bridge.online_booking_id
-        FROM appointment_slots
-        JOIN online_booking_users_bridge
-        ON appointment_slots.doctor_id = online_booking_users_bridge.doctor_id
-        WHERE appointment_slots.appointment_id IS null
-        AND appointment_slots.starts_at BETWEEN $3::date AND $3::date + interval '30' day
+      SELECT DISTINCT online_booking_users_bridge.online_booking_id
+      FROM appointment_slots
+      JOIN online_booking_users_bridge
+      ON appointment_slots.doctor_id = online_booking_users_bridge.doctor_id
+      WHERE appointment_slots.appointment_id IS null
+      AND appointment_slots.starts_at BETWEEN $3::date AND $3::date + interval '30' day
     )
     ORDER BY online_booking_service_name.text
   `
-  const startDate = moment().tz('Europe/Ljubljana').add(1, 'day').format('YYYY-MM-DD')
+  const startDate = moment()
+    .tz('Europe/Ljubljana')
+    .add(1, 'day')
+    .format('YYYY-MM-DD')
   const { rows } = await pool.query(statement, [lang, premiseId, startDate])
 
   return rows
