@@ -22,7 +22,7 @@ const getApontments = (
   lang,
 ) => {
   var statement =
-    'SELECT app.id, app.starts_at, app.ends_at, app.created_at, app.note, app.product_group_id, app.enquiry_id as app_enquiry_id, app.kind, app.patient_attended, app.appointment_canceled, app.doctor_id, app.cancelation_reason, app.all_day AS allDay, ' +
+    'SELECT app.id, app.starts_at, app.ends_at, app.created_at, app.note, app.product_group_id, app.enquiry_id as app_enquiry_id, app.kind, app.patient_attended, app.appointment_canceled, app.doctor_id, app.cancelation_reason, app.all_day, ' +
     'app.time, app.location as app_location, app.doctor_name, app.enquiry_id, enq.name, enq.last_name, ' +
     'app.attendance, app.product_id, app_s.location as app_s_location, app_s.doctor_name AS slot_doctor_name, pcl.id as prm_client_id, ' +
     'pcl.client_name as prm_client_name, prd.name as prd_name, prd.group as prd_group, prd.category as prd_category, ' +
@@ -88,6 +88,8 @@ const updateAppointments = (request, response, id, appointments) => {
   let statement = 'UPDATE appointments SET '
   if (appointments.doctor_id)
     statement += "doctor_id='" + appointments.doctor_id + "',"
+  if (typeof appointments.allDay === 'boolean')
+    statement += "all_day='" + appointments.allDay + "',"
   if (appointments.doctor_name)
     statement += "doctor_name='" + appointments.doctor_name + "',"
   if (appointments.location)
@@ -152,6 +154,7 @@ const createAppointment = (request, response, appointments) => {
   if (appointments.crmProduct) statement += 'product_id,'
   if (appointments.product_groups) statement += 'product_group_id,'
   if (appointments.assignmentDate) statement += 'starts_at, date,'
+  if (typeof appointments.allDay === 'boolean') statement += 'all_day,'
   if (appointments.backgroundColor) statement += 'label_id,'
   if (appointments.end) statement += 'ends_at,'
   statement += 'time,'
@@ -177,6 +180,8 @@ const createAppointment = (request, response, appointments) => {
       "'" +
       moment(appointments.assignmentDate).format('YYYY-MM-DD') +
       "',"
+  if (typeof appointments.allDay === 'boolean')
+    statement += "'" + appointments.allDay + "',"
   if (appointments.backgroundColor)
     statement += "'" + appointments.backgroundColor + "',"
   if (appointments.end)
