@@ -59,6 +59,7 @@ import { xray } from '../../config/pluginInit'
 import { getCalendar, getDoctorList } from '@/services/calendarService'
 import moment from 'moment'
 import { getProductGroups } from '@/services/products'
+import { mapActions, mapGetters } from 'vuex'
 
 export default {
   name: 'GoogleCalendar',
@@ -112,12 +113,15 @@ export default {
     xray.index()
     this.getDoctors()
     this.getProductGroups(this.$i18n.locale)
+    this.check = [...this.selectedDoctors]
+    this.allDoctorCheck = this.check.length === 0
   },
   watch: {
     'allDoctorCheck'() {
     },
   },
   computed: {
+    ...mapGetters('Calendar', ['selectedDoctors']),
     getEvents() {
       if (!this.check.length) {
         return this.events
@@ -148,6 +152,7 @@ export default {
     },
   },
   methods: {
+    ...mapActions('Calendar', ['setSelectedDoctors']),
     /* addAppointment () {
       this.setModalShow(true)
     }, */
@@ -172,7 +177,7 @@ export default {
             id: item.id,
             title: item.name,
             disabled: false,
-            checked: false,
+            checked: !!this.check.find(doc => doc.id === item.id && doc.checked),
           }))
         }
       })
@@ -219,7 +224,7 @@ export default {
                 id: item.enquiry_id,
                 full_name: item.name + ' ' + item.last_name,
               },
-              allDay: item.allDay ? item.allDay : false,
+              allDay: item.all_day ? item.all_day : false,
               app_lb_color: item.app_lb_color,
               app_lb_type: item.app_lb_type,
             }
@@ -232,6 +237,7 @@ export default {
     },
     allDoctorFun(value) {
       this.check = []
+      this.setSelectedDoctors(this.check)
       this.doctors.map(item => {
         item.checked = false
       })
@@ -263,6 +269,7 @@ export default {
           this.selectDoctor = {}
         })
       }
+      this.setSelectedDoctors(this.check)
     },
     scroll_left() {
       this.$refs.carousel.prev()

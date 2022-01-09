@@ -281,6 +281,7 @@ import {
 import DatePicker from 'vue2-datepicker'
 import 'vue2-datepicker/index.css'
 import AddPatientModal from '@/components/Patients/AddPatientModal.vue'
+import { mapActions, mapGetters } from 'vuex'
 
 export default {
   components: {
@@ -552,6 +553,7 @@ export default {
     },
   },
   computed: {
+    ...mapGetters('Calendar', ['calendarDate', 'calendarView']),
     /* detectMinTime () {
       return this.events.filter(event => {
         if (new Date(moment(event.time).format('HH:mm:ss')) < new Date('09:00:00')) {
@@ -597,6 +599,8 @@ export default {
   },
   mounted() {
     let self = this
+    if (this.calendarView) this.calendarOptions.initialView = this.calendarView
+    if (this.calendarDate) this.calendarOptions.initialDate = this.calendarDate
     window.addEventListener('keydown', function (event) {
       self.listenEvent(event)
     }, false)
@@ -622,6 +626,7 @@ export default {
     window.removeEventListener('keydown', this.listenEvent, false)
   },
   methods: {
+    ...mapActions('Calendar', ['setCalendarDate', 'setCalendarView']),
     listenEvent(event) {
       if (event.key === 'Escape') {
         this.closeModal()
@@ -773,8 +778,11 @@ export default {
       })
     },
     onViewChange(info) {
+      console.log(info)
       this.viewName = info.view.type
+      this.setCalendarView(info.view.type)
       this.dates = info
+      this.setCalendarDate(info.startStr)
     },
     eventResize(info) {
       let event = this.calendarApi.getEventById(info.event.id)
