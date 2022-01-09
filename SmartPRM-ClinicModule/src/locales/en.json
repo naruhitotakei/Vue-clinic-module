@@ -806,6 +806,7 @@
       "service": "Service",
       "doctor": "Doctor",
       "time": "Time",
+      "minutes": "min",
       "price": "Price",
       "open": "open",
       "taken": "taken",
