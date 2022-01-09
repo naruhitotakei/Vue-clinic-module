@@ -44,11 +44,7 @@
           <div v-if="fieldset.appointmentSlot != null">
             <total-order-info :order="form" />
             <div class="d-flex justify-content-between mt-3">
-              <b-button
-                align-self="end"
-                variant="primary"
-                @click="$emit('next', -1)"
-              >
+              <b-button align-self="end" @click="$emit('next', -1)">
                 {{ $t('public.onlineBooking.backToServices') }}
               </b-button>
               <b-button

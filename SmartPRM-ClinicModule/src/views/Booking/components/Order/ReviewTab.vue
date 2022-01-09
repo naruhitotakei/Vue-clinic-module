@@ -2,11 +2,14 @@
   <div>
     <div class="selected-slot p-2 my-3">
       {{ $t('public.onlineBooking.selectedSlot') }}:
-      {{
-        form.appointmentSlot.starts_at | formatFullDate({ lang: $i18n.locale })
-      }}
-      {{ $t('public.onlineBooking.at') }}
-      {{ time }}
+      <strong>
+        {{
+          form.appointmentSlot.starts_at
+            | formatFullDate({ lang: $i18n.locale })
+        }}
+        {{ $t('public.onlineBooking.at') }}
+        {{ time }}
+      </strong>
     </div>
     <b-table
       :items="[form.service]"
@@ -33,7 +36,7 @@
       </template>
     </b-table>
     <div class="d-flex justify-content-between mt-3">
-      <b-button align-self="end" variant="primary" @click="$emit('next', -1)">
+      <b-button align-self="end" @click="$emit('next', -1)">
         {{ $t('public.onlineBooking.slotsAndPrices') }}
       </b-button>
       <b-button align-self="end" variant="primary" v-b-modal.confirm-modal>
