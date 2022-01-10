@@ -46,6 +46,7 @@ import BusinessCustomers from '../views/Settings/BusinessCustomers'
 import Users from '../views/Settings/Users'
 import FreeSlots from '../views/Settings/FreeSlots'
 import SMSTemplates from '../views/Settings/SMSTemplates'
+import SMSTemplatesEdit from '../views/Settings/SMSTemplatesEdit'
 import MailTemplates from '../views/Settings/MailTemplates'
 import Advertising from '../views/Settings/Advertising'
 import Labels from '../views/Settings/Labels'
@@ -315,6 +316,12 @@ const settingsChildRoute = (prop, mode = false) => [
     name: prop + '.sms-templates',
     meta: { dark: mode, auth: true, name: 'SMS Templates' },
     component: SMSTemplates,
+  },
+  {
+    path: 'sms-templates/:id/edit',
+    name: prop + '.sms-templates-edit',
+    meta: { dark: mode, auth: true, name: 'Edit SMS Template' },
+    component: SMSTemplatesEdit,
   },
   {
     path: 'mail-templates',
