@@ -718,7 +718,7 @@
     }
   },
   "onlineBooking": {
-    "header": "Services and products",
+    "header": "Online Booking Services",
     "addBtn": "Add",
     "onlineBookingColumns": {
       "serviceName": "Name",

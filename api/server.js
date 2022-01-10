@@ -80,8 +80,27 @@ app.use(
 )
 app.use(bodyParser.json())
 app.use(express.static(path.join(__dirname, '../prmApp/dist')))
+
+// if (process.env.NODE_ENV === 'development') {
+//   const cookieParser = require('cookie-parser')
+//   app.use(cookieParser())
+// }
+
 app.use(
   session({
+    // ...(() => {
+    //   if (process.env.NODE_ENV === 'development') {
+    //     //
+    //   } else {
+    //     return {}
+    //   }
+
+    //   const SQLiteStore = require('connect-sqlite3')(session)
+    //   console.log('yooo')
+    //   return {
+    //     store: new SQLiteStore(),
+    //   }
+    // })(),
     resave: true,
     saveUninitialized: true,
     secret: 'BwhFeenj9DcRqANH',
