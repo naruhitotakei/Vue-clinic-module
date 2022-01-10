@@ -109,6 +109,7 @@ async function createAppointment({ enquiryId }) {
   return insert('appointments', {
     enquiry_id: enquiryId,
     kind: 'Posvet',
+    booking_source: 'online reservation',
     created_at: timestamp,
     updated_at: timestamp,
   })

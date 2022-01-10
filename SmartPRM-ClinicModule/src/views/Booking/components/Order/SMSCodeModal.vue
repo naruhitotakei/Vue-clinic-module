@@ -243,6 +243,8 @@ export default defineComponent({
           firstName: this.form.firstName,
           lastName: this.form.lastName,
           phone: this.form.phone,
+          premiseId: this.$route.query.premiseId,
+          serviceId: this.form.service.id,
           appointmentSlotId: this.form.appointmentSlot.id,
           verificationId: this.form.verificationId,
           verificationCode: this.form.verificationCode,

@@ -1,5 +1,5 @@
 var moment = require('moment')
-const { pool, now } = require('~/services/db')
+const { pool, now, insert } = require('~/services/db')
 
 const getEnquiries = (
   request,
@@ -434,7 +434,7 @@ async function getEnquiryByPhone(phoneNumber) {
 async function createEnquiryPublic({ firstName, lastName, phone }) {
   const timestamp = now()
 
-  return insert('appointments', {
+  return insert('enquiries', {
     name: firstName,
     last_name: lastName,
     phone: phone,
