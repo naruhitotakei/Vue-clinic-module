@@ -86,7 +86,7 @@ export async function updateAttendance(updateAttendanceData) {
 }
 
 export async function createAppointment(payload) {
-  const rawResponse = await fetch(`/api/appointments`, {
+  const response = await fetch(`/api/appointments`, {
     method: 'POST',
     credentials: 'same-origin',
     headers: {
@@ -95,5 +95,11 @@ export async function createAppointment(payload) {
     },
     body: JSON.stringify(payload),
   })
-  return rawResponse.json()
+  const result = await response.json()
+
+  if (response.ok === false) {
+    throw result
+  }
+
+  return result
 }

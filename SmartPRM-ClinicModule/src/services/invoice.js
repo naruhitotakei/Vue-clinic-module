@@ -23,14 +23,17 @@ export async function getInvoiceById(id) {
 }
 
 export async function getConsecutiveInvoiceNumberForCompany(id) {
-  const rawResponse = await fetch('/api/invoices/company/' + id + '/consecutive-number/', {
-    method: 'GET',
-    credentials: 'same-origin',
-    headers: {
-      'Accept': 'application/json',
-      'Content-Type': 'application/json',
+  const rawResponse = await fetch(
+    '/api/invoices/company/' + id + '/consecutive-number/',
+    {
+      method: 'GET',
+      credentials: 'same-origin',
+      headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json',
+      },
     },
-  })
+  )
   return rawResponse.json()
 }
 

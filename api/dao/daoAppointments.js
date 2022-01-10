@@ -1,12 +1,4 @@
-require('dotenv').config()
-const Pool = require('pg').Pool
-const pool = new Pool({
-  user: process.env.POSTGRES_USER,
-  host: process.env.POSTGRES_HOST,
-  database: process.env.POSTGRES_DB,
-  password: process.env.POSTGRES_PASSWORD,
-  port: process.env.POSTGRES_PORT || 5432,
-})
+const { pool, now, insert } = require('~/services/db')
 
 const getAllAppointmentsLocations = (req, res, scope, prm_client_id) => {
   let statement = 'SELECT location FROM appointments '
@@ -112,18 +104,14 @@ const updateAttendance = (req, res, appointmentID, attendance) => {
 }
 
 async function createAppointment({ enquiryId }) {
-  const model = {
-    enquiry_id: '$1',
-    created_at: now(),
-    updated_at: now(),
-  }
-  const statement = /* sql */ `
-      INSERT INTO appointments(${Object.keys(model).join(',')})
-      VALUES (${Object.values(model).join(',')})
-      RETURNING *
-    `
-  const result = await pool.query(statement, [enquiryId])
-  return result.rows[0]
+  const timestamp = now()
+
+  return insert('appointments', {
+    enquiry_id: enquiryId,
+    kind: 'Posvet',
+    created_at: timestamp,
+    updated_at: timestamp,
+  })
 }
 
 module.exports = {

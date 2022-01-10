@@ -849,7 +849,9 @@
       "bookAnotherAppointment": "Book another appointment",
       "error": {
         "over-order": "You can't book more than two appointments with same phone number.",
-        "unavailable-slot": "Your selected slot is already booked."
+        "unavailable-slot": "Your selected slot is already booked.",
+        "incorrect-code": "The code inserted does not match the expected value.",
+        "excessive-verification-attempts": "Incorrect code was entered too many times. Please wait to try again."
       }
     }
   }
