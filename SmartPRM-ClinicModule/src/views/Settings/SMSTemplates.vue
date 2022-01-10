@@ -7,6 +7,10 @@
             <h3 class="template-name">{{ smsTemplate.name }}</h3>
             <p class="template-content black-text">{{ smsTemplate.content }}</p>
             <p class="template-unique-slug">Unique name: {{ smsTemplate.slug }}</p>
+            <div class="sms-templates-actions mt-2">
+              <a :href="`sms-templates/${smsTemplate.id}/edit`">Edit</a>
+              <!-- <a>Delete</a> -->
+            </div>
           </iq-card>
         </div>
       </b-col>
@@ -65,5 +69,17 @@ export default {
   }
   .black-text {
     color: black;
+  }
+  .sms-templates-actions {
+    display: flex;
+    flex-direction: row;
+  }
+  .sms-templates-actions a {
+    font-size: 14px;
+    color: #00a9f9 !important;
+    cursor: pointer;
+  }
+  .sms-templates-actions a:first-child {
+    margin-right: 0.5rem;
   }
 </style>

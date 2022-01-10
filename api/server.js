@@ -974,7 +974,48 @@ app.get('/api/sms-templates', (req, res) => {
       req,
       res,
       req.session.prm_user.prm_client_id,
-      getScope(req.session.prm_user.permissions, usersPermission),
+    )
+  } else {
+    res.status(401).json('OK: user unauthorized')
+  }
+})
+
+app.get('/api/sms-template/:id', (req, res) => {
+  const templateID = req.params.id
+  if (
+    req.session.prm_user &&
+    req.session.prm_user.permissions &&
+    checkPermission(req.session.prm_user.permissions, usersPermission)
+  ) {
+    daoSmsTemplates.getSmsTemplate(
+      req,
+      res,
+      req.session.prm_user.prm_client_id,
+      templateID
+    )
+  } else {
+    res.status(401).json('OK: user unauthorized')
+  }
+})
+
+app.put('/api/sms-template/update', (req, res) => {
+  const templateID = req.body.id
+  const templateName = req.body.name
+  const templateContent = req.body.content
+  const templateSlug = req.body.slug
+  if (
+    req.session.prm_user &&
+    req.session.prm_user.permissions &&
+    checkPermission(req.session.prm_user.permissions, usersPermission)
+  ) {
+    daoSmsTemplates.updateSmsTemplate(
+      req,
+      res,
+      req.session.prm_user.prm_client_id,
+      templateID,
+      templateName,
+      templateContent,
+      templateSlug
     )
   } else {
     res.status(401).json('OK: user unauthorized')
