@@ -130,7 +130,7 @@ const getClinicStats = async (request, response, start, end, prm_client_id, scop
 
     let attendedAppointmentStatement = "select COUNT(appointments.id) AS appointments from appointments "
     attendedAppointmentStatement += "LEFT JOIN public.enquiries ON appointments.enquiry_id = enquiries.id "
-    attendedAppointmentStatement += "WHERE appointments.patient_attended = true "
+    attendedAppointmentStatement += "WHERE appointments.appointment_canceled = FALSE "
     attendedAppointmentStatement += "AND date_trunc('day', appointments.date) >= $1 AND date_trunc('day', appointments.date) <= $2 "
     
     if (scope == 'All') {
