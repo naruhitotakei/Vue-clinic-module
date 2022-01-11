@@ -49,7 +49,10 @@
             <apex-chart type="bar" :series="series" :options="chartOptions" />
           </div>
           <div class="mt-3 text-center" v-if="loading">
-            <p>Loading New Patients...</p>
+            <div class="text-center text-primary my-2">
+                <b-spinner class="align-middle"></b-spinner>
+                <strong class="loading">Loading...</strong>
+            </div>
           </div>
           <div class="mt-3 text-center" v-if="!loading && noData">
             <p>No data found in this date range...</p>

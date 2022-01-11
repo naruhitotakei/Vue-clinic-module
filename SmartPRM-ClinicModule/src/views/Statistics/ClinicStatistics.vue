@@ -88,7 +88,7 @@
                   </div>
                   <div class="text-right">
                     <h2 class="mb-0">
-                      <span class="counter">{{ appointments }}</span>
+                      <span class="counter">{{ appointments | formatNumber }}</span>
                     </h2>
                     <h5 class="pb-3">Appointments</h5>
                   </div>
@@ -108,7 +108,7 @@
                   </div>
                   <div class="text-right">
                     <h2 class="mb-0">
-                      <span class="counter">{{ attended }}</span>
+                      <span class="counter">{{ attended | formatNumber }}</span>
                     </h2>
                     <h5 class="">Attended</h5>
                   </div>
@@ -128,7 +128,7 @@
                   </div>
                   <div class="text-right">
                     <h2 class="mb-0">
-                      <span class="counter">{{ serviced_patients }}</span>
+                      <span class="counter">{{ serviced_patients | formatNumber }}</span>
                     </h2>
                     <h5 class="">Serviced Patients</h5>
                   </div>
@@ -316,9 +316,9 @@ export default {
       getClinicStats(start, end).then((response) => {
         if (response && response.revenue) {
           this.revenue = Number(response.revenue)
-          this.appointments = Number(response.appointments).toLocaleString()
-          this.attended = Number(response.attended).toLocaleString()
-          this.serviced_patients = Number(response.serviced).toLocaleString()
+          this.appointments = Number(response.appointments)
+          this.attended = Number(response.attended)
+          this.serviced_patients = Number(response.serviced)
         }
       })
     },

@@ -64,3 +64,9 @@ Vue.filter('formatPrice', function (value) {
     }).format(Number(value))
   }
 })
+
+Vue.filter('formatNumber', function (value) {
+  if (value || value === 0) {
+    return Number(value).toLocaleString('de-DE', { minimumFractionDigits: 2 })
+  }
+})
