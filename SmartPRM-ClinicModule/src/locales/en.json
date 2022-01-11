@@ -170,6 +170,8 @@
     "notInterested": "Not interested",
     "interested": "Interested",
     "veryInterested": "Very interested",
+    "clinicNotes": "Clinic notes",
+    "callCenterNotes": "Call center notes",
     "enterNotes": "Enter notes..."
   },
   "patients": {

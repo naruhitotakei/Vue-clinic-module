@@ -59,15 +59,28 @@ export async function updateLevelOfInterest(updateData) {
   return rawResponse.json()
 }
 
-export async function updateNotes(updateNotesData) {
-  const rawResponse = await fetch('/api/appointments/update_notes', {
+export async function updateClinicNotes(updateClinicNotesData) {
+  const rawResponse = await fetch('/api/appointments/update_clinic_notes', {
     method: 'PUT',
     credentials: 'same-origin',
     headers: {
       'Accept': 'application/json',
       'Content-Type': 'application/json',
     },
-    body: JSON.stringify(updateNotesData),
+    body: JSON.stringify(updateClinicNotesData),
+  })
+  return rawResponse.json()
+}
+
+export async function updateCallCenterNotes(updateCallCenterNotesData) {
+  const rawResponse = await fetch('/api/appointments/update_call_center_notes', {
+    method: 'PUT',
+    credentials: 'same-origin',
+    headers: {
+      'Accept': 'application/json',
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify(updateCallCenterNotesData),
   })
   return rawResponse.json()
 }

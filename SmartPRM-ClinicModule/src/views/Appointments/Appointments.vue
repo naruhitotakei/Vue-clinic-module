@@ -1,10 +1,9 @@
 <template>
   <b-container fluid>
-    <b-col lg="12" md="12">
       <iq-card>
         <template v-slot:headerTitle>
           <h3 class="mb-3 mt-2">{{ $t('appointments.header') }}</h3>
-          <div class="filters-section d-flex mb-2">
+          <div class="filters-section d-flex mb-2 ml-2">
             <h5>{{ $t('appointments.filters') }}</h5>
             <div class="filter-select">
               <v-select
@@ -146,14 +145,26 @@
                 </b-form-group>
               </b-col>
             </b-row>
-            <b-row class="no-margin pt-2 mb-3 align-center">
-              <b-form-textarea
-                id="notes-textarea"
-                :placeholder="$t('appointments.enterNotes')"
-                rows="4"
-                max-rows="6"
-                v-model="appointment.notes"
-                @blur="handleUpdateNotes($event, appointment.id)"
+            <b-row class="no-margin pt-2 align-center">
+              <label for="clinicNotes" class="ml-2 mb-1 header-color">{{ $t('appointments.clinicNotes') }}</label>
+                <b-form-textarea
+                  id="notes-textarea"
+                  :placeholder="$t('appointments.enterNotes')"
+                  rows="4"
+                  max-rows="6"
+                  v-model="appointment.notes"
+                  @blur="handleUpdateClinicNotes($event, appointment.id)"
+              ></b-form-textarea>
+            </b-row>
+              <b-row class="no-margin pt-2 mt-1 align-center">
+              <label for="callCenterNotes" class="ml-2 mb-1 header-color">{{ $t('appointments.callCenterNotes') }}</label>
+                <b-form-textarea
+                  id="notes-textarea"
+                  :placeholder="$t('appointments.enterNotes')"
+                  rows="4"
+                  max-rows="6"
+                  v-model="appointment.note"
+                  @blur="handleUpdateCallCenterNotes($event, appointment.id)"
               ></b-form-textarea>
             </b-row>
           </div>
@@ -275,6 +286,7 @@
                 sm="12"
                 class="mt-2 mb-3 align-center display-flex"
               >
+              <label for="clinicNotes" class="ml-2 mb-4 mobile-width header-color">{{ $t('appointments.clinicNotes') }}</label>
                 <b-form-textarea
                   id="notes-textarea"
                   class="relative-pos"
@@ -282,10 +294,29 @@
                   rows="4"
                   max-rows="6"
                   v-model="appointment.notes"
-                  @blur="handleUpdateNotes($event, appointment.id)"
+                  @blur="handleUpdateClinicNotes($event, appointment.id)"
                 ></b-form-textarea>
               </b-col>
             </b-row>
+              <b-row class="no-margin flexMobileParent">
+              <b-col
+                md="12"
+                sm="12"
+                class="mt-2 mb-3 align-center display-flex"
+              >
+              <label for="clinicNotes" class="ml-2 mb-4 mobile-width header-color">{{ $t('appointments.callCenterNotes') }}</label>
+                <b-form-textarea
+                  id="notes-textarea"
+                  class="relative-pos"
+                  :placeholder="$t('appointments.enterNotes')"
+                  rows="4"
+                  max-rows="6"
+                  v-model="appointment.note"
+                  @blur="handleUpdateCallCenterNotes($event, appointment.id)"
+                ></b-form-textarea>
+              </b-col>
+            </b-row>
+            <hr />
           </div>
 
           <b-modal
@@ -298,7 +329,6 @@
           </b-modal>
         </template>
       </iq-card>
-    </b-col>
   </b-container>
 </template>
 
@@ -311,7 +341,8 @@ import {
   getAppointmentsDoctors,
   getAppointments,
   updateLevelOfInterest,
-  updateNotes,
+  updateClinicNotes,
+  updateCallCenterNotes,
   updateAttendance,
 } from '../../services/appointments'
 
@@ -415,8 +446,21 @@ export default defineComponent({
         }
       })
     },
-    async handleUpdateNotes(e, appointmentID) {
-      updateNotes({ id: appointmentID, notes: e.target.value }).then(
+    async handleUpdateClinicNotes(e, appointmentID) {
+      updateClinicNotes({ id: appointmentID, clinicNotes: e.target.value }).then(
+        (response) => {
+          if (response.success === true) {
+            this.getAppointmentsData(
+              this.selectedLocation,
+              this.selectedDoctor,
+              this.dateSelected,
+            )
+          }
+        },
+      )
+    },
+    async handleUpdateCallCenterNotes(e, appointmentID) {
+      updateCallCenterNotes({ id: appointmentID, callCenterNotes: e.target.value }).then(
         (response) => {
           if (response.success === true) {
             this.getAppointmentsData(
@@ -508,6 +552,12 @@ export default defineComponent({
 }
 .width-50 {
   width: 50px !important;
+}
+.mobile-width {
+  width: 165px !important;
+}
+.header-color {
+  color: #a09e9e !important;
 }
 
 /* media */

@@ -464,18 +464,25 @@ app.put('/api/appointments/update_interest', (req, res) => {
   else res.status(401).json('OK: user unauthorized')
 })
 
-app.put('/api/appointments/update_notes', (req, res) => {
-  const appointmentID = req.body.id
-  const notes = req.body.notes
+app.put('/api/appointments/update_clinic_notes', (req, res) => {
+    const appointmentID = req.body.id
+    const clinicNotes = req.body.clinicNotes
 
-  if (
-    req.session.prm_user &&
-    req.session.prm_user.permissions &&
-    checkPermission(req.session.prm_user.permissions, appointmentsPermission)
-  )
-    daoAppointments.updateNotes(req, res, appointmentID, notes)
-  else res.status(401).json('OK: user unauthorized')
-})
+    if (req.session.prm_user && req.session.prm_user.permissions && checkPermission(req.session.prm_user.permissions, appointmentsPermission))
+        daoAppointments.updateClinicNotes(req, res, appointmentID, clinicNotes)
+    else
+        res.status(401).json("OK: user unauthorized")
+});
+
+app.put('/api/appointments/update_call_center_notes', (req, res) => {
+  const appointmentID = req.body.id
+  const callCenterNotes = req.body.callCenterNotes
+
+  if (req.session.prm_user && req.session.prm_user.permissions && checkPermission(req.session.prm_user.permissions, appointmentsPermission))
+    daoAppointments.updateCallCenterNotes(req, res, appointmentID, callCenterNotes)
+  else
+    res.status(401).json("OK: user unauthorized")
+});
 
 app.put('/api/appointments/update_attendance', (req, res) => {
   const appointmentID = req.body.id

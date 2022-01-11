@@ -167,6 +167,8 @@
     "notInterested": "Ne zanima",
     "interested": "Zanima",
     "veryInterested": "Zelo zanima",
+    "clinicNotes": "Opombe klinike",
+    "callCenterNotes": "Opombe klicnega centra",
     "enterNotes": "Vpiši Opombe..."
   },
   "patients": {
