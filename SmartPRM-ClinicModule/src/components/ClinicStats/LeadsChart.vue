@@ -110,25 +110,26 @@ export default {
     getClinicLeadStats(start, end) {
       this.loading = true
       this.noData = false
-      getLeadsPerDay(start, end).then(response => {
-        this.loading = false
+      getLeadsPerDay(start, end).then(async response => {
         if (response && response.length && Array.isArray(response)) {
           this.noData = false
           this.setDataForChart(response)
+          this.loading = false
         } else {
           this.noData = true
+          this.loading = false
         }
       }).catch(() => {
         this.noData = false
         this.loading = false
       })
     },
-    setDataForChart(data) {
+    async setDataForChart(data) {
       let datesArray = []
       let sumByCountry = []
       let countries = []
       this.dataToExport = []
-      data.forEach(item => {
+      await data.forEach(item => {
         // Get Unique Dates
         const itemDate = item.date.split('T')[0]
         const isDateExists = datesArray.find(date => date === itemDate)

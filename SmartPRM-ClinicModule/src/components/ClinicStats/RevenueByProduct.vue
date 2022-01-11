@@ -88,13 +88,14 @@ export default {
       this.loading = true
       this.noData = false
       getRevenueByProduct(start, end)
-        .then((response) => {
-          this.loading = false
+        .then(async (response) => {
           if (response && response.length && Array.isArray(response)) {
             this.noData = false
-            this.setChartData(response)
+            await this.setChartData(response)
+            this.loading = false
           } else {
             this.noData = true
+            this.loading = false
           }
         })
         .catch(() => {
@@ -102,12 +103,12 @@ export default {
           this.loading = false
         })
     },
-    setChartData(data) {
+    async setChartData(data) {
       let prNames = []
       let sumArray = []
       this.dataToExport = []
       this.fileName = `Revenue By Product (${moment(this.start).format('DD/MM/YYYY')} - ${moment(this.end).format('DD/MM/YYYY')})`
-      data.forEach((item) => {
+      await data.forEach((item) => {
         prNames.push(item.pr_name)
         const sum = Number(item.sum)
         sumArray.push(sum)

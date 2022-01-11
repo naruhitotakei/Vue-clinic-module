@@ -106,13 +106,14 @@ export default {
       this.loading = true
       this.noData = false
       getNewEnquiries(start, end)
-        .then((response) => {
-          this.loading = false
+        .then(async (response) => {
           if (response && response.length && Array.isArray(response)) {
             this.noData = false
-            this.setDataForChart(response)
+            await this.setDataForChart(response)
+            this.loading = false
           } else {
             this.noData = true
+            this.loading = false
           }
         })
         .catch(() => {
@@ -120,11 +121,11 @@ export default {
           this.loading = false
         })
     },
-    setDataForChart(data) {
+    async setDataForChart(data) {
       let datesArray = []
       let seriesData = []
       this.dataToExport = []
-      data.forEach((item, index) => {
+      await data.forEach((item, index) => {
         const itemDate = item.date.split('T')[0]
         const dateIndex = datesArray.findIndex((date) => date === itemDate)
         if (dateIndex < 0) {

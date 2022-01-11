@@ -88,7 +88,7 @@
                   </div>
                   <div class="text-right">
                     <h2 class="mb-0">
-                      <span class="counter">{{ appointments | formatNumber }}</span>
+                      <span class="counter">{{ appointments }}</span>
                     </h2>
                     <h5 class="pb-3">Appointments</h5>
                   </div>
@@ -108,7 +108,7 @@
                   </div>
                   <div class="text-right">
                     <h2 class="mb-0">
-                      <span class="counter">{{ attended | formatNumber }}</span>
+                      <span class="counter">{{ attended }}</span>
                     </h2>
                     <h5 class="">Attended</h5>
                   </div>
@@ -128,7 +128,7 @@
                   </div>
                   <div class="text-right">
                     <h2 class="mb-0">
-                      <span class="counter">{{ serviced_patients | formatNumber }}</span>
+                      <span class="counter">{{ serviced_patients }}</span>
                     </h2>
                     <h5 class="">Serviced Patients</h5>
                   </div>
@@ -187,6 +187,7 @@
       <LeadsChart :start="startDate" :end="endDate" />
       <RevenueByDoctor :start="startDate" :end="endDate" />
       <NewPatients :start="startDate" :end="endDate" />
+      <!-- <AppointmentsByProduct :start="startDate" :end="endDate" /> -->
     </template>
   </b-container>
 </template>
@@ -202,6 +203,7 @@ import RevenueByProduct from '@/components/ClinicStats/RevenueByProduct.vue'
 import LeadsChart from '@/components/ClinicStats/LeadsChart.vue'
 import RevenueByDoctor from '@/components/ClinicStats/RevenueByDoctor.vue'
 import NewPatients from '@/components/ClinicStats/NewPatients.vue'
+// import AppointmentsByProduct from '@/components/ClinicStats/AppointmentsByProduct.vue'
 import moment from 'moment'
 import { sso } from '../../services/userService'
 
@@ -213,6 +215,7 @@ export default {
     LeadsChart,
     RevenueByDoctor,
     NewPatients,
+    // AppointmentsByProduct,
   },
   mounted() {
     xray.index()
