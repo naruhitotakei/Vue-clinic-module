@@ -1909,8 +1909,8 @@ app.get('/api/codelist/clients', (req, res) => {
   daoCodeLists.getClients(req, res)
 })
 
-app.get('/api/codelist/year-dates', (req, res) => {
-  daoCodeLists.getDatesForCurrentYear(req, res)
+app.get('/api/codelist/week-dates', (req, res) => {
+  daoCodeLists.getDatesForCurrentWeek(req, res)
 })
 
 ///////////////////////////////////

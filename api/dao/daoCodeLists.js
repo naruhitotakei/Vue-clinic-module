@@ -71,7 +71,7 @@ const getClients = (request, response) => {
     })
 }
 
-const getDatesForCurrentYear = (request, response) => {
+const getDatesForCurrentWeek = (request, response) => {
     pool.query("SELECT cast(date_trunc('week', current_date) as date) + i FROM generate_series(-183, 183) i", (error, results) => {
         if (error) {
             throw error
@@ -88,5 +88,5 @@ module.exports = {
   getLocationsList,
   getTaxRateList,
   getClients,
-  getDatesForCurrentYear
+  getDatesForCurrentWeek
 }
