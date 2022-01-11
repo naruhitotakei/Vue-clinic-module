@@ -4,13 +4,14 @@
       <b-col lg="12" md="12" class="mb-4">
         <div v-for="smsTemplate in smsTemplates" :key="smsTemplate.id" class="sms-templates-content">
           <iq-card class="sms-template-parent">
-            <h3 class="template-name">{{ smsTemplate.name }}</h3>
+            <div class="title-edit-action">
+              <h3 class="template-name">{{ smsTemplate.name }}</h3>
+              <button variant="primary" class="btn btn-primary">
+                <a :href="`sms-templates/${smsTemplate.id}/edit`">Edit</a>
+              </button>
+            </div>
             <p class="template-content black-text">{{ smsTemplate.content }}</p>
             <p class="template-unique-slug">Unique name: {{ smsTemplate.slug }}</p>
-            <div class="sms-templates-actions mt-2">
-              <a :href="`sms-templates/${smsTemplate.id}/edit`">Edit</a>
-              <!-- <a>Delete</a> -->
-            </div>
           </iq-card>
         </div>
       </b-col>
@@ -54,6 +55,13 @@ export default {
     display: flex;
     flex-direction: column;
   }
+  .title-edit-action {
+    display: flex;
+    justify-content: space-between;
+  }
+  .title-edit-action a {
+    color: #fff !important;
+  }
   .sms-template-parent {
     padding: 1rem 1.5rem;
   }
@@ -69,17 +77,5 @@ export default {
   }
   .black-text {
     color: black;
-  }
-  .sms-templates-actions {
-    display: flex;
-    flex-direction: row;
-  }
-  .sms-templates-actions a {
-    font-size: 14px;
-    color: #00a9f9 !important;
-    cursor: pointer;
-  }
-  .sms-templates-actions a:first-child {
-    margin-right: 0.5rem;
   }
 </style>
