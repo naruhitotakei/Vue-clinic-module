@@ -9,7 +9,7 @@
               v-if="dataToExport && dataToExport.length"
               :data="dataToExport"
               :columns="excelColumns"
-              :filename="'Revenue By Doctor'"
+              :filename="fileName"
               :sheetname="'Revenue By Doctor'"
               class="btn btn-primary"
             >
@@ -67,6 +67,7 @@
 <script>
 import IqCard from '../../components/xray/cards/iq-card'
 import { getRevenueByDoctor } from '../../services/statistics'
+import moment from 'moment'
 
 export default {
   name: 'RevenueByDoctor',
@@ -200,6 +201,7 @@ export default {
     },
 
     prepareDataForExport(data, doctors) {
+      this.fileName = `Revenue By Doctor (${moment(this.start).format('DD/MM/YYYY')} - ${moment(this.end).format('DD/MM/YYYY')})`
       // Get Data for export
       if (Array.isArray(data) && Array.isArray(doctors)) {
         doctors.forEach((doctor) => {
@@ -223,6 +225,7 @@ export default {
       loading: true,
       series: [],
       dataToExport: [],
+      fileName: '',
       excelColumns: [
         { label: 'Doctor', field: 'doctor' },
         { label: 'Revenue', field: 'revenue' },

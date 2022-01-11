@@ -9,7 +9,7 @@
               v-if="dataToExport && dataToExport.length"
               :data="dataToExport"
               :columns="excelColumns"
-              :filename="'Revenue By Product'"
+              :filename="fileName"
               :sheetname="'Revenue By Product'"
               class="btn btn-primary"
             >
@@ -45,6 +45,7 @@
 <script>
 import IqCard from '../../components/xray/cards/iq-card'
 import { getRevenueByProduct } from '../../services/statistics'
+import moment from 'moment'
 
 export default {
   name: 'RevenueByProduct',
@@ -105,6 +106,7 @@ export default {
       let prNames = []
       let sumArray = []
       this.dataToExport = []
+      this.fileName = `Revenue By Product (${moment(this.start).format('DD/MM/YYYY')} - ${moment(this.end).format('DD/MM/YYYY')})`
       data.forEach((item) => {
         prNames.push(item.pr_name)
         const sum = Number(item.sum)
@@ -152,6 +154,7 @@ export default {
       noData: false,
       loading: true,
       dataToExport: [],
+      fileName: '',
       excelColumns: [
         { label: 'Product', field: 'product' },
         { label: 'Count', field: 'count' },

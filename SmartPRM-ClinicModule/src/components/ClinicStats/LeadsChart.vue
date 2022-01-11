@@ -8,7 +8,7 @@
                 <vue-excel-xlsx
                     :data="dataToExport"
                     :columns="excelColumns"
-                    :filename="'Lead Statistics'"
+                    :filename="fileName"
                     :sheetname="'Lead Statistics'"
                     class="btn btn-primary"
                     >
@@ -200,13 +200,14 @@ export default {
     },
 
     prepareDataForExport(data, countries) {
+      this.fileName = `Leads Statistics (${moment(this.start).format('DD/MM/YYYY')} - ${moment(this.end).format('DD/MM/YYYY')})`
       // Get Data for export
       if (Array.isArray(data) && Array.isArray(countries)) {
         countries.forEach(country => {
           const sum = data.filter(item => item.country === country)
             .map(item => item.enquiries_count && Number(item.enquiries_count))
             .reduce((a, b) => Number(a) + Number(b))
-          this.dataToExport.push({ country, enquiries: this.$options.filters.formatPrice(sum) })
+          this.dataToExport.push({ country, enquiries: this.$options.filters.formatNumber(sum) })
         })
       }
     },
@@ -218,6 +219,7 @@ export default {
       loading: true,
       noData: false,
       dataToExport: [],
+      fileName: '',
       excelColumns: [
         { label: 'Country', field: 'country' },
         { label: 'Enquiries', field: 'enquiries' },

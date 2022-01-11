@@ -124,7 +124,7 @@
                     <td class="text-center"><router-link tag="span" :to="'/patients/'+ item.enquiry_id" class="clickable">{{ item.name }} {{ item.last_name}}  </router-link></td>
                     <td class="text-center"><span>{{ formatNumber(Math.trunc(item.price))}} &#8364;</span></td>
                     <td class="text-center"><span>{{ formatNumber(Math.trunc(item.fee))}} &#8364;</span></td>
-                    <td class="text-center"><span >{{ formatDateString(item.date)}}</span></td>
+                    <td class="text-center"><span >{{ formatDateString(item.date) }} </span></td>
                     <td class="text-center"><span >{{ item.country}}</span></td>
                     <td class="text-center"><span >{{ item.region}}</span></td>
                     <td class="text-center"><span >{{ item.municipality}}</span></td>
@@ -191,7 +191,7 @@ export default {
         { label: this.$t('reportingEmazing.servicesListColumn.serviceLeadName'), key: 'name', class: 'text-left' },
         { label: this.$t('reportingEmazing.servicesListColumn.serviceAmount'), key: 'price', class: 'text-left' },
         { label: this.$t('reportingEmazing.servicesListColumn.serviceFee'), key: 'fee', class: 'text-left' },
-        { label: this.$t('reportingEmazing.servicesListColumn.serviceDate'), key: 'date', formatter: (value, key, item) => { return this.formatDateString(value) } },
+        { label: this.$t('reportingEmazing.servicesListColumn.serviceDate'), key: 'date' },
         { label: this.$t('reportingEmazing.servicesListColumn.serviceCountry'), key: 'fee', class: 'text-left' },
         { label: this.$t('reportingEmazing.servicesListColumn.serviceRegion'), key: 'fee', class: 'text-left' },
         { label: this.$t('reportingEmazing.servicesListColumn.serviceMunicipality'), key: 'fee', class: 'text-left' },
@@ -263,7 +263,7 @@ export default {
         documentName = 'Services List export'
       }
 
-      var wb = XLSX.utils.table_to_book(elt, { sheet: documentName })
+      var wb = XLSX.utils.table_to_book(elt, { sheet: documentName, raw: true })
 
       return XLSX.writeFile(wb, (documentName + '.xlsx'))
 
@@ -502,7 +502,7 @@ export default {
       var ye = new Intl.DateTimeFormat('en', { year: 'numeric' }).format(date)
       var mo = new Intl.DateTimeFormat('en', { month: 'numeric' }).format(date)
       var da = new Intl.DateTimeFormat('en', { day: 'numeric' }).format(date)
-      return (`${da}/${mo}/${ye}`)
+      return `${da}/${mo}/${ye}`
     },
   },
   computed: {

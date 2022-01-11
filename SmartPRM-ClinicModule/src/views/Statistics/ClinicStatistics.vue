@@ -203,6 +203,7 @@ import LeadsChart from '@/components/ClinicStats/LeadsChart.vue'
 import RevenueByDoctor from '@/components/ClinicStats/RevenueByDoctor.vue'
 import NewPatients from '@/components/ClinicStats/NewPatients.vue'
 import moment from 'moment'
+import { sso } from '../../services/userService'
 
 export default {
   name: 'Dashboard1',
@@ -215,6 +216,7 @@ export default {
   },
   mounted() {
     xray.index()
+    this.getLoggedUser()
     this.getStartDates()
     this.getAttendance()
   },
@@ -272,6 +274,11 @@ export default {
     }
   },
   methods: {
+    getLoggedUser() {
+      sso().then(response => {
+        console.log(response)
+      })
+    },
     onFilterChange(value) {
       const today = moment().format('YYYY-MM-DD')
       if (value && value === 2) {

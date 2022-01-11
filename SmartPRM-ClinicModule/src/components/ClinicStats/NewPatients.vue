@@ -8,7 +8,7 @@
             <vue-excel-xlsx
               :data="dataToExport"
               :columns="excelColumns"
-              :filename="'New Patients'"
+              :filename="fileName"
               :sheetname="'New Patients'"
               class="btn btn-primary"
             >
@@ -69,7 +69,7 @@ import { getNewEnquiries } from '../../services/statistics'
 import moment from 'moment'
 
 export default {
-  name: 'LeadsChart',
+  name: 'NewPatients',
   components: { IqCard },
   props: {
     start: String,
@@ -209,9 +209,9 @@ export default {
 
     prepareDataForExport(data) {
       // Get Data for export
+      this.fileName = `New Patients (${moment(this.start).format('DD/MM/YYYY')} - ${moment(this.end).format('DD/MM/YYYY')})`
       data.forEach((item) => {
         const obj = {
-          id: item.id,
           first_name: item.name,
           last_name: item.last_name,
           phone: item.phone,
@@ -229,8 +229,8 @@ export default {
       loading: true,
       noData: false,
       dataToExport: [],
+      fileName: '',
       excelColumns: [
-        { label: 'ID', field: 'id' },
         { label: 'First Name', field: 'first_name' },
         { label: 'Last Name', field: 'last_name' },
         { label: 'Email', field: 'email' },
