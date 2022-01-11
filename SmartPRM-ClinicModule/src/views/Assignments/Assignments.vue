@@ -517,7 +517,7 @@
             </div>
             <div class="col-md-12 mb-3">
               <label for="title">{{ $t('assignments.addAssignmentsModal.due_at') }} </label>
-                <b-form-input class="date" id="exampleInputdate" type="date" v-model="formData.due_at" ></b-form-input>
+              <b-form-datepicker v-model="formData.due_at" class="mb-2"></b-form-datepicker>
             </div>
           </div>
         </form>
