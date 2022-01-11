@@ -261,7 +261,7 @@
                   </b-button>
                 </div>
               </b-col>
-              <b-col md="2" sm="2" class="col-title-sm"
+              <b-col md="2" sm="2" class="col-title-sm mt-2"
                 >{{ $t('appointments.interest') }}:</b-col
               >
               <b-col md="3" sm="3" class="col-data-sm">
@@ -539,10 +539,10 @@ export default defineComponent({
   flex-direction: row;
 }
 .col-title-sm {
-  width: 30%;
+  width: 20% !important;
 }
 .col-data-sm {
-  width: 70%;
+  width: 30% !important;
 }
 .display-flex {
   display: flex;
