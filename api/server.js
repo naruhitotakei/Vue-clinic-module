@@ -110,6 +110,7 @@ const locationsPermission = 'Locations'
 const appointmentSlotsPermission = 'Free Slots'
 const usersPermission = 'Users'
 const onlineBookingPermission = 'Online Booking'
+const SMSTemplatesPermission = 'SMS Templates'
 
 ///////////////////////////////////
 // user login, logout, ...
@@ -976,12 +977,13 @@ app.get('/api/sms-templates', (req, res) => {
   if (
     req.session.prm_user &&
     req.session.prm_user.permissions &&
-    checkPermission(req.session.prm_user.permissions, usersPermission)
+    checkPermission(req.session.prm_user.permissions, SMSTemplatesPermission)
   ) {
     daoSmsTemplates.getSmsTemplates(
       req,
       res,
       req.session.prm_user.prm_client_id,
+      getScope(req.session.prm_user.permissions, SMSTemplatesPermission),
     )
   } else {
     res.status(401).json('OK: user unauthorized')
@@ -993,12 +995,11 @@ app.get('/api/sms-template/:id', (req, res) => {
   if (
     req.session.prm_user &&
     req.session.prm_user.permissions &&
-    checkPermission(req.session.prm_user.permissions, usersPermission)
+    checkPermission(req.session.prm_user.permissions, SMSTemplatesPermission)
   ) {
     daoSmsTemplates.getSmsTemplate(
       req,
       res,
-      req.session.prm_user.prm_client_id,
       templateID
     )
   } else {
@@ -1014,12 +1015,11 @@ app.put('/api/sms-template/update', (req, res) => {
   if (
     req.session.prm_user &&
     req.session.prm_user.permissions &&
-    checkPermission(req.session.prm_user.permissions, usersPermission)
+    checkPermission(req.session.prm_user.permissions, SMSTemplatesPermission)
   ) {
     daoSmsTemplates.updateSmsTemplate(
       req,
       res,
-      req.session.prm_user.prm_client_id,
       templateID,
       templateName,
       templateContent,
@@ -1843,28 +1843,6 @@ app.get('/api/statistics/new-enquiries/:start/:end', (req, res) => {
     )
   )
     daoStatistics.getNewEnquiries(
-      req,
-      res,
-      start,
-      end,
-      req.session.prm_user.prm_client_id,
-      getScope(req.session.prm_user.permissions, clinicStatisticsPermission),
-    )
-  else res.status(401).json('OK: user unauthorized')
-})
-
-app.get('/api/statistics/attended-appointments/:start/:end', (req, res) => {
-  const start = req.params.start
-  const end = req.params.end
-  if (
-    req.session.prm_user &&
-    req.session.prm_user.permissions &&
-    checkPermission(
-      req.session.prm_user.permissions,
-      clinicStatisticsPermission,
-    )
-  )
-    daoStatistics.getAttendedAppointments(
       req,
       res,
       start,

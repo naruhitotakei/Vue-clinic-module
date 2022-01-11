@@ -88,18 +88,6 @@ export async function getNewEnquiries(start, end) {
   return rawResponse.json()
 }
 
-export async function getAttendedAppointments(start, end) {
-  const rawResponse = await fetch('/api/statistics/attended-appointments/' + start + '/' + end, {
-    method: 'GET',
-    credentials: 'same-origin',
-    headers: {
-      'Accept': 'application/json',
-      'Content-Type': 'application/json',
-    },
-  })
-  return rawResponse.json()
-}
-
 export async function getAppointmentsByProduct(start, end, locale) {
   const rawResponse = await fetch('/api/statistics/appointments-by-product/' + start + '/' + end + '/' + locale, {
     method: 'GET',

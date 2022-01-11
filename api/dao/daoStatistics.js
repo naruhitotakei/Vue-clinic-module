@@ -97,25 +97,6 @@ const getNewEnquiriesPerDay = (request, response, start, end, prm_client_id, sco
     })
 }
 
-const getAttendedAppointments = (request, response, start, end, prm_client_id, scope) => {
-  let statement = "SELECT appointments_date:: date, COUNT(appointments.id) AS appointments_count, "
-  statement += "enquiries.prm_client_id FROM generate_series($1::date, $2::date, '1 day'::interval) appointments_date "
-  statement += "LEFT JOIN appointments ON appointments.starts_at::date = appointments_date "
-  statement += "LEFT JOIN enquiries ON appointments.enquiry_id = enquiries.id "
-  statement += "WHERE appointments.appointment_canceled IS FALSE "
-  if (scope == 'All') {
-  } else if (scope == 'PrmClient') {
-    statement += "AND enquiries.prm_client_id = " + prm_client_id + " ";
-  }
-  statement += "GROUP BY appointments_date, enquiries.prm_client_id"
-  pool.query(statement, [start, end], (error, results) => {
-    if (error) {
-      throw error
-    }
-    response.status(200).json(results.rows)
-  })
-}
-
 const getAppointmentsByProduct = (request, response, start, end, prm_client_id, scope, locale) => {
   let statement = "SELECT appointments_date:: date, COUNT(app.id) AS appointment_count, "
   statement += "array_agg(pgn.text) AS products, enq.prm_client_id FROM generate_series($1::date, $2::date, '1 day':: interval) appointments_date "
@@ -207,7 +188,6 @@ module.exports = {
   getRevenueByProduct,
   getNewEnquiriesPerDay,
   getRevenueByDoctor,
-  getAttendedAppointments,
   getAppointmentsByProduct,
   getClinicStats,
   getNewEnquiries
