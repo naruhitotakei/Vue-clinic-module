@@ -105,6 +105,7 @@ const advPaymentsPermission = 'Advance Payments'
 const offersPermission = 'Offers'
 const productsPermission = 'Services and Products'
 const calendarPermission = 'Calendar'
+const appointmentsPermission = "Appointments"
 const locationsPermission = 'Locations'
 const appointmentSlotsPermission = 'Free Slots'
 const usersPermission = 'Users'
