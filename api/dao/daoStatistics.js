@@ -137,6 +137,7 @@ const getClinicStats = async (request, response, start, end, prm_client_id, scop
     } else if (scope == 'PrmClient') {
         revenueStatement += "AND enquiries.prm_client_id = " + prm_client_id;
         allAppointmentStatement += "AND enquiries.prm_client_id = " + prm_client_id;
+        attendedAppointmentStatement += "AND enquiries.prm_client_id = " + prm_client_id;
     }
 
     await Promise.all([
