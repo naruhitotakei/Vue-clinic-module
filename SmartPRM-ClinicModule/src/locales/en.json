@@ -18,7 +18,8 @@
     "sortBy": "Sort By",
     "country": "Country",
     "yes": "Yes",
-    "no": "No"
+    "no": "No",
+    "noDoctor": "Doctor not assigned"
   },
   "documents": {
     "offers": "Offers",
@@ -128,7 +129,8 @@
     "btnCancel": "Cancel",
     "btnCancelation": "Cancel appointment",
     "notSavedModalHeader": "Are you sure you want to ignore your changes?",
-    "notSavedModalBody": "Be careful!, You have unsaved changes. Do you want to save them before closing the modal?"
+    "notSavedModalBody": "Be careful! You have unsaved changes. Do you want to save them before closing the modal?",
+    "noTimeSet": "No time set"
   },
   "calendarEvent": {
     "start": "Start",
@@ -554,6 +556,9 @@
     "overdueAssignments": "Overdue Assignments",
     "futureAssignments": "Future Assignments",
     "completedAssignments": "Completed Assignments",
+    "todaysAssignmentsOfOtherUsers": "Today's Assignments of other users",
+    "overdueAssignmentsOfOtherUsers": "Overdue Assignments of other users",
+    "futureAssignmentsOfOtherUsers": "Future Assignments of other users",
     "addAssignmentsModal": {
       "addAssignments": "New Assignment",
       "editAssignments": "Edit Assignment",
