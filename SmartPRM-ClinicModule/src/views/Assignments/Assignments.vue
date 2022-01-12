@@ -354,7 +354,7 @@
             <b-col cols="12" lg="6">
                 <iq-card class-name="iq-card-block iq-card-stretch iq-card-height futureAssignments-body">
                     <template v-slot:headerTitle>
-                        <h5>{{ $t('assignments.futureAssignmentsOfOtherUsers') }} of other users <span>({{ futureAssignmentsCountOtherUsers }})</span></h5>
+                        <h5>{{ $t('assignments.futureAssignmentsOfOtherUsers') }} <span>({{ futureAssignmentsCountOtherUsers }})</span></h5>
                     </template>
                     <template v-slot:body>
                       <AppMultiselect v-model="filterFuture" :options="futureAssignmentUsers" placeholder="Filter By Users" />
