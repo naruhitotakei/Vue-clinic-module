@@ -20,7 +20,7 @@
               <template v-slot:headerTitle>
                   <b-row>
                     <b-col cols="12" lg="6">
-                      <h5>My {{ $t('assignments.todaysAssignments') }}</h5>
+                      <h5>My {{ $t('assignments.todaysAssignments') }} <span>({{ todaysAssignmentsCount }})</span></h5>
                     </b-col>
                     <b-col cols="12" lg="6" v-if="myCompletedAssignments">
                       <b-progress :value="myCompletedAssignments" :max="100" show-progress></b-progress>
@@ -90,7 +90,7 @@
           <b-col cols="12" lg="6">
             <iq-card class-name="iq-card-block iq-card-stretch iq-card-height overdueAssignments-body">
                 <template v-slot:headerTitle>
-                    <h5>My {{ $t('assignments.overdueAssignments') }}</h5>
+                    <h5>My {{ $t('assignments.overdueAssignments') }} <span>({{ overdueAssignmentsCount }})</span></h5>
                 </template>
                 <template v-slot:body>
                   <b-list-group class="list-group-flush" id="myOverdueAssignments">
@@ -143,7 +143,7 @@
             <b-col cols="12" lg="6">
               <iq-card class-name="iq-card-block iq-card-stretch iq-card-height overdueAssignments-body">
                   <template v-slot:headerTitle>
-                      <h5>{{ $t('assignments.todaysAssignments') }} of other users</h5>
+                      <h5>{{ $t('assignments.todaysAssignmentsOfOtherUsers') }} <span>({{ todaysAssignmentsCountOtherUsers }})</span></h5>
                   </template>
                   <template v-slot:body>
                     <AppMultiselect v-model="filterToday" :options="todayAssignmentUsers" placeholder="Filter By Users" />
@@ -207,7 +207,7 @@
             <b-col cols="12" lg="6">
                 <iq-card class-name="iq-card-block iq-card-stretch iq-card-height overdueAssignments-body">
                     <template v-slot:headerTitle>
-                        <h5>{{ $t('assignments.overdueAssignments') }} of other users.</h5>
+                        <h5>{{ $t('assignments.overdueAssignmentsOfOtherUsers') }} <span>({{ overdueAssignmentsCountOtherUsers }})</span></h5>
                     </template>
                   <template v-slot:body>
                     <AppMultiselect v-model="filterOverdue" :options="pastAssignmentUsers" placeholder="Filter By Users" />
@@ -303,7 +303,7 @@
             <b-col cols="12" lg="6">
                 <iq-card class-name="iq-card-block iq-card-stretch iq-card-height futureAssignments-body">
                     <template v-slot:headerTitle>
-                        <h5>My {{ $t('assignments.futureAssignments') }}</h5>
+                        <h5>My {{ $t('assignments.futureAssignments') }} <span>({{ futureAssignmentsCount }})</span></h5>
                     </template>
                     <template v-slot:body>
                         <b-list-group class="list-group-flush" id="myFutureAssignments">
@@ -354,7 +354,7 @@
             <b-col cols="12" lg="6">
                 <iq-card class-name="iq-card-block iq-card-stretch iq-card-height futureAssignments-body">
                     <template v-slot:headerTitle>
-                        <h5>{{ $t('assignments.futureAssignments') }} of other users</h5>
+                        <h5>{{ $t('assignments.futureAssignmentsOfOtherUsers') }} <span>({{ futureAssignmentsCountOtherUsers }})</span></h5>
                     </template>
                     <template v-slot:body>
                       <AppMultiselect v-model="filterFuture" :options="futureAssignmentUsers" placeholder="Filter By Users" />
@@ -696,6 +696,24 @@ export default {
     },
   },
   watch: {
+    myTodayList(newList) {
+      this.todaysAssignmentsCount = this.myTodayAssignments.length
+    },
+    otherUserTodayList(newList) {
+      this.todaysAssignmentsCountOtherUsers = this.todaysAssignments.length
+    },
+    myFutureList(newList) {
+      this.futureAssignmentsCount = this.myFutureAssignments.length
+    },
+    otherUserFutureList(newList) {
+      this.futureAssignmentsCountOtherUsers = this.futureAssigments.length
+    },
+    otherUserOverDueList(newList) {
+      this.overdueAssignmentsCountOtherUsers = this.overdueAssignments.length
+    },
+    myOverDueList(newList) {
+      this.overdueAssignmentsCount = this.myOverdueAssignments.length
+    },
     filterOverdue(val) {
       if (val && val.length) {
         this.filterOverDueItems()
@@ -909,7 +927,6 @@ export default {
     },
     async closeWarningModal() {
       if (this.assignmentToEdit) {
-        console.log(this.assignmentToEdit)
         let array = []
         let aIndex = null
         if (this.assignmentToEdit.from === 'overdue') {
@@ -1097,6 +1114,12 @@ export default {
       futurePerPage: 10,
       completedCurrentPage: 0,
       completedPerPage: 10,
+      todaysAssignmentsCount: 0,
+      overdueAssignmentsCount: 0,
+      todaysAssignmentsCountOtherUsers: 0,
+      overdueAssignmentsCountOtherUsers: 0,
+      futureAssignmentsCount: 0,
+      futureAssignmentsCountOtherUsers: 0,
       users: [],
       bool: [
         { label: 'Completed', checked: true },
