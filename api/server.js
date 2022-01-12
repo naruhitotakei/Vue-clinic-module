@@ -2080,7 +2080,7 @@ app.post('/api/files/avatar/:id', async function (req, res) {
   let id = req.params.id
   if (req.session.prm_user) {
     const rv = await awsS3.upload(
-      'avatar-' + id + '/',
+      'avatar-' + id,
       req.files.file.data,
       req.files.file.mimetype,
       'avatar-' + id,
@@ -2092,7 +2092,7 @@ app.post('/api/files/avatar/:id', async function (req, res) {
 
 app.get('/api/files/avatar/:id', async function (req, res) {
   let id = req.params.id
-  const rv = await awsS3.download('avatar-' + id + '/')
+  const rv = await awsS3.download('avatar-' + id)
   if (rv.status == 'OK') {
     const download = Buffer.from(rv.data.Body)
     res.end(download)
