@@ -39,7 +39,7 @@ const getEnquiries = (
     }
     statement += ') '
   }
-  statement += 'ORDER BY last_name ASC'
+  statement += 'ORDER BY created_at DESC'
   pool.query(statement, (error, results) => {
     if (error) {
       throw error
