@@ -44,11 +44,11 @@
                 <div class="form-row">
                     <div style="margin: auto; text-align: center;">
                         <div class="add-img-user profile-img-edit">
-                            <b-img
+                            <img
                                 class="profile-pic height-150 width-150 object-fit"
                                 style="object-fit: cover"
                                 fluid
-                                :src="'/api/files/avatar/' + formData.id"
+                                :src="avatarURL.replace(/ /g, '') + formData.id + '?' + Math.random()"
                                 alt="profile-pic" />
                             <input type="hidden" v-model="formData.img">
                             <div class="p-image">
@@ -136,6 +136,7 @@ export default {
       roles: [],
       profile: { image: require('../../assets/images/user/placeholder.png') },
       editProfileShowModal: false,
+      avatarURL: '/api/files/avatar/',
       formData: {
         id: '',
         title: '',
@@ -199,6 +200,7 @@ export default {
       this.selectedFile = e.target.files[0]
       // todo check size
       await userAvatarUpload(this.selectedFile, this.formData.id, Math.random())
+      this.avatarURL === '/api/files/avatar/' ? this.avatarURL = '/api/files/avatar /' : this.avatarURL = '/api/files/avatar/'
       await this.sleep(1000)
     },
     sleep(ms) {
