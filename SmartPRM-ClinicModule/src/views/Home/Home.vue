@@ -169,7 +169,7 @@
                     <template v-slot:body>
                         <div class="iq-details" :class="{'mt-3': index !== 0}" v-for="(country, index) in countriesWithPatients" :key="index">
                             <span class="title text-dark">{{country.name}}</span>
-                            <div class="percentage float-right text-primary">{{country.percentage ? country.percentage : 0}} <span>%</span></div>
+                            <div class="percentage float-right text-primary">{{ country.count }} ({{country.percentage ? Math.round(country.percentage) : 0}} <span>%</span>)</div>
                             <div class="iq-progress-bar-linear d-inline-block w-100">
                                 <b-progress :value="country.percentage ? country.percentage : 0" class="pr-bar" :key="index"></b-progress>
                             </div>
