@@ -48,6 +48,7 @@ const daoEnquiries = require('./dao/daoEnquiries')
 const daoAssignments = require('./dao/daoAssignments')
 const daoStatistics = require('./dao/daoStatistics')
 const daoReporting = require('./dao/daoReporting')
+const daoCallCenter = require('./dao/daoCallCenter')
 const fiscalVerification = require('./services/fiscalVerification')
 const daoInvoices = require('./dao/daoInvoices')
 const daoAdvPayments = require('./dao/daoAdvPayments')
@@ -100,6 +101,7 @@ const enquiriesPermission = 'Patients'
 const assignmentsPermission = 'Assignments'
 const clinicStatisticsPermission = 'Statistics For Clinic'
 const reportingEmazingPermission = 'Emazing'
+const missingServicesPermission = 'Missing Services'
 const invoicesPermission = 'Invoices'
 const advPaymentsPermission = 'Advance Payments'
 const offersPermission = 'Offers'
@@ -1876,6 +1878,20 @@ app.get('/api/statistics/appointments-by-product/:start/:end/:locale', (req, res
     )
   else res.status(401).json('OK: user unauthorized')
 })
+
+///////////////////////////////////
+// Call Center
+///////////////////////////////////
+
+app.get('/api/call-center/missing-services/:start/:end', (req, res) => {
+  const start = req.params.start
+  const end = req.params.end
+  if (req.session.prm_user && req.session.prm_user.permissions && checkPermission(req.session.prm_user.permissions, missingServicesPermission))
+    daoCallCenter.getAppointmentsWithMissingServices(req, res, start, end, req.session.prm_user.prm_client_id, getScope(req.session.prm_user.permissions, missingServicesPermission))
+  else
+    res.status(401).json('OK: user unauthorized')
+})
+
 
 ///////////////////////////////////
 // codelist methodes
