@@ -31,6 +31,9 @@
                       <b-form-select-option :value="180"
                         >Last 180 Days</b-form-select-option
                       >
+                      <b-form-select-option :value="365"
+                        >Last 365 Days</b-form-select-option
+                      >
                       <b-form-select-option :value="2"
                         >Last 2 Years</b-form-select-option
                       >
