@@ -91,7 +91,7 @@
                   </div>
                   <div class="text-right">
                     <h2 class="mb-0">
-                      <span class="counter">{{ appointments }}</span>
+                      <span class="counter">{{ appointments | formatNumber }}</span>
                     </h2>
                     <h5 class="pb-3">Appointments</h5>
                   </div>
@@ -111,7 +111,7 @@
                   </div>
                   <div class="text-right">
                     <h2 class="mb-0">
-                      <span class="counter">{{ attended }}</span>
+                      <span class="counter">{{ attended | formatNumber }}</span>
                     </h2>
                     <h5 class="">Attended</h5>
                   </div>
@@ -131,7 +131,7 @@
                   </div>
                   <div class="text-right">
                     <h2 class="mb-0">
-                      <span class="counter">{{ serviced_patients }}</span>
+                      <span class="counter">{{ serviced_patients | formatNumber }}</span>
                     </h2>
                     <h5 class="">Serviced Patients</h5>
                   </div>
@@ -303,6 +303,7 @@ export default {
         const secondDate = moment().subtract(value, 'days').format('YYYY-MM-DD')
         this.endDate = today
         this.startDate = secondDate
+        console.log(this.startDate, this.endDate)
       }
       if (value) {
         this.getStats(this.startDate, this.endDate)
