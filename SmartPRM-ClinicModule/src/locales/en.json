@@ -19,7 +19,9 @@
     "country": "Country",
     "yes": "Yes",
     "no": "No",
-    "noDoctor": "Doctor not assigned"
+    "noDoctor": "Doctor not assigned",
+    "cancel": "Cancel",
+    "confirm": "Confirm"
   },
   "documents": {
     "offers": "Offers",

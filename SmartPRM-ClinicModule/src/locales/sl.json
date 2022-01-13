@@ -19,7 +19,9 @@
     "country": "Država",
     "yes": "Da",
     "no": "Ne",
-    "noDoctor": "Doktor ni doloćen"
+    "noDoctor": "Doktor ni doloćen",
+    "cancel": "Prekliči",
+    "confirm": "Potrdi"
   },
   "documents": {
     "offers": "Ponudbe",

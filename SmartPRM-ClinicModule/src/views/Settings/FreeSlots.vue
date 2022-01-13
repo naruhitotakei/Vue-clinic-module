@@ -29,10 +29,10 @@
                      no-close-on-backdrop
                      size="lg"
                      title="Slots Details"
-                     ok-title="Confirm"
+                     :ok-title="$t('shared.confirm')"
                      @ok="addFreeSlots"
                      @close="openFreeSlotsModal = false, slotData = defaultSlotData"
-                     cancel-title="Close">
+                     :cancel-title="$t('shared.cancel')">
                 <form class="calendar-modal">
                     <div class="form-row">
                         <div class="row align-items-center justify-content-between w-100 mb-3">
