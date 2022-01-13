@@ -303,7 +303,6 @@ export default {
         const secondDate = moment().subtract(value, 'days').format('YYYY-MM-DD')
         this.endDate = today
         this.startDate = secondDate
-        console.log(this.startDate, this.endDate)
       }
       if (value) {
         this.getStats(this.startDate, this.endDate)
