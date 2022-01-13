@@ -1,5 +1,5 @@
 <template>
-    <div class="container">
+    <b-container fluid>
         <iq-card class-name="iq-card-block iq-card-stretch iq-card-height">
           <template v-slot:headerTitle>
             <h2 class="card-title">Client Info</h2>
@@ -8,7 +8,7 @@
             <vue-editor v-model="content"></vue-editor>
           </template>
         </iq-card>
-    </div>
+    </b-container>
 </template>
 
 <script>
