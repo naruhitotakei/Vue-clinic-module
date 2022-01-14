@@ -1043,6 +1043,7 @@ app.get('/api/limited_enquiries', (req, res) => {
       getScope(req.session.prm_user.permissions, calendarPermission),
       req.query.limit,
       req.query.offset,
+      req.query.locale,
     )
   else res.status(401).json('OK: user unauthorized')
 })

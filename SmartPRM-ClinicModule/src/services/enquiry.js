@@ -22,9 +22,9 @@ export async function getLeadsCount() {
   return rawResponse.json()
 }
 
-export async function getLimitedEnquires(limit, offset) {
+export async function getLimitedEnquires(limit, offset, locale) {
   const rawResponse = await fetch(
-    '/api/limited_enquiries?limit=' + limit + '&offset=' + offset,
+    `/api/limited_enquiries?limit=${limit}&offset=${offset}&locale=${locale}`,
     {
       method: 'GET',
       credentials: 'same-origin',

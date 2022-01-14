@@ -48,7 +48,7 @@ const getEnquiries = (
   })
 }
 
-const getLimitedEnquiries = (
+const getLimitedEnquiries = async (
   request,
   response,
   user_id,
@@ -57,6 +57,7 @@ const getLimitedEnquiries = (
   scope,
   limit,
   offset,
+  locale,
 ) => {
   let statement =
     "SELECT  enquiries.* , concat(u.title, ' ', u.first_name , ' ', u.surname) AS label, TO_CHAR(last_visit, 'DD.MM.YYYY') last_visit, TO_CHAR(next_visit, 'DD.MM.YYYY') next_visit, " +
@@ -90,12 +91,84 @@ const getLimitedEnquiries = (
   statement += 'ORDER BY enquiries.created_at DESC '
   statement += 'LIMIT ' + limit + ' OFFSET ' + offset
 
-  pool.query(statement, (error, results) => {
-    if (error) {
-      throw error
-    }
-    response.status(200).json(results.rows)
-  })
+  const { rows: enquiries } = await pool.query(statement)
+  const enquiryIdList = enquiries.map(({ id }) => id)
+  const [notes, pastAppointments] = await Promise.all([
+    getNotesByEnquiries(enquiryIdList),
+    getPastAppointmentsByEnquiries(enquiryIdList, { locale }),
+  ])
+  const { groupBy } = require('lodash')
+  const [notesMap, pastAppointmentsMap] = [notes, pastAppointments].map(
+    (list) => groupBy(list, ({ enquiry_id }) => enquiry_id),
+  )
+
+  const result = enquiries.map(({ id, ...enquiry }) => ({
+    id,
+    ...enquiry,
+    notes: notesMap[id],
+    pastAppointments: pastAppointmentsMap[id],
+  }))
+
+  response.status(200).json(result)
+}
+
+async function getNotesByEnquiries(enquiryIdList) {
+  const statement = /* sql */ `
+    select * from (
+      select *, row_number() over (
+        partition by notes.enquiry_id
+        order by created_at desc
+      ) as window_row
+      from notes
+      where notes.enquiry_id in (${enquiryIdList.map(
+        (_, index) => `$${index + 1}`,
+      )})
+    ) as window_table
+    where window_row <= 5
+    order by window_row
+  `
+  const { rows } = await pool.query(statement, enquiryIdList)
+
+  return rows
+}
+
+async function getPastAppointmentsByEnquiries(enquiryIdList, { locale }) {
+  const statement = /* sql */ `
+    select * from (
+      select *, row_number() over (
+        partition by appointments.enquiry_id
+        order by starts_at desc
+      ) as window_row
+      from appointments
+      where appointments.enquiry_id in (${enquiryIdList.map(
+        (_, index) => `$${index + 1}`,
+      )})
+      and starts_at < now()::date
+    ) as window_table
+    where window_row <= 5
+    order by window_row
+  `
+  /**
+   SELECT
+      appointments.*,
+      prm_product_group_name.*,
+      appointments_label.*,
+      appointments.id AS appointment_id,
+      prm_product_group_name.text AS product_group_text
+    FROM appointments
+    LEFT JOIN prm_product_group ON appointments.product_group_id = prm_product_group.product_group_id
+    LEFT JOIN prm_product_group_name ON prm_product_group_name.product_group_id = prm_product_group.product_group_id
+    LEFT JOIN appointments_label ON appointments.label_id = appointments_label.id
+    WHERE appointments.enquiry_id in (${enquiryIdList.map(
+      (_, index) => `$${index + 1}`,
+    )})
+    AND prm_product_group_name.language = $${enquiryIdList.length + 0}
+    AND starts_at < now()::date
+    ORDER BY starts_at DESC
+    */
+  const { rows } = await pool.query(statement, [...enquiryIdList])
+
+  return rows
 }
 
 const getEnquiriesCount = (request, response) => {

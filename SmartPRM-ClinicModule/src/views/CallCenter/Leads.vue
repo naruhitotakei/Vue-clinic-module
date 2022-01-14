@@ -443,30 +443,34 @@ export default {
     },
     async getLeads(dataLimit, dataOffset) {
       this.isDataLoaded = false
-      getLimitedEnquires(dataLimit, dataOffset).then((response) => {
-        this.isDataLoaded = true
-        if (Array.isArray(response)) {
-          this.leads = response.map((obj) => ({
-            ...obj,
-            editable: false,
-            region: obj.region_name,
-            country: obj.country_name,
-            last_visit: obj.last_visit,
-            next_visit: obj.next_visit,
-            personal_dentist: obj.label,
-          }))
+      const response = await getLimitedEnquires(
+        dataLimit,
+        dataOffset,
+        this.$i18n.locale,
+      )
+      this.isDataLoaded = true
 
-          let newLeadsArr = [...this.leads]
+      if (Array.isArray(response)) {
+        this.leads = response.map((obj) => ({
+          ...obj,
+          editable: false,
+          region: obj.region_name,
+          country: obj.country_name,
+          last_visit: obj.last_visit,
+          next_visit: obj.next_visit,
+          personal_dentist: obj.label,
+        }))
 
-          newLeadsArr.map((lead, key) => {
-            getEnquiryNotes(lead.id).then((res) => {
-              newLeadsArr[key].notes = res.reverse().slice(0, 5)
-            })
+        let newLeadsArr = [...this.leads]
+
+        newLeadsArr.map((lead, key) => {
+          getEnquiryNotes(lead.id).then((res) => {
+            newLeadsArr[key].notes = res.reverse().slice(0, 5)
           })
+        })
 
-          this.leads = [...newLeadsArr]
-        }
-      })
+        this.leads = [...newLeadsArr]
+      }
     },
     getDentists() {
       getDentists().then((response) => {
