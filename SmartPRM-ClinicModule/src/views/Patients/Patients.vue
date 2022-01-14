@@ -200,9 +200,9 @@ var rows = []
 export default {
   name: 'UiDataTable',
   components: {
-    AddPatientModal
+    AddPatientModal,
   },
-  async mounted () {
+  async mounted() {
     xray.index()
     this.getPatients('ASC')
     this.getCountries()
@@ -210,25 +210,25 @@ export default {
     this.filterSelected(this.searchBy)
   },
   computed: {
-    isDisabled () {
+    isDisabled() {
       return !this.addPatientForm.firstName || !this.addPatientForm.lastName || !this.addPatientForm.country
-    }
+    },
   },
   watch: {
-    searchTxt (val) {
+    searchTxt(val) {
       if (!val) {
         this.filter = ''
       }
-    }
+    },
   },
   methods: {
-    searchRecords () {
+    searchRecords() {
       this.filter = this.searchTxt
     },
-    closeAddPatientModal (value) {
+    closeAddPatientModal(value) {
       this.openAddPatient = value
     },
-    addPatient () {
+    addPatient() {
       createEnquiry(this.addPatientForm).then((result) => {
         if (result.status === 'OK') {
           this.openAddPatient = false
@@ -238,35 +238,35 @@ export default {
         // this.getPatients()
       })
     },
-    onPatientClick (item) {
+    onPatientClick(item) {
       this.$router.push({ path: `/patients/${item.id}` })
     },
-    defaultAddPatientForm () {
+    defaultAddPatientForm() {
       return {
         firstName: '',
         lastName: '',
         phone: '',
         email: '',
-        country: ''
+        country: '',
       }
     },
-    cancelAddingPatient () {
+    cancelAddingPatient() {
       this.addPatientForm = this.defaultAddPatientForm()
     },
-    edit (item) {
+    edit(item) {
       this.tempPatient = Object.assign({}, item)
       item.editable = true
     },
-    submit (item) {
+    submit(item) {
       item.editable = false
     },
-    cancel (item) {
+    cancel(item) {
       let index = this.patients.indexOf(item)
       this.tempPatient ? this.patients.splice(index, 1, this.tempPatient) : this.patients.shift()
     },
-    emailPatient (item) {
+    emailPatient(item) {
     },
-    async getPatients (sort) {
+    async getPatients(sort) {
       this.isDataLoaded = false
       getEnquires(sort).then(response => {
         this.isDataLoaded = true
@@ -278,33 +278,33 @@ export default {
               country: obj.country_name,
               last_visit: obj.last_visit,
               next_visit: obj.next_visit,
-              personal_dentist: obj.label
+              personal_dentist: obj.label,
             }
           ))
         }
         this.setTotalRows(this.patients.length)
       })
     },
-    getCountries () {
+    getCountries() {
       getCountriesList().then(response => {
         this.countries = response
       })
     },
-    onFiltered (filteredItems) {
+    onFiltered(filteredItems) {
       this.totalRows = filteredItems.length
       this.currentPage = 1
     },
-    setTotalRows (number) {
+    setTotalRows(number) {
       this.totalRows = number
     },
-    filterSelected (value) {
+    filterSelected(value) {
       this.filterOn = value
     },
-    sortSelected () {
+    sortSelected() {
       this.getPatients(this.sortBy.sort.toUpperCase())
-    }
+    },
   },
-  data () {
+  data() {
     return {
       dropDownText: '',
       isDataLoaded: false,
@@ -329,11 +329,11 @@ export default {
         { value: 'country', text: 'Country' },
         { value: 'last_visit', text: 'Last Visit' },
         { value: 'next_visit', text: 'Next Visit' },
-        { value: 'personal_dentist', text: 'Personal Dentist' }
+        { value: 'personal_dentist', text: 'Personal Dentist' },
       ],
       sortOptions: [
         { value: 'name', text: 'Name', sort: 'asc' },
-        { value: 'name', text: 'Name', sort: 'desc' }
+        { value: 'name', text: 'Name', sort: 'desc' },
       ],
       sortBy: '',
       columns: [
@@ -346,17 +346,17 @@ export default {
         { label: this.$t('patients.patientsColumn.lastVisit'), key: 'last_visit', class: 'text-left py-1' },
         { label: this.$t('patients.patientsColumn.nextVisit'), key: 'next_visit', class: 'text-center py-1' },
         { label: this.$t('patients.patientsColumn.personalDentist'), key: 'personal_dentist', class: 'text-center py-1' },
-        { label: this.$t('patients.patientsColumn.action'), key: 'action', class: 'text-center action-column py-1' }
+        { label: this.$t('patients.patientsColumn.action'), key: 'action', class: 'text-center action-column py-1' },
       ],
       addPatientForm: {
         firstName: '',
         lastName: '',
         phone: '',
         email: '',
-        country: ''
-      }
+        country: '',
+      },
     }
-  }
+  },
 }
 </script>
 

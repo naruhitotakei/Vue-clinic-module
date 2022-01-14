@@ -22,15 +22,15 @@ export default {
   name: 'BreadCrumb',
   props: {
     items: {
-      type: Array
-    }
+      type: Array,
+    },
   },
   watch: {
-    $route (to, from) {
+    $route(to, from) {
       this.checkRoute()
-    }
+    },
   },
-  mounted () {
+  mounted() {
     this.currentRoute = this.navList.find(item => item.link.name === this.$route.name)
     let book = this.bookmark.find(item => item.link.name === this.$route.name)
     if (book !== undefined) {
@@ -41,30 +41,30 @@ export default {
     ...mapGetters({
       page: 'Setting/activePage',
       navList: 'Setting/globalSearchState',
-      bookmark: 'Setting/bookmarkState'
-    })
+      bookmark: 'Setting/bookmarkState',
+    }),
   },
-  data () {
+  data() {
     return {
       bookmarkSearch: '',
       currentRoute: {},
-      selectedBookmark: false
+      selectedBookmark: false,
     }
   },
   methods: {
     ...mapActions({
       addToBookmarkState: 'Setting/addBookmarkAction',
-      removeToBookmarkState: 'Setting/removeBookmarkAction'
+      removeToBookmarkState: 'Setting/removeBookmarkAction',
     }),
-    removeToBookmark (item) {
+    removeToBookmark(item) {
       this.removeToBookmarkState(item)
       this.selectedBookmark = false
     },
-    addToBookmark (item) {
+    addToBookmark(item) {
       this.addToBookmarkState(item)
       this.selectedBookmark = true
     },
-    checkRoute () {
+    checkRoute() {
       this.currentRoute = this.navList.find(item => item.link.name === this.$route.name)
       let book = this.bookmark.find(item => item.link.name === this.$route.name)
       if (book !== undefined) {
@@ -72,7 +72,7 @@ export default {
       } else {
         this.selectedBookmark = false
       }
-    }
-  }
+    },
+  },
 }
 </script>

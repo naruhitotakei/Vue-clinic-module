@@ -39,43 +39,43 @@ export default defineComponent({
   props: {
     form: {
       type: Object,
-      required: true
-    }
+      required: true,
+    },
   },
 
-  data () {
+  data() {
     return {
       fieldset: {
-        service: null
+        service: null,
       },
-      services: []
+      services: [],
     }
   },
 
   watch: {
     fieldset: {
       deep: true,
-      handler (value) {
+      handler(value) {
         this.$emit('update:form', {
           ...this.form,
-          ...value
+          ...value,
         })
-      }
+      },
     },
 
     '$i18n.locale': {
       immediate: true,
-      async handler (locale) {
+      async handler(locale) {
         this.services = []
         const services = await getOnlineBookingProductsPublic(locale)
         this.services = services.map((service) => ({
           ...service,
           serviceName: service.text,
           time: service.default_duration,
-          price: parseFloat(service.default_online_price)
+          price: parseFloat(service.default_online_price),
         }))
-      }
-    }
-  }
+      },
+    },
+  },
 })
 </script>

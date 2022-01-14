@@ -11,6 +11,6 @@
 </template>
 <script>
 export default {
-  name: 'ConfirmMail1'
+  name: 'ConfirmMail1',
 }
 </script>

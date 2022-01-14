@@ -1,173 +1,173 @@
-export async function getCompanyPremises () {
+export async function getCompanyPremises() {
   const rawResponse = await fetch('/api/company-premises', {
     method: 'GET',
     credentials: 'same-origin',
     headers: {
       'Accept': 'application/json',
-      'Content-Type': 'application/json'
-    }
+      'Content-Type': 'application/json',
+    },
   })
   return rawResponse.json()
 }
 
-export async function getPremiseById (id) {
+export async function getPremiseById(id) {
   const rawResponse = await fetch('/api/company-premises/' + id, {
     method: 'GET',
     credentials: 'same-origin',
     headers: {
       'Accept': 'application/json',
-      'Content-Type': 'application/json'
-    }
+      'Content-Type': 'application/json',
+    },
   })
   return rawResponse.json()
 }
 
-export async function getPremiseDeviceById (id) {
+export async function getPremiseDeviceById(id) {
   const rawResponse = await fetch('/api/company-premise-devices/' + id, {
     method: 'GET',
     credentials: 'same-origin',
     headers: {
       'Accept': 'application/json',
-      'Content-Type': 'application/json'
-    }
+      'Content-Type': 'application/json',
+    },
   })
   return rawResponse.json()
 }
 
-export async function getCompanyPremiseDevices () {
+export async function getCompanyPremiseDevices() {
   const rawResponse = await fetch('/api/company-premise-devices', {
     method: 'GET',
     credentials: 'same-origin',
     headers: {
       'Accept': 'application/json',
-      'Content-Type': 'application/json'
-    }
+      'Content-Type': 'application/json',
+    },
   })
   return rawResponse.json()
 }
 
-export async function getPremisesForCompany (companyId) {
+export async function getPremisesForCompany(companyId) {
   const rawResponse = await fetch('/api/' + companyId + '/company-premises', {
     method: 'GET',
     credentials: 'same-origin',
     headers: {
       'Accept': 'application/json',
-      'Content-Type': 'application/json'
-    }
+      'Content-Type': 'application/json',
+    },
   })
   return rawResponse.json()
 }
 
-export async function getDevicesForPremise (companyPremisesId) {
+export async function getDevicesForPremise(companyPremisesId) {
   const rawResponse = await fetch('/api/company-premises/' + companyPremisesId + '/devices', {
     method: 'GET',
     credentials: 'same-origin',
     headers: {
       'Accept': 'application/json',
-      'Content-Type': 'application/json'
-    }
+      'Content-Type': 'application/json',
+    },
   })
   return rawResponse.json()
 }
 
-export async function createPremise (premise) {
+export async function createPremise(premise) {
   const rawResponse = await fetch('/api/company-premises', {
     method: 'POST',
     credentials: 'same-origin',
     headers: {
       'Accept': 'application/json',
-      'Content-Type': 'application/json'
+      'Content-Type': 'application/json',
     },
-    body: JSON.stringify(premise)
+    body: JSON.stringify(premise),
   })
   return rawResponse.json()
 }
 
-export async function updatePremise (id, premise) {
+export async function updatePremise(id, premise) {
   const rawResponse = await fetch('/api/company-premises/' + id, {
     method: 'PUT',
     credentials: 'same-origin',
     headers: {
       'Accept': 'application/json',
-      'Content-Type': 'application/json'
+      'Content-Type': 'application/json',
     },
-    body: JSON.stringify(premise)
+    body: JSON.stringify(premise),
   })
   return rawResponse.json()
 }
 
-export async function deletePremise (id) {
+export async function deletePremise(id) {
   const rawResponse = await fetch('/api/company-premises/' + id, {
     method: 'DELETE',
     credentials: 'same-origin',
     headers: {
       'Accept': 'application/json',
-      'Content-Type': 'application/json'
-    }
+      'Content-Type': 'application/json',
+    },
   })
   return rawResponse.json()
 }
 
-export async function createPremiseDevice (premise) {
+export async function createPremiseDevice(premise) {
   const rawResponse = await fetch('/api/add-premise-device', {
     method: 'POST',
     credentials: 'same-origin',
     headers: {
       'Accept': 'application/json',
-      'Content-Type': 'application/json'
+      'Content-Type': 'application/json',
     },
-    body: JSON.stringify(premise)
+    body: JSON.stringify(premise),
   })
   return rawResponse.json()
 }
 
-export async function updatePremiseDevice (id, premise) {
+export async function updatePremiseDevice(id, premise) {
   const rawResponse = await fetch('/api/company-premise-devices/' + id, {
     method: 'PUT',
     credentials: 'same-origin',
     headers: {
       'Accept': 'application/json',
-      'Content-Type': 'application/json'
+      'Content-Type': 'application/json',
     },
-    body: JSON.stringify(premise)
+    body: JSON.stringify(premise),
   })
   return rawResponse.json()
 }
 
-export async function deletePremiseDevice (id) {
+export async function deletePremiseDevice(id) {
   const rawResponse = await fetch('/api/company-premise-devices/' + id, {
     method: 'DELETE',
     credentials: 'same-origin',
     headers: {
       'Accept': 'application/json',
-      'Content-Type': 'application/json'
-    }
+      'Content-Type': 'application/json',
+    },
   })
   return rawResponse.json()
 }
 
-export async function checkBusinessIdUniquness (premiseBusinessId) {
+export async function checkBusinessIdUniquness(premiseBusinessId) {
   const rawResponse = await fetch('/api/company-premises/check-business-id', {
     method: 'POST',
     credentials: 'same-origin',
     headers: {
       'Accept': 'application/json',
-      'Content-Type': 'application/json'
+      'Content-Type': 'application/json',
     },
-    body: JSON.stringify(premiseBusinessId)
+    body: JSON.stringify(premiseBusinessId),
   })
   return rawResponse.json()
 }
 
-export async function checkElectronicDeviceIdUniquness (electronicDeviceId) {
+export async function checkElectronicDeviceIdUniquness(electronicDeviceId) {
   const rawResponse = await fetch('/api/company-premise-devices/check-electronic-device-id', {
     method: 'POST',
     credentials: 'same-origin',
     headers: {
       'Accept': 'application/json',
-      'Content-Type': 'application/json'
+      'Content-Type': 'application/json',
     },
-    body: JSON.stringify(electronicDeviceId)
+    body: JSON.stringify(electronicDeviceId),
   })
   return rawResponse.json()
 }

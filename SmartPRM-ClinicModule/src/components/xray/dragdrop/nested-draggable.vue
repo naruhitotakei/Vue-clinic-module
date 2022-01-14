@@ -11,9 +11,9 @@ import draggable from 'vuedraggable'
 export default {
   props: ['tasks'],
   components: {
-    draggable
+    draggable,
   },
-  name: 'nested-draggable'
+  name: 'nested-draggable',
 }
 </script>
 <style scoped>

@@ -70,23 +70,23 @@ export default {
   components: { IqCard },
   props: {
     start: String,
-    end: String
+    end: String,
   },
   watch: {
-    start (val) {
+    start(val) {
       if (val) {
         this.startDate = val
         this.onDateChange()
       }
     },
-    end (val) {
+    end(val) {
       if (val) {
         this.endDate = val
         this.onDateChange()
       }
-    }
+    },
   },
-  created () {
+  created() {
     if (this.start && this.end) {
       this.startDate = this.start
       this.endDate = this.end
@@ -94,12 +94,12 @@ export default {
     }
   },
   methods: {
-    onDateChange () {
+    onDateChange() {
       if (this.startDate && this.endDate) {
         this.getDoctorRevenue(this.startDate, this.endDate)
       }
     },
-    getDoctorRevenue (start, end) {
+    getDoctorRevenue(start, end) {
       this.loading = true
       this.noData = false
       getRevenueByDoctor(start, end).then(response => {
@@ -116,7 +116,7 @@ export default {
         this.loading = false
       })
     },
-    async setDataForChart (data) {
+    async setDataForChart(data) {
       this.dataToExport = []
 
       let doctors = await data.map(item => item.doctor_name)
@@ -144,24 +144,24 @@ export default {
 
       this.chartOptions = {
         legend: {
-          position: 'right'
+          position: 'right',
         },
         xaxis: {
-          categories: uniqueDoctors
+          categories: uniqueDoctors,
         },
         yaxis: {
           labels: {
             formatter: function (val) {
               return val.toLocaleString() + ' €'
-            }
-          }
-        }
+            },
+          },
+        },
       }
 
       this.prepareDataForExport(data, uniqueDoctors)
     },
 
-    prepareDataForExport (data, doctors) {
+    prepareDataForExport(data, doctors) {
       // Get Data for export
       doctors.forEach(doctor => {
         const sum = data.filter(item => item.doctor_name === doctor)
@@ -169,9 +169,9 @@ export default {
           .reduce((a, b) => Number(a) + Number(b))
         this.dataToExport.push({ doctor, revenue: sum.toLocaleString() + ' €' })
       })
-    }
+    },
   },
-  data () {
+  data() {
     return {
       startDate: null,
       endDate: null,
@@ -181,7 +181,7 @@ export default {
       dataToExport: [],
       excelColumns: [
         { label: 'Doctor', field: 'doctor' },
-        { label: 'Revenue', field: 'revenue' }
+        { label: 'Revenue', field: 'revenue' },
       ],
       chartOptions: {
         chart: {
@@ -192,31 +192,31 @@ export default {
             show: true,
             tools: {
               pan: false,
-              zoom: false
-            }
+              zoom: false,
+            },
           },
           zoom: {
-            enabled: true
-          }
+            enabled: true,
+          },
         },
         plotOptions: {
           bar: {
             horizontal: false,
-            borderRadius: 10
-          }
+            borderRadius: 10,
+          },
         },
         xaxis: {
-          categories: []
+          categories: [],
         },
         legend: {
           position: 'right',
-          offsetY: 40
+          offsetY: 40,
         },
         fill: {
-          opacity: 1
-        }
-      }
+          opacity: 1,
+        },
+      },
     }
-  }
+  },
 }
 </script>

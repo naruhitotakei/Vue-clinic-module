@@ -139,12 +139,12 @@ import moment from 'moment'
 export default {
   name: 'Dashboard1',
   components: { IqCard, RevenueByProduct, LeadsChart, RevenueByDoctor },
-  mounted () {
+  mounted() {
     xray.index()
     this.getStartDates()
     this.getAttendance()
   },
-  data () {
+  data() {
     return {
       startDate: null,
       endDate: null,
@@ -157,7 +157,7 @@ export default {
       excelColumns: [
         { label: 'Product', field: 'product' },
         { label: 'Count', field: 'count' },
-        { label: 'Sum', field: 'sum', dataFormat: this.priceFormat }
+        { label: 'Sum', field: 'sum', dataFormat: this.priceFormat },
       ],
       slickOptions: {
         centerMode: false,
@@ -171,29 +171,29 @@ export default {
             arrows: false,
             centerMode: true,
             centerPadding: '30',
-            slidesToShow: 3
-          }
+            slidesToShow: 3,
+          },
         }, {
           breakpoint: 480,
           settings: {
             arrows: false,
             centerMode: true,
             centerPadding: '15',
-            slidesToShow: 1
-          }
-        }]
+            slidesToShow: 1,
+          },
+        }],
       },
       series: [],
       chartOptions: {
         labels: [],
         dataLabels: {
-          enabled: false
-        }
-      }
+          enabled: false,
+        },
+      },
     }
   },
   methods: {
-    onFilterChange (value) {
+    onFilterChange(value) {
       const today = moment().format('YYYY-MM-DD')
       if (value && value === 2) {
         // Get Last 2 years Date from now
@@ -213,7 +213,7 @@ export default {
         this.startDate = secondDate
       }
     },
-    getStartDates () {
+    getStartDates() {
       getDatesForCurrentYear().then(response => {
         const start = response[0]
         const end = response[response.length - 1]
@@ -222,7 +222,7 @@ export default {
         // this.getClinicRevenueByProduct(this.startDate, this.endDate)
       })
     },
-    onDateChange () {
+    onDateChange() {
       this.filterBy = null
     },
     // getStatistics () {
@@ -240,7 +240,7 @@ export default {
     //     }
     //   })
     // },
-    getAttendance () {
+    getAttendance() {
       clinicStatisticsAttendance().then(response => {
         if (typeof response !== 'string') {
           this.attendance = response[0].count
@@ -248,8 +248,8 @@ export default {
           console.error(response)
         }
       })
-    }
-  }
+    },
+  },
 }
 </script>
 

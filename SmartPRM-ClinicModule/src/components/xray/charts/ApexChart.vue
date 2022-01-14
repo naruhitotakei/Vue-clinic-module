@@ -6,7 +6,7 @@ import ApexCharts from 'apexcharts'
 export default {
   name: 'ApexChart',
   props: ['element', 'chartOption', 'isLive'],
-  mounted () {
+  mounted() {
     let _this = this
     let selector = '#' + _this.element
     let chart = new ApexCharts(document.querySelector(selector), _this.chartOption)
@@ -16,25 +16,25 @@ export default {
         setInterval(function () {
           _this.getNewSeries(_this.lastDate, {
             min: 10,
-            max: 90
+            max: 90,
           })
           chart.updateSeries([{
-            data: _this.data
+            data: _this.data,
           }])
         }, 1000)
       }
     }, 500)
   },
-  data () {
+  data() {
     return {
       lastDate: 0,
       data: [],
       TICKINTERVAL: 86400000,
-      XAXISRANGE: 777600000
+      XAXISRANGE: 777600000,
     }
   },
   methods: {
-    getNewSeries (baseval, yrange) {
+    getNewSeries(baseval, yrange) {
       let newDate = baseval + this.TICKINTERVAL
       this.lastDate = newDate
       for (var i = 0; i < this.data.length - 10; i++) {
@@ -43,9 +43,9 @@ export default {
       }
       this.data.push({
         x: newDate,
-        y: Math.floor(Math.random() * (yrange.max - yrange.min + 1)) + yrange.min
+        y: Math.floor(Math.random() * (yrange.max - yrange.min + 1)) + yrange.min,
       })
-    }
-  }
+    },
+  },
 }
 </script>

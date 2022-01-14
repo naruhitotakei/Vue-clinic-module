@@ -11,7 +11,7 @@ export default {
   components: {
   },
   name: 'Advertising',
-  mounted () {
+  mounted() {
     xray.index()
   },
   data: function () {
@@ -19,7 +19,7 @@ export default {
     }
   },
   methods: {
-  }
+  },
 }
 </script>
 

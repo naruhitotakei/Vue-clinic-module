@@ -26,27 +26,27 @@ import { mapGetters } from 'vuex'
 export default {
   name: 'GlobalSearch',
   props: {
-    search: { type: String, default: '' }
+    search: { type: String, default: '' },
   },
   computed: {
     ...mapGetters({
-      sidebar: 'Setting/globalSearchState'
+      sidebar: 'Setting/globalSearchState',
     }),
-    filteredList () {
+    filteredList() {
       return this.sidebar.filter(item => {
         return item.title.toLowerCase().includes(this.search.toLowerCase())
       })
-    }
+    },
   },
-  mounted () {
+  mounted() {
   },
-  data () {
+  data() {
     return {
       globalSearch: '',
-      show: true
+      show: true,
     }
   },
   methods: {
-  }
+  },
 }
 </script>

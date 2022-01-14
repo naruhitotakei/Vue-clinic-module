@@ -66,17 +66,17 @@ export default {
   props: ['formType'],
   computed: {
     ...mapGetters({
-      users: 'Setting/usersState'
-    })
+      users: 'Setting/usersState',
+    }),
   },
   data: () => ({
     user: {
       email: '',
-      password: ''
-    }
+      password: '',
+    },
   }),
   methods: {
-    onSubmit () {
+    onSubmit() {
       if (this.formType === 'passport') {
         this.passportRegister()
       } else if (this.formType === 'jwt') {
@@ -85,11 +85,11 @@ export default {
         this.firebaseRegister()
       }
     },
-    jwtRegister () {
+    jwtRegister() {
       this.$store.dispatch('Setting/addUserAction', this.user)
       this.$router.replace('/auth/sign-in')
     },
-    passportRegister () {
+    passportRegister() {
       auth.register(this.user).then(response => {
         if (response.status) {
           this.$router.push('/auth/sign-in')
@@ -98,13 +98,13 @@ export default {
         }
       }).finally(() => { this.loading = false })
     },
-    firebaseRegister () {
+    firebaseRegister() {
       firebase.auth().createUserWithEmailAndPassword(this.user.email, this.user.password).then((user) => {
         this.$router.replace('/auth/sign-in')
         // eslint-disable-next-line handle-callback-err
       }).catch((err) => {
       })
-    }
-  }
+    },
+  },
 }
 </script>

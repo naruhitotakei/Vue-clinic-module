@@ -33,18 +33,18 @@ export default {
   name: 'PublicLayout',
   components: {
   },
-  data () {
+  data() {
     return {
       lang: this.$route.query.lang != null ? this.$route.query.lang : 'en',
-      premise: null
+      premise: null,
     }
   },
   computed: {
     ...mapGetters({
-      langsOptions: 'Setting/langOptionState'
-    })
+      langsOptions: 'Setting/langOptionState',
+    }),
   },
-  async mounted () {
+  async mounted() {
     const response = await fetch(`/api/config?${new URLSearchParams({ premiseId: this.$route.query.premiseId })}`)
 
     if (response.ok === false) {
@@ -58,12 +58,12 @@ export default {
   watch: {
     lang: {
       immediate: true,
-      handler (lang) {
+      handler(lang) {
         this.$i18n.locale = lang
         localize(lang)
-      }
-    }
-  }
+      },
+    },
+  },
 }
 </script>
 <style>

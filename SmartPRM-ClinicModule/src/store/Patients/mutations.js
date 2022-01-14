@@ -1,5 +1,5 @@
 export default {
-  createAppointments (state, data) {
+  createAppointments(state, data) {
     state.calendarApi = data
-  }
+  },
 }

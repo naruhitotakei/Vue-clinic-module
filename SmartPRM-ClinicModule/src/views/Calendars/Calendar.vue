@@ -62,7 +62,7 @@ import { getProductGroups } from '@/services/products'
 
 export default {
   name: 'GoogleCalendar',
-  data () {
+  data() {
     return {
       allDoctorCheck: true,
       checkedListArray: [],
@@ -76,12 +76,12 @@ export default {
         'slidesToScroll': 1,
         'arrows': false,
         'dots': false,
-        'infinite': false
+        'infinite': false,
       },
       events: [],
       modalShow: {
         show: false,
-        default: false
+        default: false,
       },
       product_groups: [],
       resources: [],
@@ -97,28 +97,28 @@ export default {
         location: '',
         phone: '',
         answeredBy: '',
-        presence: ''
+        presence: '',
       },
       doctorsList: [],
       doctors: [],
       config: {
         dateFormat: 'Y-m-d',
-        inline: true
+        inline: true,
       },
-      check: []
+      check: [],
     }
   },
-  mounted () {
+  mounted() {
     xray.index()
     this.getDoctors()
     this.getProductGroups(this.$i18n.locale)
   },
   watch: {
-    'allDoctorCheck' () {
-    }
+    'allDoctorCheck'() {
+    },
   },
   computed: {
-    getEvents () {
+    getEvents() {
       if (!this.check.length) {
         return this.events
       }
@@ -132,7 +132,7 @@ export default {
       })
       return events
     },
-    getResources () {
+    getResources() {
       if (!this.check.length) {
         return this.resources
       }
@@ -145,42 +145,42 @@ export default {
         })
       })
       return resources
-    }
+    },
   },
   methods: {
     /* addAppointment () {
       this.setModalShow(true)
     }, */
-    setModalShow (bool) {
+    setModalShow(bool) {
       this.modalShow.show = bool
     },
-    getProductGroups (lang) {
+    getProductGroups(lang) {
       getProductGroups(lang).then(response => {
         this.product_groups = response
       })
     },
-    getDoctors () {
+    getDoctors() {
       getDoctorList().then((data) => {
         if (Array.isArray(data)) {
           this.doctorsList = data
           this.resources = this.doctorsList.map(item => ({
             id: item.id,
             title: item.name,
-            doctorInfo: { ...item }
+            doctorInfo: { ...item },
           }))
           this.doctors = this.doctorsList.map(item => ({
             id: item.id,
             title: item.name,
             disabled: false,
-            checked: false
+            checked: false,
           }))
         }
       })
     },
-    async updateApp ({ start, end }) {
+    async updateApp({ start, end }) {
       await this.getApontments(moment(start).startOf('month').format('YYYY-MM-DD'), moment(end).endOf('month').format('YYYY-MM-DD'))
     },
-    getApontments (start, end) {
+    getApontments(start, end) {
       // this.events = []
       getCalendar(start, end, '', this.$i18n.locale).then(data => {
         if (Array.isArray(data)) {
@@ -217,26 +217,26 @@ export default {
               display: 'block',
               patientId: {
                 id: item.enquiry_id,
-                full_name: item.name + ' ' + item.last_name
+                full_name: item.name + ' ' + item.last_name,
               },
               allDay: item.allDay ? item.allDay : false,
               app_lb_color: item.app_lb_color,
-              app_lb_type: item.app_lb_type
+              app_lb_type: item.app_lb_type,
             }
           })
         }
       })
     },
-    calculateEndDate (startDate, hours, minutes) {
+    calculateEndDate(startDate, hours, minutes) {
       return moment(startDate).add(hours, 'hours').add(minutes, 'minutes').toISOString()
     },
-    allDoctorFun (value) {
+    allDoctorFun(value) {
       this.check = []
       this.doctors.map(item => {
         item.checked = false
       })
     },
-    checkData (item) {
+    checkData(item) {
       this.selectDoctor = item
       this.doctors.map(doctor => {
         if (doctor.id === item.id) {
@@ -264,13 +264,13 @@ export default {
         })
       }
     },
-    scroll_left () {
+    scroll_left() {
       this.$refs.carousel.prev()
     },
-    scroll_right () {
+    scroll_right() {
       this.$refs.carousel.next()
-    }
-  }
+    },
+  },
 }
 </script>
 <style  lang="scss">

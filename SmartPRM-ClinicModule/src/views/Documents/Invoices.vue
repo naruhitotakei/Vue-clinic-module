@@ -110,9 +110,9 @@ export default {
   components: {
   },
   computed: {
-    hidePagination () {
+    hidePagination() {
       return Math.floor(this.totalRows / this.perPage) !== 0
-    }
+    },
   },
   name: 'Invoices',
   data: function () {
@@ -128,7 +128,7 @@ export default {
         { value: 'invoice_time', text: 'Date' },
         { value: 'company_name', text: 'Issued by' },
         { value: 'total_with_vat', text: 'Invoice amount' },
-        { value: 'status', text: 'Status' }
+        { value: 'status', text: 'Status' },
       ],
       invoices: [],
       currentPage: 1,
@@ -140,7 +140,7 @@ export default {
           formatter: (value, key, item) => {
             return item.invoice_number === 'invoice.draft' ? this.$t(item.invoice_number) : item.invoice_number
           },
-          filterByFormatted: true
+          filterByFormatted: true,
         },
         { label: this.$t('invoices.invoicesColumn.patientName'),
           key: 'patient_name',
@@ -148,7 +148,7 @@ export default {
           formatter: (value, key, item) => {
             return item.enquiries_name + ' ' + item.enquiries_last_name
           },
-          filterByFormatted: true
+          filterByFormatted: true,
         },
         { label: this.$t('invoices.invoicesColumn.date'),
           key: 'invoice_time',
@@ -156,7 +156,7 @@ export default {
           formatter: value => {
             return moment(value).format('DD-MM-YYYY')
           },
-          filterByFormatted: true
+          filterByFormatted: true,
         },
         { label: this.$t('invoices.invoicesColumn.issuedBy'), key: 'operator_name', class: 'text-left' },
         { label: this.$t('invoices.invoicesColumn.amount'), key: 'charges_sum', class: 'text-left' },
@@ -169,55 +169,55 @@ export default {
             }
             return item.total_with_vat === item.paid_amount ? this.$t('invoices.paid') : this.$t('invoices.partiallyPaid')
           },
-          filterByFormatted: true
-        }
+          filterByFormatted: true,
+        },
       ],
       filter: '',
       filterOn: [],
       isDataLoaded: false,
       totalRows: 1,
-      selectedInvoices: ''
+      selectedInvoices: '',
     }
   },
   methods: {
-    getPatients () {
+    getPatients() {
       getPatients().then(response => {
         this.patients = response
       })
     },
-    invoiceSelected (item) {
+    invoiceSelected(item) {
       this.$router.push({ path: `/documents/invoices/${item.invoice_id}` })
     },
-    addInvoice () {
+    addInvoice() {
       this.$router.push({ path: `/documents/invoices/${this.selectedPatient.id}/new-invoice` })
     },
-    getInvoices () {
+    getInvoices() {
       getInvoices().then(response => {
         this.invoices = _.orderBy(response, ['invoice_time', 'invoice_number'], ['desc', 'desc'])
         this.setTotalRows(this.invoices.length)
         this.toggleDataLoaded()
       })
     },
-    onFiltered (filteredItems) {
+    onFiltered(filteredItems) {
       this.totalRows = filteredItems.length
       this.currentPage = 1
     },
-    setTotalRows (number) {
+    setTotalRows(number) {
       this.totalRows = number
     },
-    toggleDataLoaded () {
+    toggleDataLoaded() {
       this.isDataLoaded = !this.isDataLoaded
     },
-    filterSelected (value) {
+    filterSelected(value) {
       let array = [value]
       this.filterOn = array
-    }
+    },
   },
-  mounted () {
+  mounted() {
     xray.index()
     this.getInvoices()
     this.getPatients()
-  }
+  },
 }
 </script>
 

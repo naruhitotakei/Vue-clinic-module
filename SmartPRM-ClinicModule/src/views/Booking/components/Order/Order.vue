@@ -30,7 +30,7 @@ import Services from './Services.vue'
 const Step = {
   Services: 'Services',
   ChooseTimeTab: 'ChooseTimeTab',
-  ReviewTab: 'ReviewTab'
+  ReviewTab: 'ReviewTab',
 }
 
 export default defineComponent({
@@ -39,41 +39,41 @@ export default defineComponent({
   components: {
     ChooseTimeTab,
     ReviewTab,
-    Services
+    Services,
   },
 
-  data () {
+  data() {
     return {
       form: {},
       activeStep: Step.Services,
-      lastStep: Step.Services
+      lastStep: Step.Services,
     }
   },
 
   computed: {
-    stepOrder () {
+    stepOrder() {
       return [
         {
           name: Step.Services,
           text: 'pickService',
-          isEnabled: true
+          isEnabled: true,
         },
         {
           name: Step.ChooseTimeTab,
           text: 'chooseTime',
-          isEnabled: this.form.service != null
+          isEnabled: this.form.service != null,
         },
         {
           name: Step.ReviewTab,
           text: 'review',
-          isEnabled: this.form.service != null && this.form.appointmentSlot != null
-        }
+          isEnabled: this.form.service != null && this.form.appointmentSlot != null,
+        },
       ]
-    }
+    },
   },
 
   methods: {
-    async next (length = 1) {
+    async next(length = 1) {
       const activeStepIndex = this.stepOrder.findIndex(
         ({ name }) => name === this.activeStep
       )
@@ -95,17 +95,17 @@ export default defineComponent({
 
       await this.submit()
     },
-    async submit () {
+    async submit() {
       await createAppointment({
         firstName: this.form.firstName,
         lastName: this.form.lastName,
         phone: this.form.phone,
         appointmentSlotId: this.form.appointmentSlot.id,
         verificationId: this.form.verificationId,
-        verificationCode: this.form.verificationCode
+        verificationCode: this.form.verificationCode,
       })
       this.$emit('confirmed', this.form)
-    }
-  }
+    },
+  },
 })
 </script>

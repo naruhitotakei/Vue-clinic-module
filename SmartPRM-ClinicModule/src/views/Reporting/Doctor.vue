@@ -17,8 +17,8 @@ export default {
   },
   methods: {
   },
-  mounted () {
+  mounted() {
     xray.index()
-  }
+  },
 }
 </script>

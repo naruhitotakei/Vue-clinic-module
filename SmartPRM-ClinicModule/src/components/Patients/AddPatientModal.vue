@@ -82,37 +82,37 @@ export default {
   props: {
     openAddPatient: {
       type: Boolean,
-      default: false
+      default: false,
     },
     from: {
       type: String,
-      default: null
-    }
+      default: null,
+    },
   },
   computed: {
-    showModal () {
+    showModal() {
       return this.openAddPatient
     },
-    isDisabled () {
+    isDisabled() {
       return (
         !this.addPatientForm.firstName ||
         !this.addPatientForm.lastName ||
         !this.addPatientForm.country
       )
-    }
+    },
   },
-  mounted () {
+  mounted() {
     if (!this.countries.length) {
       this.getCountries()
     }
   },
   methods: {
-    getCountries () {
+    getCountries() {
       getCountriesList().then(response => {
         this.countries = response
       })
     },
-    async addPatient () {
+    async addPatient() {
       this.loading = true
       await createEnquiry(this.addPatientForm).then((result) => {
         if (result.status === 'OK') {
@@ -128,21 +128,21 @@ export default {
       this.loading = false
       this.$emit('closeAddPatient', false)
     },
-    cancelAddingPatient () {
+    cancelAddingPatient() {
       this.addPatientForm = this.defaultAddPatientForm()
       this.$emit('closeAddPatient', false)
     },
-    defaultAddPatientForm () {
+    defaultAddPatientForm() {
       return {
         firstName: '',
         lastName: '',
         phone: '',
         email: '',
-        country: ''
+        country: '',
       }
-    }
+    },
   },
-  data () {
+  data() {
     return {
       countries: [],
       loading: false,
@@ -151,9 +151,9 @@ export default {
         lastName: '',
         phone: '',
         email: '',
-        country: ''
-      }
+        country: '',
+      },
     }
-  }
+  },
 }
 </script>

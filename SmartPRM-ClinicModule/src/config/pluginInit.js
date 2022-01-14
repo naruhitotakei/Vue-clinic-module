@@ -11,14 +11,14 @@ if (typeof window !== 'undefined') {
 }
 
 export const xray = {
-  index () {
+  index() {
     this.loaderInit()
     this.activeRoute()
     this.SmoothScrollbar()
     this.Accordian()
     this.progressBar()
   },
-  mainIndex () {
+  mainIndex() {
     this.ripple()
     this.fullscreen()
     this.sideBarToggle()
@@ -27,7 +27,7 @@ export const xray = {
     this.fixedHeader()
     this.chat()
   },
-  loaderInit () {
+  loaderInit() {
     let load = document.getElementById('loading')
     animation.fadeOut(load, { duration: 0 })
     animation.fadeOut(load, { duration: 1400 })
@@ -40,29 +40,29 @@ export const xray = {
     }, 1400)
     // $('#loading').delay(1000).fadeOut('slow')
   },
-  activeRoute () {
+  activeRoute() {
     let obj = {
       name: Route.currentRoute.meta.name,
       breadCrumb: [
         {
           html: '<i class="ri-home-4-line mr-1 float-left"></i>Home',
-          to: { name: 'mini.dashboard.home-1' }
+          to: { name: 'mini.dashboard.home-1' },
         },
         {
           text: Route.currentRoute.meta.name,
-          href: '#'
-        }
+          href: '#',
+        },
       ],
-      bookmark: true
+      bookmark: true,
     }
     Store.dispatch('Setting/activePageAction', obj)
   },
-  progressBar () {
+  progressBar() {
     $('.iq-progress-bar > span').each(function () {
       let progressBar = $(this)
       let width = $(this).data('percent')
       progressBar.css({
-        'transition': 'width 2s'
+        'transition': 'width 2s',
       })
 
       setTimeout(function () {
@@ -74,7 +74,7 @@ export const xray = {
       let progressBar = $(this)
       let height = $(this).data('percent')
       progressBar.css({
-        'transition': 'height 2s'
+        'transition': 'height 2s',
       })
 
       setTimeout(function () {
@@ -82,7 +82,7 @@ export const xray = {
       }, 100)
     })
   },
-  fixedHeader () {
+  fixedHeader() {
     $(window).scroll(function () {
       if ($(window).scrollTop() >= 75) {
         $('.iq-top-navbar').addClass('fixed-header')
@@ -91,7 +91,7 @@ export const xray = {
       }
     })
   },
-  ripple () {
+  ripple() {
     $(document).on('click', '.iq-waves-effect', function (e) {
       // Remove any old one
       $('.ripple').remove()
@@ -120,12 +120,12 @@ export const xray = {
         width: buttonWidth,
         height: buttonHeight,
         top: y + 'px',
-        left: x + 'px'
+        left: x + 'px',
       }).addClass('rippleEffect')
     })
   },
 
-  fullscreen () {
+  fullscreen() {
     const elementExist = this.checkElement('class', 'iq-full-screen')
     if (elementExist) {
       $(document).on('click', '.iq-full-screen', function () {
@@ -158,7 +158,7 @@ export const xray = {
       })
     }
   },
-  triggerSet () {
+  triggerSet() {
     const elementExist = this.checkElement('class', 'wrapper-menu')
     if (elementExist) {
       let wrapperMenu = document.querySelector('.wrapper-menu')
@@ -169,11 +169,11 @@ export const xray = {
     }
   },
 
-  sidebarMiniSetEvent (element, target) {
+  sidebarMiniSetEvent(element, target) {
     element.classList.toggle('open')
     target.classList.toggle('sidebar-main')
   },
-  checkClass (ele, type, className) {
+  checkClass(ele, type, className) {
     switch (type) {
       case 'addClass':
         if (!ele.hasClass(className)) {
@@ -191,7 +191,7 @@ export const xray = {
     }
   },
 
-  sideBarToggle () {
+  sideBarToggle() {
     const elementExist = this.checkElement('class', 'iq-sidebar-menu')
     if (elementExist) {
       $('.iq-sidebar-menu li').click(function (ele) {
@@ -201,7 +201,7 @@ export const xray = {
     }
   },
 
-  navBarAction () {
+  navBarAction() {
     $(document).on('click', '.iq-sub-dropdown', function (e) {
       e.stopPropagation()
     })
@@ -235,7 +235,7 @@ export const xray = {
     })
   },
 
-  checkElement (type, element) {
+  checkElement(type, element) {
     let found = false
     let elements
     switch (type) {
@@ -257,10 +257,10 @@ export const xray = {
     return found
   },
 
-  owlCarousel () {
+  owlCarousel() {
   },
 
-  SmoothScrollbar () {
+  SmoothScrollbar() {
     const elementExistMain = this.checkElement('id', 'sidebar-scrollbar')
     if (elementExistMain) {
       Scrollbar.init(document.querySelector('#sidebar-scrollbar'))
@@ -271,12 +271,12 @@ export const xray = {
     }
   },
 
-  Accordian () {
+  Accordian() {
     $('.iq-accordion .iq-accordion-block .accordion-details').hide()
     $('.iq-accordion .iq-accordion-block:first').addClass('accordion-active').children().slideDown('slow')
   },
 
-  AccordianInit () {
+  AccordianInit() {
     $(document).on('click', '.iq-accordion .iq-accordion-block', function () {
       if ($(this).children('div.accordion-details ').is(':hidden')) {
         $('.iq-accordion .iq-accordion-block').removeClass('accordion-active').children('div.accordion-details ').slideUp('slow')
@@ -285,7 +285,7 @@ export const xray = {
     })
   },
 
-  getActiveLink (item, activeRoute) {
+  getActiveLink(item, activeRoute) {
     let active = false
     if (item.children !== undefined) {
       item.children.filter(function (child) {
@@ -300,7 +300,7 @@ export const xray = {
     }
     return active
   },
-  showSnackbar (type, data = {}) {
+  showSnackbar(type, data = {}) {
     if (type !== null) {
       switch (type) {
         case 'success':
@@ -314,10 +314,10 @@ export const xray = {
       Snackbar.show(data)
     }
   },
-  Snackbar (data) {
+  Snackbar(data) {
     Snackbar.show(data)
   },
-  chat () {
+  chat() {
     $('#chat-start').click(function () {
       $('.chat-data-left').toggleClass('show')
     })
@@ -331,7 +331,7 @@ export const xray = {
       $('.chat-data-left').addClass('show')
     })
   },
-  random (length) {
+  random(length) {
     let result = ''
     let characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789'
     let charactersLength = characters.length
@@ -340,7 +340,7 @@ export const xray = {
     }
     return result
   },
-  applyDrag (arr, dragResult) {
+  applyDrag(arr, dragResult) {
     const { removedIndex, addedIndex, payload } = dragResult
     if (removedIndex === null && addedIndex === null) return arr
 
@@ -357,13 +357,13 @@ export const xray = {
 
     return result
   },
-  generateItems (count, creator) {
+  generateItems(count, creator) {
     const result = []
     for (let i = 0; i < count; i++) {
       result.push(creator(i))
     }
     return result
-  }
+  },
 }
 
 export const animation = {
@@ -393,7 +393,7 @@ export const animation = {
     },
     elastic: function (progress, x) {
       return Math.pow(2, 10 * (progress - 1)) * Math.cos(20 * Math.PI * x / 3 * progress)
-    }
+    },
   },
   animate: function (options) {
     let start = new Date()
@@ -425,7 +425,7 @@ export const animation = {
         }
 
         element.style.opacity = to - delta
-      }
+      },
     })
   },
   fadeIn: function (element, options) {
@@ -442,14 +442,14 @@ export const animation = {
         }
 
         element.style.opacity = to + delta
-      }
+      },
     })
-  }
+  },
 }
 
 export const flatpickerSetting = {
   wrap: true,
   altFormat: 'j M Y',
   altInput: true,
-  dateFormat: 'Y-m-d'
+  dateFormat: 'Y-m-d',
 }

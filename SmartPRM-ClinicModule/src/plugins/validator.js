@@ -9,7 +9,7 @@ Object.keys(rules).forEach(rule => {
 })
 localize({
   en,
-  sl
+  sl,
 })
 Vue.component('ValidationObserver', ValidationObserver)
 Vue.component('ValidationProvider', ValidationProvider)

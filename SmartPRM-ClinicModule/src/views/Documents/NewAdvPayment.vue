@@ -293,52 +293,52 @@ import BigNumber from 'bignumber.js'
 export default {
   name: 'NewAdvPayment',
   components: {
-    QrcodeVue
+    QrcodeVue,
   },
-  mounted () {
+  mounted() {
     xray.index()
     this.getLoggedInUser()
     this.getPatient()
   },
-  data () {
+  data() {
     return {
       detailColumns: [
         { label: this.$t('advPayments.newAdvPayment.details.item'), key: 'name', class: 'text-left item-name' },
-        { label: this.$t('advPayments.newAdvPayment.details.amount'), key: 'amount', class: 'text-left action-column' }
+        { label: this.$t('advPayments.newAdvPayment.details.amount'), key: 'amount', class: 'text-left action-column' },
       ],
       advPayments: [
         {
           name: this.$t('advPayment.advPaymentHeader'),
           amount: 0,
-          editable: true
-        }
+          editable: true,
+        },
       ],
       summaryRows: [],
       paymentMethods: [
         {
           type: null,
           amount: 0,
-          paid: true
-        }
+          paid: true,
+        },
       ],
       products: [],
       paymentMethodOptions: [
         { id: 1, name: 'Cash', label: this.$t('paymentMethods.cash') },
         { id: 2, name: 'Credit card', label: this.$t('paymentMethods.creditCard') },
-        { id: 3, name: 'Bank Account', label: this.$t('paymentMethods.bankAccount') }
+        { id: 3, name: 'Bank Account', label: this.$t('paymentMethods.bankAccount') },
       ],
       selectedItemName: '',
       summary: this.$t('advPayment.advPaymentSummary'),
       paymentMethodColumns: [
         {
           key: 'type',
-          label: this.$t('paymentMethod')
+          label: this.$t('paymentMethod'),
         },
         {
           key: 'amount',
           label: this.$t('paymentMethodsColumn.amount'),
-          class: 'action-column'
-        }
+          class: 'action-column',
+        },
       ],
       patientId: this.$route.params.patientId,
       billingDetails: '',
@@ -366,29 +366,29 @@ export default {
       referenceCodeFurs: '',
       qrCode: '',
       pdfNumber: '',
-      pdfName: ''
+      pdfName: '',
     }
   },
   computed: {
-    isInvoiceStatusIssued () {
+    isInvoiceStatusIssued() {
       return this.status === 'invoice.issued'
-    }
+    },
   },
   methods: {
-    defaultPayment () {
+    defaultPayment() {
       return {
         type: null,
         amount: 0,
-        editable: true
+        editable: true,
       }
     },
-    findDevicesForPremise (value) {
+    findDevicesForPremise(value) {
       getDevicesForPremise(value.premise_id).then(response => {
         this.devices = response
         this.device = this.devices[0]
       })
     },
-    exportToPDF () {
+    exportToPDF() {
       this.calculateQRCode()
       this.calculatePdfNumber()
       this.setPdfName()
@@ -397,22 +397,22 @@ export default {
         filename: this.pdfName + '.pdf',
         image: { type: 'jpeg', quality: 0.98 },
         html2canvas: { y: 170 },
-        jsPDF: { unit: 'mm', format: 'a3' }
+        jsPDF: { unit: 'mm', format: 'a3' },
       }
       var source = window.document.getElementById('printInvoice')
       html2pdf().set(options).from(source).save()
     },
-    setPdfName () {
+    setPdfName() {
       this.pdfName = this.invoiceNumber === 'invoice.draft' ? this.$t('invoice.draft') : this.invoiceNumber
     },
-    calculatePdfNumber () {
+    calculatePdfNumber() {
       let year = moment().format('YY')
       let premiseNumber = this.issuedIn.premise_id < 10 ? '0' + this.issuedIn.premise_id : this.issuedIn.premise_id
       let invoiceNumber = this.invoiceNumber === 'invoice.draft' ? this.$t('invoice.draft').toLowerCase() : this.invoiceNumber
       let zeroFill = _.padStart(invoiceNumber, 5, '0')
       this.pdfNumber = premiseNumber + '-' + this.device.device_name + '-' + year + zeroFill
     },
-    createBillingDetails (selectedPatient) {
+    createBillingDetails(selectedPatient) {
       let details = ''
       if (selectedPatient.name) details += selectedPatient.name
       if (selectedPatient.last_name) details += ' ' + selectedPatient.last_name
@@ -426,16 +426,16 @@ export default {
       if (selectedPatient.email) details += 'Email: ' + selectedPatient.email
       this.billingDetails = details
     },
-    submitPaymentMethod (item) {
+    submitPaymentMethod(item) {
       item.editable = false
     },
-    editPaymentMethod (item) {
+    editPaymentMethod(item) {
       item.editable = true
     },
-    editPayment (item) {
+    editPayment(item) {
       item.editable = true
     },
-    getLoggedInUser () {
+    getLoggedInUser() {
       sso().then(response => {
         this.logedInUser = response
         getCompanyById(this.logedInUser.prm_company_id).then(response => {
@@ -448,31 +448,31 @@ export default {
         })
       })
     },
-    getPatient () {
+    getPatient() {
       getEnquiryById(this.patientId).then(response => {
         this.patient = response[0]
         this.createBillingDetails(this.patient)
       })
     },
-    submitPayment (item) {
+    submitPayment(item) {
       item.editable = false
     },
-    saveAsDraft () {
+    saveAsDraft() {
       this.status = 'invoice.draft'
       this.invoiceNumber = 'invoice.draft'
       this.deviceId = this.device ? this.device.device_id : ''
       this.prepareInvoice()
       if (this.isInoiceValid()) this.createInvoice()
     },
-    saveInvoice () {
+    saveInvoice() {
       this.status = 'invoice.issued'
       this.deviceId = this.device ? this.device.device_id : ''
       this.generateInvoiceNumber()
     },
-    generateInvoiceNumber () {
+    generateInvoiceNumber() {
       let data = {
         business_premise_id: this.issuedIn.business_premise_id,
-        draft: 'invoice.draft'
+        draft: 'invoice.draft',
       }
       getSerialForInvoiceNumberBasedOnType(data).then(response => {
         let number = parseInt(response[0].count) + 1
@@ -487,14 +487,14 @@ export default {
         })
       })
     },
-    generateReferenceCode () {
+    generateReferenceCode() {
       let premiseNumber = this.issuedIn.premise_id < 10 ? '0' + this.issuedIn.premise_id : this.issuedIn.premise_id
       let year = moment().format('YY')
       let zeroFill = _.padStart(this.invoiceNumber, 5, '0')
       this.referenceCode = 'AR-' + year + '-' + this.invoiceNumber
       this.referenceCodeFurs = premiseNumber + '-' + this.device.device_name + '-' + year + zeroFill
     },
-    isInoiceValid () {
+    isInoiceValid() {
       let valid = true
       if (parseFloat(this.advPayments[0].amount).toFixed(2) !== parseFloat(this.paymentMethods[0].amount).toFixed(2)) {
         this.$bvToast.show('different-amount')
@@ -514,7 +514,7 @@ export default {
       }
       return valid
     },
-    createInvoice () {
+    createInvoice() {
       if (!this.invoiceId) {
         createInvoice(this.invoice).then(response => {
           this.invoiceId = response
@@ -533,15 +533,15 @@ export default {
         })
       }
     },
-    fetchItemsAndPaymentMethods (invoiceId) {
+    fetchItemsAndPaymentMethods(invoiceId) {
       getPaymentItemsOfInvoiceById(invoiceId).then(items => {
         this.paymentMethods = items
       })
     },
-    redirectToDetailsPage () {
+    redirectToDetailsPage() {
       this.$router.push({ path: `/documents/advance-payments/${this.invoiceId}` })
     },
-    calculateQRCode () {
+    calculateQRCode() {
       let hexaNumber = new BigNumber(this.zoi, 16)
       let decimalNumber = hexaNumber.toString(10)
       this.decimalZoi = (decimalNumber.length < 39) ? '0'.repeat(39 - decimalNumber.length) + decimalNumber : decimalNumber
@@ -549,14 +549,14 @@ export default {
       this.qrCode = this.decimalZoi + this.logedInUser.tax_number + timeStamp
       this.calculateControlNumber()
     },
-    calculateControlNumber () {
+    calculateControlNumber() {
       let sum = 0
       for (let c of this.qrCode) {
         sum += parseInt(c)
       }
       this.qrCode += sum % 10
     },
-    prepareInvoice () {
+    prepareInvoice() {
       let temp = {
         invoice_type: this.invoiceType,
         invoice_time: this.dateOfAdvPayment,
@@ -587,14 +587,14 @@ export default {
         verification_status: this.status,
         payment_status: 'Paid',
         reference_code: this.referenceCode,
-        reference_code_furs: this.referenceCodeFurs
+        reference_code_furs: this.referenceCodeFurs,
       }
       this.invoice = _.assignIn(this.invoice, this.patient, this.usersCompany, temp)
     },
-    add () {
+    add() {
       // TODO add payment
-    }
-  }
+    },
+  },
 }
 </script>
 

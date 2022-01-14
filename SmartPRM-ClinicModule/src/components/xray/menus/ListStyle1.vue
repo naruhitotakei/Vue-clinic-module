@@ -26,25 +26,25 @@ export default {
     horizontal: Boolean,
     open: { type: Boolean, default: false },
     idName: { type: String, default: 'sidebar' },
-    accordianName: { type: String, default: 'sidebar' }
+    accordianName: { type: String, default: 'sidebar' },
   },
   components: {
-    List
+    List,
   },
-  mounted () {
+  mounted() {
   },
   methods: {
-    closeMenuItemWithoutChildren (hasChildren) {
+    closeMenuItemWithoutChildren(hasChildren) {
       if (!hasChildren) {
         this.$parent.miniSidebar()
       }
     },
-    closeMenuItemWithChildren () {
+    closeMenuItemWithChildren() {
       this.$parent.miniSidebar()
     },
-    activeLink (item) {
+    activeLink(item) {
       return xray.getActiveLink(item, this.$route.name)
-    }
-  }
+    },
+  },
 }
 </script>

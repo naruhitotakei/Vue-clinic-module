@@ -21,7 +21,7 @@ Vue.config.productionTip = false
 Vue.prototype.$rollbar = new Rollbar({
   accessToken: 'b4f975b7b8cd4107ac1b6fce59b1b774',
   captureUncaught: true,
-  captureUnhandledRejections: true
+  captureUnhandledRejections: true,
 })
 
 // If you have already set up a global error handler,
@@ -52,7 +52,7 @@ let vm = new Vue({
   router,
   store,
   i18n,
-  render: h => h(App)
+  render: h => h(App),
 }).$mount('#app')
 
 window.vm = vm

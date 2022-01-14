@@ -113,10 +113,10 @@ import 'vue-phone-number-input/dist/vue-phone-number-input.css'
 
 export default {
   components: {
-    VuePhoneNumberInput
+    VuePhoneNumberInput,
   },
   props: {
-    form: Object
+    form: Object,
   },
   data: function () {
     return {
@@ -129,26 +129,26 @@ export default {
         lastName: null,
         phone: null,
         verificationId: null,
-        verificationCode: null
-      }
+        verificationCode: null,
+      },
     }
   },
   watch: {
     fieldset: {
       deep: true,
-      handler (value) {
+      handler(value) {
         this.$emit('update:form', {
           ...this.form,
-          ...value
+          ...value,
         })
-      }
-    }
+      },
+    },
   },
   methods: {
     sendConfirmationCode: async function () {
       const result = await sendSms({ phone: this.fieldset.phone })
       this.fieldset.verificationId = result.requestId
-    }
-  }
+    },
+  },
 }
 </script>

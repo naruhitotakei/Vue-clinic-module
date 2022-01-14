@@ -50,26 +50,26 @@ export default {
     colors: { type: Array, default: () => [], required: true },
     yKeys: { type: Array, default: () => [], required: true },
     labels: { type: Array, default: () => [], required: true },
-    resize: { type: Boolean, default: true }
+    resize: { type: Boolean, default: true },
   },
   components: {
-    DonutChart, BarChart, LineChart, AreaChart
+    DonutChart, BarChart, LineChart, AreaChart,
   },
   computed: {
-    prettyFloorMinFollowers () {
+    prettyFloorMinFollowers() {
       return this.prettyFloor(this.yMinMax['min']['followers'])
     },
-    prettyCeilMaxFollowers () {
+    prettyCeilMaxFollowers() {
       return this.prettyCeil(this.yMinMax['max']['followers'])
     },
-    yMinMax () {
+    yMinMax() {
       return this.minMax(this.data, 'followers')
-    }
+    },
   },
   methods: {
-    osColors () {
+    osColors() {
     },
-    minMax (objects, field) {
+    minMax(objects, field) {
       var result = {}
       return objects.reduce(function (valorAnterior, valorActual, indice, vector) {
         if (indice === 1) {
@@ -83,7 +83,7 @@ export default {
         return result
       })
     },
-    prettyFloor (number) {
+    prettyFloor(number) {
       var l = Math.floor(Math.log10(Math.abs(number), 10)) - 1
       if (l <= 0) {
         l++
@@ -95,7 +95,7 @@ export default {
       }
       return number
     },
-    prettyCeil (number) {
+    prettyCeil(number) {
       var l = Math.floor(Math.log10(Math.abs(number), 10)) - 1
       if (l <= 0) {
         l++
@@ -106,7 +106,7 @@ export default {
         number = number * (Math.pow(10, l))
       }
       return number
-    }
-  }
+    },
+  },
 }
 </script>

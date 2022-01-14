@@ -11,9 +11,9 @@ export default {
     pills: { type: Boolean, default: false },
     vertical: { type: Boolean, default: false },
     tabs: { type: Boolean, default: false },
-    align: { type: String, default: '' }
+    align: { type: String, default: '' },
   },
-  mounted () {
+  mounted() {
     let _this = this
     window.$('#' + this.id + ' a').on('click', function (e) {
       window.$(this).tab('show')
@@ -21,6 +21,6 @@ export default {
     window.$('#' + this.id + ' a').on('shown.bs.tab', function (event) {
       _this.$emit('change', event)
     })
-  }
+  },
 }
 </script>

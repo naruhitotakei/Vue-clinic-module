@@ -2,43 +2,43 @@ export const consultation = [
   {
     name: 'consultation 1',
     duration: '10min',
-    price: '$30'
+    price: '$30',
   },
   {
     name: 'consultation 2',
     duration: '20min',
-    price: '$50'
+    price: '$50',
   },
   {
     name: 'consultation 3',
     duration: '30min',
-    price: '$70'
-  }
+    price: '$70',
+  },
 ]
 
 export const services = [
   {
-    service: 'teeth withening'
+    service: 'teeth withening',
   },
   {
-    service: 'teeth withening 2'
+    service: 'teeth withening 2',
   },
   {
-    service: 'other service'
-  }
+    service: 'other service',
+  },
 ]
 
 export const team = [
   {
     firstName: 'John',
     secondName: 'Smith',
-    avatar: ''
+    avatar: '',
   },
   {
     firstName: 'Angel',
     secondName: 'Chack',
-    avatar: ''
-  }
+    avatar: '',
+  },
 ]
 
 export const serviceData = [
@@ -47,35 +47,35 @@ export const serviceData = [
       {
         name: 'consultation 1',
         duration: '10min',
-        price: '$30'
+        price: '$30',
       },
       {
         name: 'consultation 2',
         duration: '20min',
-        price: '$50'
+        price: '$50',
       },
       {
         name: 'consultation 3',
         duration: '30min',
-        price: '$70'
-      }
+        price: '$70',
+      },
     ],
-    itemName: 'Consultation'
+    itemName: 'Consultation',
   },
   {
     services: [
       {
-        service: 'teeth withening'
+        service: 'teeth withening',
       },
       {
-        service: 'teeth withening 2'
+        service: 'teeth withening 2',
       },
       {
-        service: 'other service'
-      }
+        service: 'other service',
+      },
     ],
-    itemName: 'Services'
-  }
+    itemName: 'Services',
+  },
 ]
 
 export const servicesList = [
@@ -85,8 +85,8 @@ export const servicesList = [
       { id: 1, serviceName: 'Consultation 1', time: 20, price: 30, section: 'Consultation' },
       { id: 2, serviceName: 'Consultation 2', time: 20, price: 50, section: 'Consultation' },
       { id: 3, serviceName: 'Consultation 3', time: 20, price: 70, section: 'Consultation' },
-      { id: 4, serviceName: 'Consultation 4', time: 20, price: 100, section: 'Consultation' }
-    ]
+      { id: 4, serviceName: 'Consultation 4', time: 20, price: 100, section: 'Consultation' },
+    ],
   },
   {
     title: 'Teeth Withening',
@@ -94,9 +94,9 @@ export const servicesList = [
       { id: 5, serviceName: 'Teeth Withening 1', time: 40, price: 30, section: 'Teeth Withening' },
       { id: 6, serviceName: 'Teeth Withening 2', time: 40, price: 50, section: 'Teeth Withening' },
       { id: 7, serviceName: 'Teeth Withening 3', time: 40, price: 70, section: 'Teeth Withening' },
-      { id: 8, serviceName: 'Teeth Withening 4', time: 40, price: 100, section: 'Teeth Withening' }
-    ]
-  }
+      { id: 8, serviceName: 'Teeth Withening 4', time: 40, price: 100, section: 'Teeth Withening' },
+    ],
+  },
 ]
 
 export const dailySchedule = [
@@ -125,7 +125,7 @@ export const dailySchedule = [
   '18:00',
   '18:30',
   '19:00',
-  '19:30'
+  '19:30',
 ]
 
 export const allDoctors = [
@@ -138,7 +138,7 @@ export const allDoctors = [
   { name: 'Dr. Tanja Perme', img: require('../../assets/images/user/07.jpg'), degree: 'MBBS, MD' },
   { name: 'Dr. Matic Erjavec', img: require('../../assets/images/user/08.jpg'), degree: 'MD' },
   { name: 'Dr. Peter Berlot', img: require('../../assets/images/user/09.jpg'), degree: 'MBBS' },
-  { name: 'Dr. Sebastjan Bras', img: require('../../assets/images/user/10.jpg'), degree: 'MBBS, MD' }
+  { name: 'Dr. Sebastjan Bras', img: require('../../assets/images/user/10.jpg'), degree: 'MBBS, MD' },
 ]
 
 export const daysScedule = [
@@ -151,5 +151,5 @@ export const daysScedule = [
   { name: 'Dr. Tanja Perme', img: require('../../assets/images/user/07.jpg'), degree: 'MBBS, MD', busyTimes: ['8:00', '12:30', '17:00', '18:30, 19:00'] },
   { name: 'Dr. Matic Erjavec', img: require('../../assets/images/user/08.jpg'), degree: 'MD', busyTimes: ['7:00', '7:30', '8:00', '8:30, 9:00'] },
   { name: 'Dr. Peter Berlot', img: require('../../assets/images/user/09.jpg'), degree: 'MBBS', busyTimes: ['10:00', '12:30', '13:00', '13:30, 14:00'] },
-  { name: 'Dr. Sebastjan Bras', img: require('../../assets/images/user/10.jpg'), degree: 'MBBS, MD', busyTimes: ['15:00', '15:30', '16:00', '16:30, 17:00'] }
+  { name: 'Dr. Sebastjan Bras', img: require('../../assets/images/user/10.jpg'), degree: 'MBBS, MD', busyTimes: ['15:00', '15:30', '16:00', '16:30, 17:00'] },
 ]

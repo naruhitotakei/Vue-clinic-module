@@ -286,23 +286,23 @@
 import IqCard from '../../components/xray/cards/iq-card.vue'
 import {
   getDentists,
-  getSurgeons
+  getSurgeons,
 } from '../../services/userService'
 import {
   getLeadsCount,
   getLimitedEnquires,
   getEnquiryPastAppointments,
-  getEnquiryNotes
+  getEnquiryNotes,
 } from '../../services/enquiry'
 import { xray } from '../../config/pluginInit'
 import moment from 'moment'
 
 export default {
   components: {
-    IqCard
+    IqCard,
   },
   name: 'Leads',
-  async mounted () {
+  async mounted() {
     xray.index()
     this.getDentists()
     this.getSurgeons()
@@ -310,24 +310,24 @@ export default {
     this.getLeads(this.limit, this.offset)
   },
   watch: {
-    currentPage (newPage) {
+    currentPage(newPage) {
       this.offset = (newPage * this.limit) - this.limit
       this.getLeads(this.limit, this.offset)
-    }
+    },
   },
   filters: {
-    fromNowDate (val) {
+    fromNowDate(val) {
       if (!val) {
         return '-'
       }
       return moment(val).fromNow()
     },
-    formatDate (val) {
+    formatDate(val) {
       if (!val) {
         return '-'
       }
       return moment(val).format('DD-MM-YYYY')
-    }
+    },
   },
   data: function () {
     return {
@@ -340,17 +340,17 @@ export default {
       dentists: [],
       surgeons: [],
       notes: [],
-      lang: this.$i18n.locale
+      lang: this.$i18n.locale,
     }
   },
   methods: {
-    async getAllLeadsCount () {
+    async getAllLeadsCount() {
       this.isDataLoaded = false
       getLeadsCount().then(response => {
         this.leadsCount = response[0].count
       })
     },
-    async getLeads (dataLimit, dataOffset) {
+    async getLeads(dataLimit, dataOffset) {
       this.isDataLoaded = false
       getLimitedEnquires(dataLimit, dataOffset).then(response => {
         this.isDataLoaded = true
@@ -362,7 +362,7 @@ export default {
               country: obj.country_name,
               last_visit: obj.last_visit,
               next_visit: obj.next_visit,
-              personal_dentist: obj.label
+              personal_dentist: obj.label,
             }
           ))
 
@@ -378,12 +378,12 @@ export default {
         }
       })
     },
-    getDentists () {
+    getDentists() {
       getDentists().then(response => {
         this.dentists = response
       })
     },
-    getLeadDentist (lead) {
+    getLeadDentist(lead) {
       if (this.dentists && this.dentists.length) {
         let dentist = this.dentists.find((item) => {
           return item.code === lead.prm_dentist_user_id
@@ -394,12 +394,12 @@ export default {
         return dentist.label
       }
     },
-    getSurgeons () {
+    getSurgeons() {
       getSurgeons().then(response => {
         this.surgeons = response
       })
     },
-    getLeadSurgeon (lead) {
+    getLeadSurgeon(lead) {
       if (this.surgeons && this.surgeons.length) {
         let surgeon = this.surgeons.find((item) => {
           return item.code === lead.prm_surgeon_user_id
@@ -410,7 +410,7 @@ export default {
         return surgeon.label
       }
     },
-    getPatientAppointmentsData (id, lang, returnData) {
+    getPatientAppointmentsData(id, lang, returnData) {
       var numberOfVisits = 0
       var timeSinceFirstVisit = '-'
       getEnquiryPastAppointments(id, lang).then(response => {
@@ -423,8 +423,8 @@ export default {
       } else {
         return timeSinceFirstVisit
       }
-    }
-  }
+    },
+  },
 }
 </script>
 

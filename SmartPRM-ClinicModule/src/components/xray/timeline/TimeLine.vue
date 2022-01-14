@@ -22,7 +22,7 @@
 export default {
   name: 'TimeLine',
   props: {
-    items: { type: Array, default: () => [] }
-  }
+    items: { type: Array, default: () => [] },
+  },
 }
 </script>

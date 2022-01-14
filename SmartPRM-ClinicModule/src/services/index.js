@@ -7,6 +7,6 @@ export default axios.create({
   baseURL: constant.webBaseURL,
   headers: {
     'X-Requested-With': 'XMLHttpRequest',
-    'X-CSRF-TOKEN': token
-  }
+    'X-CSRF-TOKEN': token,
+  },
 })
