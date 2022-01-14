@@ -26,12 +26,13 @@ const getConfig = (request, response, ip, premiseId) => {
       prm_company_premise.premise_street as street,
       prm_company_premise.premise_house_number as house_number,
       prm_company_premise.premise_post_code as post_code,
-      prm_company_premise.premise_phone_number as phone_number,
       prm_company_premise.premise_city as city,
       prm_company.prm_client_id as client_id,
-      prm_company.company_name as company_name
+      prm_company.company_name as company_name,
+      premise_phone_number.number as phone_number
     FROM prm_company_premise
     JOIN prm_company ON prm_company_premise.company_id = prm_company.company_id
+    JOIN premise_phone_number ON prm_company_premise.phone_number_id = premise_phone_number.id
     WHERE premise_id = $1
     LIMIT 1
   `
