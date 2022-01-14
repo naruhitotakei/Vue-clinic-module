@@ -22,6 +22,11 @@ const state = {
       value: 'sl',
       image: require('../../assets/images/small/flag-800.png'),
     },
+    {
+      title: 'Italiano',
+      value: 'it',
+      image: require('../../assets/images/small/italy.png'),
+    },
     /* { title: 'Arabic', value: 'ar', image: require('../../assets/images/small/flag-500.png') },
     { title: 'Chinese', value: 'chi', image: require('../../assets/images/small/flag-300.png') },
     { title: 'Hindi', value: 'hi', image: require('../../assets/images/small/flag-100.png') },
