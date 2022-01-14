@@ -7,9 +7,9 @@
             <b-form @submit.prevent>
               <b-row align-v="center" class="py-2">
                 <b-col cols="12">
-                  <h4 class="card-title mt-3">
+                  <h3 class="card-title mt-3">
                     {{ $t('statisticsForClinic.statisticsForClinicHeader') }}
-                  </h4>
+                  </h3>
                 </b-col>
                 <b-col cols="12" sm="6" md="4" lg="3">
                   <b-form-group>

@@ -5,7 +5,7 @@
                 <iq-card class-name="iq-card-block iq-card-stretch iq-card-height">
                     <template v-slot:headerTitle>
                       <div class="row align-items-center justify-content-between pl-3 pr-3 mb-4 mt-4">
-                        <h4 class="card-title">{{ $t('assignments.assignmentsHeader') }}</h4>
+                        <h3 class="card-title">{{ $t('assignments.assignmentsHeader') }}</h3>
                         <div class="btn-add-patient  mt-0">
                           <b-button variant="primary" @click="addNewAssignment"><i class="ri-add-line mr-2"></i>{{ $t('assignments.addAssignments') }}</b-button>
                         </div>
