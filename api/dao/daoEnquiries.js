@@ -369,7 +369,7 @@ const getPatients = (
   scope,
   prm_client_id,
   user_id,
-  accessible_user_ids,
+  accessible_user_ids
 ) => {
   let statement =
     "SELECT DISTINCT ON (enquiries.id) enquiries.*, CONCAT_WS(' ', enquiries.name, enquiries.last_name) AS full_name FROM enquiries "

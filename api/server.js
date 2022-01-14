@@ -1165,7 +1165,14 @@ app.get('/api/patients', (req, res) => {
     req.session.prm_user.permissions &&
     checkPermission(req.session.prm_user.permissions, enquiriesPermission)
   )
-    daoEnquiries.getPatients(req, res)
+    daoEnquiries.getPatients(
+      req,
+      res,
+      getScope(req.session.prm_user.permissions, enquiriesPermission),
+      req.session.prm_user.prm_client_id,
+      req.session.prm_user.id,
+      req.session.prm_user.accessible_user_ids
+    )
   else res.status(401).json('OK: user unauthorized')
 })
 
