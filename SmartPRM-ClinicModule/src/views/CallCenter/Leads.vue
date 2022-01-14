@@ -11,39 +11,94 @@
                     <template v-slot:body>
                       <div class="lead-details-block">
                         <div class="user-profile text-center">
-                          <img v-if="lead.gender == 'female'" src="../../assets/images/user/11.png" alt="profile-img" class="avatar-130 img-fluid">
-                          <img v-else src="../../assets/images/user/08.png" alt="profile-img" class="avatar-130 img-fluid">
+                          <img
+                            v-if="lead.gender == 'female'"
+                            src="../../assets/images/user/11.png"
+                            alt="profile-img"
+                            class="avatar-130 img-fluid"
+                          />
+                          <img
+                            v-else
+                            src="../../assets/images/user/08.png"
+                            alt="profile-img"
+                            class="avatar-130 img-fluid"
+                          />
                         </div>
                         <div class="text-center mt-3">
-                          <h4><b>{{ lead.name }} {{ lead.last_name }}</b></h4>
+                          <h4>
+                            <b>{{ lead.name }} {{ lead.last_name }}</b>
+                          </h4>
                         </div>
-                        <hr>
-                        <ul class="doctoe-sedual d-flex align-items-center justify-content-between p-0 m-0">
+                        <hr />
+                        <ul
+                          class="doctoe-sedual d-flex align-items-center justify-content-between p-0 m-0"
+                        >
                           <li class="text-center">
-                              <h4 class="counter">{{ getPatientAppointmentsData(lead.id, lang, 'visits') }}</h4>
-                              <span>{{ $t('EPR.overview.numberOfVisits') }}</span>
+                            <h4 class="counter">
+                              {{
+                                getPatientAppointmentsData(
+                                  lead.id,
+                                  lang,
+                                  'visits',
+                                )
+                              }}
+                            </h4>
+                            <span>{{ $t('EPR.overview.numberOfVisits') }}</span>
                           </li>
                           <li class="text-center">
-                              <h4 class="counter">{{ getPatientAppointmentsData(lead.id, lang, 'time') }}</h4>
-                              <span>{{ $t('EPR.overview.firstVisit') }}</span>
+                            <h4 class="counter">
+                              {{
+                                getPatientAppointmentsData(
+                                  lead.id,
+                                  lang,
+                                  'time',
+                                )
+                              }}
+                            </h4>
+                            <span>{{ $t('EPR.overview.firstVisit') }}</span>
                           </li>
                         </ul>
-                        <hr>
+                        <hr />
                         <div class="row ml-1 align-items-center">
-                          <div class="col-4 pl-lg-3 p-md-0 text-dark">{{ $t('EPR.overview.phone') }}:</div>
-                          <div class="col-8 pl-lg-3 p-md-0 text-dark">{{lead.phone}}</div>
-                          <div class="col-4 pl-lg-3 p-md-0 text-dark">{{ $t('EPR.overview.email') }}:</div>
-                          <div class="col-8 pl-lg-3 p-md-0 text-dark">{{lead.email}}</div>
-                          <div class="col-4 pl-lg-3 p-md-0 text-dark">{{ $t('EPR.overview.address') }}:</div>
-                          <div class="col-8 pl-lg-3 p-md-0 text-dark" v-if="lead.address_line_1">{{lead.address_line_1}}</div>
-                          <div v-else class="col-8 pl-lg-3 p-md-0 text-dark">{{ $t('EPR.overview.addressUnknown') }}</div>
+                          <div class="col-4 pl-lg-3 p-md-0 text-dark">
+                            {{ $t('EPR.overview.phone') }}:
+                          </div>
+                          <div class="col-8 pl-lg-3 p-md-0 text-dark">
+                            {{ lead.phone }}
+                          </div>
+                          <div class="col-4 pl-lg-3 p-md-0 text-dark">
+                            {{ $t('EPR.overview.email') }}:
+                          </div>
+                          <div class="col-8 pl-lg-3 p-md-0 text-dark">
+                            {{ lead.email }}
+                          </div>
+                          <div class="col-4 pl-lg-3 p-md-0 text-dark">
+                            {{ $t('EPR.overview.address') }}:
+                          </div>
+                          <div
+                            class="col-8 pl-lg-3 p-md-0 text-dark"
+                            v-if="lead.address_line_1"
+                          >
+                            {{ lead.address_line_1 }}
+                          </div>
+                          <div v-else class="col-8 pl-lg-3 p-md-0 text-dark">
+                            {{ $t('EPR.overview.addressUnknown') }}
+                          </div>
                         </div>
-                        <hr>
+                        <hr />
                         <div class="row ml-1">
-                          <div class="col-4 pl-lg-3 p-md-0"><h6>{{ $t('EPR.overview.Dentist') }}:</h6></div>
-                          <div class="col-8 p-md-0 pl-lg-3 text-dark">{{ getLeadDentist(lead) }}</div>
-                          <div class="col-4 pl-lg-3 p-md-0"><h6>{{ $t('EPR.overview.Surgeon') }}:</h6></div>
-                          <div class="col-8 p-md-0 pl-lg-3 text-dark">{{ getLeadSurgeon(lead) }}</div>
+                          <div class="col-4 pl-lg-3 p-md-0">
+                            <h6>{{ $t('EPR.overview.Dentist') }}:</h6>
+                          </div>
+                          <div class="col-8 p-md-0 pl-lg-3 text-dark">
+                            {{ getLeadDentist(lead) }}
+                          </div>
+                          <div class="col-4 pl-lg-3 p-md-0">
+                            <h6>{{ $t('EPR.overview.Surgeon') }}:</h6>
+                          </div>
+                          <div class="col-8 p-md-0 pl-lg-3 text-dark">
+                            {{ getLeadSurgeon(lead) }}
+                          </div>
                         </div>
                       </div>
                     </template>
@@ -51,32 +106,60 @@
                 </b-col>
 
                 <b-col lg="8" class="pr-0 mt-4 pt-2 col-lg-8 d-flex">
-
                   <b-col md="6">
-
                     <b-col>
-                      <button v-if="lead.phone" type="button" class="btn btn-primary mr-3" style="height: max-content">{{ $t('callCenter.leadsPage.actionCall') }}</button>
-                      <button type="button" class="btn btn-primary mr-3" style="height: max-content">{{ $t('callCenter.leadsPage.actionEdit') }}</button>
-                      <b-dropdown v-if="lead.phone || lead.email" text="Send " variant="primary">
-                        <b-dropdown-item v-if="lead.phone">{{ $t('callCenter.leadsPage.actionSendSMS') }}</b-dropdown-item>
-                        <b-dropdown-item v-if="lead.email">{{ $t('callCenter.leadsPage.actionSendEmail') }}</b-dropdown-item>
+                      <button
+                        v-if="lead.phone"
+                        type="button"
+                        class="btn btn-primary mr-3"
+                        style="height: max-content"
+                      >
+                        {{ $t('callCenter.leadsPage.actionCall') }}
+                      </button>
+                      <button
+                        type="button"
+                        class="btn btn-primary mr-3"
+                        style="height: max-content"
+                      >
+                        {{ $t('callCenter.leadsPage.actionEdit') }}
+                      </button>
+                      <b-dropdown
+                        v-if="lead.phone || lead.email"
+                        text="Send "
+                        variant="primary"
+                      >
+                        <b-dropdown-item v-if="lead.phone">{{
+                          $t('callCenter.leadsPage.actionSendSMS')
+                        }}</b-dropdown-item>
+                        <b-dropdown-item v-if="lead.email">{{
+                          $t('callCenter.leadsPage.actionSendEmail')
+                        }}</b-dropdown-item>
                       </b-dropdown>
                     </b-col>
 
                     <b-col>
-                      <b-card class="iq-card"  v-if="lead.general_notes">
-                        <b-card-title>{{ $t('EPR.overview.generalNotes') }}</b-card-title>
+                      <b-card class="iq-card" v-if="lead.general_notes">
+                        <b-card-title>{{
+                          $t('EPR.overview.generalNotes')
+                        }}</b-card-title>
                         <hr />
-                        <b-card-text class="text-black" v-html="lead.general_notes"></b-card-text>
+                        <b-card-text
+                          class="text-black"
+                          v-html="lead.general_notes"
+                        ></b-card-text>
                       </b-card>
                     </b-col>
 
                     <b-col md="6">
-                      <b-card text-variant="white"
+                      <b-card
+                        text-variant="white"
                         bg-variant="danger"
                         class="iq-card"
-                        v-if="lead.allergies">
-                        <b-card-title class="text-white">{{ $t('EPR.overview.allergies') }}</b-card-title>
+                        v-if="lead.allergies"
+                      >
+                        <b-card-title class="text-white">{{
+                          $t('EPR.overview.allergies')
+                        }}</b-card-title>
                         <blockquote class="blockquote mb-0">
                           <p class="font-size-14">{{ lead.allergies }}</p>
                         </blockquote>
@@ -86,20 +169,36 @@
                     <b-col md="14" v-if="lead.notes">
                       <iq-card>
                         <template v-slot:body>
-                          <div class="iq-card-header d-flex justify-content-between">
+                          <div
+                            class="iq-card-header d-flex justify-content-between"
+                          >
                             <div class="iq-header-title">
-                              <div class="row justify-content-between align-items-center">
-                                <h4 class="card-title">{{ $t('EPR.overview.patientNotes') }}</h4>
+                              <div
+                                class="row justify-content-between align-items-center"
+                              >
+                                <h4 class="card-title">
+                                  {{ $t('EPR.overview.patientNotes') }}
+                                </h4>
                                 <!-- <button type="button" class="btn btn-primary" @click="modalNotesShow = true">{{ $t('EPR.overview.add') }}</button> -->
                               </div>
                               <hr />
                             </div>
                           </div>
-                          <ul class="list-inline m-0 overflow-y-scroll pl-2 pr-2" style="max-height: 300px;">
-                            <li v-for="(note, index) in lead.notes" :key="index + note.created_at" class="d-flex align-items-center justify-content-between mb-3">
+                          <ul
+                            class="list-inline m-0 overflow-y-scroll pl-2 pr-2"
+                            style="max-height: 300px"
+                          >
+                            <li
+                              v-for="(note, index) in lead.notes"
+                              :key="index + note.created_at"
+                              class="d-flex align-items-center justify-content-between mb-3"
+                            >
                               <div>
-                                <h6>{{note.content}}</h6>
-                                <p class="mb-0">{{note.created_at | formatDate}} - <span class="ml-0">{{ note.user_name }}</span></p>
+                                <h6>{{ note.content }}</h6>
+                                <p class="mb-0">
+                                  {{ note.created_at | formatDate }} -
+                                  <span class="ml-0">{{ note.user_name }}</span>
+                                </p>
                               </div>
                             </li>
                           </ul>
@@ -129,11 +228,9 @@
                         </template>
                       </iq-card>
                     </b-col> -->
-
                   </b-col>
 
                   <b-col md="6">
-
                     <!-- <b-col md="6">
                       <iq-card>
                         <template v-slot:body>
@@ -208,10 +305,8 @@
                         </template>
                       </iq-card>
                     </b-col> -->
-
                   </b-col>
                 </b-col>
-
               </b-row>
             </iq-card>
           </div>
@@ -276,7 +371,6 @@
             </div>
           </div>
         </b-col> -->
-
       </b-row>
     </form>
   </b-container>
@@ -284,10 +378,7 @@
 
 <script>
 import IqCard from '../../components/xray/cards/iq-card.vue'
-import {
-  getDentists,
-  getSurgeons,
-} from '../../services/userService'
+import { getDentists, getSurgeons } from '../../services/userService'
 import {
   getLeadsCount,
   getLimitedEnquires,
@@ -311,7 +402,7 @@ export default {
   },
   watch: {
     currentPage(newPage) {
-      this.offset = (newPage * this.limit) - this.limit
+      this.offset = newPage * this.limit - this.limit
       this.getLeads(this.limit, this.offset)
     },
   },
@@ -346,30 +437,29 @@ export default {
   methods: {
     async getAllLeadsCount() {
       this.isDataLoaded = false
-      getLeadsCount().then(response => {
+      getLeadsCount().then((response) => {
         this.leadsCount = response[0].count
       })
     },
     async getLeads(dataLimit, dataOffset) {
       this.isDataLoaded = false
-      getLimitedEnquires(dataLimit, dataOffset).then(response => {
+      getLimitedEnquires(dataLimit, dataOffset).then((response) => {
         this.isDataLoaded = true
         if (Array.isArray(response)) {
-          this.leads = response.map(obj => (
-            { ...obj,
-              editable: false,
-              region: obj.region_name,
-              country: obj.country_name,
-              last_visit: obj.last_visit,
-              next_visit: obj.next_visit,
-              personal_dentist: obj.label,
-            }
-          ))
+          this.leads = response.map((obj) => ({
+            ...obj,
+            editable: false,
+            region: obj.region_name,
+            country: obj.country_name,
+            last_visit: obj.last_visit,
+            next_visit: obj.next_visit,
+            personal_dentist: obj.label,
+          }))
 
           let newLeadsArr = [...this.leads]
 
           newLeadsArr.map((lead, key) => {
-            getEnquiryNotes(lead.id).then(res => {
+            getEnquiryNotes(lead.id).then((res) => {
               newLeadsArr[key].notes = res.reverse().slice(0, 5)
             })
           })
@@ -379,7 +469,7 @@ export default {
       })
     },
     getDentists() {
-      getDentists().then(response => {
+      getDentists().then((response) => {
         this.dentists = response
       })
     },
@@ -395,7 +485,7 @@ export default {
       }
     },
     getSurgeons() {
-      getSurgeons().then(response => {
+      getSurgeons().then((response) => {
         this.surgeons = response
       })
     },
@@ -413,7 +503,7 @@ export default {
     getPatientAppointmentsData(id, lang, returnData) {
       var numberOfVisits = 0
       var timeSinceFirstVisit = '-'
-      getEnquiryPastAppointments(id, lang).then(response => {
+      getEnquiryPastAppointments(id, lang).then((response) => {
         numberOfVisits = response.length
         timeSinceFirstVisit = response.length ? response[0].date : '-'
       })
@@ -429,8 +519,8 @@ export default {
 </script>
 
 <style lang="scss">
-  .pagination-fixed {
-    position: fixed;
-    bottom: 1rem;
-  }
+.pagination-fixed {
+  position: fixed;
+  bottom: 1rem;
+}
 </style>
