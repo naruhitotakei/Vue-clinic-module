@@ -196,7 +196,7 @@ export default {
           this.events = dataWithDoctor.map(item => {
             return {
               id: item.id,
-              title: item.note ? item.name + ' ' + item.last_name + ' - ' + item.prm_pr_group_name_text + '\n' + moment(item.starts_at).format('HH:mm') + ' - ' + moment(item.ends_at).format('HH:mm') + '\n' + item.note : item.name + ' ' + item.last_name + ' - ' + item.prm_pr_group_name_text + '\n' + moment(item.starts_at).format('HH:mm') + ' - ' + moment(item.ends_at).format('HH:mm'),
+              title: this.getTitleOfEvent(item),
               start: moment(item.starts_at).format('YYYY-MM-DDTHH:mm'),
               end: item.ends_at ? moment(item.ends_at).format('YYYY-MM-DDTHH:mm') : moment(item.starts_at).add('0', 'hours').add('15', 'minutes').format('YYYY-MM-DDTHH:mm'),
               backgroundColor: item.app_lb_color ? item.app_lb_color : '#64D6E8',
@@ -231,6 +231,9 @@ export default {
           })
         }
       })
+    },
+    getTitleOfEvent(item) {
+      return `${item.name} ${item.last_name} - ${item.prm_pr_group_name_text} \n${item.all_day ? this.$t('calendar.noTimeSet') : moment(item.starts_at).format('HH:mm') + ' - ' + moment(item.ends_at).format('HH:mm')} ${item.note ? `\n${item.note}` : ''}`
     },
     calculateEndDate(startDate, hours, minutes) {
       return moment(startDate).add(hours, 'hours').add(minutes, 'minutes').toISOString()

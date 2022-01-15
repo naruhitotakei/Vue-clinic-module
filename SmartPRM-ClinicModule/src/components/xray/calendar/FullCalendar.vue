@@ -244,7 +244,7 @@
       <div>{{ eventPopover.info.event.extendedProps.doctorId }}</div>
       <div>{{ eventPopover.info.event.extendedProps.prm_pr_group_name_text }}</div>
       <div>{{ eventPopover.info.event.extendedProps.notes }}</div>
-      <div>{{ eventPopover.info.event.extendedProps.time }}</div>
+      <div>{{ eventPopover.info.event.allDay ? $t('calendar.noTimeSet') : eventPopover.info.event.extendedProps.time }}</div>
     </b-popover>
   </div>
 
