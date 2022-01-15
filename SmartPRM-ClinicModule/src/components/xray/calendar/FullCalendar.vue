@@ -428,7 +428,6 @@ export default {
         select: this.openCreateModal,
         eventClick: this.openUpdateModal,
         eventDrop: (info) => {
-          console.log(info)
           this.confirmationModal = {
             ...this.confirmationModal,
             show: true,
@@ -518,6 +517,7 @@ export default {
         this.$nextTick(() => {
           this.calendarApi = this.$refs.calendar.getApi()
           this.calendarApi.render()
+          this.calendarApi.updateSize()
         })
       }
     },
@@ -600,7 +600,11 @@ export default {
   mounted() {
     let self = this
     if (this.calendarView) this.calendarOptions.initialView = this.calendarView
-    if (this.calendarDate) this.calendarOptions.initialDate = this.calendarDate
+    if (this.calendarDate) {
+      const startDate = new Date(this.calendarDate.start)
+      const endDate = new Date(this.calendarDate.end)
+      this.calendarOptions.initialDate = new Date((startDate.getTime() + endDate.getTime()) / 2)
+    }
     window.addEventListener('keydown', function (event) {
       self.listenEvent(event)
     }, false)
@@ -778,11 +782,13 @@ export default {
       })
     },
     onViewChange(info) {
-      console.log(info)
       this.viewName = info.view.type
       this.setCalendarView(info.view.type)
       this.dates = info
-      this.setCalendarDate(info.startStr)
+      this.setCalendarDate({
+        start: info.startStr,
+        end: info.endStr,
+      })
     },
     eventResize(info) {
       let event = this.calendarApi.getEventById(info.event.id)
@@ -801,7 +807,6 @@ export default {
         this.formData.assignmentDate = event.start
         this.formData.end = event.end
         this.formData.time = new Date(event.start).toTimeString()
-        console.log('asd', event)
         this.formData.allDay = event.allDay
         this.updateCalendar(this.formData.id, this.formData, () => {
           event.setExtendedProp('assignmentDate', this.formData.assignmentDate)
@@ -815,7 +820,6 @@ export default {
         this.formData.id = event.id
         this.formData.assignmentDate = event.start
         this.formData.end = event.end
-        console.log('asd', event)
         this.formData.allDay = event.allDay
         this.formData.doctor_id = newResource.id
         this.formData.doctor_name = newResource.title
@@ -951,7 +955,6 @@ export default {
       }
     },
     openUpdateModal(selectionInfo) {
-      console.log(selectionInfo)
       // this.modalShow = true
       this.$emit('setModalShow', true)
       this.disabled = true
