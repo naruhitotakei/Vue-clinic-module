@@ -432,7 +432,12 @@ export default {
     getDatesForCurrentWeek() {
       getDatesForCurrentWeek().then(response => {
         let temp = _.map(response, '?column?')
-        this.dates = temp
+        let currentWeek = temp.filter(
+          (date) =>
+            moment(date).week() === moment().week() &&
+            moment(date).year() === moment().year()
+        )
+        this.dates = currentWeek
         this.datesForCurrentWeek = _.map(temp, function (date) {
           return moment(date).format('DD-MM-YYYY')
         })
