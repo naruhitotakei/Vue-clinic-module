@@ -1672,8 +1672,8 @@ app.get('/api/statistics/clinic/attendance', (req, res) => {
 })
 
 app.get('/api/statistics/visits-by-country', (req, res) => {
-  if (req.session.prm_user && req.session.prm_user.permissions)
-    daoStatistics.getVisitsByCountryInAWeek(req, res)
+  if (req.session.prm_user && req.session.prm_user.permissions && checkPermission(req.session.prm_user.permissions, homePermission))
+    daoStatistics.getVisitsByCountryInAWeek(req, res, getScope(req.session.prm_user.permissions, homePermission), req.session.prm_user.prm_client_id)
   else res.status(401).json('OK: user unauthorized')
 })
 
