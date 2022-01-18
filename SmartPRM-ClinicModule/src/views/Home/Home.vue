@@ -4,7 +4,7 @@
             <b-col lg="8">
                 <iq-card class-name="iq-card-block iq-card-stretch iq-card-height" style="height: auto !important;">
                     <template v-slot:headerTitle>
-                        <h4 class="card-title">{{ $t('home.todaysAppointments') }}</h4>
+                        <h4 class="card-title">{{ $t('home.todaysAppointments') }} ({{todaysAppointments.length}})</h4>
                     </template>
                     <!-- <template v-slot:headerAction>
                 <b-dropdown size="lg p-0"  variant="link" toggle-class="text-decoration-none" no-caret>
@@ -48,7 +48,7 @@
                 </iq-card>
                 <iq-card class-name="iq-card-block iq-card-stretch" style="margin-top: 0 !important">
                     <template v-slot:headerTitle>
-                        <h4 class="card-title">{{ $t('home.openAssignments') }}</h4>
+                        <h4 class="card-title">{{ $t('home.openAssignments') }} ({{openAssignmentsLength}})</h4>
                     </template>
                     <template v-slot:headerAction>
                         <div class="iq-card-header-toolbar d-flex align-items-center">
@@ -85,7 +85,7 @@
                     </div>
                 </template> -->
                         <b-list-group class="list-group-flush" id="openTodos">
-                            <b-list-group-item v-for="(item, index) in openAssignments"
+                            <b-list-group-item v-for="(item, index) in openAssignmentsList"
                               :key="index"
                               :style="{'background': getDifferenceDate(item.due_at) === 1 && '#ffeeba' || getDifferenceDate(item.due_at) > 1 && '#f5c6cb'}"
                             >
@@ -116,7 +116,7 @@
                         <template>
                             <div class="mt-4 ml-2">
                                 <p v-if="openAssignments.length === 0">{{ $t('home.noOpenAssignments') }}</p>
-                                <b-pagination v-if="openAssignments.length > 10"
+                                <b-pagination v-if="openAssignments.length > openAssignmentsPerPage"
                                               v-model="currentOpenAssignmentsPage"
                                               :total-rows="openAssignments.length"
                                               :per-page="openAssignmentsPerPage"
@@ -137,7 +137,7 @@
             <b-col lg="4">
                 <iq-card class-name="iq-card-block iq-card-stretch">
                     <template v-slot:headerTitle>
-                        <h4 class="card-title">{{ $t('home.staffList') }}</h4>
+                        <h4 class="card-title">{{ $t('home.staffList') }} ({{staff.length}})</h4>
                     </template>
                     <template v-slot:body>
                         <ul class="doctors-lists m-0 p-0">
@@ -164,7 +164,7 @@
                 </iq-card>
                 <iq-card class-name="iq-card-block iq-card-stretch">
                     <template v-slot:headerTitle>
-                        <h4 class="card-title">{{ $t('home.patientsByCountry') }}</h4>
+                        <h4 class="card-title">{{ $t('home.patientsByCountry') }} ({{countriesWithPatients.length}})</h4>
                     </template>
                     <template v-slot:body>
                         <div class="iq-details" :class="{'mt-3': index !== 0}" v-for="(country, index) in countriesWithPatients" :key="index">
@@ -353,11 +353,19 @@ export default {
     body[0].classList.add('sidebar-main-menu')
   },
   computed: {
+    openAssignmentsList() {
+      return this.openAssignments.slice(
+        (this.currentOpenAssignmentsPage - 1) * this.openAssignmentsPerPage,
+        this.currentOpenAssignmentsPage * this.openAssignmentsPerPage)
+    },
     hideTodaysAppointmentsPagination() {
       return Math.floor(this.todaysAppointments.length / this.todaysAppointmentsPerPage) !== 0
     },
     hideOpenAssignmentsPagination() {
       return Math.floor(this.openAssignments.length / this.openAssignmentsPerPage) !== 0
+    },
+    openAssignmentsLength() {
+      return this.openAssignments.length
     },
   },
   methods: {
@@ -395,7 +403,7 @@ export default {
         let dentist = this.dentists.find((item) => {
           return item.code === patient.prm_dentist_user_id
         })
-        return dentist && dentist.label ? dentist.label : 'N/A'
+        return dentist && dentist.label ? dentist.label : this.$t('shared.noDoctor')
       }
     },
     getUserLogin() {
