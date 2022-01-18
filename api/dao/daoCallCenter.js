@@ -30,6 +30,30 @@ const getAppointmentsWithMissingServices = (request, response, start, end, prm_c
   })
 }
 
+const getPrmClient = (request, response, prm_client_id) => {
+  const statement = "SELECT prm_client.id AS id, prm_client.client_name AS name, prm_client.client_info AS info from prm_client WHERE prm_client.id = " + prm_client_id + " LIMIT 1 ";
+  pool.query(statement, (error, results) => {
+    if (error) {
+      throw error
+    }
+    const client = results.rows[0]
+    response.status(200).json(client)
+  })
+}
+
+const updatePrmClientInfo = (request, response, prm_client_id, info) => {
+  console.log(prm_client_id, info)
+  const statement = `UPDATE prm_client SET client_info = '${info}' WHERE prm_client.id = ${prm_client_id}`;
+  pool.query(statement, (error, results) => {
+    if(error) {
+      throw error
+    }
+    response.status(200).json("OK")
+  })
+}
+
 module.exports = {
-  getAppointmentsWithMissingServices
+  getAppointmentsWithMissingServices,
+  getPrmClient,
+  updatePrmClientInfo
 }
