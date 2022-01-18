@@ -137,7 +137,7 @@
             <b-col lg="4">
                 <iq-card class-name="iq-card-block iq-card-stretch">
                     <template v-slot:headerTitle>
-                        <h4 class="card-title">{{ $t('home.staffList') }} ({{staff.length}})</h4>
+                        <h4 class="card-title">{{ $t('home.staffList') }}</h4>
                     </template>
                     <template v-slot:body>
                         <ul class="doctors-lists m-0 p-0">
@@ -164,7 +164,7 @@
                 </iq-card>
                 <iq-card class-name="iq-card-block iq-card-stretch">
                     <template v-slot:headerTitle>
-                        <h4 class="card-title">{{ $t('home.patientsByCountry') }} ({{countriesWithPatients.length}})</h4>
+                        <h4 class="card-title">{{ $t('home.patientsByCountry') }}</h4>
                     </template>
                     <template v-slot:body>
                         <div class="iq-details" :class="{'mt-3': index !== 0}" v-for="(country, index) in countriesWithPatients" :key="index">
