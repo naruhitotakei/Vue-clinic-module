@@ -32,17 +32,18 @@
                       <b-list-group-item
                           v-for="(item, index) in myTodayList"
                           :key="index"
-                          :style="{'background': getDifferenceDate(item.due_at) === 1 && '#ffeeba' || getDifferenceDate(item.due_at) > 1 && '#f5c6cb'}"
+                          :style="{'background': getDifferenceDate(item.due_at) === 1 && '#ffeeba' || getDifferenceDate(item.due_at) > 1 && 'white'}"
                       >
                         <div :class="{ 'taskIsActive' : !item.completed}">
-                          <div>
-                            <b-checkbox v-model="item.completed" name="check-button" inline
+                          <div class="checkbox_text">
+                            <b-checkbox class="checkbox" v-model="item.completed" name="check-button" inline
                               :key="index"
                               @change="finishAssignment(item.id, $event, 'myToday')"
                             >
-                              <strong v-if="!item.completed">{{ item.description }}</strong>
-                              <strong :style="{ color: '#aaa' }" v-else>{{ item.description }}</strong>
                             </b-checkbox>
+                              <!-- <strong v-if="!item.completed">{{ item.description }}</strong> -->
+                              <strong :class="{'red-text': isItOverdue(item.due_at)}" v-if="!item.completed">{{ item.description }}</strong>
+                              <strong :style="{ color: '#aaa' }" v-else>{{ item.description }}</strong>
                           </div>
                           <div class="d-flex align-items-center justify-content-between">
                             <div>
@@ -97,15 +98,16 @@
                     <b-list-group-item
                       v-for="(item, index) in myOverDueList"
                       :key="index"
-                      :style="{'background': getDifferenceDate(item.due_at) === 1 && '#ffeeba' || getDifferenceDate(item.due_at) > 1 && '#f5c6cb'}">
+                      :style="{'background': getDifferenceDate(item.due_at) === 1 && '#ffeeba' || getDifferenceDate(item.due_at) > 1 && 'white'}">
                       <div :class="{ 'taskIsActive' : !item.completed}">
-                        <div>
-                          <b-checkbox v-model="item.completed" name="check-button" inline
+                        <div class="checkbox_text">
+                          <b-checkbox class="checkbox" v-model="item.completed" name="check-button" inline
                             :key="index"
                             @change="finishAssignment(item.id, $event, 'myoverdue')">
-                              <strong v-if="!item.completed">{{ item.description }}</strong>
-                              <strong :style="{ color: '#aaa' }" v-else>{{ item.description }}</strong>
                             </b-checkbox>
+                              <!-- <strong v-if="!item.completed">{{ item.description }}</strong> -->
+                              <strong :class="{'red-text': isItOverdue(item.due_at)}" v-if="!item.completed">{{ item.description }}</strong>
+                              <strong :style="{ color: '#aaa' }" v-else>{{ item.description }}</strong>
                         </div>
                         <div class="d-flex align-items-center justify-content-between">
                           <div>
@@ -151,16 +153,17 @@
                       <b-list-group-item
                         v-for="(item, index) in otherUserTodayList"
                         :key="index"
-                        :style="{'background': getDifferenceDate(item.due_at) === 1 && '#ffeeba' || getDifferenceDate(item.due_at) > 1 && '#f5c6cb'}"
+                        :style="{'background': getDifferenceDate(item.due_at) === 1 && '#ffeeba' || getDifferenceDate(item.due_at) > 1 && 'white'}"
                       >
                         <div :class="{ 'taskIsActive' : !item.completed}">
-                          <div>
-                            <b-checkbox v-model="item.completed"  name="check-button" inline
+                          <div class="checkbox_text">
+                            <b-checkbox class="checkbox" v-model="item.completed"  name="check-button" inline
                               :key="index"
                               @change="openWarningModal(item.id, $event, 'today')">
-                              <strong v-if="!item.completed">{{ item.description }}</strong>
-                              <strong :style="{ color: '#aaa' }" v-else>{{ item.description }}</strong>
                             </b-checkbox>
+                              <!-- <strong v-if="!item.completed">{{ item.description }}</strong> -->
+                              <strong :class="{'red-text': isItOverdue(item.due_at)}" v-if="!item.completed">{{ item.description }}</strong>
+                              <strong :style="{ color: '#aaa' }" v-else>{{ item.description }}</strong>
                           </div>
                           <b-row>
                             <b-col cols="12" lg="6" align-self="center">
@@ -215,15 +218,16 @@
                       <b-list-group-item
                         v-for="(item, index) in otherUserOverDueList"
                         :key="index"
-                        :style="{'background': getDifferenceDate(item.due_at) === 1 && '#ffeeba' || getDifferenceDate(item.due_at) > 1 && '#f5c6cb'}">
+                        :style="{'background': getDifferenceDate(item.due_at) === 1 && '#ffeeba' || getDifferenceDate(item.due_at) > 1 && 'white'}">
                         <div :class="{ 'taskIsActive' : !item.completed}">
-                          <div>
-                            <b-checkbox v-model="item.completed" :disabled="item.disabled" name="check-button" inline
+                          <div class="checkbox_text">
+                            <b-checkbox class="checkbox" v-model="item.completed" :disabled="item.disabled" name="check-button" inline
                               :key="index"
                               @change="openWarningModal(item.id, $event, 'overdue')">
-                                <strong v-if="!item.completed">{{ item.description }}</strong>
-                                <strong :style="{ color: '#aaa' }" v-else>{{ item.description }}</strong>
                             </b-checkbox>
+                                <!-- <strong v-if="!item.completed">{{ item.description }}</strong> -->
+                                <strong :class="{'red-text': isItOverdue(item.due_at)}" v-if="!item.completed">{{ item.description }}</strong>
+                                <strong :style="{ color: '#aaa' }" v-else>{{ item.description }}</strong>
                           </div>
                           <b-row>
                             <b-col cols="12" lg="6" align-self="center">
@@ -310,16 +314,17 @@
                             <b-list-group-item
                                 v-for="(item, index) in myFutureList"
                                 :key="index"
-                                :style="{'background': getDifferenceDate(item.due_at) === 1 && '#ffeeba' || getDifferenceDate(item.due_at) > 1 && '#f5c6cb'}"
+                                :style="{'background': getDifferenceDate(item.due_at) === 1 && '#ffeeba' || getDifferenceDate(item.due_at) > 1 && 'white'}"
                             >
                               <div :class="{ 'taskIsActive' : !item.completed}">
-                                <div>
-                                  <b-checkbox v-model="item.completed" :disabled="item.disabled" name="check-button" inline
+                                <div class="checkbox_text">
+                                  <b-checkbox class="checkbox" v-model="item.completed" :disabled="item.disabled" name="check-button" inline
                                     :key="index"
                                     @change="finishAssignment(item.id, $event, 'myFuture')">
-                                    <strong v-if="!item.completed">{{ item.description }}</strong>
-                                    <strong :style="{ color: '#aaa' }" v-else>{{ item.description }}</strong>
                                   </b-checkbox>
+                                    <!-- <strong v-if="!item.completed">{{ item.description }}</strong> -->
+                                    <strong :class="{'red-text': isItOverdue(item.due_at)}" v-if="!item.completed">{{ item.description }}</strong>
+                                    <strong :style="{ color: '#aaa' }" v-else>{{ item.description }}</strong>
                                 </div>
                                 <div class="d-flex align-items-center justify-content-between">
                                   <div>
@@ -362,16 +367,17 @@
                             <b-list-group-item
                                 v-for="(item, index) in otherUserFutureList"
                                 :key="index"
-                                :style="{'background': getDifferenceDate(item.due_at) === 1 && '#ffeeba' || getDifferenceDate(item.due_at) > 1 && '#f5c6cb'}"
+                                :style="{'background': getDifferenceDate(item.due_at) === 1 && '#ffeeba' || getDifferenceDate(item.due_at) > 1 && 'white'}"
                             >
                               <div :class="{ 'taskIsActive' : !item.completed}">
-                                <div>
-                                  <b-checkbox v-model="item.completed" :disabled="item.disabled" name="check-button" inline
+                                <div class="checkbox_text">
+                                  <b-checkbox class="checkbox" v-model="item.completed" :disabled="item.disabled" name="check-button" inline
                                     :key="index"
                                     @change="openWarningModal(item.id, $event, 'future')">
-                                      <strong v-if="!item.completed">{{ item.description }}</strong>
-                                      <strong :style="{ color: '#aaa' }" v-else>{{ item.description }}</strong>
                                     </b-checkbox>
+                                      <!-- <strong v-if="!item.completed">{{ item.description }}</strong> -->
+                                      <strong :class="{'red-text': isItOverdue(item.due_at)}" v-if="!item.completed">{{ item.description }}</strong>
+                                      <strong :style="{ color: '#aaa' }" v-else>{{ item.description }}</strong>
                                 </div>
                                 <b-row>
                                   <b-col cols="12" lg="6" align-self="center">
@@ -549,6 +555,13 @@
   color: black;
 }
 
+.checkbox_text{
+  display: flex;
+  justify-content: flex-start;
+}
+.checkbox{
+  margin-right: 0 !important;
+}
 .checkbox-assignment {
     margin-left: 2rem;
 }
@@ -737,6 +750,9 @@ export default {
     },
   },
   methods: {
+    isItOverdue(date) {
+      return moment().isAfter(date)
+    },
     filterOverDueItems() {
       if (this.filterOverdue && this.filterOverdue.length) {
         let filteredAssignments = []

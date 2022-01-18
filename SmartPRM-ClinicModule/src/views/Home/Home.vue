@@ -87,20 +87,22 @@
                         <b-list-group class="list-group-flush" id="openTodos">
                             <b-list-group-item v-for="(item, index) in openAssignmentsList"
                               :key="index"
-                              :style="{'background': getDifferenceDate(item.due_at) === 1 && '#ffeeba' || getDifferenceDate(item.due_at) > 1 && '#f5c6cb'}"
+                              :style="{'background': getDifferenceDate(item.due_at) === 1 && '#ffeeba' || getDifferenceDate(item.due_at) > 1 && 'white'}"
                             >
                                 <div :class="{ 'taskIsActive' : !item.completed}">
-                                    <div>
-                                        <b-checkbox v-model="item.completed" name="check-button" inline
+                                    <div class="checkbox_text">
+                                        <b-checkbox class="checkbox" v-model="item.completed" name="check-button" inline
                                           :key="index"
                                           @change="finishAssignment(item.id, $event)">
-                                          <strong v-if="!item.completed">{{ item.description }}</strong>
-                                          <strong :style="{ color: '#aaa' }" v-else>{{ item.description }}</strong>
                                         </b-checkbox>
+                                          <!-- <strong v-if="!item.completed">{{ item.description }}</strong> -->
+                                          <strong :class="{'red-text': isItOverdue(item.due_at)}" v-if="!item.completed">{{ item.description }}</strong>
+                                          <strong :style="{ color: '#aaa' }" v-else>{{ item.description }}</strong>
                                     </div>
                                     <div class="d-flex align-items-center justify-content-between">
                                         <div>
-                                            <span class="text-left">{{ item.patientname }} {{ item.patientlastname }}</span>&nbsp;
+                                            <!-- <span class="text-left">{{ item.patientname }} {{ item.patientlastname }}</span>&nbsp; -->
+                                            <router-link tag="span" :to="'/patients/'+ item.enquiry_id" class="text-left" style="cursor:pointer;">{{ item.patientname }} {{ item.patientlastname }}</router-link>&nbsp;
                                             <span class="text-left">{{ patientsDentist(item) ? `(${patientsDentist(item)})` : '' }}</span>
                                         </div>
                                         <div class="d-flex align-items-center">
@@ -369,6 +371,9 @@ export default {
     },
   },
   methods: {
+    isItOverdue(date) {
+      return moment().isAfter(date)
+    },
     getDifferenceDate(date) {
       return Math.floor((Date.parse(new Date(Date.now())) - Date.parse(date)) / 86400000)
     },
@@ -528,12 +533,19 @@ export default {
 }
 </script>
 
-<style lang="scss">
+<style scoped lang="scss">
 .pr-bar {
   height: 6px !important;
 }
 
 .pr-bar > div {
   background-color: #089bab !important;
+}
+.checkbox_text{
+  display: flex;
+  justify-content: flex-start;
+}
+.checkbox{
+    margin-right: 0 !important;
 }
 </style>
