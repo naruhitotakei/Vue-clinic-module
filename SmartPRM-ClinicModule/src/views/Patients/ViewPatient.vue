@@ -421,10 +421,11 @@
                                                       <li id="openList" v-for="(item,index) in openAssignments" :key="index + item.due_at"
                                                           class="d-flex align-items-center justify-content-between mb-3">
                                                           <div class="w-100">
-                                                            <div>
-                                                              <b-checkbox v-model="item.completed" name="check-button" inline
+                                                            <div class="checkbox_text">
+                                                              <b-checkbox class="checkbox" v-model="item.completed" name="check-button" inline
                                                                 :key="index"
-                                                                @change="completeAssignment(item.id, $event)"><strong :class="{'red-text': isItOverdue(item.due_at)}">{{ item.description }}</strong></b-checkbox>
+                                                                @change="completeAssignment(item.id, $event)"></b-checkbox>
+                                                                <strong :class="{'red-text': isItOverdue(item.due_at)}">{{ item.description }}</strong>
                                                             </div>
                                                             <div class="d-flex align-items-center justify-content-between">
                                                               <div>
@@ -2252,7 +2253,13 @@ export default {
 .red-text {
   color: red !important;
 }
-
+.checkbox_text{
+  display: flex;
+  justify-content: flex-start;
+}
+.checkbox{
+  margin-right: 0 !important;
+}
 .preview-file {
   max-width: 110px !important;
   max-height: 110px !important;
