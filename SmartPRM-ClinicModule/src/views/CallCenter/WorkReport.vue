@@ -29,15 +29,11 @@
               </tab-content-item>
 
               <tab-content-item :active="false" id="callsByHour">
-                <iq-card>
-                  <CallsByHour />
-                </iq-card>
+                <CallsByHour />
               </tab-content-item>
 
               <tab-content-item :active="false" id="overview">
-                <iq-card>
-                  <WorkOverview />
-                </iq-card>
+                <WorkOverview />
               </tab-content-item>
             </tab-content>
           </div>
