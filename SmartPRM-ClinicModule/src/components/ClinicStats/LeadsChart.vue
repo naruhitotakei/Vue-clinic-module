@@ -187,9 +187,6 @@ export default {
         xaxis: {
           type: 'datetime',
           categories: datesArray,
-          labels: {
-            format: 'dd/MM',
-          },
         },
         tooltip: {
           y: {
