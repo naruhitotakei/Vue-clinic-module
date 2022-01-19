@@ -335,6 +335,9 @@ export default {
         this.revenueChartSeries = [{
           data: this.revenueList,
         }]
+
+        let self = this
+
         this.revenueChartOptions = {
           xaxis: {
             categories: [...datesArray],
@@ -347,6 +350,14 @@ export default {
             },
             title: {
               text: this.formatPrice(this.totalRevenue),
+            },
+          },
+          tooltip: {
+            y: {
+              formatter: function (value, { series, seriesIndex, w }) {
+                const numb = String(value).match(/\d/g).join('')
+                return self.$options.filters.formatPrice(numb)
+              },
             },
           },
         }

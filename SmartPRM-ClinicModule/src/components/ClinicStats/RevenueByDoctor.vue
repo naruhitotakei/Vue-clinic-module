@@ -152,6 +152,7 @@ export default {
         })
 
         this.series = sumByProduct
+        let self = this
 
         this.chartOptions = {
           dataLabels: {
@@ -194,6 +195,14 @@ export default {
           },
           fill: {
             opacity: 1,
+          },
+          tooltip: {
+            y: {
+              formatter: function (value, { series, seriesIndex, w }) {
+                const numb = String(value).match(/\d/g).join('')
+                return self.$options.filters.formatPrice(numb)
+              },
+            },
           },
         }
 

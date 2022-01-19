@@ -159,6 +159,7 @@ export default {
       })
 
       this.series = sumByCountry
+      let self = this
 
       this.chartOptions = {
         dataLabels: {
@@ -194,6 +195,14 @@ export default {
         xaxis: {
           type: 'datetime',
           categories: datesArray,
+        },
+        tooltip: {
+          y: {
+            formatter: function (value, { series, seriesIndex, w }) {
+              const numb = String(value).match(/\d/g).join('')
+              return self.$options.filters.formatNumber(numb)
+            },
+          },
         },
       }
 

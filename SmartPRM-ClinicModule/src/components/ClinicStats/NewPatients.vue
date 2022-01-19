@@ -137,6 +137,8 @@ export default {
         }
       })
 
+      let self = this
+
       this.series = [
         {
           name: 'New Patients',
@@ -202,6 +204,14 @@ export default {
         },
         fill: {
           opacity: 1,
+        },
+        tooltip: {
+          y: {
+            formatter: function (value, { series, seriesIndex, w }) {
+              const numb = String(value).match(/\d/g).join('')
+              return self.$options.filters.formatNumber(numb)
+            },
+          },
         },
       }
 
