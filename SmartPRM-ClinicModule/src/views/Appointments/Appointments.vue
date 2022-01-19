@@ -170,153 +170,106 @@
           </div>
 
           <!-- Mobile version -->
-          <div
-            class="card forMobile"
-            v-for="appointment in appointments"
-            :key="appointment.id + '_mobile'"
-          >
-            <b-row class="no-margin flexMobileParent">
-              <b-col md="2" sm="2" class="col-title-sm"
-                >{{ $t('appointments.time') }}:</b-col
-              >
-              <b-col md="3" sm="3" class="col-data-sm"
-                ><p class="black-text">{{ appointment.time }}</p></b-col
-              >
-              <b-col md="2" sm="2" class="col-title-sm"
-                >{{ $t('appointments.patient') }}:</b-col
-              >
-              <b-col md="3" sm="3" class="col-data-sm"
-                ><p class="black-text mb-0">
-                  {{
+          <div class="card forMobile"
+               v-for="appointment in appointments"
+               :key="appointment.id + '_mobile'">
+              <b-row class="no-margin flexMobileParent">
+                  <b-col md="2" sm="2" class="col-title-sm">{{ $t('appointments.time') }}:</b-col>
+                  <b-col md="3" sm="3" class="col-data-sm"><p class="black-text">{{ appointment.time }}</p></b-col>
+                  <b-col md="2" sm="2" class="col-title-sm">{{ $t('appointments.patient') }}:</b-col>
+                  <b-col md="3" sm="3" class="col-data-sm">
+                      <p class="black-text mb-0">
+                          {{
                     appointment.enquiry_name +
                     ' ' +
                     appointment.enquiry_last_name
-                  }}
-                </p>
-                 <p class="black-text">
-                     {{ appointment.enquiry_phone }}
-                 </p>
-                </b-col
-              >
-            </b-row>
-            <b-row class="no-margin flexMobileParent">
-              <b-col md="2" sm="2" class="col-title-sm"
-                >{{ $t('appointments.product') }}:</b-col
-              >
-              <b-col md="3" sm="3" class="col-data-sm"
-                ><p class="black-text">{{ appointment.product_name }}</p></b-col
-              >
-              <b-col md="2" sm="2" class="col-title-sm"
-                >{{ $t('appointments.doctor') }}:</b-col
-              >
-              <b-col md="3" sm="3" class="col-data-sm"
-                ><p class="black-text">{{ appointment.doctor_name }}</p></b-col
-              >
-            </b-row>
-            <b-row class="no-margin flexMobileParent mb-2">
-              <b-col md="2" sm="2" class="col-title-sm mt-2"
-                >{{ $t('appointments.attendance') }}:</b-col
-              >
-              <b-col md="3" sm="3" class="col-data-sm mt-2">
-                <div v-if="!appointment.attendance">
-                  <b-button
-                    size="sm"
-                    variant="light"
-                    class="width-50"
-                    @click="handleUpdateAttendance(appointment.id, 'Attended')"
-                  >
-                    {{ $t('shared.yes') }}
-                  </b-button>
-                  <b-button
-                    size="sm"
-                    variant="light"
-                    class="width-50"
-                    @click="handleUpdateAttendance(appointment.id, 'No-show')"
-                  >
-                    {{ $t('shared.no') }}
-                  </b-button>
-                </div>
-                <div v-if="appointment.attendance">
-                  <b-button
-                    size="sm"
-                    :variant="
+                          }}
+                      </p>
+                      <p class="black-text">
+                          {{ appointment.enquiry_phone }}
+                      </p>
+                  </b-col>
+              </b-row>
+              <b-row class="no-margin flexMobileParent">
+                  <b-col md="2" sm="2" class="col-title-sm">{{ $t('appointments.product') }}:</b-col>
+                  <b-col md="3" sm="3" class="col-data-sm"><p class="black-text">{{ appointment.product_name }}</p></b-col>
+                  <b-col md="2" sm="2" class="col-title-sm">{{ $t('appointments.doctor') }}:</b-col>
+                  <b-col md="3" sm="3" class="col-data-sm"><p class="black-text">{{ appointment.doctor_name }}</p></b-col>
+              </b-row>
+              <b-row class="no-margin flexMobileParent mb-2">
+                  <b-col md="2" sm="2" class="col-title-sm mt-2">{{ $t('appointments.attendance') }}:</b-col>
+                  <b-col md="3" sm="3" class="col-data-sm mt-2">
+                      <div v-if="!appointment.attendance">
+                          <b-button size="sm"
+                                    variant="light"
+                                    class="width-50"
+                                    @click="handleUpdateAttendance(appointment.id, 'Attended')">
+                              {{ $t('shared.yes') }}
+                          </b-button>
+                          <b-button size="sm"
+                                    variant="light"
+                                    class="width-50"
+                                    @click="handleUpdateAttendance(appointment.id, 'No-show')">
+                              {{ $t('shared.no') }}
+                          </b-button>
+                      </div>
+                      <div v-if="appointment.attendance">
+                          <b-button size="sm"
+                                    :variant="
                       appointment.attendance === 'Attended'
                         ? 'success'
                         : 'light'
                     "
-                    class="width-50"
-                    @click="handleUpdateAttendance(appointment.id, 'Attended')"
-                  >
-                    {{ $t('shared.yes') }}
-                  </b-button>
-                  <b-button
-                    size="sm"
-                    :variant="
+                                    class="width-50"
+                                    @click="handleUpdateAttendance(appointment.id, 'Attended')">
+                              {{ $t('shared.yes') }}
+                          </b-button>
+                          <b-button size="sm"
+                                    :variant="
                       appointment.attendance !== 'Attended' ? 'danger' : 'light'
                     "
-                    class="width-50"
-                    @click="handleUpdateAttendance(appointment.id, 'No-show')"
-                  >
-                    {{ $t('shared.no') }}
-                  </b-button>
-                </div>
-              </b-col>
-              <b-col md="2" sm="2" class="col-title-sm mt-2"
-                >{{ $t('appointments.interest') }}:</b-col
-              >
-              <b-col md="3" sm="3" class="col-data-sm">
-                  <b-form-group class="align-center">
-                      <b-form-radio v-for="[value, label] of [
+                                    class="width-50"
+                                    @click="handleUpdateAttendance(appointment.id, 'No-show')">
+                              {{ $t('shared.no') }}
+                          </b-button>
+                      </div>
+                  </b-col>
+                  <b-col md="2" sm="2" class="col-title-sm mt-2">{{ $t('appointments.interest') }}:</b-col>
+                  <b-col md="3" sm="3" class="col-data-sm">
+                      <b-form-group class="align-center">
+                          <b-form-radio v-for="[value, label] of [
                       ['Not interested', 'notInterested'],
                       ['Interested', 'interested'],
                       ['Very interested', 'veryInterested'],
                     ]"
-                                    :key="value"
-                                    v-model="appointment.level_of_interest"
-                                    :value="value"
-                                    @change="handleUpdateLevelOfInterest(appointment.id, value)">
-                          {{ $t(`appointments.${label}`) }}
-                      </b-form-radio>
-                  </b-form-group>
-              </b-col>
-            </b-row>
-            <b-row class="no-margin flexMobileParent">
-              <b-col
-                md="12"
-                sm="12"
-                class="mt-2 mb-3 align-center display-flex"
-              >
-              <label for="clinicNotes" class="ml-2 mb-4 mobile-width header-color">{{ $t('appointments.clinicNotes') }}</label>
-                <b-form-textarea
-                  id="notes-textarea"
-                  class="relative-pos"
-                  :placeholder="$t('appointments.enterNotes')"
-                  rows="4"
-                  max-rows="6"
-                  v-model="appointment.notes"
-                  @blur="handleUpdateClinicNotes($event, appointment.id)"
-                ></b-form-textarea>
-              </b-col>
-            </b-row>
-              <b-row class="no-margin flexMobileParent">
-              <b-col
-                md="12"
-                sm="12"
-                class="mt-2 mb-3 align-center display-flex"
-              >
-              <label for="clinicNotes" class="ml-2 mb-4 mobile-width header-color">{{ $t('appointments.callCenterNotes') }}</label>
-                <b-form-textarea
-                  id="notes-textarea"
-                  class="relative-pos"
-                  :placeholder="$t('appointments.enterNotes')"
-                  rows="4"
-                  max-rows="6"
-                  v-model="appointment.note"
-                  @blur="handleUpdateCallCenterNotes($event, appointment.id)"
-                ></b-form-textarea>
-              </b-col>
-            </b-row>
-            <hr />
+                                        :key="value"
+                                        v-model="appointment.level_of_interest"
+                                        :value="value"
+                                        @change="handleUpdateLevelOfInterest(appointment.id, value)">
+                              {{ $t(`appointments.${label}`) }}
+                          </b-form-radio>
+                      </b-form-group>
+                  </b-col>
+              </b-row>
+              <b-row class="no-margin pt-2 align-center">
+                  <label for="clinicNotes" class="ml-2 mb-1 header-color">{{ $t('appointments.clinicNotes') }}</label>
+                  <b-form-textarea id="notes-textarea"
+                                   :placeholder="$t('appointments.enterNotes')"
+                                   rows="4"
+                                   max-rows="6"
+                                   v-model="appointment.notes"
+                                   @blur="handleUpdateClinicNotes($event, appointment.id)"></b-form-textarea>
+              </b-row>
+              <b-row class="no-margin pt-2 mt-1 align-center">
+                  <label for="callCenterNotes" class="ml-2 mb-1 header-color">{{ $t('appointments.callCenterNotes') }}</label>
+                  <b-form-textarea id="notes-textarea"
+                                   :placeholder="$t('appointments.enterNotes')"
+                                   rows="4"
+                                   max-rows="6"
+                                   v-model="appointment.note"
+                                   @blur="handleUpdateCallCenterNotes($event, appointment.id)"></b-form-textarea>
+              </b-row>
+              <hr />
           </div>
 
           <b-modal
