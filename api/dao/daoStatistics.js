@@ -29,7 +29,7 @@ const getVisitsByCountryInAWeek = (request, response, scope, prm_client_id) => {
       statement += "AND e.prm_client_id = " + prm_client_id
     }
     statement += " GROUP BY c.name"
-    console.log("Getting patients by country on BE: " + statement)
+
     pool.query(statement, (error, results) => {
         if (error) {
             throw error
