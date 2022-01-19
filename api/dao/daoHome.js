@@ -12,22 +12,21 @@ var moment = require('moment');
 const getTodaysAppointments = (request, response, user_id, prm_client_id, locale, scope) => {
     let statement = "SELECT appointments.*, concat(enquiries.name, ' ', enquiries.last_name) AS patient_name, doctor_name, " +
         "enquiries.phone AS patient_phone, enquiries.id AS patient_id, prm_product_group_name.text AS product_group_name, " +
-        "prm_product_group_name.language AS language, appointments_label_name.text AS label_name, appointments_label_name.language AS language FROM appointments "
+        "prm_product_group_name.language AS language FROM appointments "
     statement += "LEFT JOIN enquiries ON appointments.enquiry_id = enquiries.id "
     statement += "LEFT JOIN users ON enquiries.prm_dentist_user_id = users.id "
     statement += "LEFT JOIN prm_product_group ON appointments.product_group_id = prm_product_group.product_group_id "
     statement += "LEFT JOIN prm_product_group_name ON prm_product_group.product_group_id = prm_product_group_name.product_group_id "
-    statement += "LEFT JOIN appointments_label ON appointments.label_id = appointments_label.id "
-    statement += "LEFT JOIN appointments_label_name ON appointments_label.id = appointments_label_name.appointment_label_id "
-    statement += "WHERE starts_at::DATE = CURRENT_DATE AND prm_product_group_name.language = '" + locale + "' AND appointments_label_name.language = '" + locale + "' " 
-    statement += "AND appointments.appointment_canceled = FALSE "
+    statement += "WHERE starts_at::DATE = CURRENT_DATE AND prm_product_group_name.language = '" + locale + "' " 
+    statement += "AND appointment_canceled = FALSE "
     if (scope == 'All') {
     } else if (scope == 'PrmClient') {
         statement += "AND users.prm_client_id = " + prm_client_id
     } else if (scope == 'Self') {
         statement += "AND enquiries.prm_dentist_user_id = " + user_id + " OR enquiries.prm_surgeon_user_id = " + user_id
     }
-    statement += "ORDER BY time ASC"
+    statement += " ORDER BY time ASC"
+
     pool.query(statement, (error, results) => {
         if (error) {
             throw error

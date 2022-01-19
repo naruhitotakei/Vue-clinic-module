@@ -352,6 +352,7 @@ export default {
     this.getDentists()
     this.getCountriesWithPatients()
     this.getDoctorsStatisticPerWeek()
+    this.getTodaysAppointmentsList(this.$i18n.locale)
     body[0].classList.add('sidebar-main-menu')
   },
   computed: {
