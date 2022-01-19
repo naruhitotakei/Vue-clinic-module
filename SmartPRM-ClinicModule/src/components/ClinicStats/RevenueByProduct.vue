@@ -124,6 +124,11 @@ export default {
       let self = this
 
       this.chartOptions = {
+        chart: {
+          toolbar: {
+            show: false,
+          },
+        },
         labels: [...prNames],
         dataLabels: {
           enabled: false,

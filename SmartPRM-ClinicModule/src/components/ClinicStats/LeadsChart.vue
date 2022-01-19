@@ -170,15 +170,7 @@ export default {
           height: 350,
           stacked: true,
           toolbar: {
-            show: true,
-            tools: {
-              download: true,
-              selection: false,
-              zoom: false,
-              zoomin: false,
-              zoomout: false,
-              pan: false,
-            },
+            show: false,
             export: {
               csv: {
                 filename: 'Leads Statistics',
