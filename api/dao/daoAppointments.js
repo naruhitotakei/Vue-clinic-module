@@ -37,14 +37,16 @@ const getAllAppointmentsDoctors = (req, res, scope, prm_client_id) => {
   })
 }
 
-const getAppointments = async (req, res, location, doctor, date, scope, prm_client_id, user_id, accessible_user_ids) => {
+const getAppointments = async (req, res, location, doctor, date, scope, prm_client_id, user_id, accessible_user_ids, locale) => {
   let statement = "SELECT appointments.*, enquiries.name AS enquiry_name, enquiries.last_name AS enquiry_last_name, " +
-    "enquiries.phone AS enquiry_phone, products.name AS product_name FROM appointments "
+    "enquiries.phone AS enquiry_phone, prm_product_group_name.text AS product_name FROM appointments "
   statement += "LEFT JOIN enquiries ON appointments.enquiry_id = enquiries.id "
-  statement += "LEFT JOIN products ON appointments.product_id = products.id "
+  statement += "LEFT JOIN prm_product_group ON appointments.product_group_id = prm_product_group.product_group_id "
+  statement += "LEFT JOIN prm_product_group_name ON prm_product_group.product_group_id = prm_product_group_name.product_group_id "
   statement += "WHERE date = $1 "
   statement += "AND ($2::text IS NULL OR appointments.location = $2::text) "
   statement += "AND ($3::int IS NULL OR appointments.doctor_id = $3::int) "
+  statement += "AND prm_product_group_name.language = '" + locale + "' "
   if (scope == 'All') {
   } else if (scope == 'PrmClient') {
     statement += 'AND enquiries.prm_client_id = ' + prm_client_id
@@ -67,7 +69,7 @@ const getAppointments = async (req, res, location, doctor, date, scope, prm_clie
     result = await pool.query(statement, [
       date,
       location !== 'All Locations' ? location : null,
-      doctor !== 'All Doctors' ? parseInt(doctor) : null,
+      doctor !== 'All Doctors' ? parseInt(doctor) : null
     ])
   } catch (error) {
     return res.status(500).send()

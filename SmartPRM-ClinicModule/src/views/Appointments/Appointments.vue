@@ -312,6 +312,7 @@ export default defineComponent({
       this.selectedLocation,
       this.selectedDoctor,
       this.dateSelected,
+      this.$i18n.locale
     )
   },
   data() {
@@ -332,6 +333,7 @@ export default defineComponent({
         this.selectedLocation,
         this.selectedDoctor,
         this.dateSelected,
+        this.$i18n.locale
       )
     },
     selectedDoctor(newDoctor) {
@@ -340,6 +342,7 @@ export default defineComponent({
         this.selectedLocation,
         this.selectedDoctor,
         this.dateSelected,
+        this.$i18n.locale
       )
     },
     dateSelected(newDate) {
@@ -348,6 +351,7 @@ export default defineComponent({
         this.selectedLocation,
         this.selectedDoctor,
         this.dateSelected,
+        this.$i18n.locale
       )
     },
   },
@@ -373,8 +377,8 @@ export default defineComponent({
         }
       })
     },
-    async getAppointmentsData(filterLocation, filterDoctor, filterDate) {
-      getAppointments(filterLocation, filterDoctor, filterDate).then(
+    async getAppointmentsData(filterLocation, filterDoctor, filterDate, locale) {
+      getAppointments(filterLocation, filterDoctor, filterDate, locale).then(
         (response) => {
           this.appointments = []
           if (Array.isArray(response)) {
@@ -395,6 +399,7 @@ export default defineComponent({
             this.selectedLocation,
             this.selectedDoctor,
             this.dateSelected,
+            this.$i18n.locale
           )
         }
       })
@@ -407,6 +412,7 @@ export default defineComponent({
               this.selectedLocation,
               this.selectedDoctor,
               this.dateSelected,
+              this.$i18n.locale
             )
           }
         },
@@ -420,6 +426,7 @@ export default defineComponent({
               this.selectedLocation,
               this.selectedDoctor,
               this.dateSelected,
+              this.$i18n.locale
             )
           }
         },
@@ -433,6 +440,7 @@ export default defineComponent({
               this.selectedLocation,
               this.selectedDoctor,
               this.dateSelected,
+              this.$i18n.locale
             )
           }
         },
