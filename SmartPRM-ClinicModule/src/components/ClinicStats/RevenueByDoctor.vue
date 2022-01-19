@@ -189,6 +189,13 @@ export default {
           xaxis: {
             categories: uniqueDoctors,
           },
+          yaxis: {
+            labels: {
+              formatter: function (val) {
+                return self.$options.filters.formatPrice(val)
+              },
+            },
+          },
           legend: {
             position: 'right',
             offsetY: 40,

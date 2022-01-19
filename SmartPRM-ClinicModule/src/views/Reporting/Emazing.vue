@@ -348,7 +348,7 @@ export default {
           yaxis: {
             labels: {
               formatter: function (y) {
-                return y
+                return self.$options.filters.formatPrice(y)
               },
             },
             title: {
