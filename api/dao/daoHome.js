@@ -58,7 +58,7 @@ const getAssignmentsForUser = (request, response, user_id) => {
     statement += "concat(users.first_name, ' ', users.surname) AS todoname, enquiries.prm_dentist_user_id FROM todos "
     statement += "LEFT JOIN enquiries ON todos.enquiry_id = enquiries.id "
     statement += "LEFT JOIN users ON todos.user_id = users.id "
-    statement += "WHERE todos.completed = false "
+    statement += "WHERE due_at <= CURRENT_DATE AND todos.completed = false "
     statement += "AND users.id = " + user_id
     statement += " ORDER BY due_at ASC "
     pool.query(statement, (error, results) => {
