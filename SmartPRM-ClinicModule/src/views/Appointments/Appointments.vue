@@ -67,11 +67,7 @@
               </b-col>
               <b-col lg="2" md="2">
                 <p class="black-text mb-0">
-                  {{
-                    appointment.enquiry_name +
-                    ' ' +
-                    appointment.enquiry_last_name
-                  }}
+                  {{ appointment.enquiry_name || '' }} {{ appointment.enquiry_last_name || '' }}
                 </p>
                 <p class="black-text">
                     {{ appointment.enquiry_phone }}
@@ -81,7 +77,7 @@
                 <p class="black-text">{{ appointment.product_name }}</p>
               </b-col>
               <b-col lg="2" md="2">
-                <p class="black-text">{{ appointment.doctor_name }}</p>
+                <p class="black-text">{{ appointment.doctor_id ? appointment.doctor_name : '' }}</p>
               </b-col>
               <b-col lg="2" md="2">
                 <div v-if="!appointment.attendance">
