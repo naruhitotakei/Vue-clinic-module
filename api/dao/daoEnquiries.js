@@ -48,14 +48,14 @@ const getEnquiries = (
   })
 }
 
-const getEnquiriesById = (request, response, id) => {
-  //AND clients.slug = 'primadent_si'
+const getEnquiriesById = (request, response, id, prmClientId) => {
   pool.query(
     'SELECT enquiries.*, c.name as country ' +
       'FROM enquiries ' +
       'LEFT JOIN clients ON enquiries.client_id = clients.id ' +
       'LEFT JOIN countries c ON enquiries.country_id = c.id ' +
-      'WHERE enquiries.trashed IS FALSE AND enquiries.id = $1',
+      'WHERE enquiries.trashed IS FALSE AND enquiries.id = $1 ' +
+      'AND enquiries.prm_client_id = ' + prmClientId,
     [id],
     (error, results) => {
       if (error) {

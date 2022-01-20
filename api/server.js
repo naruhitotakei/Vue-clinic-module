@@ -1194,7 +1194,7 @@ app.get('/api/enquiries/:id', (req, res) => {
     req.session.prm_user.permissions &&
     checkPermission(req.session.prm_user.permissions, enquiriesPermission)
   )
-    daoEnquiries.getEnquiriesById(req, res, id)
+    daoEnquiries.getEnquiriesById(req, res, id, req.session.prm_user.prm_client_id)
   else res.status(401).json('OK: user unauthorized')
 })
 
