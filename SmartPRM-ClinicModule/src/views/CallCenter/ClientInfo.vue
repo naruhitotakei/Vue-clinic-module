@@ -10,7 +10,7 @@
       <template v-slot:body>
         <div v-if="!loading">
           <div v-if="!editMode" v-html="clientInfo"></div>
-          <vue-editor v-if="editMode" v-model="clientInfo"></vue-editor>
+          <vue-editor v-if="editMode" v-model="editedInfo"></vue-editor>
           <div class="text-right mt-3" v-if="editMode">
             <button :disabled="!clientInfo || editLoading" @click="editInfo" type="button" class="btn btn-secondary mr-2">Discard</button>
             <button :disabled="!clientInfo || editLoading" @click="updateClientInfo" type="button" class="btn btn-primary">Save</button>
@@ -49,6 +49,8 @@ export default {
       loading: false,
       editLoading: false,
       clientInfo: null,
+      editedInfo: null,
+      oldInfo: null,
       content: '<p>Edit Client Info</p>',
       customToolbar: [
         ['paragraph', 'bold', 'italic', 'underline', 'link'],
@@ -59,12 +61,14 @@ export default {
   methods: {
     editInfo() {
       this.editMode = !this.editMode
+      if (this.editMode) {
+        this.editedInfo = this.clientInfo
+      }
     },
     getPrmClientInfo() {
       this.loading = true
       getPrmClient()
         .then((response) => {
-          console.log(response)
           if (response && response.id) {
             this.clientInfo = response.info
           }
@@ -76,8 +80,9 @@ export default {
     },
     async updateClientInfo() {
       this.editLoading = true
-      await updatePrmClientInfo(this.clientInfo)
+      await updatePrmClientInfo(this.editedInfo)
       this.editLoading = false
+      this.clientInfo = this.editedInfo
       this.editMode = false
     },
   },
