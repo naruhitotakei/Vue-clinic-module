@@ -67,6 +67,7 @@ const daoAppointmentSlots = require('./dao/daoAppointmentSlots')
 const daoOnlineBooking = require('./dao/daoOnlineBooking')
 const awsS3 = require('./services/awsS3')
 const daoConfig = require('./dao/daoConfig')
+const { getScope } = require('~/shared/get-scope')
 
 app.use(
   fileUpload({
@@ -117,7 +118,7 @@ app.use(rollbar.errorHandler())
 ///////////////////////////////////
 const homePermission = 'Home'
 const enquiriesPermission = 'Patients'
-const assignmentsPermission = 'Assignments'
+const { assignmentsPermission } = require('~/shared/permission')
 const clinicStatisticsPermission = 'Statistics For Clinic'
 const reportingEmazingPermission = 'Emazing'
 const missingServicesPermission = 'Missing Services'
@@ -358,13 +359,13 @@ app.post('/api/calendar', (req, res) => {
   else res.status(401).json('OK: user unauthorized')
 })
 
-app.get('/api/calendar/doctors', (req, res) => {
+app.get('/api/calendar/doctors', async (req, res) => {
   if (
     req.session.prm_user &&
     req.session.prm_user.permissions &&
     checkPermission(req.session.prm_user.permissions, calendarPermission)
-  )
-    daoCalendar.getDoctors(
+  ) {
+    const doctors = await daoCalendar.getDoctors(
       req,
       res,
       req.session.prm_user.id,
@@ -372,7 +373,9 @@ app.get('/api/calendar/doctors', (req, res) => {
       req.session.prm_user.prm_client_id,
       getScope(req.session.prm_user.permissions, assignmentsPermission),
     )
-  else res.status(401).json('OK: user unauthorized')
+
+    return res.status(200).json(doctors)
+  } else res.status(401).json('OK: user unauthorized')
 })
 
 app.put('/api/calendar/:id', (req, res) => {
@@ -2227,15 +2230,6 @@ const checkPermission = function (permissionsList, permission) {
     if (permissionsList[i].resource_name == permission) return true
   }
   return false
-}
-
-const getScope = function (permissionsList, permission) {
-  if (!permissionsList) return null
-  for (var i = 0; i < permissionsList.length; i++) {
-    if (permissionsList[i].resource_name == permission)
-      return permissionsList[i].scope_name
-  }
-  return null
 }
 
 ///////////////////////////////////

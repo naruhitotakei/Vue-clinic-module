@@ -145,7 +145,7 @@ const getPremises = (request, response, prm_client_id, scope) => {
   })
 }
 
-const createOnlineBookingProduct = (req, res, product) => {
+const createOnlineBookingProduct = async (req, res, product) => {
   let productStatement = 'INSERT INTO online_booking_service ('
   if (product.default_duration) productStatement += 'default_duration,'
   if (product.default_online_price) productStatement += 'default_online_price,'
@@ -160,7 +160,7 @@ const createOnlineBookingProduct = (req, res, product) => {
     productStatement += "'" + product.product_group_id + "',"
   productStatement += 'NOW()'
   productStatement += ') RETURNING id'
-  pool.query(productStatement, (error, results) => {
+  pool.query(productStatement, async (error, results) => {
     if (error) {
       throw error
     }
@@ -191,8 +191,9 @@ const createOnlineBookingProduct = (req, res, product) => {
         product.italian,
       )
 
-    if (product.doctor_id)
-      createOnlineBookingDoctorStatement(serviceId, product.doctor_id)
+    if (product.doctor_ids) {
+      createOnlineBookingDoctorStatement(serviceId, product.doctor_ids)
+    }
 
     if (product.premise_id)
       createOnlineBookingPremiseStatement(serviceId, product.premise_id)
@@ -227,18 +228,22 @@ const createOnlineBookingNameStatement = (
   })
 }
 
-const createOnlineBookingDoctorStatement = (serviceId, doctorId) => {
-  let statement =
-    'INSERT INTO online_booking_users_bridge (online_booking_id, doctor_id, created_at) VALUES (' +
-    serviceId +
-    ',' +
-    doctorId +
-    ',NOW())'
-  pool.query(statement, (error, results) => {
-    if (error) {
-      throw error
-    }
-  })
+const createOnlineBookingDoctorStatement = async (
+  serviceId,
+  doctorIds = [],
+) => {
+  if (doctorIds.length === 0) {
+    return
+  }
+
+  const statement = /* sql */ `
+    INSERT INTO online_booking_users_bridge (online_booking_id, doctor_id, created_at)
+    VALUES ${doctorIds
+      .map((_, index) => /* sql */ `($1, $${index + 2}, NOW())`)
+      .join(',')}
+  `
+
+  await pool.query(statement, [serviceId, ...doctorIds])
 }
 
 const createOnlineBookingPremiseStatement = (serviceId, premiseId) => {
@@ -268,7 +273,7 @@ const deleteOnlineBookingProduct = (request, response, id) => {
   )
 }
 
-const updateOnlineBookingProduct = (req, res, id, product) => {
+const updateOnlineBookingProduct = async (req, res, id, product) => {
   var statement = 'UPDATE online_booking_service SET '
   if (product.default_duration)
     statement += "default_duration='" + product.default_duration + "',"
@@ -302,8 +307,20 @@ const updateOnlineBookingProduct = (req, res, id, product) => {
       'it',
       product.italian,
     )
-  if (product.doctor_id)
-    updateOnlineBookingDoctorStatement(id, product.doctor_id)
+  if (product.doctor_ids) {
+    const { assignmentsPermission } = require('~/shared/permission')
+    const { getScope } = require('~/shared/get-scope')
+    const { getDoctors } = require('~/dao/daoCalendar')
+    const doctors = await getDoctors(
+      req,
+      res,
+      req.session.prm_user.id,
+      req.session.prm_user.accessible_user_ids,
+      req.session.prm_user.prm_client_id,
+      getScope(req.session.prm_user.permissions, assignmentsPermission),
+    )
+    updateOnlineBookingDoctorStatement(id, product.doctor_ids, doctors)
+  }
   if (product.premise_id)
     updateOnlineBookingPremiseStatement(id, product.premise_id)
   pool.query(statement, (error, results) => {
@@ -340,17 +357,53 @@ const updateOnlineBookingNameStatement = (
   })
 }
 
-const updateOnlineBookingDoctorStatement = (serviceId, doctorId) => {
-  let statement =
-    'UPDATE online_booking_users_bridge SET doctor_id = ' +
-    doctorId +
-    ',updated_at = NOW() WHERE id = ' +
-    serviceId
-  pool.query(statement, (error, results) => {
-    if (error) {
-      throw error
-    }
-  })
+const updateOnlineBookingDoctorStatement = async (
+  serviceId,
+  doctorIds = [],
+  doctors = [],
+) => {
+  await Promise.all([
+    (async () => {
+      const doctorIdMap = doctorIds.reduce((doctorIdMap, id) => {
+        doctorIdMap[id] = true
+
+        return doctorIdMap
+      }, {})
+      const removedDoctorsIds = doctors
+        .filter(({ id }) => doctorIdMap[id] == null)
+        .map(({ id }) => id)
+
+      if (removedDoctorsIds.length === 0) {
+        return
+      }
+
+      const statement = /* sql */ `
+        DELETE FROM online_booking_users_bridge
+        WHERE online_booking_id = $1
+        AND doctor_id IN (${removedDoctorsIds
+          .map((_, index) => /* sql */ `$${index + 2}`)
+          .join(',')})
+      `
+
+      await pool.query(statement, [serviceId, ...removedDoctorsIds])
+    })(),
+    (async () => {
+      if (doctorIds.length === 0) {
+        return
+      }
+
+      const statement = /* sql */ `
+        INSERT INTO online_booking_users_bridge (online_booking_id, doctor_id, created_at)
+        VALUES ${doctorIds
+          .map((_, index) => /* sql */ `($1, $${index + 2}, NOW())`)
+          .join(',')}
+        ON CONFLICT ON CONSTRAINT online_booking_doctor_unique
+        DO NOTHING;
+      `
+
+      await pool.query(statement, [serviceId, ...doctorIds])
+    })(),
+  ])
 }
 
 const updateOnlineBookingPremiseStatement = (serviceId, premiseId) => {

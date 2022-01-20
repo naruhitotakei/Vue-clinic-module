@@ -301,7 +301,7 @@ const deleteAppointmentsLabel = (request, response, id) => {
   })
 }
 
-const getDoctors = (
+const getDoctors = async (
   request,
   response,
   user_id,
@@ -324,12 +324,9 @@ const getDoctors = (
       }
     }
   }
-  pool.query(statement, (error, results) => {
-    if (error) {
-      throw error
-    }
-    response.status(200).json(results.rows)
-  })
+  const results = await pool.query(statement)
+
+  return results.rows
 }
 
 module.exports = {

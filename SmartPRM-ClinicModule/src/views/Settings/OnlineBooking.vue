@@ -158,13 +158,15 @@
                   >{{ $t('onlineBooking.serviceModal.doctor') }} *</label
                 >
                 <v-select
-                  :clearable="false"
+                  v-model="onlineBookingData.doctor_ids"
+                  multiple
                   label="doctor"
+                  :options="doctors"
                   :reduce="(doctor) => doctor.id"
                   :getOptionLabel="(doctor) => doctor.name"
+                  :clearable="false"
+                  :closeOnSelect="false"
                   class="style-chooser form-control-disabled font-size-16 ml-0 mt-1"
-                  v-model="onlineBookingData.doctor_id"
-                  :options="doctors"
                   style="min-width: 305px"
                 ></v-select>
               </div>
@@ -243,7 +245,7 @@ export default {
         english: '',
         default_online_price: '',
         default_duration: '',
-        doctor_id: '',
+        doctor_ids: '',
         product_group_id: '',
         premise_id: '',
       },
@@ -302,7 +304,7 @@ export default {
         !this.onlineBookingData.slovenian ||
         !this.onlineBookingData.default_online_price ||
         !this.onlineBookingData.default_duration ||
-        !this.onlineBookingData.doctor_id ||
+        !this.onlineBookingData.doctor_ids ||
         !this.onlineBookingData.product_group_id ||
         !this.onlineBookingData.premise_id
       )
@@ -338,7 +340,7 @@ export default {
         english: '',
         default_online_price: '',
         default_duration: '',
-        doctor_id: '',
+        doctor_ids: '',
         product_group_id: '',
         premise_id: '',
       }
