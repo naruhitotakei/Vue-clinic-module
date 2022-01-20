@@ -201,7 +201,13 @@ const createOnlineBookingProduct = (req, res, product) => {
   })
 }
 
-createOnlineBookingNameStatement = (table, idName, id, language, text) => {
+const createOnlineBookingNameStatement = (
+  table,
+  idName,
+  id,
+  language,
+  text,
+) => {
   let statement =
     'INSERT INTO ' +
     table +
@@ -221,7 +227,7 @@ createOnlineBookingNameStatement = (table, idName, id, language, text) => {
   })
 }
 
-createOnlineBookingDoctorStatement = (serviceId, doctorId) => {
+const createOnlineBookingDoctorStatement = (serviceId, doctorId) => {
   let statement =
     'INSERT INTO online_booking_users_bridge (online_booking_id, doctor_id, created_at) VALUES (' +
     serviceId +
@@ -235,7 +241,7 @@ createOnlineBookingDoctorStatement = (serviceId, doctorId) => {
   })
 }
 
-createOnlineBookingPremiseStatement = (serviceId, premiseId) => {
+const createOnlineBookingPremiseStatement = (serviceId, premiseId) => {
   let statement =
     'INSERT INTO online_booking_premise_bridge (online_booking_id, premise_id, created_at) VALUES (' +
     serviceId +
@@ -308,7 +314,13 @@ const updateOnlineBookingProduct = (req, res, id, product) => {
   res.status(200).json(product)
 }
 
-updateOnlineBookingNameStatement = (table, idName, id, language, text) => {
+const updateOnlineBookingNameStatement = (
+  table,
+  idName,
+  id,
+  language,
+  text,
+) => {
   let statement =
     'UPDATE ' +
     table +
@@ -328,7 +340,7 @@ updateOnlineBookingNameStatement = (table, idName, id, language, text) => {
   })
 }
 
-updateOnlineBookingDoctorStatement = (serviceId, doctorId) => {
+const updateOnlineBookingDoctorStatement = (serviceId, doctorId) => {
   let statement =
     'UPDATE online_booking_users_bridge SET doctor_id = ' +
     doctorId +
@@ -341,7 +353,7 @@ updateOnlineBookingDoctorStatement = (serviceId, doctorId) => {
   })
 }
 
-updateOnlineBookingPremiseStatement = (serviceId, premiseId) => {
+const updateOnlineBookingPremiseStatement = (serviceId, premiseId) => {
   let statement =
     'UPDATE online_booking_premise_bridge SET premise_id = ' +
     premiseId +
