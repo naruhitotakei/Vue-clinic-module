@@ -21,7 +21,7 @@ const getTodaysAppointments = (request, response, user_id, prm_client_id, locale
     statement += "AND appointment_canceled = FALSE "
     if (scope == 'All') {
     } else if (scope == 'PrmClient') {
-        statement += "AND users.prm_client_id = " + prm_client_id
+        statement += "AND enquiries.prm_client_id = " + prm_client_id
     } else if (scope == 'Self') {
         statement += "AND enquiries.prm_dentist_user_id = " + user_id + " OR enquiries.prm_surgeon_user_id = " + user_id
     }
@@ -52,13 +52,14 @@ const getStaff = (request, response, prm_client_id, scope) => {
     })
 }
 
-const getAssignmentsForUser = (request, response, user_id) => {
+const getAssignmentsForUser = (request, response, user_id, prm_client_id) => {
     let statement = "SELECT todos.*, enquiries.name AS patientname, enquiries.last_name AS patientlastname, "
     statement += "concat(users.first_name, ' ', users.surname) AS todoname, enquiries.prm_dentist_user_id FROM todos "
     statement += "LEFT JOIN enquiries ON todos.enquiry_id = enquiries.id "
     statement += "LEFT JOIN users ON todos.user_id = users.id "
     statement += "WHERE enquiries.trashed = false AND due_at <= CURRENT_DATE AND todos.completed = false "
     statement += "AND users.id = " + user_id
+    statement += "AND enquiries.prm_client_id = " + prm_client_id
     statement += " ORDER BY due_at ASC "
     pool.query(statement, (error, results) => {
         if (error) {
