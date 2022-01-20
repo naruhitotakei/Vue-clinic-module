@@ -12,7 +12,7 @@
           <div v-if="!editMode" v-html="clientInfo"></div>
           <vue-editor v-if="editMode" v-model="clientInfo"></vue-editor>
           <div class="text-right mt-3" v-if="editMode">
-            <button :disabled="!clientInfo || editLoading" @click="editInfo" type="button" class="btn btn-primary mr-2">Discard</button>
+            <button :disabled="!clientInfo || editLoading" @click="editInfo" type="button" class="btn btn-secondary mr-2">Discard</button>
             <button :disabled="!clientInfo || editLoading" @click="updateClientInfo" type="button" class="btn btn-primary">Save</button>
           </div>
         </div>
