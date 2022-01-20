@@ -1886,10 +1886,10 @@ export default {
     getPatient(id) {
       getEnquiryById(id).then(response => {
         this.patient = response[0]
-        if (this.patient.date_of_birth !== null) {
+        if (this.patient && this.patient.date_of_birth !== null) {
           this.patient.date_of_birth = moment(this.patient.date_of_birth).format('YYYY-MM-DD')
         }
-        if (this.patient.general_notes !== null) {
+        if (this.patient && this.patient.general_notes !== null) {
           this.notesGeneral = this.patient.general_notes.replace(/<br>/g, '\n')
         }
       }
