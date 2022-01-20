@@ -16,8 +16,6 @@ import CompositionApi from '@vue/composition-api'
 import VueExcelXlsx from 'vue-excel-xlsx'
 import DatePicker from 'vue2-datepicker'
 import 'vue2-datepicker/index.css'
-import 'bootstrap/dist/css/bootstrap.css'
-import 'bootstrap-vue/dist/bootstrap-vue.css'
 
 global.Raphael = Raphael
 Vue.config.productionTip = false

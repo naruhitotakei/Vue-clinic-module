@@ -398,9 +398,6 @@
                                                   <li v-for="(message,index) in smsList" :key="index + message.created_at" id="smsList" class="d-flex align-items-center justify-content-between mb-3">
                                                       <div>
                                                           <h6 class="text-underline" v-b-tooltip.hover :title="message.content">{{message.name}}</h6>
-                                                          <!-- <b-tooltip :target="`message-${message.id}`" triggers="hover" placement="rightbottom">
-                                                            {{ message.content }}
-                                                          </b-tooltip> -->
                                                           <small class="mb-0">{{message.created_at | formatDateAndTime}} - {{ message.delivered_at ? $t('EPR.overview.deliveredSms') :  $t('EPR.overview.notDeliveredSms')}}</small>
                                                       </div>
                                                   </li>
