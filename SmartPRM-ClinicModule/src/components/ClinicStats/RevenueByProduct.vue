@@ -53,6 +53,7 @@ export default {
   props: {
     start: String,
     end: String,
+    client: String,
   },
   watch: {
     start(val) {
@@ -107,7 +108,7 @@ export default {
       let prNames = []
       let sumArray = []
       this.dataToExport = []
-      this.fileName = `Revenue By Product (${moment(this.start).format('DD/MM/YYYY')} - ${moment(this.end).format('DD/MM/YYYY')})`
+      this.fileName = `SmartPRM_${this.client}_Clinic_Statistics_Revenue_by_doctor_(${moment(this.start).format('DD/MM/YYYY')} - ${moment(this.end).format('DD/MM/YYYY')})`
       await data.forEach((item) => {
         prNames.push(item.pr_name)
         const sum = Number(item.sum)
