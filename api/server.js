@@ -277,7 +277,7 @@ app.get('/api/home/open-assignments', (req, res) => {
     req.session.prm_user.permissions &&
     checkPermission(req.session.prm_user.permissions, homePermission)
   )
-    daoHome.getAssignmentsForUser(req, res, req.session.prm_user.id)
+    daoHome.getAssignmentsForUser(req, res, req.session.prm_user.id, req.session.prm_user.prm_client_id)
   else res.status(401).json('OK: user unauthorized')
 })
 
