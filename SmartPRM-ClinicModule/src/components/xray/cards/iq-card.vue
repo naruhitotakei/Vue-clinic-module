@@ -13,7 +13,7 @@
       <slot name="body"/>
     </b-card-body>
     <slot />
-    <div v-if="hasFooterSlot" :class="'card-footer' + footerClass">
+    <div v-if="hasFooterSlot" :class="'card-footer ' + footerClass">
       <slot name="footer"/>
     </div>
   </div>

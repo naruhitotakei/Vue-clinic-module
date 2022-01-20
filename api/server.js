@@ -277,7 +277,7 @@ app.get('/api/home/open-assignments', (req, res) => {
     req.session.prm_user.permissions &&
     checkPermission(req.session.prm_user.permissions, homePermission)
   )
-    daoHome.getAssignmentsForUser(req, res, req.session.prm_user.id)
+    daoHome.getAssignmentsForUser(req, res, req.session.prm_user.id, req.session.prm_user.prm_client_id)
   else res.status(401).json('OK: user unauthorized')
 })
 
@@ -346,7 +346,7 @@ app.get('/api/calendar/doctors', (req, res) => {
       req.session.prm_user.id,
       req.session.prm_user.accessible_user_ids,
       req.session.prm_user.prm_client_id,
-      getScope(req.session.prm_user.permissions, assignmentsPermission),
+      getScope(req.session.prm_user.permissions, calendarPermission),
     )
   else res.status(401).json('OK: user unauthorized')
 })
@@ -445,7 +445,18 @@ app.get('/api/appointments', (req, res) => {
     req.session.prm_user.permissions &&
     checkPermission(req.session.prm_user.permissions, appointmentsPermission)
   )
-    daoAppointments.getAppointments(req, res, location, doctor, date)
+    daoAppointments.getAppointments(
+      req,
+      res,
+      location,
+      doctor,
+      date,
+      getScope(req.session.prm_user.permissions, appointmentsPermission),
+      req.session.prm_user.prm_client_id,
+      req.session.prm_user.id,
+      req.session.prm_user.accessible_user_ids,
+      req.session.prm_user.prm_locale
+    )
   else res.status(401).json('OK: user unauthorized')
 })
 
@@ -1183,7 +1194,7 @@ app.get('/api/enquiries/:id', (req, res) => {
     req.session.prm_user.permissions &&
     checkPermission(req.session.prm_user.permissions, enquiriesPermission)
   )
-    daoEnquiries.getEnquiriesById(req, res, id)
+    daoEnquiries.getEnquiriesById(req, res, id, req.session.prm_user.prm_client_id)
   else res.status(401).json('OK: user unauthorized')
 })
 
@@ -1672,8 +1683,8 @@ app.get('/api/statistics/clinic/attendance', (req, res) => {
 })
 
 app.get('/api/statistics/visits-by-country', (req, res) => {
-  if (req.session.prm_user && req.session.prm_user.permissions)
-    daoStatistics.getVisitsByCountryInAWeek(req, res)
+  if (req.session.prm_user && req.session.prm_user.permissions && checkPermission(req.session.prm_user.permissions, homePermission))
+    daoStatistics.getVisitsByCountryInAWeek(req, res, getScope(req.session.prm_user.permissions, homePermission), req.session.prm_user.prm_client_id)
   else res.status(401).json('OK: user unauthorized')
 })
 
@@ -1895,6 +1906,21 @@ app.get('/api/call-center/missing-services/:start/:end', (req, res) => {
   const end = req.params.end
   if (req.session.prm_user && req.session.prm_user.permissions && checkPermission(req.session.prm_user.permissions, missingServicesPermission))
     daoCallCenter.getAppointmentsWithMissingServices(req, res, start, end, req.session.prm_user.prm_client_id, getScope(req.session.prm_user.permissions, missingServicesPermission))
+  else
+    res.status(401).json('OK: user unauthorized')
+})
+
+app.get('/api/call-center/prm-client-info', (req, res) => {
+  if (req.session.prm_user && req.session.prm_user.permissions && checkPermission(req.session.prm_user.permissions, missingServicesPermission))
+    daoCallCenter.getPrmClientInfo(req, res, req.session.prm_user.prm_client_id)
+  else
+    res.status(401).json('OK: user unauthorized')
+})
+
+app.put('/api/call-center/update-prm-client-info', (req, res) => {
+  const info = req.body.info
+  if (req.session.prm_user && req.session.prm_user.permissions && checkPermission(req.session.prm_user.permissions, missingServicesPermission))
+    daoCallCenter.updatePrmClientInfo(req, res, req.session.prm_user.prm_client_id, info)
   else
     res.status(401).json('OK: user unauthorized')
 })

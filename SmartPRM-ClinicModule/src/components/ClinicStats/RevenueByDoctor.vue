@@ -75,6 +75,7 @@ export default {
   props: {
     start: String,
     end: String,
+    client: String,
   },
   watch: {
     start(val) {
@@ -152,6 +153,7 @@ export default {
         })
 
         this.series = sumByProduct
+        let self = this
 
         this.chartOptions = {
           dataLabels: {
@@ -162,7 +164,7 @@ export default {
             height: 350,
             stacked: true,
             toolbar: {
-              show: true,
+              show: false,
             },
             zoom: {
               enabled: true,
@@ -188,12 +190,27 @@ export default {
           xaxis: {
             categories: uniqueDoctors,
           },
+          yaxis: {
+            labels: {
+              formatter: function (val) {
+                return self.$options.filters.formatPrice(val)
+              },
+            },
+          },
           legend: {
             position: 'right',
             offsetY: 40,
           },
           fill: {
             opacity: 1,
+          },
+          tooltip: {
+            y: {
+              formatter: function (value, { series, seriesIndex, w }) {
+                const numb = String(value).match(/\d/g).join('')
+                return self.$options.filters.formatPrice(numb)
+              },
+            },
           },
         }
 
@@ -202,7 +219,7 @@ export default {
     },
 
     prepareDataForExport(data, doctors) {
-      this.fileName = `Revenue By Doctor (${moment(this.start).format('DD/MM/YYYY')} - ${moment(this.end).format('DD/MM/YYYY')})`
+      this.fileName = `SmartPRM_${this.client}_Clinic_Statistics_Revenue_by_doctor_(${moment(this.start).format('DD/MM/YYYY')} - ${moment(this.end).format('DD/MM/YYYY')})`
       // Get Data for export
       if (Array.isArray(data) && Array.isArray(doctors)) {
         doctors.forEach((doctor) => {

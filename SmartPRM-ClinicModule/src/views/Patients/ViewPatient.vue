@@ -227,17 +227,32 @@
                                                        @close="closeCancelation"
                                                        @cancel="closeCancelation">
                                                   <div class="col-md-12 mb-2">
-                                                      <div class="ml-3 mt-2">
-                                                          <b-form-radio class="custom-radio-color"
+                                                      <div class="ml-3 mt-2 radio_div">
+                                                     <template>
+                                                        <div>
+                                                          <b-form-group label="Radios using options and slots" v-slot="{ ariaDescribedby }">
+                                                            <b-form-radio-group
+                                                              id="radio-slots"
+                                                              v-model="formAppointments.cancelation_reason"
+                                                              :options="options"
+                                                              :aria-describedby="ariaDescribedby"
+                                                              name="radio-options-slots"
+                                                              v-on:change="radioChange"
+                                                            >
+                                                            </b-form-radio-group>
+                                                          </b-form-group>
+                                                        </div>
+                                                      </template>
+                                                          <!-- <b-form-radio class="custom-radio-color"
                                                                         inline
                                                                         v-model="formAppointments.appointment_canceled"
                                                                         value="true"
                                                                         name="cancelation">
                                                               {{ $t('calendarEvent.cancelAppointment') }}
-                                                          </b-form-radio>
+                                                          </b-form-radio> -->
                                                       </div>
                                                       <div class="col-md-12 mt-2">
-                                                          <textarea row="2" v-model="formAppointments.cancelation_reason" class="form-control form-control-disabled mt-4" id="cancelationReason" :placeholder="$t('calendarEvent.cancelationReason')"></textarea>
+                                                          <!-- <textarea row="2" v-model="formAppointments.cancelation_reason" class="form-control form-control-disabled mt-4" id="cancelationReason" :placeholder="$t('calendarEvent.cancelationReason')"></textarea> -->
                                                       </div>
                                                   </div>
                                               </b-modal>
@@ -382,7 +397,7 @@
                                               <ul class="list-inline m-0 overflow-y-scroll pl-2 pr-2" style="max-height: 300px;">
                                                   <li v-for="(message,index) in smsList" :key="index + message.created_at" id="smsList" class="d-flex align-items-center justify-content-between mb-3">
                                                       <div>
-                                                          <h6 :id="`message-${message.id}`">{{message.name}}</h6>
+                                                          <h6 class="text-underline" :id="`message-${message.id}`">{{message.name}}</h6>
                                                           <b-tooltip class="tooltip-content" :target="`message-${message.id}`" triggers="hover" placement="rightbottom">
                                                             {{ message.content }}
                                                           </b-tooltip>
@@ -421,10 +436,11 @@
                                                       <li id="openList" v-for="(item,index) in openAssignments" :key="index + item.due_at"
                                                           class="d-flex align-items-center justify-content-between mb-3">
                                                           <div class="w-100">
-                                                            <div>
-                                                              <b-checkbox v-model="item.completed" name="check-button" inline
+                                                            <div class="checkbox_text">
+                                                              <b-checkbox class="checkbox" v-model="item.completed" name="check-button" inline
                                                                 :key="index"
-                                                                @change="completeAssignment(item.id, $event)"><strong :class="{'red-text': isItOverdue(item.due_at)}">{{ item.description }}</strong></b-checkbox>
+                                                                @change="completeAssignment(item.id, $event)"></b-checkbox>
+                                                                <strong :class="{'red-text': isItOverdue(item.due_at)}">{{ item.description }}</strong>
                                                             </div>
                                                             <div class="d-flex align-items-center justify-content-between">
                                                               <div>
@@ -1430,7 +1446,9 @@ export default {
       futureCurrentPage: 1,
       futurePerPage: 5,
       selectedInvoices: '',
-      selectedDoctor: '',
+      selectedDoctor: {
+        name: 'ssdfsdfsdf',
+      },
       selectedProductGroup: '',
       invoicesType: [
         {
@@ -1539,6 +1557,31 @@ export default {
       doctor: {
         profile: require('../../assets/images/user/1.jpg'),
       },
+      selected__: '',
+      options: [
+        { text: 'Canceled by lead', value: 'canceled by lead' },
+        { text: 'Postponed by lead', value: 'postponed by lead' },
+        { text: 'Canceled by clinic', value: 'canceled by clinic' },
+        { text: 'Postoponed by clinic', value: 'postoponed by clinic' },
+      ],
+      // cancel_checkboxes: [
+      //   {
+      //     title: 'canceled by lead',
+      //     id: 1,
+      //   },
+      //   {
+      //     title: 'postponed by lead',
+      //     id: 2,
+      //   },
+      //   {
+      //     title: 'canceled by clinic',
+      //     id: 3,
+      //   },
+      //   {
+      //     title: 'postoponed by clinic',
+      //     id: 4,
+      //   },
+      // ],
       user: {
         profile_image: require('../../assets/images/user/11.png'),
         fname: 'Anita',
@@ -1654,6 +1697,10 @@ export default {
   methods: {
     disableTime(date) {
       return date < new Date()
+    },
+    radioChange(e) {
+      // console.log(this.selected__, '----------------------')
+      console.log(this.formAppointments.cancelation_reason)
     },
     getSumOfServices() {
       let sum = 0
@@ -1843,10 +1890,10 @@ export default {
     getPatient(id) {
       getEnquiryById(id).then(response => {
         this.patient = response[0]
-        if (this.patient.date_of_birth !== null) {
+        if (this.patient && this.patient.date_of_birth !== null) {
           this.patient.date_of_birth = moment(this.patient.date_of_birth).format('YYYY-MM-DD')
         }
-        if (this.patient.general_notes !== null) {
+        if (this.patient && this.patient.general_notes !== null) {
           this.notesGeneral = this.patient.general_notes.replace(/<br>/g, '\n')
         }
       }
@@ -2164,9 +2211,10 @@ export default {
       })
     },
     saveAppointment() {
+      // alert('asdasdasasdas')
       this.addAppointmentModal = false
-      this.formAppointments.patient_id = this.patient.id
-      this.formAppointments.doctor_id = this.selectedDoctor.id
+      // this.formAppointments.patient_id = this.patient.id
+      // this.formAppointments.doctor_id = this.selectedDoctor.id
       this.formAppointments.doctor_name = this.selectedDoctor.name
       this.formAppointments.product_groups = this.selectedProductGroup.product_group_id
       this.formAppointments.crmProduct = this.selectedProductGroup.crm_product_id
@@ -2253,6 +2301,13 @@ export default {
 </script>
 
 <style lang="scss">
+.radio_div {
+  display: flex;
+  flex-direction: column;
+}
+.text-underline {
+  border-bottom: 1px dashed black;
+}
 .red-text {
   color: red !important;
 }
@@ -2260,6 +2315,14 @@ export default {
 .datePicker {
   width: 100% !important;
   display: block !important;
+}
+
+.checkbox_text{
+  display: flex;
+  justify-content: flex-start;
+}
+.checkbox{
+  margin-right: 0 !important;
 }
 
 .preview-file {

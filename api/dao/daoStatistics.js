@@ -18,8 +18,19 @@ const getClinicAttendance = (request, response, clinicId) =>  {
     })
 }
 
-const getVisitsByCountryInAWeek = (request, response) =>  {
-    pool.query("SELECT c.name, count(c.name) FROM appointments a LEFT JOIN enquiries e ON a.enquiry_id = e.id LEFT JOIN countries c ON e.country_id = c.id WHERE a.starts_at >= date_trunc('week', CURRENT_DATE) AND a.starts_at < (date_trunc('week', CURRENT_DATE) + INTERVAL '6 DAY') AND e.country_id notnull GROUP BY c.name", (error, results) => {
+const getVisitsByCountryInAWeek = (request, response, scope, prm_client_id) => {
+    let statement = "SELECT c.name, count(c.name) FROM appointments a "
+    statement += "LEFT JOIN enquiries e ON a.enquiry_id = e.id "
+    statement += "LEFT JOIN countries c ON e.country_id = c.id "
+    statement += "WHERE a.starts_at >= date_trunc('week', CURRENT_DATE) AND a.starts_at < (date_trunc('week', CURRENT_DATE) + INTERVAL '6 DAY') "
+    statement += "AND e.country_id notnull "
+    if (scope == 'All') {
+    } else if (scope == 'PrmClient') {
+      statement += "AND e.prm_client_id = " + prm_client_id
+    }
+    statement += " GROUP BY c.name"
+
+    pool.query(statement, (error, results) => {
         if (error) {
             throw error
         }

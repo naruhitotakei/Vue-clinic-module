@@ -4,7 +4,7 @@
             <b-col lg="8">
                 <iq-card class-name="iq-card-block iq-card-stretch iq-card-height" style="height: auto !important;">
                     <template v-slot:headerTitle>
-                        <h4 class="card-title">{{ $t('home.todaysAppointments') }}</h4>
+                        <h4 class="card-title">{{ $t('home.todaysAppointments') }} ({{todaysAppointments.length}})</h4>
                     </template>
                     <!-- <template v-slot:headerAction>
                 <b-dropdown size="lg p-0"  variant="link" toggle-class="text-decoration-none" no-caret>
@@ -24,6 +24,7 @@
                         <b-table v-if="todaysAppointments.length > 0"
                                  borderless
                                  id="todaysAppointmentsTable"
+                                 class="px-0"
                                  :items="todaysAppointments"
                                  :fields="todaysAppointmentsColumns"
                                  :per-page="todaysAppointmentsPerPage"
@@ -48,7 +49,7 @@
                 </iq-card>
                 <iq-card class-name="iq-card-block iq-card-stretch" style="margin-top: 0 !important">
                     <template v-slot:headerTitle>
-                        <h4 class="card-title">{{ $t('home.openAssignments') }}</h4>
+                        <h4 class="card-title">{{ $t('home.openAssignments') }} ({{openAssignmentsLength}})</h4>
                     </template>
                     <template v-slot:headerAction>
                         <div class="iq-card-header-toolbar d-flex align-items-center">
@@ -85,22 +86,24 @@
                     </div>
                 </template> -->
                         <b-list-group class="list-group-flush" id="openTodos">
-                            <b-list-group-item v-for="(item, index) in openAssignments"
+                            <b-list-group-item v-for="(item, index) in openAssignmentsList"
                               :key="index"
-                              :style="{'background': getDifferenceDate(item.due_at) === 1 && '#ffeeba' || getDifferenceDate(item.due_at) > 1 && '#f5c6cb'}"
+                              :style="{'background': getDifferenceDate(item.due_at) === 1 && '#ffeeba' || getDifferenceDate(item.due_at) > 1 && 'white'}"
                             >
                                 <div :class="{ 'taskIsActive' : !item.completed}">
-                                    <div>
-                                        <b-checkbox v-model="item.completed" name="check-button" inline
+                                    <div class="checkbox_text">
+                                        <b-checkbox class="checkbox" v-model="item.completed" name="check-button" inline
                                           :key="index"
                                           @change="finishAssignment(item.id, $event)">
-                                          <strong v-if="!item.completed">{{ item.description }}</strong>
-                                          <strong :style="{ color: '#aaa' }" v-else>{{ item.description }}</strong>
                                         </b-checkbox>
+                                          <!-- <strong v-if="!item.completed">{{ item.description }}</strong> -->
+                                          <strong :class="{'red-text': isItOverdue(item.due_at)}" v-if="!item.completed">{{ item.description }}</strong>
+                                          <strong :style="{ color: '#aaa' }" v-else>{{ item.description }}</strong>
                                     </div>
                                     <div class="d-flex align-items-center justify-content-between">
                                         <div>
-                                            <span class="text-left">{{ item.patientname }} {{ item.patientlastname }}</span>&nbsp;
+                                            <!-- <span class="text-left">{{ item.patientname }} {{ item.patientlastname }}</span>&nbsp; -->
+                                            <router-link tag="span" :to="'/patients/'+ item.enquiry_id" class="text-left" style="cursor:pointer;">{{ item.patientname }} {{ item.patientlastname }}</router-link>&nbsp;
                                             <span class="text-left">{{ patientsDentist(item) ? `(${patientsDentist(item)})` : '' }}</span>
                                         </div>
                                         <div class="d-flex align-items-center">
@@ -116,7 +119,7 @@
                         <template>
                             <div class="mt-4 ml-2">
                                 <p v-if="openAssignments.length === 0">{{ $t('home.noOpenAssignments') }}</p>
-                                <b-pagination v-if="openAssignments.length > 10"
+                                <b-pagination v-if="openAssignments.length > openAssignmentsPerPage"
                                               v-model="currentOpenAssignmentsPage"
                                               :total-rows="openAssignments.length"
                                               :per-page="openAssignmentsPerPage"
@@ -313,11 +316,11 @@ export default {
       countriesWithPatients: [],
       todaysAppointments: [],
       todaysAppointmentsColumns: [
-        { label: this.$t('home.todaysAppointmentsColumn.patient'), key: 'patient_name', class: 'text-left' },
-        { label: this.$t('home.todaysAppointmentsColumn.productGroup'), key: 'product_group_name', class: 'text-left' },
-        { label: this.$t('home.todaysAppointmentsColumn.doctor'), key: 'doctor_name', class: 'text-left' },
-        { label: this.$t('home.todaysAppointmentsColumn.time'), key: 'time', class: 'text-left' },
-        { label: this.$t('home.todaysAppointmentsColumn.contact'), key: 'patient_phone', class: 'text-left' },
+        { label: this.$t('home.todaysAppointmentsColumn.patient'), key: 'patient_name', class: 'text-left px-1' },
+        { label: this.$t('home.todaysAppointmentsColumn.productGroup'), key: 'product_group_name', class: 'text-left px-1' },
+        { label: this.$t('home.todaysAppointmentsColumn.doctor'), key: 'doctor_name', class: 'text-left px-1', formatter: (value, key) => value || '' },
+        { label: this.$t('home.todaysAppointmentsColumn.time'), key: 'time', class: 'text-left px-1' },
+        { label: this.$t('home.todaysAppointmentsColumn.contact'), key: 'patient_phone', class: 'text-left px-1' },
       ],
       staff: [],
       a: 13,
@@ -350,17 +353,29 @@ export default {
     this.getDentists()
     this.getCountriesWithPatients()
     this.getDoctorsStatisticPerWeek()
+    this.getTodaysAppointmentsList(this.$i18n.locale)
     body[0].classList.add('sidebar-main-menu')
   },
   computed: {
+    openAssignmentsList() {
+      return this.openAssignments.slice(
+        (this.currentOpenAssignmentsPage - 1) * this.openAssignmentsPerPage,
+        this.currentOpenAssignmentsPage * this.openAssignmentsPerPage)
+    },
     hideTodaysAppointmentsPagination() {
       return Math.floor(this.todaysAppointments.length / this.todaysAppointmentsPerPage) !== 0
     },
     hideOpenAssignmentsPagination() {
       return Math.floor(this.openAssignments.length / this.openAssignmentsPerPage) !== 0
     },
+    openAssignmentsLength() {
+      return this.openAssignments.length
+    },
   },
   methods: {
+    isItOverdue(date) {
+      return moment().isAfter(date)
+    },
     getDifferenceDate(date) {
       return Math.floor((Date.parse(new Date(Date.now())) - Date.parse(date)) / 86400000)
     },
@@ -395,7 +410,7 @@ export default {
         let dentist = this.dentists.find((item) => {
           return item.code === patient.prm_dentist_user_id
         })
-        return dentist && dentist.label ? dentist.label : 'N/A'
+        return dentist && dentist.label ? dentist.label : this.$t('shared.noDoctor')
       }
     },
     getUserLogin() {
@@ -520,12 +535,19 @@ export default {
 }
 </script>
 
-<style lang="scss">
+<style scoped lang="scss">
 .pr-bar {
   height: 6px !important;
 }
 
 .pr-bar > div {
   background-color: #089bab !important;
+}
+.checkbox_text{
+  display: flex;
+  justify-content: flex-start;
+}
+.checkbox{
+    margin-right: 0 !important;
 }
 </style>

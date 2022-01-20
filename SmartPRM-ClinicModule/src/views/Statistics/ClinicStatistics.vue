@@ -186,10 +186,10 @@
       </b-col> -->
     </b-row>
     <template v-if="startDate && endDate">
-      <RevenueByProduct :start="startDate" :end="endDate" />
-      <LeadsChart :start="startDate" :end="endDate" />
-      <RevenueByDoctor :start="startDate" :end="endDate" />
-      <NewPatients :start="startDate" :end="endDate" />
+      <RevenueByProduct :client="clientName" :start="startDate" :end="endDate" />
+      <LeadsChart :client="clientName" :start="startDate" :end="endDate" />
+      <RevenueByDoctor :client="clientName" :start="startDate" :end="endDate" />
+      <NewPatients :client="clientName" :start="startDate" :end="endDate" />
       <!-- <AppointmentsByProduct :start="startDate" :end="endDate" /> -->
     </template>
   </b-container>
@@ -228,6 +228,7 @@ export default {
   },
   data() {
     return {
+      clientName: null,
       startDate: null,
       endDate: null,
       filterBy: null,
@@ -282,6 +283,9 @@ export default {
   methods: {
     getLoggedUser() {
       sso().then(response => {
+        if (response && response.client_name) {
+          this.clientName = response.client_name
+        }
         console.log(response)
       })
     },

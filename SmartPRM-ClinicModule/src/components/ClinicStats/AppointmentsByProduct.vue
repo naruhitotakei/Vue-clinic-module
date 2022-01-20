@@ -65,16 +65,15 @@
 
 <script>
 import IqCard from '../../components/xray/cards/iq-card'
-import { getNewEnquiries } from '../../services/statistics'
+import { getAppointmentsByProduct } from '../../services/statistics'
 import moment from 'moment'
 
 export default {
-  name: 'NewPatients',
+  name: 'AppointmentsByProduct',
   components: { IqCard },
   props: {
     start: String,
     end: String,
-    client: String,
   },
   watch: {
     start(val) {
@@ -100,21 +99,21 @@ export default {
   methods: {
     onDateChange() {
       if (this.startDate && this.endDate) {
-        this.getNewPatients(this.startDate, this.endDate)
+        this.getAppointments(this.startDate, this.endDate)
       }
     },
-    getNewPatients(start, end) {
+    getAppointments(start, end) {
       this.loading = true
       this.noData = false
-      getNewEnquiries(start, end)
-        .then(async (response) => {
+      getAppointmentsByProduct(start, end, 'en')
+        .then((response) => {
+          this.loading = false
           if (response && response.length && Array.isArray(response)) {
             this.noData = false
-            await this.setDataForChart(response)
-            this.loading = false
+            console.log(response)
+            // this.setDataForChart(response)
           } else {
             this.noData = true
-            this.loading = false
           }
         })
         .catch(() => {
@@ -122,11 +121,11 @@ export default {
           this.loading = false
         })
     },
-    async setDataForChart(data) {
+    setDataForChart(data) {
       let datesArray = []
       let seriesData = []
       this.dataToExport = []
-      await data.forEach((item, index) => {
+      data.forEach((item, index) => {
         const itemDate = item.date.split('T')[0]
         const dateIndex = datesArray.findIndex((date) => date === itemDate)
         if (dateIndex < 0) {
@@ -137,8 +136,6 @@ export default {
           seriesData[dateIndex] = seriesData[dateIndex] + 1
         }
       })
-
-      let self = this
 
       this.series = [
         {
@@ -156,7 +153,15 @@ export default {
           height: 350,
           stacked: false,
           toolbar: {
-            show: false,
+            show: true,
+            tools: {
+              download: true,
+              selection: false,
+              zoom: false,
+              zoomin: false,
+              zoomout: false,
+              pan: false,
+            },
             export: {
               csv: {
                 filename: 'Leads Statistics',
@@ -198,14 +203,6 @@ export default {
         fill: {
           opacity: 1,
         },
-        tooltip: {
-          y: {
-            formatter: function (value, { series, seriesIndex, w }) {
-              const numb = String(value).match(/\d/g).join('')
-              return self.$options.filters.formatNumber(numb)
-            },
-          },
-        },
       }
 
       this.prepareDataForExport(data)
@@ -213,7 +210,7 @@ export default {
 
     prepareDataForExport(data) {
       // Get Data for export
-      this.fileName = `SmartPRM_${this.client}_Clinic_Statistics_Revenue_by_doctor_(${moment(this.start).format('DD/MM/YYYY')} - ${moment(this.end).format('DD/MM/YYYY')})`
+      this.fileName = `New Patients (${moment(this.start).format('DD/MM/YYYY')} - ${moment(this.end).format('DD/MM/YYYY')})`
       data.forEach((item) => {
         const obj = {
           first_name: item.name,
