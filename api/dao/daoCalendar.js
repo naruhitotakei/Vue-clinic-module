@@ -307,7 +307,7 @@ const getDoctors = (
   user_id,
   accessible_user_ids,
   prm_client_id,
-  scope,
+  scope
 ) => {
   var statement =
     "SELECT id, title, first_name, surname, concat(title, ' ', first_name , ' ', surname) AS name from users WHERE function::text LIKE '%dentist%' "
@@ -324,6 +324,7 @@ const getDoctors = (
       }
     }
   }
+
   pool.query(statement, (error, results) => {
     if (error) {
       throw error

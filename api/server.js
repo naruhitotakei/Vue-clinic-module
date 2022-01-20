@@ -346,7 +346,7 @@ app.get('/api/calendar/doctors', (req, res) => {
       req.session.prm_user.id,
       req.session.prm_user.accessible_user_ids,
       req.session.prm_user.prm_client_id,
-      getScope(req.session.prm_user.permissions, assignmentsPermission),
+      getScope(req.session.prm_user.permissions, calendarPermission),
     )
   else res.status(401).json('OK: user unauthorized')
 })
