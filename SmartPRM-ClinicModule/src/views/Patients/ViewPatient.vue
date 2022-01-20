@@ -1100,14 +1100,15 @@
           </div>
           <div class="col-md-12 mb-3">
             <label for="title">{{ $t('assignments.addAssignmentsModal.due_at') }} </label>
-            <b-form-datepicker
-                class="date"
-                id="exampleInputdate"
+            <date-picker
+                required
+                class="datePicker"
                 v-model="formData.due_at"
-                :min="new Date()"
-                :date-format-options="{ year: 'numeric', month: '2-digit', day: '2-digit' }"
-                placeholder="mm/dd/yyyy"
-            ></b-form-datepicker>
+                type="date"
+                :disabled-date="disableTime"
+                placeholder="Select date"
+                :format="'DD.MM.YYYY'"></date-picker>
+
 <!--            <b-form-input-->
 <!--                class="date"-->
 <!--                id="exampleInputdate"-->
@@ -1651,6 +1652,9 @@ export default {
     },
   },
   methods: {
+    disableTime(date) {
+      return date < new Date()
+    },
     getSumOfServices() {
       let sum = 0
       if (this.services && Array.isArray(this.services) && this.services.length) {
@@ -2251,6 +2255,11 @@ export default {
 <style lang="scss">
 .red-text {
   color: red !important;
+}
+
+.datePicker {
+  width: 100% !important;
+  display: block !important;
 }
 
 .preview-file {

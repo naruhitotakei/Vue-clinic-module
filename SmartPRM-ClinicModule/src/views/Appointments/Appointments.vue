@@ -20,17 +20,12 @@
               ></v-select>
             </div>
             <div class="filter-select">
-              <b-form-datepicker
-                class="date"
-                id="filter-datepicker"
+              <date-picker
+                required
                 v-model="dateSelected"
-                :date-format-options="{
-                  year: 'numeric',
-                  month: '2-digit',
-                  day: '2-digit',
-                }"
-                placeholder="yyyy-mm-dd"
-              ></b-form-datepicker>
+                type="date"
+                placeholder="No date selected"
+                :format="'DD.MM.YYYY'"></date-picker>
             </div>
           </div>
         </template>

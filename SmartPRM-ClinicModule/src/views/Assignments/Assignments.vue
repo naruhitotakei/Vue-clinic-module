@@ -517,7 +517,13 @@
             </div>
             <div class="col-md-12 mb-3">
               <label for="title">{{ $t('assignments.addAssignmentsModal.due_at') }} </label>
-              <b-form-datepicker v-model="formData.due_at" class="mb-2"></b-form-datepicker>
+              <date-picker
+                class="datePicker"
+                required
+                v-model="formData.due_at"
+                type="date"
+                placeholder="No date selected"
+                :format="'DD.MM.YYYY'"></date-picker>
             </div>
           </div>
         </form>
@@ -543,6 +549,11 @@
 [dir=ltr] .iq-sidebar .iq-menu li.active {
     background-color: #ffffff;
     border-radius: 15px;
+}
+
+.datePicker {
+  width: 100% !important;
+  display: block !important;
 }
 
 .taskIsActive {
