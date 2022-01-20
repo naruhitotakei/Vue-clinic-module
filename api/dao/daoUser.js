@@ -13,7 +13,7 @@ const bcrypt = require('bcrypt');
 
 const loginUser = ((request, response, email, password) => {
   return new Promise((resolve, reject) =>
-      pool.query('SELECT * FROM users WHERE email = $1 AND active = true', [email], (error, qResult) => {
+      pool.query('SELECT users.*, prm_client.client_name FROM users LEFT JOIN prm_client ON users.prm_client_id = prm_client.id WHERE email = $1 AND active = true', [email], (error, qResult) => {
         if (error) {
           reject("SQL users error " + error)
         }
