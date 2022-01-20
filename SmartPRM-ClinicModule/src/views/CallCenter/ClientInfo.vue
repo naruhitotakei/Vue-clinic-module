@@ -78,14 +78,8 @@ export default {
       this.editLoading = true
       await updatePrmClientInfo(this.clientInfo)
       this.editLoading = false
+      this.editMode = false
     },
-    // getUserLogin() {
-    //   sso().then((response) => {
-    //     if (typeof response !== 'string') {
-    //       console.log(response)
-    //     }
-    //   })
-    // },
   },
 }
 </script>
