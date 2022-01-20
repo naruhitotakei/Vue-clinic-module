@@ -137,6 +137,8 @@ export default {
         }
       })
 
+      let self = this
+
       this.series = [
         {
           name: 'New Patients',
@@ -153,15 +155,7 @@ export default {
           height: 350,
           stacked: false,
           toolbar: {
-            show: true,
-            tools: {
-              download: true,
-              selection: false,
-              zoom: false,
-              zoomin: false,
-              zoomout: false,
-              pan: false,
-            },
+            show: false,
             export: {
               csv: {
                 filename: 'Leads Statistics',
@@ -202,6 +196,14 @@ export default {
         },
         fill: {
           opacity: 1,
+        },
+        tooltip: {
+          y: {
+            formatter: function (value, { series, seriesIndex, w }) {
+              const numb = String(value).match(/\d/g).join('')
+              return self.$options.filters.formatNumber(numb)
+            },
+          },
         },
       }
 

@@ -397,7 +397,7 @@
                                               <ul class="list-inline m-0 overflow-y-scroll pl-2 pr-2" style="max-height: 300px;">
                                                   <li v-for="(message,index) in smsList" :key="index + message.created_at" id="smsList" class="d-flex align-items-center justify-content-between mb-3">
                                                       <div>
-                                                          <h6 :id="`message-${message.id}`">{{message.name}}</h6>
+                                                          <h6 class="text-underline" :id="`message-${message.id}`">{{message.name}}</h6>
                                                           <b-tooltip class="tooltip-content" :target="`message-${message.id}`" triggers="hover" placement="rightbottom">
                                                             {{ message.content }}
                                                           </b-tooltip>
@@ -2297,9 +2297,12 @@ export default {
 </script>
 
 <style lang="scss">
-.radio_div{
+.radio_div {
   display: flex;
   flex-direction: column;
+}
+.text-underline {
+  border-bottom: 1px dashed black;
 }
 .red-text {
   color: red !important;

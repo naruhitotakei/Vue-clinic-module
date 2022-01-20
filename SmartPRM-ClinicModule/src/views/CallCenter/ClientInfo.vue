@@ -2,12 +2,17 @@
   <b-container fluid>
     <iq-card class-name="iq-card-block iq-card-stretch iq-card-height">
       <template v-slot:headerTitle>
-        <h2 class="card-title">Client Info</h2>
+        <div class="d-flex align-items-center justify-content-between">
+          <h2 class="card-title">Client Info</h2>
+          <button v-if="!editMode && !loading" @click="editInfo" type="button" class="btn btn-primary">Edit</button>
+        </div>
       </template>
       <template v-slot:body>
         <div v-if="!loading">
-          <vue-editor v-model="clientInfo"></vue-editor>
-          <div class="text-right mt-3">
+          <div v-if="!editMode" v-html="clientInfo"></div>
+          <vue-editor v-if="editMode" v-model="editedInfo"></vue-editor>
+          <div class="text-right mt-3" v-if="editMode">
+            <button :disabled="!clientInfo || editLoading" @click="editInfo" type="button" class="btn btn-secondary mr-2">Discard</button>
             <button :disabled="!clientInfo || editLoading" @click="updateClientInfo" type="button" class="btn btn-primary">Save</button>
           </div>
         </div>
@@ -40,9 +45,12 @@ export default {
   },
   data: function () {
     return {
+      editMode: false,
       loading: false,
       editLoading: false,
       clientInfo: null,
+      editedInfo: null,
+      oldInfo: null,
       content: '<p>Edit Client Info</p>',
       customToolbar: [
         ['paragraph', 'bold', 'italic', 'underline', 'link'],
@@ -51,11 +59,16 @@ export default {
     }
   },
   methods: {
+    editInfo() {
+      this.editMode = !this.editMode
+      if (this.editMode) {
+        this.editedInfo = this.clientInfo
+      }
+    },
     getPrmClientInfo() {
       this.loading = true
       getPrmClient()
         .then((response) => {
-          console.log(response)
           if (response && response.id) {
             this.clientInfo = response.info
           }
@@ -67,16 +80,11 @@ export default {
     },
     async updateClientInfo() {
       this.editLoading = true
-      await updatePrmClientInfo(this.clientInfo)
+      await updatePrmClientInfo(this.editedInfo)
       this.editLoading = false
+      this.clientInfo = this.editedInfo
+      this.editMode = false
     },
-    // getUserLogin() {
-    //   sso().then((response) => {
-    //     if (typeof response !== 'string') {
-    //       console.log(response)
-    //     }
-    //   })
-    // },
   },
 }
 </script>

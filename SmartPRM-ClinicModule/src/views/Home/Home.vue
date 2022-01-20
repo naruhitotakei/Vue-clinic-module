@@ -24,6 +24,7 @@
                         <b-table v-if="todaysAppointments.length > 0"
                                  borderless
                                  id="todaysAppointmentsTable"
+                                 class="px-0"
                                  :items="todaysAppointments"
                                  :fields="todaysAppointmentsColumns"
                                  :per-page="todaysAppointmentsPerPage"
@@ -315,11 +316,11 @@ export default {
       countriesWithPatients: [],
       todaysAppointments: [],
       todaysAppointmentsColumns: [
-        { label: this.$t('home.todaysAppointmentsColumn.patient'), key: 'patient_name', class: 'text-left' },
-        { label: this.$t('home.todaysAppointmentsColumn.productGroup'), key: 'product_group_name', class: 'text-left' },
-        { label: this.$t('home.todaysAppointmentsColumn.doctor'), key: 'doctor_name', class: 'text-left' },
-        { label: this.$t('home.todaysAppointmentsColumn.time'), key: 'time', class: 'text-left' },
-        { label: this.$t('home.todaysAppointmentsColumn.contact'), key: 'patient_phone', class: 'text-left' },
+        { label: this.$t('home.todaysAppointmentsColumn.patient'), key: 'patient_name', class: 'text-left px-1' },
+        { label: this.$t('home.todaysAppointmentsColumn.productGroup'), key: 'product_group_name', class: 'text-left px-1' },
+        { label: this.$t('home.todaysAppointmentsColumn.doctor'), key: 'doctor_name', class: 'text-left px-1', formatter: (value, key) => value || '' },
+        { label: this.$t('home.todaysAppointmentsColumn.time'), key: 'time', class: 'text-left px-1' },
+        { label: this.$t('home.todaysAppointmentsColumn.contact'), key: 'patient_phone', class: 'text-left px-1' },
       ],
       staff: [],
       a: 13,

@@ -159,6 +159,7 @@ export default {
       })
 
       this.series = sumByCountry
+      let self = this
 
       this.chartOptions = {
         dataLabels: {
@@ -169,15 +170,7 @@ export default {
           height: 350,
           stacked: true,
           toolbar: {
-            show: true,
-            tools: {
-              download: true,
-              selection: false,
-              zoom: false,
-              zoomin: false,
-              zoomout: false,
-              pan: false,
-            },
+            show: false,
             export: {
               csv: {
                 filename: 'Leads Statistics',
@@ -194,6 +187,17 @@ export default {
         xaxis: {
           type: 'datetime',
           categories: datesArray,
+          labels: {
+            format: 'dd/MM/YYYY',
+          },
+        },
+        tooltip: {
+          y: {
+            formatter: function (value, { series, seriesIndex, w }) {
+              const numb = String(value).match(/\d/g).join('')
+              return self.$options.filters.formatNumber(numb)
+            },
+          },
         },
       }
 

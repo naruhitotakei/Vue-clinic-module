@@ -211,6 +211,9 @@ export default {
         chart: {
           type: 'bar',
           height: 350,
+          toolbar: {
+            show: false,
+          },
         },
         plotOptions: {
           bar: {
@@ -335,6 +338,9 @@ export default {
         this.revenueChartSeries = [{
           data: this.revenueList,
         }]
+
+        let self = this
+
         this.revenueChartOptions = {
           xaxis: {
             categories: [...datesArray],
@@ -342,11 +348,19 @@ export default {
           yaxis: {
             labels: {
               formatter: function (y) {
-                return y
+                return self.$options.filters.formatPrice(y)
               },
             },
             title: {
               text: this.formatPrice(this.totalRevenue),
+            },
+          },
+          tooltip: {
+            y: {
+              formatter: function (value, { series, seriesIndex, w }) {
+                const numb = String(value).match(/\d/g).join('')
+                return self.$options.filters.formatPrice(numb)
+              },
             },
           },
         }

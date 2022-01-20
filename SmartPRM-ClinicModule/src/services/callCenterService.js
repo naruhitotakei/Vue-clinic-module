@@ -27,7 +27,7 @@ export async function updatePrmClientInfo(info) {
     info: info,
   }
   const rawResponse = await fetch('/api/call-center/update-prm-client-info', {
-    method: 'POST',
+    method: 'PUT',
     credentials: 'same-origin',
     headers: {
       'Accept': 'application/json',

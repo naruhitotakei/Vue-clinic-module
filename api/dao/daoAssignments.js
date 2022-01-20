@@ -56,13 +56,14 @@ const getAssignments = (request, response, scope, userid, accessible_user_ids, p
             response.status(200).json(results.rows)
         }) 
     } else if (scope == "Self") {
-        var selfCondition = due == "today" ? "OR completed_at = now()::date AND users.id = " + userid : null
+        var selfCondition = due == "today" ? "(OR completed_at = now()::date AND users.id = " + userid + ") " : null
         var statement = ["SELECT todos.*, enquiries.name AS patientname, enquiries.last_name AS patientlastname, " +
                         "concat(users.first_name, ' ', users.surname) AS todoname, enquiries.prm_dentist_user_id FROM todos",
                         "LEFT JOIN enquiries ON todos.enquiry_id = enquiries.id",
                          "LEFT JOIN users ON todos.user_id = users.id",
                          condition,
                          "AND users.id=" + userid,
+                         "AND enquiries.prm_client_id = " + prmClientId,
                          selfCondition,
                          "ORDER BY todos.due_at ASC"].join('\n') 
         pool.query(statement, (error, results) => {

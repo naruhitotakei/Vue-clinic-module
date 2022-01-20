@@ -152,6 +152,7 @@ export default {
         })
 
         this.series = sumByProduct
+        let self = this
 
         this.chartOptions = {
           dataLabels: {
@@ -162,7 +163,7 @@ export default {
             height: 350,
             stacked: true,
             toolbar: {
-              show: true,
+              show: false,
             },
             zoom: {
               enabled: true,
@@ -188,12 +189,27 @@ export default {
           xaxis: {
             categories: uniqueDoctors,
           },
+          yaxis: {
+            labels: {
+              formatter: function (val) {
+                return self.$options.filters.formatPrice(val)
+              },
+            },
+          },
           legend: {
             position: 'right',
             offsetY: 40,
           },
           fill: {
             opacity: 1,
+          },
+          tooltip: {
+            y: {
+              formatter: function (value, { series, seriesIndex, w }) {
+                const numb = String(value).match(/\d/g).join('')
+                return self.$options.filters.formatPrice(numb)
+              },
+            },
           },
         }
 

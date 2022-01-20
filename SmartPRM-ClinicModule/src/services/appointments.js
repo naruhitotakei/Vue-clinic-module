@@ -26,6 +26,7 @@ export async function getAppointments(
   filterLocation,
   filterDoctor,
   filterDate,
+  locale
 ) {
   const rawResponse = await fetch(
     '/api/appointments?location=' +
@@ -33,7 +34,9 @@ export async function getAppointments(
       '&doctor=' +
       filterDoctor +
       '&date=' +
-      filterDate,
+      filterDate +
+      '&locale=' +
+      locale,
     {
       method: 'GET',
       credentials: 'same-origin',
