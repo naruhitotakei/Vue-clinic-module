@@ -9,7 +9,7 @@
               v-if="dataToExport && dataToExport.length"
               :data="dataToExport"
               :columns="excelColumns"
-              :filename="'Revenue By Doctor'"
+              :filename="fileName"
               :sheetname="'Revenue By Doctor'"
               class="btn btn-primary"
             >
@@ -50,7 +50,10 @@
             <apex-chart type="bar" :series="series" :options="chartOptions" />
           </div>
           <div class="mt-3 text-center" v-if="loading">
-            <p>Loading Revenue By Doctor...</p>
+            <div class="text-center text-primary my-2">
+                <b-spinner class="align-middle"></b-spinner>
+                <strong class="loading">Loading...</strong>
+            </div>
           </div>
           <div class="mt-3 text-center" v-if="!loading && noData">
             <p>No data found in this date range...</p>
@@ -64,6 +67,7 @@
 <script>
 import IqCard from '../../components/xray/cards/iq-card'
 import { getRevenueByDoctor } from '../../services/statistics'
+import moment from 'moment'
 
 export default {
   name: 'RevenueByDoctor',
@@ -103,13 +107,14 @@ export default {
       this.loading = true
       this.noData = false
       getRevenueByDoctor(start, end)
-        .then((response) => {
-          this.loading = false
+        .then(async (response) => {
           if (response && response.length) {
             this.noData = false
-            this.setDataForChart(response)
+            await this.setDataForChart(response)
+            this.loading = false
           } else {
             this.noData = true
+            this.loading = false
           }
         })
         .catch(() => {
@@ -117,7 +122,7 @@ export default {
           this.loading = false
         })
     },
-    setDataForChart(data) {
+    async setDataForChart(data) {
       if (data && Array.isArray(data)) {
         this.dataToExport = []
 
@@ -147,6 +152,7 @@ export default {
         })
 
         this.series = sumByProduct
+        let self = this
 
         this.chartOptions = {
           dataLabels: {
@@ -157,7 +163,7 @@ export default {
             height: 350,
             stacked: true,
             toolbar: {
-              show: true,
+              show: false,
             },
             zoom: {
               enabled: true,
@@ -183,12 +189,27 @@ export default {
           xaxis: {
             categories: uniqueDoctors,
           },
+          yaxis: {
+            labels: {
+              formatter: function (val) {
+                return self.$options.filters.formatPrice(val)
+              },
+            },
+          },
           legend: {
             position: 'right',
             offsetY: 40,
           },
           fill: {
             opacity: 1,
+          },
+          tooltip: {
+            y: {
+              formatter: function (value, { series, seriesIndex, w }) {
+                const numb = String(value).match(/\d/g).join('')
+                return self.$options.filters.formatPrice(numb)
+              },
+            },
           },
         }
 
@@ -197,6 +218,7 @@ export default {
     },
 
     prepareDataForExport(data, doctors) {
+      this.fileName = `Revenue By Doctor (${moment(this.start).format('DD/MM/YYYY')} - ${moment(this.end).format('DD/MM/YYYY')})`
       // Get Data for export
       if (Array.isArray(data) && Array.isArray(doctors)) {
         doctors.forEach((doctor) => {
@@ -220,6 +242,7 @@ export default {
       loading: true,
       series: [],
       dataToExport: [],
+      fileName: '',
       excelColumns: [
         { label: 'Doctor', field: 'doctor' },
         { label: 'Revenue', field: 'revenue' },

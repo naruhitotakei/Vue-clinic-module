@@ -9,7 +9,7 @@
               v-if="dataToExport && dataToExport.length"
               :data="dataToExport"
               :columns="excelColumns"
-              :filename="'Revenue By Product'"
+              :filename="fileName"
               :sheetname="'Revenue By Product'"
               class="btn btn-primary"
             >
@@ -28,7 +28,10 @@
             />
           </div>
           <div class="mt-3 text-center" v-if="loading">
-            <p>Loading Revenue By Product...</p>
+            <div class="text-center text-primary my-2">
+                <b-spinner class="align-middle"></b-spinner>
+                <strong class="loading">Loading...</strong>
+            </div>
           </div>
           <div class="mt-3 text-center" v-if="!loading && noData">
             <p>No data found in this date range...</p>
@@ -42,6 +45,7 @@
 <script>
 import IqCard from '../../components/xray/cards/iq-card'
 import { getRevenueByProduct } from '../../services/statistics'
+import moment from 'moment'
 
 export default {
   name: 'RevenueByProduct',
@@ -84,13 +88,14 @@ export default {
       this.loading = true
       this.noData = false
       getRevenueByProduct(start, end)
-        .then((response) => {
-          this.loading = false
+        .then(async (response) => {
           if (response && response.length && Array.isArray(response)) {
             this.noData = false
-            this.setChartData(response)
+            await this.setChartData(response)
+            this.loading = false
           } else {
             this.noData = true
+            this.loading = false
           }
         })
         .catch(() => {
@@ -98,11 +103,12 @@ export default {
           this.loading = false
         })
     },
-    setChartData(data) {
+    async setChartData(data) {
       let prNames = []
       let sumArray = []
       this.dataToExport = []
-      data.forEach((item) => {
+      this.fileName = `Revenue By Product (${moment(this.start).format('DD/MM/YYYY')} - ${moment(this.end).format('DD/MM/YYYY')})`
+      await data.forEach((item) => {
         prNames.push(item.pr_name)
         const sum = Number(item.sum)
         sumArray.push(sum)
@@ -118,6 +124,11 @@ export default {
       let self = this
 
       this.chartOptions = {
+        chart: {
+          toolbar: {
+            show: false,
+          },
+        },
         labels: [...prNames],
         dataLabels: {
           enabled: false,
@@ -149,6 +160,7 @@ export default {
       noData: false,
       loading: true,
       dataToExport: [],
+      fileName: '',
       excelColumns: [
         { label: 'Product', field: 'product' },
         { label: 'Count', field: 'count' },

@@ -238,7 +238,7 @@
                                           {{ data.item.type }}
                                       </span>
                                       <div v-else>
-                                        <v-select :clearable="false" label="name" :reduce="opt => opt.name" class="style-chooser" v-model="data.item.type" :options="paymentMethodOptions"></v-select>
+                                        <v-select :clearable="false" label="name" :reduce="opt => opt.name" class="style-chooser" v-model="data.item.type" :options="paymentMethodOptions" :getOptionLabel="method => method.label"></v-select>
                                       </div>
                                     </template>
                                     <template v-slot:cell(amount)="data">

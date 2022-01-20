@@ -7,9 +7,9 @@
             <b-form @submit.prevent>
               <b-row align-v="center" class="py-2">
                 <b-col cols="12">
-                  <h4 class="card-title mt-3">
+                  <h3 class="card-title mt-3">
                     {{ $t('statisticsForClinic.statisticsForClinicHeader') }}
-                  </h4>
+                  </h3>
                 </b-col>
                 <b-col cols="12" sm="6" md="4" lg="3">
                   <b-form-group>
@@ -30,6 +30,9 @@
                       >
                       <b-form-select-option :value="180"
                         >Last 180 Days</b-form-select-option
+                      >
+                      <b-form-select-option :value="365"
+                        >Last 365 Days</b-form-select-option
                       >
                       <b-form-select-option :value="2"
                         >Last 2 Years</b-form-select-option
@@ -88,7 +91,7 @@
                   </div>
                   <div class="text-right">
                     <h2 class="mb-0">
-                      <span class="counter">{{ appointments }}</span>
+                      <span class="counter">{{ appointments | formatNumber }}</span>
                     </h2>
                     <h5 class="pb-3">Appointments</h5>
                   </div>
@@ -108,7 +111,7 @@
                   </div>
                   <div class="text-right">
                     <h2 class="mb-0">
-                      <span class="counter">{{ attended }}</span>
+                      <span class="counter">{{ attended | formatNumber }}</span>
                     </h2>
                     <h5 class="">Attended</h5>
                   </div>
@@ -128,7 +131,7 @@
                   </div>
                   <div class="text-right">
                     <h2 class="mb-0">
-                      <span class="counter">{{ serviced_patients }}</span>
+                      <span class="counter">{{ serviced_patients | formatNumber }}</span>
                     </h2>
                     <h5 class="">Serviced Patients</h5>
                   </div>
@@ -187,6 +190,7 @@
       <LeadsChart :start="startDate" :end="endDate" />
       <RevenueByDoctor :start="startDate" :end="endDate" />
       <NewPatients :start="startDate" :end="endDate" />
+      <!-- <AppointmentsByProduct :start="startDate" :end="endDate" /> -->
     </template>
   </b-container>
 </template>
@@ -202,7 +206,9 @@ import RevenueByProduct from '@/components/ClinicStats/RevenueByProduct.vue'
 import LeadsChart from '@/components/ClinicStats/LeadsChart.vue'
 import RevenueByDoctor from '@/components/ClinicStats/RevenueByDoctor.vue'
 import NewPatients from '@/components/ClinicStats/NewPatients.vue'
+// import AppointmentsByProduct from '@/components/ClinicStats/AppointmentsByProduct.vue'
 import moment from 'moment'
+import { sso } from '../../services/userService'
 
 export default {
   name: 'Dashboard1',
@@ -212,9 +218,11 @@ export default {
     LeadsChart,
     RevenueByDoctor,
     NewPatients,
+    // AppointmentsByProduct,
   },
   mounted() {
     xray.index()
+    this.getLoggedUser()
     this.getStartDates()
     this.getAttendance()
   },
@@ -272,6 +280,11 @@ export default {
     }
   },
   methods: {
+    getLoggedUser() {
+      sso().then(response => {
+        console.log(response)
+      })
+    },
     onFilterChange(value) {
       const today = moment().format('YYYY-MM-DD')
       if (value && value === 2) {
@@ -316,9 +329,9 @@ export default {
       getClinicStats(start, end).then((response) => {
         if (response && response.revenue) {
           this.revenue = Number(response.revenue)
-          this.appointments = Number(response.appointments).toLocaleString()
-          this.attended = Number(response.attended).toLocaleString()
-          this.serviced_patients = Number(response.serviced).toLocaleString()
+          this.appointments = Number(response.appointments)
+          this.attended = Number(response.attended)
+          this.serviced_patients = Number(response.serviced)
         }
       })
     },

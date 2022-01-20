@@ -3,10 +3,19 @@
     <div v-if="premise != null" class="card my-4">
       <div class="card-body">
         <div class="d-flex justify-content-between">
-          <img :src="`/api/files/logo/${premise.client_id}`" alt="" style="height: 3rem; width: auto">
-          <select v-model="lang" class="language-selector" ref="languageSelector" @change="$refs.languageSelector.blur()">
+          <img
+            :src="`/api/files/logo/${premise.client_id}`"
+            alt=""
+            style="height: 3rem; width: auto"
+          />
+          <select
+            v-model="lang"
+            class="language-selector"
+            ref="languageSelector"
+            @change="$refs.languageSelector.blur()"
+          >
             <option
-              v-for="{ value, title} in langsOptions"
+              v-for="{ value, title } in langsOptions"
               :key="value"
               :value="value"
             >
@@ -21,7 +30,7 @@
         </div>
       </div>
     </div>
-    <slot :premise="premise"/>
+    <slot :premise="premise" />
   </div>
 </template>
 
@@ -31,8 +40,7 @@ import { mapGetters } from 'vuex'
 
 export default {
   name: 'PublicLayout',
-  components: {
-  },
+  components: {},
   data() {
     return {
       lang: this.$route.query.lang != null ? this.$route.query.lang : 'en',
@@ -45,7 +53,11 @@ export default {
     }),
   },
   async mounted() {
-    const response = await fetch(`/api/config?${new URLSearchParams({ premiseId: this.$route.query.premiseId })}`)
+    const response = await fetch(
+      `/api/config?${new URLSearchParams({
+        premiseId: this.$route.query.premiseId,
+      })}`,
+    )
 
     if (response.ok === false) {
       return
@@ -67,7 +79,7 @@ export default {
 }
 </script>
 <style>
-@import url("../assets/css/custom.css");
+@import url('../assets/css/custom.css');
 @media (max-width: 992px) {
   .full-screen {
     display: none;

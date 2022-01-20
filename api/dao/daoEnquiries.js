@@ -39,7 +39,7 @@ const getEnquiries = (
     }
     statement += ') '
   }
-  statement += 'ORDER BY last_name ASC'
+  statement += 'ORDER BY created_at DESC'
   pool.query(statement, (error, results) => {
     if (error) {
       throw error
@@ -48,14 +48,14 @@ const getEnquiries = (
   })
 }
 
-const getEnquiriesById = (request, response, id) => {
-  //AND clients.slug = 'primadent_si'
+const getEnquiriesById = (request, response, id, prmClientId) => {
   pool.query(
     'SELECT enquiries.*, c.name as country ' +
       'FROM enquiries ' +
       'LEFT JOIN clients ON enquiries.client_id = clients.id ' +
       'LEFT JOIN countries c ON enquiries.country_id = c.id ' +
-      'WHERE enquiries.trashed IS FALSE AND enquiries.id = $1',
+      'WHERE enquiries.trashed IS FALSE AND enquiries.id = $1 ' +
+      'AND enquiries.prm_client_id = ' + prmClientId,
     [id],
     (error, results) => {
       if (error) {
@@ -369,7 +369,7 @@ const getPatients = (
   scope,
   prm_client_id,
   user_id,
-  accessible_user_ids,
+  accessible_user_ids
 ) => {
   let statement =
     "SELECT DISTINCT ON (enquiries.id) enquiries.*, CONCAT_WS(' ', enquiries.name, enquiries.last_name) AS full_name FROM enquiries "

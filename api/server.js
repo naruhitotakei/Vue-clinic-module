@@ -48,6 +48,7 @@ const daoEnquiries = require('./dao/daoEnquiries')
 const daoAssignments = require('./dao/daoAssignments')
 const daoStatistics = require('./dao/daoStatistics')
 const daoReporting = require('./dao/daoReporting')
+const daoCallCenter = require('./dao/daoCallCenter')
 const fiscalVerification = require('./services/fiscalVerification')
 const daoInvoices = require('./dao/daoInvoices')
 const daoAdvPayments = require('./dao/daoAdvPayments')
@@ -119,15 +120,18 @@ const enquiriesPermission = 'Patients'
 const assignmentsPermission = 'Assignments'
 const clinicStatisticsPermission = 'Statistics For Clinic'
 const reportingEmazingPermission = 'Emazing'
+const missingServicesPermission = 'Missing Services'
 const invoicesPermission = 'Invoices'
 const advPaymentsPermission = 'Advance Payments'
 const offersPermission = 'Offers'
 const productsPermission = 'Services and Products'
 const calendarPermission = 'Calendar'
+const appointmentsPermission = "Appointments"
 const locationsPermission = 'Locations'
 const appointmentSlotsPermission = 'Free Slots'
 const usersPermission = 'Users'
 const onlineBookingPermission = 'Online Booking'
+const SMSTemplatesPermission = 'SMS Templates'
 
 ///////////////////////////////////
 // user login, logout, ...
@@ -292,7 +296,7 @@ app.get('/api/home/open-assignments', (req, res) => {
     req.session.prm_user.permissions &&
     checkPermission(req.session.prm_user.permissions, homePermission)
   )
-    daoHome.getAssignmentsForUser(req, res, req.session.prm_user.id)
+    daoHome.getAssignmentsForUser(req, res, req.session.prm_user.id, req.session.prm_user.prm_client_id)
   else res.status(401).json('OK: user unauthorized')
 })
 
@@ -460,7 +464,18 @@ app.get('/api/appointments', (req, res) => {
     req.session.prm_user.permissions &&
     checkPermission(req.session.prm_user.permissions, appointmentsPermission)
   )
-    daoAppointments.getAppointments(req, res, location, doctor, date)
+    daoAppointments.getAppointments(
+      req,
+      res,
+      location,
+      doctor,
+      date,
+      getScope(req.session.prm_user.permissions, appointmentsPermission),
+      req.session.prm_user.prm_client_id,
+      req.session.prm_user.id,
+      req.session.prm_user.accessible_user_ids,
+      req.session.prm_user.prm_locale
+    )
   else res.status(401).json('OK: user unauthorized')
 })
 
@@ -482,18 +497,25 @@ app.put('/api/appointments/update_interest', (req, res) => {
   else res.status(401).json('OK: user unauthorized')
 })
 
-app.put('/api/appointments/update_notes', (req, res) => {
-  const appointmentID = req.body.id
-  const notes = req.body.notes
+app.put('/api/appointments/update_clinic_notes', (req, res) => {
+    const appointmentID = req.body.id
+    const clinicNotes = req.body.clinicNotes
 
-  if (
-    req.session.prm_user &&
-    req.session.prm_user.permissions &&
-    checkPermission(req.session.prm_user.permissions, appointmentsPermission)
-  )
-    daoAppointments.updateNotes(req, res, appointmentID, notes)
-  else res.status(401).json('OK: user unauthorized')
-})
+    if (req.session.prm_user && req.session.prm_user.permissions && checkPermission(req.session.prm_user.permissions, appointmentsPermission))
+        daoAppointments.updateClinicNotes(req, res, appointmentID, clinicNotes)
+    else
+        res.status(401).json("OK: user unauthorized")
+});
+
+app.put('/api/appointments/update_call_center_notes', (req, res) => {
+  const appointmentID = req.body.id
+  const callCenterNotes = req.body.callCenterNotes
+
+  if (req.session.prm_user && req.session.prm_user.permissions && checkPermission(req.session.prm_user.permissions, appointmentsPermission))
+    daoAppointments.updateCallCenterNotes(req, res, appointmentID, callCenterNotes)
+  else
+    res.status(401).json("OK: user unauthorized")
+});
 
 app.put('/api/appointments/update_attendance', (req, res) => {
   const appointmentID = req.body.id
@@ -987,13 +1009,53 @@ app.get('/api/sms-templates', (req, res) => {
   if (
     req.session.prm_user &&
     req.session.prm_user.permissions &&
-    checkPermission(req.session.prm_user.permissions, usersPermission)
+    checkPermission(req.session.prm_user.permissions, SMSTemplatesPermission)
   ) {
     daoSmsTemplates.getSmsTemplates(
       req,
       res,
       req.session.prm_user.prm_client_id,
-      getScope(req.session.prm_user.permissions, usersPermission),
+      getScope(req.session.prm_user.permissions, SMSTemplatesPermission),
+    )
+  } else {
+    res.status(401).json('OK: user unauthorized')
+  }
+})
+
+app.get('/api/sms-template/:id', (req, res) => {
+  const templateID = req.params.id
+  if (
+    req.session.prm_user &&
+    req.session.prm_user.permissions &&
+    checkPermission(req.session.prm_user.permissions, SMSTemplatesPermission)
+  ) {
+    daoSmsTemplates.getSmsTemplate(
+      req,
+      res,
+      templateID
+    )
+  } else {
+    res.status(401).json('OK: user unauthorized')
+  }
+})
+
+app.put('/api/sms-template/update', (req, res) => {
+  const templateID = req.body.id
+  const templateName = req.body.name
+  const templateContent = req.body.content
+  const templateSlug = req.body.slug
+  if (
+    req.session.prm_user &&
+    req.session.prm_user.permissions &&
+    checkPermission(req.session.prm_user.permissions, SMSTemplatesPermission)
+  ) {
+    daoSmsTemplates.updateSmsTemplate(
+      req,
+      res,
+      templateID,
+      templateName,
+      templateContent,
+      templateSlug
     )
   } else {
     res.status(401).json('OK: user unauthorized')
@@ -1133,7 +1195,14 @@ app.get('/api/patients', (req, res) => {
     req.session.prm_user.permissions &&
     checkPermission(req.session.prm_user.permissions, enquiriesPermission)
   )
-    daoEnquiries.getPatients(req, res)
+    daoEnquiries.getPatients(
+      req,
+      res,
+      getScope(req.session.prm_user.permissions, enquiriesPermission),
+      req.session.prm_user.prm_client_id,
+      req.session.prm_user.id,
+      req.session.prm_user.accessible_user_ids
+    )
   else res.status(401).json('OK: user unauthorized')
 })
 
@@ -1144,7 +1213,7 @@ app.get('/api/enquiries/:id', (req, res) => {
     req.session.prm_user.permissions &&
     checkPermission(req.session.prm_user.permissions, enquiriesPermission)
   )
-    daoEnquiries.getEnquiriesById(req, res, id)
+    daoEnquiries.getEnquiriesById(req, res, id, req.session.prm_user.prm_client_id)
   else res.status(401).json('OK: user unauthorized')
 })
 
@@ -1633,8 +1702,8 @@ app.get('/api/statistics/clinic/attendance', (req, res) => {
 })
 
 app.get('/api/statistics/visits-by-country', (req, res) => {
-  if (req.session.prm_user && req.session.prm_user.permissions)
-    daoStatistics.getVisitsByCountryInAWeek(req, res)
+  if (req.session.prm_user && req.session.prm_user.permissions && checkPermission(req.session.prm_user.permissions, homePermission))
+    daoStatistics.getVisitsByCountryInAWeek(req, res, getScope(req.session.prm_user.permissions, homePermission), req.session.prm_user.prm_client_id)
   else res.status(401).json('OK: user unauthorized')
 })
 
@@ -1823,6 +1892,59 @@ app.get('/api/statistics/new-enquiries/:start/:end', (req, res) => {
   else res.status(401).json('OK: user unauthorized')
 })
 
+app.get('/api/statistics/appointments-by-product/:start/:end/:locale', (req, res) => {
+  const start = req.params.start
+  const end = req.params.end
+  const locale = req.params.locale
+  if (
+    req.session.prm_user &&
+    req.session.prm_user.permissions &&
+    checkPermission(
+      req.session.prm_user.permissions,
+      clinicStatisticsPermission,
+    )
+  )
+    daoStatistics.getAppointmentsByProduct(
+      req,
+      res,
+      start,
+      end,
+      req.session.prm_user.prm_client_id,
+      getScope(req.session.prm_user.permissions, clinicStatisticsPermission),
+      locale
+    )
+  else res.status(401).json('OK: user unauthorized')
+})
+
+///////////////////////////////////
+// Call Center
+///////////////////////////////////
+
+app.get('/api/call-center/missing-services/:start/:end', (req, res) => {
+  const start = req.params.start
+  const end = req.params.end
+  if (req.session.prm_user && req.session.prm_user.permissions && checkPermission(req.session.prm_user.permissions, missingServicesPermission))
+    daoCallCenter.getAppointmentsWithMissingServices(req, res, start, end, req.session.prm_user.prm_client_id, getScope(req.session.prm_user.permissions, missingServicesPermission))
+  else
+    res.status(401).json('OK: user unauthorized')
+})
+
+app.get('/api/call-center/prm-client-info', (req, res) => {
+  if (req.session.prm_user && req.session.prm_user.permissions && checkPermission(req.session.prm_user.permissions, missingServicesPermission))
+    daoCallCenter.getPrmClientInfo(req, res, req.session.prm_user.prm_client_id)
+  else
+    res.status(401).json('OK: user unauthorized')
+})
+
+app.put('/api/call-center/update-prm-client-info', (req, res) => {
+  const info = req.body.info
+  if (req.session.prm_user && req.session.prm_user.permissions && checkPermission(req.session.prm_user.permissions, missingServicesPermission))
+    daoCallCenter.updatePrmClientInfo(req, res, req.session.prm_user.prm_client_id, info)
+  else
+    res.status(401).json('OK: user unauthorized')
+})
+
+
 ///////////////////////////////////
 // codelist methodes
 ///////////////////////////////////
@@ -1855,8 +1977,8 @@ app.get('/api/codelist/clients', (req, res) => {
   daoCodeLists.getClients(req, res)
 })
 
-app.get('/api/codelist/year-dates', (req, res) => {
-  daoCodeLists.getDatesForCurrentYear(req, res)
+app.get('/api/codelist/week-dates', (req, res) => {
+  daoCodeLists.getDatesForCurrentWeek(req, res)
 })
 
 ///////////////////////////////////
@@ -2026,7 +2148,7 @@ app.post('/api/files/avatar/:id', async function (req, res) {
   let id = req.params.id
   if (req.session.prm_user) {
     const rv = await awsS3.upload(
-      'avatar-' + id + '/',
+      'avatar-' + id,
       req.files.file.data,
       req.files.file.mimetype,
       'avatar-' + id,
@@ -2038,7 +2160,7 @@ app.post('/api/files/avatar/:id', async function (req, res) {
 
 app.get('/api/files/avatar/:id', async function (req, res) {
   let id = req.params.id
-  const rv = await awsS3.download('avatar-' + id + '/')
+  const rv = await awsS3.download('avatar-' + id)
   if (rv.status == 'OK') {
     const download = Buffer.from(rv.data.Body)
     res.end(download)

@@ -12,16 +12,16 @@ const getAssignments = (request, response, scope, userid, accessible_user_ids, p
     var condition = null;
     var condition2 = null;
     if (due == "today") {
-        condition = "WHERE todos.trashed = false AND (todos.due_at = now()::date)"
+        condition = "WHERE enquiries.trashed = false AND (todos.due_at = now()::date) "
         condition2 ="OR completed_at = now()::date"
     } else if (due == "future") {
-        condition = "WHERE (todos.due_at > now()::date) AND completed = false AND todos.trashed = false"
+        condition = "WHERE (todos.due_at > now()::date) AND completed = false AND enquiries.trashed = false"
     } else if (due == "past") {
-        condition = "WHERE (todos.due_at < now()::date)  AND completed = false AND todos.trashed = false"
+        condition = "WHERE (todos.due_at < now()::date)  AND completed = false AND enquiries.trashed = false"
     } else if (due == "finished") {
-        condition = "WHERE ( (date_trunc('month', todos.updated_at) + INTERVAL '1 MONTH') > now()::date  ) AND completed = true AND todos.trashed = false"
+        condition = "WHERE ( (date_trunc('month', todos.updated_at) + INTERVAL '1 MONTH') > now()::date  ) AND completed = true AND enquiries.trashed = false"
     } else if (due == "all") {
-      condition = "WHERE completed = false AND todos.trashed = false"
+      condition = "WHERE completed = false AND enquiries.trashed = false"
     } else {
         response.status(200).json("NOK: Unknown due " + due)
         return
@@ -56,13 +56,14 @@ const getAssignments = (request, response, scope, userid, accessible_user_ids, p
             response.status(200).json(results.rows)
         }) 
     } else if (scope == "Self") {
-        var selfCondition = due == "today" ? "OR completed_at = now()::date AND users.id = " + userid : null
+        var selfCondition = due == "today" ? "(OR completed_at = now()::date AND users.id = " + userid + ") " : null
         var statement = ["SELECT todos.*, enquiries.name AS patientname, enquiries.last_name AS patientlastname, " +
                         "concat(users.first_name, ' ', users.surname) AS todoname, enquiries.prm_dentist_user_id FROM todos",
                         "LEFT JOIN enquiries ON todos.enquiry_id = enquiries.id",
                          "LEFT JOIN users ON todos.user_id = users.id",
                          condition,
                          "AND users.id=" + userid,
+                         "AND enquiries.prm_client_id = " + prmClientId,
                          selfCondition,
                          "ORDER BY todos.due_at ASC"].join('\n') 
         pool.query(statement, (error, results) => {

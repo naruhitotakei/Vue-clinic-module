@@ -1,5 +1,5 @@
-export async function getSmsTemplates(sort) {
-  const rawResponse = await fetch('/api/sms-templates', {
+export async function getAppointmentsWithoutServices(start, end) {
+  const rawResponse = await fetch('/api/call-center/missing-services/' + start + '/' + end, {
     method: 'GET',
     credentials: 'same-origin',
     headers: {
@@ -10,8 +10,8 @@ export async function getSmsTemplates(sort) {
   return rawResponse.json()
 }
 
-export async function getSmsTemplate(id) {
-  const rawResponse = await fetch('/api/sms-template/' + id, {
+export async function getPrmClient() {
+  const rawResponse = await fetch('/api/call-center/prm-client-info', {
     method: 'GET',
     credentials: 'same-origin',
     headers: {
@@ -22,15 +22,18 @@ export async function getSmsTemplate(id) {
   return rawResponse.json()
 }
 
-export async function updateSmsTemplate(smsTemplateData) {
-  const rawResponse = await fetch('/api/sms-template/update', {
+export async function updatePrmClientInfo(info) {
+  const assignmentDescriptor = {
+    info: info,
+  }
+  const rawResponse = await fetch('/api/call-center/update-prm-client-info', {
     method: 'PUT',
     credentials: 'same-origin',
     headers: {
       'Accept': 'application/json',
       'Content-Type': 'application/json',
     },
-    body: JSON.stringify(smsTemplateData),
+    body: JSON.stringify(assignmentDescriptor),
   })
   return rawResponse.json()
 }

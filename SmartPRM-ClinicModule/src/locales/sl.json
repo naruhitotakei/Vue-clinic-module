@@ -18,7 +18,10 @@
     "sortBy": "Razvrsti po",
     "country": "Država",
     "yes": "Da",
-    "no": "Ne"
+    "no": "Ne",
+    "noDoctor": "Doktor ni doloćen",
+    "cancel": "Prekliči",
+    "confirm": "Potrdi"
   },
   "documents": {
     "offers": "Ponudbe",
@@ -126,7 +129,10 @@
     "btnEPR": "Kartoteka pacienta",
     "btnSave": "Shrani",
     "btnCancel": "Prekliči",
-    "btnCancelation": "Preklic termina"
+    "btnCancelation": "Preklic termina",
+    "notSavedModalHeader": "Ali ste prepričani da želite ovreči spremembe?",
+    "notSavedModalBody": "Imate neshranjene spremembe. Jih želite shraniti preden zaprete modal?",
+    "noTimeSet": "Ura ni določena"
   },
   "calendarEvent": {
     "start": "Začetek",
@@ -167,6 +173,8 @@
     "notInterested": "Ne zanima",
     "interested": "Zanima",
     "veryInterested": "Zelo zanima",
+    "clinicNotes": "Opombe klinike",
+    "callCenterNotes": "Opombe klicnega centra",
     "enterNotes": "Vpiši Opombe..."
   },
   "patients": {
@@ -549,6 +557,9 @@
     "overdueAssignments": "Zapadle Naloge",
     "futureAssignments": "Naslednje Naloge",
     "completedAssignments": "Opravljene Naloge",
+    "todaysAssignmentsOfOtherUsers": "Današnje naloge drugih uporabnikov",
+    "overdueAssignmentsOfOtherUsers": "Zapadle naloge drugih uporabnikov",
+    "futureAssignmentsOfOtherUsers": "Naslednje naloge drugih uporabnikov",
     "addAssignmentsModal": {
       "addAssignments": "Nova naloga",
       "editAssignments": "Uredi nalogo",

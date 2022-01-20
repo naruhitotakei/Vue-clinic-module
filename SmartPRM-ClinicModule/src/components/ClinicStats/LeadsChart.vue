@@ -8,7 +8,7 @@
                 <vue-excel-xlsx
                     :data="dataToExport"
                     :columns="excelColumns"
-                    :filename="'Lead Statistics'"
+                    :filename="fileName"
                     :sheetname="'Lead Statistics'"
                     class="btn btn-primary"
                     >
@@ -49,7 +49,10 @@
               <apex-chart type="bar" :series="series" :options="chartOptions" />
             </div>
             <div class="mt-3 text-center" v-if="loading">
-                <p>Loading Leads Statistics...</p>
+              <div class="text-center text-primary my-2">
+                <b-spinner class="align-middle"></b-spinner>
+                <strong class="loading">Loading...</strong>
+              </div>
             </div>
             <div class="mt-3 text-center" v-if="!loading && noData">
                 <p>No data found in this date range...</p>
@@ -107,25 +110,26 @@ export default {
     getClinicLeadStats(start, end) {
       this.loading = true
       this.noData = false
-      getLeadsPerDay(start, end).then(response => {
-        this.loading = false
+      getLeadsPerDay(start, end).then(async response => {
         if (response && response.length && Array.isArray(response)) {
           this.noData = false
           this.setDataForChart(response)
+          this.loading = false
         } else {
           this.noData = true
+          this.loading = false
         }
       }).catch(() => {
         this.noData = false
         this.loading = false
       })
     },
-    setDataForChart(data) {
+    async setDataForChart(data) {
       let datesArray = []
       let sumByCountry = []
       let countries = []
       this.dataToExport = []
-      data.forEach(item => {
+      await data.forEach(item => {
         // Get Unique Dates
         const itemDate = item.date.split('T')[0]
         const isDateExists = datesArray.find(date => date === itemDate)
@@ -155,6 +159,7 @@ export default {
       })
 
       this.series = sumByCountry
+      let self = this
 
       this.chartOptions = {
         dataLabels: {
@@ -165,15 +170,7 @@ export default {
           height: 350,
           stacked: true,
           toolbar: {
-            show: true,
-            tools: {
-              download: true,
-              selection: false,
-              zoom: false,
-              zoomin: false,
-              zoomout: false,
-              pan: false,
-            },
+            show: false,
             export: {
               csv: {
                 filename: 'Leads Statistics',
@@ -190,6 +187,17 @@ export default {
         xaxis: {
           type: 'datetime',
           categories: datesArray,
+          labels: {
+            format: 'dd/MM/YYYY',
+          },
+        },
+        tooltip: {
+          y: {
+            formatter: function (value, { series, seriesIndex, w }) {
+              const numb = String(value).match(/\d/g).join('')
+              return self.$options.filters.formatNumber(numb)
+            },
+          },
         },
       }
 
@@ -197,13 +205,14 @@ export default {
     },
 
     prepareDataForExport(data, countries) {
+      this.fileName = `Leads Statistics (${moment(this.start).format('DD/MM/YYYY')} - ${moment(this.end).format('DD/MM/YYYY')})`
       // Get Data for export
       if (Array.isArray(data) && Array.isArray(countries)) {
         countries.forEach(country => {
           const sum = data.filter(item => item.country === country)
             .map(item => item.enquiries_count && Number(item.enquiries_count))
             .reduce((a, b) => Number(a) + Number(b))
-          this.dataToExport.push({ country, enquiries: this.$options.filters.formatPrice(sum) })
+          this.dataToExport.push({ country, enquiries: this.$options.filters.formatNumber(sum) })
         })
       }
     },
@@ -215,6 +224,7 @@ export default {
       loading: true,
       noData: false,
       dataToExport: [],
+      fileName: '',
       excelColumns: [
         { label: 'Country', field: 'country' },
         { label: 'Enquiries', field: 'enquiries' },
