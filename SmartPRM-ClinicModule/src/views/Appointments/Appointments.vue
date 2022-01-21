@@ -10,6 +10,7 @@
                 :options="filterLocations"
                 :value="selectedLocation"
                 v-model="selectedLocation"
+                @input="getAppointmentsData"
               ></v-select>
             </div>
             <div class="filter-select">
@@ -17,6 +18,7 @@
                 :options="filterDoctors"
                 v-model="selectedDoctor"
                 :reduce="(option) => option.value"
+                @input="getAppointmentsData"
               ></v-select>
             </div>
             <div class="filter-select">
@@ -24,8 +26,8 @@
                 required
                 v-model="dateSelected"
                 type="date"
-                placeholder="No date selected"
-                :format="'DD.MM.YYYY'"></date-picker>
+                @input="getAppointmentsData"
+                :format="'YYYY-MM-DD'"></date-picker>
             </div>
           </div>
         </template>
@@ -278,8 +280,10 @@
 
 <script>
 import { defineComponent } from '@vue/composition-api'
+import moment from 'moment'
 import IqCard from '../../components/xray/cards/iq-card.vue'
 import { xray } from '../../config/pluginInit'
+
 import {
   getAppointmentsLocations,
   getAppointmentsDoctors,
@@ -299,12 +303,7 @@ export default defineComponent({
     xray.index()
     this.getAppointmentsLocationsData()
     this.getAppointmentsDoctorsData()
-    this.getAppointmentsData(
-      this.selectedLocation,
-      this.selectedDoctor,
-      this.dateSelected,
-      this.$i18n.locale
-    )
+    this.getAppointmentsData()
   },
   data() {
     return {
@@ -312,39 +311,10 @@ export default defineComponent({
       selectedLocation: 'All Locations',
       filterDoctors: [{ value: 'All Doctors', label: 'All Doctors' }],
       selectedDoctor: 'All Doctors',
-      dateSelected: new Date().toISOString().slice(0, 10),
+      dateSelected: new Date(),
       showModal: false,
       appointments: [],
     }
-  },
-  watch: {
-    selectedLocation(newLocation) {
-      this.selectedLocation = newLocation
-      this.getAppointmentsData(
-        this.selectedLocation,
-        this.selectedDoctor,
-        this.dateSelected,
-        this.$i18n.locale
-      )
-    },
-    selectedDoctor(newDoctor) {
-      this.selectedDoctor = newDoctor
-      this.getAppointmentsData(
-        this.selectedLocation,
-        this.selectedDoctor,
-        this.dateSelected,
-        this.$i18n.locale
-      )
-    },
-    dateSelected(newDate) {
-      this.dateSelected = newDate
-      this.getAppointmentsData(
-        this.selectedLocation,
-        this.selectedDoctor,
-        this.dateSelected,
-        this.$i18n.locale
-      )
-    },
   },
   methods: {
     async getAppointmentsLocationsData() {
@@ -368,8 +338,8 @@ export default defineComponent({
         }
       })
     },
-    async getAppointmentsData(filterLocation, filterDoctor, filterDate, locale) {
-      getAppointments(filterLocation, filterDoctor, filterDate, locale).then(
+    async getAppointmentsData() {
+      getAppointments(this.selectedLocation, this.selectedDoctor, moment(this.dateSelected).format('YYYY-MM-DD'), this.$i18n.locale).then(
         (response) => {
           this.appointments = []
           if (Array.isArray(response)) {
@@ -386,12 +356,7 @@ export default defineComponent({
         interest: levelOfInterest,
       }).then((response) => {
         if (response.success === true) {
-          this.getAppointmentsData(
-            this.selectedLocation,
-            this.selectedDoctor,
-            this.dateSelected,
-            this.$i18n.locale
-          )
+          this.getAppointmentsData()
         }
       })
     },
@@ -399,12 +364,7 @@ export default defineComponent({
       updateClinicNotes({ id: appointmentID, clinicNotes: e.target.value }).then(
         (response) => {
           if (response.success === true) {
-            this.getAppointmentsData(
-              this.selectedLocation,
-              this.selectedDoctor,
-              this.dateSelected,
-              this.$i18n.locale
-            )
+            this.getAppointmentsData()
           }
         },
       )
@@ -413,12 +373,7 @@ export default defineComponent({
       updateCallCenterNotes({ id: appointmentID, callCenterNotes: e.target.value }).then(
         (response) => {
           if (response.success === true) {
-            this.getAppointmentsData(
-              this.selectedLocation,
-              this.selectedDoctor,
-              this.dateSelected,
-              this.$i18n.locale
-            )
+            this.getAppointmentsData()
           }
         },
       )
@@ -427,12 +382,7 @@ export default defineComponent({
       updateAttendance({ id: appointmentID, attendance: attendance }).then(
         (response) => {
           if (response.success === true) {
-            this.getAppointmentsData(
-              this.selectedLocation,
-              this.selectedDoctor,
-              this.dateSelected,
-              this.$i18n.locale
-            )
+            this.getAppointmentsData()
           }
         },
       )
