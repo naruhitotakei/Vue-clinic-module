@@ -98,6 +98,7 @@
                                           <!-- <strong v-if="!item.completed">{{ item.description }}</strong> -->
                                           <strong :class="{'red-text': isItOverdue(item.due_at)}" v-if="!item.completed">{{ item.description }}</strong>
                                           <strong :style="{ color: '#aaa' }" v-else>{{ item.description }}</strong>
+
                                     </div>
                                     <div class="d-flex align-items-center justify-content-between">
                                         <div>
@@ -106,7 +107,7 @@
                                             <span class="text-left">{{ patientsDentist(item) ? `(${patientsDentist(item)})` : '' }}</span>
                                         </div>
                                         <div class="d-flex align-items-center">
-                                            <span class="text-right text-width-150">{{ item.due_at | formatDate }}</span>
+                                            <span class="text-right text-width-150">{{ item.due_at | formatDateWithYear }}</span>
                                             <b-button variant=" iq-bg-success mr-1 mb-1" size="sm" style="margin-left: 5%;" @click="editAssignments(item)">
                                                 <i class="ri-ball-pen-fill m-0"></i>
                                             </b-button>
@@ -421,6 +422,7 @@ export default {
           })
           getAssignmentsForUser().then(response => {
             this.openAssignments = response
+            console.log(response, '-----------')
           })
           getDoctorList().then((data) => {
             this.doctors = data
