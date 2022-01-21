@@ -51,7 +51,7 @@
                               <span class="text-left">{{ patientsDentist(item) ? `(${patientsDentist(item)})` : '' }}</span>
                             </div>
                             <div class="d-flex align-items-center">
-                              <span class="text-right text-width-150">{{ item.due_at | formatDate }}</span>
+                              <span class="text-right text-width-150">{{ item.due_at | formatDateWithYear }}</span>
                               <b-button variant=" iq-bg-success mr-1 mb-1" size="sm" style="margin-left: 5%;" @click="editAssignments(item)">
                               <i class="ri-ball-pen-fill m-0"></i>
                             </b-button>
@@ -115,7 +115,7 @@
                             <span class="text-left">{{ patientsDentist(item) ? `(${patientsDentist(item)})` : '' }}</span>
                           </div>
                           <div class="d-flex align-items-center">
-                            <span class="text-right text-width-150">{{ item.due_at | formatDate }}</span>
+                            <span class="text-right text-width-150">{{ item.due_at | formatDateWithYear }}</span>
                             <b-button variant=" iq-bg-success mr-1 mb-1" size="sm" style="margin-left: 5%;" @click="editAssignments(item)">
                             <i class="ri-ball-pen-fill m-0"></i>
                           </b-button>
@@ -172,7 +172,7 @@
                             </b-col>
                             <b-col cols="12" lg="6" class="d-flex align-items-center justify-content-end">
                               <span class="text-right pr-2">{{ item.todoname }}</span>
-                                <span class="text-right">{{ item.due_at | formatDate }}</span>
+                                <span class="text-right">{{ item.due_at | formatDateWithYear }}</span>
                                 <b-button variant=" iq-bg-success mr-1 mb-1" size="sm" style="margin-left: 2%;" @click="editAssignments(item)">
                                 <i class="ri-ball-pen-fill m-0"></i>
                               </b-button>
@@ -236,7 +236,7 @@
                             </b-col>
                             <b-col cols="12" lg="6" class="d-flex align-items-center justify-content-end">
                               <span class="text-right pr-2">{{ item.todoname }}</span>
-                                <span class="text-right">{{ item.due_at | formatDate }}</span>
+                                <span class="text-right">{{ item.due_at | formatDateWithYear }}</span>
                                 <b-button variant=" iq-bg-success mr-1 mb-1" size="sm" style="margin-left: 2%;" @click="editAssignments(item)">
                                 <i class="ri-ball-pen-fill m-0"></i>
                               </b-button>
@@ -312,7 +312,7 @@
                     <template v-slot:body>
                         <b-list-group class="list-group-flush" id="myFutureAssignments">
                             <b-list-group-item
-                                v-for="(item, index) in myFutureList"
+                                v-for="(item, index) in sortedmyFutureAssignments"
                                 :key="index"
                                 :style="{'background': getDifferenceDate(item.due_at) === 1 && '#ffeeba' || getDifferenceDate(item.due_at) > 1 && 'white'}"
                             >
@@ -332,7 +332,7 @@
                                     <span class="text-left">{{ patientsDentist(item) ? `(${patientsDentist(item)})` : '' }}</span>
                                   </div>
                                   <div class="d-flex align-items-center">
-                                    <span class="text-right text-width-150">{{ item.due_at | formatDate }}</span>
+                                    <span class="text-right text-width-150">{{ item.due_at | formatDateWithYear }}</span>
                                     <b-button variant=" iq-bg-success mr-1 mb-1" size="sm" style="margin-left: 5%;" @click="editAssignments(item)">
                                     <i class="ri-ball-pen-fill m-0"></i>
                                   </b-button>
@@ -386,7 +386,7 @@
                                   </b-col>
                                   <b-col cols="12" lg="6" class="d-flex align-items-center justify-content-end">
                                     <span class="text-right pr-2">{{ item.todoname }}</span>
-                                      <span class="text-right">{{ item.due_at | formatDate }}</span>
+                                      <span class="text-right">{{ item.due_at | formatDateWithYear }}</span>
                                       <b-button variant=" iq-bg-success mr-1 mb-1" size="sm" style="margin-left: 2%;" @click="editAssignments(item)">
                                       <i class="ri-ball-pen-fill m-0"></i>
                                     </b-button>
@@ -671,6 +671,9 @@ export default {
     this.getEnquires()
   },
   computed: {
+    sortedmyFutureAssignments() {
+      return [...this.myFutureAssignments].reverse()
+    },
     getLocale() {
       return this.$store.getters['Setting/langState'].value ? this.$store.getters['Setting/langState'].value : this.$store.getters['Setting/langState']
     },

@@ -12,6 +12,12 @@ Vue.filter('formatDate', function (value, { lang = 'en' } = {}) {
   }
 })
 
+Vue.filter('formatDateWithYear', function (value, { lang = 'en' } = {}) {
+  if (value) {
+    return moment(String(value)).locale(lang).format('ddd, D MMM, YYYY')
+  }
+})
+
 Vue.filter('formatDateAndTime', function (value) {
   if (value) {
     return moment(String(value)).format('DD-MM-YYYY HH:mm')

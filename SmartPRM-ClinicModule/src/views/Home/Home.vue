@@ -99,6 +99,7 @@
                                           <!-- <strong v-if="!item.completed">{{ item.description }}</strong> -->
                                           <strong :class="{'red-text': isItOverdue(item.due_at)}" v-if="!item.completed">{{ item.description }}</strong>
                                           <strong :style="{ color: '#aaa' }" v-else>{{ item.description }}</strong>
+
                                     </div>
                                     <div class="d-flex align-items-center justify-content-between">
                                         <div>
@@ -107,7 +108,7 @@
                                             <span class="text-left">{{ patientsDentist(item) ? `(${patientsDentist(item)})` : '' }}</span>
                                         </div>
                                         <div class="d-flex align-items-center">
-                                            <span class="text-right text-width-150">{{ item.due_at | formatDate }}</span>
+                                            <span class="text-right text-width-150">{{ item.due_at | formatDateWithYear }}</span>
                                             <b-button variant=" iq-bg-success mr-1 mb-1" size="sm" style="margin-left: 5%;" @click="editAssignments(item)">
                                                 <i class="ri-ball-pen-fill m-0"></i>
                                             </b-button>
@@ -130,10 +131,11 @@
                 </iq-card>
                 <iq-card class-name="iq-card-block iq-card-stretch">
                     <template v-slot:headerTitle>
-                        <h4 class="card-title">{{ $t('home.appointmentChart') }}</h4>
+                        <h4 class="card-title">{{ $t('home.appointmentChart') }} ({{ totalAppointments }})</h4>
                     </template>
                     <template v-slot:body>
-                        <apex-chart type="bar" height="350" :options="chartOptions" :series="series"></apex-chart>
+                      <div class="appointmentChart" ref="appointmentChart"></div>
+                      <!-- <apex-chart type="bar" height="350" :options="chartOptions" :series="series"></apex-chart> -->
                     </template>
                 </iq-card>
             </b-col>
@@ -238,7 +240,7 @@
 <script>
 import IqCard from '../../components/xray/cards/iq-card'
 import { xray } from '../../config/pluginInit'
-import { getTodaysAppointments, getStaff, getAssignmentsForUser } from '../../services/homeService'
+import { getTodaysAppointments, getAppointmentsForTwoWeeks, getStaff, getAssignmentsForUser } from '../../services/homeService'
 import moment from 'moment'
 import { getCountriesWithPatients, getDatesForCurrentWeek } from '../../services/commonCodeLists'
 import { visitsByCountryInAWeek, getDoctorsStatisticPerWeek } from '../../services/statistics'
@@ -248,13 +250,20 @@ import { finishAssignment } from '../../services/assignmentsService'
 import { getEnquires } from '@/services/enquiry'
 import AddEditAssignment from '@/components/Assignments/AddEditAssignment'
 
+import * as am4core from '@amcharts/amcharts4/core'
+import * as am4charts from '@amcharts/amcharts4/charts'
+import am4themesAnimated from '@amcharts/amcharts4/themes/animated'
+
 import _ from 'lodash'
 const body = document.getElementsByTagName('body')
+am4core.useTheme(am4themesAnimated)
 export default {
   name: 'Home',
   components: { IqCard, AddEditAssignment },
   data() {
     return {
+      totalAppointments: 0,
+      chart: null,
       userId: null,
       users: [],
       enquires: [],
@@ -356,6 +365,11 @@ export default {
     this.getTodaysAppointmentsList(this.$i18n.locale)
     body[0].classList.add('sidebar-main-menu')
   },
+  beforeDestroy() {
+    if (this.chart) {
+      this.chart.dispose()
+    }
+  },
   computed: {
     openAssignmentsList() {
       return this.openAssignments.slice(
@@ -373,6 +387,33 @@ export default {
     },
   },
   methods: {
+    initChart(data) {
+      let chart = am4core.create(this.$refs.appointmentChart, am4charts.XYChart)
+      chart.paddingRight = 20
+
+      chart.data = data
+
+      let dateAxis = chart.xAxes.push(new am4charts.DateAxis())
+      dateAxis.dataFields.date = 'day'
+      let valueAxis = chart.yAxes.push(new am4charts.ValueAxis())
+
+      valueAxis.tooltip.disabled = false
+      valueAxis.renderer.minWidth = 35
+
+      let series = chart.series.push(new am4charts.ColumnSeries())
+
+      series.dataFields.valueY = 'appointments'
+      series.dataFields.dateX = 'day'
+
+      series.tooltipText = '{valueY.value}'
+      chart.cursor = new am4charts.XYCursor()
+
+      let scrollbarX = new am4charts.XYChartScrollbar()
+      scrollbarX.series.push(series)
+      chart.scrollbarX = scrollbarX
+
+      this.chart = chart
+    },
     isItOverdue(date) {
       return moment().isAfter(date)
     },
@@ -427,6 +468,7 @@ export default {
             this.doctors = data
             this.getDatesForCurrentWeek()
           })
+          this.getTwoWeekAppointments()
         }
       })
     },
@@ -462,6 +504,16 @@ export default {
     editMode(e) {
       e.preventDefault()
       this.disabled = false
+    },
+    getTwoWeekAppointments() {
+      getAppointmentsForTwoWeeks().then(response => {
+        if (Array.isArray(response) && response.length) {
+          this.initChart(response)
+          this.totalAppointments = response.map(item => item.appointments).reduce((a, b) => Number(a) + Number(b))
+        } else {
+          this.totalAppointments = 0
+        }
+      })
     },
     getDoctorsStatisticPerWeek() {
       getDoctorsStatisticPerWeek().then(response => {
@@ -536,6 +588,11 @@ export default {
 </script>
 
 <style scoped lang="scss">
+.appointmentChart {
+  width: 100%;
+  height: 500px;
+}
+
 .pr-bar {
   height: 6px !important;
 }
