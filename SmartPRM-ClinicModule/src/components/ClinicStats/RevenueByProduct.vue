@@ -94,20 +94,6 @@ export default {
       let chart = am4core.create(this.$refs.pieChart, am4charts.PieChart3D)
       let pieSeries = chart.series.push(new am4charts.PieSeries())
 
-      // chart.data = [{
-      //   'country': 'Lithuania',
-      //   'litres': 501.9,
-      // }, {
-      //   'country': 'Czechia',
-      //   'litres': 301.9,
-      // }, {
-      //   'country': 'Ireland',
-      //   'litres': 201.1,
-      // }, {
-      //   'country': 'Germany',
-      //   'litres': 165.8,
-      // }]
-
       chart.data = data
 
       pieSeries.dataFields.value = 'sum'
