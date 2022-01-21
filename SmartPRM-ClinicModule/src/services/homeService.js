@@ -33,3 +33,15 @@ export async function getAssignmentsForUser() {
   })
   return rawResponse.json()
 }
+
+export async function getAppointmentsForTwoWeeks() {
+  const rawResponse = await fetch('/api/home/appointments-for-two-weeks', {
+    method: 'GET',
+    credentials: 'same-origin',
+    headers: {
+      'Accept': 'application/json',
+      'Content-Type': 'application/json',
+    },
+  })
+  return rawResponse.json()
+}

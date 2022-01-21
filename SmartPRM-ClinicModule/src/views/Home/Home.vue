@@ -129,14 +129,14 @@
                         </template>
                     </template>
                 </iq-card>
-                <iq-card class-name="iq-card-block iq-card-stretch">
+                <!--<iq-card class-name="iq-card-block iq-card-stretch">
                     <template v-slot:headerTitle>
                         <h4 class="card-title">{{ $t('home.appointmentChart') }}</h4>
                     </template>
                     <template v-slot:body>
                         <apex-chart type="bar" height="350" :options="chartOptions" :series="series"></apex-chart>
                     </template>
-                </iq-card>
+                </iq-card>-->
             </b-col>
             <b-col lg="4">
                 <iq-card class-name="iq-card-block iq-card-stretch">
