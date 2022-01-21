@@ -312,7 +312,7 @@
                     <template v-slot:body>
                         <b-list-group class="list-group-flush" id="myFutureAssignments">
                             <b-list-group-item
-                                v-for="(item, index) in myFutureList"
+                                v-for="(item, index) in sortedmyFutureAssignments"
                                 :key="index"
                                 :style="{'background': getDifferenceDate(item.due_at) === 1 && '#ffeeba' || getDifferenceDate(item.due_at) > 1 && 'white'}"
                             >
@@ -660,6 +660,9 @@ export default {
     this.getEnquires()
   },
   computed: {
+    sortedmyFutureAssignments() {
+      return [...this.myFutureAssignments].reverse()
+    },
     getLocale() {
       return this.$store.getters['Setting/langState'].value ? this.$store.getters['Setting/langState'].value : this.$store.getters['Setting/langState']
     },
