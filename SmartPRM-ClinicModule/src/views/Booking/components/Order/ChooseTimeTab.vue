@@ -45,7 +45,7 @@
             <total-order-info :order="form" />
             <div class="d-flex justify-content-between mt-3">
               <b-button align-self="end" @click="$emit('next', -1)">
-                {{ $t('public.onlineBooking.backToServices') }}
+                {{ $t('public.onlineBooking.back') }}
               </b-button>
               <b-button
                 align-self="end"
@@ -53,7 +53,7 @@
                 :disabled="fieldset.appointmentSlot == null"
                 @click="$emit('next')"
               >
-                {{ $t('public.onlineBooking.toReview') }}
+                {{ $t('public.onlineBooking.continue') }}
               </b-button>
             </div>
           </div>

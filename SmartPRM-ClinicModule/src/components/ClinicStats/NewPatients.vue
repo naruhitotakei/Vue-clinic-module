@@ -74,6 +74,7 @@ export default {
   props: {
     start: String,
     end: String,
+    client: String,
   },
   watch: {
     start(val) {
@@ -212,7 +213,7 @@ export default {
 
     prepareDataForExport(data) {
       // Get Data for export
-      this.fileName = `New Patients (${moment(this.start).format('DD/MM/YYYY')} - ${moment(this.end).format('DD/MM/YYYY')})`
+      this.fileName = `SmartPRM_${this.client}_Clinic_Statistics_Revenue_by_doctor_(${moment(this.start).format('DD/MM/YYYY')} - ${moment(this.end).format('DD/MM/YYYY')})`
       data.forEach((item) => {
         const obj = {
           first_name: item.name,

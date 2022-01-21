@@ -74,6 +74,7 @@ export default {
   props: {
     start: String,
     end: String,
+    client: String,
   },
   watch: {
     start(val) {
@@ -187,9 +188,6 @@ export default {
         xaxis: {
           type: 'datetime',
           categories: datesArray,
-          labels: {
-            format: 'dd/MM/YYYY',
-          },
         },
         tooltip: {
           y: {
@@ -205,7 +203,7 @@ export default {
     },
 
     prepareDataForExport(data, countries) {
-      this.fileName = `Leads Statistics (${moment(this.start).format('DD/MM/YYYY')} - ${moment(this.end).format('DD/MM/YYYY')})`
+      this.fileName = `SmartPRM_${this.client}_Clinic_Statistics_Revenue_by_doctor_(${moment(this.start).format('DD/MM/YYYY')} - ${moment(this.end).format('DD/MM/YYYY')})`
       // Get Data for export
       if (Array.isArray(data) && Array.isArray(countries)) {
         countries.forEach(country => {

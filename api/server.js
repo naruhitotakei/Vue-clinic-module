@@ -313,6 +313,16 @@ app.get('/api/home/open-assignments', (req, res) => {
   else res.status(401).json('OK: user unauthorized')
 })
 
+app.get('/api/home/appointments-for-two-weeks', (req, res) => {
+  if (
+    req.session.prm_user &&
+    req.session.prm_user.permissions &&
+    checkPermission(req.session.prm_user.permissions, homePermission)
+  )
+    daoHome.getAppointmentsForTwoWeeks(req, res, getScope(req.session.prm_user.permissions, homePermission), req.session.prm_user.prm_client_id)
+  else res.status(401).json('OK: user unauthorized')
+})
+
 ///////////////////////////////////
 // calendar
 ///////////////////////////////////
@@ -378,7 +388,7 @@ app.get('/api/calendar/doctors', async (req, res) => {
       req.session.prm_user.id,
       req.session.prm_user.accessible_user_ids,
       req.session.prm_user.prm_client_id,
-      getScope(req.session.prm_user.permissions, assignmentsPermission),
+      getScope(req.session.prm_user.permissions, calendarPermission),
     )
 
     return res.status(200).json(doctors)

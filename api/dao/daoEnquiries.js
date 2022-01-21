@@ -290,7 +290,7 @@ const getEnquiryAssignments = (request, response, enquiryId) => {
     'LEFT JOIN enquiries ON todos.enquiry_id = enquiries.id',
     'LEFT JOIN users ON todos.user_id = users.id',
     'WHERE enquiries.id = $1',
-    'ORDER BY due_at ASC',
+    'ORDER BY due_at DESC',
   ].join('\n')
   pool.query(statement, [enquiryId], (error, results) => {
     if (error) {
@@ -411,8 +411,11 @@ const getPatients = (
 }
 
 const getEnquirySMS = (request, response, enquiryId) => {
-  let statement = `SELECT DISTINCT ON (sms_messages.id) * FROM sms_messages
-    LEFT JOIN sms_templates ON sms_templates.slug = sms_messages.kind WHERE enquiry_id = ${enquiryId}`
+  let statement = `SELECT DISTINCT sms_messages.id, sms_templates.name, sms_messages.created_at, sms_messages.sent_api_data
+  FROM sms_messages
+  LEFT JOIN sms_templates ON sms_templates.client_id = sms_messages.client_id
+  WHERE sms_messages.enquiry_id = ${enquiryId} AND sms_templates.slug = sms_messages.kind
+  ORDER BY sms_messages.created_at DESC`
   pool.query(statement, (error, results) => {
     if (error) {
       throw error

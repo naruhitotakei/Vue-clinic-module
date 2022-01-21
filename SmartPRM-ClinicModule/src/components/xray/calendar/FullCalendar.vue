@@ -278,14 +278,12 @@ import {
   updateCalendarLabel,
   getLabels,
 } from '@/services/calendarService'
-import DatePicker from 'vue2-datepicker'
-import 'vue2-datepicker/index.css'
 import AddPatientModal from '@/components/Patients/AddPatientModal.vue'
 import { mapActions, mapGetters } from 'vuex'
 
 export default {
   components: {
-    calendar, DatePicker, AddPatientModal,
+    calendar, AddPatientModal,
   },
   props: {
     resourcesOuter: Array,

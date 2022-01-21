@@ -397,10 +397,7 @@
                                               <ul class="list-inline m-0 overflow-y-scroll pl-2 pr-2" style="max-height: 300px;">
                                                   <li v-for="(message,index) in smsList" :key="index + message.created_at" id="smsList" class="d-flex align-items-center justify-content-between mb-3">
                                                       <div>
-                                                          <h6 class="text-underline" :id="`message-${message.id}`">{{message.name}}</h6>
-                                                          <b-tooltip class="tooltip-content" :target="`message-${message.id}`" triggers="hover" placement="rightbottom">
-                                                            {{ message.content }}
-                                                          </b-tooltip>
+                                                          <h6 class="text-underline" v-b-tooltip.hover :title="message.content">{{message.name}}</h6>
                                                           <small class="mb-0">{{message.created_at | formatDateAndTime}} - {{ message.delivered_at ? $t('EPR.overview.deliveredSms') :  $t('EPR.overview.notDeliveredSms')}}</small>
                                                       </div>
                                                   </li>
@@ -1116,14 +1113,15 @@
           </div>
           <div class="col-md-12 mb-3">
             <label for="title">{{ $t('assignments.addAssignmentsModal.due_at') }} </label>
-            <b-form-datepicker
-                class="date"
-                id="exampleInputdate"
+            <date-picker
+                required
+                class="datePicker"
                 v-model="formData.due_at"
-                :min="new Date()"
-                :date-format-options="{ year: 'numeric', month: '2-digit', day: '2-digit' }"
-                placeholder="mm/dd/yyyy"
-            ></b-form-datepicker>
+                type="date"
+                :disabled-date="disableTime"
+                placeholder="Select date"
+                :format="'DD.MM.YYYY'"></date-picker>
+
 <!--            <b-form-input-->
 <!--                class="date"-->
 <!--                id="exampleInputdate"-->
@@ -1694,6 +1692,9 @@ export default {
     },
   },
   methods: {
+    disableTime(date) {
+      return date < new Date()
+    },
     radioChange(e) {
       // console.log(this.selected__, '----------------------')
       console.log(this.formAppointments.cancelation_reason)
@@ -1886,10 +1887,10 @@ export default {
     getPatient(id) {
       getEnquiryById(id).then(response => {
         this.patient = response[0]
-        if (this.patient.date_of_birth !== null) {
+        if (this.patient && this.patient.date_of_birth !== null) {
           this.patient.date_of_birth = moment(this.patient.date_of_birth).format('YYYY-MM-DD')
         }
-        if (this.patient.general_notes !== null) {
+        if (this.patient && this.patient.general_notes !== null) {
           this.notesGeneral = this.patient.general_notes.replace(/<br>/g, '\n')
         }
       }
@@ -1924,6 +1925,7 @@ export default {
     },
     getPatientAssignments(id) {
       getEnquiryAssignments(id).then(response => {
+        console.log(response, '--------')
         if (Array.isArray(response)) {
           this.assignments = response.filter(todo => !todo.completed)
           this.completedAssignments = response.filter(todo => todo.completed)
@@ -2307,6 +2309,12 @@ export default {
 .red-text {
   color: red !important;
 }
+
+.datePicker {
+  width: 100% !important;
+  display: block !important;
+}
+
 .checkbox_text{
   display: flex;
   justify-content: flex-start;
@@ -2314,6 +2322,7 @@ export default {
 .checkbox{
   margin-right: 0 !important;
 }
+
 .preview-file {
   max-width: 110px !important;
   max-height: 110px !important;
