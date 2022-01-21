@@ -91,7 +91,6 @@ export default {
   },
   methods: {
     initChart(data) {
-      console.log(data)
       let chart = am4core.create(this.$refs.pieChart, am4charts.PieChart3D)
       let pieSeries = chart.series.push(new am4charts.PieSeries())
 
@@ -114,7 +113,14 @@ export default {
       pieSeries.dataFields.value = 'sum'
       pieSeries.dataFields.category = 'pr_name'
 
-      pieSeries.labels.template.text = 'hello'
+      chart.numberFormatter.numberFormat = {
+        'style': 'currency',
+        'currency': 'EUR',
+      }
+
+      chart.numberFormatter.intlLocales = 'de-DE'
+
+      pieSeries.slices.template.tooltipText = `{category}: {value.value}`
 
       chart.innerRadius = am4core.percent(40)
       pieSeries.slices.template.stroke = am4core.color('#148A9C')
@@ -124,10 +130,9 @@ export default {
       pieSeries.labels.template.disabled = true
       pieSeries.ticks.template.disabled = true
 
-      // chart.legend = new am4charts.Legend()
+      chart.legend = new am4charts.Legend()
 
       this.chart = chart
-      console.log(this.chart)
     },
     onDateChange() {
       if (this.startDate && this.endDate) {
