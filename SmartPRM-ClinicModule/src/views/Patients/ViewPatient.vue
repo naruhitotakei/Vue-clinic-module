@@ -1925,6 +1925,7 @@ export default {
     },
     getPatientAssignments(id) {
       getEnquiryAssignments(id).then(response => {
+        console.log(response, '--------')
         if (Array.isArray(response)) {
           this.assignments = response.filter(todo => !todo.completed)
           this.completedAssignments = response.filter(todo => todo.completed)
