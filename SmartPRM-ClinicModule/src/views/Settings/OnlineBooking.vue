@@ -40,6 +40,11 @@
                       {{ data.item.default_online_price | euro }}
                     </span>
                   </template>
+                  <template v-slot:cell(doctors)="data">
+                    <div v-for="{ id, name } of data.item.doctors" :key="id">
+                      {{ name }}
+                    </div>
+                  </template>
                   <template v-slot:cell(action)="data">
                     <b-button
                       variant=" iq-bg-success mr-1 mb-1"
@@ -270,7 +275,7 @@ export default {
         },
         {
           label: this.$t('onlineBooking.onlineBookingColumns.doctor'),
-          key: 'doctor_name',
+          key: 'doctors',
           class: 'text-left',
         },
         {

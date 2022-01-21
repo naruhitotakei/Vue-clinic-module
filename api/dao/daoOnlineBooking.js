@@ -10,47 +10,71 @@ const pool = new Pool({
   port: process.env.POSTGRES_PORT || 5432,
 })
 
-const getOnlineBookingProducts = (
+const getOnlineBookingProducts = async (
   request,
   response,
   prm_client_id,
   scope,
   locale,
 ) => {
-  let statement =
-    'SELECT online_booking_service.id, default_duration, default_online_price, online_booking_service_name.text AS booking_service_text, ' +
-    "online_booking_service_name.language, concat(users.title, ' ', users.first_name, ' ', users.surname) AS doctor_name, " +
-    'prm_company_premise.premise_name, prm_product_group_name.language, prm_product_group_name.text AS product_group_text, ' +
-    'users.id AS doctor_id, prm_company_premise.premise_id AS premise_id, prm_product_group.product_group_id AS product_group_id FROM online_booking_service '
-  statement +=
-    'LEFT JOIN online_booking_service_name ON online_booking_service.id = online_booking_service_name.online_booking_id '
-  statement +=
-    'LEFT JOIN prm_product_group ON online_booking_service.product_group_id = prm_product_group.product_group_id '
-  statement +=
-    'LEFT JOIN prm_product_group_name ON prm_product_group.product_group_id = prm_product_group_name.product_group_id '
-  statement +=
-    'LEFT JOIN online_booking_users_bridge ON online_booking_service.id = online_booking_users_bridge.online_booking_id '
-  statement +=
-    'LEFT JOIN users ON online_booking_users_bridge.doctor_id = users.id '
-  statement +=
-    'LEFT JOIN online_booking_premise_bridge ON online_booking_service.id = online_booking_premise_bridge.id '
-  statement +=
-    'LEFT JOIN prm_company_premise ON online_booking_premise_bridge.premise_id = prm_company_premise.premise_id '
-  statement +=
-    "WHERE online_booking_service.trashed IS FALSE AND online_booking_service_name.language = '" +
-    locale +
-    "' "
-  statement += "AND prm_product_group_name.language = '" + locale + "' "
-  if (scope == 'All') {
-  } else if (scope == 'PrmClient') {
-    statement += ' AND users.prm_client_id = ' + prm_client_id
-  }
-  pool.query(statement, (error, results) => {
-    if (error) {
-      throw error
+  const statement = /* sql */ `
+    SELECT
+      online_booking_service.id,
+      online_booking_service.default_duration,
+      online_booking_service.default_online_price,
+      online_booking_service_name.text AS booking_service_text,
+      online_booking_service_name.language,
+      users.id AS doctor_id,
+      concat(users.title, ' ', users.first_name, ' ', users.surname) AS doctor_name,
+      prm_company_premise.premise_id AS premise_id,
+      prm_company_premise.premise_name,
+      prm_product_group_name.text AS product_group_text,
+      prm_product_group_name.language,
+      prm_product_group.product_group_id AS product_group_id
+    FROM online_booking_service
+    LEFT JOIN online_booking_service_name ON online_booking_service.id = online_booking_service_name.online_booking_id
+    LEFT JOIN prm_product_group ON online_booking_service.product_group_id = prm_product_group.product_group_id
+    LEFT JOIN prm_product_group_name ON prm_product_group.product_group_id = prm_product_group_name.product_group_id
+    LEFT JOIN online_booking_users_bridge ON online_booking_service.id = online_booking_users_bridge.online_booking_id
+    LEFT JOIN users ON online_booking_users_bridge.doctor_id = users.id
+    LEFT JOIN online_booking_premise_bridge ON online_booking_service.id = online_booking_premise_bridge.id
+    LEFT JOIN prm_company_premise ON online_booking_premise_bridge.premise_id = prm_company_premise.premise_id
+    WHERE online_booking_service.trashed IS FALSE AND online_booking_service_name.language = $1
+    AND prm_product_group_name.language = $1
+    ${scope === 'PrmClient' ? /* sql */ `AND users.prm_client_id = $2` : ''}
+    ORDER BY booking_service_text
+  `
+
+  const { rows } = await pool.query(statement, [
+    locale,
+    ...(scope === 'PrmClient' ? [prm_client_id] : []),
+  ])
+
+  const grouped = rows.reduce((grouped, row) => {
+    if (grouped[row.id] == null) {
+      grouped[row.id] = []
     }
-    response.status(200).json(results.rows)
-  })
+
+    grouped[row.id].push(row)
+
+    return grouped
+  }, {})
+
+  return Object.entries(grouped)
+    .map(([serviceId, rows]) => {
+      const [{ doctor_id, doctor_name, ...service }] = rows
+
+      return {
+        ...service,
+        doctors: rows.map(({ doctor_id, doctor_name }) => ({
+          id: doctor_id,
+          name: doctor_name,
+        })),
+      }
+    })
+    .sort(({ booking_service_text: a }, { booking_service_text: b }) =>
+      a.localeCompare(b),
+    )
 }
 
 const getOnlineBookingProductNaming = (request, response, id) => {

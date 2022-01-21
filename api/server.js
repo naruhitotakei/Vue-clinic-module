@@ -138,6 +138,13 @@ const SMSTemplatesPermission = 'SMS Templates'
 // user login, logout, ...
 ///////////////////////////////////
 app.set('trust proxy', 1)
+
+if (process.env.NODE_ENV === 'development') {
+  const { authMock } = require('~/middlewares/auth-mock')
+
+  app.use(authMock)
+}
+
 // login - email and password in body
 app.post(
   '/api/login',
@@ -1081,20 +1088,22 @@ app.put('/api/sms-template/update', (req, res) => {
 // settings -> online booking
 ///////////////////////////////////
 
-app.get('/api/online-booking-products/:locale', (req, res) => {
+app.get('/api/online-booking-products/:locale', async (req, res) => {
   const locale = req.params.locale
   if (
     req.session.prm_user &&
     req.session.prm_user.permissions &&
     checkPermission(req.session.prm_user.permissions, onlineBookingPermission)
   ) {
-    daoOnlineBooking.getOnlineBookingProducts(
+    const products = await daoOnlineBooking.getOnlineBookingProducts(
       req,
       res,
       req.session.prm_user.prm_client_id,
       getScope(req.session.prm_user.permissions, onlineBookingPermission),
       locale,
     )
+
+    return res.status(200).json(products)
   } else {
     res.status(401).json('OK: user unauthorized')
   }
