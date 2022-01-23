@@ -1111,6 +1111,7 @@ app.get('/api/online-booking-products/:locale', async (req, res) => {
       req.session.prm_user.prm_client_id,
       getScope(req.session.prm_user.permissions, onlineBookingPermission),
       locale,
+      req.query.premiseId
     )
 
     return res.status(200).json(products)

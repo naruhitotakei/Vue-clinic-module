@@ -16,6 +16,7 @@ const getOnlineBookingProducts = async (
   prm_client_id,
   scope,
   locale,
+  premiseId,
 ) => {
   const statement = /* sql */ `
     SELECT
@@ -41,12 +42,14 @@ const getOnlineBookingProducts = async (
     LEFT JOIN prm_company_premise ON online_booking_premise_bridge.premise_id = prm_company_premise.premise_id
     WHERE online_booking_service.trashed IS FALSE AND online_booking_service_name.language = $1
     AND prm_product_group_name.language = $1
-    ${scope === 'PrmClient' ? /* sql */ `AND users.prm_client_id = $2` : ''}
+    AND prm_company_premise.premise_id = $2
+    ${scope === 'PrmClient' ? /* sql */ `AND users.prm_client_id = $3` : ''}
     ORDER BY booking_service_text
   `
 
   const { rows } = await pool.query(statement, [
     locale,
+    premiseId,
     ...(scope === 'PrmClient' ? [prm_client_id] : []),
   ])
 
