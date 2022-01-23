@@ -27,7 +27,7 @@
                 v-model="dateSelected"
                 type="date"
                 @input="getAppointmentsData"
-                :format="'YYYY-MM-DD'"></date-picker>
+                :format="'DD.MM.YYYY'"></date-picker>
             </div>
           </div>
         </template>

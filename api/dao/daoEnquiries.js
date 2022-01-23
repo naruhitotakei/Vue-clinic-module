@@ -411,7 +411,7 @@ const getPatients = (
 }
 
 const getEnquirySMS = (request, response, enquiryId) => {
-  let statement = `SELECT DISTINCT sms_messages.id, sms_templates.name, sms_messages.created_at, sms_messages.sent_api_data
+  let statement = `SELECT DISTINCT sms_messages.id, sms_templates.name, sms_messages.created_at, sms_messages.sent_api_data, sms_messages.content
   FROM sms_messages
   LEFT JOIN sms_templates ON sms_templates.client_id = sms_messages.client_id
   WHERE sms_messages.enquiry_id = ${enquiryId} AND sms_templates.slug = sms_messages.kind
