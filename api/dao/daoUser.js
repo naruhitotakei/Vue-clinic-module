@@ -171,6 +171,7 @@ const getUsers = (request, response, prm_client_id, scope) => {
         "position, prm_role_id AS role_id, role_name FROM users LEFT JOIN prm_role ON users.prm_role_id = prm_role.role_id "
     statement += "LEFT JOIN prm_client ON users.prm_client_id = prm_client.id "
     statement += "WHERE prm_client.client_deleted = false "
+    statement += "AND users.prm_role_id != 2 "
     statement += "AND first_name::text NOT ILIKE '%emazing%' "
     if (scope == "All") {
     } else if (scope == 'PrmClient') {
