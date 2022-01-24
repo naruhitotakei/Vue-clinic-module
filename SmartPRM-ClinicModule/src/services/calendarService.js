@@ -36,7 +36,6 @@ export async function createCalendar(appointment) {
     },
     body: JSON.stringify(appointment),
   })
-  console.log(appointment, 'appointment')
   return rawResponse.json()
 }
 

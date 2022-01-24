@@ -118,8 +118,7 @@
                                                       <label for="product_group" class="mb-0">{{ $t('calendarEvent.product_group') }} *</label>
                                                   </div>
                                                   <div class="col-md-9">
-                                                      <v-select :disabled="disabled"
-                                                                :clearable="false"
+                                                      <v-select :clearable="false"
                                                                 label="product_group_name"
                                                                 :class="{'font-size-15': disabled}"
                                                                 class="style-chooser form-control-disabled font-size-15"
@@ -1082,7 +1081,6 @@
         size="md"
         :ok-disabled="isOkDisabled"
         :title="$t('assignments.addAssignmentsModal.addAssignments')"
-        :ok-title="$t('assignments.addAssignmentsModal.save')"
         :cancel-title="$t('assignments.addAssignmentsModal.close')"
         @ok="addAssignments"
         @close="cancelAssignments"
@@ -1443,9 +1441,7 @@ export default {
       futureCurrentPage: 1,
       futurePerPage: 5,
       selectedInvoices: '',
-      selectedDoctor: {
-        name: 'ssdfsdfsdf',
-      },
+      selectedDoctor: '',
       selectedProductGroup: '',
       invoicesType: [
         {
@@ -1561,24 +1557,6 @@ export default {
         { text: 'Canceled by clinic', value: 'canceled by clinic' },
         { text: 'Postoponed by clinic', value: 'postoponed by clinic' },
       ],
-      // cancel_checkboxes: [
-      //   {
-      //     title: 'canceled by lead',
-      //     id: 1,
-      //   },
-      //   {
-      //     title: 'postponed by lead',
-      //     id: 2,
-      //   },
-      //   {
-      //     title: 'canceled by clinic',
-      //     id: 3,
-      //   },
-      //   {
-      //     title: 'postoponed by clinic',
-      //     id: 4,
-      //   },
-      // ],
       user: {
         profile_image: require('../../assets/images/user/11.png'),
         fname: 'Anita',
@@ -1696,7 +1674,6 @@ export default {
       return date < new Date()
     },
     radioChange(e) {
-      // console.log(this.selected__, '----------------------')
       console.log(this.formAppointments.cancelation_reason)
     },
     getSumOfServices() {
@@ -2209,13 +2186,13 @@ export default {
       })
     },
     saveAppointment() {
-      // alert('asdasdasasdas')
       this.addAppointmentModal = false
-      // this.formAppointments.patient_id = this.patient.id
-      // this.formAppointments.doctor_id = this.selectedDoctor.id
-      this.formAppointments.doctor_name = this.selectedDoctor.name
-      this.formAppointments.product_groups = this.selectedProductGroup.product_group_id
-      this.formAppointments.crmProduct = this.selectedProductGroup.crm_product_id
+      this.formAppointments.patient_id = this.patient.id
+      this.formAppointments.appointment_canceled = true
+      this.formAppointments.doctor_id = this.selectedDoctor?.id
+      this.formAppointments.doctor_name = this.selectedDoctor?.name
+      this.formAppointments.product_groups = this.selectedProductGroup?.product_group_id
+      this.formAppointments.crmProduct = this.selectedProductGroup?.crm_product_id
       if (!this.formAppointments.id) {
         createCalendar(this.formAppointments).then(() => {
           this.$emit('setModalShow', false)
@@ -2253,7 +2230,9 @@ export default {
     },
     getProductGroups(lang) {
       getProductGroups(lang).then((response) => {
-        this.product_groups = response
+        response.map(item => {
+          this.product_groups.push(item.product_group_name)
+        })
       })
     },
     getOldProducts() {
