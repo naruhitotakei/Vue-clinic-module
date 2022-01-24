@@ -74,7 +74,7 @@ const getAppointmentsForTwoWeeks = (request, response, scope, prm_client_id) => 
   statement += "FROM generate_series (date_trunc('week', current_date), date_trunc('week', current_date + interval '2 weeks'), interval '1 day') AS day "
   statement += "LEFT JOIN appointments app ON app.starts_at::date = day "
   statement += "LEFT JOIN enquiries enq ON app.enquiry_id = enq.id "
-  statement += "WHERE app.appointment_canceled = FALSE "
+  statement += "AND app.appointment_canceled = FALSE "
   if (scope == 'All') {
   } else if (scope == 'PrmClient') {
     statement += `AND enq.prm_client_id = ${prm_client_id} `
