@@ -134,7 +134,8 @@
                         <h4 class="card-title">{{ $t('home.appointmentChart') }} ({{ totalAppointments }})</h4>
                     </template>
                     <template v-slot:body>
-                      <div class="appointmentChart" ref="appointmentChart"></div>
+                      <AmChart v-if="chartBodyData" element="appointmentChart" type="appointments" :option="chartBodyData" />
+                      <!-- <div class="appointmentChart" ref="appointmentChart"></div> -->
                       <!-- <apex-chart type="bar" height="350" :options="chartOptions" :series="series"></apex-chart> -->
                     </template>
                 </iq-card>
@@ -249,19 +250,22 @@ import { sso, getDentists, getUsers } from '@/services/userService'
 import { finishAssignment } from '../../services/assignmentsService'
 import { getEnquires } from '@/services/enquiry'
 import AddEditAssignment from '@/components/Assignments/AddEditAssignment'
+import AmChart from '@/components/AmChart'
 
-import * as am4core from '@amcharts/amcharts4/core'
-import * as am4charts from '@amcharts/amcharts4/charts'
-import am4themesAnimated from '@amcharts/amcharts4/themes/animated'
+// import * as am4core from '@amcharts/amcharts4/core'
+// import * as am4charts from '@amcharts/amcharts4/charts'
+// import am4themesAnimated from '@amcharts/amcharts4/themes/animated'
 
 import _ from 'lodash'
 const body = document.getElementsByTagName('body')
-am4core.useTheme(am4themesAnimated)
+// am4core.useTheme(am4themesAnimated)
+
 export default {
   name: 'Home',
-  components: { IqCard, AddEditAssignment },
+  components: { IqCard, AddEditAssignment, AmChart },
   data() {
     return {
+      chartBodyData: null,
       totalAppointments: 0,
       chart: null,
       userId: null,
@@ -387,32 +391,63 @@ export default {
     },
   },
   methods: {
-    initChart(data) {
-      let chart = am4core.create(this.$refs.appointmentChart, am4charts.XYChart)
-      chart.paddingRight = 20
+    async initChart(data) {
+      if (data && data.length) {
+        console.log(data.length)
+        const now = new Date().toISOString().split('T')[0]
+        let dIndex = null
+        const today = await data.find((item, index) => {
+          if (item.day.split('T')[0] === now) {
+            dIndex = index
+            return item
+          }
+        })
+        if (today) {
+          const obj = {
+            ...today,
+            strokeWidth: 2,
+            columnDash: '5,5',
+            fillOpacity: 1,
+          }
+          this.$set(data, dIndex, obj)
+        }
 
-      chart.data = data
+        this.chartBodyData = {
+          colors: ['#4c9cac'],
+          xAxis: ['day'],
+          yAxis: ['appointments'],
+          labels: ['Appointments'],
+          data: data,
+        }
+      }
+      // let chart = am4core.create(this.$refs.appointmentChart, am4charts.XYChart)
+      // chart.paddingRight = 20
 
-      let dateAxis = chart.xAxes.push(new am4charts.DateAxis())
-      dateAxis.dataFields.date = 'day'
-      let valueAxis = chart.yAxes.push(new am4charts.ValueAxis())
+      // chart.data = data
 
-      valueAxis.tooltip.disabled = false
-      valueAxis.renderer.minWidth = 35
+      // let dateAxis = chart.xAxes.push(new am4charts.DateAxis())
+      // dateAxis.dataFields.date = 'day'
+      // let valueAxis = chart.yAxes.push(new am4charts.ValueAxis())
 
-      let series = chart.series.push(new am4charts.ColumnSeries())
+      // chart.yAxes.numberFormatter = new am4core.NumberFormatter()
+      // chart.yAxes.numberFormatter.numberFormat = '###.#'
 
-      series.dataFields.valueY = 'appointments'
-      series.dataFields.dateX = 'day'
+      // valueAxis.tooltip.disabled = false
+      // valueAxis.renderer.minWidth = 35
 
-      series.tooltipText = '{valueY.value}'
-      chart.cursor = new am4charts.XYCursor()
+      // let series = chart.series.push(new am4charts.ColumnSeries())
 
-      let scrollbarX = new am4charts.XYChartScrollbar()
-      scrollbarX.series.push(series)
-      chart.scrollbarX = scrollbarX
+      // series.dataFields.valueY = 'appointments'
+      // series.dataFields.dateX = 'day'
 
-      this.chart = chart
+      // series.tooltipText = '{valueY.value}'
+      // chart.cursor = new am4charts.XYCursor()
+
+      // let scrollbarX = new am4charts.XYChartScrollbar()
+      // scrollbarX.series.push(series)
+      // chart.scrollbarX = scrollbarX
+
+      // this.chart = chart
     },
     isItOverdue(date) {
       return moment().isAfter(date)

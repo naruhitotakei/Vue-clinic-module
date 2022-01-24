@@ -18,7 +18,8 @@
           </div>
         </template>
         <template v-slot:body>
-          <div :class="!loading && !noData ? 'appointmentChart mt-3' : 'mt-3'" ref="pieChart"></div>
+          <AmChart v-if="chartBodyData" element="pieChart" type="pie" :option="chartBodyData" />
+          <!-- <div :class="!loading && !noData ? 'pieChart mt-3' : 'mt-3'" id="pieChart" ref="pieChart"></div> -->
           <div class="mt-3" v-if="!loading && !noData">
             <!-- chart should be here...
             <div class="pieChart" ref="pieChart"></div> -->
@@ -49,14 +50,15 @@
 import IqCard from '../../components/xray/cards/iq-card'
 import { getRevenueByProduct } from '../../services/statistics'
 import moment from 'moment'
-import * as am4core from '@amcharts/amcharts4/core'
-import * as am4charts from '@amcharts/amcharts4/charts'
-import am4themesAnimated from '@amcharts/amcharts4/themes/animated'
-am4core.useTheme(am4themesAnimated)
+import AmChart from '@/components/AmChart'
+// import * as am4core from '@amcharts/amcharts4/core'
+// import * as am4charts from '@amcharts/amcharts4/charts'
+// import am4themesAnimated from '@amcharts/amcharts4/themes/animated'
+// am4core.useTheme(am4themesAnimated)
 
 export default {
   name: 'RevenueByProduct',
-  components: { IqCard },
+  components: { IqCard, AmChart },
   props: {
     start: String,
     end: String,
@@ -91,34 +93,79 @@ export default {
   },
   methods: {
     initChart(data) {
-      let chart = am4core.create(this.$refs.pieChart, am4charts.PieChart3D)
-      let pieSeries = chart.series.push(new am4charts.PieSeries())
-
-      chart.data = data
-
-      pieSeries.dataFields.value = 'sum'
-      pieSeries.dataFields.category = 'pr_name'
-
-      chart.numberFormatter.numberFormat = {
-        'style': 'currency',
-        'currency': 'EUR',
+      console.log(data)
+      this.chartBodyData = {
+        colors: ['#4c9cac'],
+        value: ['sum'],
+        category: ['pr_name'],
+        data: data,
       }
+      console.log(data)
+      // let root = am5.Root.new(this.$refs.pieChart)
+      // root.setThemes([
+      //   am5themesAnimated.new(root),
+      // ])
+      // let chart = root.container.children.push(am5percent.PieChart.new(root, {
+      //   layout: root.verticalLayout,
+      // }))
 
-      chart.numberFormatter.intlLocales = 'de-DE'
+      // let series = chart.series.push(am5percent.PieSeries.new(root, {
+      //   valueField: 'sum',
+      //   categoryField: 'pr_name',
+      // }))
 
-      pieSeries.slices.template.tooltipText = `{category}: {value.value}`
+      // chart.numberFormatter.numberFormat = {
+      //   'style': 'currency',
+      //   'currency': 'EUR',
+      // }
 
-      chart.innerRadius = am4core.percent(40)
-      pieSeries.slices.template.stroke = am4core.color('#148A9C')
-      pieSeries.slices.template.strokeWidth = 0
-      pieSeries.slices.template.strokeOpacity = 1
+      // chart.numberFormatter.intlLocales = 'de-DE'
+      // series.slices.template.tooltipText = `{category}: {value.value}`
 
-      pieSeries.labels.template.disabled = true
-      pieSeries.ticks.template.disabled = true
+      // series.data.setAll(data)
 
-      chart.legend = new am4charts.Legend()
+      // let legend = chart.children.push(am5.Legend.new(root, {
+      //   centerX: am5.percent(50),
+      //   x: am5.percent(50),
+      // }))
 
-      this.chart = chart
+      // chart.legend.reverseOrder = true
+
+      // legend.data.setAll(series.dataItems)
+
+      // series.appear(1000, 100)
+
+      // series.appear()
+      // chart.appear()
+
+      // let chart = am4core.create(this.$refs.pieChart, am4charts.PieChart3D)
+      // let pieSeries = chart.series.push(new am4charts.PieSeries())
+
+      // chart.data = data
+
+      // pieSeries.dataFields.value = 'sum'
+      // pieSeries.dataFields.category = 'pr_name'
+
+      // chart.numberFormatter.numberFormat = {
+      //   'style': 'currency',
+      //   'currency': 'EUR',
+      // }
+
+      // chart.numberFormatter.intlLocales = 'de-DE'
+
+      // pieSeries.slices.template.tooltipText = `{category}: {value.value}`
+
+      // chart.innerRadius = am4core.percent(40)
+      // pieSeries.slices.template.stroke = am4core.color('#148A9C')
+      // pieSeries.slices.template.strokeWidth = 0
+      // pieSeries.slices.template.strokeOpacity = 1
+
+      // pieSeries.labels.template.disabled = true
+      // pieSeries.ticks.template.disabled = true
+
+      // chart.legend = new am4charts.Legend()
+
+      // this.chart = chart
     },
     onDateChange() {
       if (this.startDate && this.endDate) {
@@ -131,6 +178,7 @@ export default {
     getClinicRevenueByProduct(start, end) {
       this.loading = true
       this.noData = false
+      this.chartBodyData = null
       getRevenueByProduct(start, end)
         .then(async (response) => {
           if (response && response.length && Array.isArray(response)) {
@@ -207,6 +255,7 @@ export default {
   },
   data() {
     return {
+      chartBodyData: null,
       chart: null,
       startDate: null,
       endDate: null,
@@ -235,5 +284,10 @@ export default {
 .pieChart, .appointmentChart {
   width: 100%;
   height: 500px;
+  margin: 0 auto;
+}
+
+.pieChart canvas {
+  width: 100% !important
 }
 </style>

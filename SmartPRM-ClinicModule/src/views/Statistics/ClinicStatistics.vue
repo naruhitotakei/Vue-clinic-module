@@ -286,7 +286,6 @@ export default {
         if (response && response.client_name) {
           this.clientName = response.client_name
         }
-        console.log(response)
       })
     },
     onFilterChange(value) {
