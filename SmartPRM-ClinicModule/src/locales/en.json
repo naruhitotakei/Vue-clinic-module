@@ -563,6 +563,10 @@
     "todaysAssignmentsOfOtherUsers": "Today's Assignments of other users",
     "overdueAssignmentsOfOtherUsers": "Overdue Assignments of other users",
     "futureAssignmentsOfOtherUsers": "Future Assignments of other users",
+    "noAssignmentsToday": "No assignments for today.",
+    "noOverdueAssignments": "No overdue assignments.",
+    "noFutureAssignments": "No future assignments.",
+    "filterByUsers": "Filter by users",
     "addAssignmentsModal": {
       "addAssignments": "New Assignment",
       "editAssignments": "Edit Assignment",

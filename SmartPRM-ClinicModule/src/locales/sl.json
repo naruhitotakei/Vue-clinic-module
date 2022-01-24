@@ -562,6 +562,10 @@
     "todaysAssignmentsOfOtherUsers": "Današnje naloge drugih uporabnikov",
     "overdueAssignmentsOfOtherUsers": "Zapadle naloge drugih uporabnikov",
     "futureAssignmentsOfOtherUsers": "Naslednje naloge drugih uporabnikov",
+    "noAssignmentsToday": "Ni nalog za danes.",
+    "noOverdueAssignments": "Ni zapadlih nalog.",
+    "noFutureAssignments": "Ni prihodnjih nalog.",
+    "filterByUsers": "Filtriraj uporabnike",
     "addAssignmentsModal": {
       "addAssignments": "Nova naloga",
       "editAssignments": "Uredi nalogo",
