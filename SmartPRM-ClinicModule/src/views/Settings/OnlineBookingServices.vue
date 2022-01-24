@@ -6,14 +6,17 @@
         <iq-card>
           <template v-slot:headerTitle>
             <h3 class="card-title" style="margin-top: 10px">
-              {{ $t('Online Booking') }}
+              <!-- {{ $t('onlineBooking.header') }} -->
+              <span v-if="premise != null">
+                {{ premise.name }}
+              </span>
             </h3>
-            <!-- <div class="btn-add-patient mb-4 mt-0">
+            <div class="btn-add-patient mb-4 mt-0">
               <b-button variant="primary" @click="modalServiceShow = true"
                 ><i class="ri-add-line mr-2"></i
                 >{{ $t('onlineBooking.addBtn') }}</b-button
               >
-            </div> -->
+            </div>
           </template>
           <template v-slot:body>
             <b-row>
@@ -23,24 +26,11 @@
                   class="table-t"
                   bordered
                   hover
-                  :items="premises"
-                  :fields="[
-                    {
-                      label: $t('Premise'),
-                      key: 'name',
-                      class: 'text-left',
-                    },
-                    {
-                      label: $t('Action'),
-                      key: 'action',
-                    },
-                  ]"
+                  :busy="!isProductDataLoaded"
+                  :items="onlineBookingProducts"
+                  :fields="onlineBookingColumns"
                   :per-page="productsPerPage"
                   :current-page="currentProductPage"
-                  @row-clicked="
-                    ({ id }) =>
-                      $router.push(`/settings/online-booking/${id}/services`)
-                  "
                 >
                   <template #table-busy>
                     <div class="text-center text-primary my-2">
@@ -60,13 +50,13 @@
                   </template>
                   <template v-slot:cell(action)="data">
                     <b-button
-                      variant=" iq-bg-primary mr-1 mb-1"
+                      variant=" iq-bg-success mr-1 mb-1"
                       size="sm"
                       @click="openEditModal(data.item)"
                       ><i class="ri-ball-pen-fill m-0"></i
                     ></b-button>
                     <b-button
-                      variant=" iq-bg-secondary mr-1 mb-1"
+                      variant=" iq-bg-danger mr-1 mb-1"
                       size="sm"
                       @click="removeService(data.item)"
                       ><i class="ri-delete-bin-line m-0"></i
@@ -240,10 +230,19 @@ import {
 } from '../../services/onlineBookingService'
 import { getDoctorList } from '../../services/calendarService'
 import { defineComponent } from '@vue/composition-api'
+import { getPremiseById } from '@/services/companyPremises'
 
 export default defineComponent({
   name: 'OnlineBooking',
   components: {},
+  async mounted() {
+    xray.index()
+    this.getOnlineBookingProducts(this.$i18n.locale)
+    this.getDoctors()
+    this.getOnlineBookingProductGroups(this.$i18n.locale)
+    this.getPremises()
+    this.premise = await getPremiseById(this.$route.params.id)
+  },
   data: function () {
     return {
       onlineBookingProducts: [],
@@ -263,6 +262,7 @@ export default defineComponent({
       },
       doctors: [],
       productGroups: [],
+      premise: null,
       premises: [],
       onlineBookingColumns: [
         {
@@ -290,11 +290,11 @@ export default defineComponent({
           key: 'product_group_text',
           class: 'text-left',
         },
-        {
-          label: this.$t('onlineBooking.onlineBookingColumns.premise'),
-          key: 'premise_name',
-          class: 'text-left',
-        },
+        // {
+        //   label: this.$t('onlineBooking.onlineBookingColumns.premise'),
+        //   key: 'premise_name',
+        //   class: 'text-left',
+        // },
         {
           label: this.$t('onlineBooking.onlineBookingColumns.action'),
           key: 'action',
@@ -322,19 +322,14 @@ export default defineComponent({
       )
     },
   },
-  mounted() {
-    xray.index()
-    // this.getOnlineBookingProducts(this.$i18n.locale)
-    // this.getDoctors()
-    // this.getOnlineBookingProductGroups(this.$i18n.locale)
-    this.getPremises()
-  },
   methods: {
     getOnlineBookingProducts(locale) {
-      getOnlineBookingProducts(locale).then((response) => {
-        this.onlineBookingProducts = response
-        this.isProductDataLoaded = true
-      })
+      getOnlineBookingProducts(locale, this.$route.params.id).then(
+        (response) => {
+          this.onlineBookingProducts = response
+          this.isProductDataLoaded = true
+        },
+      )
     },
     getDoctors() {
       getDoctorList().then((response) => {

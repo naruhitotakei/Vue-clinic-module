@@ -51,6 +51,7 @@ import MailTemplates from '../views/Settings/MailTemplates'
 import Advertising from '../views/Settings/Advertising'
 import Labels from '../views/Settings/Labels'
 import OnlineBooking from '../views/Settings/OnlineBooking'
+import OnlineBookingServices from '../views/Settings/OnlineBookingServices'
 /* Authentic View */
 import SignIn from '../views/Auth/Pages/SignIn'
 import SignUp from '../views/Auth/Pages/SignUp'
@@ -346,6 +347,12 @@ const settingsChildRoute = (prop, mode = false) => [
     name: prop + '.online-booking',
     meta: { dark: mode, auth: true, name: 'Online Booking' },
     component: OnlineBooking,
+  },
+  {
+    path: 'online-booking/:id/services',
+    name: prop + '.online-booking-services',
+    meta: { dark: mode, auth: true, name: 'Online Booking Services' },
+    component: OnlineBookingServices,
   },
 ]
 

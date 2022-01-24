@@ -301,13 +301,13 @@ const deleteAppointmentsLabel = (request, response, id) => {
   })
 }
 
-const getDoctors = (
+const getDoctors = async (
   request,
   response,
   user_id,
   accessible_user_ids,
   prm_client_id,
-  scope
+  scope,
 ) => {
   var statement =
     "SELECT id, title, first_name, surname, concat(title, ' ', first_name , ' ', surname) AS name from users WHERE function::text LIKE '%dentist%' "
@@ -324,13 +324,9 @@ const getDoctors = (
       }
     }
   }
+  const results = await pool.query(statement)
 
-  pool.query(statement, (error, results) => {
-    if (error) {
-      throw error
-    }
-    response.status(200).json(results.rows)
-  })
+  return results.rows
 }
 
 module.exports = {
