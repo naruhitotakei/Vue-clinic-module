@@ -3,36 +3,42 @@
     <b-col lg="12" md="12">
       <iq-card>
         <template v-slot:headerTitle>
-          <h3 class="mb-3 mt-2">Edit SMS Template</h3>
+          <h3 class="mb-3 mt-2">{{ $t('SMSTemplates.editTemplate') }}</h3>
         </template>
         <template v-slot:body>
-          <div class="input-sections mb-3">
-            <p>Message name</p>
-            <input type="text" v-model="smsTemplateData.name" placeholder="Message name" class="form-control text-inputs" />
-          </div>
-          <div class="input-sections mb-3">
-            <p>Content</p>
-              <b-form-textarea
-                id="content-textarea"
-                placeholder="Content"
-                rows="4"
-                max-rows="6"
-                v-model="smsTemplateData.content"
-              ></b-form-textarea>
-          </div>
-          <div class="input-sections mb-3">
-            <p>A unique name</p>
-            <input type="text" v-model="smsTemplateData.slug" placeholder="A unique name" class="form-control text-inputs" />
-          </div>
-          <div class="update-or-cancel">
-            <b-button
-              variant="primary"
-              class="btn btn-primary"
-              @click="updateSmsTemplateData"
-            >Update</b-button>
-            <span>or</span>
-            <a :href="`/settings/sms-templates`">Cancel</a>
-          </div>
+            <div class="input-sections mb-3">
+                <p>{{ $t('SMSTemplates.name') }}</p>
+                <input type="text" v-model="smsTemplateData.name" :placeholder="$t('SMSTemplates.name')" class="form-control text-inputs" />
+            </div>
+            <div class="input-sections mb-3">
+                <p>{{ $t('SMSTemplates.content') }}</p>
+                <b-form-textarea id="content-textarea"
+                                 :placeholder="$t('SMSTemplates.content')"
+                                 rows="4"
+                                 max-rows="6"
+                                 v-model="smsTemplateData.content"></b-form-textarea>
+            </div>
+            <div class="input-sections mb-3">
+                <p>{{ $t('SMSTemplates.uniqueName') }}</p>
+                <input type="text" v-model="smsTemplateData.slug" :placeholder="$t('SMSTemplates.uniqueName')" class="form-control text-inputs" />
+            </div>
+            <div class="input-sections mb-3">
+              <label for="language">{{ $t('SMSTemplates.language') }}</label>
+                <div>
+                    <v-select label="name"
+                              :reduce="countries => countries.id"
+                              class="style-chooser form-control-disabled font-size-14"
+                              v-model="smsTemplateData.language"
+                              :options="languages"></v-select>
+                </div>
+            </div>
+            <div class="update-or-cancel">
+                <b-button variant="primary"
+                          class="btn btn-primary"
+                          @click="updateSmsTemplateData">Update</b-button>
+                <span>or</span>
+                <a :href="`/settings/sms-templates`">Cancel</a>
+            </div>
         </template>
       </iq-card>
     </b-col>
@@ -45,29 +51,38 @@ import {
   getSmsTemplate,
   updateSmsTemplate,
 } from '../../services/smsTemplates'
+import { getCountriesList } from '../../services/commonCodeLists'
 
 export default {
   name: 'SMSTemplatesEdit',
   data: function () {
     return {
+      languages: [],
       smsTemplateID: parseInt(this.$route.params.id),
       smsTemplateData: {
         name: '',
         content: '',
         slug: '',
+        language: '',
       },
     }
   },
   mounted() {
     xray.index()
     this.getSmsTemplateData()
-    console.log(this.smsTemplateID)
+    this.getCountries()
   },
   methods: {
+    getCountries() {
+      getCountriesList().then(response => {
+        this.languages = response
+      })
+    },
     async getSmsTemplateData() {
       getSmsTemplate(this.smsTemplateID).then(response => {
         if (Array.isArray(response)) {
           this.smsTemplateData = response[0]
+          console.log('Data about sms template: ', response)
         }
       })
     },

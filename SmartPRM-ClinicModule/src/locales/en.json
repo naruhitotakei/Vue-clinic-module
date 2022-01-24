@@ -21,7 +21,9 @@
     "no": "No",
     "noDoctor": "Doctor not assigned",
     "cancel": "Cancel",
-    "confirm": "Confirm"
+    "confirm": "Confirm",
+    "update": "Update",
+    "or": "or"
   },
   "documents": {
     "offers": "Offers",
@@ -725,6 +727,14 @@
       "labelColor": "Color",
       "labelAction": "Action"
     }
+  },
+  "SMSTemplates": {
+    "uniqueName": "Unique name",
+    "language": "Language",
+    "editTemplate": "Edit template",
+    "name": "Name",
+    "content": "Content",
+    "edit": "Edit"
   },
   "onlineBooking": {
     "header": "Online Booking Services",

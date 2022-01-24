@@ -21,7 +21,9 @@
     "no": "Ne",
     "noDoctor": "Doktor ni doloćen",
     "cancel": "Prekliči",
-    "confirm": "Potrdi"
+    "confirm": "Potrdi",
+    "update": "Posodobi",
+    "or": "ali"
   },
   "documents": {
     "offers": "Ponudbe",
@@ -724,6 +726,14 @@
       "labelColor": "Barva",
       "labelAction": "Urejaj"
     }
+  },
+  "SMSTemplates": {
+    "uniqueName": "Unikatno ime",
+    "language": "Jezik",
+    "editTemplate": "Uredi SMS predlogo",
+    "name": "Ime predloge",
+    "content": "Vsebina",
+    "edit": "Uredi"
   },
   "onlineBooking": {
     "header": "Storitve in produkti",

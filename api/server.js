@@ -1076,6 +1076,7 @@ app.put('/api/sms-template/update', (req, res) => {
   const templateName = req.body.name
   const templateContent = req.body.content
   const templateSlug = req.body.slug
+  const templateLang = req.body.language
   if (
     req.session.prm_user &&
     req.session.prm_user.permissions &&
@@ -1088,6 +1089,7 @@ app.put('/api/sms-template/update', (req, res) => {
       templateName,
       templateContent,
       templateSlug,
+      templateLang
     )
   } else {
     res.status(401).json('OK: user unauthorized')
