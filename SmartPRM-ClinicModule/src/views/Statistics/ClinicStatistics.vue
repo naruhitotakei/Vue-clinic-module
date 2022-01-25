@@ -190,7 +190,7 @@
       <LeadsChart :client="clientName" :start="startDate" :end="endDate" />
       <RevenueByDoctor :client="clientName" :start="startDate" :end="endDate" />
       <NewPatients :client="clientName" :start="startDate" :end="endDate" />
-      <!-- <AppointmentsByProduct :start="startDate" :end="endDate" /> -->
+      <AppointmentsByProduct :start="startDate" :end="endDate" />
     </template>
   </b-container>
 </template>
@@ -206,7 +206,7 @@ import RevenueByProduct from '@/components/ClinicStats/RevenueByProduct.vue'
 import LeadsChart from '@/components/ClinicStats/LeadsChart.vue'
 import RevenueByDoctor from '@/components/ClinicStats/RevenueByDoctor.vue'
 import NewPatients from '@/components/ClinicStats/NewPatients.vue'
-// import AppointmentsByProduct from '@/components/ClinicStats/AppointmentsByProduct.vue'
+import AppointmentsByProduct from '@/components/ClinicStats/AppointmentsByProduct.vue'
 import moment from 'moment'
 import { sso } from '../../services/userService'
 
@@ -218,7 +218,7 @@ export default {
     LeadsChart,
     RevenueByDoctor,
     NewPatients,
-    // AppointmentsByProduct,
+    AppointmentsByProduct,
   },
   mounted() {
     xray.index()

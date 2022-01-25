@@ -4,8 +4,9 @@
       <iq-card class-name="iq-card-block iq-card-stretch iq-card-height">
         <template v-slot:headerTitle>
           <div class="d-flex align-items-center justify-content-between">
-            <h4 class="card-title">New Patients</h4>
+            <h4 class="card-title">Appointments By Product Group</h4>
             <vue-excel-xlsx
+              v-if="dataToExport && dataToExport.length"
               :data="dataToExport"
               :columns="excelColumns"
               :filename="fileName"
@@ -46,7 +47,8 @@
         </template>
         <template v-slot:body>
           <div class="mt-3" v-if="!loading && !noData">
-            <apex-chart type="bar" :series="series" :options="chartOptions" />
+            <AmChart v-if="chartBodyData" element="appointmentsByProductGroupChart" type="leads" :option="chartBodyData" />
+            <!-- <apex-chart type="bar" :series="series" :options="chartOptions" /> -->
           </div>
           <div class="mt-3 text-center" v-if="loading">
             <div class="text-center text-primary my-2">
@@ -67,10 +69,11 @@
 import IqCard from '../../components/xray/cards/iq-card'
 import { getAppointmentsByProduct } from '../../services/statistics'
 import moment from 'moment'
+import AmChart from '@/components/AmChart'
 
 export default {
   name: 'AppointmentsByProduct',
-  components: { IqCard },
+  components: { IqCard, AmChart },
   props: {
     start: String,
     end: String,
@@ -97,6 +100,14 @@ export default {
     }
   },
   methods: {
+    initChart(data, products) {
+      this.chartBodyData = {
+        colors: ['#e64141', '#00ca00', '#ffd400'],
+        xAxis: ['date'],
+        yAxis: products,
+        data: data,
+      }
+    },
     onDateChange() {
       if (this.startDate && this.endDate) {
         this.getAppointments(this.startDate, this.endDate)
@@ -105,13 +116,14 @@ export default {
     getAppointments(start, end) {
       this.loading = true
       this.noData = false
+      this.chartBodyData = null
+      this.dataToExport = []
       getAppointmentsByProduct(start, end, 'en')
         .then((response) => {
           this.loading = false
           if (response && response.length && Array.isArray(response)) {
             this.noData = false
-            console.log(response)
-            // this.setDataForChart(response)
+            this.setDataForChart(response)
           } else {
             this.noData = true
           }
@@ -125,17 +137,33 @@ export default {
       let datesArray = []
       let seriesData = []
       this.dataToExport = []
-      data.forEach((item, index) => {
-        const itemDate = item.date.split('T')[0]
-        const dateIndex = datesArray.findIndex((date) => date === itemDate)
-        if (dateIndex < 0) {
-          datesArray.push(itemDate)
-          seriesData.push(1)
-        }
-        if (dateIndex > -1) {
-          seriesData[dateIndex] = seriesData[dateIndex] + 1
-        }
+
+      const productList = data.map(item => item.products)
+      const productGroups = [...new Set([].concat.apply([], productList))]
+
+      datesArray = data.map(item => item.appointments_date.split('T')[0])
+      datesArray = [...new Set(datesArray)]
+
+      // let amChartData = []
+      let amChartData = []
+      datesArray.forEach(date => {
+        let obj = { date: date }
+        const itemsByDate = data.filter(item => item.appointments_date.split('T')[0] === date)
+        productGroups.forEach(product => {
+          const isProductHasDate = itemsByDate.find(item => item.products.includes(product))
+          if (isProductHasDate) {
+            obj[product] = isProductHasDate.appointment_count ? Number(isProductHasDate.appointment_count) : 0
+          } else {
+            obj[product] = 0
+          }
+        })
+        amChartData.push(obj)
       })
+
+      this.initChart(amChartData, productGroups)
+      // productGroups.forEach(item => {
+      //   const appointments = data.filter(item => item.products.includes)
+      // })
 
       this.series = [
         {
@@ -205,19 +233,16 @@ export default {
         },
       }
 
-      this.prepareDataForExport(data)
+      // this.prepareDataForExport(data)
     },
 
     prepareDataForExport(data) {
       // Get Data for export
-      this.fileName = `New Patients (${moment(this.start).format('DD/MM/YYYY')} - ${moment(this.end).format('DD/MM/YYYY')})`
+      this.fileName = `SmartPRM_${this.client}_Appointments_by_product_group_(${moment(this.start).format('DD/MM/YYYY')} - ${moment(this.end).format('DD/MM/YYYY')})`
       data.forEach((item) => {
         const obj = {
-          first_name: item.name,
-          last_name: item.last_name,
-          phone: item.phone,
-          email: item.email,
-          created_at: moment(item.date).format('DD/MM/YYYY'),
+          product_group: '',
+
         }
         this.dataToExport.push(obj)
       })
@@ -225,6 +250,7 @@ export default {
   },
   data() {
     return {
+      chartBodyData: null,
       startDate: null,
       endDate: null,
       loading: true,
@@ -232,11 +258,8 @@ export default {
       dataToExport: [],
       fileName: '',
       excelColumns: [
-        { label: 'First Name', field: 'first_name' },
-        { label: 'Last Name', field: 'last_name' },
-        { label: 'Email', field: 'email' },
-        { label: 'Phone', field: 'phone' },
-        { label: 'Created At', field: 'created_at' },
+        { label: 'Product Group', field: 'product_group' },
+        { label: 'Appointments', field: 'appointments' },
       ],
       series: [
         {

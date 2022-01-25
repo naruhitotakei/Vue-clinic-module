@@ -102,7 +102,6 @@ export default {
   },
   methods: {
     initChart(data, products) {
-      console.log(data.length, products.length)
       this.chartBodyData = {
         colors: ['#e64141', '#00ca00', '#ffd400'],
         xAxis: ['doctor'],
