@@ -106,7 +106,6 @@ export default {
     //   }
     // },
     initChart(data, countries) {
-      console.log(data)
       this.chartBodyData = {
         colors: ['#e64141', '#00ca00', '#ffd400'],
         xAxis: ['date'],
