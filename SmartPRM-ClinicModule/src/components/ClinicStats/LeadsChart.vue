@@ -46,7 +46,8 @@
           </template>
           <template v-slot:body>
             <div class="mt-3" v-if="!loading && !noData">
-              <apex-chart type="bar" :series="series" :options="chartOptions" />
+              <AmChart v-if="chartBodyData" element="leadsChart" type="leads" :option="chartBodyData" />
+              <!-- <apex-chart type="bar" :series="series" :options="chartOptions" /> -->
             </div>
             <div class="mt-3 text-center" v-if="loading">
               <div class="text-center text-primary my-2">
@@ -67,10 +68,11 @@
 import IqCard from '../../components/xray/cards/iq-card'
 import { getLeadsPerDay } from '../../services/statistics'
 import moment from 'moment'
+import AmChart from '@/components/AmChart'
 
 export default {
   name: 'LeadsChart',
-  components: { IqCard },
+  components: { IqCard, AmChart },
   props: {
     start: String,
     end: String,
@@ -103,6 +105,15 @@ export default {
     //     this.getClinicLeadStats(this.leadStartDate, this.leadEndDate)
     //   }
     // },
+    initChart(data, countries) {
+      console.log(data)
+      this.chartBodyData = {
+        colors: ['#e64141', '#00ca00', '#ffd400'],
+        xAxis: ['date'],
+        yAxis: countries,
+        data: data,
+      }
+    },
     onDateChange() {
       if (this.startDate && this.endDate) {
         this.getClinicLeadStats(this.startDate, this.endDate)
@@ -111,6 +122,7 @@ export default {
     getClinicLeadStats(start, end) {
       this.loading = true
       this.noData = false
+      this.chartBodyData = null
       getLeadsPerDay(start, end).then(async response => {
         if (response && response.length && Array.isArray(response)) {
           this.noData = false
@@ -127,9 +139,11 @@ export default {
     },
     async setDataForChart(data) {
       let datesArray = []
-      let sumByCountry = []
+      // let sumByCountry = []
       let countries = []
       this.dataToExport = []
+      let amChartData = []
+
       await data.forEach(item => {
         // Get Unique Dates
         const itemDate = item.date.split('T')[0]
@@ -145,59 +159,76 @@ export default {
         }
       })
 
-      countries.forEach(country => {
-        const itemsByCountry = data.filter(item => item.country === country)
-        const obj = { name: country, data: [] }
-        datesArray.forEach(date => {
-          const isCountryHasDate = itemsByCountry.find(item => item.date.split('T')[0] === date)
+      amChartData = []
+      datesArray.forEach(date => {
+        let obj = { date: date }
+        const itemsByDate = data.filter(item => item.date.split('T')[0] === date)
+        countries.forEach(country => {
+          const isCountryHasDate = itemsByDate.find(item => item.country === country)
           if (isCountryHasDate) {
-            obj.data.push(isCountryHasDate.enquiries_count ? Number(isCountryHasDate.enquiries_count) : 0)
+            obj[country] = isCountryHasDate.enquiries_count ? Number(isCountryHasDate.enquiries_count) : 0
           } else {
-            obj.data.push(0)
+            obj[country] = 0
           }
         })
-        sumByCountry.push(obj)
+        amChartData.push(obj)
       })
 
-      this.series = sumByCountry
-      let self = this
+      this.initChart(amChartData, countries)
 
-      this.chartOptions = {
-        dataLabels: {
-          enabled: false,
-        },
-        chart: {
-          type: 'bar',
-          height: 350,
-          stacked: true,
-          toolbar: {
-            show: false,
-            export: {
-              csv: {
-                filename: 'Leads Statistics',
-                dateFormatter(timestamp) {
-                  return new Date(timestamp).toDateString()
-                },
-              },
-            },
-          },
-        },
-        legend: {
-          position: 'right',
-        },
-        xaxis: {
-          type: 'datetime',
-          categories: datesArray,
-        },
-        tooltip: {
-          y: {
-            formatter: function (value, { series, seriesIndex, w }) {
-              const numb = String(value).match(/\d/g).join('')
-              return self.$options.filters.formatNumber(numb)
-            },
-          },
-        },
-      }
+      // countries.forEach(country => {
+      //   const itemsByCountry = data.filter(item => item.country === country)
+      //   const obj = { name: country, data: [] }
+      //   datesArray.forEach(date => {
+      //     const isCountryHasDate = itemsByCountry.find(item => item.date.split('T')[0] === date)
+      //     if (isCountryHasDate) {
+      //       obj.data.push(isCountryHasDate.enquiries_count ? Number(isCountryHasDate.enquiries_count) : 0)
+      //     } else {
+      //       obj.data.push(0)
+      //     }
+      //   })
+      //   sumByCountry.push(obj)
+      // })
+
+      // this.series = sumByCountry
+      // let self = this
+
+      // this.chartOptions = {
+      //   dataLabels: {
+      //     enabled: false,
+      //   },
+      //   chart: {
+      //     type: 'bar',
+      //     height: 350,
+      //     stacked: true,
+      //     toolbar: {
+      //       show: false,
+      //       export: {
+      //         csv: {
+      //           filename: 'Leads Statistics',
+      //           dateFormatter(timestamp) {
+      //             return new Date(timestamp).toDateString()
+      //           },
+      //         },
+      //       },
+      //     },
+      //   },
+      //   legend: {
+      //     position: 'right',
+      //   },
+      //   xaxis: {
+      //     type: 'datetime',
+      //     categories: datesArray,
+      //   },
+      //   tooltip: {
+      //     y: {
+      //       formatter: function (value, { series, seriesIndex, w }) {
+      //         const numb = String(value).match(/\d/g).join('')
+      //         return self.$options.filters.formatNumber(numb)
+      //       },
+      //     },
+      //   },
+      // }
 
       this.prepareDataForExport(data, countries)
     },
@@ -217,6 +248,7 @@ export default {
   },
   data() {
     return {
+      chartBodyData: null,
       startDate: null,
       endDate: null,
       loading: true,

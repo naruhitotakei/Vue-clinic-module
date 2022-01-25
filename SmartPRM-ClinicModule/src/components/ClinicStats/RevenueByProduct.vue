@@ -93,14 +93,12 @@ export default {
   },
   methods: {
     initChart(data) {
-      console.log(data)
       this.chartBodyData = {
         colors: ['#4c9cac'],
         value: ['sum'],
         category: ['pr_name'],
         data: data,
       }
-      console.log(data)
       // let root = am5.Root.new(this.$refs.pieChart)
       // root.setThemes([
       //   am5themesAnimated.new(root),
