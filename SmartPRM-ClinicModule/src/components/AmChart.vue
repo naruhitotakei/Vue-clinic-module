@@ -27,6 +27,10 @@ export default {
         chart = am4core.create(this.element, am4charts.XYChart)
         this.appointmentChart(chart)
         break
+      case 'revenueStats':
+        chart = am4core.create(this.element, am4charts.XYChart)
+        this.revenueChart(chart)
+        break
       case 'line':
         chart = am4core.create(this.element, am4charts.XYChart)
         this.line(chart)
@@ -103,33 +107,12 @@ export default {
     }
   },
   methods: {
-    // toggleSlice(item) {
-    //   var slice = pieSeries.dataItems.getIndex(item);
-    //   if (slice.visible) {
-    //     slice.hide();
-    //   }
-    //   else {
-    //     slice.show();
-    //   }
-    // },
-
-    // hoverSlice(item) {
-    //   var slice = pieSeries.slices.getIndex(item);
-    //   slice.isHover = true;
-    // },
-
-    // blurSlice(item) {
-    //   var slice = pieSeries.slices.getIndex(item);
-    //   slice.isHover = false;
-    // },
     appointmentChart(chart) {
       chart.colors.list = []
       for (let j = 0; j < this.option.colors.length; j++) {
         chart.colors.list.push(am4core.color(this.option.colors[j]))
       }
       chart.data = this.option.data
-      // let dateAxis = chart.xAxes.push(new am4charts.DateAxis())
-      // dateAxis.dataFields.date = 'day'
       let dateAxis = chart.xAxes.push(new am4charts.DateAxis())
       dateAxis.dataFields.date = this.option.xAxis[0]
       dateAxis.renderer.grid.template.location = 0
@@ -154,6 +137,46 @@ export default {
       series.columns.template.propertyFields.stroke = 'stroke'
       series.columns.template.propertyFields.strokeWidth = 'strokeWidth'
       series.columns.template.propertyFields.strokeDasharray = 'columnDash'
+
+      let columnTemplate = series.columns.template
+      columnTemplate.strokeWidth = 2
+      columnTemplate.strokeOpacity = 1
+    },
+    revenueChart(chart) {
+      chart.colors.list = []
+      for (let j = 0; j < this.option.colors.length; j++) {
+        chart.colors.list.push(am4core.color(this.option.colors[j]))
+      }
+      chart.data = this.option.data
+
+      chart.numberFormatter.numberFormat = {
+        'style': 'currency',
+        'currency': 'EUR',
+      }
+
+      chart.numberFormatter.intlLocales = 'de-DE'
+      chart.tooltip.label.fill = am4core.color('#ffffff')
+
+      let dateAxis = chart.xAxes.push(new am4charts.DateAxis())
+      dateAxis.dataFields.date = this.option.xAxis[0]
+      dateAxis.renderer.grid.template.location = 0
+      dateAxis.renderer.minGridDistance = 30
+      dateAxis.renderer.grid.template.strokeWidth = 0
+
+      // eslint-disable-next-line no-unused-lets
+      const valueAxis = new am4charts.ValueAxis()
+      valueAxis.maxPrecision = 0
+      chart.yAxes.push(valueAxis)
+      valueAxis.renderer.grid.template.strokeWidth = 0
+      valueAxis.title.html = '<b>Revenue: ' + this.$options.filters.formatPrice(this.option.revenue) + '</b>'
+
+      // Create series
+      let series = chart.series.push(new am4charts.ColumnSeries())
+      series.dataFields.valueY = this.option.yAxis[0]
+      series.dataFields.dateX = this.option.xAxis[0]
+      series.name = this.option.labels[0]
+      series.columns.template.tooltipText = '[bold]{dateX}[/]\n[bold]Revenue: {valueY}'
+      series.columns.template.fillOpacity = 1
 
       let columnTemplate = series.columns.template
       columnTemplate.strokeWidth = 2

@@ -21,7 +21,8 @@
                 <p class="text-muted">{{ $t('statisticsForClinic.yearsIncome') }}</p>
               </div>
             </div>
-            <apex-chart type="bar" height="350" :options="revenueChartOptions" :series="revenueChartSeries"></apex-chart>
+            <AmChart v-if="chartBodyData" element="revenueChart" type="revenueStats" :option="chartBodyData" />
+            <!-- <apex-chart type="bar" height="350" :options="revenueChartOptions" :series="revenueChartSeries"></apex-chart> -->
           </template>
         </iq-card>
         <iq-card>
@@ -151,15 +152,18 @@ import { xray } from '../../config/pluginInit'
 import { getCountryList, getEmazingServicesReport, getServiceList, getClinicStatistics } from '../../services/reporting'
 import _ from 'lodash'
 import XLSX from 'xlsx'
+import AmChart from '@/components/AmChart'
 // import moment from 'moment'
 
 export default {
   components: {
     IqCard,
+    AmChart,
   },
   name: 'Emazing',
   data: function () {
     return {
+      chartBodyData: null,
       fromdate: null,
       todate: null,
       servicesSummaryTotalCount: 0,
@@ -254,6 +258,16 @@ export default {
     },
   },
   methods: {
+    initChart(data, revenue) {
+      this.chartBodyData = {
+        colors: ['#4c9cac'],
+        xAxis: ['date'],
+        yAxis: ['revenue'],
+        labels: ['Revenue'],
+        revenue: revenue,
+        data: data,
+      }
+    },
     formatNumber(num) {
       return num.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1.')
     },
@@ -290,6 +304,7 @@ export default {
       return this.$options.filters.formatPrice(price)
     },
     getClinicStats() {
+      this.chartBodyData = null
       getClinicStatistics().then(response => {
         this.setRevenueData(response)
       }).catch(error => {
@@ -335,35 +350,37 @@ export default {
           datesArray.push(item.date)
           this.totalRevenue += Number(item.revenue)
         })
-        this.revenueChartSeries = [{
-          data: this.revenueList,
-        }]
 
-        let self = this
+        this.initChart(sixtyWeeks, this.totalRevenue)
+        // this.revenueChartSeries = [{
+        //   data: this.revenueList,
+        // }]
 
-        this.revenueChartOptions = {
-          xaxis: {
-            categories: [...datesArray],
-          },
-          yaxis: {
-            labels: {
-              formatter: function (y) {
-                return self.$options.filters.formatPrice(y)
-              },
-            },
-            title: {
-              text: this.formatPrice(this.totalRevenue),
-            },
-          },
-          tooltip: {
-            y: {
-              formatter: function (value, { series, seriesIndex, w }) {
-                const numb = String(value).match(/\d/g).join('')
-                return self.$options.filters.formatPrice(numb)
-              },
-            },
-          },
-        }
+        // let self = this
+
+        // this.revenueChartOptions = {
+        //   xaxis: {
+        //     categories: [...datesArray],
+        //   },
+        //   yaxis: {
+        //     labels: {
+        //       formatter: function (y) {
+        //         return self.$options.filters.formatPrice(y)
+        //       },
+        //     },
+        //     title: {
+        //       text: this.formatPrice(this.totalRevenue),
+        //     },
+        //   },
+        //   tooltip: {
+        //     y: {
+        //       formatter: function (value, { series, seriesIndex, w }) {
+        //         const numb = String(value).match(/\d/g).join('')
+        //         return self.$options.filters.formatPrice(numb)
+        //       },
+        //     },
+        //   },
+        // }
       }
     },
     onFromChange() {

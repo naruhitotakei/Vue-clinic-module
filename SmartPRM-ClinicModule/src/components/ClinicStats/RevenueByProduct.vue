@@ -94,7 +94,7 @@ export default {
   methods: {
     initChart(data) {
       this.chartBodyData = {
-        colors: ['#4c9cac'],
+        colors: ['#4c9cac', '#00ca00', '#ffd400'],
         value: ['sum'],
         category: ['pr_name'],
         data: data,
