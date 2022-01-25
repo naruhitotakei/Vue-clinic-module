@@ -124,7 +124,7 @@ export default {
       console.log('events', data)
       console.log('AnyEventIncludesWithoutResourceId', data.some(evt => !!evt.resourceId))
       console.log('resourceIncludesLegacyApp', !this.resources.find(rsc => rsc.id === 'legacy-app'))
-      // Add lagacy app recource if there is any event resourceId (doctor_id) is not exist 
+      // Add lagacy app recource if there is any event resourceId (doctor_id) is not exist
       if (data.some(evt => !!evt.resourceId) && !this.resources.find(rsc => rsc.id === 'legacy-app')) {
         this.resources.push({
           id: 'legacy-app',
@@ -134,7 +134,7 @@ export default {
       }
       // Remove legacy app from recourses if all events have resourceId
       if (data.every(evt => evt.resourceId) && this.resources.find(rsc => rsc.id === 'legacy-app')) {
-        this.resources.splice(this.resources.findIndex(rsc => rsc.id === 'legacy-app'), 1);
+        this.resources.splice(this.resources.findIndex(rsc => rsc.id === 'legacy-app'), 1)
         console.log('remove res legacy', this.resources)
       }
     },
