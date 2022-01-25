@@ -684,7 +684,7 @@ export default {
       if (this.viewName === 'resourceTimeGridWeek') {
         this.calendarOptions.resources = this.resourcesOuter.map(r => ({
           ...r,
-          title: `${r.doctorInfo.first_name[0]}. ${r.doctorInfo.surname}`,
+          title: r.doctorInfo ? `${r.doctorInfo.first_name[0]}. ${r.doctorInfo.surname}` : '',
         }))
       } else {
         this.calendarOptions.resources = this.resourcesOuter
