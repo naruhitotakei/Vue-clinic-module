@@ -201,7 +201,7 @@
     "overviewTab": "Pregled",
     "overview": {
       "numberOfVisits": "Število obiskov",
-      "firstVisit": "Čas od prvega obiska",
+      "lastVisit": "Čas od zadnjega obiska",
       "phone": "Telefon",
       "email": "Email",
       "address": "Naslov",

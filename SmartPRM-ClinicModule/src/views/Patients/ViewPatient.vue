@@ -48,7 +48,7 @@
                                                   </li>
                                                   <li class="text-center">
                                                       <h4 class="counter">{{timeSinceFirstVisit | fromNowDate}}</h4>
-                                                      <span>{{ $t('EPR.overview.firstVisit') }}</span>
+                                                      <span>{{ $t('EPR.overview.lastVisit') }}</span>
                                                   </li>
                                               </ul>
                                               <hr>

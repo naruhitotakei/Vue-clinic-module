@@ -202,7 +202,7 @@
     "overviewTab": "Overview",
     "overview": {
       "numberOfVisits": "Number of visits",
-      "firstVisit": "Time since first visit",
+      "lastVisit": "Time since last visit",
       "phone": "Phone",
       "email": "Email",
       "address": "Address",
