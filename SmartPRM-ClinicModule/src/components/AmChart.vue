@@ -290,7 +290,7 @@ export default {
       valueAxis.maxPrecision = 0
       chart.yAxes.push(valueAxis)
       valueAxis.renderer.inside = true
-      valueAxis.renderer.labels.template.disabled = true
+      valueAxis.renderer.labels.template.disabled = false
       valueAxis.min = 0
       valueAxis.renderer.grid.template.strokeWidth = 0
 
