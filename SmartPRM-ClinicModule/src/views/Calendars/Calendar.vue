@@ -122,10 +122,10 @@ export default {
     },
     'events'(data) {
       console.log('events', data)
-      console.log('AnyEventIncludesWithoutResourceId', data.some(evt => !!evt.resourceId))
+      console.log('AnyEventIncludesWithoutResourceId', data.some(evt => evt.resourceId === null || evt.resourceId === undefined))
       console.log('resourceIncludesLegacyApp', !this.resources.find(rsc => rsc.id === 'legacy-app'))
       // Add lagacy app recource if there is any event resourceId (doctor_id) is not exist
-      if (data.some(evt => !!evt.resourceId) && !this.resources.find(rsc => rsc.id === 'legacy-app')) {
+      if (data.some(evt => evt.resourceId === null || evt.resourceId === undefined) && !this.resources.find(rsc => rsc.id === 'legacy-app')) {
         this.resources.push({
           id: 'legacy-app',
           title: 'From Legacy App',
