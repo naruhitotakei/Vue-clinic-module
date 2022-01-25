@@ -121,11 +121,8 @@ export default {
     'allDoctorCheck'() {
     },
     'events'(data) {
-      console.log('events', data)
-      console.log('AnyEventIncludesWithoutResourceId', data.some(evt => evt.resourceId === null || evt.resourceId === undefined))
-      console.log('resourceIncludesLegacyApp', !this.resources.find(rsc => rsc.id === 'legacy-app'))
       // Add lagacy app recource if there is any event resourceId (doctor_id) is not exist
-      if (data.some(evt => evt.resourceId === null || evt.resourceId === undefined) && !this.resources.find(rsc => rsc.id === 'legacy-app')) {
+      if (data.some(evt => evt.resourceId === 'legacy-app') && !this.resources.find(rsc => rsc.id === 'legacy-app')) {
         this.resources.push({
           id: 'legacy-app',
           title: 'From Legacy App',
@@ -133,7 +130,7 @@ export default {
         console.log('add res legacy', this.resources)
       }
       // Remove legacy app from recourses if all events have resourceId
-      if (data.every(evt => evt.resourceId) && this.resources.find(rsc => rsc.id === 'legacy-app')) {
+      if (data.every(evt => evt.resourceId !== 'legacy-app') && this.resources.find(rsc => rsc.id === 'legacy-app')) {
         this.resources.splice(this.resources.findIndex(rsc => rsc.id === 'legacy-app'), 1)
         console.log('remove res legacy', this.resources)
       }
