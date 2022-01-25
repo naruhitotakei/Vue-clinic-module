@@ -393,7 +393,6 @@ export default {
   methods: {
     async initChart(data) {
       if (data && data.length) {
-        console.log(data.length)
         const now = new Date().toISOString().split('T')[0]
         let dIndex = null
         const today = await data.find((item, index) => {

@@ -25,8 +25,6 @@ export default {
     switch (this.type) {
       case 'appointments':
         chart = am4core.create(this.element, am4charts.XYChart)
-        chart.logo.hide()
-        console.log(chart.logo)
         this.appointmentChart(chart)
         break
       case 'line':
@@ -41,9 +39,9 @@ export default {
         chart = am4core.create(this.element, am4charts.XYChart)
         this.mixesColumn(chart)
         break
-      case 'stacked':
+      case 'leads':
         chart = am4core.create(this.element, am4charts.XYChart)
-        this.stacked(chart)
+        this.leads(chart)
         break
       case 'bar-line':
         chart = am4core.create(this.element, am4charts.XYChart)
@@ -132,11 +130,13 @@ export default {
       dateAxis.dataFields.date = this.option.xAxis[0]
       dateAxis.renderer.grid.template.location = 0
       dateAxis.renderer.minGridDistance = 30
+      dateAxis.renderer.grid.template.strokeWidth = 0
 
       // eslint-disable-next-line no-unused-lets
       const valueAxis = new am4charts.ValueAxis()
       valueAxis.maxPrecision = 0
       chart.yAxes.push(valueAxis)
+      valueAxis.renderer.grid.template.strokeWidth = 0
 
       // Create series
       let series = chart.series.push(new am4charts.ColumnSeries())
@@ -275,20 +275,24 @@ export default {
       chart.cursor.lineX.disabled = true
       chart.cursor.lineY.disabled = true
     },
-    stacked(chart) {
+    leads(chart) {
       chart.colors.list = []
       for (let j = 0; j < this.option.colors.length; j++) {
         chart.colors.list.push(am4core.color(this.option.colors[j]))
       }
       chart.data = this.option.data
 
-      let categoryAxis = chart.xAxes.push(new am4charts.CategoryAxis())
-      categoryAxis.dataFields.category = 'year'
-      categoryAxis.renderer.grid.template.location = 0
-      let valueAxis = chart.yAxes.push(new am4charts.ValueAxis())
+      let dateAxis = chart.xAxes.push(new am4charts.DateAxis())
+      dateAxis.dataFields.date = 'date'
+      dateAxis.renderer.grid.template.location = 0
+      dateAxis.renderer.grid.template.strokeWidth = 0
+      const valueAxis = new am4charts.ValueAxis()
+      valueAxis.maxPrecision = 0
+      chart.yAxes.push(valueAxis)
       valueAxis.renderer.inside = true
       valueAxis.renderer.labels.template.disabled = true
       valueAxis.min = 0
+      valueAxis.renderer.grid.template.strokeWidth = 0
 
       // Create series
       let _this = this
@@ -298,7 +302,7 @@ export default {
         let series = chart.series.push(new am4charts.ColumnSeries())
         series.name = name
         series.dataFields.valueY = field
-        series.dataFields.categoryX = _this.option.xAxis[0]
+        series.dataFields.dateX = _this.option.xAxis[0]
         series.sequencedInterpolation = true
 
         // Make it stacked
@@ -307,12 +311,12 @@ export default {
         // Configure columns
         series.columns.template.width = am4core.percent(60)
         series.columns.template.tooltipText =
-          '[bold]{name}[/]\n[font-size:14px]{categoryX}: {valueY}'
+          '[bold]{name}: {valueY}[/]\n[font-size:14px]{dateX}'
 
         // Add label
-        let labelBullet = series.bullets.push(new am4charts.LabelBullet())
-        labelBullet.label.text = '{valueY}'
-        labelBullet.locationY = 0.5
+        // let labelBullet = series.bullets.push(new am4charts.LabelBullet())
+        // labelBullet.label.text = '{valueY}'
+        // labelBullet.locationY = 0.5
 
         return series
       }
@@ -321,6 +325,9 @@ export default {
       }
       // Legend
       chart.legend = new am4charts.Legend()
+      chart.legend.position = 'right'
+      chart.legend.maxHeight = 500
+      chart.legend.scrollable = true
     },
     barLine(chart) {
       chart.colors.list = []
@@ -682,6 +689,8 @@ export default {
       }
       series.dataFields.value = this.option.value[0]
       series.dataFields.category = this.option.category[0]
+
+      console.log(series.dataFields.value)
 
       series.labels.template.disabled = true
 
