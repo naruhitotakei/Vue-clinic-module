@@ -1006,8 +1006,8 @@ export default {
 }
 
 .fc-day-today {
-    background-color: #08a4b4;
-    color: white;
+    background-color: rgba(8, 164, 180, 0.1) !important;
+    color: gray !important;
 }
 
 .fc-event{
