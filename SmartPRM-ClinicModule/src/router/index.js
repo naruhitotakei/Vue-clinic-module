@@ -33,6 +33,7 @@ import TaxAuthority from '../views/Reporting/TaxAuthority'
 import Doctor from '../views/Reporting/Doctor'
 /* Call Center */
 import Leads from '../views/CallCenter/Leads'
+import ViewLead from '../views/CallCenter/ViewLead'
 import ClientInfo from '../views/CallCenter/ClientInfo'
 import KPIs from '../views/CallCenter/KPIs'
 import WorkReport from '../views/CallCenter/WorkReport'
@@ -182,14 +183,6 @@ const documentChildRoute = (prop, mode) => [
     component: Offers,
   },
 ]
-const patientChildRoute = (prop, mode) => [
-  {
-    path: ':patientId',
-    name: prop + '.patientId',
-    meta: { dark: mode, auth: true, name: 'ViewPatient' },
-    component: ViewPatient,
-  },
-]
 
 const statisticsChildRoute = (prop, mode = false) => [
   {
@@ -233,6 +226,7 @@ const callCenterChildRoute = (prop, mode = false) => [
     name: prop + '.leads',
     meta: { dark: mode, auth: true, name: 'Leads' },
     component: Leads,
+    children: leadChildRoute('leads'),
   },
   {
     path: 'client-info',
@@ -263,6 +257,24 @@ const callCenterChildRoute = (prop, mode = false) => [
     name: prop + '.missing-services',
     meta: { dark: mode, auth: true, name: 'Missing Services' },
     component: MissingServices,
+  },
+]
+
+const patientChildRoute = (prop, mode) => [
+  {
+    path: ':patientId',
+    name: prop + '.patientId',
+    meta: { dark: mode, auth: true, name: 'ViewPatient' },
+    component: ViewPatient,
+  },
+]
+
+const leadChildRoute = (prop, mode) => [
+  {
+    path: ':leadId',
+    name: prop + '.leadId',
+    meta: { dark: mode, auth: true, name: 'ViewLead' },
+    component: ViewLead,
   },
 ]
 

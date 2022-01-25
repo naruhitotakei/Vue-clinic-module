@@ -26,7 +26,7 @@
                         </div>
                         <div class="text-center mt-3">
                           <h4>
-                            <b>{{ lead.name }} {{ lead.last_name }}</b>
+                            <b @click="leadPage(lead)">{{ lead.name }} {{ lead.last_name }}</b>
                           </h4>
                         </div>
                         <hr />
@@ -435,6 +435,9 @@ export default {
     }
   },
   methods: {
+    leadPage(lead) {
+      this.$router.push({ path: `/lead/${lead.id}` })
+    },
     async getAllLeadsCount() {
       this.isDataLoaded = false
       getLeadsCount().then((response) => {
@@ -460,7 +463,7 @@ export default {
           next_visit: obj.next_visit,
           personal_dentist: obj.label,
         }))
-
+        console.log(this.leads, '))))))))))))))))))))))))')
         let newLeadsArr = [...this.leads]
 
         newLeadsArr.map((lead, key) => {
