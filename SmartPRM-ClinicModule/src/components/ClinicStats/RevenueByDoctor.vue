@@ -47,7 +47,8 @@
         </template>
         <template v-slot:body>
           <div class="mt-3" v-if="!loading && !noData">
-            <apex-chart type="bar" :series="series" :options="chartOptions" />
+            <AmChart v-if="chartBodyData" element="revenyeByDoctorChart" type="doctor-revenue" :option="chartBodyData" />
+            <!-- <apex-chart type="bar" :series="series" :options="chartOptions" /> -->
           </div>
           <div class="mt-3 text-center" v-if="loading">
             <div class="text-center text-primary my-2">
@@ -68,10 +69,11 @@
 import IqCard from '../../components/xray/cards/iq-card'
 import { getRevenueByDoctor } from '../../services/statistics'
 import moment from 'moment'
+import AmChart from '@/components/AmChart'
 
 export default {
   name: 'RevenueByDoctor',
-  components: { IqCard },
+  components: { IqCard, AmChart },
   props: {
     start: String,
     end: String,
@@ -99,6 +101,15 @@ export default {
     }
   },
   methods: {
+    initChart(data, products) {
+      console.log(data.length, products.length)
+      this.chartBodyData = {
+        colors: ['#e64141', '#00ca00', '#ffd400'],
+        xAxis: ['doctor'],
+        yAxis: products,
+        data: data,
+      }
+    },
     onDateChange() {
       if (this.startDate && this.endDate) {
         this.getDoctorRevenue(this.startDate, this.endDate)
@@ -107,6 +118,7 @@ export default {
     getDoctorRevenue(start, end) {
       this.loading = true
       this.noData = false
+      this.chartBodyData = null
       getRevenueByDoctor(start, end)
         .then(async (response) => {
           if (response && response.length) {
@@ -133,86 +145,105 @@ export default {
         let products = data.map((item) => item.product_name)
         const uniqueProducts = [...new Set(products)]
 
-        let sumByProduct = []
-        uniqueProducts.forEach((product) => {
-          const prodsByDoctor = data.filter(
-            (item) => item.product_name === product,
-          )
-          const obj = { name: product, data: [] }
-          uniqueDoctors.forEach((doctor) => {
-            const isDoctorHasProduct = prodsByDoctor.find(
-              (item) => item.doctor_name === doctor,
-            )
-            if (isDoctorHasProduct) {
-              obj.data.push(Number(isDoctorHasProduct.sum))
+        let amChartData = []
+        uniqueDoctors.forEach(doctor => {
+          let obj = { doctor: doctor }
+          const itemsByDoctor = data.filter(item => item.doctor_name === doctor)
+          uniqueProducts.forEach(product => {
+            const isProductHasDoctor = itemsByDoctor.find(item => item.product_name === product)
+            if (isProductHasDoctor) {
+              obj[product] = isProductHasDoctor.sum ? Number(isProductHasDoctor.sum) : 0
             } else {
-              obj.data.push(0)
+              obj[product] = 0
             }
           })
-          sumByProduct.push(obj)
+          amChartData.push(obj)
         })
 
-        this.series = sumByProduct
-        let self = this
+        this.initChart(amChartData, uniqueProducts)
 
-        this.chartOptions = {
-          dataLabels: {
-            enabled: false,
-          },
-          chart: {
-            type: 'bar',
-            height: 350,
-            stacked: true,
-            toolbar: {
-              show: false,
-            },
-            zoom: {
-              enabled: true,
-            },
-          },
-          responsive: [
-            {
-              breakpoint: 480,
-              options: {
-                legend: {
-                  position: 'bottom',
-                  offsetX: -10,
-                  offsetY: 0,
-                },
-              },
-            },
-          ],
-          plotOptions: {
-            bar: {
-              horizontal: false,
-            },
-          },
-          xaxis: {
-            categories: uniqueDoctors,
-          },
-          yaxis: {
-            labels: {
-              formatter: function (val) {
-                return self.$options.filters.formatPrice(val)
-              },
-            },
-          },
-          legend: {
-            position: 'right',
-            offsetY: 40,
-          },
-          fill: {
-            opacity: 1,
-          },
-          tooltip: {
-            y: {
-              formatter: function (value, { series, seriesIndex, w }) {
-                const numb = String(value).match(/\d/g).join('')
-                return self.$options.filters.formatPrice(numb)
-              },
-            },
-          },
-        }
+        // console.log(amChartData)
+
+        // let sumByProduct = []
+        // uniqueProducts.forEach((product) => {
+        //   const prodsByDoctor = data.filter(
+        //     (item) => item.product_name === product,
+        //   )
+        //   const obj = { name: product, data: [] }
+        //   uniqueDoctors.forEach((doctor) => {
+        //     const isDoctorHasProduct = prodsByDoctor.find(
+        //       (item) => item.doctor_name === doctor,
+        //     )
+        //     if (isDoctorHasProduct) {
+        //       obj.data.push(Number(isDoctorHasProduct.sum))
+        //     } else {
+        //       obj.data.push(0)
+        //     }
+        //   })
+        //   sumByProduct.push(obj)
+        // })
+
+        // this.series = sumByProduct
+        // let self = this
+
+        // this.chartOptions = {
+        //   dataLabels: {
+        //     enabled: false,
+        //   },
+        //   chart: {
+        //     type: 'bar',
+        //     height: 350,
+        //     stacked: true,
+        //     toolbar: {
+        //       show: false,
+        //     },
+        //     zoom: {
+        //       enabled: true,
+        //     },
+        //   },
+        //   responsive: [
+        //     {
+        //       breakpoint: 480,
+        //       options: {
+        //         legend: {
+        //           position: 'bottom',
+        //           offsetX: -10,
+        //           offsetY: 0,
+        //         },
+        //       },
+        //     },
+        //   ],
+        //   plotOptions: {
+        //     bar: {
+        //       horizontal: false,
+        //     },
+        //   },
+        //   xaxis: {
+        //     categories: uniqueDoctors,
+        //   },
+        //   yaxis: {
+        //     labels: {
+        //       formatter: function (val) {
+        //         return self.$options.filters.formatPrice(val)
+        //       },
+        //     },
+        //   },
+        //   legend: {
+        //     position: 'right',
+        //     offsetY: 40,
+        //   },
+        //   fill: {
+        //     opacity: 1,
+        //   },
+        //   tooltip: {
+        //     y: {
+        //       formatter: function (value, { series, seriesIndex, w }) {
+        //         const numb = String(value).match(/\d/g).join('')
+        //         return self.$options.filters.formatPrice(numb)
+        //       },
+        //     },
+        //   },
+        // }
 
         this.prepareDataForExport(data, uniqueDoctors)
       }
@@ -237,6 +268,7 @@ export default {
   },
   data() {
     return {
+      chartBodyData: null,
       startDate: null,
       endDate: null,
       noData: false,
