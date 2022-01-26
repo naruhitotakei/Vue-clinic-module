@@ -934,6 +934,12 @@ app.get('/api/inactive-locations', (req, res) => {
   else res.status(401).json('OK: user unauthorized')
 })
 
+app.get('/api/get-premises-for-locations', (req, res) => {
+  if (req.session.prm_user && req.session.prm_user.permissions && checkPermission(req.session.prm_user.permissions, locationsPermission))
+    daoLocations.getPremises(req, res, req.session.prm_user.prm_client_id, getScope(req.session.prm_user.permissions, locationsPermission))
+  else res.status(401).json('OK: user unauthorized')
+})
+
 app.post('/api/locations', (req, res) => {
   const location = req.body
   if (
