@@ -64,11 +64,13 @@ Vue.filter('formatMoney', function (value) {
 
 Vue.filter('formatPrice', function (value) {
   if (value || value === 0) {
-    // return new Intl.NumberFormat('de-DE', {
-    //   style: 'currency',
-    //   currency: 'EUR',
-    // }).format(Math.round(Number(value)))
-    return Math.round(Number(value)).toLocaleString('de-DE', { minimumFractionDigits: 0 }) + ' €'
+    return new Intl.NumberFormat('de-DE', {
+      style: 'currency',
+      currency: 'EUR',
+      maximumFractionDigits: 0,
+      minimumFractionDigits: 0,
+    }).format(Math.round(Number(value)))
+    // return Math.round(Number(value)).toLocaleString('de-DE', { minimumFractionDigits: 0 }) + ' €'
   }
 })
 

@@ -152,6 +152,8 @@ export default {
       chart.numberFormatter.numberFormat = {
         'style': 'currency',
         'currency': 'EUR',
+        maximumFractionDigits: 0,
+        minimumFractionDigits: 0,
       }
 
       chart.numberFormatter.intlLocales = 'de-DE'
@@ -303,10 +305,10 @@ export default {
       chart.cursor.lineY.disabled = true
     },
     leads(chart) {
-      chart.colors.list = []
-      for (let j = 0; j < this.option.colors.length; j++) {
-        chart.colors.list.push(am4core.color(this.option.colors[j]))
-      }
+      // chart.colors.list = []
+      // for (let j = 0; j < this.option.colors.length; j++) {
+      //   chart.colors.list.push(am4core.color(this.option.colors[j]))
+      // }
       chart.data = this.option.data
 
       let dateAxis = chart.xAxes.push(new am4charts.DateAxis())
@@ -318,7 +320,7 @@ export default {
       valueAxis.maxPrecision = 0
       chart.yAxes.push(valueAxis)
       valueAxis.renderer.inside = true
-      valueAxis.renderer.labels.template.disabled = true
+      valueAxis.renderer.labels.template.disabled = false
       valueAxis.min = 0
       valueAxis.renderer.grid.template.strokeWidth = 0
 
@@ -358,15 +360,17 @@ export default {
       chart.legend.scrollable = true
     },
     revenueByDoctor(chart) {
-      chart.colors.list = []
-      for (let j = 0; j < this.option.colors.length; j++) {
-        chart.colors.list.push(am4core.color(this.option.colors[j]))
-      }
+      // chart.colors.list = []
+      // for (let j = 0; j < this.option.colors.length; j++) {
+      //   chart.colors.list.push(am4core.color(this.option.colors[j]))
+      // }
       chart.data = this.option.data
 
       chart.numberFormatter.numberFormat = {
         'style': 'currency',
         'currency': 'EUR',
+        maximumFractionDigits: 0,
+        minimumFractionDigits: 0,
       }
 
       chart.numberFormatter.intlLocales = 'de-DE'
@@ -380,7 +384,7 @@ export default {
       valueAxis.maxPrecision = 0
       chart.yAxes.push(valueAxis)
       valueAxis.renderer.inside = true
-      valueAxis.renderer.labels.template.disabled = true
+      valueAxis.renderer.labels.template.disabled = false
       valueAxis.min = 0
       valueAxis.renderer.grid.template.strokeWidth = 0
 
@@ -773,10 +777,10 @@ export default {
     pie(chart) {
       chart.data = this.option.data
       let series = chart.series.push(new am4charts.PieSeries())
-      series.colors.list = []
-      for (let j = 0; j < this.option.colors.length; j++) {
-        series.colors.list.push(am4core.color(this.option.colors[j]))
-      }
+      // series.colors.list = []
+      // for (let j = 0; j < this.option.colors.length; j++) {
+      //   series.colors.list.push(am4core.color(this.option.colors[j]))
+      // }
       series.dataFields.value = this.option.value[0]
       series.dataFields.category = this.option.category[0]
 
@@ -787,6 +791,8 @@ export default {
       chart.numberFormatter.numberFormat = {
         'style': 'currency',
         'currency': 'EUR',
+        maximumFractionDigits: 0,
+        minimumFractionDigits: 0,
       }
 
       chart.numberFormatter.intlLocales = 'de-DE'
