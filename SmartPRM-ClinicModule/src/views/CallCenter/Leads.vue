@@ -436,7 +436,7 @@ export default {
   },
   methods: {
     leadPage(lead) {
-      this.$router.push({ path: `/lead/${lead.id}` })
+      this.$router.push({ path: `/call-center/lead/${lead.id}` })
     },
     async getAllLeadsCount() {
       this.isDataLoaded = false
