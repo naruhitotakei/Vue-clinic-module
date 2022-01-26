@@ -10,7 +10,7 @@ const pool = new Pool({
 })
 
 const getLocationsList = (request, response, prm_client_id, scope) => {
-  let statement = "SELECT lo.id, pcp.premise_name, lo.name, lo.city, lo.address FROM locations lo "
+  let statement = "SELECT lo.id, pcp.premise_name AS premise, lo.name, lo.city, lo.address FROM locations lo "
   statement += "LEFT JOIN locations_prm_company_premise_bridge lpb ON lpb.location_id = lo.id "
   statement += "LEFT JOIN prm_company_premise pcp ON lpb.premise_id = pcp.premise_id "
   statement += "LEFT JOIN prm_client pc ON pc.id = lo.prm_client_id "
@@ -29,7 +29,7 @@ const getLocationsList = (request, response, prm_client_id, scope) => {
 }
 
 const getInactiveLocationsList = (request, response, prm_client_id, scope) => {
-  let statement = "SELECT lo.id, pcp.premise_name, lo.name, lo.city, lo.address FROM locations lo "
+  let statement = "SELECT lo.id, pcp.premise_name AS premise, lo.name, lo.city, lo.address FROM locations lo "
   statement += "LEFT JOIN locations_prm_company_premise_bridge lpb ON lpb.location_id = lo.id "
   statement += "LEFT JOIN prm_company_premise pcp ON lpb.premise_id = pcp.premise_id "
   statement += "LEFT JOIN prm_client pc ON pc.id = lo.prm_client_id "
@@ -71,7 +71,7 @@ const createLocation = (req, res, location, prm_client_id) => {
     }
     let locationId = results.rows[0].id
 
-    if (location.premise_name) createLocationPremiseBridgeStatement(locationId, location.premise_name)
+    if (location.premise) createLocationPremiseBridgeStatement(locationId, location.premise)
 
 
     res.status(200).json("OK")
@@ -89,11 +89,11 @@ createLocationPremiseBridgeStatement = (locationId, premiseId) => {
 }
 
 const updateLocation = (req, res, id, location) => {
-  let statement = "UPDATE locations SET " + "name='" + location.name + "', " + "city='" + location.city + "', " + "address='" + location.address + "',"
+  let statement = "UPDATE locations SET " + "name='" + location.name + "', " + "city='" + location.city + "', " + "address='" + location.address + "', updated_at = NOW(),"
   statement = statement.slice(0, -1)
   statement += " WHERE id = " + id
 
-  if (location.premise_id) updateLocationPremiseBridgeStatement(id, location.premise_id)
+  if (location.premise) updateLocationPremiseBridgeStatement(id, location.premise)
 
   pool.query(statement, (error, results) => {
     if (error) {
@@ -104,7 +104,8 @@ const updateLocation = (req, res, id, location) => {
 }
 
 updateLocationPremiseBridgeStatement = (locationId, premiseId) => {
-  let statement = "UPDATE locations_prm_company_premise_bridge SET premise_id = " + premiseId + ",updated_at = NOW() WHERE id = " + locationId
+  let statement = "UPDATE locations_prm_company_premise_bridge SET premise_id = " + premiseId + ",updated_at = NOW() WHERE location_id = " + locationId
+
   pool.query(statement, (error, results) => {
     if (error) {
       throw error

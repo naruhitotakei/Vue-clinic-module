@@ -37,7 +37,7 @@
                                                   label="premise"
                                                   :reduce="premise => premise.id"
                                                   class="style-chooser form-control-disabled font-size-14 pl-1"
-                                                  v-model="formData.premise_name"
+                                                  v-model="formData.premise"
                                                   :options="premises">
                                         </v-select>
                                     </div>
@@ -110,7 +110,7 @@
                                               label="premise"
                                               :reduce="premise => premise.id"
                                               class="style-chooser form-control-disabled font-size-14 pl-1"
-                                              v-model="formData.premise_name"
+                                              v-model="formData.premise"
                                               :options="premises">
                                     </v-select>
                                 </div>
@@ -166,7 +166,7 @@ export default {
       return Math.floor(this.locations.length / this.locationsPerPage) !== 0
     },
     isOkDisabled() {
-      return !this.formData.premise_name || !this.formData.name || !this.formData.city || !this.formData.address
+      return !this.formData.premise || !this.formData.name || !this.formData.city || !this.formData.address
     },
   },
   name: 'Locations',
@@ -184,20 +184,20 @@ export default {
       locationsPerPage: 10,
       formData: {
         id: '',
-        premise_name: '',
+        premise: '',
         name: '',
         city: '',
         address: '',
       },
       columns: [
-        { label: this.$t('settingsLocations.locationsColumn.name'), key: 'premise_name', class: 'text-left' },
+        { label: this.$t('settingsLocations.locationsColumn.name'), key: 'premise', class: 'text-left' },
         { label: this.$t('settingsLocations.locationsColumn.locationName'), key: 'name', class: 'text-left' },
         { label: this.$t('settingsLocations.locationsColumn.city'), key: 'city', class: 'text-left' },
         { label: this.$t('settingsLocations.locationsColumn.address'), key: 'address', class: 'text-left' },
         { label: this.$t('settingsLocations.locationsColumn.action'), key: 'action', class: 'text-center' },
       ],
       inactiveColumns: [
-        { label: this.$t('settingsLocations.locationsColumn.name'), key: 'premise_name', class: 'text-left' },
+        { label: this.$t('settingsLocations.locationsColumn.name'), key: 'premise', class: 'text-left' },
         { label: this.$t('settingsLocations.locationsColumn.locationName'), key: 'name', class: 'text-left' },
         { label: this.$t('settingsLocations.locationsColumn.city'), key: 'city', class: 'text-left' },
         { label: this.$t('settingsLocations.locationsColumn.address'), key: 'address', class: 'text-left' },
@@ -208,7 +208,7 @@ export default {
   methods: {
     defaultFormData() {
       return {
-        premise_name: '',
+        premise: '',
         name: '',
         city: '',
         address: '',
