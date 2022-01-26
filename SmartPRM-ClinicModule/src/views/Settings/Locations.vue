@@ -13,18 +13,6 @@
                         <form>
                             <div class="form-row">
                                 <div class="col-md-12 mb-3">
-                                    <label for="clinic">{{ $t('settingsLocations.locationModal.clinic') }} *</label>
-                                    <div>
-                                        <v-select :clearable="false"
-                                                  label="premise"
-                                                  :reduce="premise => premise.id"
-                                                  class="style-chooser form-control-disabled font-size-14"
-                                                  v-model="formData.premiseId"
-                                                  :options="premises">
-                                        </v-select>
-                                    </div>
-                                </div>
-                                <div class="col-md-12 mb-3">
                                     <label for="name">{{ $t('settingsLocations.locationModal.name') }} *</label>
                                     <div style="display: flex;">
                                         <input type="text" v-model="formData.name" class="form-control" :placeholder="$t('settingsLocations.locationModal.name')" required>
@@ -40,6 +28,18 @@
                                     <label for="address">{{ $t('settingsLocations.locationModal.address') }} *</label>
                                     <div style="display: flex;">
                                         <input type="text" v-model="formData.address" class="form-control" :placeholder="$t('settingsLocations.locationModal.address')" required>
+                                    </div>
+                                </div>
+                                <div class="col-md-12 mb-3">
+                                    <label for="clinic">{{ $t('settingsLocations.locationModal.clinic') }} *</label>
+                                    <div>
+                                        <v-select :clearable="false"
+                                                  label="premise"
+                                                  :reduce="premise => premise.id"
+                                                  class="style-chooser form-control-disabled font-size-14 pl-1"
+                                                  v-model="formData.premise_name"
+                                                  :options="premises">
+                                        </v-select>
                                     </div>
                                 </div>
                             </div>
@@ -86,18 +86,6 @@
                     <form>
                         <div class="form-row">
                             <div class="col-md-12 mb-3">
-                                <label for="clinic">{{ $t('settingsLocations.locationModal.clinic') }} *</label>
-                                <div>
-                                    <v-select :clearable="false"
-                                              label="premise"
-                                              :reduce="premise => premise.id"
-                                              class="style-chooser form-control-disabled font-size-14"
-                                              v-model="formData.premiseId"
-                                              :options="premises">
-                                    </v-select>
-                                </div>
-                            </div>
-                            <div class="col-md-12 mb-3">
                                 <label for="title">{{ $t('settingsLocations.locationModal.name') }} *</label>
                                 <div style="display: flex;">
                                     <input type="text" v-model="formData.name" class="form-control" :placeholder="$t('settingsLocations.locationModal.name')" required>
@@ -113,6 +101,18 @@
                                 <label for="title">{{ $t('settingsLocations.locationModal.address') }} *</label>
                                 <div style="display: flex;">
                                     <input type="text" v-model="formData.address" class="form-control" :placeholder="$t('settingsLocations.locationModal.address')" required>
+                                </div>
+                            </div>
+                            <div class="col-md-12 mb-3">
+                                <label for="clinic">{{ $t('settingsLocations.locationModal.clinic') }} *</label>
+                                <div>
+                                    <v-select :clearable="false"
+                                              label="premise"
+                                              :reduce="premise => premise.id"
+                                              class="style-chooser form-control-disabled font-size-14 pl-1"
+                                              v-model="formData.premise_name"
+                                              :options="premises">
+                                    </v-select>
                                 </div>
                             </div>
                         </div>
@@ -166,7 +166,7 @@ export default {
       return Math.floor(this.locations.length / this.locationsPerPage) !== 0
     },
     isOkDisabled() {
-      return !this.formData.premiseId || !this.formData.name || !this.formData.city || !this.formData.address
+      return !this.formData.premise_name || !this.formData.name || !this.formData.city || !this.formData.address
     },
   },
   name: 'Locations',
@@ -184,7 +184,7 @@ export default {
       locationsPerPage: 10,
       formData: {
         id: '',
-        premiseId: '',
+        premise_name: '',
         name: '',
         city: '',
         address: '',
@@ -208,7 +208,7 @@ export default {
   methods: {
     defaultFormData() {
       return {
-        premiseId: '',
+        premise_name: '',
         name: '',
         city: '',
         address: '',
@@ -241,7 +241,6 @@ export default {
     },
     addLocation() {
       createLocation(this.formData).then(() => {
-        console.log('data of the new location on the FE: ', this.formData)
         this.getLocations()
       })
     },

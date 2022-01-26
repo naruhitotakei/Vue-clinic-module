@@ -64,16 +64,14 @@ const getPremises = (request, response, prm_client_id, scope) => {
 
 const createLocation = (req, res, location, prm_client_id) => {
   var statement = "INSERT INTO locations (name, city, address, active, created_at, prm_client_id) VALUES ('" + location.name + "', " + "'" + location.city + "', " + "'" + location.address + "', " + "true, NOW()," + prm_client_id + ") RETURNING id;"
-
-  console.log("Creating location on the BE: " + statement)
+  
   pool.query(statement, (error, results) => {
     if (error) {
       throw error
     }
     let locationId = results.rows[0].id
 
-    if (location.premiseId) createLocationPremiseBridgeStatement(locationId, location.premiseId)
-    console.log("Location bridge statement on BE: " + createLocationPremiseBridgeStatement)
+    if (location.premise_name) createLocationPremiseBridgeStatement(locationId, location.premise_name)
 
 
     res.status(200).json("OK")
@@ -82,8 +80,7 @@ const createLocation = (req, res, location, prm_client_id) => {
 
 createLocationPremiseBridgeStatement = (locationId, premiseId) => {
   let statement = "INSERT INTO locations_prm_company_premise_bridge (location_id, premise_id, created_at) VALUES (" + locationId + "," + premiseId + ",NOW())"
-
-  console.log("Location bridge statement on BE: " + statement)
+  
   pool.query(statement, (error, results) => {
     if (error) {
       throw error
