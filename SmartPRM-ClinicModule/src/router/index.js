@@ -226,7 +226,12 @@ const callCenterChildRoute = (prop, mode = false) => [
     name: prop + '.leads',
     meta: { dark: mode, auth: true, name: 'Leads' },
     component: Leads,
-    children: leadChildRoute('leads'),
+  },
+  {
+    path: 'lead/:leadId',
+    name: prop + '.leads',
+    meta: { dark: mode, auth: true, name: 'ViewLead' },
+    component: ViewLead,
   },
   {
     path: 'client-info',
@@ -266,15 +271,6 @@ const patientChildRoute = (prop, mode) => [
     name: prop + '.patientId',
     meta: { dark: mode, auth: true, name: 'ViewPatient' },
     component: ViewPatient,
-  },
-]
-
-const leadChildRoute = (prop, mode) => [
-  {
-    path: ':leadId',
-    name: prop + '.leadId',
-    meta: { dark: mode, auth: true, name: 'ViewLead' },
-    component: ViewLead,
   },
 ]
 

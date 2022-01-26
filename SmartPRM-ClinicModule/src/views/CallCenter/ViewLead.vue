@@ -1,12 +1,11 @@
 <template>
-    <b-container fluid>
-        <div>
-            asdasasas
-            asdasdasdasdasd
-        </div>
-    </b-container>
+  <b-container fluid>
+    <p>Lead View</p>
+  </b-container>
 </template>
+
 <script>
+
 import { xray } from '../../config/pluginInit'
 export default {
   name: 'ViewLead',
