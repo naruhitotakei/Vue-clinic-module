@@ -5,23 +5,24 @@
             <h5 class="card-title">Revenue Statistics</h5>
             <div class="row">
               <div class="col-sm-3 col-12">
-                <h4 class="margin-0">€ {{ todayRevenue.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 }) }} </h4>
+                <h4 class="margin-0">{{ todayRevenue ? todayRevenue : 0 | formatPrice }} </h4>
                 <p class="text-muted">{{ $t('statisticsForClinic.todaysIncome') }}</p>
               </div>
               <div class="col-sm-3 col-12">
-                <h4 class="margin-0">€ {{ weeklyRevenue.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 }) }} </h4>
+                <h4 class="margin-0">{{ weeklyRevenue | formatPrice }} </h4>
                 <p class="text-muted">{{ $t('statisticsForClinic.weeksIncome') }}</p>
               </div>
               <div class="col-sm-3 col-12">
-                <h4 class="margin-0">€ {{ monthlyRevenue.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 }) }} </h4>
+                <h4 class="margin-0">{{ monthlyRevenue | formatPrice }} </h4>
                 <p class="text-muted">{{ $t('statisticsForClinic.monthsIncome') }}</p>
               </div>
               <div class="col-sm-3 col-12">
-                <h4 class="margin-0">€ {{ yearlyRevenue.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 }) }} </h4>
+                <h4 class="margin-0">{{ yearlyRevenue | formatPrice }} </h4>
                 <p class="text-muted">{{ $t('statisticsForClinic.yearsIncome') }}</p>
               </div>
             </div>
-            <apex-chart type="bar" height="350" :options="revenueChartOptions" :series="revenueChartSeries"></apex-chart>
+            <AmChart v-if="chartBodyData" element="revenueChart" type="revenueStats" :option="chartBodyData" />
+            <!-- <apex-chart type="bar" height="350" :options="revenueChartOptions" :series="revenueChartSeries"></apex-chart> -->
           </template>
         </iq-card>
         <iq-card>
@@ -58,10 +59,10 @@
              <h5 class="card-title">{{ $t('reportingEmazing.servicesSummary') }}</h5>
              <a href="#" ref="excel-table1" class="btn btn-primary" @click="exportReportToExcel('table1')">Download Excel</a>
            </div>
-            <b-table-simple ref="table1" class="table-t">
+            <b-table-simple ref="table1" id="table1" class="table-t">
               <thead>
               <tr>
-                <th v-for="(item,index) in servicesSummaryColumns" :key="index" :class="item.key === 'item' ? 'text-left' : ''">{{ item.label }}</th>
+                <th v-for="(item,index) in servicesSummaryColumns" :key="index" :class="item.key === 'item' ? 'text-left' : ''" class="text-center">{{ item.label }}</th>
               </tr>
               </thead>
               <tbody class="text-center">
@@ -69,22 +70,22 @@
                 <tr :key="bodyKey" class="main-row">
                   <td style="max-width: 200px"><span class="font-weight-bold">{{ bodyKey }}</span></td>
                   <td><span class="font-weight-bold">{{ body.group_count }}</span></td>
-                  <td><span class="font-weight-bold">{{ formatNumber(Math.trunc(body.group_amount)) }}&#8364;</span></td>
-                  <td><span class="font-weight-bold">{{ formatNumber(Math.trunc(body.group_fee)) }}&#8364;</span></td>
+                  <td><span class="font-weight-bold">{{ formatNumber(Math.trunc(body.group_amount)) }} &#8364;</span></td>
+                  <td><span class="font-weight-bold">{{ formatNumber(Math.trunc(body.group_fee)) }} &#8364;</span></td>
                 </tr>
                   <template v-for="(item, index) in body" >
                    <tr :key="Math.random(index + 1000)">
                      <td  style="max-width: 200px">{{ item.service_title }}</td>
                      <td class="td-count">{{ item.count }}</td>
-                     <td>{{ formatNumber(Math.trunc(item.sum)) }}&#8364;</td>
-                     <td>{{ formatNumber(Math.trunc(item.fee_sum)) }}&#8364;</td>
+                     <td>{{ formatNumber(Math.trunc(item.sum)) }} &#8364;</td>
+                     <td>{{ formatNumber(Math.trunc(item.fee_sum)) }} &#8364;</td>
                    </tr>
                   </template>
               </template>
               <tr v-if="servicesSummaryTotalCount">
                 <td><span class="font-weight-bold"> Total: </span></td>
                 <td><span class="font-weight-bold">{{formatNumber(Math.trunc(servicesSummaryTotalCount))}}</span></td>
-                <td><span class="font-weight-bold">{{formatNumber(Math.trunc(servicesSummaryTotalAmount))}}&#8364;</span></td>
+                <td><span class="font-weight-bold">{{formatNumber(Math.trunc(servicesSummaryTotalAmount))}} &#8364;</span></td>
                 <td><span class="font-weight-bold">{{formatNumber(Math.trunc(servicesSummaryTotalFee))}} &#8364;</span></td>
               </tr>
               </tbody>
@@ -98,10 +99,10 @@
               <a href="#" ref="excel-table2" class="btn btn-primary" @click="exportReportToExcel('table2')">Download Excel</a>
             </div>
 <!--            <b-table small :items="servicesListItems" :fields="servicesListColumns" class="mb-0"></b-table>-->
-            <b-table-simple ref="table2" class="table-t">
+            <b-table-simple ref="table2" id="table2" class="table-t">
               <thead>
               <tr>
-                <th v-for="(item,index) in servicesListColumns" :key="index" :class="item.key === 'item' ? 'text-left' : ''">{{ item.label }}</th>
+                <th v-for="(item,index) in servicesListColumns" :key="index" :class="item.key === 'item' ? 'text-left' : ''" class="text-center">{{ item.label }}</th>
               </tr>
               </thead>
               <tbody class="text-center">
@@ -122,9 +123,9 @@
                     <td class="text-center"><span >{{ item.doctor }}</span></td>
                     <td class="text-center"><span >{{ item.service_title}}</span></td>
                     <td class="text-center"><router-link tag="span" :to="'/patients/'+ item.enquiry_id" class="clickable">{{ item.name }} {{ item.last_name}}  </router-link></td>
-                    <td class="text-center"><span>{{ formatNumber(Math.trunc(item.price))}}&#8364;</span></td>
-                    <td class="text-center"><span>{{ formatNumber(Math.trunc(item.fee))}}&#8364;</span></td>
-                    <td class="text-center"><span >{{ formatDateString(item.date)}}</span></td>
+                    <td class="text-center"><span>{{ formatNumber(Math.trunc(item.price))}} &#8364;</span></td>
+                    <td class="text-center"><span>{{ formatNumber(Math.trunc(item.fee))}} &#8364;</span></td>
+                    <td class="text-center"><span >{{ formatDateString(item.date) }} </span></td>
                     <td class="text-center"><span >{{ item.country}}</span></td>
                     <td class="text-center"><span >{{ item.region}}</span></td>
                     <td class="text-center"><span >{{ item.municipality}}</span></td>
@@ -135,8 +136,8 @@
                   <td><span class="font-weight-bold"> Total: </span></td>
                   <td><span class="font-weight-bold"></span></td>
                   <td><span class="font-weight-bold"></span></td>
-                  <td> <span class="font-weight-bold">{{formatNumber(Math.trunc(servicesListTotalCount))}}&#8364;</span></td>
-                  <td> <span class="font-weight-bold">{{formatNumber(Math.trunc(servicesListTotalFee))}}&#8364;</span></td>
+                  <td> <span class="font-weight-bold">{{formatNumber(Math.trunc(servicesListTotalCount))}} &#8364;</span></td>
+                  <td> <span class="font-weight-bold">{{formatNumber(Math.trunc(servicesListTotalFee))}} &#8364;</span></td>
               </tr>
               </tbody>
             </b-table-simple>
@@ -150,15 +151,19 @@ import IqCard from '../../components/xray/cards/iq-card.vue'
 import { xray } from '../../config/pluginInit'
 import { getCountryList, getEmazingServicesReport, getServiceList, getClinicStatistics } from '../../services/reporting'
 import _ from 'lodash'
+import XLSX from 'xlsx'
+import AmChart from '@/components/AmChart'
 // import moment from 'moment'
 
 export default {
   components: {
     IqCard,
+    AmChart,
   },
   name: 'Emazing',
   data: function () {
     return {
+      chartBodyData: null,
       fromdate: null,
       todate: null,
       servicesSummaryTotalCount: 0,
@@ -190,7 +195,7 @@ export default {
         { label: this.$t('reportingEmazing.servicesListColumn.serviceLeadName'), key: 'name', class: 'text-left' },
         { label: this.$t('reportingEmazing.servicesListColumn.serviceAmount'), key: 'price', class: 'text-left' },
         { label: this.$t('reportingEmazing.servicesListColumn.serviceFee'), key: 'fee', class: 'text-left' },
-        { label: this.$t('reportingEmazing.servicesListColumn.serviceDate'), key: 'date', formatter: (value, key, item) => { return this.formatDateString(value) } },
+        { label: this.$t('reportingEmazing.servicesListColumn.serviceDate'), key: 'date' },
         { label: this.$t('reportingEmazing.servicesListColumn.serviceCountry'), key: 'fee', class: 'text-left' },
         { label: this.$t('reportingEmazing.servicesListColumn.serviceRegion'), key: 'fee', class: 'text-left' },
         { label: this.$t('reportingEmazing.servicesListColumn.serviceMunicipality'), key: 'fee', class: 'text-left' },
@@ -210,6 +215,9 @@ export default {
         chart: {
           type: 'bar',
           height: 350,
+          toolbar: {
+            show: false,
+          },
         },
         plotOptions: {
           bar: {
@@ -234,11 +242,6 @@ export default {
           title: {
             text: 'EUR',
           },
-          labels: {
-            formatter: function (y) {
-              return y.toLocaleString()
-            },
-          },
         },
         xaxis: {
           type: 'datetime',
@@ -255,27 +258,53 @@ export default {
     },
   },
   methods: {
+    initChart(data, revenue) {
+      this.chartBodyData = {
+        colors: ['#4c9cac'],
+        xAxis: ['date'],
+        yAxis: ['revenue'],
+        labels: ['Revenue'],
+        revenue: revenue,
+        data: data,
+      }
+    },
     formatNumber(num) {
       return num.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1.')
     },
     exportReportToExcel(tableName) {
-      let table = this.$refs[tableName]
-      console.log('Table')
-      console.log(table)
-      let euro = /€/gi
-      let html = table.$el.outerHTML.replace(euro, '&euro;')
-      this.$refs[`excel-${tableName}`].href = 'data:application/vnd.ms-excel,' + encodeURIComponent(html)
+      var elt = document.getElementById(tableName)
       let documentName = ''
-      let date = new Date().toLocaleString()
       if (tableName === 'table1') {
         documentName = 'Services Summary export'
       } else {
         documentName = 'Services List export'
       }
-      this.$refs[`excel-${tableName}`].download = documentName + ' ' + date
-      return true
+
+      var wb = XLSX.utils.table_to_book(elt, { sheet: documentName, raw: true })
+
+      return XLSX.writeFile(wb, (documentName + '.xlsx'))
+
+      // let table = this.$refs[tableName]
+      // console.log('Table')
+      // console.log(table)
+      // let euro = /€/gi
+      // let html = table.$el.outerHTML.replace(euro, '&euro;')
+      // this.$refs[`excel-${tableName}`].href = 'data:application/vnd.ms-excel,' + encodeURIComponent(html)
+      // let documentName = ''
+      // let date = new Date().toLocaleString()
+      // if (tableName === 'table1') {
+      //   documentName = 'Services Summary export'
+      // } else {
+      //   documentName = 'Services List export'
+      // }
+      // this.$refs[`excel-${tableName}`].download = documentName + ' ' + date
+      // return true
+    },
+    formatPrice(price) {
+      return this.$options.filters.formatPrice(price)
     },
     getClinicStats() {
+      this.chartBodyData = null
       getClinicStatistics().then(response => {
         this.setRevenueData(response)
       }).catch(error => {
@@ -321,24 +350,37 @@ export default {
           datesArray.push(item.date)
           this.totalRevenue += Number(item.revenue)
         })
-        this.revenueChartSeries = [{
-          data: this.revenueList,
-        }]
-        this.revenueChartOptions = {
-          xaxis: {
-            categories: [...datesArray],
-          },
-          yaxis: {
-            labels: {
-              formatter: function (y) {
-                return y.toLocaleString()
-              },
-            },
-            title: {
-              text: this.totalRevenue.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + ' EUR',
-            },
-          },
-        }
+
+        this.initChart(sixtyWeeks, this.totalRevenue)
+        // this.revenueChartSeries = [{
+        //   data: this.revenueList,
+        // }]
+
+        // let self = this
+
+        // this.revenueChartOptions = {
+        //   xaxis: {
+        //     categories: [...datesArray],
+        //   },
+        //   yaxis: {
+        //     labels: {
+        //       formatter: function (y) {
+        //         return self.$options.filters.formatPrice(y)
+        //       },
+        //     },
+        //     title: {
+        //       text: this.formatPrice(this.totalRevenue),
+        //     },
+        //   },
+        //   tooltip: {
+        //     y: {
+        //       formatter: function (value, { series, seriesIndex, w }) {
+        //         const numb = String(value).match(/\d/g).join('')
+        //         return self.$options.filters.formatPrice(numb)
+        //       },
+        //     },
+        //   },
+        // }
       }
     },
     onFromChange() {
@@ -491,7 +533,7 @@ export default {
       var ye = new Intl.DateTimeFormat('en', { year: 'numeric' }).format(date)
       var mo = new Intl.DateTimeFormat('en', { month: 'numeric' }).format(date)
       var da = new Intl.DateTimeFormat('en', { day: 'numeric' }).format(date)
-      return (`${da}. ${mo}. ${ye}`)
+      return `${da}/${mo}/${ye}`
     },
   },
   computed: {

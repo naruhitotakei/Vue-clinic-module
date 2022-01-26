@@ -3,6 +3,7 @@ import Vuex from 'vuex'
 import Setting from './Setting/index'
 import Chat from './Chat/index'
 import Patients from './Patients/index'
+import Calendar from './Calendar/index'
 
 Vue.use(Vuex)
 
@@ -13,6 +14,7 @@ export default new Vuex.Store({
     Setting,
     Chat,
     Patients,
+    Calendar,
   },
   state: {
   },

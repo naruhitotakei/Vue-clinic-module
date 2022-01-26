@@ -16,7 +16,14 @@
     "search": "Search",
     "searchBy": "Search By",
     "sortBy": "Sort By",
-    "country": "Country"
+    "country": "Country",
+    "yes": "Yes",
+    "no": "No",
+    "noDoctor": "Doctor not assigned",
+    "cancel": "Cancel",
+    "confirm": "Confirm",
+    "update": "Update",
+    "or": "or"
   },
   "documents": {
     "offers": "Offers",
@@ -132,7 +139,8 @@
     "btnCancel": "Cancel",
     "btnCancelation": "Cancel appointment",
     "notSavedModalHeader": "Are you sure you want to ignore your changes?",
-    "notSavedModalBody": "Be careful!, You have unsaved changes. Do you want to save them before closing the modal?"
+    "notSavedModalBody": "Be careful! You have unsaved changes. Do you want to save them before closing the modal?",
+    "noTimeSet": "No time set"
   },
   "calendarEvent": {
     "start": "Start",
@@ -162,6 +170,22 @@
     "eventMoveBetweenResources": "Are you sure you want to move this appointment to another doctor?",
     "eventTimeChange": "Are you sure you want to change this event's time?"
   },
+  "appointments": {
+    "header": "Appointments",
+    "filters": "Filters",
+    "time": "Time",
+    "patient": "Patient",
+    "product": "Product",
+    "doctor": "Doctor",
+    "attendance": "Attendance",
+    "interest": "Interest level",
+    "notInterested": "Not interested",
+    "interested": "Interested",
+    "veryInterested": "Very interested",
+    "clinicNotes": "Clinic notes",
+    "callCenterNotes": "Call center notes",
+    "enterNotes": "Enter notes..."
+  },
   "patients": {
     "patientsHeader": "Patients",
     "addPatient": "New Patient",
@@ -184,7 +208,7 @@
     "overviewTab": "Overview",
     "overview": {
       "numberOfVisits": "Number of visits",
-      "firstVisit": "Time since first visit",
+      "lastVisit": "Time since last visit",
       "phone": "Phone",
       "email": "Email",
       "address": "Address",
@@ -542,6 +566,13 @@
     "overdueAssignments": "Overdue Assignments",
     "futureAssignments": "Future Assignments",
     "completedAssignments": "Completed Assignments",
+    "todaysAssignmentsOfOtherUsers": "Today's Assignments of other users",
+    "overdueAssignmentsOfOtherUsers": "Overdue Assignments of other users",
+    "futureAssignmentsOfOtherUsers": "Future Assignments of other users",
+    "noAssignmentsToday": "No assignments for today.",
+    "noOverdueAssignments": "No overdue assignments.",
+    "noFutureAssignments": "No future assignments.",
+    "filterByUsers": "Filter by users",
     "addAssignmentsModal": {
       "addAssignments": "New Assignment",
       "editAssignments": "Edit Assignment",
@@ -707,8 +738,16 @@
       "labelAction": "Action"
     }
   },
+  "SMSTemplates": {
+    "uniqueName": "Unique name",
+    "language": "Language",
+    "editTemplate": "Edit template",
+    "name": "Name",
+    "content": "Content",
+    "edit": "Edit"
+  },
   "onlineBooking": {
-    "header": "Services and products",
+    "header": "Online Booking Services",
     "addBtn": "Add",
     "onlineBookingColumns": {
       "serviceName": "Name",
@@ -797,8 +836,10 @@
       "doctor": "Doctor",
       "time": "Time",
       "price": "Price",
+      "open": "open",
       "taken": "taken",
       "closed": "closed",
+      "unavailable": "unavailable",
       "chooseYourFavoriteDoctor": "Choose your favorite doctor",
       "selectOption": "Select option",
       "pressEnterToSelect": "Press enter to select",
@@ -809,8 +850,8 @@
       "summary": "Summary",
       "date": "Date",
       "total": "Total",
-      "backToServices": "Back to Services",
-      "toReview": "To review",
+      "back": "Back",
+      "continue": "Continue",
       "checkSelectedSlotAndConfirmReservation": "Check selected slot and confirm reservation.",
       "selectedSlot": "Selected slot",
       "at": "at",
@@ -833,7 +874,15 @@
       "modifyPhoneNumber": "Modify phone number",
       "yourDetailsHaveBeenSuccessfullyVerified": "Your details have been successfully verified. We look forward to your visit.",
       "location": "Location",
-      "company": "Company"
+      "company": "Company",
+      "bookingSuccessful": "You have successfully booked an appointment!",
+      "bookAnotherAppointment": "Book another appointment",
+      "error": {
+        "over-order": "You can't book more than two appointments with same phone number.",
+        "unavailable-slot": "Your selected slot is already booked.",
+        "incorrect-code": "The code inserted does not match the expected value.",
+        "excessive-verification-attempts": "Incorrect code was entered too many times. Please wait to try again."
+      }
     }
   }
 }

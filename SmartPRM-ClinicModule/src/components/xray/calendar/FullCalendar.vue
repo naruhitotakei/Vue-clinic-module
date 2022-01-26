@@ -85,11 +85,11 @@
             </div>
             <div class="row align-items-center justify-content-between w-100 pt-2 " :class="{'mb-3': !disabled}">
                 <div class="col-md-3">
-                    <label for="start" class="mb-0" :style="{ 'margin-top': '13px' }">{{ $t('calendarEvent.start') }} *</label>
+                    <label for="start" class="mb-0">{{ $t('calendarEvent.start') }} *</label>
                 </div>
                 <div class="col-md-9 d-flex align-items-center">
                     <date-picker :disabled="disabled"
-                                 class="form-control form-control-disabled font-size-16"
+                                 class="form-control form-control-disabled font-size-16 date-picker-padding"
                                  :class="{'no-border margin-left': disabled}"
                                  :style="{ 'height': !disabled ? '53px' : '45px' }"
                                  v-model="formData.assignmentDate"
@@ -98,11 +98,11 @@
                                  :show-second="false"
                                  :lang="'en'"
                                  :format="'DD.MM.YYYY HH.mm'"></date-picker>
-                    <b-form-input v-if="!formData.id && !disabled" style="width: 65px; padding-top: 25px; padding-bottom: 25px;" type="number" min="1" step="5" v-model="durationMins" @input="setMinutes" placeholder="Duration" class="ml-3"></b-form-input>
-                    <label for="start" class="mb-0 mr-3 ml-4" :style="{ 'margin-top': '13px' }">{{ $t('calendarEvent.end') }}*</label>
+                    <b-form-input v-if="!formData.id && !disabled" style="width: 65px; padding-top: 25px; padding-bottom: 25px;" type="number" min="1" step="5" v-model="durationMins" @input="setMinutes" placeholder="Duration" class="ml-3 font-size-16"></b-form-input>
+                    <label for="start" class="mb-0 mr-3 ml-4">{{ $t('calendarEvent.end') }}*</label>
                     <date-picker :disabled="disabled"
                                  required
-                                 class="form-control form-control-disabled font-size-16"
+                                 class="form-control form-control-disabled font-size-16 date-picker-padding"
                                  :class="{'no-border': disabled}"
                                  :style="{ 'height': !disabled ? '53px' : '45px' }"
                                  v-model="formData.end"
@@ -244,7 +244,7 @@
       <div>{{ eventPopover.info.event.extendedProps.doctorId }}</div>
       <div>{{ eventPopover.info.event.extendedProps.prm_pr_group_name_text }}</div>
       <div>{{ eventPopover.info.event.extendedProps.notes }}</div>
-      <div>{{ eventPopover.info.event.extendedProps.time }}</div>
+      <div>{{ eventPopover.info.event.allDay ? $t('calendar.noTimeSet') : eventPopover.info.event.extendedProps.time }}</div>
     </b-popover>
   </div>
 
@@ -278,13 +278,12 @@ import {
   updateCalendarLabel,
   getLabels,
 } from '@/services/calendarService'
-import DatePicker from 'vue2-datepicker'
-import 'vue2-datepicker/index.css'
 import AddPatientModal from '@/components/Patients/AddPatientModal.vue'
+import { mapActions, mapGetters } from 'vuex'
 
 export default {
   components: {
-    calendar, DatePicker, AddPatientModal,
+    calendar, AddPatientModal,
   },
   props: {
     resourcesOuter: Array,
@@ -295,6 +294,7 @@ export default {
   data() {
     return {
       durationMins: null,
+      keydownListener: null,
       eventPopover: {
         show: false,
         info: null,
@@ -426,7 +426,6 @@ export default {
         select: this.openCreateModal,
         eventClick: this.openUpdateModal,
         eventDrop: (info) => {
-          console.log(info)
           this.confirmationModal = {
             ...this.confirmationModal,
             show: true,
@@ -516,6 +515,7 @@ export default {
         this.$nextTick(() => {
           this.calendarApi = this.$refs.calendar.getApi()
           this.calendarApi.render()
+          this.calendarApi.updateSize()
         })
       }
     },
@@ -551,6 +551,7 @@ export default {
     },
   },
   computed: {
+    ...mapGetters('Calendar', ['calendarDate', 'calendarView']),
     /* detectMinTime () {
       return this.events.filter(event => {
         if (new Date(moment(event.time).format('HH:mm:ss')) < new Date('09:00:00')) {
@@ -596,11 +597,15 @@ export default {
   },
   mounted() {
     let self = this
+    if (this.calendarView) this.calendarOptions.initialView = this.calendarView
+    if (this.calendarDate) {
+      const startDate = new Date(this.calendarDate.start)
+      const endDate = new Date(this.calendarDate.end)
+      this.calendarOptions.initialDate = new Date((startDate.getTime() + endDate.getTime()) / 2)
+    }
     window.addEventListener('keydown', function (event) {
-      if (event.key === 'Escape') {
-        self.closeModal()
-      }
-    })
+      self.listenEvent(event)
+    }, false)
     this.$nextTick(() => {
       this.$forceUpdate()
       this.$emit('updateApp', {
@@ -620,14 +625,27 @@ export default {
   },
   beforeDestroy() {
     clearInterval(this.calendarUpdateEvery3Min)
-    window.removeEventListener('keydown')
+    window.removeEventListener('keydown', this.listenEvent, false)
   },
   methods: {
+    ...mapActions('Calendar', ['setCalendarDate', 'setCalendarView']),
+    listenEvent(event) {
+      if (event.key === 'Escape') {
+        this.closeModal()
+      }
+    },
     closeAddPatientModal(value) {
       this.openAddPatient = value
     },
     setPatient(patient) {
-      patient.full_name = `${patient.name} ${patient.last_name}`
+      let fullName = ''
+      if (patient.name) {
+        fullName = patient.name
+      }
+      if (patient.last_name) {
+        fullName += ' ' + patient.last_name
+      }
+      patient.full_name = fullName
       this.patients.push(patient)
       this.selectedPatient = Object.assign({}, patient)
       this.openAddPatient = false
@@ -666,7 +684,7 @@ export default {
       if (this.viewName === 'resourceTimeGridWeek') {
         this.calendarOptions.resources = this.resourcesOuter.map(r => ({
           ...r,
-          title: `${r.doctorInfo.first_name[0]}. ${r.doctorInfo.surname}`,
+          title: r.doctorInfo ? `${r.doctorInfo.first_name[0]}. ${r.doctorInfo.surname}` : '',
         }))
       } else {
         this.calendarOptions.resources = this.resourcesOuter
@@ -763,7 +781,12 @@ export default {
     },
     onViewChange(info) {
       this.viewName = info.view.type
+      this.setCalendarView(info.view.type)
       this.dates = info
+      this.setCalendarDate({
+        start: info.startStr,
+        end: info.endStr,
+      })
     },
     eventResize(info) {
       let event = this.calendarApi.getEventById(info.event.id)
@@ -782,7 +805,6 @@ export default {
         this.formData.assignmentDate = event.start
         this.formData.end = event.end
         this.formData.time = new Date(event.start).toTimeString()
-        console.log('asd', event)
         this.formData.allDay = event.allDay
         this.updateCalendar(this.formData.id, this.formData, () => {
           event.setExtendedProp('assignmentDate', this.formData.assignmentDate)
@@ -796,7 +818,6 @@ export default {
         this.formData.id = event.id
         this.formData.assignmentDate = event.start
         this.formData.end = event.end
-        console.log('asd', event)
         this.formData.allDay = event.allDay
         this.formData.doctor_id = newResource.id
         this.formData.doctor_name = newResource.title
@@ -872,6 +893,8 @@ export default {
       this.disabled = false
       this.formData = this.defaultAppointment()
       this.modalTitle = ''
+      this.selectedPatient = ''
+      this.selectedProductGroup = ''
       this.$emit('setModalShow', true)
       // this.formData.resourceId = selectionInfo.resource.id
       this.selectedDoctor = this.doctors.find(doctor => doctor.id === +selectionInfo.resource.id)
@@ -930,7 +953,6 @@ export default {
       }
     },
     openUpdateModal(selectionInfo) {
-      console.log(selectionInfo)
       // this.modalShow = true
       this.$emit('setModalShow', true)
       this.disabled = true
@@ -984,8 +1006,8 @@ export default {
 }
 
 .fc-day-today {
-    background-color: #08a4b4;
-    color: white;
+    background-color: rgba(8, 164, 180, 0.1) !important;
+    color: gray !important;
 }
 
 .fc-event{
@@ -1100,6 +1122,10 @@ body .wrapper .custom-control-label::after {
  .form-control .mx-input {
    border: none;
    box-shadow: none;
+ }
+
+ .date-picker-padding {
+   padding: 0.175rem 0.75rem !important;
  }
 
  .fc-widget-content .fc-scroller {

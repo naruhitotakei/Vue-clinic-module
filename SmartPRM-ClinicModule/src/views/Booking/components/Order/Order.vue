@@ -5,9 +5,12 @@
         <b-button
           v-for="({ name, text, isEnabled }, index) in stepOrder"
           :key="name"
-          :variant="activeStep === name ? 'primary': null"
+          :variant="activeStep === name ? 'primary' : null"
           @click="activeStep = name"
-          :disabled="isEnabled === false || stepOrder.findIndex((step) => step.name === lastStep) < index"
+          :disabled="
+            isEnabled === false ||
+            stepOrder.findIndex((step) => step.name === lastStep) < index
+          "
         >
           {{ $t(`public.onlineBooking.${text}`) }}
         </b-button>
@@ -22,7 +25,6 @@
 
 <script>
 import { defineComponent } from '@vue/composition-api'
-import { createAppointment } from '@/services/appointments'
 import ChooseTimeTab from './ChooseTimeTab.vue'
 import ReviewTab from './ReviewTab.vue'
 import Services from './Services.vue'
@@ -66,7 +68,8 @@ export default defineComponent({
         {
           name: Step.ReviewTab,
           text: 'review',
-          isEnabled: this.form.service != null && this.form.appointmentSlot != null,
+          isEnabled:
+            this.form.service != null && this.form.appointmentSlot != null,
         },
       ]
     },
@@ -75,7 +78,7 @@ export default defineComponent({
   methods: {
     async next(length = 1) {
       const activeStepIndex = this.stepOrder.findIndex(
-        ({ name }) => name === this.activeStep
+        ({ name }) => name === this.activeStep,
       )
       const nextStepIndex = activeStepIndex + length
 
@@ -83,7 +86,7 @@ export default defineComponent({
         this.activeStep = this.stepOrder[activeStepIndex + length].name
 
         const lastStepIndex = this.stepOrder.findIndex(
-          ({ name }) => name === this.lastStep
+          ({ name }) => name === this.lastStep,
         )
 
         if (nextStepIndex > lastStepIndex) {
@@ -96,14 +99,6 @@ export default defineComponent({
       await this.submit()
     },
     async submit() {
-      await createAppointment({
-        firstName: this.form.firstName,
-        lastName: this.form.lastName,
-        phone: this.form.phone,
-        appointmentSlotId: this.form.appointmentSlot.id,
-        verificationId: this.form.verificationId,
-        verificationCode: this.form.verificationCode,
-      })
       this.$emit('confirmed', this.form)
     },
   },

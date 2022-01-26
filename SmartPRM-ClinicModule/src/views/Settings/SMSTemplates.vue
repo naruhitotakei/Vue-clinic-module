@@ -4,9 +4,15 @@
       <b-col lg="12" md="12" class="mb-4">
         <div v-for="smsTemplate in smsTemplates" :key="smsTemplate.id" class="sms-templates-content">
           <iq-card class="sms-template-parent">
-            <h3 class="template-name">{{ smsTemplate.name }}</h3>
+            <div class="title-edit-action">
+              <h3 class="template-name">{{ smsTemplate.name }}</h3>
+              <button variant="primary" class="btn btn-primary">
+                <a :href="`sms-templates/${smsTemplate.id}/edit`">{{ $t('SMSTemplates.edit') }}</a>
+              </button>
+            </div>
             <p class="template-content black-text">{{ smsTemplate.content }}</p>
-            <p class="template-unique-slug">Unique name: {{ smsTemplate.slug }}</p>
+            <p class="template-unique-slug">{{ $t('SMSTemplates.uniqueName') }}: {{ smsTemplate.slug }}</p>
+            <p class="template-unique-slug">{{ $t('SMSTemplates.language') }}: {{ smsTemplate.language }}</p>
           </iq-card>
         </div>
       </b-col>
@@ -49,6 +55,13 @@ export default {
   .sms-templates-content {
     display: flex;
     flex-direction: column;
+  }
+  .title-edit-action {
+    display: flex;
+    justify-content: space-between;
+  }
+  .title-edit-action a {
+    color: #fff !important;
   }
   .sms-template-parent {
     padding: 1rem 1.5rem;

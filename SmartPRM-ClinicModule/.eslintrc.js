@@ -3,21 +3,21 @@ module.exports = {
   env: {
     node: true,
   },
-  extends: ["plugin:vue/essential", "@vue/standard"],
+  extends: ['plugin:vue/essential', '@vue/standard'],
   rules: {
-    "no-console": "off",
-    "no-debugger": process.env.NODE_ENV === "production" ? "error" : "off",
-    "comma-dangle": ["error", "always-multiline"],
-    "space-before-function-paren": [
-      "error",
+    'no-console': 'off',
+    'no-debugger': process.env.NODE_ENV === 'production' ? 'error' : 'off',
+    'comma-dangle': ['error', 'always-multiline'],
+    'space-before-function-paren': [
+      'error',
       {
-        anonymous: "always",
-        named: "never",
-        asyncArrow: "always",
+        anonymous: 'always',
+        named: 'never',
+        asyncArrow: 'always',
       },
     ],
   },
   parserOptions: {
-    parser: "babel-eslint",
+    parser: 'babel-eslint',
   },
-};
+}

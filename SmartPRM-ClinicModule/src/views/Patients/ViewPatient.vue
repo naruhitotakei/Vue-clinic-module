@@ -1,6 +1,6 @@
 <template>
   <b-container fluid>
-    <form>
+    <form v-if="patient">
       <b-row>
         <b-col lg="12">
             <iq-card body-class="p-0">
@@ -48,7 +48,7 @@
                                                   </li>
                                                   <li class="text-center">
                                                       <h4 class="counter">{{timeSinceFirstVisit | fromNowDate}}</h4>
-                                                      <span>{{ $t('EPR.overview.firstVisit') }}</span>
+                                                      <span>{{ $t('EPR.overview.lastVisit') }}</span>
                                                   </li>
                                               </ul>
                                               <hr>
@@ -194,10 +194,10 @@
                                                                         :key="index + 'color'"
                                                                         :reduce="item => item.id"
                                                                         :value="item.id"
-                                                                        :style="{'background': item.color}"
+                                                                        :style="{'border': '1px solid ' + item.color}"
                                                                         :disabled="disabled"
                                                                         name="labels">
-                                                              <p class="text-white m-0 py-1 pr-2">{{ item.text }}</p>
+                                                              <p class="m-0 py-1 pr-2" :style="{'color': item.color}">{{ item.text }}</p>
                                                           </b-form-radio>
                                                       </template>
                                                   </div>
@@ -227,17 +227,32 @@
                                                        @close="closeCancelation"
                                                        @cancel="closeCancelation">
                                                   <div class="col-md-12 mb-2">
-                                                      <div class="ml-3 mt-2">
-                                                          <b-form-radio class="custom-radio-color"
+                                                      <div class="ml-3 mt-2 radio_div">
+                                                     <template>
+                                                        <div>
+                                                          <b-form-group label="Radios using options and slots" v-slot="{ ariaDescribedby }">
+                                                            <b-form-radio-group
+                                                              id="radio-slots"
+                                                              v-model="formAppointments.cancelation_reason"
+                                                              :options="options"
+                                                              :aria-describedby="ariaDescribedby"
+                                                              name="radio-options-slots"
+                                                              v-on:change="radioChange"
+                                                            >
+                                                            </b-form-radio-group>
+                                                          </b-form-group>
+                                                        </div>
+                                                      </template>
+                                                          <!-- <b-form-radio class="custom-radio-color"
                                                                         inline
                                                                         v-model="formAppointments.appointment_canceled"
                                                                         value="true"
                                                                         name="cancelation">
                                                               {{ $t('calendarEvent.cancelAppointment') }}
-                                                          </b-form-radio>
+                                                          </b-form-radio> -->
                                                       </div>
                                                       <div class="col-md-12 mt-2">
-                                                          <textarea row="2" v-model="formAppointments.cancelation_reason" class="form-control form-control-disabled mt-4" id="cancelationReason" :placeholder="$t('calendarEvent.cancelationReason')"></textarea>
+                                                          <!-- <textarea row="2" v-model="formAppointments.cancelation_reason" class="form-control form-control-disabled mt-4" id="cancelationReason" :placeholder="$t('calendarEvent.cancelationReason')"></textarea> -->
                                                       </div>
                                                   </div>
                                               </b-modal>
@@ -300,24 +315,40 @@
                               </b-col>
                               <b-col>
                                   <b-col md="14">
-                                      <b-card class="iq-card" v-if="patient.general_notes">
-                                          <b-card-title>{{ $t('EPR.overview.generalNotes') }}</b-card-title>
-                                          <hr />
-                                          <b-card-text class="text-black" v-html="patient.general_notes"></b-card-text>
-                                          <!-- <b-card-text><small class="text-muted">{{ $t('EPR.overview.generalNotesUpdated') }} {{patient.general_notes_updated_at | fromNowDate}}</small></b-card-text> -->
-                                      </b-card>
+                                      <iq-card v-if="patient.general_notes">
+                                          <template v-slot:body>
+                                              <div class="iq-card-header d-flex justify-content-between">
+                                                  <div class="iq-header-title">
+                                                      <div class="row justify-content-between align-items-center">
+                                                          <h4 class="card-title">{{ $t('EPR.overview.generalNotes') }}</h4>
+                                                      </div>
+                                                      <hr />
+                                                  </div>
+                                              </div>
+                                              <div>
+                                                  <div class="text-black ml-1" v-html="patient.general_notes"></div>
+                                                  <!-- <b-card-text><small class="text-muted">{{ $t('EPR.overview.generalNotesUpdated') }} {{patient.general_notes_updated_at | fromNowDate}}</small></b-card-text> -->
+                                              </div>
+                                          </template>
+                                      </iq-card>
                                   </b-col>
                                   <b-col md="14">
-                                      <b-card text-variant="white"
-                                              bg-variant="danger"
-                                              class="iq-card"
-                                              v-if="patient.allergies">
-                                          <b-card-title class="text-white">{{ $t('EPR.overview.allergies') }}</b-card-title>
-                                          <blockquote class="blockquote mb-0">
-                                              <p class="font-size-14">{{patient.allergies}}</p>
-                                              <!--<footer class="blockquote-footer text-white font-size-12">{{ $t('EPR.overview.allergiesUpdated') }} {{patient.allergies_updated_at | fromNowDate}}</footer> -->
-                                          </blockquote>
-                                      </b-card>
+                                      <iq-card v-if="patient.allergies" class="allergies">
+                                          <template v-slot:body>
+                                              <div class="iq-card-header d-flex justify-content-between">
+                                                  <div class="iq-header-title">
+                                                      <div class="row justify-content-between align-items-center">
+                                                          <h4 class="card-title text-white">{{ $t('EPR.overview.allergies') }}</h4>
+                                                      </div>
+                                                      <hr />
+                                                  </div>
+                                              </div>
+                                              <div>
+                                                  <div v-html="patient.allergies" class="ml-1"></div>
+                                                  <!-- <b-card-text><small class="text-muted">{{ $t('EPR.overview.generalNotesUpdated') }} {{patient.general_notes_updated_at | fromNowDate}}</small></b-card-text> -->
+                                              </div>
+                                          </template>
+                                      </iq-card>
                                   </b-col>
                                   <b-col md="14">
                                       <iq-card>
@@ -366,15 +397,12 @@
                                               <ul class="list-inline m-0 overflow-y-scroll pl-2 pr-2" style="max-height: 300px;">
                                                   <li v-for="(message,index) in smsList" :key="index + message.created_at" id="smsList" class="d-flex align-items-center justify-content-between mb-3">
                                                       <div>
-                                                          <h6 :id="`message-${message.id}`">{{message.name}}</h6>
-                                                          <b-tooltip class="tooltip-content" :target="`message-${message.id}`" triggers="hover" placement="rightbottom">
-                                                            {{ message.content }}
-                                                          </b-tooltip>
+                                                          <h6 class="text-underline" v-tooltip="message.content">{{message.name}}</h6>
                                                           <small class="mb-0">{{message.created_at | formatDateAndTime}} - {{ message.delivered_at ? $t('EPR.overview.deliveredSms') :  $t('EPR.overview.notDeliveredSms')}}</small>
                                                       </div>
                                                   </li>
                                               </ul>
-                                              <p v-if="smsMessages.length === 0">{{ $t('EPR.overview.noSMS') }}</p>
+                                              <p v-if="smsMessages.length === 0" class="ml-1">{{ $t('EPR.overview.noSMS') }}</p>
                                               <b-pagination
                                                 class="mt-2"
                                                 v-else-if="smsMessages.length > 4"
@@ -405,15 +433,16 @@
                                                       <li id="openList" v-for="(item,index) in openAssignments" :key="index + item.due_at"
                                                           class="d-flex align-items-center justify-content-between mb-3">
                                                           <div class="w-100">
-                                                            <div>
-                                                              <b-checkbox v-model="item.completed" name="check-button" inline
+                                                            <div class="checkbox_text">
+                                                              <b-checkbox class="checkbox" v-model="item.completed" name="check-button" inline
                                                                 :key="index"
-                                                                @change="finishAssignment(item.id, $event)"><strong :class="{'red-text': isItOverdue(item.due_at)}">{{ item.description }}</strong></b-checkbox>
+                                                                @change="completeAssignment(item.id, $event)"></b-checkbox>
+                                                                <strong :class="{'red-text': isItOverdue(item.due_at)}">{{ item.description }}</strong>
                                                             </div>
                                                             <div class="d-flex align-items-center justify-content-between">
                                                               <div>
-                                                                <span class="text-left">{{ item.name }} {{ item.patientlastname }}</span>&nbsp;
-                                                                <span class="text-left">{{ getPatientsDentist(item) ? `(${getPatientsDentist(item)})` : '' }}</span>
+                                                                <span class="text-left ml-1">{{ item.name }} {{ item.patientlastname }}</span>&nbsp;
+                                                                <span class="text-left ml-1">{{ getPatientsDentist(item) ? `(${getPatientsDentist(item)})` : '' }}</span>
                                                               </div>
                                                               <div class="d-flex align-items-center">
                                                                 <span class="text-right text-width-150">{{ item.due_at | formatDate }}</span>
@@ -454,10 +483,9 @@
                                                   </div>
                                                   <ul class="iq-timeline">
                                                       <li v-for="(item,index) in futureList" :key="index + 'future'" id="futureList">
-                                                          <div v-if="item.appointmentStatus === 'Attended'" class="timeline-dots border-success"></div>
-                                                          <div v-if="item.appointmentStatus === 'Canceled by clinic'" class="timeline-dots border-light"></div>
-                                                          <div v-if="item.appointmentStatus === 'Canceled by patient'" class="timeline-dots border-danger"></div>
-                                                          <div v-if="item.appointmentStatus === 'Unknown'" class="timeline-dots border-warning"></div>
+                                                          <div v-if="item.appointmentStatus === true" class="timeline-dots border-success"></div>
+                                                          <div v-if="item.appointmentStatus === false" class="timeline-dots border-danger"></div>
+                                                          <div v-if="item.appointmentStatus === null" class="timeline-dots border-warning"></div>
                                                           <div @click="openEditAppointmentModal(item)" style="cursor: pointer;">
                                                               <h6>{{item.product_group_text}}<span class="float-right">{{item.note}}</span></h6>
                                                               <small class="mt-1">{{item.starts_at | formatDateAndTime}} {{ item.location ? `(${item.location})` : '' }}</small>
@@ -487,10 +515,9 @@
                                                   </div>
                                                   <ul class="iq-timeline" id="pastAppointments">
                                                       <li v-for="(item, index) in pastList" :key="index + 'status'" id="pastList">
-                                                        <div v-if="item.appointmentStatus === 'Attended'" class="timeline-dots border-success"></div>
-                                                        <div v-if="item.appointmentStatus === 'Canceled by clinic'" class="timeline-dots border-light"></div>
-                                                        <div v-if="item.appointmentStatus === 'Canceled by patient'" class="timeline-dots border-danger"></div>
-                                                        <div v-if="item.appointmentStatus === 'Unknown'" class="timeline-dots border-warning"></div>
+                                                        <div v-if="item.appointmentStatus === true" class="timeline-dots border-success"></div>
+                                                        <div v-if="item.appointmentStatus === false" class="timeline-dots border-danger"></div>
+                                                        <div v-if="item.appointmentStatus === null" class="timeline-dots border-warning"></div>
                                                         <h6 @click="openEditAppointmentModal(item)" class="clickable">{{item.product_group_text}}<span class="float-right">{{item.note}}</span></h6>
                                                         <small class="mt-1">{{item.starts_at | formatDateAndTime}} {{ item.location ? `(${item.location})` : '' }}</small>
                                                       </li>
@@ -615,16 +642,16 @@
                                                   <b-form-input :disabled="disabledData" name="address" class="form-control-disabled font-size-12" v-model="patient.address_line_1" style="line-height: 22px;">
                                                   </b-form-input>
                                               </b-form-group>
-                                              <b-form-group class="col-md-12 align-items-center mt-1" :class="{'mb-0': disabledData}" style="justify-content: space-between;" label-cols-sm="4" label-for="city" :label="$t('EPR.personalInfo.postCode')">
-                                                  <b-form-input :disabled="disabledData" class="col-md-12 form-control-disabled font-size-12 mt-1" style="float: left;" v-model="patient.post_code" type="text"></b-form-input>
+                                              <b-form-group class="col-md-12 align-items-center" :class="{'mb-0': disabledData}" style="justify-content: space-between;" label-cols-sm="4" label-for="city" :label="$t('EPR.personalInfo.postCode')">
+                                                  <b-form-input :disabled="disabledData" class="form-control-disabled font-size-12" style="float: left;" v-model="patient.post_code" type="text"></b-form-input>
                                               </b-form-group>
-                                              <b-form-group class="col-md-12 form-control-disabled font-size-12 mt-1" :class="{'mb-0': disabledData}" label-cols-sm="4" label-for="country" :label="$t('EPR.personalInfo.country')">
+                                              <b-form-group class="col-md-12 align-items-center" :class="{'mb-1': disabledData}" label-cols-sm="4" label-for="country" :label="$t('EPR.personalInfo.country')">
                                                   <v-select :disabled="disabledData" label="name" :clearable="false"
                                                             :reduce="country => country.id"
                                                             class="style-chooser form-control-disabled font-size-12"
                                                             v-model="patient.country_id" :options="countries"></v-select>
                                               </b-form-group>
-                                              <b-form-group class="col-md-12 align-items-center" :class="{'mb-0': disabledData}" label-cols-sm="4" label-for="region" :label="$t('EPR.personalInfo.region')">
+                                              <b-form-group class="col-md-12 align-items-center" :class="{'mb-1': disabledData}" label-cols-sm="4" label-for="region" :label="$t('EPR.personalInfo.region')">
                                                   <v-select :clearable="false"
                                                             :reduce="region => region.code"
                                                             :disabled="disabledData"
@@ -1086,14 +1113,15 @@
           </div>
           <div class="col-md-12 mb-3">
             <label for="title">{{ $t('assignments.addAssignmentsModal.due_at') }} </label>
-            <b-form-datepicker
-                class="date"
-                id="exampleInputdate"
+            <date-picker
+                required
+                class="datePicker"
                 v-model="formData.due_at"
-                :min="new Date()"
-                :date-format-options="{ year: 'numeric', month: '2-digit', day: '2-digit' }"
-                placeholder="mm/dd/yyyy"
-            ></b-form-datepicker>
+                type="date"
+                :disabled-date="disableTime"
+                placeholder="Select date"
+                :format="'DD.MM.YYYY'"></date-picker>
+
 <!--            <b-form-input-->
 <!--                class="date"-->
 <!--                id="exampleInputdate"-->
@@ -1253,9 +1281,12 @@ export default {
       return null
     },
     patientsSurgeon: function () {
-      return this.surgeons.find((item) => {
-        return item.code === this.patient.prm_surgeon_user_id
-      })
+      if (this.surgeons && Array.isArray(this.surgeons)) {
+        return this.surgeons.find((item) => {
+          return item.code === this.patient.prm_surgeon_user_id
+        })
+      }
+      return null
     },
     openAssignments: function () {
       return this.assignments.slice(
@@ -1412,7 +1443,9 @@ export default {
       futureCurrentPage: 1,
       futurePerPage: 5,
       selectedInvoices: '',
-      selectedDoctor: '',
+      selectedDoctor: {
+        name: 'ssdfsdfsdf',
+      },
       selectedProductGroup: '',
       invoicesType: [
         {
@@ -1521,6 +1554,31 @@ export default {
       doctor: {
         profile: require('../../assets/images/user/1.jpg'),
       },
+      selected__: '',
+      options: [
+        { text: 'Canceled by lead', value: 'canceled by lead' },
+        { text: 'Postponed by lead', value: 'postponed by lead' },
+        { text: 'Canceled by clinic', value: 'canceled by clinic' },
+        { text: 'Postoponed by clinic', value: 'postoponed by clinic' },
+      ],
+      // cancel_checkboxes: [
+      //   {
+      //     title: 'canceled by lead',
+      //     id: 1,
+      //   },
+      //   {
+      //     title: 'postponed by lead',
+      //     id: 2,
+      //   },
+      //   {
+      //     title: 'canceled by clinic',
+      //     id: 3,
+      //   },
+      //   {
+      //     title: 'postoponed by clinic',
+      //     id: 4,
+      //   },
+      // ],
       user: {
         profile_image: require('../../assets/images/user/11.png'),
         fname: 'Anita',
@@ -1634,6 +1692,13 @@ export default {
     },
   },
   methods: {
+    disableTime(date) {
+      return date < new Date()
+    },
+    radioChange(e) {
+      // console.log(this.selected__, '----------------------')
+      console.log(this.formAppointments.cancelation_reason)
+    },
     getSumOfServices() {
       let sum = 0
       if (this.services && Array.isArray(this.services) && this.services.length) {
@@ -1655,7 +1720,7 @@ export default {
     },
     decideAppointmentStatus(appointment) {
       if (appointment.appointment_canceled) {
-        return true
+        return false
       } else if (appointment.patient_attended === true) {
         return true
       }
@@ -1700,6 +1765,8 @@ export default {
     getLabels(lang) {
       getLabels(lang).then(response => {
         this.colors = response
+        const lastLabel = this.colors.pop()
+        this.colors.unshift(lastLabel)
       })
     },
     goToFiles() {
@@ -1741,16 +1808,18 @@ export default {
     },
     getFiles() {
       getFilesWithPrefix(this.$route.params.patientId).then(data => {
-        for (let i = 0; i < data.data.Contents.length; i++) {
-          let type = data.data.Contents[i].Key.split('.')[1]
-          let image = '/api/files/' + data.data.Contents[i].Key
-          this.files.push({
-            image: image,
-            name: data.data.Contents[i].Key,
-            type: type,
-            created_at: moment(data.data.Contents[i].LastModified).format('YYYY-MM-DD'),
-            pdf: type === 'pdf',
-          })
+        if (data.data && Array.isArray(data.data.Contents)) {
+          for (let i = 0; i < data.data.Contents.length; i++) {
+            let type = data.data.Contents[i].Key.split('.')[1]
+            let image = '/api/files/' + data.data.Contents[i].Key
+            this.files.push({
+              image: image,
+              name: data.data.Contents[i].Key,
+              type: type,
+              created_at: moment(data.data.Contents[i].LastModified).format('YYYY-MM-DD'),
+              pdf: type === 'pdf',
+            })
+          }
         }
       })
     },
@@ -1818,10 +1887,10 @@ export default {
     getPatient(id) {
       getEnquiryById(id).then(response => {
         this.patient = response[0]
-        if (this.patient.date_of_birth !== null) {
+        if (this.patient && this.patient.date_of_birth !== null) {
           this.patient.date_of_birth = moment(this.patient.date_of_birth).format('YYYY-MM-DD')
         }
-        if (this.patient.general_notes !== null) {
+        if (this.patient && this.patient.general_notes !== null) {
           this.notesGeneral = this.patient.general_notes.replace(/<br>/g, '\n')
         }
       }
@@ -1856,6 +1925,7 @@ export default {
     },
     getPatientAssignments(id) {
       getEnquiryAssignments(id).then(response => {
+        console.log(response, '--------')
         if (Array.isArray(response)) {
           this.assignments = response.filter(todo => !todo.completed)
           this.completedAssignments = response.filter(todo => todo.completed)
@@ -2083,18 +2153,15 @@ export default {
         this.cancelNotes()
       })
     },
-    finishAssignment(id, finished) {
+    completeAssignment(id, finished) {
       const completedBy = this.userId
       finishAssignment(id, finished, completedBy).then(response => {
         if (finished) {
-          const open = this.assignments.find(todo => {
-            if (todo.id === id) {
-              todo.completed = true
-              this.completedAssignments.push(todo)
-              return todo
-            }
-          })
-          this.assignments = this.assignments.filter(todo => todo.id !== open.id)
+          let open = this.assignments.find(todo => todo.id === id)
+          open.completed = true
+          this.completedAssignments.push(open)
+
+          this.assignments = this.assignments.filter(todo => todo.id !== id)
         }
       })
     },
@@ -2142,9 +2209,10 @@ export default {
       })
     },
     saveAppointment() {
+      // alert('asdasdasasdas')
       this.addAppointmentModal = false
-      this.formAppointments.patient_id = this.patient.id
-      this.formAppointments.doctor_id = this.selectedDoctor.id
+      // this.formAppointments.patient_id = this.patient.id
+      // this.formAppointments.doctor_id = this.selectedDoctor.id
       this.formAppointments.doctor_name = this.selectedDoctor.name
       this.formAppointments.product_groups = this.selectedProductGroup.product_group_id
       this.formAppointments.crmProduct = this.selectedProductGroup.crm_product_id
@@ -2231,8 +2299,33 @@ export default {
 </script>
 
 <style lang="scss">
+.radio_div {
+  display: flex;
+  flex-direction: column;
+}
+
+.v-popper__inner {
+  max-width: 360px !important
+}
+
+.text-underline {
+  border-bottom: 1px dashed black;
+}
 .red-text {
   color: red !important;
+}
+
+.datePicker {
+  width: 100% !important;
+  display: block !important;
+}
+
+.checkbox_text{
+  display: flex;
+  justify-content: flex-start;
+}
+.checkbox{
+  margin-right: 0 !important;
 }
 
 .preview-file {
@@ -2397,6 +2490,11 @@ canvas {
 .tooltip .tooltip-inner {
   max-width: 100% !important;
   width: 400px !important;
+}
+
+.allergies {
+    background-color: #f81c34 !important;
+    color: white !important;
 }
 
 @media (max-width: 992px) {

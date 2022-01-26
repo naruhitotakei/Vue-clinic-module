@@ -1,5 +1,5 @@
 var moment = require('moment')
-const { pool, now } = require('~/services/db')
+const { pool, now, insert } = require('~/services/db')
 
 const getEnquiries = (
   request,
@@ -186,14 +186,14 @@ const getEnquiriesCount = (request, response) => {
   })
 }
 
-const getEnquiriesById = (request, response, id) => {
-  //AND clients.slug = 'primadent_si'
+const getEnquiriesById = (request, response, id, prmClientId) => {
   pool.query(
     'SELECT enquiries.*, c.name as country ' +
       'FROM enquiries ' +
       'LEFT JOIN clients ON enquiries.client_id = clients.id ' +
       'LEFT JOIN countries c ON enquiries.country_id = c.id ' +
-      'WHERE enquiries.trashed IS FALSE AND enquiries.id = $1',
+      'WHERE enquiries.trashed IS FALSE AND enquiries.id = $1 ' +
+      'AND enquiries.prm_client_id = ' + prmClientId,
     [id],
     (error, results) => {
       if (error) {
@@ -428,7 +428,7 @@ const getEnquiryAssignments = (request, response, enquiryId) => {
     'LEFT JOIN enquiries ON todos.enquiry_id = enquiries.id',
     'LEFT JOIN users ON todos.user_id = users.id',
     'WHERE enquiries.id = $1',
-    'ORDER BY due_at ASC',
+    'ORDER BY due_at DESC',
   ].join('\n')
   pool.query(statement, [enquiryId], (error, results) => {
     if (error) {
@@ -501,21 +501,59 @@ const createEnquiryService = (req, res, enquiryId, service) => {
   })
 }
 
-const getPatients = (request, response) => {
-  pool.query(
-    "SELECT enquiries.*, CONCAT_WS(' ', enquiries.name, enquiries.last_name) AS full_name FROM enquiries JOIN clients ON enquiries.client_id = clients.id WHERE enquiries.trashed IS FALSE AND clients.slug = 'primadent_si'",
-    (error, results) => {
-      if (error) {
-        throw error
+const getPatients = (
+  request,
+  response,
+  scope,
+  prm_client_id,
+  user_id,
+  accessible_user_ids
+) => {
+  let statement =
+    "SELECT DISTINCT ON (enquiries.id) enquiries.*, CONCAT_WS(' ', enquiries.name, enquiries.last_name) AS full_name FROM enquiries "
+  statement += 'WHERE enquiries.trashed = FALSE '
+  if (scope == 'All') {
+  } else if (scope == 'PrmClient') {
+    statement += 'AND enquiries.prm_client_id = ' + prm_client_id
+  } else if (scope == 'Self') {
+    statement +=
+      'AND (enquiries.prm_dentist_user_id = ' +
+      user_id +
+      ' OR enquiries.prm_surgeon_user_id = ' +
+      user_id +
+      ')'
+  } else if (scope == 'Self&LinkedUsers') {
+    statement +=
+      'AND (enquiries.prm_dentist_user_id = ' +
+      user_id +
+      ' OR enquiries.prm_surgeon_user_id = ' +
+      user_id
+    if (accessible_user_ids) {
+      for (const acc_id in accessible_user_ids) {
+        statement +=
+          ' OR enquiries.prm_dentist_user_id = ' +
+          accessible_user_ids[acc_id] +
+          ' OR enquiries.prm_surgeon_user_id = ' +
+          accessible_user_ids[acc_id]
       }
-      response.status(200).json(results.rows)
-    },
-  )
+    }
+    statement += ') '
+  }
+
+  pool.query(statement, (error, results) => {
+    if (error) {
+      throw error
+    }
+    response.status(200).json(results.rows)
+  })
 }
 
 const getEnquirySMS = (request, response, enquiryId) => {
-  let statement = `SELECT DISTINCT ON (sms_messages.id) * FROM sms_messages
-    LEFT JOIN sms_templates ON sms_templates.slug = sms_messages.kind WHERE enquiry_id = ${enquiryId}`
+  let statement = `SELECT DISTINCT sms_messages.id, sms_templates.name, sms_messages.created_at, sms_messages.sent_api_data, sms_messages.content
+  FROM sms_messages
+  LEFT JOIN sms_templates ON sms_templates.client_id = sms_messages.client_id
+  WHERE sms_messages.enquiry_id = ${enquiryId} AND sms_templates.slug = sms_messages.kind
+  ORDER BY sms_messages.created_at DESC`
   pool.query(statement, (error, results) => {
     if (error) {
       throw error
@@ -535,21 +573,15 @@ async function getEnquiryByPhone(phoneNumber) {
 }
 
 async function createEnquiryPublic({ firstName, lastName, phone }) {
-  const model = {
-    name: '$1',
-    last_name: '$2',
-    phone: '$3',
-    created_at: now(),
-    updated_at: now(),
-  }
-  const statement = /* sql */ `
-    INSERT INTO enquiries(${Object.keys(model).join(',')})
-    VALUES (${Object.values(model).join(',')})
-    RETURNING *
-  `
-  const result = await pool.query(statement, [firstName, lastName, phone])
+  const timestamp = now()
 
-  return result.rows[0]
+  return insert('enquiries', {
+    name: firstName,
+    last_name: lastName,
+    phone: phone,
+    created_at: timestamp,
+    updated_at: timestamp,
+  })
 }
 
 module.exports = {

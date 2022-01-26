@@ -36,11 +36,13 @@ export default {
   methods: {
     closeMenuItemWithoutChildren(hasChildren) {
       if (!hasChildren) {
-        this.$parent.miniSidebar()
+        this.$emit('toggle')
+        // this.$parent.miniSidebar()
       }
     },
     closeMenuItemWithChildren() {
-      this.$parent.miniSidebar()
+      this.$emit('toggle')
+      // this.$parent.miniSidebar()
     },
     activeLink(item) {
       return xray.getActiveLink(item, this.$route.name)

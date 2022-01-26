@@ -5,7 +5,7 @@
                 <iq-card class-name="iq-card-block iq-card-stretch iq-card-height">
                     <template v-slot:headerTitle>
                       <div class="row align-items-center justify-content-between pl-3 pr-3 mb-4 mt-4">
-                        <h4 class="card-title">{{ $t('assignments.assignmentsHeader') }}</h4>
+                        <h3 class="card-title">{{ $t('assignments.assignmentsHeader') }}</h3>
                         <div class="btn-add-patient  mt-0">
                           <b-button variant="primary" @click="addNewAssignment"><i class="ri-add-line mr-2"></i>{{ $t('assignments.addAssignments') }}</b-button>
                         </div>
@@ -20,7 +20,7 @@
               <template v-slot:headerTitle>
                   <b-row>
                     <b-col cols="12" lg="6">
-                      <h5>My {{ $t('assignments.todaysAssignments') }}</h5>
+                      <h5>My {{ $t('assignments.todaysAssignments') }} <span>({{ todaysAssignmentsCount }})</span></h5>
                     </b-col>
                     <b-col cols="12" lg="6" v-if="myCompletedAssignments">
                       <b-progress :value="myCompletedAssignments" :max="100" show-progress></b-progress>
@@ -32,12 +32,18 @@
                       <b-list-group-item
                           v-for="(item, index) in myTodayList"
                           :key="index"
+                          :style="{'background': getDifferenceDate(item.due_at) === 1 && '#ffeeba' || getDifferenceDate(item.due_at) > 1 && 'white'}"
                       >
                         <div :class="{ 'taskIsActive' : !item.completed}">
-                          <div>
-                            <b-checkbox v-model="item.completed" name="check-button" inline
+                          <div class="checkbox_text">
+                            <b-checkbox class="checkbox" v-model="item.completed" name="check-button" inline
                               :key="index"
-                              @change="finishAssignment(item.id, $event, 'myToday')"><strong>{{ item.description }}</strong></b-checkbox>
+                              @change="finishAssignment(item.id, $event, 'myToday')"
+                            >
+                            </b-checkbox>
+                              <!-- <strong v-if="!item.completed">{{ item.description }}</strong> -->
+                              <strong :class="{'red-text': isItOverdue(item.due_at)}" v-if="!item.completed">{{ item.description }}</strong>
+                              <strong :style="{ color: '#aaa' }" v-else>{{ item.description }}</strong>
                           </div>
                           <div class="d-flex align-items-center justify-content-between">
                             <div>
@@ -45,7 +51,7 @@
                               <span class="text-left">{{ patientsDentist(item) ? `(${patientsDentist(item)})` : '' }}</span>
                             </div>
                             <div class="d-flex align-items-center">
-                              <span class="text-right text-width-150">{{ item.due_at | formatDate }}</span>
+                              <span class="text-right text-width-150">{{ item.due_at | formatDateWithYear }}</span>
                               <b-button variant=" iq-bg-success mr-1 mb-1" size="sm" style="margin-left: 5%;" @click="editAssignments(item)">
                               <i class="ri-ball-pen-fill m-0"></i>
                             </b-button>
@@ -85,19 +91,23 @@
           <b-col cols="12" lg="6">
             <iq-card class-name="iq-card-block iq-card-stretch iq-card-height overdueAssignments-body">
                 <template v-slot:headerTitle>
-                    <h5>My {{ $t('assignments.overdueAssignments') }}</h5>
+                    <h5>My {{ $t('assignments.overdueAssignments') }} <span>({{ overdueAssignmentsCount }})</span></h5>
                 </template>
                 <template v-slot:body>
                   <b-list-group class="list-group-flush" id="myOverdueAssignments">
                     <b-list-group-item
                       v-for="(item, index) in myOverDueList"
                       :key="index"
-                      :style="{'background': getDifferenceDate(item.due_at) === 1 && '#ffeeba' || getDifferenceDate(item.due_at) > 1 && '#f5c6cb'}">
+                      :style="{'background': getDifferenceDate(item.due_at) === 1 && '#ffeeba' || getDifferenceDate(item.due_at) > 1 && 'white'}">
                       <div :class="{ 'taskIsActive' : !item.completed}">
-                        <div>
-                          <b-checkbox v-model="item.completed" name="check-button" inline
+                        <div class="checkbox_text">
+                          <b-checkbox class="checkbox" v-model="item.completed" name="check-button" inline
                             :key="index"
-                            @change="finishAssignment(item.id, $event, 'myoverdue')"><strong>{{ item.description }}</strong></b-checkbox>
+                            @change="finishAssignment(item.id, $event, 'myoverdue')">
+                            </b-checkbox>
+                              <!-- <strong v-if="!item.completed">{{ item.description }}</strong> -->
+                              <strong :class="{'red-text': isItOverdue(item.due_at)}" v-if="!item.completed">{{ item.description }}</strong>
+                              <strong :style="{ color: '#aaa' }" v-else>{{ item.description }}</strong>
                         </div>
                         <div class="d-flex align-items-center justify-content-between">
                           <div>
@@ -105,7 +115,7 @@
                             <span class="text-left">{{ patientsDentist(item) ? `(${patientsDentist(item)})` : '' }}</span>
                           </div>
                           <div class="d-flex align-items-center">
-                            <span class="text-right text-width-150">{{ item.due_at | formatDate }}</span>
+                            <span class="text-right text-width-150">{{ item.due_at | formatDateWithYear }}</span>
                             <b-button variant=" iq-bg-success mr-1 mb-1" size="sm" style="margin-left: 5%;" @click="editAssignments(item)">
                             <i class="ri-ball-pen-fill m-0"></i>
                           </b-button>
@@ -135,7 +145,7 @@
             <b-col cols="12" lg="6">
               <iq-card class-name="iq-card-block iq-card-stretch iq-card-height overdueAssignments-body">
                   <template v-slot:headerTitle>
-                      <h5>{{ $t('assignments.todaysAssignments') }} of other users</h5>
+                      <h5>{{ $t('assignments.todaysAssignmentsOfOtherUsers') }} <span>({{ todaysAssignmentsCountOtherUsers }})</span></h5>
                   </template>
                   <template v-slot:body>
                     <AppMultiselect v-model="filterToday" :options="todayAssignmentUsers" placeholder="Filter By Users" />
@@ -143,12 +153,17 @@
                       <b-list-group-item
                         v-for="(item, index) in otherUserTodayList"
                         :key="index"
+                        :style="{'background': getDifferenceDate(item.due_at) === 1 && '#ffeeba' || getDifferenceDate(item.due_at) > 1 && 'white'}"
                       >
                         <div :class="{ 'taskIsActive' : !item.completed}">
-                          <div>
-                            <b-checkbox v-model="item.completed"  name="check-button" inline
+                          <div class="checkbox_text">
+                            <b-checkbox class="checkbox" v-model="item.completed"  name="check-button" inline
                               :key="index"
-                              @change="openWarningModal(item.id, $event, 'today')"><strong>{{ item.description }}</strong></b-checkbox>
+                              @change="openWarningModal(item.id, $event, 'today')">
+                            </b-checkbox>
+                              <!-- <strong v-if="!item.completed">{{ item.description }}</strong> -->
+                              <strong :class="{'red-text': isItOverdue(item.due_at)}" v-if="!item.completed">{{ item.description }}</strong>
+                              <strong :style="{ color: '#aaa' }" v-else>{{ item.description }}</strong>
                           </div>
                           <b-row>
                             <b-col cols="12" lg="6" align-self="center">
@@ -157,7 +172,7 @@
                             </b-col>
                             <b-col cols="12" lg="6" class="d-flex align-items-center justify-content-end">
                               <span class="text-right pr-2">{{ item.todoname }}</span>
-                                <span class="text-right">{{ item.due_at | formatDate }}</span>
+                                <span class="text-right">{{ item.due_at | formatDateWithYear }}</span>
                                 <b-button variant=" iq-bg-success mr-1 mb-1" size="sm" style="margin-left: 2%;" @click="editAssignments(item)">
                                 <i class="ri-ball-pen-fill m-0"></i>
                               </b-button>
@@ -195,7 +210,7 @@
             <b-col cols="12" lg="6">
                 <iq-card class-name="iq-card-block iq-card-stretch iq-card-height overdueAssignments-body">
                     <template v-slot:headerTitle>
-                        <h5>{{ $t('assignments.overdueAssignments') }} of other users.</h5>
+                        <h5>{{ $t('assignments.overdueAssignmentsOfOtherUsers') }} <span>({{ overdueAssignmentsCountOtherUsers }})</span></h5>
                     </template>
                   <template v-slot:body>
                     <AppMultiselect v-model="filterOverdue" :options="pastAssignmentUsers" placeholder="Filter By Users" />
@@ -203,14 +218,16 @@
                       <b-list-group-item
                         v-for="(item, index) in otherUserOverDueList"
                         :key="index"
-                        :style="{'background': getDifferenceDate(item.due_at) === 1 && '#ffeeba' || getDifferenceDate(item.due_at) > 1 && '#f5c6cb'}">
+                        :style="{'background': getDifferenceDate(item.due_at) === 1 && '#ffeeba' || getDifferenceDate(item.due_at) > 1 && 'white'}">
                         <div :class="{ 'taskIsActive' : !item.completed}">
-                          <div>
-                            <b-checkbox v-model="item.completed" :disabled="item.disabled" name="check-button" inline
+                          <div class="checkbox_text">
+                            <b-checkbox class="checkbox" v-model="item.completed" :disabled="item.disabled" name="check-button" inline
                               :key="index"
                               @change="openWarningModal(item.id, $event, 'overdue')">
-                                <strong>{{ item.description }}</strong>
                             </b-checkbox>
+                                <!-- <strong v-if="!item.completed">{{ item.description }}</strong> -->
+                                <strong :class="{'red-text': isItOverdue(item.due_at)}" v-if="!item.completed">{{ item.description }}</strong>
+                                <strong :style="{ color: '#aaa' }" v-else>{{ item.description }}</strong>
                           </div>
                           <b-row>
                             <b-col cols="12" lg="6" align-self="center">
@@ -219,7 +236,7 @@
                             </b-col>
                             <b-col cols="12" lg="6" class="d-flex align-items-center justify-content-end">
                               <span class="text-right pr-2">{{ item.todoname }}</span>
-                                <span class="text-right">{{ item.due_at | formatDate }}</span>
+                                <span class="text-right">{{ item.due_at | formatDateWithYear }}</span>
                                 <b-button variant=" iq-bg-success mr-1 mb-1" size="sm" style="margin-left: 2%;" @click="editAssignments(item)">
                                 <i class="ri-ball-pen-fill m-0"></i>
                               </b-button>
@@ -290,19 +307,24 @@
             <b-col cols="12" lg="6">
                 <iq-card class-name="iq-card-block iq-card-stretch iq-card-height futureAssignments-body">
                     <template v-slot:headerTitle>
-                        <h5>My {{ $t('assignments.futureAssignments') }}</h5>
+                        <h5>My {{ $t('assignments.futureAssignments') }} <span>({{ futureAssignmentsCount }})</span></h5>
                     </template>
                     <template v-slot:body>
                         <b-list-group class="list-group-flush" id="myFutureAssignments">
                             <b-list-group-item
-                                v-for="(item, index) in myFutureList"
+                                v-for="(item, index) in sortedmyFutureAssignments"
                                 :key="index"
+                                :style="{'background': getDifferenceDate(item.due_at) === 1 && '#ffeeba' || getDifferenceDate(item.due_at) > 1 && 'white'}"
                             >
                               <div :class="{ 'taskIsActive' : !item.completed}">
-                                <div>
-                                  <b-checkbox v-model="item.completed" :disabled="item.disabled" name="check-button" inline
+                                <div class="checkbox_text">
+                                  <b-checkbox class="checkbox" v-model="item.completed" :disabled="item.disabled" name="check-button" inline
                                     :key="index"
-                                    @change="finishAssignment(item.id, $event, 'myFuture')"><strong>{{ item.description }}</strong></b-checkbox>
+                                    @change="finishAssignment(item.id, $event, 'myFuture')">
+                                  </b-checkbox>
+                                    <!-- <strong v-if="!item.completed">{{ item.description }}</strong> -->
+                                    <strong :class="{'red-text': isItOverdue(item.due_at)}" v-if="!item.completed">{{ item.description }}</strong>
+                                    <strong :style="{ color: '#aaa' }" v-else>{{ item.description }}</strong>
                                 </div>
                                 <div class="d-flex align-items-center justify-content-between">
                                   <div>
@@ -310,7 +332,7 @@
                                     <span class="text-left">{{ patientsDentist(item) ? `(${patientsDentist(item)})` : '' }}</span>
                                   </div>
                                   <div class="d-flex align-items-center">
-                                    <span class="text-right text-width-150">{{ item.due_at | formatDate }}</span>
+                                    <span class="text-right text-width-150">{{ item.due_at | formatDateWithYear }}</span>
                                     <b-button variant=" iq-bg-success mr-1 mb-1" size="sm" style="margin-left: 5%;" @click="editAssignments(item)">
                                     <i class="ri-ball-pen-fill m-0"></i>
                                   </b-button>
@@ -337,7 +359,7 @@
             <b-col cols="12" lg="6">
                 <iq-card class-name="iq-card-block iq-card-stretch iq-card-height futureAssignments-body">
                     <template v-slot:headerTitle>
-                        <h5>{{ $t('assignments.futureAssignments') }} of other users</h5>
+                        <h5>{{ $t('assignments.futureAssignmentsOfOtherUsers') }} <span>({{ futureAssignmentsCountOtherUsers }})</span></h5>
                     </template>
                     <template v-slot:body>
                       <AppMultiselect v-model="filterFuture" :options="futureAssignmentUsers" placeholder="Filter By Users" />
@@ -345,12 +367,17 @@
                             <b-list-group-item
                                 v-for="(item, index) in otherUserFutureList"
                                 :key="index"
+                                :style="{'background': getDifferenceDate(item.due_at) === 1 && '#ffeeba' || getDifferenceDate(item.due_at) > 1 && 'white'}"
                             >
                               <div :class="{ 'taskIsActive' : !item.completed}">
-                                <div>
-                                  <b-checkbox v-model="item.completed" :disabled="item.disabled" name="check-button" inline
+                                <div class="checkbox_text">
+                                  <b-checkbox class="checkbox" v-model="item.completed" :disabled="item.disabled" name="check-button" inline
                                     :key="index"
-                                    @change="openWarningModal(item.id, $event, 'future')"><strong>{{ item.description }}</strong></b-checkbox>
+                                    @change="openWarningModal(item.id, $event, 'future')">
+                                    </b-checkbox>
+                                      <!-- <strong v-if="!item.completed">{{ item.description }}</strong> -->
+                                      <strong :class="{'red-text': isItOverdue(item.due_at)}" v-if="!item.completed">{{ item.description }}</strong>
+                                      <strong :style="{ color: '#aaa' }" v-else>{{ item.description }}</strong>
                                 </div>
                                 <b-row>
                                   <b-col cols="12" lg="6" align-self="center">
@@ -359,7 +386,7 @@
                                   </b-col>
                                   <b-col cols="12" lg="6" class="d-flex align-items-center justify-content-end">
                                     <span class="text-right pr-2">{{ item.todoname }}</span>
-                                      <span class="text-right">{{ item.due_at | formatDate }}</span>
+                                      <span class="text-right">{{ item.due_at | formatDateWithYear }}</span>
                                       <b-button variant=" iq-bg-success mr-1 mb-1" size="sm" style="margin-left: 2%;" @click="editAssignments(item)">
                                       <i class="ri-ball-pen-fill m-0"></i>
                                     </b-button>
@@ -496,7 +523,13 @@
             </div>
             <div class="col-md-12 mb-3">
               <label for="title">{{ $t('assignments.addAssignmentsModal.due_at') }} </label>
-                <b-form-input class="date" id="exampleInputdate" type="date" v-model="formData.due_at" ></b-form-input>
+              <date-picker
+                class="datePicker"
+                required
+                v-model="formData.due_at"
+                type="date"
+                placeholder="No date selected"
+                :format="'DD.MM.YYYY'"></date-picker>
             </div>
           </div>
         </form>
@@ -524,10 +557,22 @@
     border-radius: 15px;
 }
 
-.taskIsActive {
-    color: black;
+.datePicker {
+  width: 100% !important;
+  display: block !important;
 }
 
+.taskIsActive {
+  color: black;
+}
+
+.checkbox_text{
+  display: flex;
+  justify-content: flex-start;
+}
+.checkbox{
+  margin-right: 0 !important;
+}
 .checkbox-assignment {
     margin-left: 2rem;
 }
@@ -597,6 +642,10 @@ body  .custom-control-label::after {
     margin-top: 3px !important;
   }
 
+  span.strong-description {
+    color: red !important;
+  }
+
 }
 
 </style>
@@ -622,6 +671,9 @@ export default {
     this.getEnquires()
   },
   computed: {
+    sortedmyFutureAssignments() {
+      return [...this.myFutureAssignments].reverse()
+    },
     getLocale() {
       return this.$store.getters['Setting/langState'].value ? this.$store.getters['Setting/langState'].value : this.$store.getters['Setting/langState']
     },
@@ -671,6 +723,24 @@ export default {
     },
   },
   watch: {
+    myTodayList(newList) {
+      this.todaysAssignmentsCount = this.myTodayAssignments.length
+    },
+    otherUserTodayList(newList) {
+      this.todaysAssignmentsCountOtherUsers = this.todaysAssignments.length
+    },
+    myFutureList(newList) {
+      this.futureAssignmentsCount = this.myFutureAssignments.length
+    },
+    otherUserFutureList(newList) {
+      this.futureAssignmentsCountOtherUsers = this.futureAssigments.length
+    },
+    otherUserOverDueList(newList) {
+      this.overdueAssignmentsCountOtherUsers = this.overdueAssignments.length
+    },
+    myOverDueList(newList) {
+      this.overdueAssignmentsCount = this.myOverdueAssignments.length
+    },
     filterOverdue(val) {
       if (val && val.length) {
         this.filterOverDueItems()
@@ -694,6 +764,9 @@ export default {
     },
   },
   methods: {
+    isItOverdue(date) {
+      return moment().isAfter(date)
+    },
     filterOverDueItems() {
       if (this.filterOverdue && this.filterOverdue.length) {
         let filteredAssignments = []
@@ -744,12 +817,14 @@ export default {
     },
     getUsersList() {
       getUsers().then(response => {
-        this.users = response
-        this.users = this.users.map(user => {
-          const userObj = Object.assign({}, user)
-          userObj.full_name = user.name + ' ' + user.surname
-          return userObj
-        })
+        if (response && Array.isArray(response)) {
+          this.users = response
+          this.users = this.users.map(user => {
+            const userObj = Object.assign({}, user)
+            userObj.full_name = user.name + ' ' + user.surname
+            return userObj
+          })
+        }
       })
     },
     getAssignments() {
@@ -882,7 +957,6 @@ export default {
     },
     async closeWarningModal() {
       if (this.assignmentToEdit) {
-        console.log(this.assignmentToEdit)
         let array = []
         let aIndex = null
         if (this.assignmentToEdit.from === 'overdue') {
@@ -1070,6 +1144,12 @@ export default {
       futurePerPage: 10,
       completedCurrentPage: 0,
       completedPerPage: 10,
+      todaysAssignmentsCount: 0,
+      overdueAssignmentsCount: 0,
+      todaysAssignmentsCountOtherUsers: 0,
+      overdueAssignmentsCountOtherUsers: 0,
+      futureAssignmentsCount: 0,
+      futureAssignmentsCountOtherUsers: 0,
       users: [],
       bool: [
         { label: 'Completed', checked: true },

@@ -12,6 +12,12 @@ Vue.filter('formatDate', function (value, { lang = 'en' } = {}) {
   }
 })
 
+Vue.filter('formatDateWithYear', function (value, { lang = 'en' } = {}) {
+  if (value) {
+    return moment(String(value)).locale(lang).format('ddd, D MMM, YYYY')
+  }
+})
+
 Vue.filter('formatDateAndTime', function (value) {
   if (value) {
     return moment(String(value)).format('DD-MM-YYYY HH:mm')
@@ -27,7 +33,7 @@ Vue.filter('formatInvoiceDate', function (value) {
 Vue.filter('formatDateAssignments', function (value, lang) {
   if (value) {
     switch (lang) {
-      case 'en' :
+      case 'en':
         moment.locale('en')
         break
       case 'sl':
@@ -46,7 +52,7 @@ Vue.filter('formatFullDate', function (value, { lang = 'en' } = {}) {
 
 Vue.filter('formatTime', function (value) {
   if (value) {
-    return value + '\''
+    return value + "'"
   }
 })
 
@@ -57,7 +63,19 @@ Vue.filter('formatMoney', function (value) {
 })
 
 Vue.filter('formatPrice', function (value) {
-  if (value) {
-    return Number(value).toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + ' EUR'
+  if (value || value === 0) {
+    return new Intl.NumberFormat('de-DE', {
+      style: 'currency',
+      currency: 'EUR',
+      maximumFractionDigits: 0,
+      minimumFractionDigits: 0,
+    }).format(Math.round(Number(value)))
+    // return Math.round(Number(value)).toLocaleString('de-DE', { minimumFractionDigits: 0 }) + ' €'
+  }
+})
+
+Vue.filter('formatNumber', function (value) {
+  if (value || value === 0) {
+    return Number(value).toLocaleString('de-DE', { minimumFractionDigits: 0 })
   }
 })

@@ -14,6 +14,8 @@ import vueNumeralFilterInstaller from 'vue-numeral-filter'
 import VueApexCharts from 'vue-apexcharts'
 import CompositionApi from '@vue/composition-api'
 import VueExcelXlsx from 'vue-excel-xlsx'
+import DatePicker from 'vue2-datepicker'
+import 'vue2-datepicker/index.css'
 
 global.Raphael = Raphael
 Vue.config.productionTip = false
@@ -42,6 +44,7 @@ Vue.use(vueNumeralFilterInstaller, { locale: 'en-gb' })
 Vue.use(VueApexCharts)
 Vue.use(CompositionApi)
 Vue.component('apex-chart', VueApexCharts)
+Vue.component('date-picker', DatePicker)
 Vue.use(VueExcelXlsx)
 
 Vue.filter('percentage', function (value) {

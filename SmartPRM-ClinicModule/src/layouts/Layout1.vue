@@ -247,7 +247,7 @@ export default {
       colors: 'Setting/colorState',
     }),
     getAvatarUrl: function () {
-      return '/api/files/avatar'
+      return this.avatarURL.replace('.', '') + '?' + Math.random()
     },
     isEditDisabled() {
       return !this.logedInUser.first_name || !this.logedInUser.surname || !this.logedInUser.email

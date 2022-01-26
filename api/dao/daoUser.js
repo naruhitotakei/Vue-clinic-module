@@ -59,7 +59,7 @@ const loginUser = ((request, response, email, password) => {
 
 const getUserById = ((request, response, id) => {
   return new Promise((resolve, reject) =>
-      pool.query('SELECT * FROM users WHERE id = $1 AND active = true', [id], (error, qResult) => {
+    pool.query('SELECT users.*, prm_client.client_name FROM users LEFT JOIN prm_client ON users.prm_client_id = prm_client.id WHERE users.id = $1 AND active = true', [id], (error, qResult) => {
 
         pool.query('SELECT p.resource_name, s.scope_name FROM prm_role_permission rp JOIN prm_role r ON rp.role_id=r.role_id JOIN prm_permission p ON rp.permission_id=p.permission_id JOIN prm_scope s ON p.scope_id=s.scope_id WHERE rp.role_id = $1', [qResult.rows[0].prm_role_id], (error, qRoleResult) => {
           if (error) {
@@ -171,6 +171,7 @@ const getUsers = (request, response, prm_client_id, scope) => {
         "position, prm_role_id AS role_id, role_name FROM users LEFT JOIN prm_role ON users.prm_role_id = prm_role.role_id "
     statement += "LEFT JOIN prm_client ON users.prm_client_id = prm_client.id "
     statement += "WHERE prm_client.client_deleted = false "
+    statement += "AND users.prm_role_id != 2 "
     statement += "AND first_name::text NOT ILIKE '%emazing%' "
     if (scope == "All") {
     } else if (scope == 'PrmClient') {

@@ -1,5 +1,5 @@
 export async function sendSms(data) {
-  const rawResponse = await fetch('/api/booking/sendsms', {
+  const response = await fetch('/api/appointments/request', {
     method: 'POST',
     credentials: 'same-origin',
     headers: {
@@ -8,11 +8,17 @@ export async function sendSms(data) {
     },
     body: JSON.stringify(data),
   })
-  return rawResponse.json()
+  const result = await response.json()
+
+  if (response.ok === false) {
+    throw result
+  }
+
+  return result
 }
 
 export async function confirmAndSave(data) {
-  const rawResponse = await fetch('/api/booking/confirm-and-save', {
+  const response = await fetch('/api/booking/confirm-and-save', {
     method: 'POST',
     credentials: 'same-origin',
     headers: {
@@ -21,5 +27,11 @@ export async function confirmAndSave(data) {
     },
     body: JSON.stringify(data),
   })
-  return rawResponse.json()
+  const result = await response.json()
+
+  if (response.ok === false) {
+    throw result
+  }
+
+  return result
 }

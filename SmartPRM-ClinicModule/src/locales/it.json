@@ -1,0 +1,857 @@
+{
+  "sidebar": {
+    "dashboard": "Home",
+    "callCenterDashboard": "Call Center Dashboard",
+    "calendar": "Calendar",
+    "appointments": "Appointments",
+    "patients": "Patients",
+    "documents": "Documents",
+    "assignments": "Assignments",
+    "statistics": "Statistics",
+    "reporting": "Reporting",
+    "callCenter": "Call Center",
+    "settings": "Settings"
+  },
+  "shared": {
+    "search": "Search",
+    "searchBy": "Search By",
+    "sortBy": "Sort By",
+    "country": "Country",
+    "yes": "Yes",
+    "no": "No"
+  },
+  "documents": {
+    "offers": "Offers",
+    "invoices": "Invoices",
+    "advPayments": "Advance Payments"
+  },
+  "statistics": {
+    "statistics for clinic": "Statistics For Clinic",
+    "personal statistics": "Personal Statistics"
+  },
+  "reporting": {
+    "emazing": "Emazing",
+    "doctor": "Doctor",
+    "tax authority": "Tax Authority"
+  },
+  "callCenter": {
+    "leads": "Leads",
+    "clientInfo": "Client info",
+    "KPIs": "KPIs",
+    "workReport": "Work Report",
+    "activityReport": "Activity Report",
+    "missingServices": "Missing Services"
+  },
+  "settings": {
+    "users": "Users",
+    "locations": "Locations",
+    "services and products": "Services and Products",
+    "invoicing": "Invoicing",
+    "free slots": "Free Slots",
+    "business customers": "Business Customers",
+    "SMSTemplates": "SMS templates",
+    "mailTemplates": "Mail templates",
+    "advertising": "Advertising",
+    "labels": "Labels",
+    "onlineBooking": "Online booking"
+  },
+  "nav": {
+    "allNotifications": "All Notifications",
+    "allMessages": "All Messages",
+    "allCarts": "All Carts",
+    "viewCarts": "View Carts",
+    "user": {
+      "available": "Available",
+      "profileTitle": "My Profile",
+      "profileSub": "View personal profile details.",
+      "profileEditTitle": "Edit Profile",
+      "profileEditSub": "Modify your personal details.",
+      "accountSettingTitle": "Account Setting",
+      "accountSettingSub": "Manage your account parameters.",
+      "privacySettingTitle": "Privacy Setting",
+      "privacySettingSub": "Control your privacy parameters.",
+      "signout": "Sign Out"
+    }
+  },
+  "home": {
+    "todaysAppointments": "Today's appointments",
+    "noAppointmentsToday": "No scheduled appointments today",
+    "patientsByCountry": "Patients this week by country",
+    "appointmentChart": "Number of appointments",
+    "todaysAppointmentsColumn": {
+      "patient": "Patient",
+      "productGroup": "Product Group",
+      "doctor": "Doctor",
+      "time": "Time",
+      "contact": "Contact"
+    },
+    "newAppointmentsDropDown": {
+      "view": "View",
+      "delete": "Delete",
+      "edit": "Edit",
+      "print": "Print",
+      "download": "Download"
+    },
+    "staffList": "Staff List",
+    "doctorsListDropDown": {
+      "view": "View",
+      "appointment": "Appointment"
+    },
+    "staffListBtn": "View staff",
+    "openAssignments": "Open assignments",
+    "noOpenAssignments": "You have no open assignments",
+    "openAssignmentsColumn": {
+      "description": "Description",
+      "patientName": "Patient name",
+      "assignedTo": "Assign to",
+      "dueAt": "Due at"
+    },
+    "operationsDropDown": {
+      "view": "View"
+    },
+    "todaysSchedule": "Today's Schedule",
+    "activityStatistics": "Activity Statistics"
+  },
+  "calendar": {
+    "selectDoctor": "Select Doctor ",
+    "selectAll": "Select All",
+    "addAppointment": "New Appointment",
+    "appointmentDetails": "Appointment details",
+    "today": "Today",
+    "month": "Month",
+    "week": "Week",
+    "day": "Day",
+    "btnClose": "Close",
+    "btnEdit": "Edit Appointment",
+    "btnEPR": "View patient record",
+    "btnSave": "Save",
+    "btnCancel": "Cancel",
+    "btnCancelation": "Cancel appointment",
+    "notSavedModalHeader": "Are you sure you want to ignore your changes?",
+    "notSavedModalBody": "Be careful!, You have unsaved changes. Do you want to save them before closing the modal?"
+  },
+  "calendarEvent": {
+    "start": "Start",
+    "end": "End",
+    "duration": "Duration",
+    "note": "Note",
+    "changeColor": "Change Color",
+    "labels": "Label",
+    "viewPatient": "View Patient",
+    "changeDisplayColor": "Change Appointment Color",
+    "appointmentCancelled": "Appointment Cancelled by the Patient",
+    "unknown": "No data",
+    "attended": "Attended",
+    "notAttended": "Not Attended",
+    "canceled": "Canceled",
+    "patient": "Patient",
+    "doctor": "Doctor",
+    "location": "Location",
+    "patient_attended": "Patient attended",
+    "product_group": "Product Group",
+    "appointmentCanceledInAdvanceByClinic": "Appointment canceled by clinic",
+    "appointmentCanceledInAdvanceByPatient": "Appointment canceled by patient",
+    "cancelAppointment": "Cancel appointment",
+    "appointmentCanceled": "Appointment has been canceled",
+    "cancelationReason": "Cancelation reason",
+    "requiredFields": "Fields marked with * have to be filled",
+    "eventMoveBetweenResources": "Are you sure you want to move this appointment to another doctor?",
+    "eventTimeChange": "Are you sure you want to change this event's time?"
+  },
+  "appointments": {
+    "header": "Appointments",
+    "filters": "Filters",
+    "time": "Time",
+    "patient": "Patient",
+    "product": "Product",
+    "doctor": "Doctor",
+    "attendance": "Attendance",
+    "interest": "Interest level",
+    "notInterested": "Not interested",
+    "interested": "Interested",
+    "veryInterested": "Very interested",
+    "enterNotes": "Enter notes..."
+  },
+  "patients": {
+    "patientsHeader": "Patients",
+    "addPatient": "New Patient",
+    "patientsColumn": {
+      "name": "Name",
+      "lastName": "Last Name",
+      "telephone": "Phone",
+      "email": "Email",
+      "region": "Region",
+      "state": "Country",
+      "lastVisit": "Last Visit",
+      "nextVisit": "Next Visit",
+      "personalDentist": "Personal Dentist",
+      "action": "Actions"
+    },
+    "save": "Shrani",
+    "close": "Close"
+  },
+  "EPR": {
+    "overviewTab": "Overview",
+    "overview": {
+      "numberOfVisits": "Number of visits",
+      "firstVisit": "Time since first visit",
+      "phone": "Phone",
+      "email": "Email",
+      "address": "Address",
+      "addressUnknown": "Unknown",
+      "add": "New",
+      "addInvoice": "New invoice",
+      "deletePatient": "Delete patient",
+      "personalDoctors": "Personal doctors",
+      "personalDentist": "Personal dentist",
+      "Dentist": "Dentist",
+      "personalSurgeon": "Personal surgeon",
+      "Surgeon": "Surgeon",
+      "files": "Files",
+      "generalNotes": "General notes",
+      "generalNotesUpdated": "Last updated",
+      "allergies": "Allergies",
+      "allergiesUpdated": "Last updated",
+      "patientNotes": "Patient notes",
+      "patientNotesOpen": "Open",
+      "sms": "SMS Sent",
+      "notDeliveredSms": "awaiting confirmation of delivery",
+      "deliveredSms": "delivered",
+      "openAssignments": "Open assignments",
+      "futureAppointments": "Future appointments",
+      "pastAppointments": "Past appointments",
+      "notSelected": "Not selected",
+      "deletePatientConfirm": "Are you sure you want to delete this patient?",
+      "noNotes": "No notes for this patient.",
+      "noSMS": "No SMS sent to this patient.",
+      "noOpenAssignments": "No open assignments for this patient.",
+      "noCompletedAssignments": "No completed assignments for this patient.",
+      "noFutureAppointments": "No future appointments.",
+      "noPastAppointments": "No past appointments."
+    },
+    "personalInfoTab": "Personal Information",
+    "personalInfo": {
+      "editBtn": "Edit",
+      "personalInformation": "Personal Information",
+      "firstName": "First name",
+      "lastName": "Last name",
+      "dob": "Date of birth",
+      "gender": "Gender",
+      "male": "Male",
+      "female": "Female",
+      "unspecified": "Unspecified",
+      "address": "Address",
+      "postCode": "Postcode",
+      "city": "City",
+      "country": "Country",
+      "region": "Region",
+      "insurance": "Insurance number, insured at",
+      "phone": "Mobile number",
+      "email": "Email address",
+      "taxNumber": "Tax Number",
+      "allergiesAndSensitivites": "Allergies and sensitivites",
+      "generalNotes": "General notes",
+      "personalDoctors": "Personal doctors",
+      "personalDentist": "Dentist",
+      "personalSurgeon": "Surgeon"
+    },
+    "filesTab": "Files",
+    "filesHeader": "Files",
+    "files": {
+      "sortBy": "Sort by",
+      "addFile": "New file",
+      "fileName": "File name",
+      "fileType": "File type",
+      "fileCreatedAt": "Date",
+      "fileAddedAt": "Added at",
+      "downloadFile": "Download file",
+      "uploadingFile": "File is uploading..."
+    },
+    "invoicesTab": "Invoices",
+    "invoices": {
+      "filters": {
+        "invoice_type": "Invoice type"
+      },
+      "invoicesHeader": "Invoices",
+      "addInvoice": "New invoice",
+      "servicesSummary": "Services Summary",
+      "addService": "New service"
+    },
+    "invoicesColumn": {
+      "type": "Type",
+      "no": "Number",
+      "date": "Date",
+      "issuedBy": "Issued by",
+      "amount": "Amount",
+      "status": "Status",
+      "verificationStatus": "Verification status",
+      "paymentStatus": "Payment status"
+    },
+    "servicesSummaryColumn": {
+      "serviceTitle": "Service",
+      "serviceDate": "Date",
+      "doneBy": "Done by",
+      "servicePrice": "Price",
+      "paymentMethod": "Payment method"
+    },
+    "offersTab": "Offers",
+    "offers": {
+      "offersHeader": "Offers",
+      "addOffer": "New offer"
+    },
+    "offersColumn": {
+      "no": "Number",
+      "date": "Date",
+      "issuedBy": "Issued by",
+      "amount": "Amount"
+    },
+    "notification": "Notification",
+    "changesSaved": "Changes saved",
+    "invoiceType": "Choose invoice type",
+    "invoice": "Invoice",
+    "advPayment": "Advance Payment",
+    "offer": "Offer",
+    "cancel": "Cancel",
+    "continue": "Continue"
+  },
+  "offers": {
+    "offersHeader": "Offers",
+    "offersBtn": "New Offer",
+    "offersColumn": {
+      "no": "Number",
+      "patientName": "Patient Name",
+      "date": "Date",
+      "issuedBy": "Issued By",
+      "amount": "Amount"
+    }
+  },
+  "offer": {
+    "offerHeader": "Offer",
+    "offerInfo": {
+      "offerDate": "Date",
+      "offerTotal": "Total",
+      "offerDetails": "Billing Details",
+      "offerIssuedIn": "Issued In",
+      "offerIssuedBy": "Issued By"
+    },
+    "offerDetail": "Offer Detail",
+    "offerDetailColumn": {
+      "item": "Item",
+      "quantity": "Quantity",
+      "price": "Price",
+      "discount": "Discount",
+      "total": "Total"
+    },
+    "offerSummary": "Offer Summary",
+    "offerSummaryColumn": {
+      "dueDate": "Due Date",
+      "subTotal": "Sub-Total",
+      "discount": "Discount",
+      "total": "Total"
+    }
+  },
+  "invoices": {
+    "invoicesHeader": "Invoices",
+    "invoicesBtn": "New Invoice",
+    "invoicesColumn": {
+      "type": "Type",
+      "no": "Number",
+      "patientName": "Patient Name",
+      "date": "Date",
+      "issuedBy": "Issued By",
+      "amount": "Amount",
+      "status": "Status"
+    },
+    "paid": "Paid",
+    "unpaid": "Unpaid",
+    "partiallyPaid": "Partially paid",
+    "addNewInvoice": {
+      "selectPatient": "Select patient",
+      "patient": "Patient",
+      "close": "Close",
+      "create": "Create invoice"
+    },
+    "newInvoice": {
+      "newInvoiceHeader": "New invoice",
+      "dateOfInvoice": "Date of invoice",
+      "dateOfService": "Date of service",
+      "paymentMethodSummary": "Payment Method Summary",
+      "invoiceNo": "INVOICE no.",
+      "addPaymentMethod": "Add new payment method",
+      "newInvoiceColumn": {
+        "invoiceDate": "Date",
+        "invoiceTotal": "Total",
+        "customer": "Customer",
+        "issuedIn": "Issued in",
+        "issuedBy": "Issued by",
+        "device": "Device"
+      },
+      "newInvoiceDetails": {
+        "header": "Invoice detail",
+        "addNewItem": "Add new item",
+        "item": "Item",
+        "quantity": "Quantity",
+        "price": "Price",
+        "discount": "Discount",
+        "amount": "Amount",
+        "action": "Action",
+        "teeth": "Teeth",
+        "surface": "Surface",
+        "comment": "Comment"
+      },
+      "newInvoiceSummary": {
+        "header": "Invoice summary",
+        "dueDate": "Due date",
+        "paymentMethod": "Payment method",
+        "subTotal": "Sub-total",
+        "discount": "Discount",
+        "total": "Total",
+        "action": "Action"
+      },
+      "downloadPrint": "Download print",
+      "saveAsDraft": "Save invoice as draft",
+      "saveInvoice": "Save invoice"
+    }
+  },
+  "invoice": {
+    "draft": "Draft",
+    "paid": "Paid",
+    "unpaid": "Unpaid",
+    "partialyPaid": "Partialy paid",
+    "issued": "Issued",
+    "invoiceHeader": "Invoice",
+    "saved": "Invoice saved",
+    "notSaved": "Something is wrong, contact admin",
+    "pdfGuarantee": "The warranty is valid only with regular dental examinations at least once or twice per year and regular maintenance of oral hygiene.",
+    "invoiceInfo": {
+      "invoiceDate": "Date",
+      "invoiceTotal": "Total",
+      "invoiceStatus": "Confirmation status",
+      "paymentStatus": "Payment status",
+      "invoiceDetails": "Billing Details",
+      "invoiceIssuedIn": "Issued In",
+      "invoiceIssuedBy": "Issued By"
+    },
+    "invoiceDetail": "Invoice Detail",
+    "invoiceDetailColumn": {
+      "item": "Item",
+      "quantity": "Quantity",
+      "price": "Price",
+      "discount": "Discount",
+      "total": "Total"
+    },
+    "invoiceSummary": "Invoice Summary",
+    "invoiceSummaryColumn": {
+      "dueDate": "Due Date",
+      "paymentMethod": "Payment Method",
+      "subTotal": "Sub-Total",
+      "discount": "Discount",
+      "total": "Total"
+    }
+  },
+  "advPayments": {
+    "advPaymentsHeader": "Advance Payments",
+    "advPaymentsBtn": "New Advance Payment",
+    "advPaymentsColumn": {
+      "no": "Number",
+      "patientName": "Patient name",
+      "date": "Date",
+      "issuedBy": "Issued by",
+      "amount": "Amount"
+    },
+    "addNewAdvPayment": {
+      "selectPatient": "Select patient",
+      "patient": "Patient",
+      "close": "Close",
+      "create": "Create advance payment"
+    },
+    "newAdvPayment": {
+      "newAdvPaymentHeader": "New advance payment",
+      "alert": "Payment method amount must be the same as advance payment amount",
+      "alert2": "Advance payment amount can't be 0",
+      "alert3": "Payment method must be selected",
+      "paymentMethodSummary": "Payment method summary",
+      "downloadPrint": "Download print",
+      "saveDraft": "Save as draft",
+      "save": "Save and confirm",
+      "IBAN": "IBAN",
+      "vatId": "VAT ID no.",
+      "regNumber": "Registration no.",
+      "dateOfAdvPayment": "Date of issue",
+      "advPaymentNo": "ADVANCE PAYMENT no.",
+      "copy": "Copy",
+      "IssuedIn": "Issued in",
+      "code": "Code",
+      "item": "Item",
+      "quantity": "Quantity",
+      "price": "Price",
+      "value": "Value",
+      "amount": "Amount",
+      "total": "Total",
+      "payment": "Payment",
+      "paymentMethod": "Payment method",
+      "vatExemptionReason": "In accordance with points 2 and 4 of the first paragraph of Article 42 of ZDDV-1, health services and care are exempt from VAT, therefore no VAT has been charged.",
+      "issuedBy": "Issued by",
+      "zoi": "ZOI",
+      "eor": "EOR",
+      "details": {
+        "header": "Advance payment details",
+        "item": "Item",
+        "amount": "Amount",
+        "action": "Action"
+      }
+    },
+    "newAdvPaymentColumn": {
+      "issuedBy": "Issued by",
+      "customer": "Customer",
+      "issuedIn": "Issued in"
+    }
+  },
+  "advPayment": {
+    "advPaymentHeader": "Advance Payment",
+    "advPaymentInfo": {
+      "advPaymentDate": "Date",
+      "advPaymentTotal": "Total",
+      "advPaymentStatus": "Status",
+      "advPaymentDetails": "Billing Details",
+      "advPaymentIssuedIn": "Issued In",
+      "advPaymentIssuedBy": "Issued By"
+    },
+    "advPaymentDetail": "Advance Payment Details",
+    "advPaymentDetailColumn": {
+      "item": "Item",
+      "quantity": "Quantity",
+      "price": "Price",
+      "discount": "Discount",
+      "total": "Total"
+    },
+    "advPaymentSummary": "Advance Payment Summary",
+    "advPaymentSummaryColumn": {
+      "paymentDate": "Payment Date",
+      "paymentMethod": "Payment Method",
+      "subTotal": "Sub-Total",
+      "discount": "Discount",
+      "total": "Total"
+    }
+  },
+  "paymentMethod": "Payment method",
+  "paymentMethods": {
+    "cash": "Cash",
+    "creditCard": "Credit card",
+    "bankAccount": "Bank account"
+  },
+  "paymentMethodsColumn": {
+    "amount": "Amount",
+    "action": "Action",
+    "paid": "Paid"
+  },
+  "assignments": {
+    "assignmentsHeader": "My Assignments",
+    "addAssignments": "New Assignment",
+    "todaysAssignments": "Today's Assignments",
+    "overdueAssignments": "Overdue Assignments",
+    "futureAssignments": "Future Assignments",
+    "completedAssignments": "Completed Assignments",
+    "addAssignmentsModal": {
+      "addAssignments": "New Assignment",
+      "editAssignments": "Edit Assignment",
+      "enquiry": "Patient",
+      "description": "Description",
+      "due_at": "Date",
+      "assignTo": "Assign to",
+      "close": "Close",
+      "save": "Save"
+    },
+    "completeAssignmentModal": {
+      "no": "No",
+      "yes": "Yes",
+      "tickAssignment": "Are you sure you want to complete this assignment?",
+      "untickAssignment": "Are you sure you want to uncomplete this assignment?"
+    }
+  },
+  "statisticsForClinic": {
+    "attendance": "Number of attended appointments",
+    "nurses": "Nurses",
+    "patients": "Patients",
+    "pharmacists": "Pharmacists",
+    "statisticsForClinicHeader": "Clinic Statistics",
+    "todaysIncome": "Today's Income",
+    "weeksIncome": "This Week's Income",
+    "monthsIncome": "This Month's Income",
+    "yearsIncome": "This Year's Income"
+  },
+  "reportingEmazing": {
+    "servicesSummary": "Services Summary",
+    "periodSelect": "Select Period",
+    "currentMonth": "Current Month",
+    "lastMonth": "Last Month",
+    "thisYear": "This Year",
+    "lastYear": "Last Year",
+    "countrySelect": "All Countries",
+    "servicesSummaryColumn": {
+      "serviceFee": "Fee",
+      "serviceTitle": "Service Title",
+      "serviceCount": "Service Count",
+      "serviceAmount": "Amount"
+    },
+    "servicesList": "Services List",
+    "servicesListColumn": {
+      "serviceDate": "Service Date",
+      "serviceTitle": "Service Title",
+      "serviceLeadName": "Patient",
+      "serviceAmount": "Amount",
+      "serviceFee": "Fee",
+      "serviceLocation": "Location",
+      "serviceDoctor": "Doctor",
+      "serviceCountry": "Country",
+      "serviceRegion": "Region",
+      "serviceMunicipality": "Municipality",
+      "serviceLastConsult": "Last Consult Location"
+    }
+  },
+  "settingsUsers": {
+    "editProfile": "Edit profile",
+    "editProfileModal": {
+      "title": "Title",
+      "name": "Name",
+      "surname": "Surname",
+      "specialization": "Specialization",
+      "position": "Position",
+      "role": "Role",
+      "mail": "Mail",
+      "phone": "Phone",
+      "close": "Close",
+      "save": "Save"
+    }
+  },
+  "settingsLocations": {
+    "headerLocations": "Locations",
+    "addLocation": "New location",
+    "locationsColumn": {
+      "name": "Name",
+      "address": "Address",
+      "city": "City",
+      "action": "Action"
+    },
+    "addLocationModalHeader": "New location",
+    "editLocationModalHeader": "Edit location",
+    "locationModal": {
+      "name": "Name",
+      "city": "City",
+      "address": "Address",
+      "save": "Save",
+      "close": "Close"
+    },
+    "headerInactiveLocations": "Inactive locations"
+  },
+  "servicesAndProducts": {
+    "headerProducts": "Products",
+    "addProduct": "New product",
+    "productColumn": {
+      "productName": "Name",
+      "productPrice": "Price",
+      "productGroup": "Group",
+      "productType": "Type",
+      "productAction": "Action"
+    },
+    "addProductModal": {
+      "addProduct": "New product",
+      "nameSlovenian": "Name (Slovenian)",
+      "nameItalian": "Name (Italian)",
+      "nameGerman": "Name (German)",
+      "nameEnglish": "Name (English)",
+      "taxRate": "Tax rate",
+      "price": "Price",
+      "group": "Group",
+      "type": "Type",
+      "close": "Close",
+      "save": "Save"
+    },
+    "headerProductGroup": "Product groups",
+    "addProductGroup": "New product group",
+    "productGroupColumn": {
+      "productGroupName": "Name",
+      "productGroupCategory": "Category",
+      "productGroupFee": "Emazing fee",
+      "productGroupAction": "Action"
+    },
+    "headerProductCategories": "Product categories",
+    "addProductCategory": "New product category",
+    "productCategoryColumn": {
+      "productCategoryName": "Name",
+      "productCategoryAction": "Action"
+    }
+  },
+  "business": {
+    "headerBusiness": "Business customer",
+    "addBusiness": "New business customer",
+    "businessColumn": {
+      "businessName": "Name",
+      "businessEmail": "Email",
+      "businessAddress": "Address",
+      "businessCity": "City",
+      "businessTaxNumber": "Tax Number",
+      "businessZIPCode": "ZIP code",
+      "businessCountry": "Country",
+      "businessAction": "Action"
+    },
+    "addBusinessModal": {
+      "addBusiness": "New business",
+      "name": "Name",
+      "email": "Email",
+      "address": "Address",
+      "city": "City",
+      "vatNumber": "VAT number",
+      "zipCode": "ZIP code",
+      "countries": "Countries",
+      "close": "Close",
+      "save": "Save"
+    }
+  },
+  "labels": {
+    "labelsHeader": "Labels",
+    "newLabel": "New label",
+    "labelsColumns": {
+      "labelText": "Name",
+      "labelColor": "Color",
+      "labelAction": "Action"
+    }
+  },
+  "onlineBooking": {
+    "header": "Services and products",
+    "addBtn": "Add",
+    "onlineBookingColumns": {
+      "serviceName": "Name",
+      "price": "Price",
+      "duration": "Duration (min.)",
+      "doctor": "Doctor",
+      "productGroup": "Product group",
+      "premise": "Location",
+      "action": "Action"
+    },
+    "serviceModal": {
+      "title": "Online booking - service",
+      "save": "Save",
+      "close": "Close",
+      "slovenian": "Name (Slovenian)",
+      "italian": "Name (Italian)",
+      "english": "Name (English)",
+      "price": "Price",
+      "duration": "Duration (min)",
+      "doctor": "Doctor",
+      "productGroup": "Product group",
+      "premise": "Premise"
+    }
+  },
+  "footer": {
+    "privacyPolicy": "Privacy policy",
+    "termsOfUse": "Terms of use",
+    "allRightsReserved": "All rights reserved"
+  },
+  "dashboard2": {
+    "card1": "AVG Impressions",
+    "card2": "AVG Engagements Rate",
+    "card3": "AVG Reach",
+    "card4": "AVG Transport",
+    "featureTableTitle": "Frequent Post List",
+    "summary": "Post Summary",
+    "totalLikeComment": "Total of Likes $ Comments",
+    "bestPost": "Best Performing Posts"
+  },
+  "dashboard1": {
+    "card1": "Invoice Sent",
+    "card2": "Credited From Accounts",
+    "card3": "AVG Employee Costs",
+    "card4": "Average payment delay",
+    "invoice": "invoice",
+    "invoiceState": "Invoice Stats",
+    "openInvoice": "Open Invoices",
+    "monthlyInvoice": "Monthly Invoices",
+    "exchangeRates": "Exchange Rates",
+    "paymentHistory": "Payment History",
+    "lastCosts": "Last Costs",
+    "efficiency": "Efficiency"
+  },
+  "rightSide": {
+    "customerDistribution": "Customer Distribution",
+    "projectStatistic": "Project Statistic",
+    "countries": "Countries"
+  },
+  "dropdown": {
+    "view": "View",
+    "delete": "Delete",
+    "edit": "Edit",
+    "print": "Print",
+    "download": "Download",
+    "unfollow": "Unfollow",
+    "follow": "Follow",
+    "block": "Block"
+  },
+  "customizer": {
+    "colorCustomizer": "Color Customizer",
+    "themeColor": "Theme Color",
+    "colorMode": "Color Mode",
+    "sidebar": "Sidebar",
+    "sidebarMini": "Sidebar Mini",
+    "routeAnimation": "Route Animation",
+    "rtlMode": "RTL Mode",
+    "rtl": "RTL",
+    "reset": "Reset"
+  },
+  "public": {
+    "onlineBooking": {
+      "pickService": "Seleziona un servizio",
+      "chooseTime": "Seleziona l'orario",
+      "review": "Revisione",
+      "service": "Servizio",
+      "doctor": "Dentista",
+      "time": "Orario",
+      "price": "Prezzo",
+      "open": "Libero",
+      "taken": "Occupato",
+      "closed": "Chiuso",
+      "chooseYourFavoriteDoctor": "Scegli dentista",
+      "selectOption": "Seleziona opzione",
+      "pressEnterToSelect": "Premi invio per selezionare",
+      "pressEnterToRemove": "Premi invio per cancellare",
+      "availableDoctors": "Dentisti liberi",
+      "showMore": "Mostra altro",
+      "totalInfo": "Dati completi",
+      "summary": "Riepilogo",
+      "date": "Data",
+      "total": "Totale",
+      "back": "Indietro",
+      "continue": "Avanti",
+      "checkSelectedSlotAndConfirmReservation": "Verifica le date selezionate e conferma la prenotazione.",
+      "selectedSlot": "Data selezionata",
+      "at": "alle",
+      "startAt": "Inizio alle",
+      "slotsAndPrices": "Date e prezzi",
+      "confirm": "Conferma",
+      "dataConfirmed": "Dati confermati",
+      "confirmationOfBooking": "Conferma la prenotazione",
+      "firstName": "Nome",
+      "lastName": "Cognome",
+      "pleaseEnterYourMobileNumber": "Inserisci il tuo numero di telefono per ricevere il codice per la conferma dell'appuntamento.",
+      "phoneNumber": "Numero di telefono",
+      "phone": "Telefono",
+      "countryCode": "Prefisso internazionale",
+      "sendVerificationCode": "Manda il codice di verifica",
+      "theCodeHasBeenSentTo": "Il codice è stato inviato a",
+      "smsVerificationCode": "Codice di verifica sms:",
+      "confirmationCode": "Codice di conferma",
+      "confirmCode": "Conferma il codice",
+      "modifyPhoneNumber": "Modifica il numero di telefono",
+      "yourDetailsHaveBeenSuccessfullyVerified": "I tuoi dati sono stati confermati. Ti aspettiamo all'appuntamento.",
+      "location": "Località",
+      "company": "Ditta",
+      "bookingSuccessful": "Il tuo appuntamento è confermato!",
+      "bookAnotherAppointment": "Prenota un nuvo appuntamento",
+      "error": {
+        "over-order": "Non è possibile fare due prenotazioni con lo stesso numero di telefono.",
+        "unavailable-slot": "La data scelta è già occupata."
+      }
+    }
+
+  }
+}

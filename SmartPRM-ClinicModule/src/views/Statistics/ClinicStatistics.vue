@@ -7,31 +7,66 @@
             <b-form @submit.prevent>
               <b-row align-v="center" class="py-2">
                 <b-col cols="12">
-                  <h4 class="card-title mt-3">{{ $t('statisticsForClinic.statisticsForClinicHeader') }}</h4>
+                  <h3 class="card-title mt-3">
+                    {{ $t('statisticsForClinic.statisticsForClinicHeader') }}
+                  </h3>
                 </b-col>
                 <b-col cols="12" sm="6" md="4" lg="3">
                   <b-form-group>
-                    <label style="padding-top: 8px;">Filter</label>
-                    <b-form-select style="line-height: normal" v-model="filterBy" @change="onFilterChange">
-                      <b-form-select-option :value="null">Select Filter</b-form-select-option>
-                      <b-form-select-option :value="30">Last 30 Days</b-form-select-option>
-                      <b-form-select-option :value="90">Last 90 Days</b-form-select-option>
-                      <b-form-select-option :value="180">Last 180 Days</b-form-select-option>
-                      <b-form-select-option :value="2">Last 2 Years</b-form-select-option>
-                      <b-form-select-option :value="1">Year-To-Date</b-form-select-option>
+                    <label style="padding-top: 8px">Filter</label>
+                    <b-form-select
+                      style="line-height: normal"
+                      v-model="filterBy"
+                      @change="onFilterChange"
+                    >
+                      <b-form-select-option :value="null"
+                        >Select Filter</b-form-select-option
+                      >
+                      <b-form-select-option :value="30"
+                        >Last 30 Days</b-form-select-option
+                      >
+                      <b-form-select-option :value="90"
+                        >Last 90 Days</b-form-select-option
+                      >
+                      <b-form-select-option :value="180"
+                        >Last 180 Days</b-form-select-option
+                      >
+                      <b-form-select-option :value="365"
+                        >Last 365 Days</b-form-select-option
+                      >
+                      <b-form-select-option :value="2"
+                        >Last 2 Years</b-form-select-option
+                      >
+                      <b-form-select-option :value="1"
+                        >Year-To-Date</b-form-select-option
+                      >
                     </b-form-select>
                   </b-form-group>
                 </b-col>
                 <b-col cols="12" sm="6" md="4" lg="3">
                   <b-form-group>
-                    <label style="padding-top: 8px;">From:</label>
-                    <b-form-input style="line-height: normal" class="date" id="exampleStartdate" type="date" v-model="startDate" @change="onDateChange"></b-form-input>
+                    <label style="padding-top: 8px">From:</label>
+                    <b-form-input
+                      style="line-height: normal"
+                      class="date"
+                      id="exampleStartdate"
+                      type="date"
+                      v-model="startDate"
+                      @change="onDateChange"
+                    ></b-form-input>
                   </b-form-group>
                 </b-col>
                 <b-col cols="12" sm="6" md="4" lg="3">
                   <b-form-group>
-                    <label style="padding-top: 8px;">End:</label>
-                    <b-form-input style="line-height: normal" class="date" id="exampleEnddate" type="date" v-model="endDate" @change="onDateChange"></b-form-input>
+                    <label style="padding-top: 8px">End:</label>
+                    <b-form-input
+                      style="line-height: normal"
+                      class="date"
+                      id="exampleEnddate"
+                      type="date"
+                      v-model="endDate"
+                      @change="onDateChange"
+                    ></b-form-input>
                   </b-form-group>
                 </b-col>
               </b-row>
@@ -42,52 +77,83 @@
       <b-col lg="12">
         <b-row>
           <b-col md="6" lg="3">
-            <iq-card class-name="iq-card-block iq-card-stretch iq-card-height" body-class="iq-bg-primary rounded">
+            <iq-card
+              class-name="iq-card-block iq-card-stretch iq-card-height"
+              body-class="iq-bg-primary rounded"
+            >
+              <template v-slot:body>
+                <div class="d-flex align-items-top justify-content-between">
+                  <div
+                    class="rounded-circle iq-card-icon bg-primary"
+                    style="min-height: 60px; min-width: 60px"
+                  >
+                    <i class="ri-user-fill"></i>
+                  </div>
+                  <div class="text-right">
+                    <h2 class="mb-0">
+                      <span class="counter">{{ appointments | formatNumber }}</span>
+                    </h2>
+                    <h5 class="pb-3">Appointments</h5>
+                  </div>
+                </div>
+              </template>
+            </iq-card>
+          </b-col>
+          <b-col md="6" lg="3">
+            <iq-card
+              class-name="iq-card-block iq-card-stretch iq-card-height"
+              body-class="iq-bg-warning rounded"
+            >
               <template v-slot:body>
                 <div class="d-flex align-items-center justify-content-between">
-                  <div class="rounded-circle iq-card-icon bg-primary" style="min-height: 60px; min-width: 60px;"><i class="ri-user-fill"></i></div>
+                  <div class="rounded-circle iq-card-icon bg-warning">
+                    <i class="ri-women-fill"></i>
+                  </div>
                   <div class="text-right">
-                    <h2 class="mb-0"><span class="counter">{{ attendance }}</span></h2>
-                    <h5 class="">{{ $t('statisticsForClinic.attendance') }}</h5>
+                    <h2 class="mb-0">
+                      <span class="counter">{{ attended | formatNumber }}</span>
+                    </h2>
+                    <h5 class="">Attended</h5>
                   </div>
                 </div>
               </template>
             </iq-card>
           </b-col>
           <b-col md="6" lg="3">
-            <iq-card class-name="iq-card-block iq-card-stretch iq-card-height" body-class="iq-bg-warning rounded">
-              <template v-slot:body >
+            <iq-card
+              class-name="iq-card-block iq-card-stretch iq-card-height"
+              body-class="iq-bg-danger rounded"
+            >
+              <template v-slot:body>
                 <div class="d-flex align-items-center justify-content-between">
-                  <div class="rounded-circle iq-card-icon bg-warning"><i class="ri-women-fill"></i></div>
+                  <div class="rounded-circle iq-card-icon bg-danger">
+                    <i class="ri-group-fill"></i>
+                  </div>
                   <div class="text-right">
-                    <h2 class="mb-0"><span class="counter">3450</span></h2>
-                    <h5 class="">{{ $t('statisticsForClinic.nurses') }}</h5>
+                    <h2 class="mb-0">
+                      <span class="counter">{{ serviced_patients | formatNumber }}</span>
+                    </h2>
+                    <h5 class="">Serviced Patients</h5>
                   </div>
                 </div>
               </template>
             </iq-card>
           </b-col>
           <b-col md="6" lg="3">
-            <iq-card class-name="iq-card-block iq-card-stretch iq-card-height" body-class="iq-bg-danger rounded">
-              <template v-slot:body >
+            <iq-card
+              class-name="iq-card-block iq-card-stretch iq-card-height"
+              body-class="iq-bg-info rounded"
+            >
+              <template v-slot:body>
                 <div class="d-flex align-items-center justify-content-between">
-                  <div class="rounded-circle iq-card-icon bg-danger"><i class="ri-group-fill"></i></div>
-                  <div class="text-right">
-                    <h2 class="mb-0"><span class="counter">3500</span></h2>
-                    <h5 class="">{{ $t('statisticsForClinic.patients') }}</h5>
+                  <div class="rounded-circle iq-card-icon bg-info">
+                    <i class="ri-hospital-line"></i>
                   </div>
-                </div>
-              </template>
-            </iq-card>
-          </b-col>
-          <b-col md="6" lg="3">
-            <iq-card class-name="iq-card-block iq-card-stretch iq-card-height" body-class="iq-bg-info rounded">
-              <template v-slot:body >
-                <div class="d-flex align-items-center justify-content-between">
-                  <div class="rounded-circle iq-card-icon bg-info"><i class="ri-hospital-line"></i></div>
                   <div class="text-right">
-                    <h2 class="mb-0"><span class="counter">4500</span></h2>
-                    <h5 class="">{{ $t('statisticsForClinic.pharmacists') }}</h5>
+                    <h2 class="mb-0">
+                      <span class="counter">{{ revenue | formatPrice }}</span>
+                    </h2>
+                    <h5 class="">Revenue</h5>
                   </div>
                 </div>
               </template>
@@ -120,37 +186,56 @@
       </b-col> -->
     </b-row>
     <template v-if="startDate && endDate">
-      <RevenueByProduct :start="startDate" :end="endDate" />
-      <LeadsChart :start="startDate" :end="endDate" />
-      <RevenueByDoctor :start="startDate" :end="endDate" />
+      <RevenueByProduct :client="clientName" :start="startDate" :end="endDate" />
+      <LeadsChart :client="clientName" :start="startDate" :end="endDate" />
+      <RevenueByDoctor :client="clientName" :start="startDate" :end="endDate" />
+      <NewPatients :client="clientName" :start="startDate" :end="endDate" />
+      <AppointmentsByProduct :start="startDate" :end="endDate" />
     </template>
   </b-container>
 </template>
 <script>
 import { xray } from '../../config/pluginInit'
 import IqCard from '../../components/xray/cards/iq-card'
-import { clinicStatisticsAttendance } from '../../services/statistics'
-import { getDatesForCurrentYear } from '../../services/commonCodeLists'
+import {
+  clinicStatisticsAttendance,
+  getClinicStats,
+} from '../../services/statistics'
+// import { getDatesForCurrentYear } from '../../services/commonCodeLists'
 import RevenueByProduct from '@/components/ClinicStats/RevenueByProduct.vue'
 import LeadsChart from '@/components/ClinicStats/LeadsChart.vue'
 import RevenueByDoctor from '@/components/ClinicStats/RevenueByDoctor.vue'
+import NewPatients from '@/components/ClinicStats/NewPatients.vue'
+import AppointmentsByProduct from '@/components/ClinicStats/AppointmentsByProduct.vue'
 import moment from 'moment'
+import { sso } from '../../services/userService'
 
 export default {
   name: 'Dashboard1',
-  components: { IqCard, RevenueByProduct, LeadsChart, RevenueByDoctor },
+  components: {
+    IqCard,
+    RevenueByProduct,
+    LeadsChart,
+    RevenueByDoctor,
+    NewPatients,
+    AppointmentsByProduct,
+  },
   mounted() {
     xray.index()
+    this.getLoggedUser()
     this.getStartDates()
     this.getAttendance()
   },
   data() {
     return {
+      clientName: null,
       startDate: null,
       endDate: null,
       filterBy: null,
-      leadStartDate: null,
-      leadEndDate: null,
+      revenue: 0,
+      appointments: 0,
+      attended: 0,
+      serviced_patients: 0,
       attendance: 0,
       statistics: [],
       dataToExport: [],
@@ -165,23 +250,26 @@ export default {
         slidesToShow: 5,
         slidesToScroll: 1,
         focusOnSelect: true,
-        responsive: [{
-          breakpoint: 992,
-          settings: {
-            arrows: false,
-            centerMode: true,
-            centerPadding: '30',
-            slidesToShow: 3,
+        responsive: [
+          {
+            breakpoint: 992,
+            settings: {
+              arrows: false,
+              centerMode: true,
+              centerPadding: '30',
+              slidesToShow: 3,
+            },
           },
-        }, {
-          breakpoint: 480,
-          settings: {
-            arrows: false,
-            centerMode: true,
-            centerPadding: '15',
-            slidesToShow: 1,
+          {
+            breakpoint: 480,
+            settings: {
+              arrows: false,
+              centerMode: true,
+              centerPadding: '15',
+              slidesToShow: 1,
+            },
           },
-        }],
+        ],
       },
       series: [],
       chartOptions: {
@@ -193,6 +281,13 @@ export default {
     }
   },
   methods: {
+    getLoggedUser() {
+      sso().then(response => {
+        if (response && response.client_name) {
+          this.clientName = response.client_name
+        }
+      })
+    },
     onFilterChange(value) {
       const today = moment().format('YYYY-MM-DD')
       if (value && value === 2) {
@@ -212,18 +307,36 @@ export default {
         this.endDate = today
         this.startDate = secondDate
       }
+      if (value) {
+        this.getStats(this.startDate, this.endDate)
+      }
     },
     getStartDates() {
-      getDatesForCurrentYear().then(response => {
-        const start = response[0]
-        const end = response[response.length - 1]
-        this.startDate = start['?column?'].split('T')[0]
-        this.endDate = end['?column?'].split('T')[0]
-        // this.getClinicRevenueByProduct(this.startDate, this.endDate)
-      })
+      this.endDate = moment().format('YYYY-MM-DD')
+      this.startDate = moment().add(-30, 'days').format('YYYY-MM-DD')
+      this.getStats(this.startDate, this.endDate)
+      // getDatesForCurrentYear().then(response => {
+      //   const start = response[0]
+      //   const end = response[response.length - 1]
+      //   this.startDate = start['?column?'].split('T')[0]
+      //   this.endDate = end['?column?'].split('T')[0]
+      //   this.getStats(this.startDate, this.endDate)
+      // })
     },
     onDateChange() {
       this.filterBy = null
+      this.getStats(this.startDate, this.endDate)
+    },
+
+    getStats(start, end) {
+      getClinicStats(start, end).then((response) => {
+        if (response && response.revenue) {
+          this.revenue = Number(response.revenue)
+          this.appointments = Number(response.appointments)
+          this.attended = Number(response.attended)
+          this.serviced_patients = Number(response.serviced)
+        }
+      })
     },
     // getStatistics () {
     //   getClinicStatistics().then(response => {
@@ -241,7 +354,7 @@ export default {
     //   })
     // },
     getAttendance() {
-      clinicStatisticsAttendance().then(response => {
+      clinicStatisticsAttendance().then((response) => {
         if (typeof response !== 'string') {
           this.attendance = response[0].count
         } else {
@@ -254,8 +367,7 @@ export default {
 </script>
 
 <style>
-.iq-card-body{
+.iq-card-body {
   flex: unset;
 }
-
 </style>

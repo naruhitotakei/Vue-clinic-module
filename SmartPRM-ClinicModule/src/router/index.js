@@ -47,10 +47,12 @@ import BusinessCustomers from '../views/Settings/BusinessCustomers'
 import Users from '../views/Settings/Users'
 import FreeSlots from '../views/Settings/FreeSlots'
 import SMSTemplates from '../views/Settings/SMSTemplates'
+import SMSTemplatesEdit from '../views/Settings/SMSTemplatesEdit'
 import MailTemplates from '../views/Settings/MailTemplates'
 import Advertising from '../views/Settings/Advertising'
 import Labels from '../views/Settings/Labels'
 import OnlineBooking from '../views/Settings/OnlineBooking'
+import OnlineBookingServices from '../views/Settings/OnlineBookingServices'
 /* Authentic View */
 import SignIn from '../views/Auth/Pages/SignIn'
 import SignUp from '../views/Auth/Pages/SignUp'
@@ -153,8 +155,15 @@ const documentChildRoute = (prop, mode) => [
     component: Invoice,
   },
   {
+    path: 'invoices/:invoiceId/draft/patient/:patientId',
+    name: prop + '.draftInvoice',
+    meta: { dark: mode, auth: true, name: 'Invoice' },
+    props: true,
+    component: NewInvoice,
+  },
+  {
     path: 'invoices/:patientId/new-invoice',
-    name: prop + '.invoiceId',
+    name: prop + '.newInvoice',
     meta: { dark: mode, auth: true, name: 'Invoice' },
     component: NewInvoice,
   },
@@ -181,6 +190,14 @@ const documentChildRoute = (prop, mode) => [
     name: prop + '.offers',
     meta: { dark: mode, auth: true, name: 'Offers' },
     component: Offers,
+  },
+]
+const patientChildRoute = (prop, mode) => [
+  {
+    path: ':patientId',
+    name: prop + '.patientId',
+    meta: { dark: mode, auth: true, name: 'ViewPatient' },
+    component: ViewPatient,
   },
 ]
 
@@ -265,15 +282,6 @@ const callCenterChildRoute = (prop, mode = false) => [
   },
 ]
 
-const patientChildRoute = (prop, mode) => [
-  {
-    path: ':patientId',
-    name: prop + '.patientId',
-    meta: { dark: mode, auth: true, name: 'ViewPatient' },
-    component: ViewPatient,
-  },
-]
-
 const settingsChildRoute = (prop, mode = false) => [
   {
     path: 'users',
@@ -318,6 +326,12 @@ const settingsChildRoute = (prop, mode = false) => [
     component: SMSTemplates,
   },
   {
+    path: 'sms-templates/:id/edit',
+    name: prop + '.sms-templates-edit',
+    meta: { dark: mode, auth: true, name: 'Edit SMS Template' },
+    component: SMSTemplatesEdit,
+  },
+  {
     path: 'mail-templates',
     name: prop + '.mail-templates',
     meta: { dark: mode, auth: true, name: 'Mail Templates' },
@@ -340,6 +354,12 @@ const settingsChildRoute = (prop, mode = false) => [
     name: prop + '.online-booking',
     meta: { dark: mode, auth: true, name: 'Online Booking' },
     component: OnlineBooking,
+  },
+  {
+    path: 'online-booking/:id/services',
+    name: prop + '.online-booking-services',
+    meta: { dark: mode, auth: true, name: 'Online Booking Services' },
+    component: OnlineBookingServices,
   },
 ]
 

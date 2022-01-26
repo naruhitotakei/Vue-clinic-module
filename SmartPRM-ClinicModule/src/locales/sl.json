@@ -16,7 +16,14 @@
     "search": "Iskanje",
     "searchBy": "Išči po",
     "sortBy": "Razvrsti po",
-    "country": "Država"
+    "country": "Država",
+    "yes": "Da",
+    "no": "Ne",
+    "noDoctor": "Doktor ni doloćen",
+    "cancel": "Prekliči",
+    "confirm": "Potrdi",
+    "update": "Posodobi",
+    "or": "ali"
   },
   "documents": {
     "offers": "Ponudbe",
@@ -34,11 +41,11 @@
   },
   "callCenter": {
     "leads": "Leadi",
-    "clientInfo": "Podatki o Klientu",
+    "clientInfo": "Podatki o klientu",
     "KPIs": "KPIs",
-    "workReport": "Poročila o Delu",
-    "activityReport": "Poročila o Aktivnosti",
-    "missingServices": "Manjkajoče Storitve"
+    "workReport": "Poročila o delu",
+    "activityReport": "Poročila o aktivnosti",
+    "missingServices": "Manjkajoče storitve"
   },
   "settings": {
     "users": "Uporabniki",
@@ -124,7 +131,10 @@
     "btnEPR": "Kartoteka pacienta",
     "btnSave": "Shrani",
     "btnCancel": "Prekliči",
-    "btnCancelation": "Preklic termina"
+    "btnCancelation": "Preklic termina",
+    "notSavedModalHeader": "Ali ste prepričani da želite ovreči spremembe?",
+    "notSavedModalBody": "Imate neshranjene spremembe. Jih želite shraniti preden zaprete modal?",
+    "noTimeSet": "Ura ni določena"
   },
   "calendarEvent": {
     "start": "Začetek",
@@ -153,6 +163,22 @@
     "eventMoveBetweenResources": "Ali ste prepričani da želite preložiti ta termin na drugega zdravnika?",
     "eventTimeChange": "Ali ste prepričani da želite spremeniti čas tega termina?"
   },
+  "appointments": {
+    "header": "Termini",
+    "filters": "Filtriraj",
+    "time": "Čas",
+    "patient": "Pacient",
+    "product": "Produkt",
+    "doctor": "Zdravnik",
+    "attendance": "Prisotnost",
+    "interest": "Zanimanje za poseg",
+    "notInterested": "Ne zanima",
+    "interested": "Zanima",
+    "veryInterested": "Zelo zanima",
+    "clinicNotes": "Opombe klinike",
+    "callCenterNotes": "Opombe klicnega centra",
+    "enterNotes": "Vpiši Opombe..."
+  },
   "patients": {
     "patientsHeader": "Pacienti",
     "addPatient": "Nov pacient",
@@ -175,7 +201,7 @@
     "overviewTab": "Pregled",
     "overview": {
       "numberOfVisits": "Število obiskov",
-      "firstVisit": "Čas od prvega obiska",
+      "lastVisit": "Čas od zadnjega obiska",
       "phone": "Telefon",
       "email": "Email",
       "address": "Naslov",
@@ -533,6 +559,13 @@
     "overdueAssignments": "Zapadle Naloge",
     "futureAssignments": "Naslednje Naloge",
     "completedAssignments": "Opravljene Naloge",
+    "todaysAssignmentsOfOtherUsers": "Današnje naloge drugih uporabnikov",
+    "overdueAssignmentsOfOtherUsers": "Zapadle naloge drugih uporabnikov",
+    "futureAssignmentsOfOtherUsers": "Naslednje naloge drugih uporabnikov",
+    "noAssignmentsToday": "Ni nalog za danes.",
+    "noOverdueAssignments": "Ni zapadlih nalog.",
+    "noFutureAssignments": "Ni prihodnjih nalog.",
+    "filterByUsers": "Filtriraj uporabnike",
     "addAssignmentsModal": {
       "addAssignments": "Nova naloga",
       "editAssignments": "Uredi nalogo",
@@ -698,6 +731,14 @@
       "labelAction": "Urejaj"
     }
   },
+  "SMSTemplates": {
+    "uniqueName": "Unikatno ime",
+    "language": "Jezik",
+    "editTemplate": "Uredi SMS predlogo",
+    "name": "Ime predloge",
+    "content": "Vsebina",
+    "edit": "Uredi"
+  },
   "onlineBooking": {
     "header": "Storitve in produkti",
     "addBtn": "Dodaj",
@@ -785,11 +826,13 @@
       "chooseTime": "Izberite termin",
       "review": "Pregled",
       "service": "Storitev",
-      "doctor": "Zdravnik",
+      "doctor": "Zobozdravnik",
       "time": "Čas",
       "price": "Cena",
-      "taken": "Zasedeno",
-      "closed": "Zaprto",
+      "open": "prosto",
+      "taken": "zasedeno",
+      "closed": "zaprto",
+      "unavailable": "sl - unavailable",
       "chooseYourFavoriteDoctor": "Izberite zdravnika",
       "selectOption": "Izberite možnost",
       "pressEnterToSelect": "Pritisnite enter, da izberete",
@@ -797,11 +840,11 @@
       "availableDoctors": "Prosti zdravniki",
       "showMore": "Pokaži več",
       "totalInfo": "Popolni podatki",
-      "summary": "sl - Summary",
+      "summary": "Povzetek",
       "date": "Datum",
       "total": "Skupaj",
-      "backToServices": "Nazaj na storitve",
-      "toReview": "Na pregled",
+      "back": "Nazaj",
+      "continue": "Naprej",
       "checkSelectedSlotAndConfirmReservation": "Obkljukajte izbrane termine in potrdite rezervacijo.",
       "selectedSlot": "Izbran termin",
       "at": "ob",
@@ -824,7 +867,15 @@
       "modifyPhoneNumber": "Spremeni telefonsko številko",
       "yourDetailsHaveBeenSuccessfullyVerified": "Vaši podatki so bili potrjeni. Veselimo se vašega obiska.",
       "location": "Lokacija",
-      "company": "Podjetje"
+      "company": "Podjetje",
+      "bookingSuccessful": "Vaš termin je rezerviran!",
+      "bookAnotherAppointment": "Rezerviraj nov termin",
+      "error": {
+        "over-order": "Ni možno zapolniti več kot dva termina iz iste telefonske številke.",
+        "unavailable-slot": "Vaš izbrani termin je že zaseden.",
+        "incorrect-code": "sl - The code inserted does not match the expected value.",
+        "excessive-verification-attempts": "sl - Incorrect code was entered too many times. Please wait to try again."
+      }
     }
   }
 }

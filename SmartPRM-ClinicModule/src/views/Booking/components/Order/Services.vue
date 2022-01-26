@@ -3,10 +3,14 @@
     <b-table
       :items="services"
       :fields="[
-        { key: 'serviceName', label: $t('public.onlineBooking.service'), tdClass: 'w-50' },
+        {
+          key: 'serviceName',
+          label: $t('public.onlineBooking.service'),
+          tdClass: 'w-50',
+        },
         { key: 'time', label: $t('public.onlineBooking.time') },
-        { key: 'price', label: $t('public.onlineBooking.price') },
-        { key: 'selected', label: '', tdClass: 'checkColumn' }
+        { key: 'priceFormatted', label: $t('public.onlineBooking.price') },
+        { key: 'selected', label: '', tdClass: 'checkColumn' },
       ]"
       select-mode="single"
       responsive="sm"
@@ -15,7 +19,11 @@
       @row-selected="fieldset.service = $event[0]"
     >
       <template #cell(selected)="{ rowSelected }">
-        <span :style="{ 'color': rowSelected ? '' : 'transparent' }" aria-hidden="true">&check;</span>
+        <span
+          :style="{ color: rowSelected ? '' : 'transparent' }"
+          aria-hidden="true"
+          >&check;</span
+        >
       </template>
     </b-table>
     <div class="text-right">
@@ -48,12 +56,26 @@ export default defineComponent({
       fieldset: {
         service: null,
       },
-      services: [],
+      store: {
+        services: [],
+      },
     }
   },
 
+  computed: {
+    services() {
+      return this.store.services.map((service) => ({
+        ...service,
+        serviceName: service.text,
+        time: `${service.default_duration} min`,
+        price: parseFloat(service.default_online_price),
+        priceFormatted: `$${parseFloat(service.default_online_price)}`,
+      }))
+    },
+  },
+
   watch: {
-    fieldset: {
+    'fieldset': {
       deep: true,
       handler(value) {
         this.$emit('update:form', {
@@ -66,14 +88,9 @@ export default defineComponent({
     '$i18n.locale': {
       immediate: true,
       async handler(locale) {
-        this.services = []
+        this.store.services = []
         const services = await getOnlineBookingProductsPublic(locale)
-        this.services = services.map((service) => ({
-          ...service,
-          serviceName: service.text,
-          time: service.default_duration,
-          price: parseFloat(service.default_online_price),
-        }))
+        this.store.services = services
       },
     },
   },

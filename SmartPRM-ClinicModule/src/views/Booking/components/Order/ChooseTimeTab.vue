@@ -1,6 +1,6 @@
 <template>
   <div v-if="dateSlots.length > 0" class="mt-5">
-    <div style="padding-left: 48px; padding-right: 48px; ">
+    <div style="padding-left: 48px; padding-right: 48px">
       <slick :option="slickOptions">
         <date-card
           v-for="slot in dateSlots"
@@ -9,7 +9,9 @@
           :availability="slot.availability"
           :active="slot.date.getTime() === date.getTime()"
           :totalPrice="form.service.price"
-          @date-selected="(value) => slot.availability === false ? date = value : null"
+          @date-selected="
+            (value) => (slot.availability === false ? (date = value) : null)
+          "
         />
       </slick>
     </div>
@@ -28,7 +30,10 @@
             :selectLabel="$t('public.onlineBooking.pressEnterToSelect')"
             :deselectLabel="$t('public.onlineBooking.pressEnterToRemove')"
           />
-          <div v-if="appointmentSlots.length > 0" class="mt-5">
+          <div
+            v-if="appointmentSlots && appointmentSlots.length > 0"
+            class="mt-5"
+          >
             <time-selection-table
               :items="appointmentSlotsFiltered"
               :appointment-slot.sync="fieldset.appointmentSlot"
@@ -39,12 +44,8 @@
           <div v-if="fieldset.appointmentSlot != null">
             <total-order-info :order="form" />
             <div class="d-flex justify-content-between mt-3">
-              <b-button
-                align-self="end"
-                variant="primary"
-                @click="$emit('next', -1)"
-              >
-                {{ $t('public.onlineBooking.backToServices') }}
+              <b-button align-self="end" @click="$emit('next', -1)">
+                {{ $t('public.onlineBooking.back') }}
               </b-button>
               <b-button
                 align-self="end"
@@ -52,7 +53,7 @@
                 :disabled="fieldset.appointmentSlot == null"
                 @click="$emit('next')"
               >
-                {{ $t('public.onlineBooking.toReview') }}
+                {{ $t('public.onlineBooking.continue') }}
               </b-button>
             </div>
           </div>
@@ -112,28 +113,28 @@ export default defineComponent({
         responsive: [
           {
             breakpoint: 1200,
-            settings: { slidesToShow: 6 },
+            settings: { slidesToShow: 6, slidesToScroll: 6 },
           },
           {
             breakpoint: 992,
-            settings: { slidesToShow: 4 },
+            settings: { slidesToShow: 4, slidesToScroll: 4 },
           },
           {
             breakpoint: 768,
-            settings: { slidesToShow: 3 },
+            settings: { slidesToShow: 3, slidesToScroll: 3 },
           },
           {
             breakpoint: 576,
-            settings: { slidesToShow: 2 },
+            settings: { slidesToShow: 2, slidesToScroll: 2 },
           },
         ],
-        prevArrow: /* html */`
+        prevArrow: /* html */ `
           <a href="#" class="ri-arrow-left-s-line left" style="
             margin-left: -48px;
             background: transparent;
           "></a>
         `,
-        nextArrow: /* html */`
+        nextArrow: /* html */ `
           <a href="#" class="ri-arrow-right-s-line right" style="
             margin-right: -48px;
             background: transparent;
@@ -147,10 +148,16 @@ export default defineComponent({
       }
 
       const startDate = moment(this.availableDates[0]).startOf('isoWeek')
-      const endDate = moment(this.availableDates[this.availableDates.length - 1]).endOf('isoWeek')
+      const endDate = moment(
+        this.availableDates[this.availableDates.length - 1],
+      ).endOf('isoWeek')
       const dates = []
 
-      for (let date = moment(startDate); date.isSameOrBefore(endDate); date.add(1, 'day')) {
+      for (
+        let date = moment(startDate);
+        date.isSameOrBefore(endDate);
+        date.add(1, 'day')
+      ) {
         dates.push({
           availability: (() => {
             if (this.availableDates.includes(date.format('YYYY-MM-DD'))) {
@@ -161,7 +168,11 @@ export default defineComponent({
               return 'closed'
             }
 
-            if (date.isAfter(moment(this.availableDates[this.availableDates.length - 1]))) {
+            if (
+              date.isAfter(
+                moment(this.availableDates[this.availableDates.length - 1]),
+              )
+            ) {
               return 'unavailable'
             }
 
@@ -192,7 +203,9 @@ export default defineComponent({
 
         return group
       }, {})
-      appointmentSlots = Object.entries(appointmentSlots).sort(([a], [b]) => a - b)
+      appointmentSlots = Object.entries(appointmentSlots).sort(
+        ([a], [b]) => a - b,
+      )
       appointmentSlots = appointmentSlots.map(([dateTime, slots]) => ({
         doctors: slots,
         time: moment(dateTime).format('HH:mm'),
@@ -202,17 +215,19 @@ export default defineComponent({
       return appointmentSlots
     },
     doctors() {
-      return Object.values(this.appointmentSlots.reduce((doctorById, slot) => {
-        if (doctorById[slot.doctor_id] == null) {
-          doctorById[slot.doctor_id] = slot
-        }
+      return Object.values(
+        this.appointmentSlots.reduce((doctorById, slot) => {
+          if (doctorById[slot.doctor_id] == null) {
+            doctorById[slot.doctor_id] = slot
+          }
 
-        return doctorById
-      }, {}))
+          return doctorById
+        }, {}),
+      )
     },
   },
   watch: {
-    fieldset: {
+    'fieldset': {
       deep: true,
       handler(value) {
         this.$emit('update:form', {
@@ -250,7 +265,7 @@ export default defineComponent({
         ])
       },
     },
-    date: async function (date) {
+    'date': async function (date) {
       this.fieldset.appointmentSlot = null
       this.appointmentSlots = []
       this.appointmentSlots = await getAppointmentSlots({
@@ -264,8 +279,8 @@ export default defineComponent({
 </script>
 
 <style lang="scss" scoped>
-@import "~@/assets/scss/app-vars.scss";
-.favorite-doctor{
+@import '~@/assets/scss/app-vars.scss';
+.favorite-doctor {
   color: $primary;
   font-size: 16px;
 }
