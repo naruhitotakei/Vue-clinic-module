@@ -1,4 +1,5 @@
 const moduleAlias = require('module-alias')
+const get = require('lodash/get')
 
 moduleAlias.addAliases({
   '~': __dirname,
@@ -934,6 +935,12 @@ app.get('/api/inactive-locations', (req, res) => {
   else res.status(401).json('OK: user unauthorized')
 })
 
+app.get('/api/get-premises-for-locations', (req, res) => {
+  if (req.session.prm_user && req.session.prm_user.permissions && checkPermission(req.session.prm_user.permissions, locationsPermission))
+    daoLocations.getPremises(req, res, req.session.prm_user.prm_client_id, getScope(req.session.prm_user.permissions, locationsPermission))
+  else res.status(401).json('OK: user unauthorized')
+})
+
 app.post('/api/locations', (req, res) => {
   const location = req.body
   if (
@@ -1220,7 +1227,7 @@ app.get('/api/enquiries', (req, res) => {
       req.session.prm_user.id,
       req.session.prm_user.accessible_user_ids,
       req.session.prm_user.prm_client_id,
-      getScope(req.session.prm_user.permissions, calendarPermission),
+      getScope(req.session.prm_user.permissions, enquiriesPermission),
       sortBy,
     )
   else res.status(401).json('OK: user unauthorized')
@@ -1612,9 +1619,24 @@ app.post('/api/invoices', (req, res) => {
     req.session.prm_user &&
     req.session.prm_user.permissions &&
     checkPermission(req.session.prm_user.permissions, invoicesPermission)
-  )
+  ) {
     daoInvoices.createInvoices(req, res, invoice)
-  else res.status(401).json('OK: user unauthorized')
+        .then(result => {
+          const invoiceId = get(result,'[0].rows[0].invoice_id');
+          if(invoiceId){
+            res.status(200).json(invoiceId)
+          } else {
+            res.status(400).json('Invoice id not found!')
+          }
+        })
+        .catch(reason => {
+          console.error(reason)
+          res.status(400).json(reason)
+        })
+  }
+  else {
+    res.status(401).json('OK: user unauthorized')
+  }
 })
 
 app.put('/api/invoices/:id', (req, res) => {

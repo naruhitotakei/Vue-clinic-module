@@ -22,6 +22,18 @@ export async function getInactiveLocationsList() {
   return rawResponse.json()
 }
 
+export async function getPremisesForLocationsList() {
+  const rawResponse = await fetch('/api/get-premises-for-locations', {
+    method: 'GET',
+    credentials: 'same-origin',
+    headers: {
+      'Accept': 'application/json',
+      'Content-Type': 'application/json',
+    },
+  })
+  return rawResponse.json()
+}
+
 export async function createLocation(location) {
   const rawResponse = await fetch('/api/locations/', {
     method: 'POST',

@@ -13,23 +13,35 @@
                         <form>
                             <div class="form-row">
                                 <div class="col-md-12 mb-3">
-                                    <label for="title">{{ $t('settingsLocations.locationModal.name') }} *</label>
+                                    <label for="name">{{ $t('settingsLocations.locationModal.name') }} *</label>
                                     <div style="display: flex;">
                                         <input type="text" v-model="formData.name" class="form-control" :placeholder="$t('settingsLocations.locationModal.name')" required>
                                     </div>
                                 </div>
                                 <div class="col-md-12 mb-3">
-                                    <label for="title">{{ $t('settingsLocations.locationModal.city') }} *</label>
+                                    <label for="city">{{ $t('settingsLocations.locationModal.city') }} *</label>
                                     <div style="display: flex;">
                                         <input type="text" v-model="formData.city" class="form-control" :placeholder="$t('settingsLocations.locationModal.city')" required>
                                     </div>
                                 </div>
                                 <div class="col-md-12 mb-3">
-                                    <label for="title">{{ $t('settingsLocations.locationModal.address') }} *</label>
+                                    <label for="address">{{ $t('settingsLocations.locationModal.address') }} *</label>
                                     <div style="display: flex;">
                                         <input type="text" v-model="formData.address" class="form-control" :placeholder="$t('settingsLocations.locationModal.address')" required>
+                                    </div>
                                 </div>
-                            </div>
+                                <div class="col-md-12 mb-3">
+                                    <label for="clinic">{{ $t('settingsLocations.locationModal.clinic') }} *</label>
+                                    <div>
+                                        <v-select :clearable="false"
+                                                  label="premise"
+                                                  :reduce="premise => premise.id"
+                                                  class="style-chooser form-control-disabled font-size-14 pl-1"
+                                                  v-model="formData.premise"
+                                                  :options="premises">
+                                        </v-select>
+                                    </div>
+                                </div>
                             </div>
                         </form>
                     </b-modal>
@@ -91,6 +103,18 @@
                                     <input type="text" v-model="formData.address" class="form-control" :placeholder="$t('settingsLocations.locationModal.address')" required>
                                 </div>
                             </div>
+                            <div class="col-md-12 mb-3">
+                                <label for="clinic">{{ $t('settingsLocations.locationModal.clinic') }} *</label>
+                                <div>
+                                    <v-select :clearable="false"
+                                              label="premise"
+                                              :reduce="premise => premise.id"
+                                              class="style-chooser form-control-disabled font-size-14 pl-1"
+                                              v-model="formData.premise"
+                                              :options="premises">
+                                    </v-select>
+                                </div>
+                            </div>
                         </div>
                     </form>
                 </b-modal>
@@ -127,12 +151,13 @@
 
 <script>
 import { xray } from '../../config/pluginInit'
-import { getLocationsList, getInactiveLocationsList, createLocation, updateLocation, toggleActivity } from '../../services/locations'
+import { getLocationsList, getInactiveLocationsList, createLocation, updateLocation, toggleActivity, getPremisesForLocationsList } from '../../services/locations'
 export default {
   mounted() {
     xray.index()
     this.getLocations()
     this.getInactiveLocations()
+    this.getPremisesForLocations()
   },
   components: {
   },
@@ -141,7 +166,7 @@ export default {
       return Math.floor(this.locations.length / this.locationsPerPage) !== 0
     },
     isOkDisabled() {
-      return !this.formData.name || !this.formData.city || !this.formData.address
+      return !this.formData.premise || !this.formData.name || !this.formData.city || !this.formData.address
     },
   },
   name: 'Locations',
@@ -151,6 +176,7 @@ export default {
       isInactiveDataLoaded: false,
       locations: [],
       inactiveLocations: [],
+      premises: [],
       addLocationModal: false,
       editLocationModal: false,
       item: [],
@@ -158,20 +184,23 @@ export default {
       locationsPerPage: 10,
       formData: {
         id: '',
+        premise: '',
         name: '',
         city: '',
         address: '',
       },
       columns: [
-        { label: this.$t('settingsLocations.locationsColumn.name'), key: 'name', class: 'text-left' },
+        { label: this.$t('settingsLocations.locationsColumn.name'), key: 'premise', class: 'text-left' },
+        { label: this.$t('settingsLocations.locationsColumn.locationName'), key: 'name', class: 'text-left' },
         { label: this.$t('settingsLocations.locationsColumn.city'), key: 'city', class: 'text-left' },
         { label: this.$t('settingsLocations.locationsColumn.address'), key: 'address', class: 'text-left' },
         { label: this.$t('settingsLocations.locationsColumn.action'), key: 'action', class: 'text-center' },
       ],
       inactiveColumns: [
-        { label: this.$t('settingsLocations.locationsColumn.name'), key: 'i_name', class: 'text-left' },
-        { label: this.$t('settingsLocations.locationsColumn.city'), key: 'i_city', class: 'text-left' },
-        { label: this.$t('settingsLocations.locationsColumn.address'), key: 'i_address', class: 'text-left' },
+        { label: this.$t('settingsLocations.locationsColumn.name'), key: 'premise', class: 'text-left' },
+        { label: this.$t('settingsLocations.locationsColumn.locationName'), key: 'name', class: 'text-left' },
+        { label: this.$t('settingsLocations.locationsColumn.city'), key: 'city', class: 'text-left' },
+        { label: this.$t('settingsLocations.locationsColumn.address'), key: 'address', class: 'text-left' },
         { label: this.$t('settingsLocations.locationsColumn.action'), key: 'i_action', class: 'text-center' },
       ],
     }
@@ -179,6 +208,7 @@ export default {
   methods: {
     defaultFormData() {
       return {
+        premise: '',
         name: '',
         city: '',
         address: '',
@@ -194,6 +224,11 @@ export default {
       getInactiveLocationsList().then(response => {
         this.inactiveLocations = response
         this.isInactiveDataLoaded = true
+      })
+    },
+    getPremisesForLocations() {
+      getPremisesForLocationsList().then(response => {
+        this.premises = response
       })
     },
     openEditModal(item) {
