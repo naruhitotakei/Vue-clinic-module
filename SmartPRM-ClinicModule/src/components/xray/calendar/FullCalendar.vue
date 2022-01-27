@@ -1,5 +1,5 @@
 <template>
-<b-container fluid>
+<b-container fluid class="calendar-size">
   <calendar
   :options="calendarOptions"
   id="calendar"
@@ -401,6 +401,7 @@ export default {
       event: {},
       dates: null,
       calendarOptions: {
+        height: '100%',
         plugins: [dayGridPlugin, timeGridPlugin, interactionPlugin, resourceTimeGrid, listPlugin],
         defaultAllDay: true,
         headerToolbar: {
@@ -987,8 +988,8 @@ export default {
 
 <style lang="scss">
 @import '~@fullcalendar/common/main.css';
-#calendar {
-  height: calc(100vh - 210px);
+.calendar-size {
+  height: calc(100vh - 150px);
 }
 .fc-col-header, .fc-timegrid-body, .fc-timegrid-slots table {
   min-width: 100%;

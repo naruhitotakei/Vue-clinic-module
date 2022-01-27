@@ -3,16 +3,41 @@
     <b-row>
       <b-col lg="9">
         <iq-card>
+          <template v-slot:headerTitle>
+            <iq-card class="mb-0 d-lg-none">
+              <template v-slot:body>
+                <div class="row justify-content-between align-items-center m-0">
+                  <div class="row align-items-center">
+                    <b-dropdown id="dropdown-aria" variant="primary" :text="$t('calendar.selectDoctor')" class="ml-2 ml-sm-2">
+                      <b-dropdown-group>
+                        <b-checkbox name="check-button" v-model="allDoctorCheck" @change="allDoctorFun(allDoctorCheck)"
+                                    inline>{{ $t('calendar.selectAll') }}
+                        </b-checkbox>
+                      </b-dropdown-group>
+                      <b-dropdown-form>
+                        <b-dropdown-group v-for="(item,index) in doctors" :key="index">
+                          <b-checkbox href="#" class="custom-switch-color" :color="item.color" @change="checkData(item)"
+                                      v-model="item.checked" :ref="'doctor_'+index" name="check-button" inline>
+                            {{ item.title }}
+                          </b-checkbox>
+                        </b-dropdown-group>
+                      </b-dropdown-form>
+                    </b-dropdown>
+                  </div>
+                </div>
+              </template>
+            </iq-card>
+          </template>
           <template v-slot:body>
             <FullCalendar :resourcesOuter="getResources" :events="getEvents" @updateApp="updateApp"
                           @checkData="checkData" @setModalShow="setModalShow" :modalShow="modalShow"
                           :selectDoctor="selectDoctor"
                           ref="fullCalendar"
-                          style="width: 100%; height: 100%;"/>
+                          style="width: 100%;"/>
           </template>
         </iq-card>
       </b-col>
-      <b-col lg="3" class="pl-lg-2">
+      <b-col lg="3" class="pl-lg-2 d-none d-lg-block">
         <iq-card
           class="overflow-hidden"
           footerClass="bg-transparent px-0 pt-0"
@@ -313,6 +338,9 @@ export default {
   opacity: 0.5;
 }
 .calendar-page {
+  .calendar-card {
+    height: calc(100vh - 110px);
+  }
   .inline-calendar {
     .mx-datepicker-main {
       border: none;
