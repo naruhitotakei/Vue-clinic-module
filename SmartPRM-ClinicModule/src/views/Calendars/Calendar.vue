@@ -3,13 +3,13 @@
     <b-row>
       <b-col lg="9">
         <iq-card>
-          <template v-slot:headerTitle>
-            <iq-card class="mb-0 d-lg-none">
+          <template v-slot:body>
+            <iq-card class="mb-0">
               <template v-slot:body>
-                <div class="row justify-content-between align-items-center m-0">
+                <div class="row justify-content-between align-items-center m-1 d-lg-none">
                   <div class="row align-items-center">
                     <b-dropdown id="dropdown-aria" variant="primary" :text="$t('calendar.selectDoctor')" class="ml-2 ml-sm-2">
-                      <b-dropdown-group>
+                      <b-dropdown-group class="px-3">
                         <b-checkbox name="check-button" v-model="allDoctorCheck" @change="allDoctorFun(allDoctorCheck)"
                                     inline>{{ $t('calendar.selectAll') }}
                         </b-checkbox>
@@ -27,8 +27,6 @@
                 </div>
               </template>
             </iq-card>
-          </template>
-          <template v-slot:body>
             <FullCalendar :resourcesOuter="getResources" :events="getEvents" @updateApp="updateApp"
                           @checkData="checkData" @setModalShow="setModalShow" :modalShow="modalShow"
                           :selectDoctor="selectDoctor"
@@ -340,6 +338,9 @@ export default {
 .calendar-page {
   .calendar-card {
     height: calc(100vh - 110px);
+  }
+  .dropdown-menu {
+    font-size: 0.775rem !important;
   }
   .inline-calendar {
     .mx-datepicker-main {

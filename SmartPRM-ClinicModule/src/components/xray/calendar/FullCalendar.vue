@@ -293,6 +293,7 @@ export default {
   },
   data() {
     return {
+      resizeObserver: null,
       durationMins: null,
       keydownListener: null,
       eventPopover: {
@@ -513,11 +514,11 @@ export default {
     },
     'isDataLoaded'(data) {
       if (data) {
-        this.$nextTick(() => {
+        setTimeout(() => {
           this.calendarApi = this.$refs.calendar.getApi()
           this.calendarApi.render()
           this.calendarApi.updateSize()
-        })
+        }, 1000)
       }
     },
     '$refs.calendar'() {
@@ -528,9 +529,12 @@ export default {
     'resourcesOuter'() {
       this.setResourcesName()
       this.setResourcesView()
-      if (this.calendarApi) {
-        this.calendarApi.render()
-      }
+      this.$nextTick(() => {
+        if (this.calendarApi) {
+          this.calendarApi.render()
+          this.calendarApi.updateSize()
+        }
+      })
     },
     'eventAndResources'(data) {
       if (data.events.length >= 0 && data.resources.length > 0) {
@@ -623,10 +627,20 @@ export default {
     this.calendarUpdateEvery3Min = setInterval(() => {
       this.updateCalendar()
     }, 1000 * 3 * 60) // 1000 => 1 second, 3 * 60 => 3 minutes
+    this.resizeObserver = new ResizeObserver(() => {
+      this.$nextTick(() => {
+        if (this.calendarApi) {
+          this.calendarApi.updateSize()
+        }
+      })
+    })
+
+    this.resizeObserver.observe(document.querySelector('.calendar-size'))
   },
   beforeDestroy() {
     clearInterval(this.calendarUpdateEvery3Min)
     window.removeEventListener('keydown', this.listenEvent, false)
+    this.resizeObserver.disconnect()
   },
   methods: {
     ...mapActions('Calendar', ['setCalendarDate', 'setCalendarView']),
@@ -989,7 +1003,7 @@ export default {
 <style lang="scss">
 @import '~@fullcalendar/common/main.css';
 .calendar-size {
-  height: calc(100vh - 150px);
+  height: calc(100vh - 160px);
 }
 .fc-col-header, .fc-timegrid-body, .fc-timegrid-slots table {
   min-width: 100%;
