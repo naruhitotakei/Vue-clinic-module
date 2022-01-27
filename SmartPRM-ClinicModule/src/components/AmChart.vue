@@ -843,8 +843,13 @@ export default {
       // for (let j = 0; j < this.option.colors.length; j++) {
       //   series.colors.list.push(am4core.color(this.option.colors[j]))
       // }
+
       series.dataFields.value = this.option.value[0]
       series.dataFields.category = this.option.category[0]
+
+      // series.events.once('ready', function (ev) {
+      //   chart.legend.children.moveValue(ev.target.legendDataItem.itemContainer, ev.target.zIndex)
+      // })
 
       series.labels.template.disabled = true
 
