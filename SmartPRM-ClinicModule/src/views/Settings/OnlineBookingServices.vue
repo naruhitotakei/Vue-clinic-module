@@ -400,7 +400,10 @@ export default defineComponent({
           response,
           Object.assign(
             {},
-            { ...item, doctor_ids: item.doctors.map(({ id }) => id) },
+            {
+              ...item,
+              doctor_ids: item.doctors.map(({ id }) => id),
+            },
           ),
         )
       })
