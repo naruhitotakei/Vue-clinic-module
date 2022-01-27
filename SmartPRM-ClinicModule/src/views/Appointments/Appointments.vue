@@ -39,7 +39,7 @@
             :key="appointment.id"
           >
           <b-row class="no-margin">
-            <strong><p class="text-black sm_margin_b">{{ appointment.time }} - {{appointment.location}} - {{ appointment.doctor_id ? appointment.doctor_name : '' }}</p></strong>
+            <strong><p class="text-black sm_margin_b">{{ appointment.time === '00:00' ? 'No time specified' : appointment.time }} - {{appointment.location}} - {{ appointment.doctor_id ? appointment.doctor_name : '' }}</p></strong>
           </b-row>
           <b-row class="no-margin">
             <h5>
