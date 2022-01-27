@@ -1226,7 +1226,7 @@ app.get('/api/enquiries', (req, res) => {
       req.session.prm_user.id,
       req.session.prm_user.accessible_user_ids,
       req.session.prm_user.prm_client_id,
-      getScope(req.session.prm_user.permissions, calendarPermission),
+      getScope(req.session.prm_user.permissions, enquiriesPermission),
       sortBy,
     )
   else res.status(401).json('OK: user unauthorized')
