@@ -39,17 +39,21 @@
             :key="appointment.id"
           >
           <b-row class="no-margin">
-            <p class="text-black sm_margin_b">{{ appointment.time }} - {{ appointment.doctor_id ? appointment.doctor_name : '' }}</p>
+            <strong><p class="text-black sm_margin_b">{{ appointment.time === '00:00' ? 'No time specified' : appointment.time }} - {{appointment.location}} {{appointment.doctor_id ? '-' : ''}} {{ appointment.doctor_id ? appointment.doctor_name : '' }}</p></strong>
           </b-row>
           <b-row class="no-margin">
-            <p class="text-black sm_margin_b">
-              {{ appointment.product_name }} -  {{ appointment.enquiry_name || '' }} {{ appointment.enquiry_last_name || '' }} ({{ appointment.enquiry_phone }})
-            </p>
+            <h5>
+              <p class="text-black sm_margin_b">
+                {{ appointment.product_name }} -  {{ appointment.enquiry_name || '' }} {{ appointment.enquiry_last_name || '' }} ({{ appointment.enquiry_phone }})
+              </p>
+            </h5>
           </b-row>
-          <b-row class="card-titles no-margin">
-            <p class="text-black sm_margin_b">
-              Note to the doctor :
-            </p>
+          <b-row class="no-margin">
+            <strong>
+              <p class="text-black sm_margin_b">
+                Note to the doctor : {{appointment.note}}
+              </p>
+            </strong>
           </b-row>
           <b-row class="mt-4">
             <b-col lg="5" md="5">
@@ -61,15 +65,6 @@
                   max-rows="6"
                   v-model="appointment.notes"
                   @blur="handleUpdateClinicNotes($event, appointment.id)"
-              ></b-form-textarea>
-              <label for="callCenterNotes" class="ml-2 mb-1 header-color">{{ $t('appointments.callCenterNotes') }}</label>
-                <b-form-textarea
-                  id="notes-textarea"
-                  :placeholder="$t('appointments.enterNotes')"
-                  rows="4"
-                  max-rows="6"
-                  v-model="appointment.note"
-                  @blur="handleUpdateCallCenterNotes($event, appointment.id)"
               ></b-form-textarea>
             </b-col>
             <b-col lg="7" md="7">
@@ -149,6 +144,7 @@
               </b-row>
             </b-col>
           </b-row>
+          <b-row class="card-titles no-margin mt-4"></b-row>
           </div>
           <!-- Mobile version -->
           <div class="card forMobile"
@@ -241,7 +237,7 @@
                                    v-model="appointment.notes"
                                    @blur="handleUpdateClinicNotes($event, appointment.id)"></b-form-textarea>
               </b-row>
-              <b-row class="no-margin pt-2 mt-1 align-center">
+            <b-row class="no-margin pt-2 mt-1 align-center">
                   <label for="callCenterNotes" class="ml-2 mb-1 header-color">{{ $t('appointments.callCenterNotes') }}</label>
                   <b-form-textarea id="notes-textarea"
                                    :placeholder="$t('appointments.enterNotes')"
