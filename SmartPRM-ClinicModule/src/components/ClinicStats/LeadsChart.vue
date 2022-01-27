@@ -4,7 +4,7 @@
         <iq-card class-name="iq-card-block iq-card-stretch iq-card-height">
           <template v-slot:headerTitle>
             <div class="d-flex align-items-center justify-content-between">
-                <h4 class="card-title">Leads Statistics</h4>
+                <h4 class="card-title">Leads Statistics ({{ totalLeads | formatNumber }})</h4>
                 <vue-excel-xlsx
                     :data="dataToExport"
                     :columns="excelColumns"
@@ -122,6 +122,8 @@ export default {
       this.loading = true
       this.noData = false
       this.chartBodyData = null
+      this.totalLeads = 0
+      this.dataToExport = []
       getLeadsPerDay(start, end).then(async response => {
         if (response && response.length && Array.isArray(response)) {
           this.noData = false
@@ -166,8 +168,9 @@ export default {
           const isCountryHasDate = itemsByDate.find(item => item.country === country)
           if (isCountryHasDate) {
             obj[country] = isCountryHasDate.enquiries_count ? Number(isCountryHasDate.enquiries_count) : 0
+            this.totalLeads += Number(obj[country])
           } else {
-            obj[country] = 0
+            // obj[country] = 0
           }
         })
         amChartData.push(obj)
@@ -247,6 +250,7 @@ export default {
   },
   data() {
     return {
+      totalLeads: 0,
       chartBodyData: null,
       startDate: null,
       endDate: null,

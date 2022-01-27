@@ -256,7 +256,7 @@ export default defineComponent({
         english: '',
         default_online_price: '',
         default_duration: '',
-        doctor_ids: '',
+        doctor_ids: [],
         product_group_id: '',
         premise_id: '',
       },
@@ -354,7 +354,7 @@ export default defineComponent({
         english: '',
         default_online_price: '',
         default_duration: '',
-        doctor_ids: '',
+        doctor_ids: [],
         product_group_id: '',
         premise_id: '',
       }
@@ -398,7 +398,13 @@ export default defineComponent({
       getOnlineBookingProductsNaming(item.id).then((response) => {
         this.onlineBookingData = this.populateNaming(
           response,
-          Object.assign({}, item),
+          Object.assign(
+            {},
+            {
+              ...item,
+              doctor_ids: item.doctors.map(({ id }) => id),
+            },
+          ),
         )
       })
       this.modalServiceShow = true
