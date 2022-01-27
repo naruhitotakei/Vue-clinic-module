@@ -9,6 +9,7 @@
                         <tab-nav :pills="true" class="iq-edit-profile d-flex">
                             <a id="myTab" class="nav-link show col-12 col-sm-1 col-md-2 p-0 ri-arrow-left-line" style="padding: 10px 0px !important; font-size: x-large;" @click="$router.push('/patients')" :active="false"></a>
                             <tab-nav-items class="col-12 col-sm-2 col-md-2 p-0" :active="true" href="#overview" :title="$t('EPR.overviewTab')" />
+                            <tab-nav-items class="col-12 col-sm-2 col-md-2 p-0" :active="false" href="#calendar" :title="'Calendar'" />
                             <tab-nav-items class="col-12 col-sm-4 col-md-3 p-0" :active="false" href="#info" :title="$t('EPR.personalInfoTab')" />
                             <tab-nav-items class="col-12 col-sm-1 col-md-2 p-0" :active="false" href="#files" :title="$t('EPR.filesTab')" />
                             <tab-nav-items class="col-12 col-sm-2 col-md-2 p-0" :active="false" href="#invoices" :title="$t('EPR.invoicesTab')" />
@@ -570,6 +571,9 @@
                                   </b-col>
                               </b-row>
                       </iq-card>
+                  </tab-content-item>
+                  <tab-content-item :active="false" id="calendar">
+                    <Calendar />
                   </tab-content-item>
                   <tab-content-item :active="false" id="info">
                       <iq-card style="background: none;">
@@ -1204,12 +1208,13 @@ import { getProductGroups, getOldProducts } from '@/services/products'
 import Tiff from 'tiff.js'
 import DatePicker from 'vue2-datepicker'
 import _ from 'lodash'
+import Calendar from '@/views/Calendars/Calendar.vue'
 const $ = require('jquery')
 
 export default {
   name: 'ViewPatient',
   components: {
-    DatePicker,
+    DatePicker, Calendar,
   },
   mounted() {
     xray.index()
@@ -2511,5 +2516,10 @@ canvas {
   .mobile-border a {
     border-radius: 0 0 15px 15px !important;
   }
+}
+</style>
+<style scoped>
+.iq-edit-list-data{
+  padding-bottom:60px
 }
 </style>
