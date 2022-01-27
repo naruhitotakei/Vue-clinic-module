@@ -32,6 +32,10 @@
                             <template v-slot:cell(patient_name)="data">
                                 <router-link tag="span" :to="'/patients/' + data.item.patient_id" style="cursor:pointer;" class="style-chooser form-control-disabled">{{ data.item.patient_name }}</router-link>
                             </template>
+                            <template v-slot:cell(time)="data">
+                                <span v-if="data.item.time === '00:00'">/</span>
+                                <span v-else>{{ data.item.time }}</span>
+                            </template>
                         </b-table>
                         <p v-else>{{ $t('home.noAppointmentsToday') }}</p>
                     </template>
