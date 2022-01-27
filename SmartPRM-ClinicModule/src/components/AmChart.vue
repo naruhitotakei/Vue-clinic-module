@@ -322,7 +322,8 @@ export default {
       valueAxis.renderer.inside = true
       valueAxis.renderer.labels.template.disabled = false
       valueAxis.min = 0
-      valueAxis.renderer.grid.template.strokeWidth = 0
+      valueAxis.renderer.grid.template.strokeWidth = 0.5
+      valueAxis.renderer.grid.template.strokeDasharray = '4 2'
 
       // Create series
       let _this = this
@@ -334,6 +335,9 @@ export default {
         series.dataFields.valueY = field
         series.dataFields.dateX = _this.option.xAxis[0]
         series.sequencedInterpolation = true
+
+        series.legendSettings.valueText = '{valueY.close}'
+        series.legendSettings.itemValueText = '[bold]{valueY}[/bold]'
 
         // Make it stacked
         series.stacked = true
@@ -358,6 +362,7 @@ export default {
       chart.legend.position = 'right'
       chart.legend.maxHeight = 400
       chart.legend.scrollable = true
+      chart.cursor = new am4charts.XYCursor()
     },
     revenueByDoctor(chart) {
       // chart.colors.list = []
@@ -386,7 +391,8 @@ export default {
       valueAxis.renderer.inside = true
       valueAxis.renderer.labels.template.disabled = false
       valueAxis.min = 0
-      valueAxis.renderer.grid.template.strokeWidth = 0
+      valueAxis.renderer.grid.template.strokeWidth = 0.5
+      valueAxis.renderer.grid.template.strokeDasharray = '4 2'
 
       // Create series
       let _this = this
@@ -407,6 +413,9 @@ export default {
         series.columns.template.tooltipText =
           '[bold]{name}: {valueY}[/]\n[font-size:14px]{categoryX}'
 
+        series.legendSettings.valueText = '{valueY.close}'
+        series.legendSettings.itemValueText = '[bold]{valueY}[/bold]'
+
         // Add label
         // let labelBullet = series.bullets.push(new am4charts.LabelBullet())
         // labelBullet.label.text = '{valueY}'
@@ -422,6 +431,7 @@ export default {
       chart.legend.position = 'right'
       chart.legend.maxHeight = 400
       chart.legend.scrollable = true
+      chart.cursor = new am4charts.XYCursor()
     },
     barLine(chart) {
       chart.colors.list = []
@@ -783,8 +793,6 @@ export default {
       // }
       series.dataFields.value = this.option.value[0]
       series.dataFields.category = this.option.category[0]
-
-      console.log(series.dataFields.value)
 
       series.labels.template.disabled = true
 
