@@ -4,7 +4,7 @@
       <iq-card class-name="iq-card-block iq-card-stretch iq-card-height">
         <template v-slot:headerTitle>
           <div class="d-flex align-items-center justify-content-between">
-            <h4 class="card-title">New Patients</h4>
+            <h4 class="card-title">New Patients ({{ totalPatients | formatNumber }})</h4>
             <vue-excel-xlsx
               :data="dataToExport"
               :columns="excelColumns"
@@ -46,7 +46,8 @@
         </template>
         <template v-slot:body>
           <div class="mt-3" v-if="!loading && !noData">
-            <apex-chart type="bar" :series="series" :options="chartOptions" />
+            <AmChart v-if="chartBodyData" element="newPatientsChart" type="newPatients" :option="chartBodyData" />
+            <!-- <apex-chart type="bar" :series="series" :options="chartOptions" /> -->
           </div>
           <div class="mt-3 text-center" v-if="loading">
             <div class="text-center text-primary my-2">
@@ -67,10 +68,11 @@
 import IqCard from '../../components/xray/cards/iq-card'
 import { getNewEnquiries } from '../../services/statistics'
 import moment from 'moment'
+import AmChart from '@/components/AmChart'
 
 export default {
   name: 'NewPatients',
-  components: { IqCard },
+  components: { IqCard, AmChart },
   props: {
     start: String,
     end: String,
@@ -98,6 +100,15 @@ export default {
     }
   },
   methods: {
+    initChart(data) {
+      this.chartBodyData = {
+        colors: ['#e64141', '#00ca00', '#ffd400'],
+        labels: ['New Patients'],
+        xAxis: ['date'],
+        yAxis: ['count'],
+        data: data,
+      }
+    },
     onDateChange() {
       if (this.startDate && this.endDate) {
         this.getNewPatients(this.startDate, this.endDate)
@@ -106,6 +117,8 @@ export default {
     getNewPatients(start, end) {
       this.loading = true
       this.noData = false
+      this.dataToExport = []
+      this.totalPatients = 0
       getNewEnquiries(start, end)
         .then(async (response) => {
           if (response && response.length && Array.isArray(response)) {
@@ -126,17 +139,32 @@ export default {
       let datesArray = []
       let seriesData = []
       this.dataToExport = []
-      await data.forEach((item, index) => {
+      let amChartData = []
+      this.totalPatients = 0
+      await data.forEach(async (item, index) => {
         const itemDate = item.date.split('T')[0]
-        const dateIndex = datesArray.findIndex((date) => date === itemDate)
-        if (dateIndex < 0) {
-          datesArray.push(itemDate)
-          seriesData.push(1)
+        const itemAt = amChartData.findIndex(dItem => dItem.date.split('T')[0] === itemDate)
+        if (itemAt < 0) {
+          const obj = {
+            date: itemDate,
+            count: 1,
+          }
+          amChartData.push(obj)
+        } else {
+          amChartData[itemAt].count = Number(amChartData[itemAt].count) + 1
         }
-        if (dateIndex > -1) {
-          seriesData[dateIndex] = seriesData[dateIndex] + 1
-        }
+        this.totalPatients += 1
+        // const dateIndex = datesArray.findIndex((date) => date === itemDate)
+        // if (dateIndex < 0) {
+        //   datesArray.push(itemDate)
+        //   seriesData.push(1)
+        // }
+        // if (dateIndex > -1) {
+        //   seriesData[dateIndex] = seriesData[dateIndex] + 1
+        // }
       })
+
+      this.initChart(amChartData)
 
       let self = this
 
@@ -228,6 +256,8 @@ export default {
   },
   data() {
     return {
+      chartBodyData: null,
+      totalPatients: 0,
       startDate: null,
       endDate: null,
       loading: true,
