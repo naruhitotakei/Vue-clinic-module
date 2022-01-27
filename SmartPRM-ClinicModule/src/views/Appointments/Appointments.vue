@@ -38,46 +38,52 @@
             v-for="appointment in appointments"
             :key="appointment.id"
           >
-            <b-row class="card-titles no-margin">
-              <b-col lg="1" md="1">
-                {{ $t('appointments.time') }}
-              </b-col>
-              <b-col lg="2" md="2">
-                {{ $t('appointments.patient') }}
-              </b-col>
-              <b-col lg="2" md="2">
-                {{ $t('appointments.product') }}
-              </b-col>
-              <b-col lg="2" md="2">
-                {{ $t('appointments.doctor') }}
-              </b-col>
-              <b-col lg="2" md="2">
+          <b-row class="no-margin">
+            <p class="text-black sm_margin_b">{{ appointment.time }} - {{ appointment.doctor_id ? appointment.doctor_name : '' }}</p>
+          </b-row>
+          <b-row class="no-margin">
+            <p class="text-black sm_margin_b">
+              {{ appointment.product_name }} -  {{ appointment.enquiry_name || '' }} {{ appointment.enquiry_last_name || '' }} ({{ appointment.enquiry_phone }})
+            </p>
+          </b-row>
+          <b-row class="card-titles no-margin">
+            <p class="text-black sm_margin_b">
+              Note to the doctor :
+            </p>
+          </b-row>
+          <b-row class="mt-4">
+            <b-col lg="5" md="5">
+              <label for="clinicNotes" class="ml-2 mb-1 header-color">{{ $t('appointments.clinicNotes') }}</label>
+                <b-form-textarea
+                  id="notes-textarea"
+                  :placeholder="$t('appointments.enterNotes')"
+                  rows="4"
+                  max-rows="6"
+                  v-model="appointment.notes"
+                  @blur="handleUpdateClinicNotes($event, appointment.id)"
+              ></b-form-textarea>
+              <label for="callCenterNotes" class="ml-2 mb-1 header-color">{{ $t('appointments.callCenterNotes') }}</label>
+                <b-form-textarea
+                  id="notes-textarea"
+                  :placeholder="$t('appointments.enterNotes')"
+                  rows="4"
+                  max-rows="6"
+                  v-model="appointment.note"
+                  @blur="handleUpdateCallCenterNotes($event, appointment.id)"
+              ></b-form-textarea>
+            </b-col>
+            <b-col lg="7" md="7">
+              <b-row class="card-titles no-margin">
+                <b-col lg="6" md="6">
                 {{ $t('appointments.attendance') }}
               </b-col>
-              <b-col lg="2" md="2">
+              <b-col lg="6" md="6">
                 {{ $t('appointments.interest') }}
               </b-col>
-            </b-row>
-            <b-row class="no-margin pt-2">
-              <b-col lg="1" md="1">
-                <p class="black-text">{{ appointment.time }}</p>
-              </b-col>
-              <b-col lg="2" md="2">
-                <p class="black-text mb-0">
-                  {{ appointment.enquiry_name || '' }} {{ appointment.enquiry_last_name || '' }}
-                </p>
-                <p class="black-text">
-                    {{ appointment.enquiry_phone }}
-                </p>
-              </b-col>
-              <b-col lg="2" md="2">
-                <p class="black-text">{{ appointment.product_name }}</p>
-              </b-col>
-              <b-col lg="2" md="2">
-                <p class="black-text">{{ appointment.doctor_id ? appointment.doctor_name : '' }}</p>
-              </b-col>
-              <b-col lg="2" md="2">
-                <div v-if="!appointment.attendance">
+              </b-row>
+              <b-row style="margin-top:10px">
+                <b-col lg="4" md="4" class="attendance_style">
+                <div v-if="!appointment.attendance" class="attendance_">
                   <b-button
                     size="sm"
                     variant="light"
@@ -95,7 +101,7 @@
                     {{ $t('shared.no') }}
                   </b-button>
                 </div>
-                <div v-if="appointment.attendance">
+                <div v-if="appointment.attendance" class="attendance_">
                   <b-button
                     size="sm"
                     :variant="
@@ -120,48 +126,30 @@
                   </b-button>
                 </div>
               </b-col>
-              <b-col lg="3" md="3">
-                <b-form-group class="align-center my-1">
-                  <b-form-radio
-                    v-for="[value, label] of [
-                      ['Not interested', 'notInterested'],
-                      ['Interested', 'interested'],
-                      ['Very interested', 'veryInterested'],
-                    ]"
-                    :key="value"
-                    v-model="appointment.level_of_interest"
-                    :value="value"
-                    @change="handleUpdateLevelOfInterest(appointment.id, value)"
-                  >
-                    {{ $t(`appointments.${label}`) }}
-                  </b-form-radio>
+              <b-col lg="8" md="8">
+                <b-form-group class="align-center my-1 pt-2">
+                  <b-form-radio-group class="form-radio-group">
+                    <b-form-radio
+                      class="radio_container"
+                      v-for="[value, label] of [
+                        ['Not interested', 'notInterested'],
+                        ['Interested', 'interested'],
+                        ['Very interested', 'veryInterested'],
+                      ]"
+                      :key="value"
+                      v-model="appointment.level_of_interest"
+                      :value="value"
+                      @change="handleUpdateLevelOfInterest(appointment.id, value)"
+                    >
+                    <span>{{ $t(`appointments.${label}`) }}</span>
+                    </b-form-radio>
+                  </b-form-radio-group>
                 </b-form-group>
               </b-col>
-            </b-row>
-            <b-row class="no-margin pt-2 align-center">
-              <label for="clinicNotes" class="ml-2 mb-1 header-color">{{ $t('appointments.clinicNotes') }}</label>
-                <b-form-textarea
-                  id="notes-textarea"
-                  :placeholder="$t('appointments.enterNotes')"
-                  rows="4"
-                  max-rows="6"
-                  v-model="appointment.notes"
-                  @blur="handleUpdateClinicNotes($event, appointment.id)"
-              ></b-form-textarea>
-            </b-row>
-              <b-row class="no-margin pt-2 mt-1 align-center">
-              <label for="callCenterNotes" class="ml-2 mb-1 header-color">{{ $t('appointments.callCenterNotes') }}</label>
-                <b-form-textarea
-                  id="notes-textarea"
-                  :placeholder="$t('appointments.enterNotes')"
-                  rows="4"
-                  max-rows="6"
-                  v-model="appointment.note"
-                  @blur="handleUpdateCallCenterNotes($event, appointment.id)"
-              ></b-form-textarea>
-            </b-row>
+              </b-row>
+            </b-col>
+          </b-row>
           </div>
-
           <!-- Mobile version -->
           <div class="card forMobile"
                v-for="appointment in appointments"
@@ -407,6 +395,9 @@ export default defineComponent({
   margin-left: 0 !important;
   margin-right: 0 !important;
 }
+.sm_margin_b {
+  margin-bottom: 4px !important;
+}
 .card-titles {
   border-bottom: 1px solid #dbdbdb;
 }
@@ -495,5 +486,31 @@ export default defineComponent({
   .filter-select {
     min-width: 100%;
   }
+}
+.attendance_style{
+  display:flex;
+  justify-content:flex-start;
+  align-items: center;
+  width:20%
+}
+.interestLevel{
+  width:80%;
+  height:100%;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+}
+.attendance_{
+  margin-left:15px
+}
+.form-radio-group{
+  display:flex;
+}
+.radio_container{
+  margin:4px !important
+}
+.custom-control-label{
+  display: flex !important;
+  align-items: center !important;
 }
 </style>
