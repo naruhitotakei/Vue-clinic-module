@@ -28,11 +28,7 @@
                     {
                       label: $t('Premise'),
                       key: 'name',
-                      class: 'text-left',
-                    },
-                    {
-                      label: $t('Action'),
-                      key: 'action',
+                      class: 'text-left cursor-pointer',
                     },
                   ]"
                   :per-page="productsPerPage"
@@ -412,4 +408,8 @@ export default defineComponent({
 })
 </script>
 
-<style></style>
+<style scoped>
+::v-deep .cursor-pointer {
+  cursor: pointer;
+}
+</style>
