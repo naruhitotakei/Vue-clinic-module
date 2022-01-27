@@ -1,5 +1,4 @@
 const moduleAlias = require('module-alias')
-const get = require('lodash/get')
 
 moduleAlias.addAliases({
   '~': __dirname,
@@ -1619,24 +1618,9 @@ app.post('/api/invoices', (req, res) => {
     req.session.prm_user &&
     req.session.prm_user.permissions &&
     checkPermission(req.session.prm_user.permissions, invoicesPermission)
-  ) {
+  )
     daoInvoices.createInvoices(req, res, invoice)
-        .then(result => {
-          const invoiceId = get(result,'[0].rows[0].invoice_id');
-          if(invoiceId){
-            res.status(200).json(invoiceId)
-          } else {
-            res.status(400).json('Invoice id not found!')
-          }
-        })
-        .catch(reason => {
-          console.error(reason)
-          res.status(400).json(reason)
-        })
-  }
-  else {
-    res.status(401).json('OK: user unauthorized')
-  }
+  else res.status(401).json('OK: user unauthorized')
 })
 
 app.put('/api/invoices/:id', (req, res) => {
