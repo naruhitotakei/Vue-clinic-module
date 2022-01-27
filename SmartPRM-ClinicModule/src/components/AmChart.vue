@@ -174,7 +174,6 @@ export default {
       valueAxis.maxPrecision = 0
       chart.yAxes.push(valueAxis)
       valueAxis.renderer.grid.template.strokeWidth = 0
-      valueAxis.title.html = '<b>Revenue: ' + this.$options.filters.formatPrice(this.option.revenue) + '</b>'
 
       // Create series
       let series = chart.series.push(new am4charts.ColumnSeries())
