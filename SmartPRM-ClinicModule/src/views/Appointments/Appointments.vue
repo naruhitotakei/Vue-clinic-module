@@ -44,7 +44,7 @@
           <b-row class="no-margin">
             <h5>
               <p class="text-black sm_margin_b">
-                {{ appointment.product_name }} -  {{ appointment.enquiry_name || '' }} {{ appointment.enquiry_last_name || '' }} ({{ appointment.enquiry_phone }})
+                {{ appointment.product_name }} | {{ appointment.enquiry_name || '' }} {{ appointment.enquiry_last_name || '' }} | {{ appointment.enquiry_phone }}
               </p>
             </h5>
           </b-row>
