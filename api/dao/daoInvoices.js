@@ -1,5 +1,4 @@
 require('dotenv').config();
-const isArray = require('lodash/isArray');
 
 const Pool = require('pg').Pool
 const pool = new Pool({
@@ -10,7 +9,7 @@ const pool = new Pool({
     port: process.env.POSTGRES_PORT || 5432,
 })
 
-const createInvoices = async (request, response, invoice) => {
+const createInvoices = (request, response, invoice) => {
     let statement = "INSERT INTO invoice("
     if (invoice.invoice_type) statement += "invoice_type,"
     if (invoice.invoice_time) statement += "invoice_time,"
@@ -116,15 +115,24 @@ const createInvoices = async (request, response, invoice) => {
     if (invoice.reference_code_furs) statement += "'" + invoice.reference_code_furs + "',"
     statement = statement.slice(0, -1)
     statement += ") RETURNING invoice_id"
-    const p1 = pool.query(statement);
-    const t1 = await p1;
-    const invoiceId = t1.rows[0].invoice_id;
-    const shouldSaveTeethAndSurface = invoice.verification_status === 'invoice.issued';
-    const p2 = (invoice.invoiceItems.length > 0 && isArray(invoice.invoiceItems)) ?
-        invoice.invoiceItems.map(async item => await createInoviceItem(item, invoiceId, invoice.id, shouldSaveTeethAndSurface)) : [];
-    const p3 = (invoice.payment_methods.length > 0 && isArray(invoice.payment_methods)) ?
-        invoice.payment_methods.map(async item => await createPaymentMethod(invoiceId, item.type, item.amount, item.paid)) : [];
-    return Promise.all([p1, ...p2, ...p3]);
+    pool.query(statement, (error, results) => {
+        if (error) {
+            throw error
+        }
+        var invoiceId = results.rows[0].invoice_id;
+        var shouldSaveTeethAndSurface = invoice.verification_status === 'invoice.issued'
+        if (invoice.invoiceItems.length > 0) {
+            invoice.invoiceItems.forEach(item => {
+                createInoviceItem(item, invoiceId, invoice.id, shouldSaveTeethAndSurface)
+            });
+        }
+        if (invoice.payment_methods.length > 0) {
+            invoice.payment_methods.forEach(item => {
+                createPaymentMethod(invoiceId, item.type, item.amount, item.paid)
+            });
+        }
+        response.status(200).json(invoiceId)
+    })
 }
 
 const updateInvoices = (request, response, id, invoice) => {
@@ -209,10 +217,14 @@ const updateInvoices = (request, response, id, invoice) => {
     }
 }
 
-const createPaymentMethod = async (invoiceId, paymentMethod, amount, paid) => {
+const createPaymentMethod = (invoiceId, paymentMethod, amount, paid) => {
     let statement = "INSERT INTO payment_item(invoice_id, amount, type, paid, created_at"
     statement+= ") VALUES (" + invoiceId + "," + amount + ",'" + paymentMethod + "'," + paid + ",NOW())"
-    return pool.query(statement)
+    pool.query(statement, (error, results) => {
+        if (error) {
+            throw error
+        } 
+    })
 }
 
 const updatePaymentMethod = (id, paymentMethod, amount, paid) => {
@@ -228,17 +240,23 @@ const updatePaymentMethod = (id, paymentMethod, amount, paid) => {
     })
 }
 
-const createInoviceItem = async (item, invoiceId, enquiryId, shouldSaveTeethAndSurface) => {
+const createInoviceItem = (item, invoiceId, enquiryId, shouldSaveTeethAndSurface) => {
     let net_amount = item.item.tax_amount ? parseFloat(item.item.product_price) + parseFloat(item.item.tax_amount) : parseFloat(item.item.product_price)
     let teeth = item.teeth.toString()
     let surfaces = item.surfaces.toString()
     let statement = "INSERT INTO invoice_item(invoice_id, product_id, product_name, product_price, invoiced_quantity, discount, product_vat_tax_rate, product_tax_amount, net_amount, teeth, surfaces, comment, created_date) VALUES (" + invoiceId + "," + item.item.product_id + ",'" + item.item.product_name + "'," + item.item.product_price + "," + item.quantity + ","+ item.discount + "," + item.item.tax_rate + "," + item.item.tax_amount + "," + net_amount + ",'" + teeth + "','" + surfaces + "','" + item.comment + "',NOW()) RETURNING id"
-    const p1 = pool.query(statement);
-    const t1 = await p1
-    const invoiceItemId = t1.rows[0].id;
-    const p2 = (shouldSaveTeethAndSurface && isArray(item.teeth)) ? item.teeth.map(async tooth =>
-        await createTooth(tooth, enquiryId, invoiceItemId, item.surfaces, item.comment)) : []
-    return Promise.all([p1, ...p2])
+    pool.query(statement, (error, results) => {
+        if (error) {
+            throw error
+        }
+        var invoiceItemId = results.rows[0].id;
+
+        if( shouldSaveTeethAndSurface) {
+            item.teeth.forEach(tooth => {
+                createTooth(tooth, enquiryId, invoiceItemId, item.surfaces, item.comment)
+            })
+        }
+    })
 }
 
 const updateInoviceItem = (item, invoiceItemId, enquiryId, shouldSaveTeethAndSurface) => {
@@ -269,17 +287,20 @@ const updateInoviceItem = (item, invoiceItemId, enquiryId, shouldSaveTeethAndSur
     })
 }
 
-const createTooth = async (tooth, enquiryId, invoiceItemId, surfaces, comment) => {
+const createTooth = (tooth, enquiryId, invoiceItemId, surfaces, comment) => {
     let statement = "INSERT INTO enquiry_teeth(enquiry_id, number, created_at) VALUES (" + enquiryId + ", " + tooth + ", NOW()) RETURNING id"
-    const p1 = pool.query(statement)
-    const t1 = await p1
-    const toothId = t1.rows[0].id;
-    const p2 = createInvoiceItemTooth(toothId, invoiceItemId, surfaces, comment)
-    const p3 = createToothLog(toothId, surfaces, comment)
-    return Promise.all([p1, p2, p3])
+    pool.query(statement, (error, results) => {
+        if (error) {
+            throw error
+        }
+        var toothId = results.rows[0].id;
+
+        createInvoiceItemTooth(toothId, invoiceItemId, surfaces, comment)
+        createToothLog(toothId, surfaces, comment)
+    })
 }
 
-const createToothLog = async (toothId, surfaces, comment) => {
+const createToothLog = (toothId, surfaces, comment) => {
     let statement = "INSERT INTO tooth_log(enquiry_teeth_id, comment, date, created_at,"
     if (surfaces.includes('O')) statement += "occlusal,"
     if (surfaces.includes('M')) statement += "mesial,"
@@ -295,10 +316,14 @@ const createToothLog = async (toothId, surfaces, comment) => {
     if (surfaces.includes('L')) statement += "true,"
     statement = statement.slice(0, -1)
     statement += ")"
-    return pool.query(statement)
+    pool.query(statement, (error, results) => {
+        if (error) {
+            throw error
+        }
+    })
 }
 
-const createInvoiceItemTooth = async (toothId, invoiceItemId, surfaces, comment) => {
+const createInvoiceItemTooth = (toothId, invoiceItemId, surfaces, comment) => {
     let statement = "INSERT INTO teeth_invoice_item(enquiry_teeth_id, invoice_item_id, comment, created_at,"
     if (surfaces.includes('O')) statement += "occlusal,"
     if (surfaces.includes('M')) statement += "mesial,"
@@ -314,7 +339,11 @@ const createInvoiceItemTooth = async (toothId, invoiceItemId, surfaces, comment)
     if (surfaces.includes('L')) statement += "true,"
     statement = statement.slice(0, -1)
     statement += ")"
-    return pool.query(statement)
+    pool.query(statement, (error, results) => {
+        if (error) {
+            throw error
+        }
+    })
 }
 
 const getInvoices = (request, response, user_id, accessible_user_ids, prm_client_id, scope) => {

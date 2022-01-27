@@ -736,7 +736,6 @@ export default {
           this.fetchItemsAndPaymentMethods()
           if (this.isInvoiceStatusIssued) this.redirectToDetailsPage()
         }).catch(errorMsg => {
-          console.log(errorMsg)
           this.$bvToast.show('bottom-right-danger')
         })
       } else {

@@ -174,7 +174,6 @@ export default {
       valueAxis.maxPrecision = 0
       chart.yAxes.push(valueAxis)
       valueAxis.renderer.grid.template.strokeWidth = 0
-      valueAxis.title.html = '<b>Revenue: ' + this.$options.filters.formatPrice(this.option.revenue) + '</b>'
 
       // Create series
       let series = chart.series.push(new am4charts.ColumnSeries())
@@ -342,7 +341,7 @@ export default {
         series.sequencedInterpolation = true
 
         series.legendSettings.valueText = '{valueY.close}'
-        series.legendSettings.itemValueText = '[bold]{valueY}[/bold]'
+        series.legendSettings.itemValueText = '{valueY}'
 
         // Make it stacked
         series.stacked = true
@@ -368,7 +367,7 @@ export default {
       chart.legend.maxHeight = 300
       chart.legend.scrollable = true
       chart.legend.fontSize = '12px'
-      // chart.cursor = new am4charts.XYCursor()
+      chart.cursor = new am4charts.XYCursor()
     },
     revenueByDoctor(chart) {
       // chart.colors.list = []
@@ -390,7 +389,6 @@ export default {
       categoryAxis.dataFields.category = 'doctor'
       categoryAxis.renderer.grid.template.location = 0
       categoryAxis.renderer.grid.template.strokeWidth = 0
-      categoryAxis.renderer.minGridDistance = 80
       const valueAxis = new am4charts.ValueAxis()
       valueAxis.maxPrecision = 0
       chart.yAxes.push(valueAxis)
@@ -399,6 +397,14 @@ export default {
       valueAxis.min = 0
       valueAxis.renderer.grid.template.strokeWidth = 0.5
       valueAxis.renderer.grid.template.strokeDasharray = '4 2'
+
+      chart.cursor = new am4charts.XYCursor()
+      chart.cursor.lineY.disabled = true
+      chart.cursor.lineX.disabled = true
+      chart.hideSeriesTooltipsOnSelection = true
+      valueAxis.cursorTooltipEnabled = false
+      categoryAxis.cursorTooltipEnabled = false
+      chart.cursor.maxTooltipDistance = -1
 
       // Create series
       let _this = this
@@ -420,12 +426,14 @@ export default {
           '[bold]{name}: {valueY}[/]\n[font-size:14px]{categoryX}'
 
         series.legendSettings.valueText = '{valueY.close}'
-        series.legendSettings.itemValueText = '[bold]{valueY}[/bold]'
+        series.legendSettings.itemValueText = '{valueY}'
 
         // Add label
         // let labelBullet = series.bullets.push(new am4charts.LabelBullet())
         // labelBullet.label.text = '{valueY}'
         // labelBullet.locationY = 0.5
+
+        chart.cursor.snapToSeries = [series]
 
         return series
       }
@@ -438,7 +446,6 @@ export default {
       chart.legend.maxHeight = 300
       chart.legend.scrollable = true
       chart.legend.fontSize = '12px'
-      chart.cursor = new am4charts.XYCursor()
     },
     newPatients(chart) {
       // chart.colors.list = []
@@ -836,8 +843,13 @@ export default {
       // for (let j = 0; j < this.option.colors.length; j++) {
       //   series.colors.list.push(am4core.color(this.option.colors[j]))
       // }
+
       series.dataFields.value = this.option.value[0]
       series.dataFields.category = this.option.category[0]
+
+      // series.events.once('ready', function (ev) {
+      //   chart.legend.children.moveValue(ev.target.legendDataItem.itemContainer, ev.target.zIndex)
+      // })
 
       series.labels.template.disabled = true
 
