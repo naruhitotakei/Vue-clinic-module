@@ -18,7 +18,7 @@ export default {
     element: { type: String, default: 'am-chart' },
     type: { type: String, default: 'bar' },
     option: { type: Object, default: () => {} },
-    height: { type: Number, default: 500 },
+    height: { type: Number, default: 400 },
   },
   mounted() {
     let chart
@@ -46,6 +46,10 @@ export default {
       case 'leads':
         chart = am4core.create(this.element, am4charts.XYChart)
         this.leads(chart)
+        break
+      case 'newPatients':
+        chart = am4core.create(this.element, am4charts.XYChart)
+        this.newPatients(chart)
         break
       case 'doctor-revenue':
         chart = am4core.create(this.element, am4charts.XYChart)
@@ -361,9 +365,10 @@ export default {
       // Legend
       chart.legend = new am4charts.Legend()
       chart.legend.position = 'right'
-      chart.legend.maxHeight = 400
+      chart.legend.maxHeight = 300
       chart.legend.scrollable = true
-      chart.cursor = new am4charts.XYCursor()
+      chart.legend.fontSize = '12px'
+      // chart.cursor = new am4charts.XYCursor()
     },
     revenueByDoctor(chart) {
       // chart.colors.list = []
@@ -430,9 +435,48 @@ export default {
       // Legend
       chart.legend = new am4charts.Legend()
       chart.legend.position = 'right'
-      chart.legend.maxHeight = 400
+      chart.legend.maxHeight = 300
       chart.legend.scrollable = true
+      chart.legend.fontSize = '12px'
       chart.cursor = new am4charts.XYCursor()
+    },
+    newPatients(chart) {
+      // chart.colors.list = []
+      // for (let j = 0; j < this.option.colors.length; j++) {
+      //   chart.colors.list.push(am4core.color(this.option.colors[j]))
+      // }
+      chart.data = this.option.data
+      let dateAxis = chart.xAxes.push(new am4charts.DateAxis())
+      dateAxis.dataFields.date = this.option.xAxis[0]
+      dateAxis.renderer.grid.template.location = 0
+      dateAxis.renderer.grid.template.strokeWidth = 0
+      dateAxis.groupData = true
+
+      chart.numberFormatter.numberFormat = {
+        maximumFractionDigits: 0,
+        minimumFractionDigits: 0,
+      }
+
+      chart.numberFormatter.intlLocales = 'de-DE'
+
+      // eslint-disable-next-line no-unused-lets
+      const valueAxis = new am4charts.ValueAxis()
+      valueAxis.maxPrecision = 0
+      chart.yAxes.push(valueAxis)
+      valueAxis.renderer.grid.template.strokeWidth = 0.5
+      valueAxis.renderer.grid.template.strokeDasharray = '4 2'
+
+      // Create series
+      let series = chart.series.push(new am4charts.ColumnSeries())
+      series.dataFields.valueY = this.option.yAxis[0]
+      series.dataFields.dateX = this.option.xAxis[0]
+      series.name = this.option.labels[0]
+      series.columns.template.tooltipText = 'Patients: [bold]{valueY}[/]'
+      series.columns.template.fillOpacity = 1
+
+      let columnTemplate = series.columns.template
+      columnTemplate.strokeWidth = 2
+      columnTemplate.strokeOpacity = 1
     },
     barLine(chart) {
       chart.colors.list = []
