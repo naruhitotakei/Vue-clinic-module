@@ -316,6 +316,7 @@ export default {
       dateAxis.renderer.grid.template.location = 0
       dateAxis.renderer.grid.template.strokeWidth = 0
       dateAxis.renderer.minGridDistance = 50
+      dateAxis.groupData = true
       const valueAxis = new am4charts.ValueAxis()
       valueAxis.maxPrecision = 0
       chart.yAxes.push(valueAxis)
