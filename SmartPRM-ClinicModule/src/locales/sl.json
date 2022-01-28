@@ -834,7 +834,8 @@
       "open": "prosto",
       "taken": "zasedeno",
       "closed": "zaprto",
-      "unavailable": "sl - unavailable",
+      "available": "en - available",
+      "unavailable": "en - unavailable",
       "chooseYourFavoriteDoctor": "Izberite zdravnika",
       "selectOption": "Izberite možnost",
       "pressEnterToSelect": "Pritisnite enter, da izberete",
@@ -875,8 +876,8 @@
       "error": {
         "over-order": "Ni možno zapolniti več kot dva termina iz iste telefonske številke.",
         "unavailable-slot": "Vaš izbrani termin je že zaseden.",
-        "incorrect-code": "sl - The code inserted does not match the expected value.",
-        "excessive-verification-attempts": "sl - Incorrect code was entered too many times. Please wait to try again."
+        "incorrect-code": "en - The code inserted does not match the expected value.",
+        "excessive-verification-attempts": "en - Incorrect code was entered too many times. Please wait to try again."
       }
     }
   }

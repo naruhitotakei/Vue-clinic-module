@@ -810,6 +810,8 @@
       "open": "Libero",
       "taken": "Occupato",
       "closed": "Chiuso",
+      "available": "en - available",
+      "unavailable": "en - unavailable",
       "chooseYourFavoriteDoctor": "Scegli dentista",
       "selectOption": "Seleziona opzione",
       "pressEnterToSelect": "Premi invio per selezionare",
@@ -849,9 +851,10 @@
       "bookAnotherAppointment": "Prenota un nuvo appuntamento",
       "error": {
         "over-order": "Non è possibile fare due prenotazioni con lo stesso numero di telefono.",
-        "unavailable-slot": "La data scelta è già occupata."
+        "unavailable-slot": "La data scelta è già occupata.",
+        "incorrect-code": "en - The code inserted does not match the expected value.",
+        "excessive-verification-attempts": "en - Incorrect code was entered too many times. Please wait to try again."
       }
     }
-
   }
 }
