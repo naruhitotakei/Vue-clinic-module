@@ -2418,3 +2418,10 @@ app.get('/api/files/logo/:id', async function (req, res) {
   const download = Buffer.from(rv.data.Body)
   res.end(download)
 })
+
+app.get('/api/debug', (request, response) => {
+  const { query, body, ip, headers } = request
+  const result = { query, body, ip, headers }
+
+  response.json(result)
+})
