@@ -46,7 +46,6 @@ const getApontments = (
     'LEFT JOIN prm_product_group_name prm_pr_group_name ON prm_pr_group.product_group_id = prm_pr_group_name.product_group_id '
   statement += 'WHERE app.trashed = false '
   statement += `AND prm_pr_group_name.language = '${lang}' `
-  statement += `AND app.doctor_id IS NOT NULL `
   // statement += "AND pcl.client_deleted = false "
   if (scope == 'All') {
   } else if (scope == 'PrmClient') {

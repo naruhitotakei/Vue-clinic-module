@@ -650,6 +650,7 @@
     "addLocation": "New location",
     "locationsColumn": {
       "name": "Name",
+      "locationName": "Location name",
       "address": "Address",
       "city": "City",
       "action": "Action"
@@ -657,6 +658,7 @@
     "addLocationModalHeader": "New location",
     "editLocationModalHeader": "Edit location",
     "locationModal": {
+      "clinic": "Premise",
       "name": "Name",
       "city": "City",
       "address": "Address",

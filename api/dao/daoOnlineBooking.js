@@ -26,7 +26,7 @@ const getOnlineBookingProducts = async (
       online_booking_service_name.text AS booking_service_text,
       online_booking_service_name.language,
       users.id AS doctor_id,
-      concat(users.title, ' ', users.first_name, ' ', users.surname) AS doctor_name,
+      trim(concat(users.title, ' ', users.first_name, ' ', users.surname)) AS doctor_name,
       prm_company_premise.premise_id AS premise_id,
       prm_company_premise.premise_name,
       prm_product_group_name.text AS product_group_text,
@@ -69,10 +69,12 @@ const getOnlineBookingProducts = async (
 
       return {
         ...service,
-        doctors: rows.map(({ doctor_id, doctor_name }) => ({
-          id: doctor_id,
-          name: doctor_name,
-        })),
+        doctors: rows
+          .filter(({ doctor_id }) => doctor_id != null)
+          .map(({ doctor_id, doctor_name }) => ({
+            id: doctor_id,
+            name: doctor_name,
+          })),
       }
     })
     .sort(({ booking_service_text: a }, { booking_service_text: b }) =>

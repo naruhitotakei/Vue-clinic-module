@@ -4,7 +4,7 @@
       <iq-card class-name="iq-card-block iq-card-stretch iq-card-height">
         <template v-slot:headerTitle>
           <div class="d-flex align-items-center justify-content-between">
-            <h4 class="card-title">Appointments By Product Group</h4>
+            <h4 class="card-title">Appointments By Product Group ({{ totalApts | formatNumber }})</h4>
             <vue-excel-xlsx
               v-if="dataToExport && dataToExport.length"
               :data="dataToExport"
@@ -118,6 +118,7 @@ export default {
       this.noData = false
       this.chartBodyData = null
       this.dataToExport = []
+      this.totalApts = []
       getAppointmentsByProduct(start, end, 'en')
         .then((response) => {
           this.loading = false
@@ -146,6 +147,7 @@ export default {
 
       // let amChartData = []
       let amChartData = []
+      this.totalApts = 0
       datesArray.forEach(date => {
         let obj = { date: date }
         const itemsByDate = data.filter(item => item.appointments_date.split('T')[0] === date)
@@ -153,8 +155,9 @@ export default {
           const isProductHasDate = itemsByDate.find(item => item.products.includes(product))
           if (isProductHasDate) {
             obj[product] = isProductHasDate.appointment_count ? Number(isProductHasDate.appointment_count) : 0
+            this.totalApts += Number(obj[product])
           } else {
-            obj[product] = 0
+            // obj[product] = 0
           }
         })
         amChartData.push(obj)
@@ -250,6 +253,7 @@ export default {
   },
   data() {
     return {
+      totalApts: 0,
       chartBodyData: null,
       startDate: null,
       endDate: null,

@@ -4,7 +4,7 @@
       <iq-card class-name="iq-card-block iq-card-stretch iq-card-height">
         <template v-slot:headerTitle>
           <div class="d-flex align-items-center justify-content-between">
-            <h4 class="card-title">Revenue By Doctor</h4>
+            <h4 class="card-title">Revenue By Doctor ({{ totalRevenue | formatPrice }})</h4>
             <vue-excel-xlsx
               v-if="dataToExport && dataToExport.length"
               :data="dataToExport"
@@ -118,6 +118,8 @@ export default {
       this.loading = true
       this.noData = false
       this.chartBodyData = null
+      this.totalRevenue = 0
+      this.dataToExport = []
       getRevenueByDoctor(start, end)
         .then(async (response) => {
           if (response && response.length) {
@@ -152,8 +154,9 @@ export default {
             const isProductHasDoctor = itemsByDoctor.find(item => item.product_name === product)
             if (isProductHasDoctor) {
               obj[product] = isProductHasDoctor.sum ? Number(isProductHasDoctor.sum) : 0
+              this.totalRevenue += Number(obj[product])
             } else {
-              obj[product] = 0
+              // obj[product] = 0
             }
           })
           amChartData.push(obj)
@@ -267,6 +270,7 @@ export default {
   },
   data() {
     return {
+      totalRevenue: 0,
       chartBodyData: null,
       startDate: null,
       endDate: null,

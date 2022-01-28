@@ -643,6 +643,7 @@
     "addLocation": "Nova lokacija",
     "locationsColumn": {
       "name": "Ime",
+      "locationName": "Ime lokacije",
       "address": "Naslov",
       "city": "Kraj",
       "action": "Možnosti"
@@ -650,6 +651,7 @@
     "addLocationModalHeader": "Nova lokacija",
     "editLocationModalHeader": "Uredi lokacijo",
     "locationModal": {
+      "clinic": "Klinika",
       "name": "Ime",
       "city": "Address",
       "address": "Naslov",

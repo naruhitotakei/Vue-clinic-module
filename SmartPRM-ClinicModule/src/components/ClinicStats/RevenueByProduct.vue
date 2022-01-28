@@ -92,7 +92,8 @@ export default {
     }
   },
   methods: {
-    initChart(data) {
+    async initChart(data) {
+      data = await data.sort((a, b) => Number(a.sum) < Number(b.sum) ? 1 : -1)
       this.chartBodyData = {
         colors: ['#4c9cac', '#00ca00', '#ffd400'],
         value: ['sum'],

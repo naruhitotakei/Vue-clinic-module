@@ -4,15 +4,38 @@
       <b-col lg="9">
         <iq-card>
           <template v-slot:body>
+            <iq-card class="mb-0">
+              <template v-slot:body>
+                <div class="row justify-content-between align-items-center m-1 d-lg-none">
+                  <div class="row align-items-center">
+                    <b-dropdown id="dropdown-aria" variant="primary" :text="$t('calendar.selectDoctor')" class="ml-2 ml-sm-2">
+                      <b-dropdown-group class="px-3">
+                        <b-checkbox name="check-button" v-model="allDoctorCheck" @change="allDoctorFun(allDoctorCheck)"
+                                    inline>{{ $t('calendar.selectAll') }}
+                        </b-checkbox>
+                      </b-dropdown-group>
+                      <b-dropdown-form>
+                        <b-dropdown-group v-for="(item,index) in doctors" :key="index">
+                          <b-checkbox href="#" class="custom-switch-color" :color="item.color" @change="checkData(item)"
+                                      v-model="item.checked" :ref="'doctor_'+index" name="check-button" inline>
+                            {{ item.title }}
+                          </b-checkbox>
+                        </b-dropdown-group>
+                      </b-dropdown-form>
+                    </b-dropdown>
+                  </div>
+                </div>
+              </template>
+            </iq-card>
             <FullCalendar :resourcesOuter="getResources" :events="getEvents" @updateApp="updateApp"
                           @checkData="checkData" @setModalShow="setModalShow" :modalShow="modalShow"
                           :selectDoctor="selectDoctor"
                           ref="fullCalendar"
-                          style="width: 100%; height: 100%;"/>
+                          style="width: 100%;"/>
           </template>
         </iq-card>
       </b-col>
-      <b-col lg="3" class="pl-lg-2">
+      <b-col lg="3" class="pl-lg-2 d-none d-lg-block">
         <iq-card
           class="overflow-hidden"
           footerClass="bg-transparent px-0 pt-0"
@@ -70,6 +93,7 @@ export default {
       checkedListArray: [],
       selectDoctor: {},
       slideCount: 0,
+      legacyAppId: ' ', // empty string is required for fullcalendar to render events
       optionSlider: {
         'centerMode': true,
         'centerPadding': '0',
@@ -122,16 +146,16 @@ export default {
     },
     'events'(data) {
       // Add lagacy app recource if there is any event resourceId (doctor_id) is not exist
-      if (data.some(evt => evt.resourceId === 'legacy-app') && !this.resources.find(rsc => rsc.id === 'legacy-app')) {
+      if (data.some(evt => evt.resourceId === this.legacyAppId) && !this.resources.find(rsc => rsc.id === this.legacyAppId)) {
         this.resources.push({
-          id: 'legacy-app',
-          title: 'From Legacy App',
+          id: this.legacyAppId,
+          title: '',
         })
         console.log('add res legacy', this.resources)
       }
       // Remove legacy app from recourses if all events have resourceId
-      if (data.every(evt => evt.resourceId !== 'legacy-app') && this.resources.find(rsc => rsc.id === 'legacy-app')) {
-        this.resources.splice(this.resources.findIndex(rsc => rsc.id === 'legacy-app'), 1)
+      if (data.every(evt => evt.resourceId !== this.legacyAppId) && this.resources.find(rsc => rsc.id === this.legacyAppId)) {
+        this.resources.splice(this.resources.findIndex(rsc => rsc.id === this.legacyAppId), 1)
         console.log('remove res legacy', this.resources)
       }
     },
@@ -224,7 +248,7 @@ export default {
               patient_attended: item.patient_attended,
               appointment_canceled: item.appointment_canceled,
               cancelation_reason: item.cancelation_reason,
-              resourceId: item.doctor_id ? item.doctor_id : 'legacy-app',
+              resourceId: item.doctor_id ? item.doctor_id : this.legacyAppId,
               eventResourceId: item.doctor_id,
               location: item.location ? item.location : item.app_location,
               product_groups: item.product_group_id,
@@ -313,6 +337,12 @@ export default {
   opacity: 0.5;
 }
 .calendar-page {
+  .calendar-card {
+    height: calc(100vh - 110px);
+  }
+  .dropdown-menu {
+    font-size: 0.775rem !important;
+  }
   .inline-calendar {
     .mx-datepicker-main {
       border: none;
