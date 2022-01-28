@@ -486,9 +486,25 @@ app.get('/api/appointments/doctors', (req, res) => {
   else res.status(401).json('OK: user unauthorized')
 })
 
+app.get('/api/appointments/kinds', (req, res) => {
+  if (
+    req.session.prm_user &&
+    req.session.prm_user.permissions &&
+    checkPermission(req.session.prm_user.permissions, appointmentsPermission)
+  )
+    daoAppointments.getAllAppointmentsKinds(
+      req,
+      res,
+      getScope(req.session.prm_user.permissions, appointmentsPermission),
+      req.session.prm_user.prm_client_id,
+    )
+  else res.status(401).json('OK: user unauthorized')
+})
+
 app.get('/api/appointments', (req, res) => {
   const location = req.query.location
   const doctor = req.query.doctor
+  const kind = req.query.kind
   const date = req.query.date
   if (
     req.session.prm_user &&
@@ -500,6 +516,7 @@ app.get('/api/appointments', (req, res) => {
       res,
       location,
       doctor,
+      kind,
       date,
       getScope(req.session.prm_user.permissions, appointmentsPermission),
       req.session.prm_user.prm_client_id,

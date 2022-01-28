@@ -18,6 +18,16 @@ const getAllAppointmentsLocations = (req, res, scope, prm_client_id) => {
   })
 }
 
+const getAllAppointmentsKinds = (req, res, scope, prm_client_id) => {
+  let statement = 'SELECT kind FROM "appointments" WHERE kind IS NOT NULL GROUP BY kind '
+  pool.query(statement, (error, results) => {
+    if (error) {
+      throw error
+    }
+    res.status(200).json(results.rows)
+  })
+}
+
 const getAllAppointmentsDoctors = (req, res, scope, prm_client_id) => {
   let statement =
     'SELECT DISTINCT ON(doctor_id) doctor_name, doctor_id FROM appointments '
@@ -37,7 +47,7 @@ const getAllAppointmentsDoctors = (req, res, scope, prm_client_id) => {
   })
 }
 
-const getAppointments = async (req, res, location, doctor, date, scope, prm_client_id, user_id, accessible_user_ids, locale) => {
+const getAppointments = async (req, res, location, doctor, kind, date, scope, prm_client_id, user_id, accessible_user_ids, locale) => {
   let statement = "SELECT appointments.*, enquiries.name AS enquiry_name, enquiries.last_name AS enquiry_last_name, " +
     "enquiries.phone AS enquiry_phone, prm_product_group_name.text AS product_name FROM appointments "
   statement += "LEFT JOIN enquiries ON appointments.enquiry_id = enquiries.id "
@@ -46,7 +56,9 @@ const getAppointments = async (req, res, location, doctor, date, scope, prm_clie
   statement += "WHERE date = $1 "
   statement += "AND ($2::text IS NULL OR appointments.location = $2::text) "
   statement += "AND ($3::int IS NULL OR appointments.doctor_id = $3::int) "
+  statement += "AND ($4::text IS NULL OR appointments.kind = $4::text) "
   statement += "AND prm_product_group_name.language = '" + locale + "' "
+  statement += "AND appointments.appointment_canceled = FALSE "
   if (scope == 'All') {
   } else if (scope == 'PrmClient') {
     statement += 'AND enquiries.prm_client_id = ' + prm_client_id
@@ -69,7 +81,8 @@ const getAppointments = async (req, res, location, doctor, date, scope, prm_clie
     result = await pool.query(statement, [
       date,
       location !== 'All Locations' ? location : null,
-      doctor !== 'All Doctors' ? parseInt(doctor) : null
+      doctor !== 'All Doctors' ? parseInt(doctor) : null,
+      kind !== 'All Kinds' ? kind : null,
     ])
   } catch (error) {
     return res.status(500).send()
@@ -145,6 +158,7 @@ async function createAppointment({ enquiryId }) {
 module.exports = {
   getAllAppointmentsLocations,
   getAllAppointmentsDoctors,
+  getAllAppointmentsKinds,
   getAppointments,
   updateLevelOfInterest,
   updateClinicNotes,
