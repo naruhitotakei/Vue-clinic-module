@@ -53,17 +53,15 @@
             <h5>
               <strong>
                 <p class="text-black sm_margin_b">
-                  {{ appointment.product_name }} {{ appointment.enquiry_name ? '|' : ''}} <span @click="redirectEPR(appointment.id)" class="eprName"> {{ appointment.enquiry_name || '' }} {{ appointment.enquiry_last_name || '' }} </span>{{appointment.enquiry_phone ? '|' : ''}} {{ appointment.enquiry_phone }}
+                  <span @click="redirectEPR(appointment.id)" class="eprName"> {{ appointment.enquiry_name || '' }} {{ appointment.enquiry_last_name || '' }} </span> {{ appointment.product_name ? '|' : ''}}  {{ appointment.product_name }} {{appointment.enquiry_phone ? '|' : ''}} {{ appointment.enquiry_phone }}
                 </p>
               </strong>
             </h5>
           </b-row>
           <b-row class="no-margin">
-            <strong>
               <p class="text-black sm_margin_b">
                 Note to the doctor : {{appointment.note}}
               </p>
-            </strong>
           </b-row>
           <b-row class="mt-1">
             <b-col lg="5" md="5">
@@ -167,17 +165,15 @@
               <h5>
                 <strong>
                   <p class="text-black sm_margin_b">
-                    {{ appointment.product_name }} {{ appointment.enquiry_name ? '|' : ''}} <span @click="redirectEPR(appointment.id)" class="eprName"> {{ appointment.enquiry_name || '' }} {{ appointment.enquiry_last_name || '' }} </span>{{appointment.enquiry_phone ? '|' : ''}} {{ appointment.enquiry_phone }}
+                    <span @click="redirectEPR(appointment.id)" class="eprName"> {{ appointment.enquiry_name || '' }} {{ appointment.enquiry_last_name || '' }} </span> {{ appointment.product_name ? '|' : ''}}  {{ appointment.product_name }} {{appointment.enquiry_phone ? '|' : ''}} {{ appointment.enquiry_phone }}
                   </p>
                 </strong>
               </h5>
             </b-row>
             <b-row class="no-margin">
-              <strong>
                 <p class="text-black sm_margin_b">
                   Note to the doctor : {{appointment.note}}
                 </p>
-              </strong>
             </b-row>
           <b-row class="mt-1 bottom_side">
             <b-col lg="5" md="5" sm="12" class="response_note">
