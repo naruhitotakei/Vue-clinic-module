@@ -10,6 +10,7 @@ const pool = new Pool({
 
 const langByCountry = {
   SI: 'sl',
+  IT: 'it',
 }
 
 const getConfig = (request, response, ip, premiseId) => {
@@ -48,6 +49,7 @@ const getConfig = (request, response, ip, premiseId) => {
 
     response.json({
       lang,
+      country: geo != null ? geo.country.toLowerCase() : 'si',
       premise: {
         name: premise.name,
         address: `${premise.street} ${premise.house_number}, ${premise.post_code} ${premise.city}`,

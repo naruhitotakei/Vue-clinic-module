@@ -2372,7 +2372,12 @@ app.post('/api/booking/confirm-and-save', (req, res) => {
 })
 
 app.get('/api/config', (request, response) => {
-  daoConfig.getConfig(request, response, request.ip, request.query.premiseId)
+  daoConfig.getConfig(
+    request,
+    response,
+    request.headers['x-real-ip'],
+    request.query.premiseId,
+  )
 })
 
 app.use('/api/available-services', require('~/controllers/available-services'))
