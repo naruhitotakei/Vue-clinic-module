@@ -15,6 +15,14 @@
             </div>
             <div class="filter-select">
               <v-select
+                :options="filterKinds"
+                :value="selectedKind"
+                v-model="selectedKind"
+                @input="getAppointmentsData"
+              ></v-select>
+            </div>
+            <div class="filter-select">
+              <v-select
                 :options="filterDoctors"
                 v-model="selectedDoctor"
                 :reduce="(option) => option.value"
@@ -281,6 +289,7 @@ import { xray } from '../../config/pluginInit'
 
 import {
   getAppointmentsLocations,
+  getAppointmentsKinds,
   getAppointmentsDoctors,
   getAppointments,
   updateLevelOfInterest,
@@ -297,12 +306,15 @@ export default defineComponent({
   mounted() {
     xray.index()
     this.getAppointmentsLocationsData()
+    this.getAppointmentsKindsData()
     this.getAppointmentsDoctorsData()
     this.getAppointmentsData()
   },
   data() {
     return {
       filterLocations: ['All Locations'],
+      filterKinds: ['All Kinds'],
+      selectedKind: 'Posvet',
       selectedLocation: 'All Locations',
       filterDoctors: [{ value: 'All Doctors', label: 'All Doctors' }],
       selectedDoctor: 'All Doctors',
@@ -314,6 +326,15 @@ export default defineComponent({
   methods: {
     redirectEPR(id) {
       this.$router.push({ path: `/patients/${id}` })
+    },
+    async getAppointmentsKindsData() {
+      getAppointmentsKinds().then((response) => {
+        if (Array.isArray(response)) {
+          response.map((obj) => {
+            this.filterKinds.push(obj.kind)
+          })
+        }
+      })
     },
     async getAppointmentsLocationsData() {
       getAppointmentsLocations().then((response) => {
@@ -337,7 +358,7 @@ export default defineComponent({
       })
     },
     async getAppointmentsData() {
-      getAppointments(this.selectedLocation, this.selectedDoctor, moment(this.dateSelected).format('YYYY-MM-DD'), this.$i18n.locale).then(
+      getAppointments(this.selectedLocation, this.selectedDoctor, this.selectedKind, moment(this.dateSelected).format('YYYY-MM-DD'), this.$i18n.locale).then(
         (response) => {
           this.appointments = []
           if (Array.isArray(response)) {
@@ -395,7 +416,7 @@ export default defineComponent({
   align-items: center;
 }
 .filter-select {
-  min-width: 300px;
+  min-width: 250px;
   margin-left: 1rem;
 }
 .vs__clear {

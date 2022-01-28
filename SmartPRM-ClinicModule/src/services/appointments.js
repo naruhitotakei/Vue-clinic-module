@@ -10,6 +10,18 @@ export async function getAppointmentsLocations() {
   return rawResponse.json()
 }
 
+export async function getAppointmentsKinds() {
+  const rawResponse = await fetch('/api/appointments/kinds', {
+    method: 'GET',
+    credentials: 'same-origin',
+    headers: {
+      'Accept': 'application/json',
+      'Content-Type': 'application/json',
+    },
+  })
+  return rawResponse.json()
+}
+
 export async function getAppointmentsDoctors() {
   const rawResponse = await fetch('/api/appointments/doctors', {
     method: 'GET',
@@ -25,14 +37,17 @@ export async function getAppointmentsDoctors() {
 export async function getAppointments(
   filterLocation,
   filterDoctor,
+  filterKind,
   filterDate,
-  locale
+  locale,
 ) {
   const rawResponse = await fetch(
     '/api/appointments?location=' +
       filterLocation +
       '&doctor=' +
       filterDoctor +
+      '&kind=' +
+      filterKind +
       '&date=' +
       filterDate +
       '&locale=' +

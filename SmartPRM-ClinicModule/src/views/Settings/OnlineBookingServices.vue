@@ -6,9 +6,15 @@
         <iq-card>
           <template v-slot:headerTitle>
             <h3 class="card-title" style="margin-top: 10px">
-              <!-- {{ $t('onlineBooking.header') }} -->
+              <a
+                href="#"
+                class="px-2"
+                style="font-size: x-large"
+                @click="$router.back()"
+                ><i class="ri-arrow-left-line"></i
+              ></a>
               <span v-if="premise != null">
-                {{ premise.name }}
+                {{ premise.premise_name }}
               </span>
             </h3>
             <div class="btn-add-patient mb-4 mt-0">
@@ -193,21 +199,6 @@
                   style="min-width: 305px"
                 ></v-select>
               </div>
-              <div class="col-md-12 mb-3">
-                <label for="premise"
-                  >{{ $t('onlineBooking.serviceModal.premise') }} *</label
-                >
-                <v-select
-                  :clearable="false"
-                  label="premise"
-                  :reduce="(premise) => premise.id"
-                  :getOptionLabel="(premise) => premise.name"
-                  class="style-chooser form-control-disabled font-size-16 ml-0 mt-1"
-                  v-model="onlineBookingData.premise_id"
-                  :options="premises"
-                  style="min-width: 305px"
-                ></v-select>
-              </div>
             </div>
           </form>
         </b-modal>
@@ -241,7 +232,7 @@ export default defineComponent({
     this.getDoctors()
     this.getOnlineBookingProductGroups(this.$i18n.locale)
     this.getPremises()
-    this.premise = await getPremiseById(this.$route.params.id)
+    this.premise = (await getPremiseById(this.$route.params.id))[0]
   },
   data: function () {
     return {
@@ -256,9 +247,9 @@ export default defineComponent({
         english: '',
         default_online_price: '',
         default_duration: '',
-        doctor_ids: '',
+        doctor_ids: [],
         product_group_id: '',
-        premise_id: '',
+        premise_id: this.$route.params.id,
       },
       doctors: [],
       productGroups: [],
@@ -354,9 +345,9 @@ export default defineComponent({
         english: '',
         default_online_price: '',
         default_duration: '',
-        doctor_ids: '',
+        doctor_ids: [],
         product_group_id: '',
-        premise_id: '',
+        premise_id: this.$route.params.id,
       }
     },
     cancelService() {
@@ -398,7 +389,13 @@ export default defineComponent({
       getOnlineBookingProductsNaming(item.id).then((response) => {
         this.onlineBookingData = this.populateNaming(
           response,
-          Object.assign({}, item),
+          Object.assign(
+            {},
+            {
+              ...item,
+              doctor_ids: item.doctors.map(({ id }) => id),
+            },
+          ),
         )
       })
       this.modalServiceShow = true

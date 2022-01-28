@@ -71,7 +71,11 @@ export async function createInvoice(invoice) {
     },
     body: JSON.stringify(invoice),
   })
-  return rawResponse.json()
+  const result = await rawResponse.json()
+  if (rawResponse.status !== 200) {
+    throw new Error(result)
+  }
+  return result
 }
 
 export async function getSerialForInvoiceNumberBasedOnType(data) {

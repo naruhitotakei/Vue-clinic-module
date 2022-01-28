@@ -1,4 +1,5 @@
 const moduleAlias = require('module-alias')
+const get = require('lodash/get')
 
 moduleAlias.addAliases({
   '~': __dirname,
@@ -319,7 +320,12 @@ app.get('/api/home/appointments-for-two-weeks', (req, res) => {
     req.session.prm_user.permissions &&
     checkPermission(req.session.prm_user.permissions, homePermission)
   )
-    daoHome.getAppointmentsForTwoWeeks(req, res, getScope(req.session.prm_user.permissions, homePermission), req.session.prm_user.prm_client_id)
+    daoHome.getAppointmentsForTwoWeeks(
+      req,
+      res,
+      getScope(req.session.prm_user.permissions, homePermission),
+      req.session.prm_user.prm_client_id,
+    )
   else res.status(401).json('OK: user unauthorized')
 })
 
@@ -480,9 +486,25 @@ app.get('/api/appointments/doctors', (req, res) => {
   else res.status(401).json('OK: user unauthorized')
 })
 
+app.get('/api/appointments/kinds', (req, res) => {
+  if (
+    req.session.prm_user &&
+    req.session.prm_user.permissions &&
+    checkPermission(req.session.prm_user.permissions, appointmentsPermission)
+  )
+    daoAppointments.getAllAppointmentsKinds(
+      req,
+      res,
+      getScope(req.session.prm_user.permissions, appointmentsPermission),
+      req.session.prm_user.prm_client_id,
+    )
+  else res.status(401).json('OK: user unauthorized')
+})
+
 app.get('/api/appointments', (req, res) => {
   const location = req.query.location
   const doctor = req.query.doctor
+  const kind = req.query.kind
   const date = req.query.date
   if (
     req.session.prm_user &&
@@ -494,6 +516,7 @@ app.get('/api/appointments', (req, res) => {
       res,
       location,
       doctor,
+      kind,
       date,
       getScope(req.session.prm_user.permissions, appointmentsPermission),
       req.session.prm_user.prm_client_id,
@@ -935,8 +958,17 @@ app.get('/api/inactive-locations', (req, res) => {
 })
 
 app.get('/api/get-premises-for-locations', (req, res) => {
-  if (req.session.prm_user && req.session.prm_user.permissions && checkPermission(req.session.prm_user.permissions, locationsPermission))
-    daoLocations.getPremises(req, res, req.session.prm_user.prm_client_id, getScope(req.session.prm_user.permissions, locationsPermission))
+  if (
+    req.session.prm_user &&
+    req.session.prm_user.permissions &&
+    checkPermission(req.session.prm_user.permissions, locationsPermission)
+  )
+    daoLocations.getPremises(
+      req,
+      res,
+      req.session.prm_user.prm_client_id,
+      getScope(req.session.prm_user.permissions, locationsPermission),
+    )
   else res.status(401).json('OK: user unauthorized')
 })
 
@@ -1095,7 +1127,7 @@ app.put('/api/sms-template/update', (req, res) => {
       templateName,
       templateContent,
       templateSlug,
-      templateLang
+      templateLang,
     )
   } else {
     res.status(401).json('OK: user unauthorized')
@@ -1119,7 +1151,7 @@ app.get('/api/online-booking-products/:locale', async (req, res) => {
       req.session.prm_user.prm_client_id,
       getScope(req.session.prm_user.permissions, onlineBookingPermission),
       locale,
-      req.query.premiseId
+      req.query.premiseId,
     )
 
     return res.status(200).json(products)
@@ -1226,7 +1258,7 @@ app.get('/api/enquiries', (req, res) => {
       req.session.prm_user.id,
       req.session.prm_user.accessible_user_ids,
       req.session.prm_user.prm_client_id,
-      getScope(req.session.prm_user.permissions, calendarPermission),
+      getScope(req.session.prm_user.permissions, enquiriesPermission),
       sortBy,
     )
   else res.status(401).json('OK: user unauthorized')
@@ -1618,9 +1650,24 @@ app.post('/api/invoices', (req, res) => {
     req.session.prm_user &&
     req.session.prm_user.permissions &&
     checkPermission(req.session.prm_user.permissions, invoicesPermission)
-  )
-    daoInvoices.createInvoices(req, res, invoice)
-  else res.status(401).json('OK: user unauthorized')
+  ) {
+    daoInvoices
+      .createInvoices(req, res, invoice)
+      .then((result) => {
+        const invoiceId = get(result, '[0].rows[0].invoice_id')
+        if (invoiceId) {
+          res.status(200).json(invoiceId)
+        } else {
+          res.status(400).json('Invoice id not found!')
+        }
+      })
+      .catch((reason) => {
+        console.error(reason)
+        res.status(400).json(reason)
+      })
+  } else {
+    res.status(401).json('OK: user unauthorized')
+  }
 })
 
 app.put('/api/invoices/:id', (req, res) => {
@@ -2387,4 +2434,11 @@ app.get('/api/files/logo/:id', async function (req, res) {
 
   const download = Buffer.from(rv.data.Body)
   res.end(download)
+})
+
+app.get('/api/debug', (request, response) => {
+  const { query, body, ip, headers } = request
+  const result = { query, body, ip, headers }
+
+  response.json(result)
 })
