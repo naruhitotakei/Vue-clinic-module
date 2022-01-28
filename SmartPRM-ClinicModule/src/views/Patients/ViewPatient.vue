@@ -105,6 +105,7 @@
                                                   </div>
                                                   <div class="col-md-9">
                                                       <v-select :clearable="false"
+                                                                :disabled="disabled"
                                                                 label="name"
                                                                 class="style-chooser form-control-disabled font-size-15"
                                                                 v-model="selectedDoctor"
@@ -118,6 +119,7 @@
                                                   </div>
                                                   <div class="col-md-9">
                                                       <v-select :clearable="false"
+                                                                :disabled="disabled"
                                                                 label="product_group_name"
                                                                 :class="{'font-size-15': disabled}"
                                                                 class="style-chooser form-control-disabled font-size-15"
@@ -1442,9 +1444,7 @@ export default {
       futureCurrentPage: 1,
       futurePerPage: 5,
       selectedInvoices: '',
-      selectedDoctor: {
-        name: 'ssdfsdfsdf',
-      },
+      selectedDoctor: '',
       selectedProductGroup: '',
       invoicesType: [
         {
@@ -1824,7 +1824,6 @@ export default {
     downloadFile(file) {
       let fileName = file.name
       downloadFile(fileName).then(response => {
-        console.log(response)
         var bytes = new Uint8Array(response.data.Body.data)
         var fileURL = window.URL.createObjectURL(new Blob([bytes]))
         var fileLink = document.createElement('a')
@@ -1923,7 +1922,6 @@ export default {
     },
     getPatientAssignments(id) {
       getEnquiryAssignments(id).then(response => {
-        console.log(response, '--------')
         if (Array.isArray(response)) {
           this.assignments = response.filter(todo => !todo.completed)
           this.completedAssignments = response.filter(todo => todo.completed)
@@ -2184,6 +2182,7 @@ export default {
     openAddAppointmentModal() {
       this.addAppointmentModal = true
       this.findDentist(this.patient.prm_dentist_user_id)
+      this.findProductGroupName()
       this.formAppointments.backgroundColor = 136
       this.formAppointments.patient_id = this.patient.id
       this.formAppointments.location = this.locations[0].city
@@ -2193,6 +2192,10 @@ export default {
     findDentist(dentistId) {
       let doctor = this.doctors.find(doctor => doctor.id === dentistId)
       this.selectedDoctor = doctor
+    },
+    findProductGroupName(id) {
+      let productName = this.product_groups.find(p => p.product_group_id === id)
+      this.selectedProductGroup = productName.product_group_name
     },
     closeAppointmentModal() {
       this.addAppointmentModal = false
@@ -2207,7 +2210,6 @@ export default {
       })
     },
     saveAppointment() {
-      // alert('asdasdasasdas')
       this.addAppointmentModal = false
       this.formAppointments.patient_id = this.patient.id
       this.formAppointments.doctor_id = this.selectedDoctor?.id
@@ -2255,7 +2257,7 @@ export default {
     getProductGroups(lang) {
       getProductGroups(lang).then((response) => {
         response.map(product => {
-          this.product_groups.push(product.product_group_name)
+          this.product_groups.push(product)
         })
       })
     },
@@ -2268,6 +2270,8 @@ export default {
     },
     openEditAppointmentModal(appointment) {
       this.findDentist(appointment.doctor_id)
+      this.selectedDoctor = appointment.doctor_name
+      this.findProductGroupName(appointment.product_group_id)
       this.formAppointments = {
         id: appointment.appointment_id,
         location: appointment.location,
