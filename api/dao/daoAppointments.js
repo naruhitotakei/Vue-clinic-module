@@ -58,6 +58,7 @@ const getAppointments = async (req, res, location, doctor, kind, date, scope, pr
   statement += "AND ($3::int IS NULL OR appointments.doctor_id = $3::int) "
   statement += "AND ($4::text IS NULL OR appointments.kind = $4::text) "
   statement += "AND prm_product_group_name.language = '" + locale + "' "
+  statement += "AND appointments.appointment_canceled = FALSE "
   if (scope == 'All') {
   } else if (scope == 'PrmClient') {
     statement += 'AND enquiries.prm_client_id = ' + prm_client_id
