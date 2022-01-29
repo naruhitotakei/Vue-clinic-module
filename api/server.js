@@ -1930,6 +1930,32 @@ app.get('/api/statistics/revenue-by-product/:start/:end', (req, res) => {
   else res.status(401).json('OK: user unauthorized')
 })
 
+// app.get('/api/statistics/revenue-by-products', (req, res) => {
+//   const start = req.params.start
+//   const end = req.params.end
+//   // if (
+//   //   req.session.prm_user &&
+//   //   req.session.prm_user.permissions &&
+//   //   checkPermission(
+//   //     req.session.prm_user.permissions,
+//   //     clinicStatisticsPermission,
+//   //   )
+//   // )
+//     daoStatistics.getRevenueByProducts({req, res})
+//   // else res.status(401).json('OK: user unauthorized')
+// })
+
+// https://staging-prm.emazing.si/webflow-webhook
+//  'redirect_url' => 'http://webhook.example.vagrant/redirect.php',
+//  'webhook_url' => 'http://webhook.example.vagrant/webhook.php',
+// ngrok http -host-header=rewrite webhook.example.vagrant:80
+// ngrok http -host-header=rewrite staging-prm.emazing.si:80
+app.post("/webflow-webhook", (req, res) => {
+  console.log(req.body) // Call your action on the request here
+  // res.status(200).end() // Responding is important
+  res.status(200).json('webhook') // Responding is important
+})
+
 app.get('/api/statistics/revenue-by-doctor/:start/:end', (req, res) => {
   const start = req.params.start
   const end = req.params.end
