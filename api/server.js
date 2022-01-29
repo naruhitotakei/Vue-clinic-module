@@ -1947,7 +1947,7 @@ app.get('/api/statistics/revenue-by-product/:start/:end', (req, res) => {
 
 // https://staging-prm.emazing.si/webflow-webhook
 // ngrok http -host-header=rewrite staging-prm.emazing.si:80
-app.post("/api-webflow-webhook", (req, res) => {
+app.get("/api-webflow-webhook", (req, res) => {
   console.log(req.body) // Call your action on the request here
   res.status(200).json('webhook test') // Responding is important
 })
