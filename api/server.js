@@ -1946,14 +1946,10 @@ app.get('/api/statistics/revenue-by-product/:start/:end', (req, res) => {
 // })
 
 // https://staging-prm.emazing.si/webflow-webhook
-//  'redirect_url' => 'http://webhook.example.vagrant/redirect.php',
-//  'webhook_url' => 'http://webhook.example.vagrant/webhook.php',
-// ngrok http -host-header=rewrite webhook.example.vagrant:80
 // ngrok http -host-header=rewrite staging-prm.emazing.si:80
-app.post("/webflow-webhook", (req, res) => {
+app.post("/api-webflow-webhook", (req, res) => {
   console.log(req.body) // Call your action on the request here
-  // res.status(200).end() // Responding is important
-  res.status(200).json('webhook') // Responding is important
+  res.status(200).json('webhook test') // Responding is important
 })
 
 app.get('/api/statistics/revenue-by-doctor/:start/:end', (req, res) => {
