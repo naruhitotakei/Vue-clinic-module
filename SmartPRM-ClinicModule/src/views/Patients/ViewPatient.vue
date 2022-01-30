@@ -419,58 +419,7 @@
                                   </b-col>
                                   <b-col>
                                       <b-col md="14">
-                                          <iq-card>
-                                              <template v-slot:body>
-                                                  <div class="iq-card-header d-flex justify-content-between">
-                                                    <div class="iq-header-title">
-                                                      <div class="row justify-content-between align-items-center">
-                                                        <h4 class="card-title">{{ $t('EPR.overview.openAssignments') }}</h4>
-                                                        <button type="" class="btn btn-primary" @click.prevent="modalAssigmentShow = true">{{ $t('EPR.overview.add') }}</button>
-                                                      </div>
-                                                      <hr />
-                                                    </div>
-                                                  </div>
-                                                  <ul class="list-inline m-0 overflow-y-scroll">
-                                                      <li id="openList" v-for="(item,index) in openAssignments" :key="index + item.due_at"
-                                                          class="d-flex align-items-center justify-content-between mb-3">
-                                                          <div class="w-100">
-                                                            <div class="checkbox_text">
-                                                              <b-checkbox class="checkbox" v-model="item.completed" name="check-button" inline
-                                                                :key="index"
-                                                                @change="completeAssignment(item.id, $event)"></b-checkbox>
-                                                                <strong :class="{'red-text': isItOverdue(item.due_at)}">{{ item.description }}</strong>
-                                                            </div>
-                                                            <div class="d-flex align-items-center justify-content-between">
-                                                              <div>
-                                                                <span class="text-left ml-1">{{ item.name }} {{ item.patientlastname }}</span>&nbsp;
-                                                                <span class="text-left ml-1">{{ getPatientsDentist(item) ? `(${getPatientsDentist(item)})` : '' }}</span>
-                                                              </div>
-                                                              <div class="d-flex align-items-center">
-                                                                <span class="text-right text-width-150">{{ item.due_at | formatDate }}</span>
-                                                                <!-- <b-button variant=" iq-bg-success mr-1 mb-1" size="sm" style="margin-left: 5%;" @click="editAssignments(item)">
-                                                                  <i class="ri-ball-pen-fill m-0"></i>
-                                                                </b-button> -->
-                                                              </div>
-                                                            </div>
-                                                              <!-- <h6 >{{item.description}}</h6>
-                                                              <div class="row justify-content-between pt-1 w-100 ml-0 line-height">
-                                                                  <p class="mb-0">{{item.name}}</p>
-                                                                  <p class="mb-0">{{item.due_at | formatDate}}</p>
-                                                              </div> -->
-                                                          </div>
-                                                      </li>
-                                                  </ul>
-                                                  <p v-if="assignments.length === 0">{{ $t('EPR.overview.noOpenAssignments') }}</p>
-                                                  <b-pagination
-                                                    class="mt-2"
-                                                    v-else-if="assignments.length > 5"
-                                                    v-model="smsCurrentPage"
-                                                    :total-rows="assignments.length"
-                                                    :per-page="smsPerPage"
-                                                    aria-controls="openList"
-                                                ></b-pagination>
-                                              </template>
-                                          </iq-card>
+                                          <OpenAssignments epr :userId="patientId" @completed-assignments="completeAssignments"></OpenAssignments>
                                           <iq-card>
                                               <template v-slot:body>
                                                   <div class="iq-card-header d-flex justify-content-between">
@@ -1196,7 +1145,6 @@ import {
   createEnquiryNotes,
   trashEnquiry,
 } from '../../services/enquiry'
-import { finishAssignment } from '../../services/assignmentsService'
 import { getDentists, getSurgeons, getLegacyDoctors, getUsersForAssignments, sso } from '../../services/userService'
 import { getCountriesList, getRegionsList, getLocationsList, getMunicipalitiesList } from '../../services/commonCodeLists'
 import moment from 'moment'
@@ -1209,12 +1157,13 @@ import Tiff from 'tiff.js'
 import DatePicker from 'vue2-datepicker'
 import _ from 'lodash'
 import Calendar from '@/views/Calendars/Calendar.vue'
+import OpenAssignments from '@/components/Assignments/OpenAssignments'
 const $ = require('jquery')
 
 export default {
   name: 'ViewPatient',
   components: {
-    DatePicker, Calendar,
+    DatePicker, Calendar, OpenAssignments,
   },
   mounted() {
     xray.index()
@@ -2158,17 +2107,8 @@ export default {
         this.cancelNotes()
       })
     },
-    completeAssignment(id, finished) {
-      const completedBy = this.userId
-      finishAssignment(id, finished, completedBy).then(response => {
-        if (finished) {
-          let open = this.assignments.find(todo => todo.id === id)
-          open.completed = true
-          this.completedAssignments.push(open)
-
-          this.assignments = this.assignments.filter(todo => todo.id !== id)
-        }
-      })
+    completeAssignments(assignments) {
+      this.completedAssignments = assignments
     },
     chooseInvoice() {
       switch (this.selectedInvoices) {
