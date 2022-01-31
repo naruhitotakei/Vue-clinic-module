@@ -164,19 +164,7 @@ export default defineComponent({
               return false
             }
 
-            if (date.day() === 0) {
-              return 'closed'
-            }
-
-            if (
-              date.isAfter(
-                moment(this.availableDates[this.availableDates.length - 1]),
-              )
-            ) {
-              return 'unavailable'
-            }
-
-            return 'taken'
+            return 'unavailable'
           })(),
           date: date.toDate(),
         })

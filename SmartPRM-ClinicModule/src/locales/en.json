@@ -835,6 +835,7 @@
       "open": "open",
       "taken": "taken",
       "closed": "closed",
+      "available": "available",
       "unavailable": "unavailable",
       "chooseYourFavoriteDoctor": "Choose your favorite doctor",
       "selectOption": "Select option",
