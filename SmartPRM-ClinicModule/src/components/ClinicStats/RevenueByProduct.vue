@@ -86,11 +86,6 @@ export default {
       // this.initChart()
     }
   },
-  beforeDestroy() {
-    if (this.chart) {
-      this.chart.dispose()
-    }
-  },
   methods: {
     async initChart(data) {
       data = await data.sort((a, b) => Number(a.sum) < Number(b.sum) ? 1 : -1)
