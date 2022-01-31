@@ -1960,6 +1960,28 @@ app.get('/api/statistics/revenue-by-product/:start/:end', (req, res) => {
   else res.status(401).json('OK: user unauthorized')
 })
 
+// app.get('/api/statistics/revenue-by-products', (req, res) => {
+//   const start = req.params.start
+//   const end = req.params.end
+//   // if (
+//   //   req.session.prm_user &&
+//   //   req.session.prm_user.permissions &&
+//   //   checkPermission(
+//   //     req.session.prm_user.permissions,
+//   //     clinicStatisticsPermission,
+//   //   )
+//   // )
+//     daoStatistics.getRevenueByProducts({req, res})
+//   // else res.status(401).json('OK: user unauthorized')
+// })
+
+// https://staging-prm.emazing.si/webflow-webhook
+// ngrok http -host-header=rewrite staging-prm.emazing.si:80
+app.get("/api-webflow-webhook", (req, res) => {
+  console.log(req.body) // Call your action on the request here
+  res.status(200).json('webhook test') // Responding is important
+})
+
 app.get('/api/statistics/revenue-by-doctor/:start/:end', (req, res) => {
   const start = req.params.start
   const end = req.params.end
