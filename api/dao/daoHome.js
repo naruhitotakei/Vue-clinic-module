@@ -70,18 +70,18 @@ const getAssignmentsForUser = (request, response, user_id, prm_client_id) => {
 }
 
 const getAppointmentsForTwoWeeks = (request, response, scope, prm_client_id) => {
-  let statement = "SELECT day:: date, (SELECT COUNT(app.id) FROM appointments app "
-  statement += "INNER JOIN enquiries enq on enq.id = app.enquiry_id "
-  statement += "AND app.starts_at:: date = day:: date "
-  statement += "AND app.appointment_canceled = FALSE "
-  if (scope == 'All') {
-  } else if (scope == 'PrmClient') {
-    statement += `AND enq.prm_client_id = ${prm_client_id} `
-  }
-  statement += ") as appointments "
-  statement += "FROM generate_series(date_trunc('week', current_date), date_trunc('week', current_date + interval '2 weeks'), interval '1 day') AS day "
-  statement += "LIMIT 14"
-
+    const statement = `SELECT day::date,
+       (select count(appointments.id)
+        from appointments
+                 left join enquiries e on e.id = appointments.enquiry_id
+        where appointments.starts_at::date = day::date
+          AND appointments.appointment_canceled = FALSE
+          ${scope === 'All' && `AND e.prm_client_id = ${prm_client_id}`}
+       ) as appointments
+    FROM generate_series(date_trunc('week', current_date), date_trunc('week', current_date + interval '2 weeks'), interval '1 day') AS day
+    GROUP BY day
+    order by day
+    limit 14`;
   pool.query(statement, (error, results) => {
     if (error) {
       throw error
