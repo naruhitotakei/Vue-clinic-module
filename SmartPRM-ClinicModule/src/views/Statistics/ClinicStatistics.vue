@@ -191,6 +191,7 @@
       <RevenueByDoctor :client="clientName" :start="startDate" :end="endDate" />
       <NewPatients :client="clientName" :start="startDate" :end="endDate" />
       <AppointmentsByProduct :start="startDate" :end="endDate" />
+      <RevenueByCategory :start="startDate" :end="endDate" />
     </template>
   </b-container>
 </template>
@@ -207,6 +208,7 @@ import LeadsChart from '@/components/ClinicStats/LeadsChart.vue'
 import RevenueByDoctor from '@/components/ClinicStats/RevenueByDoctor.vue'
 import NewPatients from '@/components/ClinicStats/NewPatients.vue'
 import AppointmentsByProduct from '@/components/ClinicStats/AppointmentsByProduct.vue'
+import RevenueByCategory from '@/components/ClinicStats/RevenueByCategory.vue'
 import moment from 'moment'
 import { sso } from '../../services/userService'
 
@@ -219,6 +221,7 @@ export default {
     RevenueByDoctor,
     NewPatients,
     AppointmentsByProduct,
+    RevenueByCategory,
   },
   mounted() {
     xray.index()
