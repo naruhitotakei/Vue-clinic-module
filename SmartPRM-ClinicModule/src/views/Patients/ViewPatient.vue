@@ -1560,24 +1560,6 @@ export default {
         { text: 'Canceled by clinic', value: 'canceled by clinic' },
         { text: 'Postoponed by clinic', value: 'postoponed by clinic' },
       ],
-      // cancel_checkboxes: [
-      //   {
-      //     title: 'canceled by lead',
-      //     id: 1,
-      //   },
-      //   {
-      //     title: 'postponed by lead',
-      //     id: 2,
-      //   },
-      //   {
-      //     title: 'canceled by clinic',
-      //     id: 3,
-      //   },
-      //   {
-      //     title: 'postoponed by clinic',
-      //     id: 4,
-      //   },
-      // ],
       user: {
         profile_image: require('../../assets/images/user/11.png'),
         fname: 'Anita',
