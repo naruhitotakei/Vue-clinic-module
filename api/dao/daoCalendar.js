@@ -127,7 +127,11 @@ const updateAppointments = (request, response, id, appointments) => {
   if (appointments.patient_attended === false)
     statement += "attendance='No-show',"
   if (appointments.patient_attended === null) statement += "attendance='',"
-  if (appointments.appointment_canceled) statement += "attendance='Cancelled',"
+  // if (appointments.appointment_canceled) statement += "attendance='Cancelled',"
+  if(appointments.cancelation_reason === 'canceled by clinic' || appointments.cancelation_reason === 'postoponed by clinic')
+    statement += "attendance='canceled by clinic',"
+  if(appointments.cancelation_reason === 'canceled by lead' || appointments.cancelation_reason === 'postponed by lead')
+  statement += "attendance='canceled by lead',"  
   if (appointments.cancelation_reason)
     statement += "cancelation_reason='" + appointments.cancelation_reason + "' "
   statement = statement.slice(0, -1)
