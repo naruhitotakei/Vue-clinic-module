@@ -5,11 +5,16 @@
 import * as am4core from '@amcharts/amcharts4/core'
 import * as am4charts from '@amcharts/amcharts4/charts'
 import * as am4maps from '@amcharts/amcharts4/maps'
+// import * as am4pluginsSunburst from '@amcharts/amcharts4/plugins/sunburst'
 // eslint-disable-next-line camelcase
 import am4themes_animated from '@amcharts/amcharts4/themes/animated'
 import am4geodataWorldLow from '@amcharts/amcharts4-geodata/worldLow'
 // eslint-disable-next-line camelcase
 import am4themes_dark from '@amcharts/amcharts4/themes/amchartsdark'
+
+import * as am5 from '@amcharts/amcharts5'
+import * as am5hierarchy from '@amcharts/amcharts5/hierarchy'
+import am5themesAnimated from '@amcharts/amcharts5/themes/Animated'
 
 am4core.useTheme(am4themes_animated)
 export default {
@@ -54,6 +59,11 @@ export default {
       case 'doctor-revenue':
         chart = am4core.create(this.element, am4charts.XYChart)
         this.revenueByDoctor(chart)
+        break
+      case 'revenueByCategory':
+        // let root = am5.Root.new(this.element)
+        // chart = am4core.create(this.element, am4pluginsSunburst.Sunburst)
+        this.revenueByCategory(chart)
         break
       case 'bar-line':
         chart = am4core.create(this.element, am4charts.XYChart)
@@ -446,6 +456,64 @@ export default {
       chart.legend.maxHeight = 300
       chart.legend.scrollable = true
       chart.legend.fontSize = '12px'
+    },
+    revenueByCategory(chart) {
+      // chart.colors.list = []
+      // for (let j = 0; j < this.option.colors.length; j++) {
+      //   chart.colors.list.push(am4core.color(this.option.colors[j]))
+      // }
+      let root = am5.Root.new(this.element)
+      root.setThemes([
+        am5themesAnimated.new(root),
+      ])
+
+      let container = root.container.children.push(am5.Container.new(root, {
+        width: am5.percent(100),
+        height: am5.percent(100),
+        layout: root.verticalLayout,
+      }))
+
+      let series = container.children.push(am5hierarchy.Sunburst.new(root, {
+        singleBranchOnly: true,
+        downDepth: 10,
+        initialDepth: 10,
+        valueField: 'value',
+        categoryField: 'name',
+        childDataField: 'children',
+      }))
+
+      series.data.setAll(this.option.data)
+      series.set('selectedDataItem', series.dataItems[0])
+
+      // series.labels.template.setAll({
+      //   text: '[bold]{category}[/] ({value})',
+      // })
+
+      series.nodes.template.set('tooltipText', '{category}: [bold]{value}[/]')
+
+      let legend = container.children.push(am5.Legend.new(root, {}))
+      legend.data.setAll(series.dataItems[0].get('children'))
+
+      series.appear(1000, 100)
+
+      // chart.numberFormatter.numberFormat = {
+      //   'style': 'currency',
+      //   'currency': 'EUR',
+      //   maximumFractionDigits: 0,
+      //   minimumFractionDigits: 0,
+      // }
+
+      // chart.numberFormatter.intlLocales = 'de-DE'
+
+      // chart.dataFields.value = 'value'
+      // chart.dataFields.name = 'name'
+      // chart.dataFields.children = 'children'
+      // Legend
+      // chart.legend = new am4charts.Legend()
+      // chart.legend.position = 'right'
+      // chart.legend.maxHeight = 300
+      // chart.legend.scrollable = true
+      // chart.legend.fontSize = '12px'
     },
     newPatients(chart) {
       // chart.colors.list = []

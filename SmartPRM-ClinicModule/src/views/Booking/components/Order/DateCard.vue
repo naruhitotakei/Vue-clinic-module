@@ -18,7 +18,7 @@
       <div class="price-field">
         {{
           !availability
-            ? $t('public.onlineBooking.open')
+            ? $t('public.onlineBooking.available')
             : $t(`public.onlineBooking.${availability}`)
         }}
       </div>
@@ -87,5 +87,9 @@ export default defineComponent({
     color: $white;
     background-color: $gray-800;
   }
+}
+
+::v-deep .date-card.disabled {
+  cursor: auto;
 }
 </style>

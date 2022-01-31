@@ -32,6 +32,9 @@
                             <template v-slot:cell(patient_name)="data">
                                 <router-link tag="span" :to="'/patients/' + data.item.patient_id" style="cursor:pointer;" class="style-chooser form-control-disabled">{{ data.item.patient_name }}</router-link>
                             </template>
+                            <template v-slot:cell(doctor_name)="data">
+                                <span v-if="data.item.doctor_id">{{ data.item.doctor_name }}</span>
+                            </template>
                             <template v-slot:cell(time)="data">
                                 <span v-if="!data.item.time === '00:00'">{{ data.item.time }}</span>
                             </template>
@@ -334,7 +337,7 @@ export default {
       todaysAppointmentsColumns: [
         { label: this.$t('home.todaysAppointmentsColumn.patient'), key: 'patient_name', class: 'text-left px-1' },
         { label: this.$t('home.todaysAppointmentsColumn.productGroup'), key: 'product_group_name', class: 'text-left px-1' },
-        { label: this.$t('home.todaysAppointmentsColumn.doctor'), key: 'doctor_name', class: 'text-left px-1', formatter: (value, key) => value || '' },
+        { label: this.$t('home.todaysAppointmentsColumn.doctor'), key: 'doctor_name', class: 'text-left px-1' },
         { label: this.$t('home.todaysAppointmentsColumn.time'), key: 'time', class: 'text-left px-1' },
         { label: this.$t('home.todaysAppointmentsColumn.contact'), key: 'patient_phone', class: 'text-left px-1' },
       ],

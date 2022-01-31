@@ -4,8 +4,8 @@
       <iq-card class-name="iq-card-block iq-card-stretch iq-card-height">
         <template v-slot:headerTitle>
           <div class="d-flex align-items-center justify-content-between">
-            <h4 class="card-title">Revenue By Product</h4>
-            <vue-excel-xlsx
+            <h4 class="card-title">Revenue By Category</h4>
+            <!-- <vue-excel-xlsx
               v-if="dataToExport && dataToExport.length"
               :data="dataToExport"
               :columns="excelColumns"
@@ -14,12 +14,18 @@
               class="btn btn-primary"
             >
               Download Excel
-            </vue-excel-xlsx>
+            </vue-excel-xlsx> -->
           </div>
         </template>
         <template v-slot:body>
-          <AmChart v-if="chartBodyData" element="pieChart" type="pie" :option="chartBodyData" />
-          <!-- <div :class="!loading && !noData ? 'pieChart mt-3' : 'mt-3'" id="pieChart" ref="pieChart"></div> -->
+          <AmChart
+            v-if="chartBodyData"
+            element="revenueByCategoryChart"
+            type="revenueByCategory"
+            class="revenueByCategory"
+            :option="chartBodyData"
+            :height="500"
+          />
           <div class="mt-3" v-if="!loading && !noData">
             <!-- chart should be here...
             <div class="pieChart" ref="pieChart"></div> -->
@@ -33,8 +39,8 @@
           </div>
           <div class="mt-3 text-center" v-if="loading">
             <div class="text-center text-primary my-2">
-                <b-spinner class="align-middle"></b-spinner>
-                <strong class="loading">Loading...</strong>
+              <!-- <b-spinner class="align-middle"></b-spinner>
+              <strong class="loading">Loading...</strong> -->
             </div>
           </div>
           <div class="mt-3 text-center" v-if="!loading && noData">
@@ -57,7 +63,7 @@ import AmChart from '@/components/AmChart'
 // am4core.useTheme(am4themesAnimated)
 
 export default {
-  name: 'RevenueByProduct',
+  name: 'RevenueByCategory',
   components: { IqCard, AmChart },
   props: {
     start: String,
@@ -83,87 +89,67 @@ export default {
       this.startDate = this.start
       this.endDate = this.end
       this.onDateChange()
-      // this.initChart()
+      this.initChart()
     }
   },
   methods: {
-    async initChart(data) {
-      data = await data.sort((a, b) => Number(a.sum) < Number(b.sum) ? 1 : -1)
+    async initChart() {
       this.chartBodyData = {
         colors: ['#4c9cac', '#00ca00', '#ffd400'],
-        value: ['sum'],
-        category: ['pr_name'],
-        data: data,
+        data: [
+          {
+            name: 'Revenue',
+            children: [
+              {
+                name: 'Category A',
+                children: [
+                  {
+                    name: 'Product Group A',
+                    children: [
+                      { name: 'Product A1', value: 200 },
+                      { name: 'Product B1', value: 100 },
+                      { name: 'Product C1', value: 200 },
+                    ],
+                  },
+                  {
+                    name: 'Product Group B',
+                    children: [
+                      { name: 'Product A1', value: 50 },
+                      { name: 'Product B1', value: 70 },
+                    ],
+                  },
+                ],
+              },
+              {
+                name: 'Category B',
+                children: [
+                  {
+                    name: 'Product Group AB',
+                    children: [
+                      { name: 'Product A1', value: 30 },
+                      { name: 'Product B1', value: 20 },
+                      { name: 'Product C1', value: 80 },
+                    ],
+                  },
+                  {
+                    name: 'Product Group BA',
+                    children: [
+                      { name: 'Product A1', value: 150 },
+                      { name: 'Product B1', value: 270 },
+                      { name: 'Product B1', value: 670 },
+                      { name: 'Product B1', value: 90 },
+                    ],
+                  },
+                ],
+              },
+            ],
+          },
+        ],
       }
-      // let root = am5.Root.new(this.$refs.pieChart)
-      // root.setThemes([
-      //   am5themesAnimated.new(root),
-      // ])
-      // let chart = root.container.children.push(am5percent.PieChart.new(root, {
-      //   layout: root.verticalLayout,
-      // }))
-
-      // let series = chart.series.push(am5percent.PieSeries.new(root, {
-      //   valueField: 'sum',
-      //   categoryField: 'pr_name',
-      // }))
-
-      // chart.numberFormatter.numberFormat = {
-      //   'style': 'currency',
-      //   'currency': 'EUR',
-      // }
-
-      // chart.numberFormatter.intlLocales = 'de-DE'
-      // series.slices.template.tooltipText = `{category}: {value.value}`
-
-      // series.data.setAll(data)
-
-      // let legend = chart.children.push(am5.Legend.new(root, {
-      //   centerX: am5.percent(50),
-      //   x: am5.percent(50),
-      // }))
-
-      // chart.legend.reverseOrder = true
-
-      // legend.data.setAll(series.dataItems)
-
-      // series.appear(1000, 100)
-
-      // series.appear()
-      // chart.appear()
-
-      // let chart = am4core.create(this.$refs.pieChart, am4charts.PieChart3D)
-      // let pieSeries = chart.series.push(new am4charts.PieSeries())
-
-      // chart.data = data
-
-      // pieSeries.dataFields.value = 'sum'
-      // pieSeries.dataFields.category = 'pr_name'
-
-      // chart.numberFormatter.numberFormat = {
-      //   'style': 'currency',
-      //   'currency': 'EUR',
-      // }
-
-      // chart.numberFormatter.intlLocales = 'de-DE'
-
-      // pieSeries.slices.template.tooltipText = `{category}: {value.value}`
-
-      // chart.innerRadius = am4core.percent(40)
-      // pieSeries.slices.template.stroke = am4core.color('#148A9C')
-      // pieSeries.slices.template.strokeWidth = 0
-      // pieSeries.slices.template.strokeOpacity = 1
-
-      // pieSeries.labels.template.disabled = true
-      // pieSeries.ticks.template.disabled = true
-
-      // chart.legend = new am4charts.Legend()
-
-      // this.chart = chart
     },
     onDateChange() {
       if (this.startDate && this.endDate) {
-        this.getClinicRevenueByProduct(this.startDate, this.endDate)
+        // this.getClinicRevenueByProduct(this.startDate, this.endDate)
       }
     },
     priceFormat(value) {
@@ -194,7 +180,11 @@ export default {
       // let sumArray = []
       const products = []
       this.dataToExport = []
-      this.fileName = `SmartPRM_${this.client}_Clinic_Statistics_Revenue_by_doctor_(${moment(this.start).format('DD/MM/YYYY')} - ${moment(this.end).format('DD/MM/YYYY')})`
+      this.fileName = `SmartPRM_${
+        this.client
+      }_Clinic_Statistics_Revenue_by_doctor_(${moment(this.start).format(
+        'DD/MM/YYYY',
+      )} - ${moment(this.end).format('DD/MM/YYYY')})`
       await data.forEach((item) => {
         // prNames.push(item.pr_name)
         // const sum = Number(item.sum)
@@ -275,13 +265,8 @@ export default {
 </script>
 
 <style scoped>
-.pieChart, .appointmentChart {
-  width: 100%;
-  height: 500px;
-  margin: 0 auto;
-}
-
-.pieChart canvas {
-  width: 100% !important
+.revenueByCategory canvas {
+  width: 100% !important;
+  max-width: 100% !important;
 }
 </style>

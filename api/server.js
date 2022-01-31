@@ -1930,6 +1930,27 @@ app.get('/api/statistics/revenue-by-product/:start/:end', (req, res) => {
   else res.status(401).json('OK: user unauthorized')
 })
 
+// app.get('/api/statistics/revenue-by-products', (req, res) => {
+//   const start = req.params.start
+//   const end = req.params.end
+//   // if (
+//   //   req.session.prm_user &&
+//   //   req.session.prm_user.permissions &&
+//   //   checkPermission(
+//   //     req.session.prm_user.permissions,
+//   //     clinicStatisticsPermission,
+//   //   )
+//   // )
+//     daoStatistics.getRevenueByProducts({req, res})
+//   // else res.status(401).json('OK: user unauthorized')
+// })
+
+// Form submission webhook
+app.post("/api/webflow-webhook", (req, res) => {
+  console.log(req.body) // Call your action on the request here
+  res.status(200).json(req.body) // Responding is important
+})
+
 app.get('/api/statistics/revenue-by-doctor/:start/:end', (req, res) => {
   const start = req.params.start
   const end = req.params.end
@@ -2389,7 +2410,12 @@ app.post('/api/booking/confirm-and-save', (req, res) => {
 })
 
 app.get('/api/config', (request, response) => {
-  daoConfig.getConfig(request, response, request.ip, request.query.premiseId)
+  daoConfig.getConfig(
+    request,
+    response,
+    request.headers['x-real-ip'],
+    request.query.premiseId,
+  )
 })
 
 app.use('/api/available-services', require('~/controllers/available-services'))
@@ -2397,6 +2423,8 @@ app.use('/api/available-dates', require('~/controllers/available-dates'))
 app.use('/api/available-doctors', require('~/controllers/available-doctors'))
 app.use('/api/appointment-slots', require('~/controllers/appointment-slots'))
 app.use('/api/appointments', require('~/controllers/appointments'))
+app.use('/api/clients', require('~/controllers/clients'))
+app.use('/api/user-client', require('~/controllers/user-client'))
 app.get('/api/public/online-booking-products', (req, res) => {
   const locale = req.query.locale
   daoOnlineBooking.getOnlineBookingProductsPublic(req, res, locale)

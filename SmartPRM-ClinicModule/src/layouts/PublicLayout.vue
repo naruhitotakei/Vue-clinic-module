@@ -43,7 +43,7 @@ export default {
   components: {},
   data() {
     return {
-      lang: this.$route.query.lang != null ? this.$route.query.lang : 'en',
+      lang: null,
       premise: null,
     }
   },
@@ -63,13 +63,24 @@ export default {
       return
     }
 
-    const { premise } = await response.json()
+    const { lang, country, premise } = await response.json()
     this.premise = premise
+
+    try {
+      await this.$router.replace({
+        query: { lang, country, ...this.$route.query },
+      })
+    } catch (error) {
+      if (error.name !== 'NavigationDuplicated') {
+        throw error
+      }
+    }
+
+    this.lang = this.$route.query.lang
     window.document.title = premise.name
   },
   watch: {
     lang: {
-      immediate: true,
       handler(lang) {
         this.$i18n.locale = lang
         localize(lang)

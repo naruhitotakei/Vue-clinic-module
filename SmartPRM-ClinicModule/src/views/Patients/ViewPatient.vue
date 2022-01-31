@@ -9,7 +9,6 @@
                         <tab-nav :pills="true" class="iq-edit-profile d-flex">
                             <a id="myTab" class="nav-link show col-12 col-sm-1 col-md-2 p-0 ri-arrow-left-line" style="padding: 10px 0px !important; font-size: x-large;" @click="$router.push('/patients')" :active="false"></a>
                             <tab-nav-items class="col-12 col-sm-2 col-md-2 p-0" :active="true" href="#overview" :title="$t('EPR.overviewTab')" />
-                            <tab-nav-items class="col-12 col-sm-2 col-md-2 p-0" :active="false" href="#calendar" :title="'Calendar'" />
                             <tab-nav-items class="col-12 col-sm-4 col-md-3 p-0" :active="false" href="#info" :title="$t('EPR.personalInfoTab')" />
                             <tab-nav-items class="col-12 col-sm-1 col-md-2 p-0" :active="false" href="#files" :title="$t('EPR.filesTab')" />
                             <tab-nav-items class="col-12 col-sm-2 col-md-2 p-0" :active="false" href="#invoices" :title="$t('EPR.invoicesTab')" />
@@ -119,8 +118,8 @@
                                                       <label for="product_group" class="mb-0">{{ $t('calendarEvent.product_group') }} *</label>
                                                   </div>
                                                   <div class="col-md-9">
-                                                      <v-select :disabled="disabled"
-                                                                :clearable="false"
+                                                      <v-select :clearable="false"
+                                                                :disabled="disabled"
                                                                 label="product_group_name"
                                                                 :class="{'font-size-15': disabled}"
                                                                 class="style-chooser form-control-disabled font-size-15"
@@ -133,26 +132,26 @@
                                                       <label for="start" class="mb-0">{{ $t('calendarEvent.start') }} *</label>
                                                   </div>
                                                   <div class="col-md-9 d-flex align-items-center mb-3" :class="{'icon-disabled': disabled}">
-                                                      <date-picker class="font-size-15 date-picker"
-                                                                   :disabled="disabled"
-                                                                   v-model="formAppointments.assignmentDate"
-                                                                   type="datetime"
-                                                                   :class="{'form-control form-control-disabled no-border': disabled}"
-                                                                   :minute-step="5"
-                                                                   :show-second="false"
-                                                                   :lang="'en'"
-                                                                   :format="'DD.MM.YYYY HH.mm'"></date-picker>
-                                                      <label for="start" class="mb-0 mr-3 ml-4">{{ $t('calendarEvent.end') }}*</label>
+                                                    <date-picker class="font-size-15 date-picker"
+                                                                  :disabled="disabled"
+                                                                  v-model="formAppointments.assignmentDate"
+                                                                  type="datetime"
+                                                                  :class="{'form-control form-control-disabled no-border': disabled}"
+                                                                  :minute-step="5"
+                                                                  :show-second="false"
+                                                                  :lang="'en'"
+                                                                  :format="'DD.MM.YYYY HH.mm'"></date-picker>
+                                                      <label for="start" class="mb-0 mr-3 ml-4 mt-3">{{ $t('calendarEvent.end') }}*</label>
                                                       <date-picker required
-                                                                   :disabled="disabled"
-                                                                   class="font-size-15 date-picker"
-                                                                   :class="{'form-control form-control-disabled no-border': disabled}"
-                                                                   v-model="formAppointments.end"
-                                                                   type="time"
-                                                                   :minute-step="5"
-                                                                   :show-second="false"
-                                                                   :lang="'en'"
-                                                                   :format="'HH.mm'"></date-picker>
+                                                                  :disabled="disabled"
+                                                                  class="font-size-15 date-picker"
+                                                                  :class="{'form-control form-control-disabled no-border': disabled}"
+                                                                  v-model="formAppointments.end"
+                                                                  type="time"
+                                                                  :minute-step="5"
+                                                                  :show-second="false"
+                                                                  :lang="'en'"
+                                                                  :format="'HH.mm'"></date-picker>
                                                   </div>
                                               </div>
                                               <br>
@@ -161,7 +160,7 @@
                                                       <label for="notes">{{ $t('calendarEvent.note') }}</label>
                                                   </div>
                                                   <div class="col-md-9">
-                                                      <textarea :disabled="disabled" row="2" v-model="formAppointments.notes" class="form-control form-control-disabled font-size-15" placeholder="Add your note here for event!" id="note" required></textarea>
+                                                      <textarea :disabled="disabled" row="2" v-model="formAppointments.notes" class="form-control form-control-disabled font-size-15 mt-3" placeholder="Add your note here for event!" id="note" required></textarea>
                                                   </div>
                                               </div>
                                               <template v-if="formAppointments.id">
@@ -233,6 +232,7 @@
                                                         <div>
                                                           <b-form-group label="Radios using options and slots" v-slot="{ ariaDescribedby }">
                                                             <b-form-radio-group
+                                                              class="radio_style"
                                                               id="radio-slots"
                                                               v-model="formAppointments.cancelation_reason"
                                                               :options="options"
@@ -520,9 +520,6 @@
                                   </b-col>
                               </b-row>
                       </iq-card>
-                  </tab-content-item>
-                  <tab-content-item :active="false" id="calendar">
-                    <Calendar />
                   </tab-content-item>
                   <tab-content-item :active="false" id="info">
                       <iq-card style="background: none;">
@@ -1156,14 +1153,13 @@ import { getProductGroups, getOldProducts } from '@/services/products'
 import Tiff from 'tiff.js'
 import DatePicker from 'vue2-datepicker'
 import _ from 'lodash'
-import Calendar from '@/views/Calendars/Calendar.vue'
 import OpenAssignments from '@/components/Assignments/OpenAssignments'
 const $ = require('jquery')
 
 export default {
   name: 'ViewPatient',
   components: {
-    DatePicker, Calendar, OpenAssignments,
+    DatePicker, OpenAssignments,
   },
   mounted() {
     xray.index()
@@ -1397,9 +1393,7 @@ export default {
       futureCurrentPage: 1,
       futurePerPage: 5,
       selectedInvoices: '',
-      selectedDoctor: {
-        name: 'ssdfsdfsdf',
-      },
+      selectedDoctor: '',
       selectedProductGroup: '',
       invoicesType: [
         {
@@ -1515,24 +1509,6 @@ export default {
         { text: 'Canceled by clinic', value: 'canceled by clinic' },
         { text: 'Postoponed by clinic', value: 'postoponed by clinic' },
       ],
-      // cancel_checkboxes: [
-      //   {
-      //     title: 'canceled by lead',
-      //     id: 1,
-      //   },
-      //   {
-      //     title: 'postponed by lead',
-      //     id: 2,
-      //   },
-      //   {
-      //     title: 'canceled by clinic',
-      //     id: 3,
-      //   },
-      //   {
-      //     title: 'postoponed by clinic',
-      //     id: 4,
-      //   },
-      // ],
       user: {
         profile_image: require('../../assets/images/user/11.png'),
         fname: 'Anita',
@@ -1650,7 +1626,6 @@ export default {
       return date < new Date()
     },
     radioChange(e) {
-      // console.log(this.selected__, '----------------------')
       console.log(this.formAppointments.cancelation_reason)
     },
     getSumOfServices() {
@@ -1780,7 +1755,6 @@ export default {
     downloadFile(file) {
       let fileName = file.name
       downloadFile(fileName).then(response => {
-        console.log(response)
         var bytes = new Uint8Array(response.data.Body.data)
         var fileURL = window.URL.createObjectURL(new Blob([bytes]))
         var fileLink = document.createElement('a')
@@ -1879,7 +1853,6 @@ export default {
     },
     getPatientAssignments(id) {
       getEnquiryAssignments(id).then(response => {
-        console.log(response, '--------')
         if (Array.isArray(response)) {
           this.assignments = response.filter(todo => !todo.completed)
           this.completedAssignments = response.filter(todo => todo.completed)
@@ -2131,6 +2104,7 @@ export default {
     openAddAppointmentModal() {
       this.addAppointmentModal = true
       this.findDentist(this.patient.prm_dentist_user_id)
+      this.findProductGroupName()
       this.formAppointments.backgroundColor = 136
       this.formAppointments.patient_id = this.patient.id
       this.formAppointments.location = this.locations[0].city
@@ -2140,6 +2114,10 @@ export default {
     findDentist(dentistId) {
       let doctor = this.doctors.find(doctor => doctor.id === dentistId)
       this.selectedDoctor = doctor
+    },
+    findProductGroupName(id) {
+      let productName = this.product_groups.find(p => p.product_group_id === id)
+      this.selectedProductGroup = productName.product_group_name
     },
     closeAppointmentModal() {
       this.addAppointmentModal = false
@@ -2154,13 +2132,13 @@ export default {
       })
     },
     saveAppointment() {
-      // alert('asdasdasasdas')
       this.addAppointmentModal = false
-      // this.formAppointments.patient_id = this.patient.id
-      // this.formAppointments.doctor_id = this.selectedDoctor.id
-      this.formAppointments.doctor_name = this.selectedDoctor.name
-      this.formAppointments.product_groups = this.selectedProductGroup.product_group_id
+      this.formAppointments.patient_id = this.patient.id
+      this.formAppointments.doctor_id = this.selectedDoctor?.id
+      this.formAppointments.doctor_name = this.selectedDoctor?.name
+      this.formAppointments.product_groups = this.selectedProductGroup?.product_group_id
       this.formAppointments.crmProduct = this.selectedProductGroup.crm_product_id
+      this.formAppointments.appointment_canceled = true
       if (!this.formAppointments.id) {
         createCalendar(this.formAppointments).then(() => {
           this.$emit('setModalShow', false)
@@ -2182,7 +2160,9 @@ export default {
     },
     getDoctors() {
       getDoctorList().then((response) => {
-        this.doctors = response
+        response.map(doctor => {
+          this.doctors.push(doctor.name)
+        })
         if (Array.isArray(response)) {
           this.formAppointments.doctor_id = response.find(doctor => doctor.name === this.loggedInUser.name)
         }
@@ -2198,7 +2178,9 @@ export default {
     },
     getProductGroups(lang) {
       getProductGroups(lang).then((response) => {
-        this.product_groups = response
+        response.map(product => {
+          this.product_groups.push(product)
+        })
       })
     },
     getOldProducts() {
@@ -2210,6 +2192,8 @@ export default {
     },
     openEditAppointmentModal(appointment) {
       this.findDentist(appointment.doctor_id)
+      this.selectedDoctor = appointment.doctor_name
+      this.findProductGroupName(appointment.product_group_id)
       this.formAppointments = {
         id: appointment.appointment_id,
         location: appointment.location,
@@ -2458,9 +2442,8 @@ canvas {
     border-radius: 0 0 15px 15px !important;
   }
 }
-</style>
-<style scoped>
-.iq-edit-list-data{
-  padding-bottom:60px
+.radio_style{
+  display:grid;
+  grid-template-columns:1fr 1fr
 }
 </style>

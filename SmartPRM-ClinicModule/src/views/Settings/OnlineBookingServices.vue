@@ -224,7 +224,7 @@ import { defineComponent } from '@vue/composition-api'
 import { getPremiseById } from '@/services/companyPremises'
 
 export default defineComponent({
-  name: 'OnlineBooking',
+  name: 'OnlineBookingServices',
   components: {},
   async mounted() {
     xray.index()
