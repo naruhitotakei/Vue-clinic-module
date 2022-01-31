@@ -166,6 +166,9 @@
   "appointments": {
     "header": "Termini",
     "filters": "Filtriraj",
+    "allDoctors": "Vsi zdravniki",
+    "allLocations": "Vse lokacije",
+    "allKinds": "Vse vrste",
     "time": "Čas",
     "patient": "Pacient",
     "product": "Produkt",
@@ -176,7 +179,7 @@
     "interested": "Zanima",
     "veryInterested": "Zelo zanima",
     "clinicNotes": "Opombe klinike",
-    "callCenterNotes": "Opombe klicnega centra",
+    "noteToDoctor": "Opombe zdravniku",
     "enterNotes": "Vpiši Opombe..."
   },
   "patients": {

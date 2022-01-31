@@ -167,6 +167,9 @@
   "appointments": {
     "header": "Appointments",
     "filters": "Filters",
+    "allDoctors": "All doctors",
+    "allLocations": "All locations",
+    "allKinds": "All kinds",
     "time": "Time",
     "patient": "Patient",
     "product": "Product",
@@ -177,7 +180,7 @@
     "interested": "Interested",
     "veryInterested": "Very interested",
     "clinicNotes": "Clinic notes",
-    "callCenterNotes": "Call center notes",
+    "noteToDoctor": "Note to doctor",
     "enterNotes": "Enter notes..."
   },
   "patients": {

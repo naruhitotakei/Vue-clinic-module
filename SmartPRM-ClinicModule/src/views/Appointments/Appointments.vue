@@ -60,7 +60,7 @@
           </b-row>
           <b-row class="no-margin">
               <p class="text-black sm_margin_b">
-                Note to the doctor : {{appointment.note}}
+                  {{ $t('appointments.noteToDoctor') }} : {{appointment.note}}
               </p>
           </b-row>
           <b-row class="mt-1">
@@ -172,7 +172,7 @@
             </b-row>
             <b-row class="no-margin">
                 <p class="text-black sm_margin_b">
-                  Note to the doctor : {{appointment.note}}
+                  {{ $t('appointments.noteToDoctor') }} : {{appointment.note}}
                 </p>
             </b-row>
           <b-row class="mt-1 bottom_side">
@@ -312,7 +312,7 @@ export default defineComponent({
       filterKinds: ['All Kinds'],
       selectedKind: 'Posvet',
       selectedLocation: 'All Locations',
-      filterDoctors: [{ value: 'All Doctors', label: 'All Doctors' }],
+      filterDoctors: [{ value: 'All Doctors', label: this.$t('appointments.allDoctors') }],
       selectedDoctor: 'All Doctors',
       dateSelected: new Date(),
       showModal: false,
