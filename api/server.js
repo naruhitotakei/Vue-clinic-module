@@ -1945,11 +1945,10 @@ app.get('/api/statistics/revenue-by-product/:start/:end', (req, res) => {
 //   // else res.status(401).json('OK: user unauthorized')
 // })
 
-// https://staging-prm.emazing.si/webflow-webhook
-// ngrok http -host-header=rewrite staging-prm.emazing.si:80
-app.get("/api-webflow-webhook", (req, res) => {
+// Form submission webhook
+app.post("/api/webflow-webhook", (req, res) => {
   console.log(req.body) // Call your action on the request here
-  res.status(200).json('webhook test') // Responding is important
+  res.status(200).json(req.body) // Responding is important
 })
 
 app.get('/api/statistics/revenue-by-doctor/:start/:end', (req, res) => {
