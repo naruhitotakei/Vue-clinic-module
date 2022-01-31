@@ -22,7 +22,7 @@
             <!-- Free Slots Calendar -->
             <VueFullCalendar
                 :options="calendarOptions"
-                :key="reFetchSlots" />
+                />
             <!--Add Free Slots Modal-->
             <b-modal v-model="openFreeSlotsModal"
                      no-close-on-esc
@@ -188,7 +188,6 @@ export default {
     return {
       allDoctorsCheck: true,
       slots: [],
-      reFetchSlots: 0,
       doctors: [],
       doctorsList: [],
       check: [],
@@ -274,7 +273,6 @@ export default {
               backgroundColor: slot.appointment_id ? '#F1773A' : '#64D6E8',
             })
           })
-          this.reFetchSlots++
         }
       })
     },
