@@ -70,13 +70,13 @@ const getAssignmentsForUser = (request, response, user_id, prm_client_id) => {
 }
 
 const getAppointmentsForTwoWeeks = (request, response, scope, prm_client_id) => {
-    const statement = `SELECT day::date,
+    const statement = `SELECT (day::date at time zone '${process.env.TIME_ZONE}') as day,
        (select count(appointments.id)
         from appointments
                  left join enquiries e on e.id = appointments.enquiry_id
         where appointments.starts_at::date = day::date
           AND appointments.appointment_canceled = FALSE
-          ${scope === 'All' && `AND e.prm_client_id = ${prm_client_id}`}
+          ${scope === 'PrmClient' ? `AND e.prm_client_id = ${prm_client_id}` : ''}
        ) as appointments
     FROM generate_series(date_trunc('week', current_date), date_trunc('week', current_date + interval '2 weeks'), interval '1 day') AS day
     GROUP BY day
