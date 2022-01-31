@@ -10,6 +10,7 @@
                 :options="filterLocations"
                 :value="selectedLocation"
                 v-model="selectedLocation"
+                :reduce="(option) => option.value"
                 @input="getAppointmentsData"
               ></v-select>
             </div>
@@ -18,6 +19,7 @@
                 :options="filterKinds"
                 :value="selectedKind"
                 v-model="selectedKind"
+                :reduce="(option) => option.value"
                 @input="getAppointmentsData"
               ></v-select>
             </div>
@@ -60,7 +62,7 @@
           </b-row>
           <b-row class="no-margin">
               <p class="text-black sm_margin_b">
-                  {{ $t('appointments.noteToDoctor') }} : {{appointment.note}}
+                {{$t('appointments.noteToDoctor')}} : {{appointment.note}}
               </p>
           </b-row>
           <b-row class="mt-1">
@@ -172,7 +174,7 @@
             </b-row>
             <b-row class="no-margin">
                 <p class="text-black sm_margin_b">
-                  {{ $t('appointments.noteToDoctor') }} : {{appointment.note}}
+                  {{$t('appointments.noteToDoctor')}} : {{appointment.note}}
                 </p>
             </b-row>
           <b-row class="mt-1 bottom_side">
@@ -308,10 +310,10 @@ export default defineComponent({
   },
   data() {
     return {
-      filterLocations: ['All Locations'],
-      filterKinds: ['All Kinds'],
-      selectedKind: 'Posvet',
+      filterLocations: [{ value: 'All Locations', label: this.$t('appointments.allLocations') }],
       selectedLocation: 'All Locations',
+      filterKinds: [{ value: 'All Kinds', label: this.$t('appointments.allKinds') }],
+      selectedKind: 'Posvet',
       filterDoctors: [{ value: 'All Doctors', label: this.$t('appointments.allDoctors') }],
       selectedDoctor: 'All Doctors',
       dateSelected: new Date(),
@@ -354,6 +356,7 @@ export default defineComponent({
       })
     },
     async getAppointmentsData() {
+      // if slavoneren && == All Doctors -> selectedDoctorValue = 'All Doctors'
       getAppointments(this.selectedLocation, this.selectedDoctor, this.selectedKind, moment(this.dateSelected).format('YYYY-MM-DD'), this.$i18n.locale).then(
         (response) => {
           this.appointments = []
