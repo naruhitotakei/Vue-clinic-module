@@ -8,18 +8,14 @@
             <div class="filter-select">
               <v-select
                 :options="filterLocations"
-                :value="selectedLocation"
                 v-model="selectedLocation"
-                :reduce="(option) => option.value"
                 @input="getAppointmentsData"
               ></v-select>
             </div>
             <div class="filter-select">
               <v-select
                 :options="filterKinds"
-                :value="selectedKind"
                 v-model="selectedKind"
-                :reduce="(option) => option.value"
                 @input="getAppointmentsData"
               ></v-select>
             </div>
@@ -356,7 +352,12 @@ export default defineComponent({
       })
     },
     async getAppointmentsData() {
-      // if slavoneren && == All Doctors -> selectedDoctorValue = 'All Doctors'
+      if (typeof this.selectedLocation === 'object' && this.selectedLocation !== null) {
+        this.selectedLocation = this.selectedLocation.value
+      }
+      if(typeof this.selectedKind === 'object' && this.selectedKind !== null){
+        this.selectedKind = this.selectedKind.value
+      }
       getAppointments(this.selectedLocation, this.selectedDoctor, this.selectedKind, moment(this.dateSelected).format('YYYY-MM-DD'), this.$i18n.locale).then(
         (response) => {
           this.appointments = []
