@@ -355,7 +355,7 @@ export default defineComponent({
       if (typeof this.selectedLocation === 'object' && this.selectedLocation !== null) {
         this.selectedLocation = this.selectedLocation.value
       }
-      if(typeof this.selectedKind === 'object' && this.selectedKind !== null){
+      if (typeof this.selectedKind === 'object' && this.selectedKind !== null) {
         this.selectedKind = this.selectedKind.value
       }
       getAppointments(this.selectedLocation, this.selectedDoctor, this.selectedKind, moment(this.dateSelected).format('YYYY-MM-DD'), this.$i18n.locale).then(
