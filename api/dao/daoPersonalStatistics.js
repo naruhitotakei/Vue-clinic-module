@@ -9,6 +9,29 @@ const pool = new Pool({
   port: process.env.POSTGRES_PORT || 5432,
 })
 
+const getDoctors = (request, response, scope, prm_client_id, user_id, accessible_user_ids) => {
+  let statement = "SELECT id, title, first_name, surname, concat(title, ' ', first_name , ' ', surname) AS name from users WHERE function::text LIKE '%dentist%' "
+  if (scope === 'All') {
+  } else if (scope === 'PrmClient') {
+    statement += 'AND prm_client_id = ' + prm_client_id
+  } else if (scope === 'Self&LinkedUsers') {
+    statement += 'AND (id = ' + user_id
+    if (accessible_user_ids) {
+      for (const id in accessible_user_ids) {
+        statement += 'OR id = ' + accessible_user_ids[id]
+      }
+    }
+    statement += ') '
+  }
+
+  pool.query(statement, (error, results) => {
+    if (error) {
+      throw error
+    }
+    response.status(200).json(results.rows)
+  })
+}
+
 const getDoctorsRevenue = (request, response, start, end, doctor, scope, prm_client_id, user_id, accessible_user_ids) => {
   let statement = "SELECT products.name AS product_name, concat(users.title, ' ', users.first_name, ' ', users.surname) AS doctor_name, " +
     "array_agg(products.id) AS products, users.id AS doctor_id, COUNT (users.id), SUM(services.price) FROM services "
@@ -40,5 +63,6 @@ const getDoctorsRevenue = (request, response, start, end, doctor, scope, prm_cli
 }
 
 module.exports = {
+  getDoctors,
   getDoctorsRevenue
 }
