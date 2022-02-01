@@ -103,6 +103,11 @@ const updateAppointments = (request, response, id, appointments) => {
       'appointment_canceled=' + appointments.appointment_canceled + ','
   if (appointments.product_groups)
     statement += "product_group_id='" + appointments.product_groups + "',"
+  if (appointments.product_groups_name === 'Consultation'){
+    statement += "kind='" + "Posvet" + "',"  
+  }else{
+    statement += "kind='" + "Poseg" + "',"  
+  }
   if (appointments.crmProduct)
     statement += 'product_id=' + appointments.crmProduct + ','
   if (appointments.assignmentDate)
