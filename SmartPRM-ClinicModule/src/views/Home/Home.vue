@@ -524,7 +524,6 @@ export default {
     getTodaysAppointmentsList(locale) {
       getTodaysAppointments(locale).then(response => {
         this.todaysAppointments = response
-        console.log('Todays appointments on the FE: ', response)
       })
     },
     getDatesForCurrentWeek() {
