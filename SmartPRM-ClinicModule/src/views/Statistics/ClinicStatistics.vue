@@ -25,8 +25,8 @@
                       <b-form-select-option :value="30"
                         >Last 30 Days</b-form-select-option
                       >
-                      <b-form-select-option :value="90"
-                        >Last 90 Days</b-form-select-option
+                      <b-form-select-option :value="91"
+                        >Last 91 Days</b-form-select-option
                       >
                       <b-form-select-option :value="180"
                         >Last 180 Days</b-form-select-option
@@ -213,7 +213,7 @@ import moment from 'moment'
 import { sso } from '../../services/userService'
 
 export default {
-  name: 'Dashboard1',
+  name: 'ClinicStatistics',
   components: {
     IqCard,
     RevenueByProduct,
