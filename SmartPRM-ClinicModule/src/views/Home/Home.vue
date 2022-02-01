@@ -36,7 +36,7 @@
                                 <span v-if="data.item.doctor_id">{{ data.item.doctor_name }}</span>
                             </template>
                             <template v-slot:cell(time)="data">
-                                <span v-if="!data.item.time === '00:00'">{{ data.item.time }}</span>
+                                <span v-if="data.item.time !== '00:00'">{{ data.item.time }}</span>
                             </template>
                         </b-table>
                         <p v-else>{{ $t('home.noAppointmentsToday') }}</p>
@@ -524,6 +524,7 @@ export default {
     getTodaysAppointmentsList(locale) {
       getTodaysAppointments(locale).then(response => {
         this.todaysAppointments = response
+        console.log('Todays appointments on the FE: ', response)
       })
     },
     getDatesForCurrentWeek() {
