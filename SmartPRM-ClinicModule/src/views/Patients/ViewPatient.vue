@@ -2139,6 +2139,7 @@ export default {
       this.formAppointments.product_groups = this.selectedProductGroup?.product_group_id
       this.formAppointments.crmProduct = this.selectedProductGroup.crm_product_id
       this.formAppointments.appointment_canceled = true
+      this.formAppointments.product_groups_name = this.selectedProductGroup
       if (!this.formAppointments.id) {
         createCalendar(this.formAppointments).then(() => {
           this.$emit('setModalShow', false)
