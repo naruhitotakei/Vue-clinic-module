@@ -79,6 +79,7 @@ jobs:
           -e AWS_BUCKET_NAME=${AWS_BUCKET_NAME} \
           -e VONAGE_API_KEY=${VONAGE_API_KEY} \
           -e VONAGE_API_SECRET=${VONAGE_API_SECRET} \
+          -e TIME_ZONE="Europe/Vienna" \
           ghcr.io/thermidor/smartprm-api:staging
 
 
