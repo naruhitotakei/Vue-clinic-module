@@ -1,4 +1,4 @@
-export async function getDoctorsRevenue() {
+export async function getDoctorsList() {
   const rawResponse = await fetch('/api/personal-statistics/doctors', {
     method: 'GET',
     credentials: 'same-origin',
