@@ -48,6 +48,7 @@ const daoHome = require('./dao/daoHome')
 const daoEnquiries = require('./dao/daoEnquiries')
 const daoAssignments = require('./dao/daoAssignments')
 const daoStatistics = require('./dao/daoStatistics')
+const daoPersonalStatistics = require('./dao/daoPersonalStatistics')
 const daoReporting = require('./dao/daoReporting')
 const daoCallCenter = require('./dao/daoCallCenter')
 const fiscalVerification = require('./services/fiscalVerification')
@@ -121,6 +122,7 @@ const homePermission = 'Home'
 const enquiriesPermission = 'Patients'
 const { assignmentsPermission } = require('~/shared/permission')
 const clinicStatisticsPermission = 'Statistics For Clinic'
+const personalStatisticsPermission = 'Personal statistic'
 const reportingEmazingPermission = 'Emazing'
 const missingServicesPermission = 'Missing Services'
 const invoicesPermission = 'Invoices'
@@ -2073,6 +2075,35 @@ app.get(
     else res.status(401).json('OK: user unauthorized')
   },
 )
+
+///////////////////////////////////
+// Personal Statistics
+///////////////////////////////////
+
+app.get('/api/personal-statistics/revenue-for-doctor', (req, res) => {
+  const start = req.params.start
+  const end = req.params.end
+  const doctor = req.query.doctor
+  if (
+    req.session.prm_user &&
+    req.session.prm_user.permissions &&
+    checkPermission(req.session.prm_user.permissions, personalStatisticsPermission)
+  )
+    daoPersonalStatistics.getDoctorsRevenue(
+      req,
+      res,
+      start,
+      end,
+      doctor,
+      getScope(req.session.prm_user.permissions, personalStatisticsPermission),
+      req.session.prm_user.prm_client_id,
+      req.session.prm_user.id,
+      req.session.prm_user.accessible_user_ids
+    )
+  else res.status(401).json('OK: user unauthorized')
+})
+
+
 
 ///////////////////////////////////
 // Call Center
