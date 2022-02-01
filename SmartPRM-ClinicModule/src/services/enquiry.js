@@ -10,6 +10,33 @@ export async function getEnquires(sort) {
   return rawResponse.json()
 }
 
+export async function getLeadsCount() {
+  const rawResponse = await fetch('/api/enquires_count', {
+    method: 'GET',
+    credentials: 'same-origin',
+    headers: {
+      'Accept': 'application/json',
+      'Content-Type': 'application/json',
+    },
+  })
+  return rawResponse.json()
+}
+
+export async function getLimitedEnquires(limit, offset, locale) {
+  const rawResponse = await fetch(
+    `/api/limited_enquiries?limit=${limit}&offset=${offset}&locale=${locale}`,
+    {
+      method: 'GET',
+      credentials: 'same-origin',
+      headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json',
+      },
+    },
+  )
+  return rawResponse.json()
+}
+
 export async function getEnquiryById(id) {
   const rawResponse = await fetch('/api/enquiries/' + id, {
     method: 'GET',
@@ -73,26 +100,32 @@ export async function createEnquiryNotes(notes) {
 }
 
 export async function getEnquiryPastAppointments(id, locale) {
-  const rawResponse = await fetch(`/api/enquiries/${id}/${locale}/past-appointments`, {
-    method: 'GET',
-    credentials: 'same-origin',
-    headers: {
-      'Accept': 'application/json',
-      'Content-Type': 'application/json',
+  const rawResponse = await fetch(
+    `/api/enquiries/${id}/${locale}/past-appointments`,
+    {
+      method: 'GET',
+      credentials: 'same-origin',
+      headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json',
+      },
     },
-  })
+  )
   return rawResponse.json()
 }
 
 export async function getEnquiryFutureAppointments(id, locale) {
-  const rawResponse = await fetch(`/api/enquiries/${id}/${locale}/future-appointments`, {
-    method: 'GET',
-    credentials: 'same-origin',
-    headers: {
-      'Accept': 'application/json',
-      'Content-Type': 'application/json',
+  const rawResponse = await fetch(
+    `/api/enquiries/${id}/${locale}/future-appointments`,
+    {
+      method: 'GET',
+      credentials: 'same-origin',
+      headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json',
+      },
     },
-  })
+  )
   return rawResponse.json()
 }
 
@@ -109,14 +142,17 @@ export async function getEnquiryAssignments(id) {
 }
 
 export async function getEnquiryInvoices(id, sort) {
-  const rawResponse = await fetch(`/api/enquiries/${id}/invoices?sort=${sort}`, {
-    method: 'GET',
-    credentials: 'same-origin',
-    headers: {
-      'Accept': 'application/json',
-      'Content-Type': 'application/json',
+  const rawResponse = await fetch(
+    `/api/enquiries/${id}/invoices?sort=${sort}`,
+    {
+      method: 'GET',
+      credentials: 'same-origin',
+      headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json',
+      },
     },
-  })
+  )
   return rawResponse.json()
 }
 

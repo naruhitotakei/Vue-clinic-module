@@ -33,6 +33,7 @@ import TaxAuthority from '../views/Reporting/TaxAuthority'
 import Doctor from '../views/Reporting/Doctor'
 /* Call Center */
 import Leads from '../views/CallCenter/Leads'
+import ViewLead from '../views/CallCenter/ViewLead'
 import ClientInfo from '../views/CallCenter/ClientInfo'
 import KPIs from '../views/CallCenter/KPIs'
 import WorkReport from '../views/CallCenter/WorkReport'
@@ -242,6 +243,12 @@ const callCenterChildRoute = (prop, mode = false) => [
     name: prop + '.leads',
     meta: { dark: mode, auth: true, name: 'Leads' },
     component: Leads,
+  },
+  {
+    path: 'lead/:leadId',
+    name: prop + '.leads',
+    meta: { dark: mode, auth: true, name: 'ViewLead' },
+    component: ViewLead,
   },
   {
     path: 'client-info',

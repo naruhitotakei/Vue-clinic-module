@@ -39,7 +39,145 @@ const getEnquiries = (
     }
     statement += ') '
   }
-  statement += 'ORDER BY created_at DESC'
+  statement += 'ORDER BY last_name ASC'
+  pool.query(statement, (error, results) => {
+    if (error) {
+      throw error
+    }
+    response.status(200).json(results.rows)
+  })
+}
+
+const getLimitedEnquiries = async (
+  request,
+  response,
+  user_id,
+  accessible_user_ids,
+  prm_client_id,
+  scope,
+  limit,
+  offset,
+  locale,
+) => {
+  let statement =
+    "SELECT  enquiries.* , concat(u.title, ' ', u.first_name , ' ', u.surname) AS label, TO_CHAR(last_visit, 'DD.MM.YYYY') last_visit, TO_CHAR(next_visit, 'DD.MM.YYYY') next_visit, " +
+    'r.name AS region_name, countries.code AS country_code, countries.name AS country_name FROM enquiries '
+  statement +=
+    'LEFT JOIN prm_client ON prm_client.id = enquiries.prm_client_id '
+  statement += 'LEFT JOIN users u ON u.id = enquiries.prm_dentist_user_id '
+  statement += 'LEFT JOIN countries ON countries.id = enquiries.country_id '
+  statement += 'LEFT JOIN regions r ON enquiries.region_id = r.id  '
+  statement +=
+    'LEFT JOIN LATERAL (SELECT MAX(starts_at) AS last_visit, enquiry_id from appointments where starts_at < current_date AND enquiry_id = enquiries.id GROUP BY enquiry_id) past_d ON past_d.enquiry_id = enquiries.id  '
+  statement +=
+    'LEFT JOIN LATERAL (SELECT MIN(starts_at) AS next_visit, enquiry_id from appointments where starts_at > current_date AND enquiry_id = enquiries.id GROUP BY enquiry_id) future_d ON future_d.enquiry_id = enquiries.id  '
+  statement += 'WHERE enquiries.trashed IS FALSE '
+  statement += 'AND prm_client.client_deleted IS FALSE '
+  if (scope == 'All') {
+  } else if (scope == 'PrmClient') {
+    statement += 'AND enquiries.prm_client_id=' + prm_client_id
+  } else if (scope == 'Self') {
+    statement += 'AND enquiries.prm_dentist_user_id=' + user_id
+  } else if (scope === 'Self&LinkedUsers') {
+    statement += ' AND (enquiries.prm_dentist_user_id=' + user_id
+    if (accessible_user_ids) {
+      for (const acc_id in accessible_user_ids) {
+        statement +=
+          ' OR enquiries.prm_dentist_user_id=' + accessible_user_ids[acc_id]
+      }
+    }
+    statement += ') '
+  }
+  statement += 'ORDER BY enquiries.created_at DESC '
+  statement += 'LIMIT ' + limit + ' OFFSET ' + offset
+
+  const { rows: enquiries } = await pool.query(statement)
+  const enquiryIdList = enquiries.map(({ id }) => id)
+  const [notes, pastAppointments] = await Promise.all([
+    getNotesByEnquiries(enquiryIdList),
+    getPastAppointmentsByEnquiries(enquiryIdList, { locale }),
+  ])
+  const { groupBy } = require('lodash')
+  const [notesMap, pastAppointmentsMap] = [notes, pastAppointments].map(
+    (list) => groupBy(list, ({ enquiry_id }) => enquiry_id),
+  )
+
+  const result = enquiries.map(({ id, ...enquiry }) => ({
+    id,
+    ...enquiry,
+    notes: notesMap[id],
+    pastAppointments: pastAppointmentsMap[id],
+  }))
+
+  response.status(200).json(result)
+}
+
+async function getNotesByEnquiries(enquiryIdList) {
+  const statement = /* sql */ `
+    select * from (
+      select *, row_number() over (
+        partition by notes.enquiry_id
+        order by created_at desc
+      ) as window_row
+      from notes
+      where notes.enquiry_id in (${enquiryIdList.map(
+        (_, index) => `$${index + 1}`,
+      )})
+    ) as window_table
+    where window_row <= 5
+    order by window_row
+  `
+  const { rows } = await pool.query(statement, enquiryIdList)
+
+  return rows
+}
+
+async function getPastAppointmentsByEnquiries(enquiryIdList, { locale }) {
+  const statement = /* sql */ `
+    select * from (
+      select *, row_number() over (
+        partition by appointments.enquiry_id
+        order by starts_at desc
+      ) as window_row
+      from appointments
+      where appointments.enquiry_id in (${enquiryIdList.map(
+        (_, index) => `$${index + 1}`,
+      )})
+      and starts_at < now()::date
+    ) as window_table
+    where window_row <= 5
+    order by window_row
+  `
+  /**
+   SELECT
+      appointments.*,
+      prm_product_group_name.*,
+      appointments_label.*,
+      appointments.id AS appointment_id,
+      prm_product_group_name.text AS product_group_text
+    FROM appointments
+    LEFT JOIN prm_product_group ON appointments.product_group_id = prm_product_group.product_group_id
+    LEFT JOIN prm_product_group_name ON prm_product_group_name.product_group_id = prm_product_group.product_group_id
+    LEFT JOIN appointments_label ON appointments.label_id = appointments_label.id
+    WHERE appointments.enquiry_id in (${enquiryIdList.map(
+      (_, index) => `$${index + 1}`,
+    )})
+    AND prm_product_group_name.language = $${enquiryIdList.length + 0}
+    AND starts_at < now()::date
+    ORDER BY starts_at DESC
+    */
+  const { rows } = await pool.query(statement, [...enquiryIdList])
+
+  return rows
+}
+
+const getEnquiriesCount = (request, response) => {
+  let statement = 'SELECT COUNT( * ) FROM enquiries '
+  statement +=
+    'LEFT JOIN prm_client ON prm_client.ID = enquiries.prm_client_id '
+  statement +=
+    'WHERE enquiries.trashed IS FALSE AND prm_client.client_deleted IS FALSE'
+
   pool.query(statement, (error, results) => {
     if (error) {
       throw error
@@ -448,6 +586,8 @@ async function createEnquiryPublic({ firstName, lastName, phone }) {
 
 module.exports = {
   getEnquiries,
+  getEnquiriesCount,
+  getLimitedEnquiries,
   getEnquiriesById,
   createEnquiry,
   updateEnquiry,
