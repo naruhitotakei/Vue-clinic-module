@@ -2117,7 +2117,7 @@ export default {
     },
     findProductGroupName(id) {
       let productName = this.product_groups.find(p => p.product_group_id === id)
-      this.selectedProductGroup = productName.product_group_name
+      this.selectedProductGroup = productName?.product_group_name
     },
     closeAppointmentModal() {
       this.addAppointmentModal = false
@@ -2139,7 +2139,7 @@ export default {
       this.formAppointments.product_groups = this.selectedProductGroup?.product_group_id
       this.formAppointments.crmProduct = this.selectedProductGroup.crm_product_id
       this.formAppointments.appointment_canceled = true
-      this.formAppointments.product_groups_name = this.selectedProductGroup
+      this.formAppointments.product_group_code = this.selectedProductGroup.product_group_code
       if (!this.formAppointments.id) {
         createCalendar(this.formAppointments).then(() => {
           this.$emit('setModalShow', false)
