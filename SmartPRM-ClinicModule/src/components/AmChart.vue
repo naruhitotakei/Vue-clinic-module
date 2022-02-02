@@ -546,7 +546,7 @@ export default {
       series.dataFields.valueY = this.option.yAxis[0]
       series.dataFields.dateX = this.option.xAxis[0]
       series.name = this.option.labels[0]
-      series.columns.template.tooltipText = 'Patients: [bold]{valueY}[/]'
+      series.columns.template.tooltipText = '{dateX}[/]\nPatients: [bold]{valueY}[/bold]'
       series.columns.template.fillOpacity = 1
 
       let columnTemplate = series.columns.template
