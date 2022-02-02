@@ -40,6 +40,7 @@ import WorkReport from '../views/CallCenter/WorkReport'
 import ActivityReport from '../views/CallCenter/ActivityReport'
 import MissingServices from '../views/CallCenter/MissingServices'
 /* Settings */
+import General from '../views/Settings/General'
 import Invoicing from '../views/Settings/Invoicing'
 import Locations from '../views/Settings/Locations'
 import ServicesAndProducts from '../views/Settings/ServicesAndProducts'
@@ -288,6 +289,12 @@ const settingsChildRoute = (prop, mode = false) => [
     name: prop + '.users',
     meta: { dark: mode, auth: true, name: 'Users' },
     component: Users,
+  },
+  {
+    path: 'general',
+    name: prop + '.general',
+    meta: { dark: mode, auth: true, name: 'General' },
+    component: General,
   },
   {
     path: 'locations',

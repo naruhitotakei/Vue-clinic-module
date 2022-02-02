@@ -283,6 +283,17 @@
     "icon": "ri-settings-5-line",
     "children": [
       {
+        "title": "General",
+        "name": "settings.general",
+        "is_active": false,
+        "link": {
+          "name": "settings.general"
+        },
+        "class_name": "",
+        "is_icon_class": true,
+        "icon": "ri-community-line"
+      },
+      {
         "title": "Free Slots",
         "name": "settings.free slots",
         "is_active": false,
