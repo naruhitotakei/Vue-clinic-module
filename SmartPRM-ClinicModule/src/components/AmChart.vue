@@ -330,6 +330,32 @@ export default {
       dateAxis.renderer.grid.template.strokeWidth = 0
       dateAxis.renderer.minGridDistance = 50
       dateAxis.groupData = true
+      if (this.option.timeUnit) {
+        // console.log(this.option.timeUnit)
+        // let count = null
+        // if (this.option.timeUnit === 'day') count = 1
+        // if (this.option.timeUnit === 'week') count = 1
+        // if (this.option.timeUnit === 'month') count = 1
+        // dateAxis.baseInterval = {
+        //   'timeUnit': this.option.timeUnit,
+        //   'count': count,
+        // }
+        // if (this.option.timeUnit === 'day') {
+        //   dateAxis.gridIntervals.setAll([
+        //     { timeUnit: 'day', count: 1 },
+        //   ])
+        // }
+        // if (this.option.timeUnit === 'week') {
+        //   dateAxis.gridIntervals.setAll([
+        //     { timeUnit: 'week', count: 1 },
+        //   ])
+        // }
+        // if (this.option.timeUnit === 'month') {
+        //   dateAxis.gridIntervals.setAll([
+        //     { timeUnit: 'month', count: 12 },
+        //   ])
+        // }
+      }
       const valueAxis = new am4charts.ValueAxis()
       valueAxis.maxPrecision = 0
       chart.yAxes.push(valueAxis)
