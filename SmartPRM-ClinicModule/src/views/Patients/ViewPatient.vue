@@ -280,26 +280,78 @@
                                       <!--                                          </div>-->
                                       <!--                                      </template>-->
                                       <!--                                  </iq-card>-->
-                                      <b-col md="14">
-                                        <iq-card v-if="patient.general_notes">
-                                            <template v-slot:body>
-                                                <div class="iq-card-header d-flex justify-content-between">
-                                                    <div class="iq-header-title">
-                                                        <div class="row justify-content-between align-items-center">
-                                                            <h4 class="card-title">{{ $t('EPR.overview.generalNotes') }}</h4>
-                                                        </div>
-                                                        <hr />
-                                                    </div>
-                                                </div>
-                                                <div>
-                                                    <div class="text-black ml-1" v-html="patient.general_notes"></div>
-                                                    <!-- <b-card-text><small class="text-muted">{{ $t('EPR.overview.generalNotesUpdated') }} {{patient.general_notes_updated_at | fromNowDate}}</small></b-card-text> -->
-                                                </div>
-                                            </template>
-                                        </iq-card>
-                                    </b-col>
+                                      <iq-card body-class="iq-card-body" v-if="files.length > 0">
+                                          <template v-slot:body>
+                                              <div class="iq-card-header d-flex justify-content-between">
+                                                  <div class="iq-header-title">
+                                                      <h4 @click="goToFiles" class="card-title clickable">{{ $t('EPR.overview.files') }} ({{filesSortBy.length}})</h4><hr />
+                                                  </div>
+                                              </div>
+                                              <div class="iq-card-body p-0">
+                                                  <ul class="profile-img-gallary profile-preview-gallery d-flex flex-wrap p-0 m-0 font-size-12 overflow-y-scroll" style="max-height: 230px;">
+                                                    <li class="col-md-4 col-6 pb-3 clickable" v-for="(file, index) in filesSortBy" :key="index + file.created_at" @click="goToFiles">
+                                                      <div v-html="tiffConvertToCanvas(file, index, true)" class="preview" :class="`tiff-block-${index}-preview`"></div>
+                                                      <img
+                                                        src="./photo.svg"
+                                                        alt="gallary-image"
+                                                        class="img-fluid dicom preview-file svg"
+                                                        v-if="checkIfOtherType(file.type)"
+                                                        >
+                                                      <img
+                                                        :src="file.image"
+                                                        alt="gallary-image"
+                                                        class="img-fluid preview-file"
+                                                        v-if="checkIfImageType(file.type)"
+                                                        >
+                                                      <object :data="file.image" type="application/pdf" width="250px" height="auto" class="m-auto d-block preview-file" v-if="file.pdf">
+                                                      </object>
+                                                      <div class="text-center">
+                                                        <p class="mb-0"> {{file.name}}</p>
+                                                        <p>{{file.created_at}}</p>
+                                                      </div>
+                                                    </li>
+                                                  </ul>
+                                              </div>
+                                          </template>
+                                      </iq-card>
                               </b-col>
                               <b-col>
+                                  <b-col md="14">
+                                      <iq-card v-if="patient.general_notes">
+                                          <template v-slot:body>
+                                              <div class="iq-card-header d-flex justify-content-between">
+                                                  <div class="iq-header-title">
+                                                      <div class="row justify-content-between align-items-center">
+                                                          <h4 class="card-title">{{ $t('EPR.overview.generalNotes') }}</h4>
+                                                      </div>
+                                                      <hr />
+                                                  </div>
+                                              </div>
+                                              <div>
+                                                  <div class="text-black ml-1" v-html="patient.general_notes"></div>
+                                                  <!-- <b-card-text><small class="text-muted">{{ $t('EPR.overview.generalNotesUpdated') }} {{patient.general_notes_updated_at | fromNowDate}}</small></b-card-text> -->
+                                              </div>
+                                          </template>
+                                      </iq-card>
+                                  </b-col>
+                                  <b-col md="14">
+                                      <iq-card v-if="patient.allergies" class="allergies">
+                                          <template v-slot:body>
+                                              <div class="iq-card-header d-flex justify-content-between">
+                                                  <div class="iq-header-title">
+                                                      <div class="row justify-content-between align-items-center">
+                                                          <h4 class="card-title text-white">{{ $t('EPR.overview.allergies') }}</h4>
+                                                      </div>
+                                                      <hr />
+                                                  </div>
+                                              </div>
+                                              <div>
+                                                  <div v-html="patient.allergies" class="ml-1"></div>
+                                                  <!-- <b-card-text><small class="text-muted">{{ $t('EPR.overview.generalNotesUpdated') }} {{patient.general_notes_updated_at | fromNowDate}}</small></b-card-text> -->
+                                              </div>
+                                          </template>
+                                      </iq-card>
+                                  </b-col>
                                   <b-col md="14">
                                       <iq-card>
                                           <template v-slot:body>
