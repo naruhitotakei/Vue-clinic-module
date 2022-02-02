@@ -46,27 +46,37 @@
                 <b-col cols="12" sm="6" md="4" lg="3">
                   <b-form-group>
                     <label style="padding-top: 8px">From:</label>
-                    <b-form-input
+                    <b-form-datepicker
+                      v-model="startDate"
+                      :date-format-options="{ 'year': 'numeric', 'month': 'short', 'day': 'numeric', 'weekday': 'short' }"
+                      @change="onDateChange">
+                    </b-form-datepicker>
+                    <!-- <b-form-input
                       style="line-height: normal"
                       class="date"
                       id="exampleStartdate"
                       type="date"
                       v-model="startDate"
                       @change="onDateChange"
-                    ></b-form-input>
+                    ></b-form-input> -->
                   </b-form-group>
                 </b-col>
                 <b-col cols="12" sm="6" md="4" lg="3">
                   <b-form-group>
                     <label style="padding-top: 8px">End:</label>
-                    <b-form-input
+                    <b-form-datepicker
+                      v-model="endDate"
+                      :date-format-options="{ 'year': 'numeric', 'month': 'short', 'day': 'numeric', 'weekday': 'short' }"
+                      @change="onDateChange">
+                    </b-form-datepicker>
+                    <!-- <b-form-input
                       style="line-height: normal"
                       class="date"
                       id="exampleEnddate"
                       type="date"
                       v-model="endDate"
                       @change="onDateChange"
-                    ></b-form-input>
+                    ></b-form-input> -->
                   </b-form-group>
                 </b-col>
               </b-row>
