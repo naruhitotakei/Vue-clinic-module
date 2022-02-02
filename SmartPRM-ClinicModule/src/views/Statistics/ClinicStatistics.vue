@@ -48,8 +48,13 @@
                     <label style="padding-top: 8px">From:</label>
                     <b-form-datepicker
                       v-model="startDate"
-                      :date-format-options="{ 'year': 'numeric', 'month': 'short', 'day': 'numeric', 'weekday': 'short' }"
-                      @change="onDateChange">
+                      :date-format-options="{
+                        year: 'numeric',
+                        month: 'numeric',
+                        day: 'numeric',
+                      }"
+                      @input="onDateChange"
+                    >
                     </b-form-datepicker>
                     <!-- <b-form-input
                       style="line-height: normal"
@@ -66,8 +71,13 @@
                     <label style="padding-top: 8px">End:</label>
                     <b-form-datepicker
                       v-model="endDate"
-                      :date-format-options="{ 'year': 'numeric', 'month': 'short', 'day': 'numeric', 'weekday': 'short' }"
-                      @change="onDateChange">
+                      :date-format-options="{
+                        year: 'numeric',
+                        month: 'numeric',
+                        day: 'numeric',
+                      }"
+                      @input="onDateChange"
+                    >
                     </b-form-datepicker>
                     <!-- <b-form-input
                       style="line-height: normal"
@@ -101,7 +111,9 @@
                   </div>
                   <div class="text-right">
                     <h2 class="mb-0">
-                      <span class="counter">{{ appointments | formatNumber }}</span>
+                      <span class="counter">{{
+                        appointments | formatNumber
+                      }}</span>
                     </h2>
                     <h5 class="pb-3">Appointments</h5>
                   </div>
@@ -141,7 +153,9 @@
                   </div>
                   <div class="text-right">
                     <h2 class="mb-0">
-                      <span class="counter">{{ serviced_patients | formatNumber }}</span>
+                      <span class="counter">{{
+                        serviced_patients | formatNumber
+                      }}</span>
                     </h2>
                     <h5 class="">Serviced Patients</h5>
                   </div>
@@ -196,8 +210,17 @@
       </b-col> -->
     </b-row>
     <template v-if="startDate && endDate">
-      <RevenueByProduct :client="clientName" :start="startDate" :end="endDate" />
-      <LeadsChart :client="clientName" :start="startDate" :end="endDate" />
+      <RevenueByProduct
+        :client="clientName"
+        :start="startDate"
+        :end="endDate"
+      />
+      <LeadsChart
+        :client="clientName"
+        :start="startDate"
+        :end="endDate"
+        :unit="unit"
+      />
       <RevenueByDoctor :client="clientName" :start="startDate" :end="endDate" />
       <NewPatients :client="clientName" :start="startDate" :end="endDate" />
       <AppointmentsByProduct :start="startDate" :end="endDate" />
@@ -241,6 +264,7 @@ export default {
   },
   data() {
     return {
+      unit: null,
       clientName: null,
       startDate: null,
       endDate: null,
@@ -295,7 +319,7 @@ export default {
   },
   methods: {
     getLoggedUser() {
-      sso().then(response => {
+      sso().then((response) => {
         if (response && response.client_name) {
           this.clientName = response.client_name
         }
@@ -321,12 +345,14 @@ export default {
         this.startDate = secondDate
       }
       if (value) {
+        this.getUnit()
         this.getStats(this.startDate, this.endDate)
       }
     },
     getStartDates() {
       this.endDate = moment().format('YYYY-MM-DD')
       this.startDate = moment().add(-30, 'days').format('YYYY-MM-DD')
+      this.getUnit()
       this.getStats(this.startDate, this.endDate)
       // getDatesForCurrentYear().then(response => {
       //   const start = response[0]
@@ -338,10 +364,29 @@ export default {
     },
     onDateChange() {
       this.filterBy = null
+      this.getUnit()
       this.getStats(this.startDate, this.endDate)
     },
 
+    getUnit() {
+      const days = moment
+        .duration(moment(this.endDate).diff(moment(this.startDate)))
+        .asDays()
+      if (days <= 91) {
+        this.unit = 'day'
+      }
+      if (days > 91 && days <= 180) {
+        this.unit = 'week'
+      }
+      if (days > 180) {
+        this.unit = 'month'
+      }
+
+      console.log('get unit ', this.unit)
+    },
+
     getStats(start, end) {
+      console.log('Fetch Stats...')
       getClinicStats(start, end).then((response) => {
         if (response && response.revenue) {
           this.revenue = Number(response.revenue)
