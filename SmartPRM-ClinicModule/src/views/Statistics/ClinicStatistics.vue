@@ -99,23 +99,24 @@
           <b-col md="6" lg="3">
             <iq-card
               class-name="iq-card-block iq-card-stretch iq-card-height"
-              body-class="iq-bg-primary rounded"
+              body-class=" rounded"
+              class="iq-bg-appointments-card"
             >
               <template v-slot:body>
                 <div class="d-flex align-items-top justify-content-between">
                   <div
-                    class="rounded-circle iq-card-icon bg-primary"
+                    class="rounded-circle iq-card-icon bg-dark"
                     style="min-height: 60px; min-width: 60px"
                   >
-                    <i class="ri-user-fill"></i>
+                    <i class="ri-calendar-event-line"></i>
                   </div>
                   <div class="text-right">
                     <h2 class="mb-0">
-                      <span class="counter">{{
+                      <span class="counter text-white">{{
                         appointments | formatNumber
                       }}</span>
                     </h2>
-                    <h5 class="pb-3">Appointments</h5>
+                    <h5 class="pb-3 text-white">Appointments</h5>
                   </div>
                 </div>
               </template>
@@ -124,40 +125,19 @@
           <b-col md="6" lg="3">
             <iq-card
               class-name="iq-card-block iq-card-stretch iq-card-height"
-              body-class="iq-bg-warning rounded"
+              body-class="rounded"
+              class="iq-bg-attended-card"
             >
               <template v-slot:body>
                 <div class="d-flex align-items-center justify-content-between">
-                  <div class="rounded-circle iq-card-icon bg-warning">
-                    <i class="ri-women-fill"></i>
-                  </div>
-                  <div class="text-right">
-                    <h2 class="mb-0">
-                      <span class="counter">{{ attended | formatNumber }}</span>
-                    </h2>
-                    <h5 class="">Attended</h5>
-                  </div>
-                </div>
-              </template>
-            </iq-card>
-          </b-col>
-          <b-col md="6" lg="3">
-            <iq-card
-              class-name="iq-card-block iq-card-stretch iq-card-height"
-              body-class="iq-bg-danger rounded"
-            >
-              <template v-slot:body>
-                <div class="d-flex align-items-center justify-content-between">
-                  <div class="rounded-circle iq-card-icon bg-danger">
+                  <div class="rounded-circle iq-card-icon bg-success">
                     <i class="ri-group-fill"></i>
                   </div>
                   <div class="text-right">
                     <h2 class="mb-0">
-                      <span class="counter">{{
-                        serviced_patients | formatNumber
-                      }}</span>
+                      <span class="counter text-white">{{ attended | formatNumber }}</span>
                     </h2>
-                    <h5 class="">Serviced Patients</h5>
+                    <h5 class="text-white">Attended</h5>
                   </div>
                 </div>
               </template>
@@ -166,18 +146,42 @@
           <b-col md="6" lg="3">
             <iq-card
               class-name="iq-card-block iq-card-stretch iq-card-height"
-              body-class="iq-bg-info rounded"
+              body-class="rounded"
+              class="iq-bg-serviced-card"
+            >
+              <template v-slot:body>
+                <div class="d-flex align-items-center justify-content-between">
+                  <div class="rounded-circle iq-card-icon bg-danger">
+                    <i class="ri-user-star-fill"></i>
+                  </div>
+                  <div class="text-right">
+                    <h2 class="mb-0">
+                      <span class="counter text-white">{{
+                        serviced_patients | formatNumber
+                      }}</span>
+                    </h2>
+                    <h5 class="text-white">Serviced Patients</h5>
+                  </div>
+                </div>
+              </template>
+            </iq-card>
+          </b-col>
+          <b-col md="6" lg="3">
+            <iq-card
+              class-name="iq-card-block iq-card-stretch iq-card-height"
+              body-class="rounded"
+              class="iq-bg-revenue-card"
             >
               <template v-slot:body>
                 <div class="d-flex align-items-center justify-content-between">
                   <div class="rounded-circle iq-card-icon bg-info">
-                    <i class="ri-hospital-line"></i>
+                    <i class="ri-money-euro-circle-fill"></i>
                   </div>
                   <div class="text-right">
                     <h2 class="mb-0">
-                      <span class="counter">{{ revenue | formatPrice }}</span>
+                      <span class="counter text-white">{{ revenue | formatPrice }}</span>
                     </h2>
-                    <h5 class="">Revenue</h5>
+                    <h5 class="text-white">Revenue</h5>
                   </div>
                 </div>
               </template>
@@ -424,7 +428,23 @@ export default {
 }
 </script>
 
-<style>
+<style scoped>
+.iq-bg-appointments-card {
+  background: #67B7DC !important;
+  color: white;
+}
+.iq-bg-attended-card {
+  background: #6794DC !important;
+  color: white;
+}
+.iq-bg-serviced-card {
+  background: #6771DC !important;
+  color: white;
+}
+.iq-bg-revenue-card {
+  background: #8067DD !important;
+  color: white;
+}
 .iq-card-body {
   flex: unset;
 }

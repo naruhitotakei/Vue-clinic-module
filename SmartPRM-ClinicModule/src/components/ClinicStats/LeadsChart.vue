@@ -77,6 +77,7 @@ export default {
     start: String,
     end: String,
     client: String,
+    unit: String,
   },
   watch: {
     start(val) {
@@ -106,8 +107,10 @@ export default {
     //   }
     // },
     initChart(data, countries) {
+      console.log('Unit is ', this.unit)
       this.chartBodyData = {
         colors: ['#e64141', '#00ca00', '#ffd400'],
+        timeUnit: this.unit,
         xAxis: ['date'],
         yAxis: countries,
         data: data,
