@@ -103,7 +103,7 @@ const updateAppointments = (request, response, id, appointments) => {
       'appointment_canceled=' + appointments.appointment_canceled + ','
   if (appointments.product_groups)
     statement += "product_group_id='" + appointments.product_groups + "',"
-  if (appointments.product_groups_name === 'Consultation'){
+  if (appointments.product_group_code === 'PG0002'){
     statement += "kind='" + "Posvet" + "',"  
   }else{
     statement += "kind='" + "Poseg" + "',"  
@@ -161,13 +161,23 @@ const createAppointment = (request, response, appointments) => {
   if (appointments.patient_attended) statement += 'patient_attended,'
   if (appointments.crmProduct) statement += 'product_id,'
   if (appointments.product_groups) statement += 'product_group_id,'
+  // if (appointments.product_group_code === 'PG0002'){
+  //   statement += 'kind,'
+  // }else{
+  //   statement += 'kind,'
+  // }
   if (appointments.assignmentDate) statement += 'starts_at, date,'
   if (typeof appointments.allDay === 'boolean') statement += 'all_day,'
   if (appointments.backgroundColor) statement += 'label_id,'
   if (appointments.end) statement += 'ends_at,'
   statement += 'time,'
   statement += 'created_at,'
-  statement += 'kind'
+  if (appointments.product_group_code === 'PG0002'){
+    statement += 'kind'
+  }else{
+    statement += 'kind'
+  }
+  // statement += 'kind'
   statement += ') VALUES ('
   if (appointments.doctor_id) statement += "'" + appointments.doctor_id + "',"
   if (appointments.doctor_name)
@@ -197,7 +207,12 @@ const createAppointment = (request, response, appointments) => {
       "'" + moment(appointments.end).format('YYYY-MM-DDTHH:mm') + "',"
   statement += "'" + time + "',"
   statement += 'NOW(),'
-  statement += "'Posvet')"
+  // statement += "'Posvet')"
+  if (appointments.product_group_code === 'PG0002'){
+    statement += "'Posvet')"
+  }else{
+    statement += "'Poseg')"
+  }
   pool.query(statement, (error, results) => {
     if (error) {
       response.status(404).json(error)
