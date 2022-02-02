@@ -48,6 +48,7 @@
     "missingServices": "Manjkajoče storitve"
   },
   "settings": {
+    "general": "Splošno",
     "users": "Uporabniki",
     "locations": "Lokacije",
     "services and products": "Storitve in Izdelki",

@@ -55,6 +55,7 @@
   },
   "settings": {
     "users": "Users",
+    "general": "General",
     "locations": "Locations",
     "services and products": "Services and Products",
     "invoicing": "Invoicing",
