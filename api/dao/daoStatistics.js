@@ -47,23 +47,21 @@ const getDoctorsStatisticPerWeek = (request, response) =>  {
     })
 }
 
-const getRevenueByProduct = (request, response, start, end, prm_client_id, scope) => {
-    let statement = "SELECT pr.name AS pr_name, COUNT(pr.name), SUM(se.price) FROM services se "
-    statement += "LEFT JOIN products pr ON se.product_id = pr.id "
-    statement += "LEFT JOIN clients cl ON pr.client_id = cl.id "
-    statement += "LEFT JOIN clients_prm_client_bridge cpcb ON cl.id = cpcb.clients_id "
-    statement += "WHERE date_trunc('day', se.date) >= $1 AND (date_trunc('day', se.date) - INTERVAL '1 DAY' ) <= $2 "
-    if (scope == 'All') {
-    } else if (scope == 'PrmClient') {
-        statement += "AND cpcb.prm_client_id = " + prm_client_id;
-    }
-    statement += "GROUP BY pr.name "
-    pool.query(statement, [start, end], (error, results) => {
-        if (error) {
-            throw error
-        }
-        response.status(200).json(results.rows)
-    })
+const getRevenueByProduct = async ({start, end, prm_client_id, scope}) => {
+
+    const statement = `
+    SELECT pr.name AS pr_name, COUNT(pr.name), SUM(se.price)
+    FROM services se
+             LEFT JOIN products pr ON se.product_id = pr.id
+             LEFT JOIN clients cl ON pr.client_id = cl.id
+             LEFT JOIN clients_prm_client_bridge cpcb ON cl.id = cpcb.clients_id
+    WHERE true
+      AND se.date between $1 AND $2
+      ${scope === 'PrmClient' ? `AND cpcb.prm_client_id = ${prm_client_id}` : ''}
+      AND pr.name is not null
+    GROUP BY pr.name`;
+
+    return pool.query(statement, [start, end]);
 }
 
 const getRevenueByDoctor = (request, response, start, end, prm_client_id, scope) => {

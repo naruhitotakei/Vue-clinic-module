@@ -1950,34 +1950,28 @@ app.get('/api/statistics/revenue-by-product/:start/:end', (req, res) => {
       req.session.prm_user.permissions,
       clinicStatisticsPermission,
     )
-  )
-    daoStatistics.getRevenueByProduct(
-      req,
-      res,
-      start,
-      end,
-      req.session.prm_user.prm_client_id,
-      getScope(req.session.prm_user.permissions, clinicStatisticsPermission),
-    )
-  else res.status(401).json('OK: user unauthorized')
+  ) {
+    daoStatistics.getRevenueByProduct({
+      start, end,
+      prm_client_id: req.session.prm_user.prm_client_id,
+      scope: getScope(req.session.prm_user.permissions, clinicStatisticsPermission),
+    }).then((result) => {
+      const data = get(result,'rows');
+      if (data) {
+        res.status(200).json(data)
+      } else {
+        res.status(400).json(result)
+      }
+    }).catch((reason) => {
+      console.error(reason)
+      res.status(400).json(reason)
+    })
+  } else {
+    res.status(401).json('OK: user unauthorized')
+  }
 })
 
-// app.get('/api/statistics/revenue-by-products', (req, res) => {
-//   const start = req.params.start
-//   const end = req.params.end
-//   // if (
-//   //   req.session.prm_user &&
-//   //   req.session.prm_user.permissions &&
-//   //   checkPermission(
-//   //     req.session.prm_user.permissions,
-//   //     clinicStatisticsPermission,
-//   //   )
-//   // )
-//     daoStatistics.getRevenueByProducts({req, res})
-//   // else res.status(401).json('OK: user unauthorized')
-// })
-
-// Form submission webhook
+// Form submission webhook Todo in progress
 app.post("/api/webflow-webhook", (req, res) => {
   console.log(req.body) // Call your action on the request here
   res.status(200).json(req.body) // Responding is important
